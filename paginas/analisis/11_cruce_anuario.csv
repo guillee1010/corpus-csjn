@@ -1,0 +1,31 @@
+categoria,metrica,anio,anuario,corpus,cobertura_pct,comentario
+volumetria,total_casos,2024,19056.0,197.0,1.03,casos resueltos del anuario vs publicados en Fallos
+volumetria,casos_tratados_anuario_vs_corpus,2024,5370.0,197.0,3.67,casos tratados (excluye art. 280 y formulas) vs publicados
+volumetria,casos_inadmisibles_formula,2024,13686.0,,,rechazados por art. 280 u otras formulas (no tratados)
+volumetria,total_casos,2025,26524.0,192.0,0.72,casos resueltos del anuario vs publicados en Fallos
+volumetria,casos_tratados_anuario_vs_corpus,2025,5701.0,192.0,3.37,casos tratados (excluye art. 280 y formulas) vs publicados
+volumetria,casos_inadmisibles_formula,2025,20823.0,,,rechazados por art. 280 u otras formulas (no tratados)
+materia,pct_previsional,2024,40.4,3.05,,% de los recursos (anuario) / % del corpus
+materia,pct_penal,2024,18.9,10.15,,% de los recursos (anuario) / % del corpus
+materia,pct_laboral,2024,15.8,6.6,,% de los recursos (anuario) / % del corpus
+materia,pct_contencioso_adm,2024,8.4,13.2,,% de los recursos (anuario) / % del corpus
+materia,pct_civil_comercial,2024,5.9,4.57,,% de los recursos (anuario) / % del corpus
+materia,pct_trib_aduan_banc,2024,8.6,,,% de los recursos (anuario) / % del corpus
+materia,pct_previsional,2025,58.28,4.17,,% de los recursos (anuario) / % del corpus
+materia,pct_penal,2025,13.62,8.85,,% de los recursos (anuario) / % del corpus
+materia,pct_laboral,2025,12.04,11.46,,% de los recursos (anuario) / % del corpus
+materia,pct_contencioso_adm,2025,5.05,10.94,,% de los recursos (anuario) / % del corpus
+materia,pct_civil_comercial,2025,4.88,1.04,,% de los recursos (anuario) / % del corpus
+materia,pct_trib_aduan_banc,2025,3.59,,,% de los recursos (anuario) / % del corpus
+votacion,pct_unanimidad,2024,42.35,68.02,,"OJO: anuario cuenta ""unanimidad"" estricta (sin votos separados); corpus puede incluir casos con voto conjunto formal"
+votacion,pct_disidencia,2024,7.07,7.61,,COINCIDE BIEN entre ambas fuentes — disidencia formal
+votacion,pct_concurrencia_o_voto_separado,2024,50.3,13.71,,anuario = voto_conjunto+voto_propio (incluye formales); corpus = solo con texto separado
+votacion,pct_unanimidad,2025,48.97,80.73,,"OJO: anuario cuenta ""unanimidad"" estricta (sin votos separados); corpus puede incluir casos con voto conjunto formal"
+votacion,pct_disidencia,2025,0.11,1.56,,COINCIDE BIEN entre ambas fuentes — disidencia formal
+votacion,pct_concurrencia_o_voto_separado,2025,50.89,7.29,,anuario = voto_conjunto+voto_propio (incluye formales); corpus = solo con texto separado
+duracion,mediana_dias_resueltos,2024,385.0,,,corpus no tiene fecha de presentacion del recurso
+remisiones,pct_con_remision,2024,88.0,,,parser v16 no detecta remisiones automaticamente
+conjueces,pct_casos_con_conjueces,2024,0.15,,,parser detecta jueces; cruzar manualmente
+duracion,mediana_dias_resueltos,2025,364.0,,,corpus no tiene fecha de presentacion del recurso
+remisiones,pct_con_remision,2025,93.21,,,parser v16 no detecta remisiones automaticamente
+conjueces,pct_casos_con_conjueces,2025,0.49,,,parser detecta jueces; cruzar manualmente
