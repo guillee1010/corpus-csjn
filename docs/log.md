@@ -80,3 +80,34 @@ Resultado: esquema de paginación A confirmado (continuo entre volúmenes) en la
 3. Cambio 3 — integrar `catalogo_volumenes.csv` a `cruzar_catalogo_y_mapa.py`. Resuelve bug del 334 y similares en tomos multi-volumen.
 4. Filtrar material editorial preliminar antes del mapa de páginas (resuelve solapamiento aparente del tomo 338).
 5. Cambio 2 ampliado — columna `categoria_editorial` con los 5 valores identificados.
+### Sesión posterior — limpieza de working tree
+
+Limpieza del working tree antes de encarar la reorganización del repo. No fue una sesión pesada comparada con la del setup; sobre todo decisiones de inventario y dos commits chicos.
+
+#### Inventario de scripts
+- 14 .py en raíz, 9 en `paginas/`, 10 en `historial/`.
+- Tres duplicados confirmados idénticos (byte a byte) entre raíz y `paginas/`: `construir_catalogo.py`, `cruce_anuarios.py`, `diag_sin_firma_ascii.py`. Decisión postergada para la rama de reorganización: en cada caso se conservará la copia de raíz.
+
+#### Archivos borrados
+- Archivo con nombre roto (`"bject -First 5..."`, 1.4 MB residuo de comando mal pegado).
+- `catalogo_v14_fix1.csv` en raíz (redundante con la copia de `paginas/`).
+- `paginas/csjn_casos_v16_PRE_FIX1.csv` (redundante con Git).
+- `paginas/comparar_fix1.py` (script ad-hoc).
+
+Ninguno estaba trackeado, no generan commit.
+
+#### Mudanzas (commit A)
+- `historial/bitacora.md` → `docs/log.md`. La bitácora estaba mal ubicada en `historial/` y debía estar en `docs/`.
+- `paginas/secciones_indices_v14.csv` → `historial/secciones_indices_v14.csv`. Es un catálogo de índices generado durante exploración previa al armado del catálogo principal; cubre solo un volumen. Se conserva en `historial/` por valor documental.
+
+#### Trackeo de archivos productivos (commit B)
+- `generar_catalogo_volumenes.py`: script del Cambio 3 (parte 1).
+- `paginas/catalogo_volumenes.csv`: output del script anterior. Se trackea provisoriamente; la decisión sobre versionado de outputs grandes queda pendiente.
+
+#### Estado del repo al cierre de la sesión
+- `main`: 2 commits nuevos (mudanzas + Cambio 3 parte 1), pusheados a GitHub.
+- Working tree limpio.
+
+#### Pendientes nuevos identificados en esta sesión
+- README desactualizado (refleja estado v10, ignora pipeline de 4 etapas, padrón viejo, paths obsoletos). Decisión tomada: no reescribir entero hasta después de la reorganización del repo. Solución provisoria: README mínimo con remisión a `docs/log.md`.
+- Reconstrucción retroactiva del log: el trabajo de coding previo al 30/04 (parsers v1 a v15, armado de pipeline) nunca entró a la bitácora. Pendiente para sesión propia con chats viejos a mano.
