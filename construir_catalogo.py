@@ -338,7 +338,7 @@ def construir_filas_catalogo(entradas_por_archivo):
     for tomo, pags_ordenadas in paginas_por_tomo.items():
         for i, pag in enumerate(pags_ordenadas):
             if i + 1 < len(pags_ordenadas):
-                pagina_fin_map[(tomo, pag)] = pags_ordenadas[i + 1] - 1
+                pagina_fin_map[(tomo, pag)] = pags_ordenadas[i + 1]
             else:
                 pagina_fin_map[(tomo, pag)] = None  # último del tomo
 
