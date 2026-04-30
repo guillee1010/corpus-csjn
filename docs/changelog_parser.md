@@ -1,0 +1,204 @@
+# Changelog del parser CSJN
+
+Pipeline: `paginas/csjnvNN.py` → `csjn_casos_vNN.csv` + `csjn_casos_vNN_votos.csv`  
+Corpus: Fallos CSJN Tomos 329–349 (2006–2026), excluyendo 335–336  
+Fuente: PDFs oficiales convertidos a Markdown
+
+---
+
+## v1–v3 — Prueba de concepto (28 abril 2026, sesión inicial)
+
+**Problema motivador:** extraer datos estructurados de los volúmenes de Fallos convertidos a Markdown. El corpus tenía drift editorial de casi 20 años; no se sabía qué marcadores eran estables.
+
+**Trabajo de v1:** identificación de marcadores de apertura y cierre. Se confirmó que `FALLO DE LA CORTE SUPREMA` (singular, no plural) seguido de `Buenos Aires, [fecha]` es el marcador de apertura de cada caso. `Tribunal de origen:` es el marcador de cierre. Ambos se verificaron contra los PDFs originales.
+
+**v2:** se agregó detección básica del dispositivo `Por ello,` y extracción de carátula (`case_name`). Primer CSV de salida con una fila por caso.
+
+**v3:** se incorporó manejo de `dictamen embebido` (opinión del Procurador intercalada en el cuerpo del fallo). Sin esta distinción el parser contaminaba el cuerpo del fallo con texto del dictamen.
+
+**Resultado:** parser funcional sobre tomos recientes (344–349). Dataset: ~500 casos aproximados. Output: un solo CSV de casos.
+
+---
+
+## v4–v6 — Detección de firmas y votos (28 abril 2026)
+
+**Problema motivador:** los fallos incluyen votos separados (concurrencias, disidencias). El parser v3 los ignoraba y el `voting_pattern` era irrecuperable.
+
+**v4:** primer intento de detección de firmas de jueces. Se definió una ventana de N líneas después del dispositivo para buscar nombres. Bug inicial: la ventana era fija y en fallos largos no alcanzaba las firmas.
+
+**v5:** firma multilínea (`firma_raw` acumulado). Se incorporó detección de conjueces. Se definieron las posiciones de voto: `mayoria`, `según su voto`, `en disidencia`, `por su voto`.
+
+**v6:** distinción crítica entre `Por ello` dispositivo (verbo institucional: `se`, `habiendo`) versus `Por ello` argumental (cláusula subordinada: `la`, `concluyó`). Sin esta distinción el parser confundía partes argumentativas con el dispositivo. Se incorporó `wc_mayoria` y `wc_votos` (word count por bloque).
+
+**Resultado:** detección de firmas funcional en tomos recientes. `wc_votos = 0` para mayorías sin voto separado es decisión de diseño deliberada, no bug.
+
+---
+
+## v7–v9 — Bifurcación del output y estabilización (28 abril 2026)
+
+**Problema motivador:** el CSV de casos mezclaba información de nivel caso con información de nivel voto. Dificulta el análisis estadístico.
+
+**v7:** refactor del loop principal a procesamiento en un solo pase (`single-pass block processing`). Mejoras en detección de carátula. Sugerencias de colega parcialmente incorporadas.
+
+**v8:** se separaron los outcomes en patrones: `inadmisible_280`, `inadmisible_acordada_4`, `hace_lugar`, `rechaza`, `competencia`, `otro`. Se incorporó `is_full_bench`, `is_merit_decision`, `caso_id` como FK estable.
+
+**v9:** **bifurcación del output.** El parser produce dos datasets:
+- `csjn_casos_v9.csv` — case-centered, una fila por sentencia (817 casos, tomos 344–349)
+- `csjn_casos_v9_votos.csv` — vote-centered, una fila por juez/voto (2.803 votos)
+
+Se incorporó `posiciones` (JSON dict con posición de cada juez) y se completó el companion script `csjn_analisis.py` con exportación a Excel.
+
+**Hallazgo empírico clave:** decisiones unánimes tienen mediana `wc_votos = 0`; patrón `mixed` tiene mediana 1.803. Evidencia directa para H3 (coordinación inercial vs. deliberación).
+
+**Dataset identificado** como equivalente embrionario argentino del Spaeth SCDB.
+
+---
+
+## v10 — Corpus extendido y detección de art. 280 (28 abril 2026)
+
+**Problema motivador:** extender el corpus de 6 tomos (344–349) a 19 tomos (329–349, sin 335–336). El parser v9 estaba diseñado para tomos recientes y fallaba en tomos viejos (banco de 7 jueces, formato ligeramente distinto).
+
+**Cambios:**
+- `classify_outcome` recibe ahora tanto el dispositivo como el considerando para detectar `inadmisible_280`. El art. 280 figura en el considerando, no en el dispositivo — bug de diseño en v9.
+- Nuevo outcome: `inadmisible_acordada_4`.
+- CSV de votos enriquecido con columna `texto_voto` (texto íntegro del voto individual).
+- Nueva columna `considerando_texto` en CSV de casos.
+
+**Problemas detectados en validación:**
+- Tomos 335–336 producen `n_titulares = 0` en 401 casos (formato de MD distinto o corrupción). Se excluyen del corpus analítico.
+- `inadmisible_280` detecta solo 39 casos sobre ~5.700 (0,7%) — muy por debajo de lo esperable institucionalmente. Bug pendiente, no resuelto en v10.
+- `sin_firma` = 797 casos (14%), alto para corpus completo.
+- `outcome = otro` = 1.941 casos (34%) — dispositivo detectado pero verbo no matchea ningún patrón.
+
+**Resultado:** corpus extendido a 5.323 casos. Dataset con `csjn_casos_v10.csv` + votos.
+
+---
+
+## v11 — Detección positiva de originaria y detector de dispositivo ampliado (28 abril 2026)
+
+**Problema motivador:** dos bugs masivos identificados en auditoría del v10.
+
+**Bug 1 — Detector de dispositivo:** v10 solo captaba `Por ello` como apertura del dispositivo. En tomos viejos (329–340), ~25% de los fallos usan otras fórmulas (`Por los fundamentos del dictamen`, `De conformidad con lo dictaminado`, `Por todo lo expuesto`). Resultado: 1.123 fallos sin dispositivo detectado.
+
+**Bug 2 — `is_originaria` por heurística negativa:** v10 clasificaba como originaria todo caso donde no encontraba `Tribunal de origen:`. Resultado: 2.238 casos (39%) marcados erróneamente como originarios cuando la Corte tramita solo ~300 por año por esa vía.
+
+**Cambios:**
+- `RE_DISPOSITIVO_VARIANTES`: 11 patrones de apertura de dispositivo. Nueva función `detectar_apertura_dispositivo()`. Tolerancia al typo OCR `concusiones` por `conclusiones`. Fix bonus: `[,.]` → `[,.]?` en el regex argumental (evitaba detectar `"Por ello concluyó..."` sin coma como dispositivo).
+- `is_originaria`: reemplazada por función `es_originaria()` con detección positiva sobre 4 señales: `"competencia originaria"` en cuerpo, art. 117 CN, `"Originario"` en carátula, `"en forma originaria"` / `"instancia originaria"`.
+- Nueva columna `tribunal_origen_status` en CSV de casos.
+
+**Resultado:** `sin_dispositivo` baja de 1.123 a ~173 (−85%). `is_originaria` baja de 2.238 a 358 (coherente con realidad institucional). Dataset: ~5.300+ casos.
+
+---
+
+## v12 — Clasificación de tipo de voto separado (28 abril 2026)
+
+**Problema motivador:** el CSV de votos no distinguía el tipo de concurrencia. Un voto `según su voto` puede ser adhesión con matiz (el juez firma la mayoría pero agrega argumento propio) o puede ser el fallo más importante del caso. Sin clasificación el análisis textual es ciego.
+
+**Cambios:**
+- Nueva función `clasificar_tipo_voto()` con detección de 5 tipos de voto separado.
+- Nueva columna `tipo_voto_sep` en CSV de votos.
+- Nueva columna `fragmenta_ratio` (indicador de si el voto introduce razonamiento divergente del majority).
+- Tests sobre 8 ejemplos del ground truth con `assert`.
+
+**Nota:** esta versión fue desarrollada en colaboración con Claude Opus sobre prompt estructurado (`prompt_opus_v12.md`) con el script v11 embebido.
+
+**Resultado:** CSV de votos con 3 columnas nuevas. Sin cambios en el CSV de casos.
+
+---
+
+## v13 — Catálogo de entradas del índice (28–29 abril 2026)
+
+**Problema motivador:** el parser producía casos a partir del cuerpo de los MD pero no tenía fuente de verdad sobre *cuántos* fallos debería haber en cada tomo. Sin catálogo no había manera de detectar fallos que el parser perdía.
+
+**Trabajo de esta versión:** se construyó `construir_catalogo.py` como script separado que extrae las entradas del índice temático de cada tomo y genera `catalogo_v13.csv`. Se resolvieron problemas de diseño: entradas cruzadas (ej. `A.F.I.P. (Aguas de la Costa S.A. c/):`), páginas múltiples por entrada, cálculo de `pagina_fin` inter-archivo en tomos multi-volumen.
+
+**Deduplicación:** regex `\([^)]*c\/[^)]*\)` para clasificar entradas cruzadas vs. directas; se conserva la directa. `pagina_fin` calculada globalmente por `(tomo, pagina_inicio)` para cruzar fronteras de archivo.
+
+**Resultado:** `catalogo_v13.csv` con 5.690 entradas en 19 tomos.
+
+---
+
+## v14 — Mapa de páginas y cruce (29 abril 2026)
+
+**Problema motivador:** el catálogo tiene páginas del índice pero el parser opera sobre líneas del MD. Necesitaba un puente entre ambas coordenadas.
+
+**Trabajo de esta versión:**
+- `detectar_paginas.py`: genera `mapa_paginas.csv` con 46.936 headers de página detectados en los 46 archivos MD.
+- `cruzar_catalogo_mapa.py`: vincula cada entrada del catálogo con su ubicación física (`linea_inicio`) en el MD. Produce `fallos_localizados.csv`.
+
+**Resultado del cruce:** 5.569 ok / 121 huérfanos (entradas del catálogo sin ubicación en el mapa). El parser v14 usa el catálogo como fuente de verdad para delimitar bloques (en lugar de depender solo de marcadores textuales). Corpus: 5.690 entradas.
+
+**Sesgo identificado post-v14:** el parser usaba la línea de inicio del *siguiente* fallo como fin del actual, sin buscar el fin real. Esto inflaba los bloques de los últimos fallos de cada tomo (`ultimo_del_tomo`).
+
+---
+
+## v15 — Corrección del sesgo de fin de bloque (29–30 abril 2026)
+
+**Problema motivador:** v14 tenía sesgo sistemático en la detección del fin de bloque. Los últimos fallos de cada tomo tenían bloques inflados porque no había "siguiente fallo" que sirva de límite.
+
+**Cambios:**
+- Nueva columna `linea_fin_real` calculada por búsqueda bidireccional.
+- Nuevas columnas `status_fin` y `pista_fin` (trazabilidad del método de detección).
+- La carátula del siguiente caso es la pista más fuerte (85% de los fines bien detectados).
+
+**Impacto medido (v14 → v15):**
+- `sin_dispositivo`: −580
+- `unanime`: +831
+- Word count global: −5,6%
+
+**Resultado:** `csjn_casos_v15.csv` con 5.647 fallos. Corpus principal para análisis estadístico.
+
+---
+
+## v16 — Corrección de fechas (30 abril 2026)
+
+**Problema motivador:** v15 tenía bug en la extracción de fechas. Muchos casos quedaban sin fecha o con fecha incorrecta.
+
+**Cambios:** corrección del extractor de fechas. 92,6% de los casos con fecha extraída correctamente post-v16.
+
+**Resultado:** `csjn_casos_v16.csv` (5.647 fallos) + `csjn_casos_v16_votos.csv` (20.562 votos). Este es el dataset en producción al inicio de la jornada del 29–30 abril 2026.
+
+**Anomalías documentadas al cierre de v16** (`anomalias_pipeline_completo.csv`, 26 anomalías en 5 capas):
+- 573 casos `sin_firma` (10,1% del corpus). Distribución: R1 (no detectó dispositivo) 51,7%, R2 (dispositivo ok, ningún juez en ventana de 40 líneas) 48,3%.
+- Concentración en tomos recientes: tomo 345 28,7%, tomo 347 18,9%, tomo 348 18,1%.
+- 121 huérfanos del cruce.
+- 19 casos `ultimo_del_tomo` con bloques inflados.
+- 3 casos `fin_no_detectado`: `345_p250`, `345_p800`, `346_p74`.
+- Categoría A (bloques mutilados por bug de `detectar_fin_real`): caso testigo `329_p53` (7 líneas, 58 palabras).
+- Categoría B (sumarios con link externo): innovación editorial desde tomo 347. Patrón: `(*) Ver fallo.` literal. Estos casos no tienen pieza decisoria en el corpus y deben filtrarse, no parsearse mejor.
+
+---
+
+## v17 — Fix de `sin_firma` y columna `categoria_editorial` (30 abril 2026)
+
+**Problema motivador:** 573 casos `sin_firma`. Diagnóstico: la ventana de búsqueda de firmas en `csjnv16.py` (`d=1` bucket) tiene un bug de delimitación: la constante `-1` en `construir_catalogo.py:341` causa que el último bloque de cada tomo se extienda hasta el final del archivo en lugar de hasta el marcador real de fin. Esto infla los bloques en los últimos fallos de cada tomo y desplaza las firmas fuera de la ventana.
+
+**Cambios (en dos commits separados):**
+
+*Cambio 1 (commit independiente):*
+- Fix de `construir_catalogo.py:341`: eliminar el `-1` que causaba extensión indebida del último bloque.
+- Tests de regresión definidos: Colonia Penal de Ezeiza (`346_p57`), N.N. s/ Incidente de incompetencia, caso de tomo viejo bit a bit.
+- Métrica de éxito: baja de `sin_firma` en bucket `d=1`, Colonia Penal de Ezeiza pasa a detectar firmas.
+
+*Cambio 2 (commit sobre el 1):*
+- Nueva columna `categoria_editorial` en CSV de casos. Cinco valores: `fallo_completo` (default), `sumario_con_link` (detector literal `Ver fallo.` case-sensitive), `acordada`, `material_preliminar`, `separador_mes`.
+- Detector de `sumario_con_link` es ortográficamente seguro: sin riesgo de regresión sobre tomos viejos.
+
+**Estado al cierre del 30 abril 2026:**
+- Cambio 1 mergeado y validado: 175 mejoras, `sin_firma` baja de 10,1% a 7,1%, 32 huérfanos menos.
+- El caso `334_p829` confirmado como no-regresión: bug de localización en tomos multi-volumen enmascarado en PRE.
+- `catalogo_volumenes.csv` generado, pendiente integración al cruce (Cambio 3).
+- Cinco/seis categorías editoriales identificadas; detector implementado.
+
+**Pendientes para v18:**
+- Filtro de material preliminar en `detectar_paginas.py` + regenerar mapa y catálogo de volúmenes (debe hacerse antes del Cambio 3 para no invalidar el catálogo existente).
+- Cambio 3: integrar `catalogo_volumenes.csv` al cruce.
+- 19 casos `ultimo_del_tomo` con bloques inflados aún pendientes.
+- 3 casos `fin_no_detectado` pendientes.
+- 121 huérfanos: reducción parcial lograda en v17 Cambio 1, restan ~89.
+- Mejora de `detectar_fin_real` para `primer_token` débil (postergada, requiere sesión dedicada).
+
+---
+
+*Nota metodológica:* este changelog se reconstruyó retrospectivamente a partir de los logs de sesiones de trabajo. Fechas confirmadas por timestamps de archivos (`historial/csjnv10.py` → 28/04, `historial/csjnv11.py` → 28/04) y commits del repo (`git log`, primer commit con snapshot v16 → 30/04). Las versiones v1–v9 se desarrollaron en una sola sesión el 28/04 según el summary del chat fundacional. Las versiones v12–v15 no tienen archivo commiteado individualmente; sus fechas (28–30/04) se infieren por el contexto de sesiones.
