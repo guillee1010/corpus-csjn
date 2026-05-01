@@ -318,3 +318,36 @@ La versión activa es la marcada como tal en este changelog. Al cierre de cada s
 - Diff de métricas clave contra la versión anterior (`sin_firma`, `voting_pattern`, `wc_*`).
 - Inspección manual de al menos 3 casos representativos (un fallo unánime largo, un fallo con dictamen, un sumario con link si aplica).
 - Verificación de que no haya regresión cuantitativa sin justificación cualitativa (caso v17 beta v2: +268 sin_firma sin beneficio comprobado → descartada).
+## construir_catalogo v15 — 2026-05-01
+
+### Estado: producción (reemplaza a `construir_catalogo.py` con Fix 1).
+
+### Problema motivador
+
+Detectado durante la sesión de validación cruzada con Gemini sobre el Tomo 349. El `csjnv16.py` (y posteriores) reportaba 36 fallos para el Tomo 349 cuando Gemini detectaba 45. El bug no estaba en el parser sino en el **extractor del catálogo**: la función `detectar_secciones` busca el marcador `INDICE POR LOS NOMBRES DE LAS PARTES` para arrancar a parsear el listado del índice. En tomos modernos (337-349), el reflow del conversor PDF→md ubicaba sistemáticamente esa portadilla **después** de las primeras entradas alfabéticas del listado (A, B, C), no antes. Resultado: pérdida silenciosa de 9-15 entradas alfabéticamente tempranas por tomo.
+
+### Cambios
+
+- Nueva función `extender_inicio_indice_nombres()` con look-back desde el header `INDICE POR LOS NOMBRES DE LAS PARTES` hasta una cabecera "A" aislada, validada por la presencia de al menos 3 anclas `: p. N` entre la "A" y el header. Tres validaciones encadenadas garantizan no-regresión en tomos donde el header ya estaba en su lugar correcto.
+- Integración en `procesar_archivo`: llamada después de `encontrar_indice_nombres`. Logging `[FIX-v15]` cuando el fix se activa, silencioso cuando no.
+
+### Resultados
+
+- Catálogo: pasa de 5690 a 5862 entradas (+172).
+- `fallos_localizados`: 5862 cruzados, 5741 ok.
+- `csjn_casos`: pasa de 5647 a 5819 fallos.
+- Distribución de los 172 nuevos: 154 en `ok` (89.5%), 18 en `ok_sin_marcador_apertura` (10.5%). Cero huérfanos nuevos.
+- Bug confirmado en TODOS los tomos modernos (337-349), no solo en el 349. Pérdida típica: 9-15 entradas por tomo.
+
+### Tomo 349 específico
+
+9 entradas recuperadas en orden alfabético: Aballay (p. 210), Agencia de Administración de Bienes del Estado (p. 300), Arias (p. 34), Asociación Gremial de Computación (p. 286), Becerra (p. 53), Bertotto (p. 244), Bodereau (p. 258), Buttera (p. 253), Colegio de Martilleros y Corredores (p. 1).
+
+### Pendientes documentados
+
+- Tomos 337-341: arrancan con primera entrada en p. 23-61 (en lugar de p. 1). Diagnóstico previo identificó esto como un bug **distinto** al del Tomo 349, no relacionado con la portadilla mal ubicada. Auditoría pendiente.
+- Tomo 349 con solo 45 entradas (vs ~200 típicas en tomos modernos). Probablemente falta procesar `LibroVol349-2.md`, `-3.md`, etc. Pipeline upstream, no parser.
+- 121 huérfanos del cruce siguen estructurales, sin cambio respecto a v14.
+
+---
+
