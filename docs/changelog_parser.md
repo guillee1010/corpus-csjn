@@ -202,30 +202,44 @@ Se incorporó `posiciones` (JSON dict con posición de cada juez) y se completó
 ---
 
 *Nota metodológica:* este changelog se reconstruyó retrospectivamente a partir de los logs de sesiones de trabajo. Fechas confirmadas por timestamps de archivos (`historial/csjnv10.py` → 28/04, `historial/csjnv11.py` → 28/04) y commits del repo (`git log`, primer commit con snapshot v16 → 30/04). Las versiones v1–v9 se desarrollaron en una sola sesión el 28/04 según el summary del chat fundacional. Las versiones v12–v15 no tienen archivo commiteado individualmente; sus fechas (28–30/04) se infieren por el contexto de sesiones.
+
+---
+
 ## v17 beta v2 — 2026-05-01
 
-### Estado: en pruebas, no validado.
+### Estado: descartada.
 
-### Cambios respecto a v17 beta:
+### Intención del cambio:
 
-- **Detector de fin de dictamen reescrito.** Reemplaza la heurística "línea con fecha + previa corta" por una regla OR de dos señales:
-  - Firma de Procurador conocido al final de línea corta. Lista ampliada empíricamente del corpus: Casal, Monti, Abramovich, Cosarin, Righi, Bausset, Warcalde, Netto, Becerra, Carbó, Obarrio, Beiró, Sachetta.
-  - Línea que empieza con "Buenos Aires, X de mes de YYYY" (fecha al pie típica del dictamen).
-  - Ambas señales con exclusión de contextos de cita (comillas, "Fallos:", "fs.", "Procurador Fiscal", "Ministerio Público:", "precedente").
-- **Nueva columna `wc_fallo_neto = word_count - wc_dictamen`.** Permite análisis del cuerpo decisorio separado del aporte del dictamen.
-- **Tipos unificados.** `dictamen_presente`, `is_originaria`, `is_full_bench`, `is_merit_decision` se exportan como `int` (0/1) en todos los casos. v17 beta v1 tenía mezcla de `True/False` (para fallos) y `0` (para sumarios).
+Reescribir el detector de fin de dictamen reemplazando la heurística v16 ("línea con fecha + previa corta") por una regla OR de dos señales:
 
-### Pendientes / problemas conocidos:
+- Firma de Procurador conocido al final de línea corta. Lista ampliada empíricamente del corpus: Casal, Monti, Abramovich, Cosarin, Righi, Bausset, Warcalde, Netto, Becerra, Carbó, Obarrio, Beiró, Sachetta.
+- Línea que empieza con "Buenos Aires, X de mes de YYYY" (fecha al pie típica del dictamen).
+- Ambas señales con exclusión de contextos de cita (comillas, "Fallos:", "fs.", "Procurador Fiscal", "Ministerio Público:", "precedente").
 
-- En la primera corrida con la regla AND (solo firma), `sin_firma` saltó a 1093 (vs 312 en v17 beta v1) y 2600 casos tuvieron `wc_dictamen >= word_count` (dictamen comió todo el bloque). La regla OR busca corregir esto.
-- Si la corrida con OR sigue mostrando >500 casos sin firma, considerar rollback a v17 beta v1 o v16.
-- 22 casos sospechosos de falso positivo en `tipo_entrada = sumario_con_link` con `status_localizacion = ok` (Ruiz c/ AFIP, Asociación Gremial). No abordado en esta versión.
+Se incorporó además la columna `wc_fallo_neto = word_count - wc_dictamen` para permitir análisis del cuerpo decisorio separado del aporte del dictamen, y se unificaron los tipos de las columnas booleanas (`dictamen_presente`, `is_originaria`, `is_full_bench`, `is_merit_decision`) como `int` en todos los casos.
+
+### Razones del descarte:
+
+- **Regresión en `sin_firma`.** Pasó de 312 (v17 beta v1) a 580. La regla nueva interfirió con la detección de firmas de jueces del fallo posterior al dictamen, sin beneficio comprobado en la detección del dictamen mismo.
+- **Métrica de validación inválida.** El script `validar_v17_beta_v2.py` reportaba 2155 casos "patológicos" donde `wc_dictamen ≥ word_count`. La métrica está mal construida: `word_count` se calcula como `wc_mayoria + wc_votos`, no incluye preámbulo ni dictamen. Que el dictamen sea más extenso que la suma de mayoría más votos del fallo posterior es estructuralmente normal en fallos breves resueltos por remisión al dictamen. La métrica no diagnostica nada útil.
+- **No se llegó a inspeccionar empíricamente** ningún bloque concreto para confirmar si el detector acotaba bien el dictamen. La sesión se cerró antes de poder hacerlo.
+
+### Hallazgo metodológico para v18:
+
+Diseñar una métrica de validación que sea efectivamente diagnóstica del corte del dictamen. Una opción es comparar la línea de fin de dictamen detectada con la posición esperada del marcador de inicio del fallo (la fecha "Buenos Aires, ..." que abre el fallo de la Corte): el fin del dictamen debería caer inmediatamente antes de ese marcador. Esto pone el inicio del fallo como ancla, en vez de buscar señales débiles de fin de dictamen.
+
+### Estado de los archivos:
+
+- `csjnv17_beta_v2.py` y sus CSVs (`csjn_casos_v17_beta_v2.csv`, `csjn_casos_v17_beta_v2_votos.csv`) eliminados del repo.
+- Script de validación movido a `scripts/diagnosticos/validar_v17_beta_v2.py` para referencia futura.
+- Output de la corrida (`validacion_v17_beta_v2.txt`) eliminado.
 
 ---
 
 ## v17 beta — 2026-05-01
 
-### Estado: validado parcialmente (4 casos de sumario-con-link verificados manualmente; 2 casos de falso positivo identificados pero no resueltos).
+### Estado: versión activa (validada parcialmente: 4 casos de sumario-con-link verificados manualmente; 2 casos de falso positivo identificados pero no resueltos). Reemplaza a v16 fix1 como baseline tras descarte de v17 beta v2 (2026-05-01).
 
 ### Cambios respecto a v16:
 
@@ -281,3 +295,26 @@ Se incorporó `posiciones` (JSON dict con posición de cada juez) y se completó
 ## v14, v12, anteriores
 
 Ver historial de git y comentarios en cabecera de cada archivo.
+
+---
+
+## Protocolo de rollback
+
+Si una versión activa muestra problemas en el análisis estadístico y conviene volver a una versión anterior estable, el procedimiento es:
+
+**De v17 beta v1 a v16 fix1:**
+
+1. Confirmar que el CSV de v16 fix1 (`paginas/csjn_casos_v16_fix1.csv`) está commiteado y trackeado.
+2. En el script de análisis, cambiar el path de entrada de `csjn_casos_v17_beta.csv` a `csjn_casos_v16_fix1.csv`.
+3. Documentar en `docs/log.md` la razón del rollback (qué problema motivó volver atrás, en qué tomos o qué tipo de casos).
+4. No es necesario borrar el CSV ni el script de v17 beta del repo: queda como histórico.
+
+**Identificación de la versión activa:**
+
+La versión activa es la marcada como tal en este changelog. Al cierre de cada sesión que cambie la versión activa, actualizar el campo "Estado" de la entrada correspondiente y agregar la nota "Reemplaza a vXX como baseline tras [razón]".
+
+**Antes de declarar una versión nueva como activa:**
+
+- Diff de métricas clave contra la versión anterior (`sin_firma`, `voting_pattern`, `wc_*`).
+- Inspección manual de al menos 3 casos representativos (un fallo unánime largo, un fallo con dictamen, un sumario con link si aplica).
+- Verificación de que no haya regresión cuantitativa sin justificación cualitativa (caso v17 beta v2: +268 sin_firma sin beneficio comprobado → descartada).
