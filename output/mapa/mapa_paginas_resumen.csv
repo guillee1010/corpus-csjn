@@ -1,0 +1,47 @@
+tomo,archivo,n_headers,pagina_min,pagina_max,monotonia_pct,dup_filtrados,outliers_filtrados,n_gaps_grandes,n_paginas_duplicadas_postfiltro,n_pares_fuera_de_orden,anomalias
+329,LibroVol329.1.md,1366,5,1373,100.00,1,0,0,0,0,
+329,LibroVol329.2.md,1585,1375,2963,100.00,0,0,0,0,0,
+329,LibroVol329.3.md,1922,2965,4890,100.00,0,0,0,0,0,
+329,LibroVol329.4.md,1222,4891,6115,100.00,0,0,0,0,0,rango detectado 4891-6115 excede el del catalogo (5-6087)
+330,LibroVol330.1.md,1318,5,1324,100.00,1,0,0,0,0,
+330,LibroVol330.2.md,1547,1325,2875,100.00,0,0,0,0,0,
+330,LibroVol330.3.md,1429,2877,4310,100.00,0,0,1,0,0,1 gap(s) > 3p (mayores: 4289->4294 (d5))
+330,LibroVol330.4.md,1148,4313,5461,100.00,0,0,0,0,0,rango detectado 4313-5461 excede el del catalogo (5-5435)
+331,LibroVol331.1.md,999,8,1009,100.00,1,0,0,0,0,
+331,LibroVol331.2.md,966,1014,1984,100.00,0,0,0,0,0,
+331,LibroVol331.3.md,945,1986,2937,100.00,0,0,0,0,0,rango detectado 1986-2937 excede el del catalogo (7-2925)
+332,LibroVol332.1.md,911,6,920,100.00,1,0,0,0,0,
+332,LibroVol332.2.md,1104,922,2031,100.00,0,0,0,0,0,
+332,LibroVol332.3.md,864,2034,2904,100.00,0,0,0,0,0,rango detectado 2034-2904 excede el del catalogo (5-2898)
+333,LibroVol333.1.md,764,6,774,100.00,1,0,0,0,0,
+333,LibroVol333.2.md,1100,778,1882,100.00,0,0,0,0,0,
+333,LibroVol333.3.md,577,1886,2468,100.00,0,0,0,0,0,rango detectado 1886-2468 excede el del catalogo (5-2445)
+334,LibroVol334.1.md,703,6,714,100.00,1,0,0,0,0,
+334,LibroVol334.2.md,341,716,1062,100.00,0,0,0,0,0,
+334,LibroVol334.3.md,857,1064,1924,100.00,0,0,0,0,0,
+337,LibroVol337.1.md,882,5,887,100.00,1,0,0,0,0,rango detectado 5-887 excede el del catalogo (23-1581)
+337,LibroVol337.2.md,696,895,1591,100.00,0,1,0,0,0,rango detectado 895-1591 excede el del catalogo (23-1581)
+338,LibroVol338.1.md,676,5,681,100.00,1,0,0,0,0,rango detectado 5-681 excede el del catalogo (40-1583)
+338,LibroVol338.2.md,905,338,1591,99.89,0,2,0,0,1,1 pares fuera de orden | rango detectado 338-1591 excede el del catalogo (40-1583)
+339,LibroVol339.1.md,929,5,935,100.00,1,1,0,0,0,rango detectado 5-935 excede el del catalogo (61-1834)
+339,LibroVol339.2.md,886,951,1837,100.00,0,1,0,0,0,
+340,LibroVol340.1.md,965,7,971,100.00,1,0,0,0,0,
+340,LibroVol340_2.md,1119,979,2100,100.00,0,3,0,0,0,rango detectado 979-2100 excede el del catalogo (7-2029)
+341,LibroVol341.1.md,846,7,857,100.00,1,5,0,0,0,rango detectado 7-857 excede el del catalogo (25-2027)
+341,LibroVol341.2.md,1221,865,2086,100.00,0,1,0,0,0,rango detectado 865-2086 excede el del catalogo (25-2027)
+342,LibroVol342-1.md,1290,1,1291,100.00,1,1,0,0,0,
+342,LibroVol342-2.md,1106,1299,2408,100.00,0,4,0,0,0,rango detectado 1299-2408 excede el del catalogo (1-2399)
+343,LibroVol343-1.md,665,1,665,100.00,1,0,0,0,0,
+343,LibroVol343-2.md,777,681,1457,100.00,0,0,0,0,0,
+343,LibroVol343-3.md,877,1457,2334,100.00,0,1,0,0,0,rango detectado 1457-2334 excede el del catalogo (1-2280)
+344,LibroVol344-1.md,1259,1,1259,100.00,1,0,0,0,0,
+344,LibroVol344-2.md,1369,1259,2627,100.00,0,0,0,0,0,
+344,LibroVol344-3.md,1169,2629,3797,100.00,0,0,0,0,0,rango detectado 2629-3797 excede el del catalogo (1-3782)
+345,LibroVol345-1.md,880,1,880,100.00,1,0,0,0,0,
+345,LibroVol345-2.md,679,881,1560,100.00,0,0,0,0,0,rango detectado 881-1560 excede el del catalogo (1-1549)
+346,LibroVol346-1.md,765,1,765,100.00,1,0,0,0,0,
+346,LibroVol346-2.md,818,767,1585,100.00,0,1,0,0,0,rango detectado 767-1585 excede el del catalogo (1-1564)
+347,LibroVol347-1.md,1176,1,1176,100.00,1,0,0,0,0,
+347,LibroVol347-2.md,1191,1177,2367,100.00,0,0,0,0,0,rango detectado 1177-2367 excede el del catalogo (1-2352)
+348,LibroVol348-1.md,1812,1,1813,100.00,1,0,0,0,0,rango detectado 1-1813 excede el del catalogo (1-1796)
+349,LibroVol349-1.md,310,1,310,100.00,0,0,0,0,0,rango detectado 1-310 excede el del catalogo (10-306)

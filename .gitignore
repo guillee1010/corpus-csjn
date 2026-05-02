@@ -17,3 +17,8 @@ desktop.ini
 # Temporales
 *.tmp
 *.log
+.env
+
+# Locales (red de seguridad y baseline, no para repo)
+snapshots/
+validacion/

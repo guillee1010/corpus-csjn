@@ -1,138 +1,111 @@
-# CSJN — Pipeline completo (corpus 2006-2026)
+# corpus-csjn
 
-## Archivos en este paquete
+Pipeline de extracción y análisis de fallos de la Corte Suprema de Justicia de la Nación (CSJN), Argentina, períodos 2007-2026.
 
-| Archivo | Función |
-|---|---|
-| `csjnv10.py` | Parser de Markdown a CSV. Versión extendida con padrón histórico completo (Petracchi, Zaffaroni, Fayt, Argibay, Boggiano, etc.) |
-| `reparser_firmas.py` | Atajo: si ya generaste CSVs con un parser sin padrón histórico, este script reparsea las firmas sin re-correr el parser |
-| `clasificador_tipo_caso.py` | Asigna `tipo_caso` (admisibilidad / núcleo / originaria) a cada caso |
-| `detector_templates.py` | Detecta los templates Lorenzetti+Vidal y Rosenkrantz+no-Levinas |
-| `csjn_analisis_v3.py` | Análisis estadístico extendido con composición 2006-2026 (5 regímenes), modelos a nivel voto, ZINB, co-disidencia, etc. |
-| `csjn_analisis_v2.py` | Versión anterior (corpus 2021-2026, 3 regímenes). Conservar como respaldo |
+Producto base de la tesis de Maestría en Argumentación Jurídica (UBA), director Dr. Eugenio Sarrabayrouse: *"Diseño institucional y estrategia en la decisión judicial colegiada"*.
 
-## Decidir el camino: A o B
+## Qué es
 
-### Camino A — re-parsear desde los .md (recomendado para tesis)
+Un pipeline que toma los `.md` de los Tomos de Fallos de la CSJN (publicación oficial de la Secretaría de Jurisprudencia) y produce un dataset estructurado con metadatos por fallo: composición de la mayoría, voting pattern (unánime, disidencia, según su voto, mixed), firmantes, outcome, word count, materia inferida, tribunal de origen, fecha.
 
-Si tenés todos los .md y no te molesta esperar la corrida del parser
-(unos minutos por cada 100 casos):
+El objetivo metodológico es producir el equivalente argentino del [Supreme Court Database (SCDB)](http://scdb.wustl.edu/) para análisis cuantitativo de patrones de decisión de la CSJN.
 
-```bash
-python csjnv10.py --input-dir markdowns/ --output csjn_casos_v10.csv
+## Estado actual
+
+- **Versión del parser:** v17beta
+- **Versión del catálogo:** v15
+- **Universo procesable:** 19 tomos (329-349, excluidos 335 y 336 por OCR no legible)
+- **Fallos en catálogo:** 5862
+- **Fallos parseados (último output):** 5819 → en validación tras fix Bug D (debe subir a ~5838+)
+- **Cobertura:** ≥97,9% del universo procesable
+
+## Estructura del repositorio
+
+```
+corpus-csjn/
+├── README.md                          ← este archivo
+├── DEUDA_TECNICA.md                   ← deuda y bugs activos
+├── BITACORA.md                        ← log cronológico de hallazgos
+├── CHANGELOG.md                       ← cambios versionados al pipeline
+├── catalogo_v15.csv                   ← catálogo activo
+├── secciones_indices_v14.csv          ← lookup de aparatos editoriales
+├── construir_catalogo_v15.py          ← genera catálogo
+├── csjnv17_beta.py                    ← parser principal
+├── csjnv16.py, csjnv15.py, csjnv14.py ← versiones anteriores del parser
+├── cruce_anuarios.py                  ← cruza corpus con anuarios CSJN
+├── markdowns_v2/                      ← .md fuente de los Tomos (sólo lectura)
+├── paginas/                           ← scripts y outputs intermedios
+│   ├── detectar_paginas.py            ← detecta headers de página en .md
+│   ├── cruzar_catalogo_y_mapa.py      ← localizador (catálogo + mapa)
+│   ├── mapa_paginas.csv               ← output de detectar_paginas
+│   ├── fallos_localizados.csv         ← output del cruce, input del parser
+│   ├── fallos_localizados_huerfanos.csv
+│   └── analisis_descriptivo.py
+├── scripts/diagnosticos/              ← scripts ad-hoc de diagnóstico
+├── snapshots/                         ← backups antes de cambios destructivos
+└── historial/                         ← versiones obsoletas
 ```
 
-Este genera `csjn_casos_v10.csv` y `csjn_casos_v10_votos.csv` con la columna
-`texto_voto` poblada (necesaria para el detector de templates).
+## Pipeline de cuatro etapas
 
-### Camino B — atajo si ya generaste CSVs con la versión antigua
-
-Si ya tenés CSVs producidos por una versión del parser que no incluía a
-Petracchi/Zaffaroni/Fayt/Argibay en el padrón:
-
-```bash
-python reparser_firmas.py \
-  --casos csjn_casos_v10.csv \
-  --votos csjn_casos_v10_votos.csv \
-  --output-casos csjn_casos_v10_corregido.csv \
-  --output-votos csjn_casos_v10_votos_corregido.csv
+```
+.md fuente
+    ↓
+[1] detectar_paginas.py        → mapa_paginas.csv
+    ↓                            (en qué línea empieza cada página)
+[2] construir_catalogo_v15.py  → catalogo_v15.csv
+    ↓                            secciones_indices_v14.csv
+    ↓                            (qué fallos existen + dónde empiezan los índices)
+[3] cruzar_catalogo_y_mapa.py  → fallos_localizados.csv
+    ↓                            fallos_localizados_huerfanos.csv
+    ↓                            (qué archivo y qué líneas ocupa cada fallo)
+[4] csjnv17_beta.py            → csjn_casos_v17beta_fix349.csv
+                                 (dataset final con voting_pattern, firmas, etc.)
 ```
 
-Esto re-parsea las firmas con el padrón completo en pocos segundos.
-**Importante**: este atajo NO regenera `texto_voto`. Si querés usar el
-detector de templates con todo el rigor, hay que ir por el Camino A.
+## Cómo correr el pipeline
 
-## Pipeline completo (después de A o B)
+Cada etapa es un script Python standalone invocado por línea de comando. No hay orquestador automático.
 
-```bash
-# 1. Clasificador de tipo_caso
-python clasificador_tipo_caso.py \
-  --casos csjn_casos_v10[_corregido].csv \
-  --output csjn_casos_v10_clasificado.csv
+### Etapa 3: localización (con fix Bug D)
 
-# 2. Detector de templates (solo Camino A: requiere texto_voto)
-python detector_templates.py \
-  --casos csjn_casos_v10[_corregido].csv \
-  --votos csjn_casos_v10_votos[_corregido].csv \
-  --output-dir resultados_templates
-
-# 3a. Análisis estadístico — corpus completo
-python csjn_analisis_v3.py \
-  --casos csjn_casos_v10_clasificado.csv \
-  --votos csjn_casos_v10_votos[_corregido].csv \
-  --templates resultados_templates/templates_resultado.csv \
-  --output-dir resultados_v3
-
-# 3b. Análisis solo sobre el "núcleo" (sin admisibilidad ni originaria) — RECOMENDADO
-python csjn_analisis_v3.py \
-  --casos csjn_casos_v10_clasificado.csv \
-  --votos csjn_casos_v10_votos[_corregido].csv \
-  --templates resultados_templates/templates_resultado.csv \
-  --tipo-caso nucleo \
-  --output-dir resultados_v3_nucleo
+```powershell
+cd C:\Users\guill\Proyectos\corpus-csjn\paginas
+python cruzar_catalogo_y_mapa.py `
+  ..\catalogo_v15.csv `
+  mapa_paginas.csv `
+  ..\markdowns_v2 `
+  fallos_localizados.csv `
+  ..\secciones_indices_v14.csv
 ```
 
-## Composiciones institucionales (5 regímenes)
+El quinto argumento (`secciones_indices_v14.csv`) es opcional pero recomendado: activa el fix Bug D que recupera los últimos fallos de cada tomo cortando el bloque antes del aparato editorial de índices.
 
-El v3 maneja 5 regímenes en la variable `composicion`:
+### Etapa 4: parsing
 
-| Régimen | Período | Composición |
-|---|---|---|
-| `banco_de_7` | hasta 09/05/2014 | Lorenzetti, Highton, Fayt, Petracchi, Maqueda, Zaffaroni, Argibay |
-| `transicion` | 10/05/2014 — 21/08/2016 | Vacantes progresivas: 6→5→4 jueces |
-| `banco_de_5` | 22/08/2016 — 01/11/2021 | Lorenzetti, Highton, Maqueda, Rosatti, Rosenkrantz |
-| `banco_de_4` | 02/11/2021 — 28/12/2024 | Sin Highton |
-| `banco_de_3` | 29/12/2024 → presente | Sin Maqueda (incluye intervalo García-Mansilla) |
+```powershell
+cd C:\Users\guill\Proyectos\corpus-csjn
+python csjnv17_beta.py
+```
 
-Fechas tomadas del cuadro institucional verificado.
+Configuración interna del parser (paths, etc.) en el header del script.
 
-## Salidas principales
+## Decisiones metodológicas relevantes
 
-### Del parser (`csjnv10.py`)
-- `csjn_casos_v10.csv`: 1 fila por caso
-- `csjn_casos_v10_votos.csv`: 1 fila por (caso, juez), con `texto_voto`
+- **Tomos 335 y 336 excluidos** por imposibilidad de OCR (firmas hológrafas en lugar de texto). No es pérdida del pipeline, es decisión de soporte material.
+- **Catálogo v15** corrige bias del v14 en detección de fin de fallo.
+- **Sin orquestador automático**: cada script se invoca a mano. Decisión deliberada para mantener trazabilidad por etapa.
+- **Validación incremental**: snapshots antes de cada cambio, diff post-cambio, spot-check sobre casos recuperados. Un fix por vez.
 
-### Del clasificador
-- `csjn_casos_v10_clasificado.csv`: input + columnas `tipo_caso` y `tipo_caso_grupo`
+## Referencias del proyecto al output
 
-### Del detector de templates
-- `templates_resultado.csv`: flags por caso
-- `templates_serie_mensual.csv` / `templates_serie_anual.csv`: serie temporal
-- `fig_templates_serie.png`: gráfico de aparición temporal
-- `templates_consolidado.xlsx`: Excel con todas las tablas
+El dataset producido alimenta los capítulos 3 y 4 de la tesis (análisis cuantitativo de patrones de mayoría, frecuencia de concurrencias y disidencias, evolución por composición de la Corte). Hipótesis cubiertas:
 
-### Del análisis estadístico v3
-- `corpus_limpio_v3.csv`: corpus modelable
-- `csjn_resultados_v3.xlsx`: todas las tablas
-- `fig_dissent_forest.png`: forest plot logit disidencia
-- `fig_voto_mlogit_forest.png`: multinomial a nivel voto
-- `fig_zinb_obs_vs_pred.png`: ZINB observado vs predicho
-- `fig_codisidencia_banco_de_7.png` y los 4 bancos restantes
+- **H3**: ausencia de incentivos institucionales para opinión unificada → promueve concurrencias y disidencias.
+- **H4**: permanencia efectiva de secretarías letradas → memoria institucional acumulada.
 
-## Resultados esperados (validación con corpus 2006-2026)
+Para detalles teóricos ver el documento de tesis. Para deuda técnica del pipeline, ver `DEUDA_TECNICA.md`. Para historial de hallazgos y diagnósticos, ver `BITACORA.md`.
 
-Con corpus de ~5.700 casos correctamente parseados:
+## Versionado
 
-- **Detección de jueces históricos**: Petracchi, Zaffaroni, Fayt, Argibay
-  cada uno con ~1.500-1.800 votos en banco de 7
-- **Co-disidencia banco de 7**: φ Highton+Argibay ≈ 0,28; Fayt+Zaffaroni ≈ 0,25
-- **Co-disidencia banco de 5**: φ Rosatti+Maqueda ≈ 0,28 (corrige el dato
-  inflado de versiones anteriores)
-- **Co-disidencia banco de 3**: φ Rosatti+Lorenzetti ≈ 0,66 (eje nuevo emergente)
-
-## Limitaciones conocidas
-
-- **Tomos 335 y 336 con 0 jueces detectados**: probablemente .md vacíos o
-  con formato roto. No afectan al resto del análisis.
-- **Detección de inadmisible_280 baja en tomos viejos** (solo ~23 casos
-  detectados): la fórmula textual cambió a lo largo del tiempo.
-- **Casos sin_dispositivo en tomos viejos (~19%)**: el "Por ello" en libros
-  pre-2014 puede tener formato distinto al esperado.
-
-## Próximos pasos sugeridos
-
-1. Validación manual de templates: muestrear 30-50 casos con flag y verificar.
-2. Análisis temporal completo de templates: ¿desde cuándo Lorenzetti usa Vidal?
-3. Detector de remisiones (fundamentación por mero reenvío a precedente).
-4. Detector ANSES masivo (tribunal previsional + Badaro/Elliff/Blanco).
-5. Diagnóstico de outcomes mal detectados en tomos viejos.
+Versiones del parser tienen sufijo numérico (`csjnv14.py`, `csjnv15.py`, etc.). Versiones obsoletas se mantienen en `historial/` para reproducibilidad de outputs anteriores. Cambios al pipeline se registran en `CHANGELOG.md`.

@@ -1,0 +1,105 @@
+caso_id_canonico,tomo,source_file,voting_pattern,outcome,status_localizacion,n_patrones,case_name_indice
+345_p98,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,Biocardales SA c/ DGA s/ Recurso directo de organismo externo
+345_p101,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,Cantoni S.A. c/ P.E.N. s/ Amparo ley 16.986
+345_p154,345,LibroVol345-1.md,unanime,hace_lugar,ok_sin_marcador_apertura,1,Transporte Interprovincial Correntino Sociedad Anónima (TICSA) c/ Secretaría de Transporte de la Nación s/ Amparo ley 16.986
+345_p155,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Lebos, Alberto s/ Incidente de incompetencia"
+345_p160,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,2,"Asociación Civil con Personería Jurídica Cuenca Río Paraná c/ Aguas Santafesinas S.A. y Otros s/ Amparo ambiental | Santucho, Jorge Adrián s/ Incidente de incompetencia"
+345_p181,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Ezquiaga, María Fabiana y Otro s/ Incidente de incompetencia"
+345_p182,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Fedele, Franco s/ Incidente de incompetencia"
+345_p183,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Gamron, Miguel Andrés s/ Incidente de incompetencia"
+345_p184,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Garfunkel, Rafael Augusto y Otros s/ Incidente de incompetencia"
+345_p185,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,3,"López, Andrés s/ Incidente de incompetencia"
+345_p243,345,LibroVol345-1.md,unanime,nulidad,ok_sin_marcador_apertura,1,N.N. s/ Incidente de incompetencia
+345_p250,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,2,"Karlen, Alejandro Hernán c/ Estado Nacional, Poder Ejecutivo de la Nación s/ Ejecución de sentencia"
+345_p276,345,LibroVol345-1.md,unanime,confirma,ok_sin_marcador_apertura,2,"Bustamante, María Vanesa c/ Pepsico de Argentina S.R.L. y Otro s/ Accidente - acción civil"
+345_p282,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Brandt, María Claudia c/ Tribunal de Disciplina del Colegio de Abogados de Córdoba s/ Recurso de queja | Bureau Veritas Argentina S.A. y Otro c/ AGIP s/ Proceso de conocimiento"
+345_p297,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"L., A. E. en rep. de su hijo M. L. B. A. c/ Estado Nacional - Programa Federal de Salud - Dirección Nacional de Prestaciones Médicas y Otro s/ Amparo ley 16.986"
+345_p379,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Díaz, Miriam c/ Celeri, Agustín s/ Incidente de incompetencia"
+345_p380,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"F., L. y Otro s/ Incidente de incompetencia"
+345_p381,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"De los Santos, Alcino y Otros s/ Incidente de incompetencia"
+345_p383,345,LibroVol345-1.md,unanime,desestima,ok_sin_marcador_apertura,1,"Maceroni, Sergio Fabián y Otro s/ Incidente de incompetencia"
+345_p400,345,LibroVol345-1.md,sin_firma,desestima,ok_sin_marcador_apertura,1,"Sindicato de Obreros y Empleados de Minoridad y Educación c/ EN - M Trabajo, Empleo y Seguridad Social y Otro s/ Juicio sumarísimo"
+345_p416,345,LibroVol345-1.md,unanime,otro,ok_sin_marcador_apertura,1,N.N. s/ Inf. ley 24.051. Denunciante: Ignacio Chiodo
+345_p600,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,2,"Wingeyer, Carlos Érico c/ Aime, Oscar Reinaldo y Otros s/ Daños y perjuicios"
+345_p602,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Canal, Cintia Yanina y Otros s/ Incidente de incompetencia"
+345_p603,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Torrilla, Ezequiel Fabio y Otro s/ Incidente de incompetencia"
+345_p604,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Paz, Carlos Raúl s/ Incidente de incompetencia"
+345_p788,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Cullen, Miguel Ángel y Otros s/ Formula petición"
+345_p800,345,LibroVol345-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,Ford Argentina S.C.A. s/ Inhibitoria
+345_p867,345,LibroVol345-1.md,unanime,otro,ok_sin_marcador_apertura,1,"Sosa, Marina Fabiana s/ Incidente de incompetencia"
+345_p936,345,LibroVol345-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Otazú Morel, Juan Antonio c/ Estado de la Provincia de Misiones – Poder Ejecutivo s/ Demanda contencioso administrativa"
+345_p950,345,LibroVol345-2.md,unanime,procedente,ok_sin_marcador_apertura,1,"De Amorrortu, Francisco Javier c/ AySA S.A. y Otro s/ Proceso de conocimiento"
+345_p1010,345,LibroVol345-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"M., L. M. c/ ANSeS s/ Retiro por invalidez (art. 49 P.4. ley 24.241)"
+345_p1083,345,LibroVol345-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,Sociar S.A. s/ Recurso de queja
+345_p1084,345,LibroVol345-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"V., C. H. c/ I.O.M.A. s/ Incidente de incompetencia"
+345_p1085,345,LibroVol345-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Corrado Soto, Guillermo Cristian y Otros c/ Los Grobos Agropecuaria SA y Otros s/ Acción preventiva de daños"
+345_p1100,345,LibroVol345-2.md,unanime,desestima,ok_sin_marcador_apertura,1,"Manrique, Roberto Fabián s/ Incidente de incompetencia"
+345_p1170,345,LibroVol345-2.md,unanime,desestima,ok_sin_marcador_apertura,1,"Asociación de Bancos de la Argentina y Otros c/ Córdoba, Provincia de s/ Acción declarativa de certeza"
+345_p1173,345,LibroVol345-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"De Amorrortu, Francisco Javier c/ Ministerio de Transporte de la Nación y Otros s/ Acción declarativa de inconstitucionalidad."
+345_p1289,345,LibroVol345-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Mitchell, Diego Javier c/ Latam Airlines Group SA y Otro s/ Incumplimiento de contrato"
+345_p1290,345,LibroVol345-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Molina, Alejandro Héctor c/ Universidad Tecnológica Nacional s/ Educación superior - ley 24521 - art. 32"
+345_p1296,345,LibroVol345-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,Ministerio Público Fiscal s/ Incidente de incompetencia
+345_p1341,345,LibroVol345-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Dirección Nacional de Vialidad c/ Fernández, Cristina Elizabet y Otros s/ Responsabilidad por daños"
+345_p1496,345,LibroVol345-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"G., M. P. c/ IOMA s/ Acción de amparo"
+346_p74,346,LibroVol346-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,2,"C., H. D. c/ F., D. C. s/ División de bienes"
+346_p172,346,LibroVol346-1.md,unanime,hace_lugar,ok_sin_marcador_apertura,1,"N.N. s/ Incidente de incompetencia. Dte: Ferrero, Gabriela Laura"
+346_p176,346,LibroVol346-1.md,sin_firma,otro,ok_sin_marcador_apertura,1,"Yancarlos, Teresa Elizabeth y Otro c/ Mapfre Argentina ART S.A. y Otros s/ Otros - previsionales"
+346_p192,346,LibroVol346-1.md,unanime,procedente,ok_sin_marcador_apertura,1,"Santiago, Eduardo s/ Incidente de incompetencia"
+346_p247,346,LibroVol346-1.md,unanime,desestima,ok_sin_marcador_apertura,1,"Gilli, María de los Ángeles y Otros c/ Santiago del Estero, Provincia de s/ Inhibitoria"
+346_p256,346,LibroVol346-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,Instituto de Previsión Social de Neuquén c/ Municipalidad de la Ciudad de Resistencia s/ Cobro de sumas de dinero
+346_p390,346,LibroVol346-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Marchi, Héctor Daniel c/ Carrió, Elisa María Avelina y Otros s/ Daños y perjuicios"
+346_p431,346,LibroVol346-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Passaglia, Manuel y Otro s/ Querella"
+346_p624,346,LibroVol346-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Gorenstein, Marcelo Ricardo c/ Telecentro S.A. s/ Daños y perjuicios"
+346_p625,346,LibroVol346-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Julián, Daniel Rafael c/ Hidrotec S.R.L. s/ Ordinario – despido"
+346_p626,346,LibroVol346-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"N.N. (Estancia La Escondida - Villa Mascardi) y Otros s/ Incidente de incompetencia. Querellante: Giménez Tournier, María Magdalena"
+346_p864,346,LibroVol346-2.md,unanime,revoca,ok_sin_marcador_apertura,1,"Romani Tappulima, Saúl Roosevelt s/ Incidente de incompetencia"
+346_p920,346,LibroVol346-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"N. N. s/ Incidente de incompetencia. Denunciante: Varela, Rubén Darío"
+346_p1062,346,LibroVol346-2.md,unanime,otro,ok_sin_marcador_apertura,1,Promedon SA c/ GCBA – AGIP - DGR s/ Proceso de conocimiento
+346_p1086,346,LibroVol346-2.md,unanime,procedente,ok_sin_marcador_apertura,1,"N.N. s/ Incidente de incompetencia. Dte: Javorsky, Rolando Sergio"
+346_p1194,346,LibroVol346-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,2,Fisco de la Provincia de Buenos Aires (004 0005013) c/ Instituto Nac. de Serv. Soc. para Jubilados y Pensionados s/ Proceso de ejecución
+346_p1200,346,LibroVol346-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Maldonado, Carlos Javier y Otros c/ Banco Hipotecario SA y Otro s/ Daños y perjuicios"
+346_p1233,346,LibroVol346-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,Banco Central de la República Argentina c/ Asociación Bancaria Nacional y Otros s/ Inhibitoria
+346_p1279,346,LibroVol346-2.md,unanime,originaria,ok_sin_marcador_apertura,1,"Gauto, Gustavo Javier s/ Incidente de incompetencia"
+346_p1295,346,LibroVol346-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,Curtume CBR S.A. s/ Incidente de incompetencia
+346_p1461,346,LibroVol346-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"C., M. M. c/ OSDE s/ Amparo de salud"
+346_p1520,346,LibroVol346-2.md,mixed,revoca,ok_sin_marcador_apertura,1,N.N. s/ Incidente de incompetencia
+347_p1,347,LibroVol347-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"NN y Otro s/ Incidente de incompetencia. Denunciante: Giusti, Alicia Matilde"
+347_p127,347,LibroVol347-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Grajlah, Juan Matías c/ Zapata, Gonzalo Hugo y Otros s/ Daños y perjuicios"
+347_p214,347,LibroVol347-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"C., G. A. y Otro c/ Swiss Medical SA s/ Amparo de salud"
+347_p246,347,LibroVol347-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"L., C. C. c/ OAM (Obra Asistencial Mutual Mar del Plata) y Otro s/ Incidente"
+347_p367,347,LibroVol347-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Municipalidad de Almirante Brown c/ Barraza, Elba Cristina s/ Medida cautelar autónoma"
+347_p631,347,LibroVol347-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"González, Claudio Martin y Otros s/ Incidente de incompetencia"
+347_p652,347,LibroVol347-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Sánchez, Ramón (víctima) s/ Muerte por causa dudosa"
+347_p823,347,LibroVol347-1.md,unanime,otro,ok_sin_marcador_apertura,1,GCBA c/ Correo Oficial de la R.A. S.A. y Otro s/ Ejecución fiscal tributarios
+347_p1021,347,LibroVol347-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Tubio, Oscar c/ Asociación Civil Club Atlético Boca Juniors y Otro s/ Daños y perjuicios"
+347_p1375,347,LibroVol347-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Usín, Leandro Gustavo y Otros s/ Incidente de incompetencia"
+347_p1376,347,LibroVol347-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Páez, Ángel s/ Incidente de incompetencia"
+347_p1378,347,LibroVol347-2.md,unanime,competencia,ok_sin_marcador_apertura,1,"Robledo, María Alicia y Otros c/ Programa Federal Incluir Salud (ex Programa Federal de Salud) - Ministerio de Salud de la Nación y Otros s/ Daños y perjuicios."
+347_p1381,347,LibroVol347-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"F., C. S. s/ Amparo"
+347_p1383,347,LibroVol347-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Guerra, Andrea Elizabeth c/ Despegar. Com. Ar S.A. y Otro s/ Ordinario"
+347_p1384,347,LibroVol347-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"M., D. A. y Otros c/ V., C. R. s/ Nulidad de convenio - incidente familia"
+347_p1762,347,LibroVol347-2.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Echeverría, Martín y Otros s/ Incidente de incompetencia"
+348_p60,348,LibroVol348-1.md,unanime,desestima,ok_sin_marcador_apertura,1,"Griego, Brandon o Maximiliano Pereyra s/ incidente de incompetencia"
+348_p82,348,LibroVol348-1.md,unanime,desestima,ok_sin_marcador_apertura,1,"González, Oscar Eduardo s/ incidente de incompetencia"
+348_p89,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Monzón, Horacio Andrés y otros s/ incidente de incompetencia"
+348_p94,348,LibroVol348-1.md,unanime,hace_lugar,ok_sin_marcador_apertura,1,"Lago, Adriana Marcela y otro c/ Aerolíneas Argentinas S.A. s/ ordinario"
+348_p260,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Gómez, José Antonio y otro c/ Mariño, Sandra Mariana (fallecida) y otros s/ daños y perjuicios"
+348_p274,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Blindaje Seguridad SRL c/ Ponce de León, Alejandro y otro s/ daños y perjuicios"
+348_p286,348,LibroVol348-1.md,unanime,hace_lugar,ok_sin_marcador_apertura,1,"B., S. S. c/ C., R. R. s/ homologación de convenio (civil)"
+348_p293,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Salvo, Cristian c/ EDERSA s/ daños y perjuicios"
+348_p294,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Souza, Amanda Graciela c/ Ente 23.283 y 23.412 Cooperador Leyes y otro s/ otros reclamos"
+348_p295,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Ayala, Andrea Fabiana c/ Banco de Servicios y Transacciones S.A s/ hábeas data (art. 43. C.N.)"
+348_p328,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,Provincia de Misiones c/ AFIP-DGI s/ contencioso administrativo - varios
+348_p329,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"R., J. A. c/ R., M. A. s/ sumarísimo"
+348_p473,348,LibroVol348-1.md,unanime,otro,ok_sin_marcador_apertura,1,"Hotesur S.A. c/ Altman, Daniel Ernesto s/ daños y perjuicios"
+348_p533,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Giménez, Mirta Raquel c/ Programa Federal Incluir Salud y otro s/ amparo ley 16.986"
+348_p878,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,Ushuaia Green SAS c/ Banco BBVA Argentina SA s/ incidente
+348_p1028,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"Belsito, Noemí s/ incidente de competencia"
+348_p1254,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,"ENAFIP c/ Basílico, Luis Germán s/ proceso de ejecución"
+348_p1351,348,LibroVol348-1.md,unanime,abstracto,ok_sin_marcador_apertura,1,"Pintos, Pedro José s/ incidente de competencia"
+348_p1429,348,LibroVol348-1.md,unanime,otro,ok_sin_marcador_apertura,1,"González, Horacio Ricardo y otro c/ EN - M Seguridad - resol. 943/23 s/amparo ley 16.986"
+348_p1533,348,LibroVol348-1.md,unanime,procedente,ok_sin_marcador_apertura,1,"González, Manuel c/ Dear Power S.R.L. s/ sumarísimo"
+348_p1534,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,N.N. s/ incidente de competencia
+348_p1546,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,YPF SA c/ GASNEA SA s/ recurso directo organismo externo
+348_p1719,348,LibroVol348-1.md,unanime,otro,ok_sin_marcador_apertura,1,"S., K. S. y otro c/ A. S., A. S. s/ medidas precautorias"
+348_p1728,348,LibroVol348-1.md,sin_firma,sin_dispositivo,ok_sin_marcador_apertura,1,N.N. s/ incidente de competencia

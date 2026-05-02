@@ -1,0 +1,3327 @@
+FIRMAS POSIBLES DE PROCURADOR (apellidos no conocidos)
+======================================================================
+
+Apellidos ya detectados (filtrados): Casal, Monti, Abramovich, Cosarin, Righi
+
+Apellidos candidatos encontrados (con >=5 ocurrencias):
+----------------------------------------------------------------------
+Total: 553
+
+
+Art: 3136 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L59837: Art.
+    LibroVol329.1.md L59952: Art.
+    LibroVol329.1.md L59953: Art.
+
+General: 2513 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L17167: Procurador General.
+    LibroVol329.1.md L20542: se al señor Procurador General.
+    LibroVol329.1.md L21287: se al señor Procurador General.
+
+Nacional: 1526 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L2254: Nacional.
+    LibroVol329.1.md L2504: la Constitución Nacional.
+    LibroVol329.1.md L7879: el artículo 117 de la Constitución Nacional.
+
+Nación: 1041 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L1766: la Nación.
+    LibroVol329.1.md L3400: Comercial de la Nación.
+    LibroVol329.1.md L8169: cesal Civil y Comercial de la Nación.
+
+Lorenzetti: 1017 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L15663: voto de los jueces Zaffaroni y Lorenzetti.
+    LibroVol330.2.md L46584: 21 de mayo de 2006) voto del juez Lorenzetti.
+    LibroVol330.4.md L49928: (Voto de los Dres. Ricardo Luis Lorenzetti
+
+Argibay: 1007 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L23198: dencia de la Dra. Carmen M. Argibay.
+    LibroVol331.1.md L247: — E. Raúl Zaffaroni — Carmen M. Argibay.
+    LibroVol331.1.md L919: ministra doctora doña Carmen M. Argibay
+
+Maqueda: 908 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L16099: los doctores Petracchi y Maqueda.
+    LibroVol329.3.md L67149: Maqueda.
+    LibroVol330.2.md L943: los jueces Fayt y Maqueda.
+
+Rosenkrantz: 816 ocurrencias
+  Ejemplos:
+    LibroVol339.2.md L11979: Carlos Fernando Rosenkrantz.
+    LibroVol339.2.md L15306: Rosenkrantz.
+    LibroVol339.2.md L18523: Carlos Fernando Rosenkrantz.
+
+Rosatti: 744 ocurrencias
+  Ejemplos:
+    LibroVol331.3.md L17984: Horacio Daniel Rosatti.
+    LibroVol339.1.md L34973: Carlos Maqueda — Horacio Rosatti.
+    LibroVol339.1.md L35073: Carlos Maqueda — Horacio Rosatti.
+
+Aires: 502 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L26: Tucumán 1471 (1050) Buenos Aires
+    LibroVol329.1.md L4406: vincia de Buenos Aires.
+    LibroVol329.1.md L8723: de la Ciudad Autónoma de Buenos Aires.
+
+Federal: 412 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L4481: tal Federal.
+    LibroVol329.1.md L8339: pital Federal.
+    LibroVol329.1.md L8353: piedad Inmueble de la Capital Federal.
+
+Nolasco: 393 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L51942: Nolasco.
+    LibroVol329.4.md L3074: de la jueza Highton de Nolasco.
+    LibroVol329.4.md L3348: voto de la jueza Highton de Nolasco.
+
+Zaffaroni: 393 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60297: designó en tal cargo al Dr. E. Raúl Zaffaroni.
+    LibroVol329.4.md L78093: dente Dr. E. Raúl Zaffaroni.
+    LibroVol330.1.md L43306: en disidencia del los jueces Fayt y Zaffaroni.
+
+Tribunal: 356 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L6810: trae el asunto a conocimiento del Tribunal.
+    LibroVol329.1.md L7420: minos en que ha sido sometido al Tribunal.
+    LibroVol329.1.md L8116: originaria del Tribunal.
+
+Corte: 352 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L208: ley 1285/58 y resolución Nº 1360/91 de la Corte.
+    LibroVol329.1.md L3912: que le cabe a esta Corte.
+    LibroVol329.1.md L4158: deducido por la actora ante esta Corte.
+
+Notifíquese: 322 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L2048: ción). Notifíquese.
+    LibroVol329.1.md L2797: Notifíquese.
+    LibroVol329.1.md L2882: Notifíquese.
+
+Bausset: 309 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L517: Buenos Aires, 7 de marzo de 2005. Ricardo O. Bausset.
+    LibroVol329.1.md L847: viembre de 2004. Ricardo O. Bausset.
+    LibroVol329.1.md L1158: Ricardo O. Bausset.
+
+Suprema: 291 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L1622: instancia originaria de la Corte Suprema.
+    LibroVol329.1.md L4950: de la Corte Suprema.
+    LibroVol329.1.md L13874: Suprema.
+
+Warcalde: 270 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L3058: González Warcalde.
+    LibroVol329.1.md L6414: Buenos Aires, 22 de agosto de 2005. Luis Santiago González Warcalde.
+    LibroVol329.1.md L8935: Warcalde.
+
+Estado: 265 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L9310: del Estado.
+    LibroVol329.1.md L30981: Estado.
+    LibroVol329.1.md L47557: ciación ilícita en perjuicio del Estado.
+
+Bicentenario: 259 ocurrencias
+  Ejemplos:
+    LibroVol333.1.md L22: Año del Bicentenario
+    LibroVol333.1.md L170: Año del Bicentenario
+    LibroVol333.1.md L334: Año del Bicentenario
+
+Argentina: 243 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L34: Impreso en la Argentina
+    LibroVol329.1.md L35: Printed in Argentina
+    LibroVol329.1.md L1518: Argentina.
+
+Penal: 230 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L19642: Código Penal.
+    LibroVol329.1.md L27671: tribunal es la Cámara Nacional de Casación Penal.
+    LibroVol329.1.md L31953: infracción al artículo 157 bis del Código Penal.
+
+Generalidades: 227 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L1695: la Corte Suprema. Generalidades.
+    LibroVol329.1.md L1708: la Corte Suprema. Generalidades.
+    LibroVol329.1.md L1720: la Corte Suprema. Generalidades.
+
+Trámite: 218 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L4408: RECURSO EXTRAORDINARIO: Trámite.
+    LibroVol329.1.md L4421: RECURSO EXTRAORDINARIO: Trámite.
+    LibroVol329.1.md L12146: RECURSO DE QUEJA: Trámite.
+
+Otros: 194 ocurrencias
+  Ejemplos:
+    LibroVol331.1.md L11246: UNIVERSAL S.R.L. y Otros
+    LibroVol331.1.md L15918: VICTOR ALEJANDRO ARGÜELLO y Otros
+    LibroVol331.1.md L17742: MARTIN FERNANDO DELFINO y Otros
+
+Netto: 185 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L29219: Buenos Aires, 21 de febrero de 2014. Irma Adriana García Netto.
+    LibroVol337.2.md L19980: García Netto.
+    LibroVol337.2.md L21005: lada. Buenos Aires, 18 de marzo de 2014. Irma Adriana García Netto.
+
+Civil: 172 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L11754: del Código Civil.
+    LibroVol329.1.md L12778: en los arts. 953 y 1071 del Código Civil.
+    LibroVol329.1.md L13292: normas del Código Civil.
+
+Petracchi: 159 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59740: S. Petracchi
+    LibroVol330.1.md L11520: voto del juez Petracchi.
+    LibroVol330.1.md L28135: de los jueces Lorenzetti y Petracchi.
+
+Provincia: 155 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L6800: lada de esa Provincia.
+    LibroVol329.1.md L21186: 36 y 37 de la Constitución de la Provincia.
+    LibroVol329.1.md L52340: Ente Regulador de la Electricidad de la Provincia
+
+Judicial: 147 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L577: Judicial.
+    LibroVol329.1.md L14465: Judicial.
+    LibroVol329.1.md L17889: Judicial.
+
+Constitución: 137 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L15769: de la Constitución.
+    LibroVol329.1.md L42779: Público por el art. 120 de dicha Constitución.
+    LibroVol329.2.md L59855: 110 de la Constitución
+
+Volumen: 132 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L51494: página dentro del Volumen.
+    LibroVol329.1.md L52060: página dentro del Volumen.
+    LibroVol329.1.md L52094: página dentro del Volumen.
+
+Otro: 131 ocurrencias
+  Ejemplos:
+    LibroVol331.1.md L838: EDUARDO FRANCISCO ALANIZ y Otro
+    LibroVol331.1.md L1146: MARIA EUGENIA CIRILO y Otro
+    LibroVol331.1.md L3596: RODOLFO YANZON y Otro
+
+Fundamental: 127 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L11456: de la Ley Fundamental.
+    LibroVol329.1.md L21773: los artículos 31 y 33 de la Carta Fundamental.
+    LibroVol329.1.md L29264: dispuesto por el art. 116 de la Ley Fundamental.
+
+Amparo: 118 ocurrencias
+  Ejemplos:
+    LibroVol334.2.md L1771: VARGAS, OTTO CESAR y Otros s/ Amparo
+    LibroVol334.3.md L6870: y Otro (ESTADO NACIONAL) s/ Amparo
+    LibroVol334.3.md L12904: de la CAPITAL FEDERAL s/ Amparo
+
+Varias: 113 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L5844: nes anteriores a la sentencia definitiva. Varias.
+    LibroVol329.1.md L10950: sión de las cuestiones de hecho. Varias.
+    LibroVol329.1.md L16884: nes anteriores a la sentencia definitiva. Varias.
+
+Plata: 112 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L1117: do por la Municipalidad de La Plata.
+    LibroVol329.1.md L38461: vil y Comercial de La Plata.
+    LibroVol329.1.md L39383: tancia Nº 2 de Mar del Plata.
+
+Humanos: 112 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L10028: Americana sobre Derechos Humanos.
+    LibroVol329.1.md L18048: Convención Americana sobre Derechos Humanos.
+    LibroVol329.1.md L35479: de Derechos Humanos.
+
+Fayt: 102 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L14455: del juez Fayt.
+    LibroVol329.2.md L51450: del juez Fayt.
+    LibroVol330.1.md L38254: igual numeración del voto del juez Fayt.
+
+Córdoba: 96 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L5841: ral Nº 2, de la Provincia de Córdoba.
+    LibroVol329.1.md L34960: San Francisco, Provincia de Córdoba.
+    LibroVol329.2.md L14768: mera Nominación de Córdoba.
+
+Eduardo: 91 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52486: Mitrocarga S.A. y otro (Schwartz, Pablo Eduardo
+    LibroVol329.2.md L12174: sentes actuaciones. Buenos Aires, 17 de noviembre de 2005. Eduardo
+    LibroVol329.2.md L40379: solución apelada. Buenos Aires, 30 de septiembre de 2005. Eduardo
+
+Recurso: 90 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L50374: 5; Recurso
+    LibroVol330.4.md L51110: 1; Recurso
+    LibroVol330.4.md L51111: de queja, 5, 6; Recurso
+
+Buenos: 84 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52107: Acuña, Mónica D. y otros c/ Provincia de Buenos
+    LibroVol329.1.md L52273: Contreras, Carlos Walter c/ Provincia de Buenos
+    LibroVol329.1.md L52315: (Sociedad Italiana de Beneficencia en Buenos
+
+Mendoza: 82 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L574: Mendoza.
+    LibroVol329.1.md L8868: Social, representada por el Dr. Víctor Mendoza.
+    LibroVol329.1.md L18880: de Abogados de Mendoza.
+
+Público: 82 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L1426: Público.
+    LibroVol329.1.md L13276: Público.
+    LibroVol329.1.md L28736: Público.
+
+Pág: 81 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L62608: Pág.
+    LibroVol329.2.md L72043: Pág.
+    LibroVol329.3.md L86728: Pág.
+
+Luis: 75 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L11088: dido el recurso extraordinario. Buenos Aires, 2 de mayo de 2005. Luis
+    LibroVol329.2.md L702: la Provincia de San Luis.
+    LibroVol329.2.md L882: nas Nº 3 de la Provincia de San Luis.
+
+Procuración: 75 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L49030: de la Procuración
+    LibroVol330.4.md L49195: -Del dictamen de la Procuración
+    LibroVol330.4.md L49211: de la Procuración
+
+Acción: 75 ocurrencias
+  Ejemplos:
+    LibroVol338.2.md L2944: c/ MUNICIPALIDAD de GENERAL GÜEMES s/ Acción
+    LibroVol338.2.md L6873: YPF S.A. c/ CHUBUT, PROVINCIA del s/ Acción
+    LibroVol339.1.md L35335: de la Provincia de La Pampa s/ Acción
+
+González: 73 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L6322: González.
+    LibroVol329.1.md L8064: ría Gabriela Gallegos y Horacio González
+    LibroVol329.1.md L8934: cia. Buenos Aires, 14 de febrero de 2006. Luis Santiago González
+
+Regulación: 72 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L3430: HONORARIOS: Regulación.
+    LibroVol329.1.md L3438: HONORARIOS: Regulación.
+    LibroVol329.1.md L3445: HONORARIOS: Regulación.
+
+Salta: 72 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L36761: nicipio de Salta.
+    LibroVol329.3.md L34348: vincia de Salta.
+    LibroVol329.3.md L68859: Tribunal de origen: Corte de Justicia de Salta.
+
+Ríos: 68 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L7964: Uruguay, Provincia de Entre Ríos.
+    LibroVol329.1.md L14349: tancia de Paraná, Provincia de Entre Ríos.
+    LibroVol329.1.md L21682: tancia de Paraná, Provincia de Entre Ríos.
+
+Trabajo: 68 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L18015: gos del Trabajo.
+    LibroVol329.1.md L56048: a los jueces nacionales del Trabajo.
+    LibroVol329.3.md L4305: de Contrato de Trabajo.
+
+Ejecutivo: 65 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L795: exclusiva del Poder Ejecutivo.
+    LibroVol329.1.md L52181: Barreiro, Bienvenido T. y otro c/ Poder Ejecutivo
+    LibroVol329.3.md L42573: Poder Judicial en el ámbito del Ejecutivo.
+
+Fiscal: 65 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L23736: tante del Ministerio Público Fiscal.
+    LibroVol329.3.md L50748: II del dictamen del señor Procurador Fiscal.
+    LibroVol329.3.md L68120: dos del Ministerio Público Fiscal.
+
+Despido: 65 ocurrencias
+  Ejemplos:
+    LibroVol334.2.md L3276: RADIOCOMUNICACIONES MOVILES S.A. s/ Despido
+    LibroVol334.3.md L3029: c/ REPRESENTACIONES S.R.L. y Otros s/ Despido
+    LibroVol337.1.md L6926: S.A. s/ Despido
+
+Juan: 62 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L396: vincia de San Juan
+    LibroVol329.1.md L27030: San Juan.
+    LibroVol329.1.md L41746: de San Juan.
+
+Santiago: 61 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L3057: entre otros). Buenos Aires, 29 de agosto de 2005. Luis Santiago
+    LibroVol329.1.md L34647: tencia apelada. Buenos Aires, 27 de abril de 2005. Luis Santiago
+    LibroVol329.1.md L46480: defensa en juicio. Buenos Aires, 12 de agosto de 2005. Luis Santiago
+
+Oficial: 61 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L34906: adecuadamente refutados por la Defensora Oficial.
+    LibroVol329.2.md L35364: Oficial.
+    LibroVol329.2.md L62489: Defensora Oficial.
+
+Laura: 60 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L47704: intervino en la contienda. Buenos Aires, 30 de mayo de 2006. Laura
+    LibroVol329.3.md L72274: ta, Provincia de Córdoba. Buenos Aires, 30 de mayo de 2006. Laura
+    LibroVol329.4.md L29624: ajeno a esta instancia. Buenos Aires, 22 de septiembre de 2006. Laura
+
+Fe: 59 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L21368: cia de Santa Fe.
+    LibroVol329.2.md L4871: ral de Santa Fe.
+    LibroVol329.2.md L9055: Demandada: Provincia de Santa Fe.
+
+Becerra: 58 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L10786: do Becerra.
+    LibroVol329.1.md L11177: do Becerra.
+    LibroVol329.1.md L12935: ta. Buenos Aires, 18 de noviembre de 2003. Nicolás Eduardo Becerra.
+
+Tucumán: 58 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L6928: de la ley 5636, ambas de Tucumán.
+    LibroVol329.2.md L7458: Nombre de la demandada: Provincia de Tucumán.
+    LibroVol329.2.md L11033: Tribunal de origen: Cámara Federal de Tucumán.
+
+Neuquén: 57 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L35100: Neuquén.
+    LibroVol329.1.md L52447: Lago Espejo Resort S.A. c/ Provincia del Neuquén
+    LibroVol329.2.md L7981: de costas a la Provincia del Neuquén.
+
+Justicia: 57 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L41230: Corte Suprema de Justicia.
+    LibroVol329.2.md L3856: Justicia.
+    LibroVol329.2.md L59782: de Justicia
+
+Ordinario: 54 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L5927: Celina s/ Ordinario
+    LibroVol337.1.md L22341: Ordinario
+    LibroVol337.1.md L29238: HUMANOS - POLICIA FEDERAL ARGENTINA s/ Ordinario
+
+Negro: 53 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L21466: Negro.
+    LibroVol329.1.md L23368: Negro.
+    LibroVol329.2.md L12089: Demandada: Provincia de Río Negro.
+
+Secretaría: 50 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L8191: do por Secretaría.
+    LibroVol329.2.md L36919: yecto de Secretaría.
+    LibroVol329.2.md L51314: por cédula que se confeccionará por Secretaría.
+
+Misiones: 50 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L8873: tancia de Posadas, Provincia de Misiones.
+    LibroVol329.2.md L39637: tancia de Eldorado, Provincia de Misiones.
+    LibroVol329.3.md L49604: ral de Posadas, Provincia de Misiones.
+
+Carbó: 50 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L3920: dalena Gils Carbó.
+    LibroVol337.1.md L5559: Magdalena Gils Carbó.
+    LibroVol337.1.md L23059: mayo de 2013. Alejandra Magdalena Gils Carbó.
+
+Obarrio: 48 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L4909: rio. Buenos Aires, 17 de junio de 2003. Felipe Daniel Obarrio.
+    LibroVol329.1.md L24076: de noviembre de 2004. Felipe Daniel Obarrio.
+    LibroVol329.1.md L24649: niel Obarrio.
+
+Martín: 46 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L16938: San Martín.
+    LibroVol329.1.md L17408: mento judicial de San Martín.
+    LibroVol329.1.md L17500: Nº 5 de San Martín.
+
+Chubut: 46 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L28605: vamente, de la Provincia del Chubut.
+    LibroVol329.1.md L46880: al Estado Nacional y a la Provincia del Chubut.
+    LibroVol330.1.md L18592: la ciudad de Trelew, Provincia del Chubut.
+
+Corrientes: 46 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L37812: tancia de Corrientes.
+    LibroVol329.1.md L52367: rección Provincial de Energía de Corrientes
+    LibroVol329.3.md L32898: tancia de Corrientes.
+
+Disidencia: 46 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L49493: acción o recurso de que se trate (Disidencia
+    LibroVol330.4.md L50053: (Disidencia
+    LibroVol330.4.md L50083: (Disidencia
+
+Nacion: 46 ocurrencias
+  Ejemplos:
+    LibroVol331.1.md L33: Justicia de la Nacion
+    LibroVol331.2.md L33: Justicia de la Nacion
+    LibroVol331.3.md L33: Justicia de la Nacion
+
+Magna: 45 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L22698: 32) de la Carta Magna.
+    LibroVol329.2.md L24123: Carta Magna.
+    LibroVol329.2.md L36083: Magna.
+
+Jujuy: 45 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L37903: de Jujuy.
+    LibroVol329.4.md L21893: Código Procesal Penal de Jujuy.
+    LibroVol329.4.md L34052: Provincia de Jujuy.
+
+Chaco: 45 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L38053: tuir domicilio en la Provincia del Chaco.
+    LibroVol329.2.md L67710: Judicial de la Provincia del Chaco.
+    LibroVol329.4.md L38051: Comercial de Resistencia, Provincia del Chaco.
+
+Beiró: 44 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L37061: diendo en la causa. Buenos Aires, 21 de junio de 2006. Marta A. Beiró
+    LibroVol329.4.md L3964: norma citada). Buenos Aires, 6 de septiembre de 2006. Marta. A. Beiró
+    LibroVol329.4.md L30864: Buenos Aires. Buenos Aires, 19 de septiembre de 2006. Marta A. Beiró
+
+Social: 43 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52109: Administración Nacional de la Seguridad Social
+    LibroVol329.2.md L11371: ra Federal de la Seguridad Social.
+    LibroVol329.2.md L68964: Seguridad Social
+
+Extradición: 42 ocurrencias
+  Ejemplos:
+    LibroVol334.3.md L55: ASTIZ, ALFREDO IGNACIO s/ Extradición
+    LibroVol334.3.md L23685: CALAFELL, ROQUE ESTEBAN s/ Extradición
+    LibroVol334.3.md L34015: VILLALBA, RAUL ANDRES s/ Extradición
+
+Acordadas: 40 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52909: Acordadas
+    LibroVol329.2.md L61673: Acordadas
+    LibroVol329.3.md L74976: Acordadas
+
+Comercial: 40 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L57737: y Comercial.
+    LibroVol329.3.md L53840: Comercial.
+    LibroVol330.2.md L59963: Río de la Plata TV S.A. de Teledifusión Comercial
+
+Marta: 40 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L43467: arreglo a lo expresado. Buenos Aires, 2 de noviembre de 2005. Marta
+    LibroVol329.3.md L55831: la Provincia de Corrientes. Buenos Aires, 22 de agosto de 2006. Marta
+    LibroVol330.1.md L27070: con arreglo a lo expuesto. Buenos Aires, 28 de diciembre de 2005. Marta
+
+Argentino: 40 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L65564: ternacional del Estado Argentino.
+    LibroVol329.4.md L66027: Estado Argentino.
+    LibroVol330.1.md L51054: Zapata, Gustavo Carmelo c/ Ejército Argentino
+
+Cámara: 38 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60397: en la Cámara
+    LibroVol329.3.md L6579: da consideración omiten los jueces de la Cámara.
+    LibroVol329.3.md L13712: en cada Cámara.
+
+Pampa: 38 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60832: Bustos, Ramón Roberto c/ Provincia de La Pampa
+    LibroVol329.4.md L30467: Circunscripción de la Provincia de La Pampa.
+    LibroVol329.4.md L46648: Bustos, Ramón Roberto c/ Provincia de La Pampa
+
+Paraná: 37 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L16225: Sentencia de Amparo de Feria Nº 2 de Paraná.
+    LibroVol329.1.md L32905: Paraná.
+    LibroVol329.2.md L45117: tancia de Paraná.
+
+Administración: 37 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52280: Costanzo, Carlos Alberto y otra c/ Administración
+    LibroVol329.4.md L46927: Costanzo, Carlos Alberto y otra c/ Administración
+    LibroVol330.1.md L56751: te de la Administración.
+
+República: 37 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52777: Uddeholm S.A. c/ Banco Central de la República
+    LibroVol329.2.md L14184: de la fundación de la República.
+    LibroVol329.3.md L73850: Administración General de Puertos (La República
+
+Electoral: 36 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L7446: Tribunal de origen: Cámara Nacional Electoral.
+    LibroVol329.2.md L37198: Tribunal de origen: Cámara Nacional Electoral.
+    LibroVol330.2.md L4699: Tribunal de origen: Cámara Nacional Electoral.
+
+Rosario: 35 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L32515: niales celebradas en la ciudad de Rosario.
+    LibroVol329.1.md L32583: de la Cámara Federal de Apelaciones de Rosario.
+    LibroVol329.4.md L43939: Rosario.
+
+Dirección: 34 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60077: Dirección
+    LibroVol329.2.md L60748: Argencard S.A. (Provincia del Chubut (Dirección
+    LibroVol329.4.md L46354: Argencard S.A. (Provincia del Chubut (Dirección
+
+Ezequiel: 33 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L46258: presente queja. Buenos Aires, 10 de marzo de 2005. Eduardo Ezequiel
+    LibroVol329.2.md L22495: apelación. Buenos Aires, 16 de noviembre de 2004. Eduardo Ezequiel
+    LibroVol329.2.md L40709: sente queja. Buenos Aires, 29 de agosto de 2005. Eduardo Ezequiel
+
+Seg: 33 ocurrencias
+  Ejemplos:
+    LibroVol334.2.md L10348: s/ Personal Militar y Civil de las FFAA y de Seg.
+    LibroVol337.1.md L4233: FFAA y de Seg
+    LibroVol338.1.md L23717: civil de las FFAA y de Seg.
+
+Martínez: 32 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L5838: Martínez.
+    LibroVol329.1.md L34957: de Gustavo Damián Martínez.
+    LibroVol329.2.md L16502: defensora oficial Stella Maris Martínez.
+
+San: 32 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52376: do de Paz del Departamento Judicial de San
+    LibroVol329.1.md L52440: cial de San Martín (Foro de abogados de San
+    LibroVol329.1.md L52703: REPSOL YPF GLP Envasado en la Ciudad de San
+
+Seguridad: 32 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L57759: Administración Nacional de la Seguridad
+    LibroVol329.2.md L60818: Benítez, Francisca Aída c/ Instituto de Seguridad
+    LibroVol329.2.md L61482: Velázquez, María Ofelia c/ Instituto de Seguridad
+
+Adriana: 32 ocurrencias
+  Ejemplos:
+    LibroVol337.2.md L19979: so extraordinario. Buenos Aires, 15 de mayo de 2014. Irma Adriana
+    LibroVol337.2.md L24014: la sentencia apelada. Buenos Aires, 16 de julio de 2014. Irma Adriana
+    LibroVol337.2.md L26012: de queja impetrado. Buenos Aires, 2 de junio de 2014. Irma Adriana
+
+Estero: 30 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L20380: Estero.
+    LibroVol329.2.md L31982: del Estero.
+    LibroVol329.2.md L51924: Demandada: Provincia de Santiago del Estero.
+
+Impositiva: 30 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L35994: ción General Impositiva.
+    LibroVol330.2.md L11646: General Impositiva.
+    LibroVol330.4.md L22414: Impositiva.
+
+Congreso: 29 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L19052: yente del Congreso.
+    LibroVol331.2.md L35755: Congreso.
+    LibroVol331.2.md L36020: tervención del Congreso.
+
+Llanos: 29 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L29781: doctor Alejandro J. Fernández Llanos.
+    LibroVol329.1.md L31763: ría Marcela Llanos y Florencio Alejandro Llanos.
+    LibroVol329.1.md L31765: Fernández Llanos.
+
+Magistratura: 29 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59814: Magistratura
+    LibroVol329.2.md L59959: Magistratura
+    LibroVol329.2.md L60572: Magistratura.
+
+Incidente: 29 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L3641: Ami Cable Holding LDT. y Otro s/ Incidente
+    LibroVol339.1.md L8258: s/ Incidente
+    LibroVol341.2.md L1875: DISTRITO SANTA FE s/ Incidente
+
+Rioja: 28 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52161: Banco Central de la República Argentina (La Rioja
+    LibroVol329.4.md L11523: mera Instancia de La Rioja.
+    LibroVol329.4.md L46480: Banco Central de la República Argentina (La Rioja
+
+Ambiente: 28 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L35799: art. 34 de la ley 25.675 General del Ambiente.
+    LibroVol329.2.md L61130: Ministerio de Desarrollo Social y Medio Ambiente
+    LibroVol329.4.md L47832: Ministerio de Desarrollo Social y Medio Ambiente
+
+Febrero: 28 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74473: Nación Argentina y/o AFIP (Club 20 de Febrero
+    LibroVol329.4.md L48053: Nación Argentina y/o AFIP (Club 20 de Febrero
+    LibroVol337.1.md L35325: Febrero
+
+Reajustes: 28 ocurrencias
+  Ejemplos:
+    LibroVol340.1.md L36355: Cahais Rubén Osvaldo c/ ANSeS s /Reajustes
+    LibroVol340.1.md L36508: Meringer, Rita Ethel c/ ANSeS s/ Reajustes
+    LibroVol340_2.md L43198: Cahais Rubén Osvaldo c/ ANSeS s /Reajustes
+
+Servicios: 27 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L50870: tricidad, Consumo, Crédito y otros Servicios
+    LibroVol330.2.md L59705: L.A.P.A. S.A. c/ Ministerio de Obras y Servicios
+    LibroVol330.4.md L45511: L.A.P.A. S.A. c/ Ministerio de Obras y Servicios
+
+Corresponde: 27 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L49953: 32. Corresponde
+    LibroVol330.4.md L51025: 1. Corresponde
+    LibroVol330.4.md L51059: 1. Corresponde
+
+Sachetta: 27 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L21008: noviembre 2013. Marcelo Adrián Sachetta.
+    LibroVol337.1.md L25929: Marcelo Adrián Sachetta.
+    LibroVol337.2.md L27381: 03 de febrero de 2014. Marcelo Adrian Sachetta.
+
+Políticos: 26 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L19690: Derechos Civiles y Políticos.
+    LibroVol329.2.md L34011: Políticos.
+    LibroVol329.4.md L8720: to Internacional de Derechos Civiles y Políticos.
+
+Niño: 26 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L19798: del Niño.
+    LibroVol330.2.md L13332: ción sobre los Derechos del Niño.
+    LibroVol330.3.md L32235: del Niño.
+
+Julio: 26 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74584: Provincia de Buenos Aires y otros (García, Julio
+    LibroVol329.4.md L48450: Provincia de Buenos Aires y otros (García, Julio
+    LibroVol337.1.md L35330: Julio
+
+Mayo: 26 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L6857: Giardelli, patrocinado por el Dr. Miguel C. Mayo.
+    LibroVol334.2.md L9716: Miguel C. J. Mayo.
+    LibroVol337.1.md L35328: Mayo
+
+Jurisprudencial: 26 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L22: 5.- Suplementos de Actualización Jurisprudencial
+    LibroVol337.2.md L22: 5.- Suplementos de Actualización Jurisprudencial
+    LibroVol338.1.md L22: 5.- Suplementos de Actualización Jurisprudencial
+
+Esteban: 25 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L27674: la queja es improcedente. Buenos Aires, 5 de octubre de 2005. Esteban
+    LibroVol329.3.md L74265: Grinboim, Raquel (Cedermas, Norberto Esteban
+    LibroVol329.4.md L43751: avance de la investigación. Buenos Aires, 13 de junio de 2006. Esteban
+
+Bisaro: 25 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L33706: trocinado por el Dr. Norberto S. Bisaro.
+    LibroVol329.2.md L4111: patrocinado por el Dr. Norberto S. Bisaro.
+    LibroVol329.2.md L19185: E. Abdala y Norberto S. Bisaro.
+
+Cruz: 25 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L51240: derada de la Provincia de Santa Cruz.
+    LibroVol329.2.md L58955: Provincia de Santa Cruz.
+    LibroVol332.2.md L14608: gasoductos en la Provincia de Santa Cruz.
+
+Ciudad: 25 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L53657: comercial de esa Ciudad.
+    LibroVol329.2.md L59841: Jueces, que se realizó en la Ciudad
+    LibroVol329.3.md L983: Tributario de la Ciudad.
+
+Marzo: 25 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L35326: Marzo
+    LibroVol337.2.md L27934: Marzo
+    LibroVol338.1.md L26516: Marzo
+
+Sur: 24 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L30112: go, Antártida e Islas del Atlántico Sur.
+    LibroVol329.4.md L21027: Fuego, Antártida e Islas del Atlántico Sur.
+    LibroVol329.4.md L21031: Antártida e Islas del Atlántico Sur.
+
+Vigencia: 24 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L40194: LEY: Vigencia.
+    LibroVol329.1.md L40200: LEY: Vigencia.
+    LibroVol329.1.md L40210: LEY: Vigencia.
+
+Enrique: 24 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59739: Enrique
+    LibroVol329.4.md L47646: de Locomotoras (Fernández Propato, Enrique
+    LibroVol329.4.md L48323: Policía Federal Argentina (Salguero, Aldo Enrique
+
+Fisco: 24 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L22674: gaciones reclamadas y acreditadas por el Fisco.
+    LibroVol330.2.md L28239: las partes y al señor representante del Fisco.
+    LibroVol332.2.md L22093: deuda del contribuyente con el Fisco.
+
+Superior: 24 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74725: ción c/ Provincia del Chaco (Tribunal Superior
+    LibroVol329.4.md L48912: ción c/ Provincia del Chaco (Tribunal Superior
+    LibroVol330.1.md L5157: ministrativa del Consejo Superior.
+
+Abril: 24 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L35327: Abril
+    LibroVol337.2.md L27935: Abril
+    LibroVol338.1.md L26517: Abril
+
+Junio: 24 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L35329: Junio
+    LibroVol337.2.md L27937: Junio
+    LibroVol338.1.md L26519: Junio
+
+Nacionales: 23 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L28770: la Administración de Parques Nacionales.
+    LibroVol329.4.md L10428: Nacionales.
+    LibroVol330.3.md L50038: de Parques Nacionales.
+
+Considerando: 23 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L17155: Considerando.
+    LibroVol330.2.md L26840: Considerando
+    LibroVol331.2.md L35006: Considerando
+
+Derecho: 22 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L9325: Estado de Derecho.
+    LibroVol329.1.md L10737: Derecho.
+    LibroVol329.2.md L55937: en un Estado de Derecho.
+
+Carlos: 22 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52276: Coronel, Martín Fernando c/ Villafañe, Carlos
+    LibroVol329.1.md L52593: Provincia de Buenos Aires (Contreras, Carlos
+    LibroVol329.3.md L74413: Ministerio de Justicia y DD.HH. (Raviolo, Carlos
+
+José: 22 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52520: Nación Argentina y otra (Fernández, Santiago José
+    LibroVol329.2.md L61078: Jaureguialzo, Javier y otro (Palacios Hardy, José
+    LibroVol329.2.md L61266: Provincia de Buenos Aires (Ayerza, Héctor José
+
+Fernández: 22 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L51923: Pablo Oscar Fernández.
+    LibroVol329.3.md L42468: Fernández.
+    LibroVol329.3.md L57951: los Alberto Diez y Pedro H. Fernández.
+
+Ministerio: 22 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L49334: Ministerio
+    LibroVol330.4.md L50162: del Ministerio
+    LibroVol330.4.md L54389: puso que el Ministerio
+
+Agosto: 22 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L35334: Agosto
+    LibroVol337.2.md L27942: Agosto
+    LibroVol338.1.md L26524: Agosto
+
+Septiembre: 22 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L35335: Septiembre
+    LibroVol337.2.md L27943: Septiembre
+    LibroVol338.1.md L26525: Septiembre
+
+Octubre: 22 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L35336: Octubre
+    LibroVol337.2.md L27944: Octubre
+    LibroVol338.1.md L26526: Octubre
+
+Noviembre: 22 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L35337: Noviembre
+    LibroVol337.2.md L27945: Noviembre
+    LibroVol338.1.md L26527: Noviembre
+
+Diciembre: 22 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L35338: Diciembre
+    LibroVol337.2.md L27946: Diciembre
+    LibroVol338.1.md L26528: Diciembre
+
+Irma: 22 ocurrencias
+  Ejemplos:
+    LibroVol338.1.md L18141: extraordinario de fojas 98/105. Buenos Aires, 9 de febrero de 2015. Irma
+    LibroVol338.2.md L25222: nes planteadas en el recurso. Buenos Aires, 28 de abril de 2015. Irma
+    LibroVol339.1.md L22478: to resultaren pertinentes. Buenos Aires, 11 de febrero de 2016. Irma
+
+Daños: 22 ocurrencias
+  Ejemplos:
+    LibroVol338.2.md L23755: BUJÁN, JUAN PABLO c/ UGOFE LSM y Otros s/ Daños
+    LibroVol338.2.md L25123: METROPOLITANO BELGRANO S.A. y Otro s/ Daños
+    LibroVol339.1.md L30841: OPERATIVA FERROVIARIA de EMERGENCIAS s/ Daños
+
+Resistencia: 21 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L38175: tancia de Resistencia.
+    LibroVol329.2.md L16934: Resistencia.
+    LibroVol329.2.md L16946: Municipalidad de Resistencia.
+
+Economía: 21 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52730: Secretaría de Energía del Ministerio de Economía
+    LibroVol329.4.md L48918: Secretaría de Energía del Ministerio de Economía
+    LibroVol330.1.md L50991: Sociedad Minera Catamarqueña de Economía
+
+Morón: 21 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L17329: Judicial de Morón.
+    LibroVol329.2.md L34030: en lo Penal de la ciudad de Morón.
+    LibroVol329.3.md L37780: ral de Morón.
+
+García: 21 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L49900: de guardia, doctor Carlos García.
+    LibroVol329.2.md L61439: Servicio Nacional de Parques Nacionales c/ García
+    LibroVol329.3.md L65838: Edgardo Antonio García.
+
+Ernesto: 21 ocurrencias
+  Ejemplos:
+    LibroVol344-1.md L30076: Buenos Aires. Buenos Aires, 18 de noviembre de 2020. Víctor Ernesto
+    LibroVol344-1.md L48705: 2020. Abramovich Cosarin Victor Ernesto.
+    LibroVol344-2.md L2201: Victor Ernesto.
+
+Correccional: 20 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L3072: Criminal y Correccional.
+    LibroVol329.3.md L64686: nal y Correccional.
+    LibroVol330.1.md L14788: nal y Correccional.
+
+López: 20 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L8870: Ignacio López.
+    LibroVol329.1.md L13322: López.
+    LibroVol329.1.md L13374: López.
+
+Banco: 20 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60794: Banco Central de la República Argentina c/ Banco
+    LibroVol329.4.md L46492: Banco Central de la República Argentina c/ Banco
+    LibroVol329.4.md L46572: BBVA Consolidar Seguros S.A. y/o BBVA Banco
+
+La: 20 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74092: Defensor General del Departamento Judicial de La
+    LibroVol329.4.md L46399: c/ Empresa Distribuidora de Electricidad de La
+    LibroVol329.4.md L46994: Defensor General del Departamento Judicial de La
+
+Públicos: 20 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L59957: – Cooperativa de Obras y Servicios Públicos
+    LibroVol330.2.md L64186: ral de Ingresos Públicos.
+    LibroVol330.4.md L46258: – Cooperativa de Obras y Servicios Públicos
+
+Municipalidad: 20 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L161: Recurso Extraordinario de la Municipalidad
+    LibroVol330.4.md L45900: Pastrana, Maria Cristina y otros c/ Municipalidad
+    LibroVol337.2.md L27784: L’Oreal Argentina S.A. c/ Municipalidad
+
+Uruguay: 19 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L185: tancia de Concepción del Uruguay.
+    LibroVol329.1.md L6891: tancia de Concepción del Uruguay.
+    LibroVol329.3.md L19853: Uruguay.
+
+Catamarca: 19 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L2002: Tribunal de Justicia de Catamarca.
+    LibroVol329.2.md L54902: Catamarca.
+    LibroVol329.2.md L59150: Catamarca.
+
+Concepto: 19 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L18888: Concepto.
+    LibroVol329.1.md L18899: Concepto.
+    LibroVol329.1.md L37368: Concepto.
+
+Ricardo: 19 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L20532: ajeno a esta instancia. Buenos Aires, 21 de febrero de 2006. Ricardo
+    LibroVol329.1.md L27883: nuevo conforme a derecho. Buenos Aires, 12 de mayo de 2005. Ricardo
+    LibroVol329.2.md L16053: mar la presente queja. Buenos Aires, 28 de febrero de 2005. Ricardo
+
+Energía: 19 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52630: Provincia de La Pampa c/ Secretaría de Energía
+    LibroVol329.4.md L48532: Provincia de La Pampa c/ Secretaría de Energía
+    LibroVol330.1.md L50644: Ente Provincial Regulador de la Energía (Energía
+
+Procedimiento: 19 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L54656: Procedimiento
+    LibroVol329.2.md L18682: EXCEPCIONES: Procedimiento.
+    LibroVol329.2.md L63640: Procedimiento
+
+Fundamentación: 19 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L14912: RECURSO DE QUEJA: Fundamentación.
+    LibroVol329.2.md L15176: RECURSO DE QUEJA: Fundamentación.
+    LibroVol329.2.md L67036: Fundamentación
+
+Santa: 19 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59842: de Santa
+    LibroVol329.2.md L60890: Consejo Agrario Provincial – Provincia de Santa
+    LibroVol329.2.md L61207: Olmedo, Dominga Nieves c/ Provincia de Santa
+
+Derechos: 19 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L62269: Convención Americana sobre Derechos
+    LibroVol329.2.md L67175: Convención Americana sobre Derechos
+    LibroVol329.3.md L80297: Convención Americana sobre Derechos
+
+Isidro: 19 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L70932: dependen de la Municipalidad de San Isidro.
+    LibroVol329.3.md L79263: Municipalidad de San Isidro.
+    LibroVol330.1.md L8823: sición Nº 3 de San Isidro.
+
+Juicio: 19 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L81522: Juicio
+    LibroVol329.4.md L53715: Juicio
+    LibroVol330.2.md L65888: Juicio
+
+Legislativo: 19 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L8405: Poder Legislativo.
+    LibroVol329.4.md L69832: llada por el Cuerpo Legislativo.
+    LibroVol329.4.md L71844: tuación desarrollada por el Cuerpo Legislativo.
+
+Cuenca: 19 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L31146: nes integrantes de la Autoridad de Cuenca.
+    LibroVol331.2.md L24200: la Autoridad de Cuenca.
+    LibroVol331.2.md L24209: Autoridad de Cuenca.
+
+Plazo: 18 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L5480: RECURSO DE QUEJA: Plazo.
+    LibroVol329.1.md L5507: RECURSO DE QUEJA: Plazo.
+    LibroVol329.1.md L17822: RECURSO DE QUEJA: Plazo.
+
+Blanca: 18 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L11368: Judicial de Bahía Blanca.
+    LibroVol329.3.md L65841: Blanca.
+    LibroVol329.4.md L5908: Instancia de Bahía Blanca.
+
+Garay: 18 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L13859: Garay.
+    LibroVol329.2.md L17676: to F. Garay.
+    LibroVol329.3.md L3464: E. Garay.
+
+Formosa: 18 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L20244: cional de Las Lomitas, Formosa.
+    LibroVol329.1.md L21293: Tribunal de origen: Juzgado Federal de Formosa.
+    LibroVol329.2.md L57255: ciudad de Formosa.
+
+Provincial: 18 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L26882: Justicia Provincial.
+    LibroVol330.1.md L4531: Provincial.
+    LibroVol330.2.md L39400: Provincial.
+
+Torres: 18 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L48021: Torres.
+    LibroVol329.1.md L48494: López Torres.
+    LibroVol329.2.md L6667: la defensa de Justo Santiago Torres.
+
+Seguros: 18 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52237: Camino del Atlántico S.A.C.V. (Caja de Seguros
+    LibroVol329.3.md L74326: La República Compañía Argentina de Seguros
+    LibroVol329.4.md L46724: Camino del Atlántico S.A.C.V. (Caja de Seguros
+
+Alberto: 18 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52617: Provincia de Catamarca (Juárez, Manuel Alberto
+    LibroVol329.3.md L74525: Poder Ejecutivo Nacional (De Lasa, Jorge Alberto
+    LibroVol329.4.md L48063: Netmedi S.A. y otro (Mermelstein, Carlos Alberto
+
+María: 18 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L61313: Provincia de La Rioja (Pierini de Pochat, María
+    LibroVol329.3.md L74402: Ejército (Vea Murguía de Achard, María
+    LibroVol329.4.md L47828: Ejército (Vea Murguía de Achard, María
+
+Víctor: 18 ocurrencias
+  Ejemplos:
+    LibroVol340_2.md L11273: dictamen de fojas 67/70. Buenos Aires, 4 de noviembre de 2016. Víctor
+    LibroVol343-1.md L18864: mercial de la Nación. Buenos Aires, 7 de noviembre de 2018. Víctor
+    LibroVol343-3.md L16447: firmar la sentencia apelada. Buenos Aires, 3 de mayo de 2019.Víctor
+
+Nicolás: 17 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L45135: ajustada a derecho. Buenos Aires, 6 de noviembre de 2003. Nicolás
+    LibroVol329.2.md L34741: San Nicolás.
+    LibroVol329.2.md L61053: Hernández, Pedro Javier y otro (Leisch, Nicolás
+
+Resoluciones: 17 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52939: Resoluciones
+    LibroVol329.4.md L49331: Resoluciones
+    LibroVol330.1.md L51196: Resoluciones
+
+Capital: 17 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L20726: S.A”, con domicilio legal en esta Capital.
+    LibroVol329.2.md L60391: para la Capital
+    LibroVol329.4.md L31044: trativo federal de esta Capital.
+
+Carmen: 17 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59736: 1") A la doctora Carmen
+    LibroVol329.2.md L59889: de Nolasco y Carmen
+    LibroVol330.4.md L50022: Dra. Carmen
+
+Asociación: 17 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59829: Aires, la Asociación
+    LibroVol330.1.md L50600: Defensor de Usuarios y Consumidores Asociación
+    LibroVol330.2.md L59541: Defensor del Pueblo de la Nación c/ Asociación
+
+Competencia: 17 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L18715: cional de Defensa de la Competencia.
+    LibroVol330.2.md L11044: des de la Ley de Defensa de la Competencia.
+    LibroVol330.2.md L33354: Defensa de la Competencia.
+
+Americana: 17 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L50859: y 5 de la Convención Americana
+    LibroVol330.4.md L50867: Americana
+    LibroVol330.4.md L55956: Convención Americana
+
+Ejecución: 17 ocurrencias
+  Ejemplos:
+    LibroVol338.1.md L13437: MABEL CONCEPCIÓN s/ Ejecución
+    LibroVol339.1.md L35447: (OSPLAD) c/ Jujuy, Provincia de s/ Ejecución
+    LibroVol339.1.md L35526: Suarez, Sixto Axel c/ ANSeS s/ Ejecución
+
+Homicidio: 17 ocurrencias
+  Ejemplos:
+    LibroVol338.2.md L8005: CORONEL, GUSTAVO JAVIER y Otros s/ Homicidio
+    LibroVol339.1.md L35464: Pace, César Armando y Otros s/ Homicidio
+    LibroVol339.2.md L34096: Pace, César Armando y Otros s/ Homicidio
+
+Moreno: 16 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L49751: Dr. Guillermo J. Moreno.
+    LibroVol329.2.md L34214: Dra. Elena C. Moreno.
+    LibroVol329.3.md L49353: Sergio F. Moreno.
+
+Rivadavia: 16 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L14688: Rivadavia.
+    LibroVol329.2.md L25380: Rivadavia.
+    LibroVol329.3.md L37605: Federal de Comodoro Rivadavia.
+
+Casación: 16 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60399: de Casación
+    LibroVol332.3.md L26504: Nacional de Casación.
+    LibroVol334.1.md L21866: la Sala I de la Cámara Nacional de Casación.
+
+Transporte: 16 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L20527: Transporte.
+    LibroVol338.1.md L26437: Mecánicos y Afines del Transporte
+    LibroVol338.2.md L35429: Mecánicos y Afines del Transporte
+
+Poder: 16 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L46426: Asociación  Tribunales de Empleados del Poder
+    LibroVol329.4.md L47909: Moldes, Leónidas Juan Gustavo y otros c/ Poder
+    LibroVol330.4.md L49438: del Poder
+
+Procesal: 16 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L75686: Procesal.
+    LibroVol329.4.md L75981: Código Procesal.
+    LibroVol330.4.md L50173: tiva, del Código Procesal
+
+Aduanero: 16 ocurrencias
+  Ejemplos:
+    LibroVol332.1.md L20506: Código Aduanero.
+    LibroVol332.2.md L7346: arts. 991 y 992 del Código Aduanero.
+    LibroVol332.2.md L7430: artículos 991 y 992 del Código Aduanero.
+
+Proceso: 16 ocurrencias
+  Ejemplos:
+    LibroVol339.1.md L1697: • Tipo de Proceso
+    LibroVol339.1.md L1764: •Tipo de Proceso
+    LibroVol339.1.md L11932: MINISTERIO de DESARROLLO SOCIAL s/ Proceso
+
+Restitución: 16 ocurrencias
+  Ejemplos:
+    LibroVol339.2.md L33589: B. C., J. G. c/ R. P., C. J. s/ Restitución
+    LibroVol339.2.md L33591: B. D. C., G. E. c/ D. C., M. R. s/ Restitución
+    LibroVol341.1.md L32433: G. C., S. c/ M. M., A. s/ Restitución
+
+Posadas: 15 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L16291: Posadas.
+    LibroVol329.2.md L30836: tal Nacional Profesor Alejandro Posadas.
+    LibroVol329.4.md L9444: Apelaciones de Posadas.
+
+Derogación: 15 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L34174: LEY: Derogación.
+    LibroVol329.1.md L56841: Derogación
+    LibroVol329.3.md L32904: LEY: Derogación.
+
+Económico: 15 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L40190: Económico.
+    LibroVol329.3.md L68284: Económico.
+    LibroVol330.2.md L10922: ra en lo Penal Económico.
+
+Chile: 15 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L1767: judiciales de la República de Chile.
+    LibroVol329.3.md L25794: jador en la República de Chile.
+    LibroVol331.3.md L12197: su extradición a la República de Chile.
+
+Alzada: 15 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L16018: lación ante la Alzada.
+    LibroVol329.3.md L45129: to razonamiento aplicado por la Alzada.
+    LibroVol329.4.md L61901: radicándose los autos en la Alzada.
+
+Abogados: 15 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74553: Provincia de Buenos Aires (Colegio de Abogados
+    LibroVol329.4.md L48366: Provincia de Buenos Aires (Colegio de Abogados
+    LibroVol330.1.md L41773: Público de Abogados.
+
+Instituto: 15 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L4543: diversas categorías y cátedras de ese Instituto.
+    LibroVol330.4.md L45561: Longobardi, Irene Gwendoline y otros c/ Instituto
+    LibroVol330.4.md L52464: do por el Instituto
+
+Otra: 15 ocurrencias
+  Ejemplos:
+    LibroVol331.1.md L5168: HUMBERTO JOSE GUARINO y Otra
+    LibroVol331.1.md L16163: EMILIO GARCIA MENDEZ y Otra
+    LibroVol331.2.md L7395: BUENOS AIRES y Otra
+
+Peralta: 14 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L14040: una banda liderada por Diego Martín Peralta.
+    LibroVol329.4.md L11979: Tufic Peralta.
+    LibroVol329.4.md L60715: obrar inicuo en beneficio de Zamar y Peralta.
+
+Alvarez: 14 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L39536: Luz Alvarez.
+    LibroVol329.2.md L50042: tora Alvarez.
+    LibroVol329.2.md L50383: la doctora Alvarez.
+
+Sociedad: 14 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52599: Provincia de Buenos Aires (Previmar Sociedad
+    LibroVol329.4.md L48405: Provincia de Buenos Aires (Previmar Sociedad
+    LibroVol330.2.md L59433: Belagardi, Julio A. c/ Lotería Nacional Sociedad
+
+Resolución: 14 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L59159: Resolución
+    LibroVol329.2.md L68915: Resolución
+    LibroVol329.3.md L83144: Resolución
+
+Comienzo: 14 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L9425: PRESCRIPCION: Comienzo.
+    LibroVol329.2.md L9432: PRESCRIPCION: Comienzo.
+    LibroVol329.2.md L18711: PRESCRIPCION: Comienzo.
+
+Zamora: 14 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L19497: 1240, de Temperley, partido de Lomas de Zamora.
+    LibroVol329.2.md L40162: Zamora.
+    LibroVol329.2.md L54556: Zamora.
+
+Quilmes: 14 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L21162: Quilmes.
+    LibroVol329.2.md L61275: Provincia de Buenos Aires (Microómnibus Quilmes
+    LibroVol329.4.md L48393: Provincia de Buenos Aires (Microómnibus Quilmes
+
+Rodríguez: 14 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L31744: Adela C. Mollard, Carmen B. Rodríguez.
+    LibroVol331.1.md L17196: Rey Mendez Rodríguez.
+    LibroVol332.1.md L16415: el Dr. Ricardo Adrián Rodríguez.
+
+Paraguay: 14 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L86: Extradición con la República del Paraguay.
+    LibroVol329.4.md L23251: blica del Paraguay.
+    LibroVol329.4.md L23311: Embajada de la República del Paraguay.
+
+Pérez: 14 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L21417: Dr. Héctor Leonardo Pérez.
+    LibroVol330.1.md L46861: lo Oscar Pérez.
+    LibroVol330.2.md L3094: Pérez.
+
+Costas: 14 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L26567: RECURSO EXTRAORDINARIO: Resolución. Costas.
+    LibroVol330.1.md L26572: RECURSO EXTRAORDINARIO: Resolución. Costas.
+    LibroVol330.1.md L26577: RECURSO EXTRAORDINARIO: Resolución. Costas.
+
+Raúl: 14 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L59496: Cleland, Guillermo Federico c/ Costilla, Raúl
+    LibroVol330.4.md L44867: Cleland, Guillermo Federico c/ Costilla, Raúl
+    LibroVol330.4.md L45832: Neumark, Martín Joaquín y otro c/ Taboas, Raúl
+
+Diputados: 14 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L11183: Cámara de Diputados.
+    LibroVol330.3.md L11762: Cámara de Diputados.
+    LibroVol330.3.md L12471: Bussi de la Cámara de Diputados.
+
+Código: 14 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L50785: (arts. 3951, 3952 Y 4019 del Código
+    LibroVol330.4.md L56138: inadmisible (art. 280 del Código
+    LibroVol330.4.md L56398: (art. 280 del Código
+
+Aduanas: 13 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L24142: ción Nacional de Aduanas.
+    LibroVol331.1.md L33263: la Administración Nacional de Aduanas.
+    LibroVol334.2.md L9986: s/ Administración Nacional de Aduanas
+
+Requisitos: 13 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52849: Requisitos
+    LibroVol329.2.md L61578: Requisitos
+    LibroVol329.3.md L74865: Requisitos
+
+Quiebra: 13 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L56011: Quiebra
+    LibroVol329.3.md L78776: Quiebra
+    LibroVol329.4.md L51868: Quiebra
+
+Oportunidad: 13 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L59031: Oportunidad
+    LibroVol329.2.md L68711: Oportunidad
+    LibroVol329.3.md L82966: Oportunidad
+
+Fundamento: 13 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L59059: Fundamento
+    LibroVol329.2.md L68753: Fundamento
+    LibroVol329.3.md L83003: Fundamento
+
+Ministros: 13 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59634: los señores Ministros
+    LibroVol329.2.md L59729: los señores Ministros
+    LibroVol329.2.md L59887: a los Ministros
+
+Convención: 13 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L19832: la Convención.
+    LibroVol330.2.md L14412: siciones de la Convención.
+    LibroVol330.2.md L45384: las garantías previstas en la Convención.
+
+Empleo: 13 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L36771: Empleo.
+    LibroVol330.2.md L15644: ordenamiento y la Ley de Empleo.
+    LibroVol330.2.md L15746: Contrato de Trabajo y la Ley de Empleo.
+
+Jurisprudencia: 13 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L48779: de Jurisprudencia
+    LibroVol331.1.md L16: •	 Jurisprudencia
+    LibroVol331.2.md L16: •	 Jurisprudencia
+
+Defensa: 13 ocurrencias
+  Ejemplos:
+    LibroVol331.3.md L28128: medida, del Ministerio Público de la Defensa.
+    LibroVol339.1.md L35176: Asociación de Padres Dinad (Defensa
+    LibroVol340.1.md L871: Ministerio Público de la Defensa.
+
+Alejandra: 13 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L5558: cia apelada, con costas. Buenos Aires, 5 de abril de 2013. Alejandra
+    LibroVol337.1.md L8913: recurso extraordinario. Buenos Aires, 2 de julio de 2013. M. Alejandra
+    LibroVol337.2.md L8162: la sentencia apelada. Buenos Aires, 30 de abril de 2014. Alejandra
+
+Contencioso: 13 ocurrencias
+  Ejemplos:
+    LibroVol337.2.md L14260: PROVINCIA de TIERRA DEL FUEGO s/ Contencioso
+    LibroVol343-1.md L25813: Nacional y Otro s/ Contencioso
+    LibroVol343-2.md L30437: Nacional y Otro s/ Contencioso
+
+Impugnación: 13 ocurrencias
+  Ejemplos:
+    LibroVol339.1.md L35338: Federal de Ingresos Públicos s/ Impugnación
+    LibroVol339.2.md L3536: FEDERAL de INGRESOS PÚBLICOS - DGI s/ Impugnación
+    LibroVol339.2.md L33863: Federal de Ingresos Públicos s/ Impugnación
+
+Infracción: 13 ocurrencias
+  Ejemplos:
+    LibroVol339.2.md L33623: Britez Galeano, Omar Cerbellón s/ Infracción
+    LibroVol340.1.md L27276: SMITH VELÁZQUEZ MELENDEZ, JONATHAN s/ Infracción
+    LibroVol341.1.md L32330: Aparicio, Patricia Aurelia y Otros s/ Infracción
+
+Multilateral: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L123: impositiva local como el Convenio Multilateral.
+    LibroVol331.2.md L28656: art. 9º del Convenio Multilateral.
+    LibroVol332.2.md L3524: Convenio Multilateral.
+
+Anatocismo: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L12539: INTERESES: Liquidación. Anatocismo.
+    LibroVol329.1.md L12582: INTERESES: Liquidación. Anatocismo.
+    LibroVol329.1.md L55039: Anatocismo
+
+Exportación: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L24114: ADUANA: Exportación.
+    LibroVol329.1.md L24128: ADUANA: Exportación.
+    LibroVol329.1.md L53028: Exportación
+
+Interrupción: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L38185: PRESCRIPCION: Interrupción.
+    LibroVol329.1.md L57407: Interrupción
+    LibroVol329.2.md L32267: PRESCRIPCION: Interrupción.
+
+Desistimiento: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L49523: COSTAS: Desarrollo del juicio. Desistimiento.
+    LibroVol329.1.md L54061: Desistimiento
+    LibroVol329.4.md L6877: COSTAS: Desarrollo del juicio. Desistimiento.
+
+Jorge: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52564: Pérez, Dorotea Natividad y otra (Grichner, Jorge
+    LibroVol329.2.md L61455: Telefónica de Argentina y otros (Gobet, Jorge
+    LibroVol329.4.md L48203: Pérez, Dorotea Natividad y otra (Grichner, Jorge
+
+España: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L2283: laga, España.
+    LibroVol329.2.md L34073: de diciembre de 1976, exiliándose en España.
+    LibroVol329.4.md L37020: Reino de España.
+
+Desindexación: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L4903: DEPRECIACION MONETARIA: Desindexación.
+    LibroVol329.2.md L63364: Desindexación
+    LibroVol329.4.md L22165: DEPRECIACION MONETARIA: Desindexación.
+
+Central: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L54940: omitida por la Comisión Médica Central.
+    LibroVol329.2.md L56751: art. 49 de la Carta Orgánica del Banco Central.
+    LibroVol329.4.md L13471: da por Organización Veraz y el Banco Central.
+
+Personal: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L73603: Inciso 1 – Personal
+    LibroVol330.3.md L55069: Inciso 1 – Gastos en Personal
+    LibroVol330.3.md L55194: Inciso 1 – Gastos en Personal
+
+Universidad: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74256: González Lima, Guillermo Enrique c/ Universidad
+    LibroVol329.4.md L47435: González Lima, Guillermo Enrique c/ Universidad
+    LibroVol330.2.md L59659: Granillo Fernández, Héctor Manuel c/ Universidad
+
+Fallos: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L43: de la Nación-Fallos.
+    LibroVol331.2.md L48: 1. Corte Suprema de Justicia de la Nación-Fallos.
+    LibroVol331.3.md L48: 1. Corte Suprema de Justicia de la Nación-Fallos.
+
+Título: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L44: 1. Título
+    LibroVol333.1.md L42: 1. Corte Suprema de Justicia. Fallos. I. Título
+    LibroVol337.1.md L47: 1. Fallos de la Corte. I. Título.
+
+Díaz: 12 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L57559: de la prosecretaria Norma Delia De Paoli de Díaz.
+    LibroVol330.2.md L38076: Díaz.
+    LibroVol330.4.md L14291: presentada por la Dra. Adriana Valeria Díaz.
+
+Salud: 12 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L33718: rio del Ministerio de Salud.
+    LibroVol331.2.md L9685: tración Nacional del Seguro de Salud.
+    LibroVol331.2.md L10311: del Seguro de Salud.
+
+Jubilación: 12 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L48890: Ver: Jubilación
+    LibroVol330.4.md L48894: Ver: Jubilación
+    LibroVol330.4.md L49298: 2; Jubilación
+
+Novedades: 12 ocurrencias
+  Ejemplos:
+    LibroVol331.1.md L15: •	 Novedades
+    LibroVol331.2.md L15: •	 Novedades
+    LibroVol331.3.md L15: •	 Novedades
+
+Consejo: 12 ocurrencias
+  Ejemplos:
+    LibroVol331.1.md L3612: en todo caso, decida formular dicho Consejo.
+    LibroVol332.1.md L6235: del Consejo.
+    LibroVol332.1.md L40151: necesaria aprobación del Consejo.
+
+Riachuelo: 12 ocurrencias
+  Ejemplos:
+    LibroVol331.2.md L23799: área de la Cuenca Matanza-Riachuelo.
+    LibroVol337.1.md L33538: Autoridad de Cuenca Matanza-Riachuelo.
+    LibroVol338.1.md L2943: sufriría la Cuenca Hídrica Matanza Riachuelo.
+
+Pública: 12 ocurrencias
+  Ejemplos:
+    LibroVol332.2.md L10728: tración Pública.
+    LibroVol338.2.md L16322: nistración Pública.
+    LibroVol339.1.md L1701: • Defensoría Pública
+
+Sumarísimo: 12 ocurrencias
+  Ejemplos:
+    LibroVol334.3.md L22030: s/ Sumarísimo
+    LibroVol339.1.md L5177: Otro s/ Sumarísimo
+    LibroVol339.1.md L10709: s/ Sumarísimo
+
+Rosello: 12 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L7063: Alejandra Cordone Rosello.
+    LibroVol337.1.md L7537: Buenos Aires, 15 de marzo de 2013. M. Alejandra Cordone Rosello.
+    LibroVol337.1.md L8914: Cordone Rosello.
+
+Galeno: 12 ocurrencias
+  Ejemplos:
+    LibroVol341.2.md L47625: Martínez, Leonardo Matías c/ Galeno
+    LibroVol343-1.md L25803: Quispe, Marta Johanna y Otro c/ Galeno
+    LibroVol343-2.md L30427: Quispe, Marta Johanna y Otro c/ Galeno
+
+Paz: 11 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L1605: Marta Graciela Paz.
+    LibroVol329.2.md L20746: dad de José C. Paz.
+    LibroVol329.3.md L41301: Representado por el Dr. Alberto A. Conil Paz.
+
+Mercedes: 11 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L4944: tancia de Mercedes.
+    LibroVol332.1.md L19867: Ciudad de Mercedes.
+    LibroVol333.2.md L40826: Hágase saber al Juzgado Federal de Mercedes.
+
+Arias: 11 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L38634: rado Dr. José Emiliano Arias.
+    LibroVol329.3.md L70777: Arias.
+    LibroVol330.1.md L48787: Emiliano Arias.
+
+Graciela: 11 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52432: lados y Pensionados (Barraco, Cora Graciela
+    LibroVol329.2.md L61371: Provincia de Tucumán (Juárez, Marina Graciela
+    LibroVol329.4.md L47575: lados y Pensionados (Barraco, Cora Graciela
+
+Senado: 11 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L10393: ción al Senado.
+    LibroVol329.3.md L12413: taba habilitado para aplicar también el Senado.
+    LibroVol329.3.md L12544: imponer limitaciones adicionales al Senado.
+
+Empresa: 11 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74384: Masotta, María Teresa Montovani de c/ Empresa
+    LibroVol329.3.md L74437: Montovani de Masotta, María Teresa c/ Empresa
+    LibroVol329.4.md L47774: Masotta, María Teresa Montovani de c/ Empresa
+
+Río: 11 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L46795: Chaves, Alfredo Luis y otros c/ Provincia de Río
+    LibroVol330.3.md L20872: del Río.
+    LibroVol330.4.md L44928: Integrados S.A. (Banco de la Provincia de Río
+
+Constituyente: 11 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L9924: ción de la Convención Nacional Constituyente.
+    LibroVol340.1.md L9383: la Convención Constituyente.
+    LibroVol340.1.md L9836: ción Constituyente.
+
+Docente: 11 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L46897: Docente.
+    LibroVol337.1.md L35161: Complementaria para la Actividad Docente
+    LibroVol337.2.md L27648: Complementaria para la Actividad Docente
+
+Emergencia: 11 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L48760: Ver: Emergencia
+    LibroVol330.4.md L49273: Emergencia
+    LibroVol330.4.md L50883: Ver: Emergencia
+
+Ejército: 11 ocurrencias
+  Ejemplos:
+    LibroVol333.2.md L43747: Estado Nacional y/o Est. Mayor Gral. del Ejército
+    LibroVol333.3.md L23163: Estado Nacional y/o Est. Mayor Gral. del Ejército
+    LibroVol334.3.md L29381: siones específicas” propias del Ejército.
+
+Flores: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L8067: Flores.
+    LibroVol329.1.md L11876: representada por el Dr. Ignacio Flores.
+    LibroVol329.2.md L18668: C. Sirur Flores.
+
+Enjuiciamiento: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L51617: te y suplente del Jurado de Enjuiciamiento.
+    LibroVol329.4.md L59488: Enjuiciamiento.
+    LibroVol330.4.md L20016: de Enjuiciamiento.
+
+Prescripción: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L54629: Prescripción
+    LibroVol329.2.md L18702: EXCEPCIONES: Clases. Prescripción.
+    LibroVol329.2.md L18731: EXCEPCIONES: Clases. Prescripción.
+
+Gravamen: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L58056: Gravamen
+    LibroVol329.2.md L67490: Gravamen
+    LibroVol329.3.md L81607: Gravamen
+
+Prueba: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L1006: DAÑOS Y PERJUICIOS: Prueba.
+    LibroVol329.2.md L63201: Prueba
+    LibroVol330.1.md L21373: DAÑOS Y PERJUICIOS: Prueba.
+
+Comercio: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L7124: citado Código de Comercio.
+    LibroVol329.3.md L21923: culo 221 del Código de Comercio.
+    LibroVol329.4.md L49200: Y.P.F. S.A. (Compañía de Transporte y Comercio
+
+Bariloche: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L27402: lidad de San Carlos de Bariloche.
+    LibroVol329.3.md L45927: de San Carlos de Bariloche.
+    LibroVol329.4.md L44003: do Federal de Bariloche.
+
+Rosa: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L29165: denuncia formulada por Marcelo Julián Di Rosa.
+    LibroVol329.3.md L74639: Provincia de Santa Fe (Godoy de D’Angelo, Rosa
+    LibroVol329.4.md L48629: Provincia de Santa Fe (Godoy de D’Angelo, Rosa
+
+Armadas: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L37012: Armadas.
+    LibroVol329.4.md L71788: imparciales a las Fuerzas Armadas.
+    LibroVol329.4.md L72820: zas Armadas.
+
+Pensiones: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L42985: Régimen de Jubilaciones y Pensiones.
+    LibroVol330.4.md L52384: y Pensiones
+    LibroVol331.1.md L4346: de Jubilaciones y Pensiones.
+
+Castro: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L48152: pia y patrocinado por el Dr. Fernando Castro.
+    LibroVol329.4.md L69489: a) Hecho del ex soldado Juan Sebastián Castro.
+    LibroVol329.4.md L70156: b. Declaración del testigo Juan Sebastián Castro.
+
+Reglamento: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60564: 12 del Reglamento
+    LibroVol329.2.md L60624: 12 del Reglamento
+    LibroVol329.2.md L60649: 12 del Reglamento
+
+Roberto: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60841: Policía Federal Argentina (Bocci, Mario Roberto
+    LibroVol329.2.md L61295: Provincia de Buenos Aires y otros (Urán, Roberto
+    LibroVol329.4.md L46692: Policía Federal Argentina (Bocci, Mario Roberto
+
+Silvia: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L61184: Nación Argentina y otros (Mendoza, Beatriz Silvia
+    LibroVol329.2.md L61281: Provincia de Buenos Aires (Vernengo Prack, Silvia
+    LibroVol329.3.md L74477: Nación Argentina y otros (Mendoza, Beatriz Silvia
+
+Sucesión: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L65106: Sucesión
+    LibroVol329.3.md L78805: Sucesión
+    LibroVol329.4.md L51924: Sucesión
+
+Peritos: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L50176: PRUEBA: Peritos.
+    LibroVol329.3.md L50187: PRUEBA: Peritos.
+    LibroVol329.3.md L80790: Peritos
+
+Internacional: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74747: Relaciones Exteriores, Comercio Internacional
+    LibroVol329.4.md L48973: Relaciones Exteriores, Comercio Internacional
+    LibroVol330.2.md L59589: S.A. (Techint Compañía Técnica Internacional
+
+Ruiz: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L4783: Marcelo García Ruiz.
+    LibroVol329.4.md L6174: y Alvaro Daniel Ruiz.
+    LibroVol329.4.md L24422: García Ruiz.
+
+Parques: 10 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L48712: Provincia del Neuquén (Administración de Parques
+    LibroVol330.4.md L51549: Nacional de Parques
+    LibroVol341.1.md L32560: Administración Nacional de Parques
+
+Roca: 10 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L328: patrocinio letrado del doctor Eduardo Gil Roca.
+    LibroVol332.1.md L26093: de Primera Instancia de General Roca.
+    LibroVol337.1.md L19354: M. Gil Roca.
+
+Campana: 10 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L6363: Departamento Judicial de Zárate-Campana.
+    LibroVol333.3.md L12133: tancia de Campana.
+    LibroVol334.1.md L18695: Juzgado Federal de Campana.
+
+Industrial: 10 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L59691: Instituto Nacional de la Propiedad Industrial
+    LibroVol330.4.md L45457: Instituto Nacional de la Propiedad Industrial
+    LibroVol339.1.md L35142: Agencia Especial de Financiamiento Industrial
+
+Jurisdicción: 10 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L48590: Ver: Jurisdicción
+    LibroVol330.4.md L49299: y pensión, 8; Jurisdicción
+    LibroVol330.4.md L49325: Jurisdicción
+
+Propiedad: 10 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L50802: Ver: Propiedad
+    LibroVol330.4.md L50829: 41; Propiedad
+    LibroVol339.1.md L35217: los Registros Nacionales de la Propiedad
+
+Denuncia: 10 ocurrencias
+  Ejemplos:
+    LibroVol334.2.md L3173: QUIROGA, VALERIA ANALIA s/ Denuncia
+    LibroVol334.2.md L7149: BURLENGHI, VALERIA CAROLINA s/ Denuncia
+    LibroVol339.1.md L6374: U.F.I.M.A. s/ Denuncia
+
+Peña: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L11982: Peña.
+    LibroVol332.2.md L34995: del Dr. Luis María Peña.
+    LibroVol332.2.md L38541: del Dr. Luis María Peña.
+
+Bianchi: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L40937: Alberto B. Bianchi.
+    LibroVol329.1.md L41188: patrocinado por el Dr. Alberto B. Bianchi.
+    LibroVol329.3.md L20149: Alberto B. Bianchi.
+
+Rica: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L51675: la ciudad de San José, República de Costa Rica.
+    LibroVol329.2.md L17732: en el Pacto de San José de Costa Rica.
+    LibroVol329.2.md L52925: de Costa Rica.
+
+Clases: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L54462: Clases
+    LibroVol329.2.md L63558: Clases
+    LibroVol329.3.md L77255: Clases
+
+Liquidación: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L55038: Liquidación
+    LibroVol329.2.md L64234: Liquidación
+    LibroVol329.3.md L77721: Liquidación
+
+Gómez: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L9748: por el Dr. Francisco López Gómez.
+    LibroVol330.1.md L7751: Carmen Gómez.
+    LibroVol331.1.md L18568: condenado Héctor Fabián Gómez.
+
+Nominación: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L26936: Nominación.
+    LibroVol329.2.md L30815: Nominación.
+    LibroVol329.3.md L24792: nes de la Segunda Nominación.
+
+Grand: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L50768: patrocinados por el Dr. Esteban J. Conte Grand.
+    LibroVol329.3.md L18862: para Gastón Walter Grand.
+    LibroVol329.4.md L3564: Grand.
+
+Funcionarios: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59831: y Funcionarios
+    LibroVol329.2.md L60581: Funcionarios
+    LibroVol329.2.md L60608: Funcionarios
+
+Highton: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59888: Elena Highton
+    LibroVol329.2.md L60288: Highton
+    LibroVol329.2.md L60317: que la Dra. Highton
+
+Oscar: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L61252: Poder Ejecutivo Nacional (Barrera, Ernesto Oscar
+    LibroVol329.3.md L74136: Empresa Ferrocarriles Argentinos (Isogna, Oscar
+    LibroVol329.3.md L74425: Mitre, Bartolomé y otros (Spinosa Melo, Oscar
+
+Miguel: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L28334: a Miguel.
+    LibroVol330.3.md L56355: Balbi de Rosasco, Norma y otra (Ceriani, Miguel
+    LibroVol330.4.md L44597: Balbi de Rosasco, Norma y otra (Ceriani, Miguel
+
+Langevin: 9 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L69456: Procesal, Dr. Julián Horacio Langevin.
+    LibroVol330.1.md L18985: Langevin.
+    LibroVol333.2.md L33515: Oficial doctor Julián Horacio Langevin.
+
+Badeni: 9 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L12159: Dr. Gregorio Badeni.
+    LibroVol330.3.md L14616: Badeni.
+    LibroVol331.1.md L31788: Dr. Gregorio Badeni.
+
+Ambiental: 9 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L53516: del Fondo de Reparación Ambiental.
+    LibroVol331.2.md L9405: Compensación Ambiental.
+    LibroVol340_2.md L8632: el Dictamen de Factibilidad Ambiental.
+
+Remuneración: 9 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L17426: EMPLEADOS PUBLICOS: Remuneración.
+    LibroVol330.4.md L17432: EMPLEADOS PUBLICOS: Remuneración.
+    LibroVol330.4.md L17451: EMPLEADOS PUBLICOS: Remuneración.
+
+Rocha: 9 ocurrencias
+  Ejemplos:
+    LibroVol333.3.md L285: Pedro Da Rocha.
+    LibroVol333.3.md L3199: Tesoro, doctor Joaquín Pedro da Rocha.
+    LibroVol339.1.md L35127: letrado del Dr. Santiago D. M. Ruiz Rocha.
+
+Inc: 9 ocurrencias
+  Ejemplos:
+    LibroVol334.1.md L11236: MARIA JULIA TORRES c/ RCI ARGENTINA Inc.
+    LibroVol339.1.md L35411: Argentina y su propietaria Yamana Gold Inc.
+    LibroVol339.2.md L33981: Argentina y su propietaria Yamana Gold Inc.
+
+Alves: 9 ocurrencias
+  Ejemplos:
+    LibroVol334.3.md L18723: A) Respecto al señor Juan Francisco Bueno Alves
+    LibroVol334.3.md L18973: señor Bueno Alves.
+    LibroVol334.3.md L19135: integridad personal del señor Bueno Alves.
+
+Telefónica: 9 ocurrencias
+  Ejemplos:
+    LibroVol340_2.md L43718: Spagnuolo César Antonio y Otros c/ Telefónica
+    LibroVol342-1.md L50732: Telefónica Móviles Argentina S.A. – Telefónica
+    LibroVol342-2.md L43586: Telefónica Móviles Argentina S.A. – Telefónica
+
+Kaploean: 9 ocurrencias
+  Ejemplos:
+    LibroVol341.1.md L9851: da por la Dra. Mirna Isabel Kaploean.
+    LibroVol341.2.md L22565: representada por la Dra. Mirna Isabel Kaploean.
+    LibroVol341.2.md L44393: tada por la Dra. Mirna Isabel Kaploean.
+
+Legajo: 9 ocurrencias
+  Ejemplos:
+    LibroVol344-1.md L15315: MENÉNDEZ, LUCIANO BENJAMÍN y Otros s/ Legajo
+    LibroVol344-1.md L49334: Menéndez, Luciano Benjamín y Otros s/ Legajo
+    LibroVol344-2.md L54004: Menéndez, Luciano Benjamín y Otros s/ Legajo
+
+Varela: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L2056: vo Alberto Varela.
+    LibroVol329.2.md L6345: Carlos Alfredo Varela.
+    LibroVol330.3.md L20054: Dr. Florencio Varela.
+
+Consumidor: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L26435: aplicable la ley de Defensa del Consumidor.
+    LibroVol334.3.md L21927: del Consumidor.
+    LibroVol340.1.md L27363: del Consumidor.
+
+Santillán: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L29296: Santillán.
+    LibroVol331.1.md L13346: Dres. Osvaldo Schiappacasse y Guido H. Santillán.
+    LibroVol347-1.md L7158: una de ellas era Santillán.
+
+Presidente: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L51799: Presidente
+    LibroVol329.1.md L51800: Presidente
+    LibroVol329.2.md L60289: de Nolasco al cargo de Presidente
+
+Ramón: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52149: Arriola, Mónica Beatriz (Apecechea, Jorge Ramón
+    LibroVol329.1.md L52666: Provincia de Tucumán c/ Monasterio, Ramón
+    LibroVol329.2.md L61311: Provincia de La Pampa y otro (Bustos, Ramón
+
+Policía: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52229: Caja de Retiros, Jubilaciones y Pensiones Policía
+    LibroVol329.3.md L73997: Caja de Retiros, Jubilaciones y Pensiones Policía
+    LibroVol329.4.md L46694: Caja de Retiros, Jubilaciones y Pensiones Policía
+
+Igualdad: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L53697: Igualdad
+    LibroVol329.2.md L62705: Igualdad
+    LibroVol329.3.md L76060: Igualdad
+
+Vivienda: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L28524: vincial de la Vivienda.
+    LibroVol329.3.md L16311: do Nacional de la Vivienda.
+    LibroVol329.3.md L73946: S.A. de Ahorro y Préstamo para la Vivienda
+
+Discapacidad: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L28550: Discapacidad.
+    LibroVol329.4.md L10726: y Promoción de la Persona con Discapacidad.
+    LibroVol341.1.md L10708: Personas con Discapacidad.
+
+Junín: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L29818: Tribunal de origen: Juzgado Federal de Junín.
+    LibroVol331.3.md L734: y Comercial del Departamento Judicial de Junín.
+    LibroVol340.1.md L14446: de Junín.
+
+Azul: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L54111: Federal de Primera Instancia de Azul.
+    LibroVol330.1.md L30402: tancia de Azul.
+    LibroVol330.4.md L8425: de Azul.
+
+Fernando: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59590: de San Fernando.
+    LibroVol330.4.md L45461: Estado en liquidación (Arias, Alejo Fernando
+    LibroVol338.2.md L35357: Gómez, Patricia Verónica c/ Latrille, Fernando
+
+Tribunales: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59819: Tribunales
+    LibroVol329.2.md L59898: Tribunales
+    LibroVol329.2.md L59964: Tribunales
+
+Argentinas: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59822: Argentinas
+    LibroVol329.2.md L59967: Argentinas
+    LibroVol330.2.md L12570: después concedido a Aguas Argentinas.
+
+Magistrados: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59830: de Magistrados
+    LibroVol329.2.md L59970: Aires, la Asociación de Magistrados
+    LibroVol330.1.md L55528: Jurado de Enjuiciamiento de Magistrados
+
+Oficina: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60071: la Oficina
+    LibroVol329.4.md L45465: tes Sociales pertenecientes a la Oficina.
+    LibroVol329.4.md L45574: tes Sociales pertenecientes a la Oficina.
+
+Sociales: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L62291: Instituto Nacional de Servicios Sociales
+    LibroVol329.3.md L81210: Instituto Nacional de Servicios Sociales
+    LibroVol329.4.md L54923: Instituto Nacional de Servicios Sociales
+
+Petcoff: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L8374: dro Fernández Llanos y Luisa Margarita Petcoff.
+    LibroVol329.3.md L50441: nos y Luisa M. Petcoff.
+    LibroVol330.2.md L22929: Petcoff.
+
+Contractual: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L17238: DAÑOS Y PERJUICIOS: Culpa. Contractual.
+    LibroVol329.3.md L17243: DAÑOS Y PERJUICIOS: Culpa. Contractual.
+    LibroVol329.3.md L76538: Contractual
+
+Domínguez: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L27342: por el Dr. Andrés Gil Domínguez.
+    LibroVol329.3.md L58545: de Federico Guillermo Domínguez.
+    LibroVol331.2.md L26663: Dr. Federico Guillermo Domínguez.
+
+Reconquista: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L39484: tancia de Reconquista.
+    LibroVol329.4.md L57637: Federal de Reconquista.
+    LibroVol329.4.md L57753: vencia en el Juzgado Federal de Reconquista.
+
+Automotor: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74462: va Obrera de Trabajo y Transporte Automotor
+    LibroVol329.4.md L3668: dad del Automotor.
+    LibroVol329.4.md L47984: va Obrera de Trabajo y Transporte Automotor
+
+Mario: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74582: Provincia de Buenos Aires y otros (Correa, Mario
+    LibroVol329.4.md L48444: Provincia de Buenos Aires y otros (Correa, Mario
+    LibroVol330.2.md L60003: Tauro, Marcela y otro (Oyarbide, Norberto Mario
+
+Comisión: 8 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L47631: rrollo Social y Medio Ambiente – Comisión
+    LibroVol330.2.md L59598: Establecimiento Modelo Terrabusi S.A. (Comisión
+    LibroVol330.4.md L45190: Establecimiento Modelo Terrabusi S.A. (Comisión
+
+Sánchez: 8 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L18298: Gabriela Sánchez.
+    LibroVol331.1.md L4606: por el Dr. Héctor Guillermo Sánchez.
+    LibroVol332.2.md L3373: patrocinante Dr. Adrián Alberto Sánchez.
+
+Lema: 8 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L25951: cardo Entelman y Alberto M. García Lema.
+    LibroVol340_2.md L20572: Tomás A. García Lema.
+    LibroVol341.2.md L7746: García Lema.
+
+Herrera: 8 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L16769: Luis Fernando Herrera.
+    LibroVol330.2.md L59519: Corte Suprema de Justicia de la Nación (Herrera
+    LibroVol330.3.md L6517: Herrera.
+
+Insania: 8 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L35252: nes civiles y comerciales. Insania.
+    LibroVol330.4.md L35260: nes civiles y comerciales. Insania.
+    LibroVol330.4.md L52805: Insania
+
+Sentencia: 8 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L49466: Sentencia
+    LibroVol330.4.md L56119: Sentencia
+    LibroVol330.4.md L58583: Sentencia
+
+Interpretación: 8 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L53582: Interpretación
+    LibroVol330.4.md L54819: Interpretación
+    LibroVol330.4.md L56030: Interpretación
+
+Rentas: 8 ocurrencias
+  Ejemplos:
+    LibroVol331.3.md L34917: ción General de Rentas.
+    LibroVol332.2.md L3419: de la Dirección Provincial de Rentas.
+    LibroVol332.2.md L3546: 82/02 de la Dirección General de Rentas.
+
+Médica: 8 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L7000: convenio de Agentes de Propaganda Médica.
+    LibroVol337.1.md L7358: reconocido como Agente de Propaganda Médica.
+    LibroVol339.1.md L35460: P., E. G. y Otra c/ Centro de Educación Médica
+
+Quirno: 8 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L35236: Investigaciones Clínicas Norberto Quirno
+    LibroVol337.2.md L27780: Investigaciones Clínicas Norberto Quirno
+    LibroVol339.1.md L35461: e Investigaciones Clínicas Norberto Quirno
+
+Robo: 8 ocurrencias
+  Ejemplos:
+    LibroVol339.1.md L33425: N.N. s/ Robo
+    LibroVol339.2.md L28968: N., N. s/ Robo
+    LibroVol340_2.md L43148: Basilotta, Darío Alberto y Otros s/ Robo
+
+Alimentos: 8 ocurrencias
+  Ejemplos:
+    LibroVol339.2.md L30259: C., M. A. c/ H., E. L. s/ Alimentos
+    LibroVol339.2.md L33363: S., S. M. y Otros c/ F., F. G. s/ Alimentos
+    LibroVol340.1.md L865: N., S. y Otro c/ G. P., M. J. s/ Alimentos
+
+Mapfre: 8 ocurrencias
+  Ejemplos:
+    LibroVol341.1.md L32492: Martínez, Silvia Olga Beatriz c/ Mapfre
+    LibroVol341.2.md L47628: Martínez, Silvia Olga Beatriz c/ Mapfre
+    LibroVol343-1.md L25695: Martínez, Silvia Olga Beatriz c/ Mapfre
+
+Cabanillas: 8 ocurrencias
+  Ejemplos:
+    LibroVol341.2.md L5860: y Francisco M. Cabanillas.
+    LibroVol346-1.md L23408: Rabbi-Baldi Cabanillas
+    LibroVol346-1.md L23702: Luis Renato Rabbi—Baldi Cabanillas.
+
+Forma: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L546: ral. Forma.
+    LibroVol329.1.md L59027: Forma
+    LibroVol330.2.md L9400: ral. Forma.
+
+Olmedo: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L8449: D. Olmedo.
+    LibroVol331.1.md L14930: Daniel Olmedo.
+    LibroVol332.1.md L22862: Adolfo Daniel Olmedo y Daniel Eduardo Olmedo.
+
+Kisser: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L14346: Arturo Kisser.
+    LibroVol329.1.md L32900: Raymundo Arturo Kisser.
+    LibroVol331.1.md L2623: do Arturo Kisser.
+
+Prieto: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L17848: do por el Dr. Martín Alejo Prieto.
+    LibroVol330.1.md L6462: Prieto.
+    LibroVol332.1.md L18560: Gregorio Badeni y Gonzalo M. Prieto.
+
+Diez: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L19557: de la Dra. Myrian Graciela Rodríguez de Diez.
+    LibroVol329.4.md L11232: letrado de la Dra. María Eugenia Diez.
+    LibroVol329.4.md L21025: del Dr. Rafael C. Diez.
+
+Pereyra: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L25264: López Pereyra.
+    LibroVol329.1.md L33556: López Pereyra.
+    LibroVol329.3.md L47943: buida a Juan Pablo Pereyra.
+
+Daniel: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L40948: que los presentes. Buenos Aires, 11 de febrero de 2004. Felipe Daniel
+    LibroVol329.2.md L45765: de fs. 1251/2. Buenos Aires, 3 de septiembre de 2004. Felipe Daniel
+    LibroVol329.3.md L50668: me a derecho. Buenos Aires, 17 de diciembre de 2004. Felipe Daniel
+
+Estados: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L51678: diversos órganos judiciales de los Estados.
+    LibroVol330.1.md L42599: primordiales del gobierno de los Estados.
+    LibroVol338.2.md L26525: Estados.
+
+Obras: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52770: Transportes y Construcciones S.A. y S.A. de Obras
+    LibroVol329.4.md L47327: G.C.B.A. c/ Administración General de Obras
+    LibroVol329.4.md L49059: Transportes y Construcciones S.A. y S.A. de Obras
+
+Contradicción: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L58712: Contradicción
+    LibroVol329.3.md L82586: Contradicción
+    LibroVol329.4.md L54482: Contradicción
+
+Felipe: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L11280: arreglo a lo expresado. Buenos Aires, 30 de diciembre de 2004. Felipe
+    LibroVol329.2.md L49382: arreglo a lo expuesto. Buenos Aires, 30 de noviembre de 2004. Felipe
+    LibroVol329.3.md L7147: dicte nueva sentencia. Buenos Aires, 23 de febrero de 2004. Felipe
+
+Objeto: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L12560: EXPROPIACION: Objeto.
+    LibroVol329.2.md L63663: Objeto
+    LibroVol330.2.md L50264: EXPROPIACION: Objeto.
+
+Suspensión: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L18696: PRESCRIPCION: Suspensión.
+    LibroVol329.3.md L54558: PRESCRIPCION: Suspensión.
+    LibroVol329.3.md L80597: Suspensión
+
+Grande: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L25382: tancia de la ciudad de Río Grande.
+    LibroVol329.2.md L61500: Weihmann, Eva c/ Transportes Río Grande
+    LibroVol329.4.md L49186: Weihmann, Eva c/ Transportes Río Grande
+
+Polti: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L31203: triz Polti.
+    LibroVol329.2.md L59145: triz Polti.
+    LibroVol329.3.md L72874: presentada por la Dra. Liliana Beatriz Polti.
+
+Jurado: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60290: del Jurado
+    LibroVol329.4.md L62630: Jurado.
+    LibroVol329.4.md L77977: habilita la decisión del Jurado.
+
+Gas: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60806: Baratelli, Alejandro José y otros c/ Camuzzi Gas
+    LibroVol329.4.md L46530: Baratelli, Alejandro José y otros c/ Camuzzi Gas
+    LibroVol339.2.md L5123: cional Regulador del Gas.
+
+Ferrocarriles: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L61047: Gramajo, Carlos Alberto y otros c/ Ferrocarriles
+    LibroVol329.4.md L47445: Gramajo, Carlos Alberto y otros c/ Ferrocarriles
+    LibroVol330.3.md L56433: Cortez, Jesús Florentino y otros c/ Ferrocarriles
+
+Castillo: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L5328: Castillo.
+    LibroVol339.1.md L9280: Dr. Álvaro del Castillo.
+    LibroVol340_2.md L9113: presentados por la Dra. María José Castillo.
+
+Viltes: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L7739: Fernández y Valeria Lorena Viltes.
+    LibroVol329.3.md L71310: y Valeria Lorena Viltes.
+    LibroVol330.1.md L23361: Lorena Viltes.
+
+Vicente: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L19005: Vicente.
+    LibroVol330.2.md L3928: Vicente.
+    LibroVol332.2.md L9807: Martínez de San Vicente.
+
+Limitada: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L35121: Vigencia Cooperativa de Trabajo Limitada.
+    LibroVol330.2.md L59958: Sociales y Viviendas El Bolsón Limitada
+    LibroVol330.3.md L8551: cos de San Martín de los Andes Limitada.
+
+Pago: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L35947: EXCEPCIONES: Clases. Pago.
+    LibroVol329.3.md L77341: Pago
+    LibroVol329.4.md L9971: EXCEPCIONES: Clases. Pago.
+
+Carballés: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L46860: Miguel Jacoby y R. A. Patricio Carballés.
+    LibroVol329.4.md L10254: Pablo Miguel Jacoby y R. A. Patricio Carballés.
+    LibroVol330.1.md L29644: Sandra Sirur Flores y Patricio Carballés.
+
+Ortiz: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L687: da por la Dra. Guadalupe Valdez Ortiz.
+    LibroVol329.4.md L11333: José Alberto Díaz Ortiz.
+    LibroVol332.1.md L13455: letrado del Dr. José A. Díaz Ortiz.
+
+Impuestos: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L29885: cipación Federal de Impuestos.
+    LibroVol330.4.md L49315: Impuestos
+    LibroVol330.4.md L52759: Impuestos
+
+Guillermo: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L45410: TERAN, Guillermo
+    LibroVol330.2.md L59523: Costilla, Raúl Orlando y otra (Cleland, Guillermo
+    LibroVol330.4.md L44972: Costilla, Raúl Orlando y otra (Cleland, Guillermo
+
+Caro: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L69553: examina los hechos imputados al Dr. Caro.
+    LibroVol329.4.md L70432: tado ante Caro.
+    LibroVol329.4.md L71874: para el nombramiento del doctor Caro.
+
+Carrasco: 7 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L70507: Octavio Carrasco.
+    LibroVol329.4.md L70658: soldado Carrasco.
+    LibroVol329.4.md L70712: soldado Carrasco.
+
+Belgrano: 7 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L14626: en estación Saldías del Ferrocarril Belgrano.
+    LibroVol341.2.md L47315: Arjona, Roberto y Otros c/ Ferr. Gral. Belgrano
+    LibroVol344-1.md L48867: Asociación Mutual Club Atlético Belgrano
+
+Suárez: 7 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L18882: pena que le correspondía a Suárez.
+    LibroVol330.1.md L18912: los cuales resultó condenado Suárez.
+    LibroVol330.3.md L36454: tada por el Dr. Santiago Ibar Suárez.
+
+Producción: 7 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L46147: Ministerio de Economía y Producción.
+    LibroVol330.2.md L62353: Economía y Producción.
+    LibroVol331.1.md L34958: y Producción.
+
+Automotores: 7 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L59507: Comuna de Hughes c/ Transportes Automotores
+    LibroVol330.3.md L56730: Scania Argentina S.A. c/ Amarilla Automotores
+    LibroVol330.4.md L34988: cional al Impuesto a los Automotores.
+
+Laboral: 7 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L70932: Laboral
+    LibroVol339.2.md L24452: MAR del PLATA s/ Laboral
+    LibroVol339.2.md L25003: SRL s/ Laboral
+
+Gordillo: 7 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L46724: Agustín A. Gordillo.
+    LibroVol331.3.md L14538: la Dra. Susana Suárez Gordillo.
+    LibroVol338.1.md L11102: nisterio Público. Buenos Aires, 15 de octubre de 2014. Agustín Gordillo.
+
+Gestión: 7 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L55848: Creación de una Comisión Nacional de Gestión.
+    LibroVol337.2.md L27799: Maules, Cecilia Valeria c/ Unidad de Gestión
+    LibroVol339.1.md L35325: Giménez, Julio César c/ Unidad de Gestión
+
+Yacimientos: 7 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L56635: Petroservice Sociedad Anónima c/ Yacimientos
+    LibroVol330.4.md L45916: Petroservice Sociedad Anónima c/ Yacimientos
+    LibroVol330.4.md L49225: a Yacimientos
+
+Gobierno: 7 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L46300: Romero, Francisca del Valle y otros c/ Gobierno
+    LibroVol338.2.md L14413: la base de nuestra forma de Gobierno.
+    LibroVol338.2.md L35324: Fernández, Gustavo Gabriel y otro c/ Gobierno
+
+Dra: 7 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L50456: superior (Disidencia de la Dra.
+    LibroVol330.4.md L56180: de la Dra.
+    LibroVol330.4.md L56239: de la Dra.
+
+Migraciones: 7 ocurrencias
+  Ejemplos:
+    LibroVol332.2.md L21458: Dirección General de Migraciones.
+    LibroVol332.2.md L21776: Dirección General de Migraciones.
+    LibroVol344-1.md L39531: de la Dirección Nacional de Migraciones.
+
+Videla: 7 ocurrencias
+  Ejemplos:
+    LibroVol338.1.md L10933: Castro Videla.
+    LibroVol341.1.md L19041: Bianchi y Santiago M. Castro Videla.
+    LibroVol345-1.md L10218: M. Castro Videla.
+
+Álvarez: 7 ocurrencias
+  Ejemplos:
+    LibroVol338.1.md L25235: Cachia y Jorge Adrián Álvarez.
+    LibroVol342-1.md L44991: Álvarez.
+    LibroVol344-2.md L4074: Álvarez.
+
+Inhibitoria: 7 ocurrencias
+  Ejemplos:
+    LibroVol339.1.md L27301: TELEFÓNICA MÓVILES ARGENTINA SA s/ Inhibitoria
+    LibroVol339.1.md L35541: Telefónica Móviles Argentina SA s/ Inhibitoria
+    LibroVol339.2.md L34243: Telefónica Móviles Argentina SA s/ Inhibitoria
+
+Estafa: 7 ocurrencias
+  Ejemplos:
+    LibroVol339.2.md L26749: PAVÓN, CRISTIAN SEBASTIÁN s/ Estafa
+    LibroVol339.2.md L26812: MAIDANA, ALDO ROBERTO s/ Estafa
+    LibroVol339.2.md L28626: PICCADACI, JOSÉ GUILLERMO s/ Estafa
+
+Colegio: 7 ocurrencias
+  Ejemplos:
+    LibroVol340_2.md L43217: Cavallo Álvarez, Sandra Elizabeth c/ Colegio
+    LibroVol344-1.md L49145: Gallego Beorlegui, Juan Pablo c/ Colegio
+    LibroVol344-1.md L49338: Mihura Estrada, Ricardo y Otros c/ Colegio
+
+Prestaciones: 7 ocurrencias
+  Ejemplos:
+    LibroVol341.1.md L32445: González, Carmen c/ ANSeS s/ Prestaciones
+    LibroVol341.2.md L47538: González, Carmen c/ ANSeS s/ Prestaciones
+    LibroVol344-1.md L48912: Externo (OSPOCE) y Otro s/ Prestaciones
+
+Incompatibilidad: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L4506: EMPLEADOS PUBLICOS: Incompatibilidad.
+    LibroVol329.1.md L4517: EMPLEADOS PUBLICOS: Incompatibilidad.
+    LibroVol329.1.md L4544: EMPLEADOS PUBLICOS: Incompatibilidad.
+
+Sosa: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L11921: Silberzweig y Dora Inés Sosa.
+    LibroVol329.2.md L54971: Guillermo Sosa.
+    LibroVol329.3.md L72693: rre y la Dra. María Elena Sosa.
+
+Núñez: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L16287: J. Wickstrom y Héctor A. Núñez.
+    LibroVol332.3.md L4232: Fernández y Héctor Antonio Núñez.
+    LibroVol332.3.md L4355: Dra. Antonia Núñez.
+
+Anónima: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L37330: Sociedad Anónima.
+    LibroVol329.1.md L52603: Provincia de Buenos Aires (Sociedad Anónima
+    LibroVol329.3.md L74570: Provincia de Buenos Aires (Sociedad Anónima
+
+Generales: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52295: D.G.I. (La Continental Cía. de Seguros Generales
+    LibroVol329.3.md L73851: Compañía Argentina de Seguros Generales
+    LibroVol329.4.md L46159: Compañía Argentina de Seguros Generales
+
+Francisco: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52573: Poder Ejecutivo Nacional (Saralegui, Francisco
+    LibroVol330.3.md L56660: Provincia de Buenos Aires (Cid, José Francisco
+    LibroVol330.4.md L45666: Menem, Carlos Saúl y otros (Manuso, Francisco
+
+Petrolíferos: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52682: Provincia del Neuquén (Yacimientos Petrolíferos
+    LibroVol329.2.md L61383: Provincia del Neuquén c/ Yacimientos Petrolíferos
+    LibroVol329.4.md L46937: Cruz, Bernardo Oscar c/ Yacimientos Petrolíferos
+
+Culturales: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L10306: micos, Sociales y Culturales.
+    LibroVol331.2.md L31628: de Derechos Económicos, Sociales y Culturales.
+    LibroVol341.2.md L25909: Derechos Económicos, Sociales y Culturales.
+
+Militar: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L12100: ticia Militar.
+    LibroVol329.4.md L70169: tal Militar.
+    LibroVol329.4.md L70314: su internación en el Hospital Militar.
+
+Extracontractual: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L19397: DAÑOS Y PERJUICIOS: Culpa. Extracontractual.
+    LibroVol329.2.md L63093: Extracontractual
+    LibroVol330.1.md L21311: DAÑOS Y PERJUICIOS: Culpa. Extracontractual.
+
+Alonso: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L21464: dad Zabala Alonso.
+    LibroVol329.2.md L52461: Ernesto Alonso.
+    LibroVol329.3.md L23426: tados por el Dr. Hugo Alberto Alonso.
+
+Coriolano: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L22746: el defensor de casación Dr. Mario L. Coriolano.
+    LibroVol329.4.md L33196: representado por el Dr. Mario L. Coriolano.
+    LibroVol332.2.md L18122: Mario Luis Coriolano.
+
+Victorica: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L23877: tín Romero Victorica.
+    LibroVol329.2.md L24139: Dr. Juan M. Romero Victorica.
+    LibroVol330.2.md L15863: Diego H. González Victorica.
+
+Instancia: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L33659: Instancia.
+    LibroVol330.4.md L49318: Instancia
+    LibroVol330.4.md L50497: de la Instancia
+
+Autónoma: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59823: y Ciudad Autónoma
+    LibroVol329.2.md L59968: y Ciudad Autónoma
+    LibroVol330.4.md L50727: 1; Ciudad Autónoma
+
+Información: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59986: un Centro de Información
+    LibroVol329.2.md L60031: el Centro de Información
+    LibroVol329.2.md L60066: de Información
+
+Empleados: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60582: y Empleados
+    LibroVol329.2.md L60609: y Empleados
+    LibroVol330.4.md L49275: Empleados
+
+Argentinos: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L61330: Provincia de Río Negro (Ferrocarriles Argentinos
+    LibroVol329.4.md L48587: Provincia de Río Negro (Ferrocarriles Argentinos
+    LibroVol334.3.md L22549: Ferrocarriles Argentinos.
+
+Devoto: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L4194: del Dr. Ernesto Horacio Devoto.
+    LibroVol330.4.md L23328: defensora pública oficial, Dra. Eleonora Devoto.
+    LibroVol331.3.md L32908: Defensora Pública Oficial Dra. Eleonora Devoto.
+
+Melo: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L32289: Federico Spinosa Melo.
+    LibroVol329.3.md L32594: Federico Spinosa Melo.
+    LibroVol334.3.md L26750: fallecimiento de Leopoldo Jorge Melo.
+
+Blanco: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L46306: de Cucco y Gustavo Adolfo Blanco.
+    LibroVol337.2.md L2816: Dres. Pablo Raúl Masud y Mario José Blanco.
+    LibroVol339.2.md L33611: Blanco, Juan Ángel c/ María Elvia Blanco
+
+Duarte: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L57676: Alexandre y Fidel Eduardo Duarte.
+    LibroVol330.4.md L11373: dos por el Dr. Matías Duarte.
+    LibroVol331.3.md L5721: por el Dr. Matías Duarte.
+
+Aguirre: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L60384: E. Obregón y Víctor E. Aguirre.
+    LibroVol330.2.md L32170: cinada por el Dr. Gaspar Arturo Aguirre.
+    LibroVol330.4.md L27172: Aguirre.
+
+Spota: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L62013: M.G. Spota.
+    LibroVol329.3.md L64214: presentado por el Dr. Eugenio Marcelo G. Spota.
+    LibroVol329.3.md L69372: presentado por el Dr. Eugenio M. G. Spota.
+
+Méndez: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L73076: la Dra. María Mónica Méndez.
+    LibroVol330.2.md L2492: O. Méndez.
+    LibroVol330.4.md L15393: representada por el Dr. Javier Marcelo Méndez.
+
+Hugo: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74409: Ministerio de Justicia y DD.HH (Ferreira, Hugo
+    LibroVol329.4.md L46366: Armada Argentina y otro (Mesquida, Gregorio Hugo
+    LibroVol329.4.md L47866: Ministerio de Justicia y DD.HH (Ferreira, Hugo
+
+Rodolfo: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74531: Poder Ejecutivo Nacional (Rodríguez, Rodolfo
+    LibroVol329.4.md L48289: Poder Ejecutivo Nacional (Rodríguez, Rodolfo
+    LibroVol330.2.md L59865: Poder Ejecutivo Nacional y otro (Schroh, Rodolfo
+
+Yacyretá: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L17061: en el Tratado de Yacyretá.
+    LibroVol330.1.md L20911: Binacional Yacyretá.
+    LibroVol330.2.md L46915: eléctrica Yacyretá.
+
+Piaggio: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L26211: Aníbal Piaggio.
+    LibroVol331.2.md L6330: Piaggio.
+    LibroVol333.2.md L18616: presentado por el Dr. Aníbal Norberto Piaggio.
+
+Fuego: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L27704: Fuego.
+    LibroVol332.3.md L22333: Tierra del Fuego.
+    LibroVol339.1.md L6123: Negro, Santa Cruz y Tierra del Fuego.
+
+Juana: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L48287: Poder Ejecutivo Nacional (Pichuaga, Rosa Juana
+    LibroVol330.2.md L59570: Entidad Binacional Yacyretá (Machado, Juana
+    LibroVol330.4.md L45177: Entidad Binacional Yacyretá (Machado, Juana
+
+Fariz: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L58376: Fernández recurrió la resolución del juez Fariz.
+    LibroVol329.4.md L59243: Fariz.
+    LibroVol329.4.md L59663: a esa fecha en el Juzgado a cargo del Dr. Fariz.
+
+Luna: 6 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L69530: c) Hecho del ex soldado Fabián Luna.
+    LibroVol329.4.md L70363: c. Declaración del testigo Fabián Luna.
+    LibroVol329.4.md L71917: del testigo Luna.
+
+Costa: 6 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L17953: do Agustín Costa.
+    LibroVol330.3.md L33353: Horacio Costa.
+    LibroVol331.2.md L7385: Dres. Dante A. Giadone y Horacio J. Costa.
+
+Municipal: 6 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L15094: Tributaria Municipal.
+    LibroVol330.3.md L9884: cia del Tribunal Electoral Municipal.
+    LibroVol337.2.md L24042: Código Tributario Municipal.
+
+Nacucchio: 6 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L22257: el Dr. José Luis Nacucchio.
+    LibroVol330.4.md L5695: José Luis Nacucchio.
+    LibroVol333.3.md L21197: por el doctor José Luis Nacucchio.
+
+Compañía: 6 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L60062: Yacimientos Petrolíferos Fiscales S.E. (Compañía
+    LibroVol337.1.md L35191: p/s defensa c/ La Meridional Compañía
+    LibroVol337.2.md L27686: p/s defensa c/ La Meridional Compañía
+
+Ganancias: 6 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L70917: Ley de Impuesto a las Ganancias
+    LibroVol334.1.md L9941: las Ganancias.
+    LibroVol334.1.md L19763: de Impuesto a las Ganancias.
+
+Eléctrica: 6 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L56340: Asociación de Generadores de Energía Eléctrica
+    LibroVol330.4.md L44562: Asociación de Generadores de Energía Eléctrica
+    LibroVol339.1.md L35401: Malla, Alfredo Juan c/ Agua y Energía Eléctrica
+
+Acevedo: 6 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L56713: Rhone Poulenc Rorer International y otro (Acevedo
+    LibroVol330.4.md L46266: Rhone Poulenc Rorer International y otro (Acevedo
+    LibroVol333.1.md L11808: Francisco Acevedo.
+
+Censos: 6 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L21306: tadísticas y Censos.
+    LibroVol331.3.md L21394: Instituto Nacional de Estadísticas y Censos.
+    LibroVol331.3.md L41221: de Estadísticas y Censos.
+
+Valores: 6 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L30631: mas de la Comisión Nacional de Valores.
+    LibroVol330.4.md L30774: de Valores.
+    LibroVol344-2.md L21667: Nacional de Valores.
+
+Responsabilidad: 6 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L50557: Responsabilidad
+    LibroVol330.4.md L52784: Responsabilidad
+    LibroVol330.4.md L54825: Responsabilidad
+
+Ley: 6 ocurrencias
+  Ejemplos:
+    LibroVol331.1.md L4884: 31 de la Ley.
+    LibroVol342-1.md L50656: Nacional de Córdoba s/ Recurso directo Ley
+    LibroVol342-2.md L43255: Nacional de Jujuy s/ Recurso directo Ley
+
+Educación: 6 ocurrencias
+  Ejemplos:
+    LibroVol331.1.md L37997: Dirección General de Cultura y Educación.
+    LibroVol338.1.md L14002: General de Educación.
+    LibroVol339.1.md L26825: diversa a la del Ministerio de Educación.
+
+Francia: 6 ocurrencias
+  Ejemplos:
+    LibroVol332.1.md L23775: en Francia.
+    LibroVol333.2.md L15914: Fiscal de la República de Francia.
+    LibroVol342-2.md L31172: por el Dr. Juan Manuel Francia.
+
+Telleldín: 6 ocurrencias
+  Ejemplos:
+    LibroVol332.2.md L11274: era Carlos Alberto Telleldín.
+    LibroVol332.2.md L11994: viendo o condenando a Telleldín.
+    LibroVol332.2.md L13145: de Carlos Alberto Telleldín.
+
+Control: 6 ocurrencias
+  Ejemplos:
+    LibroVol332.2.md L43487: Gobierno Pcia. de San Juan (Unidad de Control
+    LibroVol332.3.md L10151: Intervención del Organismo de Control.
+    LibroVol332.3.md L34600: Gobierno Pcia. de San Juan (Unidad de Control
+
+Mosqueira: 6 ocurrencias
+  Ejemplos:
+    LibroVol333.1.md L3154: vios) de la Dra. María Gabriela Mosqueira.
+    LibroVol333.2.md L41119: letrado de la Dra. María Mosqueira.
+    LibroVol333.3.md L2430: Gabriela Mosqueira.
+
+Cornejo: 6 ocurrencias
+  Ejemplos:
+    LibroVol333.1.md L4008: Máximo Pita y Martín Ovejero Cornejo.
+    LibroVol333.1.md L27847: Pita y Martín Ovejero Cornejo.
+    LibroVol333.2.md L8584: Cornejo.
+
+Morán: 6 ocurrencias
+  Ejemplos:
+    LibroVol334.1.md L14626: Eduardo Morán.
+    LibroVol343-1.md L10741: Luis E. Morán.
+    LibroVol347-1.md L28672: — Marcos Morán.
+
+Interamericana: 6 ocurrencias
+  Ejemplos:
+    LibroVol334.3.md L18154: de la Comisión Interamericana
+    LibroVol345-1.md L25556: del fallo “Mendoza” por la Corte Interamericana.
+    LibroVol347-2.md L34065: de la Carta Democrática Interamericana.
+
+Varios: 6 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L5045: s/ Varios
+    LibroVol338.1.md L18383: E., M. D. c/ P., P.,F. s/ Varios
+    LibroVol339.2.md L4327: NIDERA S.A. c/ DGI s/ Varios
+
+Mercosur: 6 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L16218: Común del Mercosur.
+    LibroVol337.1.md L32128: Grupo Mercado Común del Mercosur.
+    LibroVol337.1.md L32297: 27/96 del Grupo Mercado Común del Mercosur.
+
+Director: 6 ocurrencias
+  Ejemplos:
+    LibroVol339.1.md L818: 4°) Designación del Director
+    LibroVol339.2.md L1133: de la Nación para la designación del Director.
+    LibroVol339.2.md L1186: el Director.
+
+Alumbrera: 6 ocurrencias
+  Ejemplos:
+    LibroVol339.1.md L35263: Cruz, Felipa y Otros c/ Minera Alumbrera
+    LibroVol339.1.md L35265: Cruz, Felipa y Otros c/ Minera Alumbrera
+    LibroVol339.2.md L33713: Cruz, Felipa y Otros c/ Minera Alumbrera
+
+Querella: 6 ocurrencias
+  Ejemplos:
+    LibroVol339.2.md L32798: AAGESEN, HAYDEÉ MARGARITA y Otro s/ Querella
+    LibroVol340_2.md L11784: R., MARCELO ALEJO y Otros s/ Querella
+    LibroVol343-2.md L10400: COLOTTI, CAMILO ÁNGEL y Otros s/ Querella
+
+Madero: 6 ocurrencias
+  Ejemplos:
+    LibroVol340.1.md L20255: doctor Juan María Díaz Madero.
+    LibroVol340_2.md L16016: doctor Juan María Díaz Madero.
+    LibroVol340_2.md L29790: doctor Juan María Díaz Madero.
+
+Amenazas: 6 ocurrencias
+  Ejemplos:
+    LibroVol340_2.md L17303: GONZÁLEZ, LEONARDO EZEQUIEL s/ Amenazas.
+    LibroVol340_2.md L43383: González, Leonardo Ezequiel s/ Amenazas.
+    LibroVol341.1.md L12060: GRILLO MAZZITELLI, LUIS PABLO s/ Amenazas
+
+Privación: 6 ocurrencias
+  Ejemplos:
+    LibroVol341.1.md L32428: Fracassi, Eduardo René y Otros s/ Privación
+    LibroVol341.2.md L47511: Fracassi, Eduardo René y Otros s/ Privación
+    LibroVol342-1.md L50613: Iñigo, David Gustavo y Otros s/ Privación
+
+Abramóvich: 6 ocurrencias
+  Ejemplos:
+    LibroVol341.2.md L29034: Buenos Aires, 3 de julio de 2017. Víctor Abramóvich.
+    LibroVol343-2.md L27735: Buenos Aires, 4 de noviembre de 2016. Víctor Abramóvich.
+    LibroVol344-1.md L9781: junio de 2019. Víctor Abramóvich.
+
+Bs: 6 ocurrencias
+  Ejemplos:
+    LibroVol341.2.md L47417: Colegio de Escribanos de la Provincia de Bs.
+    LibroVol343-1.md L25527: Echenique, Jorge y Otro/a c/ Provincia de Bs.
+    LibroVol343-2.md L30152: Echenique, Jorge y Otro/a c/ Provincia de Bs.
+
+Petróleo: 6 ocurrencias
+  Ejemplos:
+    LibroVol342-1.md L32053: de Gas Licuado de Petróleo.
+    LibroVol342-1.md L32247: cialización de Gas Licuado de Petróleo.
+    LibroVol342-1.md L32374: cialización de Gas Licuado de Petróleo.
+
+Apelación: 6 ocurrencias
+  Ejemplos:
+    LibroVol342-1.md L50502: causa n° 261019 de la Cámara de Apelación
+    LibroVol342-2.md L43158: causa n° 261019 de la Cámara de Apelación
+    LibroVol344-1.md L48812: causa n° 16.263 de la Cámara de Apelación
+
+Sola: 6 ocurrencias
+  Ejemplos:
+    LibroVol342-2.md L29788: patrocinio letrado del Dr. Juan Vicente Sola.
+    LibroVol343-1.md L1396: Vicente Sola.
+    LibroVol344-1.md L38214: patrocinio letrado del Dr. Juan Vicente Sola.
+
+Walter: 6 ocurrencias
+  Ejemplos:
+    LibroVol343-1.md L25344: Alarcón, Gerardo Daniel c/ Sapienza, Walter
+    LibroVol343-1.md L25498: Cruz, Martín Ernesto c/ Alastuey, Roberto Walter
+    LibroVol343-2.md L29969: Alarcón, Gerardo Daniel c/ Sapienza, Walter
+
+Production: 6 ocurrencias
+  Ejemplos:
+    LibroVol343-1.md L25884: Sinopec Argentina Exploration and Production
+    LibroVol343-2.md L30508: Sinopec Argentina Exploration and Production
+    LibroVol343-3.md L34705: Sinopec Argentina Exploration and Production
+
+Chaves: 6 ocurrencias
+  Ejemplos:
+    LibroVol347-1.md L5836: muerte de Carlos Antonio Chaves.
+    LibroVol347-1.md L6271: ves y $ 11.782.000 a Carlos Gabriel Chaves.
+    LibroVol347-1.md L6735: 28.462.000 a Carlos Gabriel Chaves.
+
+Mansilla: 6 ocurrencias
+  Ejemplos:
+    LibroVol348-1.md L3339: García—Mansilla.
+    LibroVol348-1.md L5909: García-Mansilla
+    LibroVol348-1.md L6233: Manuel José García—Mansilla.
+
+Silva: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L7444: representado por el Dr. Jorge Alejandro Silva.
+    LibroVol330.1.md L6138: María Fátima Silva.
+    LibroVol346-2.md L1839: del Dr. Luis Ricardo Silva.
+
+América: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L15996: tados Unidos de América.
+    LibroVol331.1.md L23005: Unidos de América.
+    LibroVol339.2.md L9534: Embajada de los Estados Unidos de América.
+
+Hernández: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L21292: O. Hernández.
+    LibroVol338.1.md L20257: cinio letrado del doctor Antonio María Hernández.
+    LibroVol341.1.md L2614: Hernández.
+
+Consoli: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L22430: representada por la Dra. Verónica I. Consoli.
+    LibroVol330.2.md L23636: tina Consoli.
+    LibroVol333.2.md L15285: Irene Consoli.
+
+Trelew: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L37620: la ciudad de Trelew.
+    LibroVol329.3.md L6454: la ciudad de Trelew.
+    LibroVol329.4.md L8885: Trelew.
+
+Ahmad: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L37973: Alejandra Ahmad.
+    LibroVol329.2.md L42126: Padilla Tanco y María Alejandra Ahmad.
+    LibroVol329.2.md L50955: Florencia Alvarez Prado y María Alejandra Ahmad.
+
+Retiro: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L42016: dos Judiciales de la Nación en Retiro.
+    LibroVol340_2.md L43100: Asociación de Aseguradores de Vida y Retiro
+    LibroVol341.1.md L32350: Benítez, Jorge Ariel c/ Galicia Retiro
+
+Transener: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L52449: Lagorio, Arnaldo Santiago c/ Compañía Transener
+    LibroVol329.3.md L39999: Recurso Extraordinario de Transener
+    LibroVol329.3.md L40160: calidad de tercero, Transener.
+
+Transferencia: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L56156: Acuerdo General de Transferencia.
+    LibroVol330.4.md L48771: 3.Transferencia
+    LibroVol339.1.md L838: 5°) Acta de Transferencia
+
+Término: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.1.md L59051: Término
+    LibroVol329.4.md L54705: Término
+    LibroVol330.1.md L57057: Término
+
+Romero: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L11158: Romero.
+    LibroVol333.1.md L23252: los Dres. Mario Romero y Federico C. Romero.
+    LibroVol342-2.md L446: Dr. Mariano Romero.
+
+Giannini: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L16795: el Dr. César A. Mosso Giannini.
+    LibroVol329.2.md L19381: doctor César A. Mosso Giannini.
+    LibroVol329.4.md L10866: dro J. Sin y César Antonio Mosso Giannini.
+
+Incompetencia: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L19217: EXCEPCIONES: Clases. Incompetencia.
+    LibroVol329.2.md L28668: EXCEPCIONES: Clases. Incompetencia.
+    LibroVol329.2.md L63592: Incompetencia
+
+Barreiro: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L37100: por el Dr. David A. Barreiro.
+    LibroVol331.3.md L4345: por el Dr. David Alberto Barreiro.
+    LibroVol331.3.md L4356: vid Alberto Barreiro.
+
+Giménez: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L40728: impuesta a Antonio Fidel Giménez.
+    LibroVol337.1.md L4632: Tarsitano y María Inés Giménez.
+    LibroVol341.2.md L31451: da por la Dra. Milena Giménez.
+
+Designar: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59733: Designar
+    LibroVol329.2.md L59886: 2j Designar
+    LibroVol329.2.md L60086: 2") Designar
+
+Provincias: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L59821: de las Provincias
+    LibroVol329.2.md L59900: de las Provincias
+    LibroVol329.2.md L59966: de las Provincias
+
+Subrogaciones: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60565: de Subrogaciones
+    LibroVol329.2.md L60625: de Subrogaciones
+    LibroVol329.2.md L60651: Subrogaciones
+
+Vida: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60762: Cuidado del Medio Ambiente y Calidad de Vida
+    LibroVol329.3.md L74528: Acción Social de la Nación (Mujeres por la Vida
+    LibroVol329.4.md L46390: Cuidado del Medio Ambiente y Calidad de Vida
+
+César: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L60800: Banco de la Nación Argentina (Putallaz, César
+    LibroVol329.3.md L74432: Monroe Americana S.A. (Ramagnoli, Tulio César
+    LibroVol329.4.md L46504: Banco de la Nación Argentina (Putallaz, César
+
+Lavoro: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L61178: Nación Argentina y Banca Nazionale del Lavoro
+    LibroVol329.4.md L48028: Nación Argentina y Banca Nazionale del Lavoro
+    LibroVol330.2.md L59446: Borenholtz, Bernardo (Banca Nazionale del Lavoro
+
+Robles: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.2.md L61332: Provincia de Río Negro y otra (Vicente Robles
+    LibroVol329.4.md L48591: Provincia de Río Negro y otra (Vicente Robles
+    LibroVol330.1.md L1676: Fernando Robles.
+
+Concursos: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L1140: del Reglamento de Concursos.
+    LibroVol329.3.md L1404: del Reglamento de Concursos.
+    LibroVol330.2.md L2052: de la Ley de Concursos.
+
+Aeronáutico: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L17421: Código Aeronáutico.
+    LibroVol329.3.md L17598: Aeronáutico.
+    LibroVol329.3.md L17707: Aeronáutico.
+
+Defraudación: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L19199: nes penales. Delitos en particular. Defraudación.
+    LibroVol329.3.md L78741: Defraudación
+    LibroVol331.1.md L2083: penales. Delitos en particular. Defraudación.
+
+Mancini: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L41808: Rodríguez Mancini.
+    LibroVol329.3.md L41811: Mancini.
+    LibroVol330.4.md L4909: Mancini.
+
+Rojas: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L43378: Catella, y el Ministro Dr. Jorge Antonio Rojas.
+    LibroVol329.4.md L69185: la excusación solicitada por el Dr. Rojas.
+    LibroVol334.1.md L20081: José Rojas.
+
+Esquivel: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L49355: H. Esquivel.
+    LibroVol329.4.md L17747: María del Rosario Esquivel.
+    LibroVol331.3.md L23188: tado por la Dra. Miriam Beatriz Esquivel.
+
+Bouzat: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L57624: Bouzat.
+    LibroVol334.2.md L1653: Gabriel Bouzat.
+    LibroVol338.1.md L26292: Gabriel Bouzat.
+
+Clara: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L69108: representado por la Dra. Ana María Santa Clara.
+    LibroVol329.4.md L45426: SICARDI, Clara
+    LibroVol329.4.md L67947: nados Néstor Carlos Salas y Mirta Susana Clara.
+
+Cía: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74056: Comuna de Hughes c/ Elizalde Garrahan y Cía.
+    LibroVol329.4.md L46878: Comuna de Hughes c/ Elizalde Garrahan y Cía.
+    LibroVol338.1.md L26481: Santiago del Estero, Provincia de c/ Cía.
+
+Isabel: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74782: Universidad de Buenos Aires (Piaggi, Ana Isabel
+    LibroVol329.4.md L45428: MUNILLA LACASA, María Isabel
+    LibroVol329.4.md L49084: Universidad de Buenos Aires (Piaggi, Ana Isabel
+
+Hermanos: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.3.md L74829: Zambrana Serrudo, René c/ Derudder Hermanos
+    LibroVol329.4.md L49230: Zambrana Serrudo, René c/ Derudder Hermanos
+    LibroVol330.3.md L56641: Poder Ejecutivo Nacional (Gardebled Hermanos
+
+Hidráulicas: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L11065: Saneamiento y Obras Hidráulicas.
+    LibroVol344-1.md L47979: Obras Hidráulicas.
+    LibroVol344-1.md L48070: Obras Hidráulicas.
+
+Hombre: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L35120: de Derechos y Deberes del Hombre.
+    LibroVol329.4.md L35283: de Derechos y Deberes del Hombre.
+    LibroVol333.2.md L34437: de Derechos y Deberes del Hombre.
+
+Scotti: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L43458: y Edgardo O. Scotti.
+    LibroVol330.3.md L29581: O. Scotti.
+    LibroVol330.3.md L54327: Estado) y Edgardo O. Scotti.
+
+Héctor: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L48581: Provincia de Río Negro (Bergadá Mujica, Héctor
+    LibroVol330.1.md L51004: Swiss Medical Group S.A. (Farini Duggan, Héctor
+    LibroVol330.2.md L59748: Manco, Osvaldo Oscar y otro (Ledesma, Héctor
+
+Sala: 5 ocurrencias
+  Ejemplos:
+    LibroVol329.4.md L69327: del Sr. Sala.
+    LibroVol332.2.md L24937: los jueces de la Sala.
+    LibroVol339.1.md L17802: pecto a la señora Milagro Sala.
+
+Unidos: 5 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L15488: Estados Unidos.
+    LibroVol332.2.md L31825: tados Unidos.
+    LibroVol338.2.md L35550: Sindicato de Obreros Marítimos Unidos
+
+Medina: 5 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L47949: Osvaldo Medina.
+    LibroVol331.1.md L17556: tado por la Dra. Susana Graciela Medina.
+    LibroVol333.2.md L34749: gencia, Manuel Bustos Medina.
+
+Amico: 5 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L48789: por la Dra. Lorena Cecilia D’Amico.
+    LibroVol330.2.md L27596: Héctor F. D’Amico.
+    LibroVol330.2.md L27634: Héctor F. D’Amico.
+
+Fuerzas: 5 ocurrencias
+  Ejemplos:
+    LibroVol330.1.md L51028: Unión de Oficiales de la Reserva de las Fuerzas
+    LibroVol330.4.md L46498: Unión de Oficiales de la Reserva de las Fuerzas
+    LibroVol330.4.md L56944: Docente Civil de las Fuerzas
+
+Figueroa: 5 ocurrencias
+  Ejemplos:
+    LibroVol330.2.md L51477: Dres. Armando Murature y Federico G. Figueroa.
+    LibroVol332.1.md L29288: Dr. Tomás Ise Figueroa.
+    LibroVol332.3.md L28466: Dres. Mario Fenzel y Guillermo Federico Figueroa.
+
+Marcelo: 5 ocurrencias
+  Ejemplos:
+    LibroVol330.3.md L56452: Del Campo, Osvaldo José y otro (Suárez, Marcelo
+    LibroVol330.4.md L45042: Del Campo, Osvaldo José y otro (Suárez, Marcelo
+    LibroVol338.2.md L32695: la presente queja. Buenos Aires, 28 de octubre de 2013. Marcelo
+
+Personas: 5 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L10481: misión Nacional para la Desaparición de Personas.
+    LibroVol334.2.md L13406: AFIP DGI Autos Sol Naciente Seguros Personas
+    LibroVol334.3.md L34164: AFIP DGI Autos Sol Naciente Seguros Personas
+
+Superintendencia: 5 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L48797: de Superintendencia
+    LibroVol330.4.md L56095: Superintendencia
+    LibroVol330.4.md L59282: 210. Si bien la Superintendencia
+
+Consolidación: 5 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L49269: Consolidación
+    LibroVol330.4.md L50656: Consolidación
+    LibroVol330.4.md L50918: Ver: Consolidación
+
+Contrato: 5 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L50815: Ver: Contrato
+    LibroVol330.4.md L50900: 5, 7, 9; Contrato
+    LibroVol330.4.md L52662: Contrato
+
+Estatuto: 5 ocurrencias
+  Ejemplos:
+    LibroVol330.4.md L52156: 1. Si de los arts: 27, 28, 29 Y 52 del Estatuto
+    LibroVol330.4.md L56942: (Aprobación del Estatuto
+    LibroVol330.4.md L56948: (Estatuto
+
+Adopción: 5 ocurrencias
+  Ejemplos:
+    LibroVol331.1.md L13774: civiles y comerciales. Adopción.
+    LibroVol331.1.md L42404: Adopción
+    LibroVol331.2.md L12702: civiles y comerciales. Adopción.
+
+Finanzas: 5 ocurrencias
+  Ejemplos:
+    LibroVol331.1.md L37133: y Finanzas.
+    LibroVol342-1.md L3646: y Finanzas.
+    LibroVol344-1.md L49613: –5- c/ Ministerio de Hacienda y Finanzas
+
+Caja: 5 ocurrencias
+  Ejemplos:
+    LibroVol331.2.md L33363: y aportar a otra Caja.
+    LibroVol337.1.md L35160: Catamarca, provincia de c/ Caja
+    LibroVol337.2.md L27647: Catamarca, provincia de c/ Caja
+
+Gral: 5 ocurrencias
+  Ejemplos:
+    LibroVol331.2.md L38004: Adm. Federal de Ingresos Públicos Dirección Gral.
+    LibroVol331.2.md L38047: Estado Nacional -Min. Defensa- Estado Mayor Gral.
+    LibroVol331.3.md L37170: Estado Nacional -Min. Defensa- Estado Mayor Gral.
+
+Segarra: 5 ocurrencias
+  Ejemplos:
+    LibroVol331.3.md L30789: Gullco y Alejandro E. Segarra.
+    LibroVol332.2.md L37803: Laura Beatriz Segarra.
+    LibroVol333.2.md L18828: el patrocinio de Alejandro E. Segarra.
+
+Arrostito: 5 ocurrencias
+  Ejemplos:
+    LibroVol332.3.md L17917: por la Dra. Silvia Mónica Arrostito.
+    LibroVol333.2.md L15012: Arrostito.
+    LibroVol334.1.md L11226: sentado por la Dra. Silvia Mónica Arrostito.
+
+Muzzio: 5 ocurrencias
+  Ejemplos:
+    LibroVol333.1.md L3327: representado por el Dr. Carlos Muzzio.
+    LibroVol337.1.md L13804: Alejandro Muzzio.
+    LibroVol337.2.md L2813: Dr. Carlos Alejandro Muzzio.
+
+Bossert: 5 ocurrencias
+  Ejemplos:
+    LibroVol333.1.md L20607: y Gustavo A. Bossert.
+    LibroVol334.1.md L6741: y Gustavo A. Bossert.
+    LibroVol334.1.md L6747: Gustavo Bossert.
+
+Armada: 5 ocurrencias
+  Ejemplos:
+    LibroVol333.1.md L30072: Estado Nacional - Ministerio de Defensa - Armada
+    LibroVol333.3.md L23144: Estado Nacional - Ministerio de Defensa - Armada
+    LibroVol341.2.md L47817: Segura, María Elena c/ EN -M Defensa- Armada
+
+Quiebras: 5 ocurrencias
+  Ejemplos:
+    LibroVol333.2.md L1961: y concordantes de la Ley de Concursos y Quiebras.
+    LibroVol341.2.md L25568: reguladas por la Ley de Concursos y Quiebras.
+    LibroVol342-1.md L18696: reguladas por la Ley de Concursos y Quiebras.
+
+Salgado: 5 ocurrencias
+  Ejemplos:
+    LibroVol333.2.md L5887: por el Dr. Juan Manuel Salgado.
+    LibroVol333.2.md L5893: por el Dr. Juan Manuel Salgado.
+    LibroVol347-1.md L15109: do por el Dr. Gabriel Alejandro Salgado.
+
+Libres: 5 ocurrencias
+  Ejemplos:
+    LibroVol333.3.md L4588: Paso de los Libres.
+    LibroVol333.3.md L4875: Libres.
+    LibroVol339.1.md L32848: Paso de los Libres.
+
+Convenio: 5 ocurrencias
+  Ejemplos:
+    LibroVol333.3.md L20281: de las previsiones del art. 20 de dicho Convenio.
+    LibroVol333.3.md L20482: inciso a, del Convenio.
+    LibroVol344-1.md L18964: otros derechos reconocidos por el Convenio.
+
+Queja: 5 ocurrencias
+  Ejemplos:
+    LibroVol334.3.md L12334: de la CAPITAL FEDERAL s/ Queja
+    LibroVol338.1.md L1668: CABLEVISIÓN S.A. c/ DNCI - Disp. 697/10 s/ Queja
+    LibroVol342-1.md L23055: SALVAGNO, ROBERTO c/ PEDRO FORTUNY S.A. s/ Queja
+
+Giangrasso: 5 ocurrencias
+  Ejemplos:
+    LibroVol334.3.md L14692: por el Dr. Marcos Giangrasso.
+    LibroVol340_2.md L11681: trado del Dr. Marcos A. Giangrasso.
+    LibroVol342-1.md L10363: cinio letrado del Dr. Marcos A. Giangrasso.
+
+Ramos: 5 ocurrencias
+  Ejemplos:
+    LibroVol334.3.md L26461: nanciero a Ramos.
+    LibroVol341.1.md L24527: representada por el Dr. Máximo J. Ramos.
+    LibroVol344-2.md L19968: Dr. Carlos Javier Ramos.
+
+Exhorto: 5 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L29065: Florida) s/ Exhorto
+    LibroVol338.1.md L18175: GRAND, MANUELA JUSTA s/ Exhorto
+    LibroVol338.2.md L4190: s/ Exhorto
+
+Mitre: 5 ocurrencias
+  Ejemplos:
+    LibroVol337.1.md L31423: también se destinarían a la línea Mitre.
+    LibroVol337.1.md L31486: del ramal Retiro-Tigre de la línea Mitre.
+    LibroVol340.1.md L36578: Propietarios de calle Bartolomé Mitre
+
+Fundación: 5 ocurrencias
+  Ejemplos:
+    LibroVol337.2.md L1019: Irigoyen, Juan Carlos Hipólito c/ Fundación
+    LibroVol337.2.md L27759: Irigoyen, Juan Carlos Hipólito c/ Fundación
+    LibroVol340.1.md L36670: Valor, Norma Marcelina y Otros c/ Fundación
+
+Sumario: 5 ocurrencias
+  Ejemplos:
+    LibroVol337.2.md L13526: Otros s/ Sumario
+    LibroVol341.2.md L12276: ARGENTINAS S.A. s/ Sumario
+    LibroVol341.2.md L16324: DIAMANTE y Otro s/ Sumario
+
+Aguas: 5 ocurrencias
+  Ejemplos:
+    LibroVol337.2.md L27774: Kersich, Juan Gabriel y Otros c/ Aguas
+    LibroVol341.1.md L19515: Enrique Aguas.
+    LibroVol344-1.md L19372: te (LGA) y 25.688 de Gestión de Aguas.
+
+Administrativo: 5 ocurrencias
+  Ejemplos:
+    LibroVol338.1.md L10797: tencioso Administrativo.
+    LibroVol338.1.md L10935: tencioso Administrativo.
+    LibroVol340_2.md L180: y Otros s/ Contrato Administrativo
+
+Morales: 5 ocurrencias
+  Ejemplos:
+    LibroVol338.2.md L8212: el Dr. Diego Morales.
+    LibroVol341.2.md L17690: Morales.
+    LibroVol341.2.md L17696: Hernán Morales.
+
+Transportes: 5 ocurrencias
+  Ejemplos:
+    LibroVol338.2.md L35210: Bustamante de Martínez, Idalina c/ Transportes
+    LibroVol345-1.md L34157: Laso, José Luis y Otros c/ Transportes
+    LibroVol345-2.md L26596: Laso, José Luis y Otros c/ Transportes
+
+Registro: 5 ocurrencias
+  Ejemplos:
+    LibroVol339.1.md L1402: otra acción y al Registro.
+    LibroVol339.1.md L1409: supuestos se comunicará la decisión al Registro.
+    LibroVol344-1.md L49101: Escalona, Martín Reynaldo y Otro c/ Registro
+
+Araujo: 5 ocurrencias
+  Ejemplos:
+    LibroVol339.1.md L33414: María Celina Strubbia y Lisandro Arturo Araujo.
+    LibroVol342-2.md L42925: Martínez Araujo.
+    LibroVol345-2.md L18786: Ranni y Alejo Martínez Araujo.
+
+Encubrimiento: 5 ocurrencias
+  Ejemplos:
+    LibroVol339.2.md L16577: LAURICELLA, JOSE MARIO s/ Encubrimiento
+    LibroVol340.1.md L31096: LEDESMA, CARLOS LEONARDO y Otro s/ Encubrimiento
+    LibroVol340.1.md L32173: DEL PUERTO, CHRISTIAN DAMIÁN s/ Encubrimiento
+
+Patronal: 5 ocurrencias
+  Ejemplos:
+    LibroVol339.2.md L33840: Giménez, Gustavo Ariel c/ Federación Patronal
+    LibroVol344-1.md L49277: Juárez, Sergio Daniel c/ Federación Patronal
+    LibroVol344-2.md L53947: Juárez, Sergio Daniel c/ Federación Patronal
+
+Atuel: 5 ocurrencias
+  Ejemplos:
+    LibroVol340.1.md L19884: aguas del río Atuel.
+    LibroVol340_2.md L27841: aguas del río Atuel.
+    LibroVol340_2.md L28297: ese embalse, se previó un trasvase al río Atuel.
+
+Federación: 5 ocurrencias
+  Ejemplos:
+    LibroVol340_2.md L43578: Ortega, María del Carmen c/ Federación
+    LibroVol341.2.md L47632: Martínez, Sinecio Arnaldo y Otros c/ Federación
+    LibroVol344-1.md L49446: Piedrabuena, Aníbal Ariel c/ Federación
+
+Gualeguaychú: 5 ocurrencias
+  Ejemplos:
+    LibroVol341.2.md L47479: Otros c/ Municipalidad de Gualeguaychú
+    LibroVol342-1.md L47145: Florística de la Municipalidad de Gualeguaychú.
+    LibroVol342-1.md L47191: José de Gualeguaychú.
+
+Penitenciario: 5 ocurrencias
+  Ejemplos:
+    LibroVol341.2.md L47554: H. M. A. y Otro c/ EN - Servicio Penitenciario
+    LibroVol345-1.md L34277: Pres, Horacio Daniel c/ Servicio Penitenciario
+    LibroVol345-2.md L26716: Pres, Horacio Daniel c/ Servicio Penitenciario
+
+Servicio: 5 ocurrencias
+  Ejemplos:
+    LibroVol341.2.md L47571: Argentino - Ministerio de Justicia - Servicio
+    LibroVol343-1.md L25615: Hug, Mario Alberto y Otro c/ EN-Servicio
+    LibroVol343-2.md L30239: Hug, Mario Alberto y Otro c/ EN-Servicio
+
+Concurso: 5 ocurrencias
+  Ejemplos:
+    LibroVol342-1.md L50460: Baravalle, Fernando Ángel s/ Concurso
+    LibroVol342-2.md L43095: Baravalle, Fernando Ángel s/ Concurso
+    LibroVol344-1.md L49171: GCBA c/ Directamoint S.A. s/ Concurso
+
+Alejandro: 5 ocurrencias
+  Ejemplos:
+    LibroVol343-1.md L25686: Márquez, Mónica Cristina c/ Hospital Alejandro
+    LibroVol343-2.md L30310: Márquez, Mónica Cristina c/ Hospital Alejandro
+    LibroVol343-3.md L34507: Márquez, Mónica Cristina c/ Hospital Alejandro
+
+Naval: 5 ocurrencias
+  Ejemplos:
+    LibroVol344-1.md L49221: González, Ricardo c/ Prefectura Naval
+    LibroVol344-2.md L53891: González, Ricardo c/ Prefectura Naval
+    LibroVol344-3.md L46126: González, Ricardo c/ Prefectura Naval
+
+Medical: 5 ocurrencias
+  Ejemplos:
+    LibroVol347-1.md L45627: Gorriti Echegaray, Darío Pedro c/ Swiss Medical
+    LibroVol347-1.md L45903: Silveira Quintas, Martín y Otro c/ Swiss Medical
+    LibroVol347-2.md L46643: Gorriti Echegaray, Darío Pedro c/ Swiss Medical

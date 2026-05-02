@@ -1,0 +1,24 @@
+subtabla,voting_pattern,n,wc_mediana,wc_p25,wc_p75,wc_promedio,wc_max,outcome,posicion
+por_voting_pattern,disidencia,485,1370,794,2534,2185,19811,,
+por_voting_pattern,mixed,144,2902,1747,6985,5315,33997,,
+por_voting_pattern,segun_su_voto,331,1990,998,4110,3105,26524,,
+por_voting_pattern,sin_firma,567,1001,329,4080,3285,40844,,
+por_voting_pattern,unanime,4039,930,514,1912,1713,42531,,
+por_outcome,,79,972,656,2012,,,abstracto,
+por_outcome,,492,378,276,610,,,competencia,
+por_outcome,,208,1440,778,2941,,,confirma,
+por_outcome,,786,1004,518,2320,,,desestima,
+por_outcome,,11,466,340,710,,,desistimiento,
+por_outcome,,799,1168,702,2199,,,hace_lugar,
+por_outcome,,31,1697,867,3860,,,inadmisible_280,
+por_outcome,,40,980,725,2321,,,mal_concedido,
+por_outcome,,67,1044,761,1786,,,nulidad,
+por_outcome,,111,1421,938,2454,,,originaria,
+por_outcome,,1954,1360,678,3053,,,otro,
+por_outcome,,511,1127,680,2184,,,procedente,
+por_outcome,,183,1252,708,2572,,,revoca,
+por_outcome,,294,376,235,717,,,sin_dispositivo,
+por_posicion_voto,,652,218,127,1135,1004,,,en disidencia
+por_posicion_voto,,919,738,166,1948,1414,,,mayoria
+por_posicion_voto,,4,748,584,1264,1100,,,por su voto
+por_posicion_voto,,531,571,171,1582,1132,,,según su voto
