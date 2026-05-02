@@ -543,7 +543,7 @@ def main(argv):
         sys.exit(1)
     carpeta_corpus = argv[1]
     salida_csv = argv[2] if len(argv) >= 3 else 'mapa_paginas.csv'
-    ruta_catalogo = argv[3] if len(argv) >= 4 else 'catalogo_v14.csv'
+    ruta_catalogo = argv[3] if len(argv) >= 4 else '../../output/catalogo/catalogo.csv'
     procesar_corpus(carpeta_corpus, salida_csv, ruta_catalogo)
 
 

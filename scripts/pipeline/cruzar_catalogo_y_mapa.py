@@ -12,7 +12,7 @@ Uso (PowerShell o cualquier shell):
     python cruzar_catalogo_y_mapa.py <catalogo_csv> <mapa_csv> [<carpeta_corpus>] [<salida_csv>] [<secciones_indices_csv>]
 
 Ejemplo:
-    python cruzar_catalogo_y_mapa.py catalogo_v14.csv mapa_paginas.csv ..\\markdowns_v2 fallos_localizados.csv ..\\secciones_indices_v14.csv
+    python cruzar_catalogo_y_mapa.py ../../output/catalogo/catalogo.csv ../../output/mapa/mapa_paginas.csv ../../corpus ../../output/localizacion/fallos_localizados.csv ../../output/catalogo/secciones_indices.csv
 
 La carpeta del corpus es opcional pero recomendada: se usa para conocer
 la cantidad total de líneas de cada .md y así poder calcular linea_fin

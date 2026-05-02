@@ -77,12 +77,12 @@ archivo. Columnas:
 
 USO
 ---
-  python3 construir_catalogo.py --input-dir markdowns_v2/
+  python3 construir_catalogo.py --input-dir ../../corpus/
 
   python3 construir_catalogo.py \\
-      --input-dir markdowns_v2/ \\
-      --output-catalogo catalogo_v14.csv \\
-      --output-secciones secciones_indices_v14.csv \\
+      --input-dir ../../corpus/ \\
+      --output-catalogo ../../output/catalogo/catalogo.csv \\
+      --output-secciones ../../output/catalogo/secciones_indices.csv \\
       --verbose
 """
 
@@ -575,16 +575,16 @@ def main():
                     "los índices oficiales de los .md."
     )
     parser.add_argument(
-        '--input-dir', type=Path, default=Path('markdowns_v2'),
-        help='Directorio con los archivos .md (default: markdowns_v2)'
+        '--input-dir', type=Path, default=Path('../../corpus'),
+        help='Directorio con los archivos .md (default: ../../corpus)'
     )
     parser.add_argument(
-        '--output-catalogo', type=Path, default=Path('catalogo_v14.csv'),
-        help='Ruta del CSV del catálogo (default: catalogo_v14.csv)'
+        '--output-catalogo', type=Path, default=Path('../../output/catalogo/catalogo.csv'),
+        help='Ruta del CSV del catálogo (default: ../../output/catalogo/catalogo.csv)'
     )
     parser.add_argument(
-        '--output-secciones', type=Path, default=Path('secciones_indices_v14.csv'),
-        help='Ruta del CSV de secciones (default: secciones_indices_v14.csv)'
+        '--output-secciones', type=Path, default=Path('../../output/catalogo/secciones_indices.csv'),
+        help='Ruta del CSV de secciones (default: ../../output/catalogo/secciones_indices.csv)'
     )
     parser.add_argument(
         '--verbose', '-v', action='store_true',

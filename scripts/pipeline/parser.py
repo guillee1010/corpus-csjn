@@ -36,8 +36,8 @@ Cambios respecto a v16:
 Uso:
   python csjnv17_beta.py --localizados fallos_localizados.csv \
                           --mapa mapa_paginas.csv \
-                          --corpus ../markdowns_v2 \
-                          --output csjn_casos_v17_beta.csv
+                          --corpus ../../corpus \
+                          --output ../../output/parser/csjn_casos.csv
 
 Compatibilidad: schema extendido respecto a v16 (agrega tipo_entrada y
 wc_dictamen al final). El resto de las columnas mantienen su orden y
@@ -1711,7 +1711,7 @@ def main():
                     help="CSV con mapa de páginas (mapa_paginas.csv)")
     ap.add_argument("--corpus", required=True,
                     help="Directorio con los archivos LibroVol*.md")
-    ap.add_argument("--output", default="csjn_casos_v16.csv",
+    ap.add_argument("--output", default="../../output/parser/csjn_casos.csv",
                     help="CSV de salida (case-centered)")
     ap.add_argument("--output-votos", default=None,
                     help="CSV de salida (vote-centered). Default: <output>_votos.csv")
