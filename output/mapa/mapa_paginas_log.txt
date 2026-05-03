@@ -1,4 +1,4 @@
-Carpeta corpus: ..\markdowns_v2
+Carpeta corpus: ../../corpus
 Archivos a procesar: 46
 
 Catalogo cargado: rangos para 19 tomos
@@ -25,8 +25,8 @@ Catalogo cargado: rangos para 19 tomos
   LibroVol334.3.md                857 headers, p.1064-1924, monot.100.0%
   LibroVol337.1.md                882 headers, p.5-887, monot.100.0%   [1 dup filtrado]   ! rango detectado 5-887 excede el del catalogo (23-1581)
   LibroVol337.2.md                696 headers, p.895-1591, monot.100.0%   [1 outlier(s) filtrado]   ! rango detectado 895-1591 excede el del catalogo (23-1581)
-  LibroVol338.1.md                676 headers, p.5-681, monot.100.0%   [1 dup filtrado]   ! rango detectado 5-681 excede el del catalogo (40-1583)
-  LibroVol338.2.md                905 headers, p.338-1591, monot. 99.9%   [2 outlier(s) filtrado]   ! 1 pares fuera de orden | rango detectado 338-1591 excede el del catalogo (40-1583)
+  LibroVol338.1.md                676 headers, p.5-681, monot.100.0%   [1 dup filtrado]   ! rango detectado 5-681 excede el del catalogo (29-1583)
+  LibroVol338.2.md                905 headers, p.338-1591, monot. 99.9%   [2 outlier(s) filtrado]   ! 1 pares fuera de orden | rango detectado 338-1591 excede el del catalogo (29-1583)
   LibroVol339.1.md                929 headers, p.5-935, monot.100.0%   [1 dup + 1 outlier(s) filtrado]   ! rango detectado 5-935 excede el del catalogo (61-1834)
   LibroVol339.2.md                886 headers, p.951-1837, monot.100.0%   [1 outlier(s) filtrado]
   LibroVol340.1.md                965 headers, p.7-971, monot.100.0%   [1 dup filtrado]
@@ -48,12 +48,12 @@ Catalogo cargado: rangos para 19 tomos
   LibroVol347-1.md               1176 headers, p.1-1176, monot.100.0%   [1 dup filtrado]
   LibroVol347-2.md               1191 headers, p.1177-2367, monot.100.0%   ! rango detectado 1177-2367 excede el del catalogo (1-2352)
   LibroVol348-1.md               1812 headers, p.1-1813, monot.100.0%   [1 dup filtrado]   ! rango detectado 1-1813 excede el del catalogo (1-1796)
-  LibroVol349-1.md                310 headers, p.1-310, monot.100.0%   ! rango detectado 1-310 excede el del catalogo (10-306)
+  LibroVol349-1.md                310 headers, p.1-310, monot.100.0%
 
 ======================================================================
 Total: 46 archivos, 46936 headers detectados
 Filtrados en post-procesamiento: 18 duplicados, 21 outliers
-Archivos con anomalias (22):
+Archivos con anomalias (21):
   - LibroVol329.4.md
   - LibroVol330.3.md
   - LibroVol330.4.md
@@ -75,9 +75,8 @@ Archivos con anomalias (22):
   - LibroVol346-2.md
   - LibroVol347-2.md
   - LibroVol348-1.md
-  - LibroVol349-1.md
 ======================================================================
 
-CSV escrito: mapa_paginas.csv  (46936 filas)
-Resumen escrito: mapa_paginas_resumen.csv  (46 filas)
-Filtradas escritas: mapa_paginas_filtradas.csv  (39 filas)
+CSV escrito: ..\..\output\mapa\mapa_paginas.csv  (46936 filas)
+Resumen escrito: ..\..\output\mapa\mapa_paginas_resumen.csv  (46 filas)
+Filtradas escritas: ..\..\output\mapa\mapa_paginas_filtradas.csv  (39 filas)
