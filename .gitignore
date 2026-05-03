@@ -22,3 +22,5 @@ desktop.ini
 # Locales (red de seguridad y baseline, no para repo)
 snapshots/
 validacion/
+archivo/exploratorios/
+/*.txt
