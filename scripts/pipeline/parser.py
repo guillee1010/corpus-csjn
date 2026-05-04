@@ -155,6 +155,50 @@ RE_PAGE_HEADER   = re.compile(
     r"^(FALLOS DE LA CORTE SUPREMA|DE JUSTICIA DE LA NACIÓN|"
     r"DE JUSTICIA DE LA NACION|\d{2,6})\s*$", re.I)
 
+# v18: Fix 1 — V1 como fuente primaria de case_name_cuerpo.
+# Auditoría B (sesión XV) midió 3.859 hits = 67.3% del corpus con captura
+# limpia. Reemplaza a find_case_name como fuente primaria. La búsqueda
+# arranca desde apertura_rel hacia adelante para evitar el dictamen previo
+# (donde están las citas doctrinales que rompían find_case_name viejo).
+
+RE_VISTOS_LOS_AUTOS = re.compile(
+    r'^\s*Vistos los autos:\s*([\u201C\u201D"\u2018\u2019\'])',
+    re.IGNORECASE
+)
+COMILLAS_CIERRE = '\u201C\u201D"\u2018\u2019\''
+
+def extraer_caratula_v1(bloque, apertura_rel, max_lineas=8):
+    """
+    v18: extrae la carátula desde el patrón V1 (`Vistos los autos: "X"`).
+    Itera el bloque desde apertura_rel hacia adelante. En cuanto encuentra
+    el marcador, reconstruye la carátula concatenando líneas hasta cerrar
+    la comilla, manejando wrap por silabación. Devuelve la carátula sin
+    las comillas, o "" si no hay V1.
+    """
+    inicio = apertura_rel if apertura_rel is not None else 0
+    for i in range(inicio, len(bloque)):
+        linea = bloque[i]
+        m = RE_VISTOS_LOS_AUTOS.match(linea)
+        if not m:
+            continue
+        comilla_apert = m.group(1)
+        pos_apertura = linea.index(comilla_apert)
+        acumulado = linea[pos_apertura + 1:].rstrip()
+        m_cierre = re.search(f'[{COMILLAS_CIERRE}]', acumulado)
+        if m_cierre:
+            return acumulado[:m_cierre.start()]
+        for j in range(i + 1, min(i + max_lineas, len(bloque))):
+            sig = bloque[j].rstrip()
+            if acumulado.endswith('\u00AD') or acumulado.endswith('-'):
+                acumulado = acumulado.rstrip('\u00AD-') + sig.lstrip()
+            else:
+                acumulado = acumulado + ' ' + sig.lstrip()
+            if re.search(f'[{COMILLAS_CIERRE}]', sig):
+                pos_cierre = max(acumulado.rfind(c) for c in COMILLAS_CIERRE)
+                return acumulado[:pos_cierre]
+        return acumulado
+    return ""
+
 # Tomo desde nombre de archivo
 RE_TOMO          = re.compile(r"LibroVol(\d+)")
 
@@ -1239,6 +1283,7 @@ def construir_caso_sumario_link(caso_id_canonico, tomo, nombres_indice,
         "tomo":                   tomo,
         "case_name_indice":       nombres_indice,
         "case_name_cuerpo":       "",
+        "case_name_cuerpo_legacy": "",
         "date":                   "",
         "apertura_tipo":          "",
         "outcome":                "",
@@ -1430,13 +1475,25 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                     fecha_str = m.group(1)
                     break
 
-        # case_name del cuerpo (heurística v12). Si no hay marcador clásico
-        # de apertura, no tiene sentido retroceder buscando carátula desde
-        # apertura_idx (estaríamos retrocediendo desde el inicio del bloque,
-        # agarrando basura del fallo anterior). En ese caso lo dejamos vacío.
+        # case_name del cuerpo. v18: Fix 1 — V1 como fuente primaria.
+        #
+        # Estrategia primaria: extraer_caratula_v1 busca 'Vistos los autos:
+        # "X"' desde apertura_rel hacia adelante. Cobertura medida: 67%
+        # del corpus (Auditoría B, sesión XV). Captura limpia, sin las
+        # citas doctrinales del dictamen que rompían find_case_name viejo.
+        #
+        # Fallback: find_case_name (heurística v12) cuando V1 no encuentra.
+        # Si tampoco hay apertura_rel, queda vacío.
+        #
+        # Columna shadow case_name_cuerpo_legacy guarda lo que hubiera
+        # devuelto find_case_name siempre, para auditar el diff post-fix.
+        # Eliminable en una corrida posterior cuando el fix esté validado.
         if apertura_rel is not None:
-            case_name_cuerpo = find_case_name(lines, apertura_idx)
+            case_name_cuerpo_legacy = find_case_name(lines, apertura_idx)
+            case_name_cuerpo_v1 = extraer_caratula_v1(bloque, apertura_rel)
+            case_name_cuerpo = case_name_cuerpo_v1 or case_name_cuerpo_legacy
         else:
+            case_name_cuerpo_legacy = ""
             case_name_cuerpo = ""
 
         # Tribunal de origen
@@ -1582,6 +1639,7 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             "tomo":                   tomo,
             "case_name_indice":       nombres_indice,
             "case_name_cuerpo":       case_name_cuerpo,
+            "case_name_cuerpo_legacy": case_name_cuerpo_legacy,
             "date":                   fecha_str,
             "apertura_tipo":          apertura_tipo,
             "outcome":                outcome,
@@ -1799,7 +1857,7 @@ def main():
     if all_casos:
         fieldnames = [
             "caso_id_canonico", "tomo",
-            "case_name_indice", "case_name_cuerpo",
+            "case_name_indice", "case_name_cuerpo", "case_name_cuerpo_legacy",
             "date", "apertura_tipo",
             "outcome", "voting_pattern",
             "n_jueces", "n_titulares", "n_votos_svoto", "n_disidencias",
