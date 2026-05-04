@@ -1,0 +1,54 @@
+======================================================================
+ANALISIS DESCRIPTIVO DEL CORPUS CSJN (v16)
+======================================================================
+
+Casos cargados: 5647
+Votos cargados: 20562
+
+======================================================================
+FILTRADO DEL CORPUS
+======================================================================
+  Total casos:                     5647
+  Excluidos por bloque gigante:    30
+  Excluidos por anio inconsistente:4
+  Excluidos por status raro:       77
+  --- los criterios pueden solaparse ---
+  Total excluidos (union):         81
+  Subset limpio:                   5566  (98.6%)
+
+Generando 01_volumetria...
+Generando 02_diagnostico_corpus...
+Generando 03_outcomes...
+Generando 04_voting_patterns...
+Generando 05_composicion_corte...
+Generando 06_jueces_productividad...
+Generando 07_jueces_diadicas...
+Generando 08_word_counts...
+Generando 09_originaria_vs_apelada...
+Generando 10_dictamen_presence...
+
+======================================================================
+OUTPUTS
+======================================================================
+  Escrito: 01_volumetria.csv  (41 filas)
+  Escrito: 02_diagnostico_corpus.csv  (21 filas)
+  Escrito: 03_outcomes.csv  (58 filas)
+  Escrito: 04_voting_patterns.csv  (49 filas)
+  Escrito: 05_composicion_corte.csv  (22 filas)
+  Escrito: 06_jueces_productividad.csv  (18 filas)
+  Escrito: 07_jueces_diadicas.csv  (95 filas)
+  Escrito: 08_word_counts.csv  (23 filas)
+  Escrito: 09_originaria_vs_apelada.csv  (43 filas)
+  Escrito: 10_dictamen_presence.csv  (22 filas)
+  Excel resumen: analisis_descriptivo.xlsx
+
+======================================================================
+RESUMEN
+======================================================================
+  Subset analizado: 5566 fallos limpios de 5647 totales
+  Cobertura temporal: 2004 - 2026
+  Unanimidad global:    72.6%
+  Disidencia global:    8.7%
+  Concurrencia global:  8.5%
+
+Listo. Mira analisis/analisis_descriptivo.xlsx para ver todo.
