@@ -422,3 +422,40 @@ Cuatro fases:
 **Estado:** decisión metodológica. Aplicable desde ahora.
 
 ---
+
+
+### H016 — Punto ciego: la auditoría no detecta amputaciones del bloque
+
+**Contexto:** pregunta del usuario al cierre de sesión 2026-05-08. ¿Puede haber contenido del fallo que el auditor no procese porque el bloque ya viene cortado por el parser?
+
+**Respuesta: sí, sistemáticamente.** Y las invariantes actuales del auditor (cobertura + disjunción) **no detectan** este tipo de error por construcción.
+
+**Diagnóstico:**
+
+El auditor recibe un bloque delimitado por `(linea_inicio, linea_fin_real)` donde:
+- `linea_inicio` viene del catálogo (`catalogo.csv`).
+- `linea_fin_real` lo computa `detectar_fin_real()` del parser sobre el bloque del catálogo.
+
+Si cualquiera de los dos límites está mal puesto, el bloque que llega al auditor está amputado o inflado. El auditor procesa correctamente lo que recibe (cobertura=OK, disjunción=OK), pero **no tiene cómo saber qué quedó afuera**.
+
+**Tres puntos del pipeline donde esto puede ocurrir:**
+
+1. **Catálogo (`construir_catalogo.py`)**: si la detección de `linea_inicio` falla, contenido pre-carátula queda fuera del bloque desde la base.
+2. **Localizador (`cruzar_catalogo_y_mapa.py`)**: huérfanos, casos `pagina_no_en_mapa`, `fallo_cruza_archivos`. Lo que entra mal localizado al parser nunca llega al auditor.
+3. **`detectar_fin_real()` del parser**: F002 (extiende de más, contamina el bloque con el fallo siguiente) y F003 (corta de menos, pierde firma multi-línea o metadatos editoriales finales). Ambos ya identificados en H014.
+
+**Implicancia metodológica:** el residuo del catch_all es una **cota inferior del error**, no un estimador. Si el catch_all reporta 5%, el error real puede ser 5% o más alto. La auditoría hoy detecta solo errores **dentro del bloque recibido**, no errores **del recorte del bloque**.
+
+**Implicancia para tesis:** las cifras finales del Capítulo 4 (frecuencia de unanimidad/concurrencia/disidencia, word counts por tipo de voto, etc.) requieren validación adicional sobre el .md original, no sólo sobre el bloque parseado.
+
+**Tres mitigaciones posibles, en orden de costo:**
+
+1. **Detector de amputación inferior automatizado.** Función nueva en el auditor que mire si hay líneas entre `linea_fin_real` y la próxima carátula detectable en el .md. Si las hay, reportar como `posible_amputacion_fin`. Costo bajo. Detecta F003 sistemáticamente.
+2. **Expansión de contexto en el output.** Incluir 30 líneas previas a `linea_inicio` y 30 posteriores a `linea_fin_real` rotuladas como `contexto_previo`/`contexto_posterior`. Costo medio. El humano detecta amputaciones por inspección visual.
+3. **Auditoría estratificada con ojo humano sobre .md/PDF original.** Muestra de N casos comparados manualmente contra fuente. Costo alto. Es el único método que cubre los tres puntos del pipeline simultáneamente.
+
+**Estado:** registrado como hallazgo metodológico. No hay fix de código en esta sesión. Para próxima sesión, decidir si implementar mitigación 1 antes de avanzar con F007 u otros fixes.
+
+**Implicancia para H015:** el auditor, en su forma actual, **no es candidato a reemplazar al parser** sin antes resolver este punto ciego. Un parser nuevo sobre la arquitectura del auditor heredaría el mismo problema de heredar bloques mal recortados, salvo que se rediseñe la entrada (operar sobre el .md crudo, no sobre el bloque pre-cortado).
+
+---
