@@ -116,3 +116,49 @@ Registro de cambios al pipeline. Formato: [Fecha] — Versión/Componente — de
 - Hash SHA256 obligatorio para archivos modificados.
 - Bugs detectados pero no fixeados van a `DEUDA_TECNICA.md`, no acá.
 - Hallazgos de diagnóstico (positivos o negativos) van a `BITACORA.md`.
+
+## [2026-05-06] — Sin cambios de código
+
+Sesión de diagnóstico. No se modificó ningún script del pipeline.
+Hallazgos en BITACORA.md H013.
+
+## [2026-05-08] — `scripts/auditoria/auditar_fallo.py`
+
+**Tipo:** Componente nuevo
+
+**Cambios:**
+
+- Módulo nuevo: `scripts/auditoria/auditar_fallo.py`. Herramienta de auditoría manual de bloques del corpus + API canónica programática (`auditar_fallo(tomo, pagina) -> dict`).
+- Reusa por importación regex y helpers de `scripts/pipeline/parser.py` (no copia, no reimplementa). Heurísticas auxiliares propias del auditor: `es_header_sumario_auditoria` (cubre formatos sin puntuación + con `:` y subtítulo), `detectar_caratula` (estructural, no por mayúsculas/minúsculas).
+- Función `segmentar_bloque(bloque, ...) -> list[Span]` materializa la separación entre segmentación y extracción de features, cosa que el parser actual no hace (parser.py L1513-1564).
+- 10 tipos de span emitidos: `caratula`, `sumario`, `dictamen`, `cuerpo_mayoria`, `voto`, `disidencia`, `firma`, `sumario_con_link`, `header_pagina`, `catch_all`. `header_pagina` es transversal; los demás semánticos son disjuntos. Invariantes verificadas (cobertura + disjunción) en cada llamada.
+- CLI: `--tomo X --pagina Y` (caso único), `--tomo X --pagina A,B,C` (varios), `--random N [--tomo X] [--status Y]` (muestreo). Output default a archivo en `scripts/auditoria/output/auditoria_<timestamp>.md`. Flag `--stdout` para terminal. Flag `--output` para ruta específica.
+- Rutas default relativas al layout actual del repo: `corpus/`, `output/localizacion/fallos_localizados.csv`, `output/catalogo/mapa_paginas.csv`. Override con `--corpus`, `--localizados`, `--mapa`. Falla ruidoso si default no existe.
+
+**Backward compatibility:** módulo nuevo, no modifica nada existente. No regenera CSVs. No consume `csjn_casos.csv` (decisión deliberada: la auditoría no audita el output del parser con el output del parser).
+
+**Validación:**
+
+Casos contrastados contra `.md` real durante construcción: Sivaslian (349_p306, status `ok_cortado_en_indice`, 3.93% residuo), Cerboni (331_p1028, voto separado de Argibay, 8.28%), Macri (349_p81, disidencia larga, 3.74%), Lavrentiev (349_p28, 8.12%), Décima (349_p40, 22.13% — caso siguiente arrastrado), Generación Zoe (349_p75, 0%). Cobertura y disjunción OK en todos.
+
+**Bugs del parser identificados durante validación (anotados en BITACORA H014, no fixeados acá):**
+
+- F001: `RE_VOTO_HDR` no matchea `Voto la señora` (medido: 2 votos perdidos en LibroVol331.2.md).
+- F002: `detectar_fin_real` extiende al fallo siguiente.
+- F003: `detectar_fin_real` corta corto en último del tomo.
+- F004: arrastre del fallo previo al inicio del bloque.
+- F005: fin del dictamen pisa el FALLO DE LA CORTE.
+- F006: sumarios editoriales no segmentados (motivo original de H013).
+
+**Archivos afectados:**
+
+- `scripts/auditoria/auditar_fallo.py` (nuevo)
+- `scripts/auditoria/medir_voto_hdr.py` (nuevo, helper de medición de F001)
+- `scripts/auditoria/output/` (directorio nuevo, gitignored)
+
+**Pendiente próxima sesión:**
+
+- Corrida `--random 50` sobre corpus completo para medir distribución de residuo.
+- Decidir partición `metadatos_editoriales` con datos empíricos.
+- Migrar fixes F001-F005 al parser en bloque coordinado, regenerar corpus una sola vez.
+
