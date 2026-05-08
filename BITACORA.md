@@ -459,3 +459,32 @@ Si cualquiera de los dos límites está mal puesto, el bloque que llega al audit
 **Implicancia para H015:** el auditor, en su forma actual, **no es candidato a reemplazar al parser** sin antes resolver este punto ciego. Un parser nuevo sobre la arquitectura del auditor heredaría el mismo problema de heredar bloques mal recortados, salvo que se rediseñe la entrada (operar sobre el .md crudo, no sobre el bloque pre-cortado).
 
 ---
+
+
+## H017 — 2026-05-09 — Diseño detector de amputación inferior (H016): decisión de scope y heurística de firma multilínea
+
+**Contexto.** Sesión de diseño previo a implementación. Objetivo: definir el detector de amputación inferior planteado en H016, considerando el horizonte de uso (tesis maestría / doctorado / producto) más amplio que solo el corpus 344-349.
+
+**Decisión 1 — Horizonte de diseño.** Se descarta optimizar el detector solo para tesis. La tesis ya tiene cifras suficientes sin H016 resuelto. El detector se diseña pensando en doctorado y eventual aplicación comercial. Implica: clasificaciones del gap con confiabilidad medible, no solo conteo agregado.
+
+**Decisión 2 — Variante elegida.** Se descarta variante 1 (detector pasivo puro) y variante 3 (detector + reclasificación con extensión del bloque). Se adopta variante 2 (detector activo con clasificación tipada del gap), justificación: variante 1 es insuficiente para doctorado, variante 3 acopla el auditor al estado actual del parser que tiene F001-F006 sin migrar.
+
+**Decisión 3 — Tipos de span en clasificador del gap (iteración 1).** Tres tipos: `firma_arrastrada` (multilínea), `header_pagina`, `no_clasificable`. Se posponen para iteración 2: `voto_arrastrado`, `disidencia_arrastrada`, `metadata_editorial`. Razón para posponer: voto/disidencia requieren detección de cuerpo multi-párrafo; metadata editorial requiere validación con caso real donde aparezca (no aparece en corpus 339+, aparente reformateo editorial).
+
+**Decisión 4 — Alertas estructurales.** Se incorporan dos alertas que salen al revisar caso real 339_p1648: `firma_truncada_en_silabacion` (última línea del span firma del bloque no termina en punto, termina en nombre propio aislado — indicador casi gratuito de amputación) y `caratula_siguiente_detectada_antes_de_linea_inicio_proximo_caso` (señal de bug en catálogo).
+
+**Hallazgo F008 — off-by-one entre auditor y .md.** Al validar caso 339_p1648 contra LibroVol339_2.md se detecta inconsistencia: el span 17 del reporte de auditoría dice `firma (26598-26598)` con texto "Ricardo Luis Lorenzetti – Elena I. Highton de Nolasco – Juan", pero la línea 26598 del .md real es "mencionada localidad bonaerense." (la firma está en 26599-26600). Hay un off-by-one en el renderer absoluto/relativo del auditor o un bug real en cálculo de offsets. Pendiente investigar en próxima sesión, no bloqueante para H017.
+
+**Decisión 5 — Heurística de firma multilínea: límite estructural, no de líneas.** Inicialmente se propuso "≤80 char + 1-3 líneas". Corrección sustantiva del usuario: la CSJN tuvo composición de 9 ministros (1990-2006), 7 ministros (2006-2014), 5 ministros (2014+), más conjueces frecuentes y disidencias firmadas separadamente. Una firma puede ocupar 3-5+ líneas legítimamente. Diseñar para corpus 344-349 (5 ministros) sería miopía: el sistema apunta a aplicarse a períodos anteriores y posteriores con composiciones desconocidas a priori. Se reformula la heurística: el span de firma_arrastrada se extiende mientras la línea matchee criterios de firma, y se cierra solo por **límites estructurales duros**: RE_PAGE_HEADER, linea_es_header_sumario, RE_VISTOS_LOS_AUTOS, RE_APERTURA, carátula del próximo caso, RE_VOTO_HDR/RE_DISID_HDR (que cierra firma y abre alerta separada), línea en blanco terminal (con lookahead de 1 línea para captar separador entre firma de mayoría y firma de disidencia). NO hay tope arbitrario de N líneas.
+
+**Implementación pendiente.** No se codeó nada esta sesión. Toda la discusión es de diseño. Próxima sesión arranca con codificación dentro de `auditar_fallo.py` (sección nueva `# ── Detección de amputación inferior (H016) ──`), seguido de validación contra caso 339_p1648 y luego corrida `--random 50` con detector activo.
+
+**Archivos analizados esta sesión.**
+- `scripts/auditoria/auditar_fallo.py` (estado actual del módulo).
+- `output/localizacion/fallos_localizados.csv` (validación de columna `linea_inicio` como ancla del próximo caso).
+- `scripts/pipeline/parser.py` (regex disponibles, JUECES_CONOCIDOS, linea_es_firma_de_juez, detectar_fin_real).
+- `output/auditoria/auditar_fallo/auditoria_2026-05-08_16-23-05.md` (corrida --random 50 anterior).
+- `corpus/LibroVol339_2.md` líneas 26595-26660 (caso paradigmático 339_p1648).
+
+**Prioridades reordenadas para siguiente sesión.** A1 = codear el detector según diseño consolidado en H017. A2 = validar contra 339_p1648 y otros 4-5 casos de la corrida anterior. A3 = corrida `--random 50` con detector activo. B-D = sin cambios respecto a H016 (F007, casos >20%, F001).
+
