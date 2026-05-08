@@ -84,8 +84,8 @@ from pipeline.parser import (  # noqa: E402
 _REPO_ROOT = _SCRIPTS_DIR.parent
 DEFAULT_CORPUS = _REPO_ROOT / "corpus"
 DEFAULT_LOCALIZADOS = _REPO_ROOT / "output" / "localizacion" / "fallos_localizados.csv"
-DEFAULT_MAPA = _REPO_ROOT / "output" / "catalogo" / "mapa_paginas.csv"
-DEFAULT_OUTPUT_DIR = _AUDITORIA_DIR / "output"
+DEFAULT_MAPA = _REPO_ROOT / "output" / "mapa" / "mapa_paginas.csv"
+DEFAULT_OUTPUT_DIR = _REPO_ROOT / "output" / "auditoria" / "auditar_fallo"
 
 # ── Tipos de span (10) ────────────────────────────────────────────────────────
 # Orden no semántico: solo para documentación.

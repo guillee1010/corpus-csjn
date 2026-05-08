@@ -334,3 +334,91 @@ Script `medir_voto_hdr.py` corrido sobre los 2 archivos disponibles en sandbox (
 **No regenerar `csjn_casos.csv` antes de auditar más casos.** La auditoría no consume el output del parser, así que cambios en el parser no rompen la auditoría. Pero cada regeneración invalida análisis estadísticos que use el CSV. Conviene acumular fixes y regenerar una sola vez.
 
 ---
+
+
+### H014 — extensión: muestra empírica `--random 50`
+
+**Corrida:** `python scripts/auditoria/auditar_fallo.py --random 50` sobre el corpus completo (2026-05-08 16:23). Output en `output/auditoria/auditar_fallo/auditoria_2026-05-08_16-23-05.md` (28k líneas, 50 casos).
+
+**Distribución de residuo:**
+
+| Bucket | Casos | % de la muestra |
+|--------|------:|----------------:|
+| 0% | 6 | 12% |
+| 0-2% | 8 | 16% |
+| 2-5% | 9 | 18% |
+| 5-10% | 11 | 22% |
+| 10-20% | 11 | 22% |
+| 20-50% | 5 | 10% |
+| >50% | 0 | 0% |
+
+**Agregado:** mediana 5.45%, residuo global 5.22%. Un 28% de la muestra (14 casos) está bajo 2% — la mayoría del corpus se segmenta razonablemente bien con la heurística actual del auditor.
+
+**Top 5 con más residuo:**
+- 333_p2420 (44.8%, Gómez c/ Alto Paraná)
+- 330_p1854 (31.1%, Bongiovanni)
+- 330_p2746 (30.0%, Mendoza c/ Nación Argentina — caso de Riachuelo)
+- 341_p1617 (26.8%, Rojas c/ Alto Paraná)
+- 341_p221 (23.1%, Amabile Cibils)
+
+**Status:** los 50 casos sampleados son todos `status='ok'`. El sampleo no agarró ninguno de los 19 `ok_cortado_en_indice` (esperable — son <0.4% del corpus).
+
+**Invariantes:**
+- Cobertura: 50/50 OK.
+- **Disjunción: 46/50 OK. Cuatro casos con disjunción rota** → bug del auditor identificado, ver F007 abajo.
+
+### F007 (nuevo, bug del AUDITOR no del parser) — votos/disidencias del fallo previo arrastrado se emiten como spans semánticos del fallo actual
+
+**Casos afectados (4/50):**
+- 329_p2179 (disidencia del previo, 257 líneas que solapan carátula + 6 sumarios + dictamen del actual)
+- 329_p4789 (voto del previo, 591 líneas)
+- 342_p899 (disidencia del previo, 75 líneas)
+- 333_p1619 (disidencia parcial del previo, 81 líneas)
+
+**Causa:** `detectar_votos_y_disidencias()` en `auditar_fallo.py` busca matches de `RE_VOTO_HDR` y `RE_DISID_HDR` en TODO el bloque. Cuando el bloque arrastra contenido del fallo previo (F004), los headers de voto/disidencia del previo matchean y se emiten como spans del actual.
+
+Resultado: el span aparece ANTES de la carátula del fallo actual, abarcando cientos de líneas, y solapa con todo lo que viene después (carátula, sumarios, dictamen). Disjunción FALLA.
+
+**Fix conceptual (no implementado):** `detectar_votos_y_disidencias` debería usar la carátula como límite inferior. Cualquier match ANTES de `caratula_rel` es residuo del previo, no semántica del actual. Esto requiere reordenar la pipeline de `segmentar_bloque`: detectar carátula PRIMERO, después detectar votos solo desde caratula+1.
+
+**Severidad:** baja en términos cuantitativos (4/50 = 8% de los casos), pero alta en términos de confiabilidad: cuando ocurre, el span erróneo se come ~50% del bloque y oculta la estructura real. Las invariantes del auditor delataron el problema sin necesidad de inspección manual.
+
+**Estado:** pendiente fix. La invariante de disjunción sigue siendo útil exactamente para estos casos: garantiza que el bug se detecta automáticamente.
+
+---
+
+### H015 — Estrategia de promoción del auditor al parser
+
+**Pregunta planteada por el usuario:** si el auditor termina siendo mejor que el parser (más heurísticas validadas, mejor segmentación), ¿no es más simple promoverlo a parser que ir parchando el parser fix por fix?
+
+**Argumentos a favor de promover el auditor:**
+- El auditor ya implementa el rediseño arquitectónico que la BITACORA H013/H014 identifica como necesario (separación de segmentación y extracción de features).
+- Parchar el parser fix por fix conserva su deuda técnica (heurísticas mezcladas con cómputo de features).
+- Es trabajo evolutivo razonable: prototipo paralelo que supera al sistema en producción.
+
+**Argumentos en contra (lo que el parser tiene y el auditor no):**
+- El parser emite `csjn_casos.csv` y `csjn_casos_votos.csv` en el formato que la tesis ya consume. El auditor emite spans, no CSVs.
+- El parser está validado contra los 5819 casos hace meses. Sus números (con sus bugs) están medidos.
+- El parser tiene heurísticas calibradas que el auditor no replica: `classify_outcome`, `clasificar_tipo_voto` (Tipo A/B/C/D/E), `es_originaria`, word counts, parseo de firma. Cientos de líneas de código.
+
+**Decisión: promoción gradual con punto de inflexión a evaluar.**
+
+Cuatro fases:
+
+1. **Fase de auditoría (actual).** El auditor evoluciona heurísticas mejores, los overrides `_auditoria` se acumulan validados.
+
+2. **Migración seleccionada.** Los overrides validados se migran al parser uno por uno, priorizando los de mayor impacto.
+
+3. **Punto de inflexión.** Cuando la diferencia entre auditor y parser sea principalmente arquitectónica (segmentación + extracción), evaluar: construir un parser nuevo (v18 o v19) sobre la arquitectura del auditor, importando del parser actual las funciones de cómputo (classify_outcome, clasificar_tipo_voto, es_originaria, word counts).
+
+4. **Validación cruzada y deprecación.** Parser nuevo corre sobre el corpus, comparar salidas con `csjn_casos.csv` actual, las diferencias deben ser explicables por los bugs identificados. Si pasa, parser viejo a `historial/`.
+
+**Convención operativa para la fase 1:**
+- Cada override del auditor se nombra con sufijo `_auditoria` (ej: `es_header_sumario_auditoria`).
+- Cada override lleva docstring con: razón del override, diferencia con el original, ID en BITACORA, estado de validación.
+- Compromiso de migración periódica: cuando hay 5 overrides validados, se migran en bloque coordinado.
+- El auditor NO es un parser sombra. Si acumula 30+ overrides indefinidamente, es señal de que estamos esquivando la migración.
+
+**Estado:** decisión metodológica. Aplicable desde ahora.
+
+---

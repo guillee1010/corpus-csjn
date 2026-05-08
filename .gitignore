@@ -25,3 +25,5 @@ validacion/
 archivo/exploratorios/
 /*.txt
 markdowns_v2/
+
+output/auditoria/auditar_fallo/

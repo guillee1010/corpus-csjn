@@ -1,164 +1,83 @@
 # Changelog
 
-Registro de cambios al pipeline. Formato: [Fecha] — Versión/Componente — descripción.
+Registro de versiones del parser de fallos CSJN (`csjnvN.py`) y scripts auxiliares.
 
-## [2026-05-02] — `paginas/cruzar_catalogo_y_mapa.py`
+## v17 beta v2 — 2026-05-01
 
-**Tipo:** Fix (Bug D — último fallo del tomo arrastra aparato editorial de índices)
+### Estado: en pruebas, no validado.
 
-**Cambios:**
+### Cambios respecto a v17 beta:
 
-- Función nueva `cargar_indices_nombres(ruta)`: lee `secciones_indices_v14.csv` y devuelve dict `{archivo: linea_inicio_indice_nombres}`. Devuelve dict vacío si la ruta es `None` o el archivo no existe.
-- `cruzar()` acepta nuevo parámetro opcional `indices_nombres_por_archivo` con default `None`.
-- En la rama de "último fallo del tomo" (`pg_fin is None`):
-  - Si el archivo está en el dict de índices: `linea_fin = linea_inicio_indice_nombres - 1`, status `ok_cortado_en_indice`.
-  - Si no: fallback al comportamiento anterior (`linea_fin = última línea del .md`, status `ultimo_del_tomo`).
-- `procesar()` y `main()` aceptan quinto argumento opcional `secciones_indices_csv`.
-- Status nuevo agregado al docstring y al CSV de resumen: `ok_cortado_en_indice`.
-- `huerfanos.csv` excluye tanto `ok` como `ok_cortado_en_indice` (los nuevos buenos).
+- **Detector de fin de dictamen reescrito.** Reemplaza la heurística "línea con fecha + previa corta" por una regla OR de dos señales:
+  - Firma de Procurador conocido al final de línea corta. Lista ampliada empíricamente del corpus: Casal, Monti, Abramovich, Cosarin, Righi, Bausset, Warcalde, Netto, Becerra, Carbó, Obarrio, Beiró, Sachetta.
+  - Línea que empieza con "Buenos Aires, X de mes de YYYY" (fecha al pie típica del dictamen).
+  - Ambas señales con exclusión de contextos de cita (comillas, "Fallos:", "fs.", "Procurador Fiscal", "Ministerio Público:", "precedente").
+- **Nueva columna `wc_fallo_neto = word_count - wc_dictamen`.** Permite análisis del cuerpo decisorio separado del aporte del dictamen.
+- **Tipos unificados.** `dictamen_presente`, `is_originaria`, `is_full_bench`, `is_merit_decision` se exportan como `int` (0/1) en todos los casos. v17 beta v1 tenía mezcla de `True/False` (para fallos) y `0` (para sumarios).
 
-**Backward compatibility:** sin el quinto argumento, comportamiento idéntico al anterior. Validado con tests sintéticos.
+### Pendientes / problemas conocidos:
 
-**Hash SHA256 del archivo modificado:** `FE1585DAA87CFA0ED2E8809F8C46370AF11E1132B7EB8B2D2C963D227B2A87C1`
-
-**Resultado en corrida real (catálogo v15, 5862 entradas):**
-- 19 nuevos casos `ok_cortado_en_indice` ✓
-- 0 casos `ultimo_del_tomo` ✓
-- Total huérfanos baja de 121 (estimado pre-fix) a 70 (real post-fix)
-- Anomalía pendiente de diagnóstico: `pagina_fin_no_en_mapa` cayó a 0 (antes 39); `fallo_cruza_archivos` subió a 27 (antes 20). Hipótesis principal: cambio de catálogo v14→v15.
-
-**Archivos afectados:**
-- `paginas/cruzar_catalogo_y_mapa.py` (modificado)
-- `paginas/fallos_localizados.csv` (regenerado)
-- `paginas/fallos_localizados_huerfanos.csv` (regenerado)
-- `paginas/fallos_localizados_resumen.csv` (regenerado, nueva columna `ok_cortado_en_indice`)
+- En la primera corrida con la regla AND (solo firma), `sin_firma` saltó a 1093 (vs 312 en v17 beta v1) y 2600 casos tuvieron `wc_dictamen >= word_count` (dictamen comió todo el bloque). La regla OR busca corregir esto.
+- Si la corrida con OR sigue mostrando >500 casos sin firma, considerar rollback a v17 beta v1 o v16.
+- 22 casos sospechosos de falso positivo en `tipo_entrada = sumario_con_link` con `status_localizacion = ok` (Ruiz c/ AFIP, Asociación Gremial). No abordado en esta versión.
 
 ---
 
-## [2026-05-01] — `csjnv17_beta.py`
+## v17 beta — 2026-05-01
 
-**Tipo:** Patch (fix349)
+### Estado: validado parcialmente (4 casos de sumario-con-link verificados manualmente; 2 casos de falso positivo identificados pero no resueltos).
 
-**Cambios:**
-- Tratamiento especial para Tomo 349 (provisorio, índice truncado en V).
+### Cambios respecto a v16:
 
-**Output:** `csjn_casos_v17beta_fix349.csv` (10.9 MB, 5819 casos parseados).
+- **Detector de sumarios-con-link.** A partir del tomo 345, la CSJN publica algunos casos solo como sumario editorial con link al fallo online, sin reproducir el fallo completo. v17 detecta el patrón `(*) Sentencia del [fecha]. Ver en https://sj.csjn.gov.ar/...` (variantes "Ver fallo." en tomos 347-349) y marca esos casos como `tipo_entrada = "sumario_con_link"`. Campos analíticos quedan vacíos. Metadata estructural (linea_inicio, linea_fin, source_file, etc.) se conserva.
+- **Nueva columna `tipo_entrada`** con valores `"fallo"` (default) o `"sumario_con_link"`.
+- **Nueva columna `wc_dictamen`** que exporta el word count del dictamen (heurística heredada de v16, no validada).
 
----
+### Resultados:
 
-## [2026-05-01] — `construir_catalogo_v15.py`
+- 5647 casos procesados.
+- 160 marcados como `sumario_con_link`:
+  - 104 con `status_localizacion = ok_sin_marcador_apertura` (limpios).
+  - 56 con `status_localizacion = ok` (ambiguos: 3/5 verificados son sumarios reales; 2/5 son fallos legítimos contaminados por solapamiento de páginas).
+- `sin_firma` bajó de 399 (v16 fix1) a 312.
 
-**Tipo:** Mejora del catálogo
+### Pendientes / problemas conocidos:
 
-**Cambios:**
-- Corrección de bias en detección de fin de fallo (v14 sobreestimaba bloques).
-- Output: `catalogo_v15.csv` (5862 entradas, +24 KB respecto a v14).
-
-**Impacto medido:**
-- `sin_dispositivo`: −580
-- `unanime`: +831
-- Word count global: −5,6%
-
----
-
-## [2026-04-30] — `csjnv17beta.py` (rollback)
-
-**Tipo:** Rollback de v17_beta_v2
-
-**Contexto:** v17_beta_v2 intentó manejar fallos con dictamen del Procurador embebido (Bug A) pero introdujo regresiones en detección de fechas de fallo. Se hizo rollback a v17_beta original.
-
-**Lección:** parchar dictámenes embebidos requiere refactor más profundo que un patch puntual. Documentado como Bug A en `DEUDA_TECNICA.md`.
+- Solapamiento estructural del catálogo: una misma página de la edición oficial puede contener dos casos distintos (fallo + sumario, o dos sumarios encadenados), pero el catálogo asigna un solo `caso_id_canonico`. Esto produce:
+  - Falsos positivos del detector (~22 casos: fallos largos cuyo bloque incluye un sumario-con-link siguiente).
+  - 28 sumarios-con-link cuya firma es del fallo anterior, no propia.
+- Solución estructural pendiente (ver "Opción C" en bitácora): post-procesar el catálogo para dividir entradas con múltiples casos. Postergado a v18.
 
 ---
 
-## [2026-04-29] — `paginas/cruzar_catalogo_y_mapa.py` (versión inicial)
+## v16 fix1 — 2026-04-29
 
-**Tipo:** Componente nuevo
+### Estado: producción (baseline actual).
 
-**Cambios:**
-- Script standalone para cruzar catálogo + mapa de páginas → fallos_localizados.csv.
-- Genera `huerfanos.csv` con casos que no se pudieron localizar limpiamente.
-- Hash SHA256 versión inicial: pendiente de registrar (archivo perdido en sobrescritura del 2/5/2026).
+### Cambios respecto a v16:
 
----
-
-## [2026-04-28] — Generación de `mapa_paginas.csv`
-
-**Tipo:** Componente del pipeline
-
-**Cambios:**
-- `paginas/detectar_paginas.py` produce `mapa_paginas.csv` con headers de página detectados en cada `.md`.
-- Cobertura: 46.933 páginas únicas en 46 archivos.
-- 3 duplicados (tomo, página) detectados y resueltos por regla "línea más baja gana": Tomo 338 p.338, Tomo 343 p.1457, Tomo 344 p.1259.
+- Fix aplicado en `construir_catalogo.py`. Output regenerado como `csjn_casos_v16_fix1.csv`.
 
 ---
 
-## Versiones históricas del parser
+## v16 — 2026-04-29
 
-| Versión | Fecha | Casos parseados | Notas principales |
-|---------|-------|----------------:|-------------------|
-| v9 | 2026-04 (early) | 817 | Versión bifurcada: csjn_casos_v9.csv + csjn_casos_v9_votos.csv (2.803 votos individuales) |
-| v10-v11 | 2026-04-26 | — | Iteraciones intermedias |
-| v12 | 2026-04-28 | — | csjn_casos_v12_nueva.csv (12.6 MB) |
-| v14 | 2026-04-28 | — | Catalog-delimited |
-| v15 | 2026-04-29 | 817+ | Agrega `linea_fin_real`, `status_fin`, `pista_fin` con búsqueda bidireccional |
-| v16 | 2026-04-29 | — | Mejoras incrementales |
-| v17_beta | 2026-04-30 | 5819 | Versión actual estable |
-| v17_beta_v2 | 2026-04-30 | — | Rollback (regresión en dictámenes) |
-| v17_beta + fix349 | 2026-05-01 | 5819 | Tratamiento especial Tomo 349 provisorio |
+### Cambios respecto a v15:
+
+- Fix de extracción de fecha. v15 buscaba la fecha solo en las primeras 8 líneas del bloque, pero el bloque arranca con sumarios y dictamen. v16 busca la fecha cerca del marcador `FALLO DE LA CORTE SUPREMA` (caso a) o como última fecha "Buenos Aires" del bloque (caso b).
+- Solo el 5.6% de los fallos tenía fecha extraída en v15. v16 mejora sustancialmente.
 
 ---
 
-## Convenciones para futuros cambios
+## v15 — 2026-04-28
 
-- Cambios al pipeline se documentan acá antes de aplicarse.
-- Cambios destructivos (sobrescritura de scripts, eliminación de archivos) requieren snapshot previo en `snapshots/snapshot_YYYY-MM-DD_HHMM/`.
-- Hash SHA256 obligatorio para archivos modificados.
-- Bugs detectados pero no fixeados van a `DEUDA_TECNICA.md`, no acá.
-- Hallazgos de diagnóstico (positivos o negativos) van a `BITACORA.md`.
+### Cambios respecto a v14:
 
-## [2026-05-06] — Sin cambios de código
+- Detección de fin real del fallo dentro del bloque (`linea_fin_real`). Permite cortar el bloque cuando empieza el caso siguiente, evitando contaminación.
+- Output bifurcado: CSV de casos + CSV de votos (uno por juez por caso).
 
-Sesión de diagnóstico. No se modificó ningún script del pipeline.
-Hallazgos en BITACORA.md H013.
+---
 
-## [2026-05-08] — `scripts/auditoria/auditar_fallo.py`
+## v14, v12, anteriores
 
-**Tipo:** Componente nuevo
-
-**Cambios:**
-
-- Módulo nuevo: `scripts/auditoria/auditar_fallo.py`. Herramienta de auditoría manual de bloques del corpus + API canónica programática (`auditar_fallo(tomo, pagina) -> dict`).
-- Reusa por importación regex y helpers de `scripts/pipeline/parser.py` (no copia, no reimplementa). Heurísticas auxiliares propias del auditor: `es_header_sumario_auditoria` (cubre formatos sin puntuación + con `:` y subtítulo), `detectar_caratula` (estructural, no por mayúsculas/minúsculas).
-- Función `segmentar_bloque(bloque, ...) -> list[Span]` materializa la separación entre segmentación y extracción de features, cosa que el parser actual no hace (parser.py L1513-1564).
-- 10 tipos de span emitidos: `caratula`, `sumario`, `dictamen`, `cuerpo_mayoria`, `voto`, `disidencia`, `firma`, `sumario_con_link`, `header_pagina`, `catch_all`. `header_pagina` es transversal; los demás semánticos son disjuntos. Invariantes verificadas (cobertura + disjunción) en cada llamada.
-- CLI: `--tomo X --pagina Y` (caso único), `--tomo X --pagina A,B,C` (varios), `--random N [--tomo X] [--status Y]` (muestreo). Output default a archivo en `scripts/auditoria/output/auditoria_<timestamp>.md`. Flag `--stdout` para terminal. Flag `--output` para ruta específica.
-- Rutas default relativas al layout actual del repo: `corpus/`, `output/localizacion/fallos_localizados.csv`, `output/catalogo/mapa_paginas.csv`. Override con `--corpus`, `--localizados`, `--mapa`. Falla ruidoso si default no existe.
-
-**Backward compatibility:** módulo nuevo, no modifica nada existente. No regenera CSVs. No consume `csjn_casos.csv` (decisión deliberada: la auditoría no audita el output del parser con el output del parser).
-
-**Validación:**
-
-Casos contrastados contra `.md` real durante construcción: Sivaslian (349_p306, status `ok_cortado_en_indice`, 3.93% residuo), Cerboni (331_p1028, voto separado de Argibay, 8.28%), Macri (349_p81, disidencia larga, 3.74%), Lavrentiev (349_p28, 8.12%), Décima (349_p40, 22.13% — caso siguiente arrastrado), Generación Zoe (349_p75, 0%). Cobertura y disjunción OK en todos.
-
-**Bugs del parser identificados durante validación (anotados en BITACORA H014, no fixeados acá):**
-
-- F001: `RE_VOTO_HDR` no matchea `Voto la señora` (medido: 2 votos perdidos en LibroVol331.2.md).
-- F002: `detectar_fin_real` extiende al fallo siguiente.
-- F003: `detectar_fin_real` corta corto en último del tomo.
-- F004: arrastre del fallo previo al inicio del bloque.
-- F005: fin del dictamen pisa el FALLO DE LA CORTE.
-- F006: sumarios editoriales no segmentados (motivo original de H013).
-
-**Archivos afectados:**
-
-- `scripts/auditoria/auditar_fallo.py` (nuevo)
-- `scripts/auditoria/medir_voto_hdr.py` (nuevo, helper de medición de F001)
-- `scripts/auditoria/output/` (directorio nuevo, gitignored)
-
-**Pendiente próxima sesión:**
-
-- Corrida `--random 50` sobre corpus completo para medir distribución de residuo.
-- Decidir partición `metadatos_editoriales` con datos empíricos.
-- Migrar fixes F001-F005 al parser en bloque coordinado, regenerar corpus una sola vez.
-
+Ver historial de git y comentarios en cabecera de cada archivo.
