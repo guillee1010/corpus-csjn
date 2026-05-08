@@ -488,3 +488,222 @@ Si cualquiera de los dos límites está mal puesto, el bloque que llega al audit
 
 **Prioridades reordenadas para siguiente sesión.** A1 = codear el detector según diseño consolidado en H017. A2 = validar contra 339_p1648 y otros 4-5 casos de la corrida anterior. A3 = corrida `--random 50` con detector activo. B-D = sin cambios respecto a H016 (F007, casos >20%, F001).
 
+
+## H018 — 2026-05-09 · Sesión de diseño del detector de borde inferior. Decisiones consolidadas. Implementación pospuesta a próxima sesión.
+
+Sesión larga de diseño y validación previa contra archivos reales. NO se
+implementó código en esta sesión; se acumuló contexto suficiente para
+codear de una sola vez en sesión limpia. El plan original H017 era
+implementar el detector de "amputación inferior", pero la sesión derivó
+en discusión de scope, helper, alertas y lógica de clasificación. Al
+final hubo confusión acumulada por el contexto saturado (Claude entregó
+un `.py` separado cuando se había acordado integración directa, y empezó
+a crear archivo modificado fuera del flujo). Se decide cerrar acá y
+retomar limpio.
+
+Lo que sí queda registrado en esta entrada: las decisiones de diseño
+tomadas, los hallazgos nuevos detectados al validar contra archivos
+reales, y los puntos pendientes para la próxima sesión.
+
+### Renombre del detector
+
+Se descarta "amputación inferior" (excesivamente gráfico) y se adopta
+**`borde_inferior`**. El nombre cubre los estados posibles del borde
+entre el fallo actual y el próximo del catálogo: continuo,
+header_normal, gap_con_residuo, gap_grande_solo_headers,
+solapado_con_proximo, fin_archivo. Es geográfico, no direccional ni
+violento.
+
+### Verificación del caso paradigmático contra archivos reales
+
+El prompt de continuación 2026-05-09 declaraba que `339_p1648` tenía
+firma cortada en "Juan" sin "Carlos Maqueda." y un gap de líneas
+26599-26604. Verificación contra `LibroVol339_2.md`:
+
+- La firma cierra completa en línea 26599 (`Carlos Maqueda.`). NO está
+  amputada.
+- `detectar_fin_real` del parser corta en línea 26598 (off-by-one):
+  reconoce la firma pero no extiende el fin sobre la silabación.
+- El catálogo dice `linea_fin=26634` para 1648, pero el contenido real
+  termina en 26599. Las líneas 26605-26634 ya pertenecen a 339_p1651.
+
+El detector que diseñamos sí captura este caso vía la alerta
+`firma_multilinea_partida_por_fin_real` (delta=4, primera línea no
+vacía del gap es firma_arrastrada).
+
+### Decisiones de diseño consolidadas
+
+**1. Versión simple primero, robusta documentada en código como
+reserva.** La simple es una resta entre `linea_inicio_proximo_caso` y
+`linea_fin_real` con clasificación de las líneas del gap. La robusta
+(con ventana de búsqueda de cierre estructural alrededor de
+`linea_fin_real`) queda documentada para activarse si la corrida
+`--random 50` muestra > 10% de falsos positivos por bugs heredados
+del parser.
+
+**2. Helper de detección de firma con apellidos canónicos**
+(`linea_es_continuacion_firma`). Set:
+```
+APELLIDOS_FIRMA_TITULARES = {
+    "ROSATTI", "ROSENKRANTZ", "LORENZETTI", "MAQUEDA",
+    "HIGHTON", "NOLASCO", "MANSILLA",
+    "ZAFFARONI", "PETRACCHI", "ARGIBAY", "FAYT",
+    "BOGGIANO", "BELLUSCIO", "LÓPEZ", "LOPEZ",
+    "VÁZQUEZ", "VAZQUEZ", "NAZARENO",
+}
+```
+Solo titulares, sin conjueces (decisión avalada por contexto Elías).
+Apellidos compuestos (Highton/Nolasco, García-Mansilla) proveen
+redundancia natural contra OCR sucio. Cero tolerancia OCR explícita
+en esta iteración.
+
+Criterio del helper: presencia de apellido del set + compatibilidad
+discursiva (mayúsculas dominantes ≥70%, o línea ≤80 chars terminada
+en punto/raya, o presencia de em-dash). Validado contra
+LibroVol329_2.md (72k líneas): 1646 detectadas correctamente vs 222
+no-detectadas, todas las no-detectadas son discursivas legítimas.
+
+**3. Lógica de clasificación: el contenido decide el estado, no solo
+el delta.** El detector siempre clasifica las líneas del gap por
+contenido. Si hay líneas no benignas (distintas a vacía/header_pagina),
+estado=gap_con_residuo independiente del delta. Si todas son benignas
+y delta ≤ UMBRAL_GAP_RESIDUO (=4), estado=header_normal. Si todas son
+benignas y delta > UMBRAL, estado=gap_grande_solo_headers. Esto
+corrige una versión inicial que dependía solo del umbral y dejaba
+escapar 339_p1648 (delta=4 caía en header_normal).
+
+**4. Regla de coherencia: apellido titular repetido en span contiguo
+de firma_arrastrada = bug del detector.** Validado empíricamente: en
+LibroVol329_2 (72k líneas) cero casos legítimos de repetición. La
+firma de mayoría es disyuntiva por construcción institucional. Alerta
+`apellido_repetido_en_firma_arrastrada` con cierre estructural duro
+del span.
+
+**5. Render condicional con resumen global.** En cada caso del reporte
+solo se renderiza la sección de borde inferior si hay anomalía (estados
+gap_con_residuo, solapado_con_proximo, gap_grande_solo_headers) o
+alertas. En el header del documento se agrega línea agregada con
+resumen global de los estados (N continuos · M header_normal · K
+gap_con_residuo · L solapados · F fin_archivo).
+
+**6. Umbral inicial: `UMBRAL_GAP_RESIDUO = 4`.** Cubre 1 vacía + header
+de página de hasta 3 líneas. Constante reversible.
+
+**7. Próximo caso del MISMO ARCHIVO (no del mismo tomo).** Un tomo se
+divide en varios archivos `.md`. La cota del detector usa
+`fila["archivo"]` como filtro, no solo `fila["tomo"]`. El cálculo se
+hace iterando `filas_loc` filtradas por archivo y ordenadas por
+`linea_inicio`.
+
+### Estructura del output del detector
+
+```python
+"borde_inferior": {
+    "linea_fin_real": int,
+    "linea_inicio_proximo_caso": int | None,
+    "delta": int,
+    "estado": "continuo" | "header_normal" | "gap_con_residuo"
+              | "gap_grande_solo_headers" | "solapado_con_proximo"
+              | "fin_archivo",
+    "lineas_gap": [
+        {"linea_abs": int, "clasificacion": str, "texto": str},
+        ...
+    ],
+    "alertas": [str, ...]
+}
+```
+
+Clasificaciones de líneas del gap (cuando estado != continuo/header_normal/fin_archivo):
+- `vacia`
+- `header_pagina` (matchea RE_PAGE_HEADER o está en mapa de headers)
+- `firma_arrastrada` (apellidos titulares + criterio discursivo)
+- `voto_disidencia_individual` (RE_VOTO_HDR o RE_DISID_HDR)
+- `apertura_proximo_caso` (RE_VISTOS_LOS_AUTOS o primer_token_siguiente)
+- `no_clasificable` (catch-all)
+
+Alertas posibles:
+- `firma_multilinea_partida_por_fin_real`
+- `apellido_repetido_en_firma_arrastrada`
+- `voto_disidencia_individual_en_gap`
+- `caratula_siguiente_en_gap`
+- `gap_grande_solo_headers` (cuando aplica)
+
+### Hallazgo nuevo: F010 — off-by-one de detectar_fin_real en firmas multilínea
+
+Caso paradigmático 339_p1648. La firma se extiende líneas 26598-26599
+con silabación ("Juan / Carlos Maqueda."). `detectar_fin_real` reporta
+linea_fin_real=26598. El detector de borde inferior captura esto vía
+alerta `firma_multilinea_partida_por_fin_real`. F010 es bug del parser
+(`detectar_fin_real`), no del auditor. Investigación queda para sesión
+separada. Prioridad alta.
+
+### Hallazgo nuevo: F011 — catálogo de localización con linea_fin extendido
+
+Caso paradigmático 339_p1648. Catálogo dice fin=26634, pero contenido
+real termina en 26599. Las líneas 26605-26634 ya pertenecen al fallo
+339_p1651 (sumarios + dictamen de "Diez, Ernesto Osvaldo"). NO es
+problema del detector de borde inferior. Es del proceso de
+localización/catalogación. Investigación separada. Prioridad media.
+
+### Hallazgo descartado: F009
+
+Test inicial sugería que RE_VOTO_HDR/RE_DISID_HDR no cubrían formato
+pre-2015 ("DOCTORA DOÑA ELENA..."). Verificación posterior mostró que
+los regex SÍ matchean los headers reales del libro viejo
+("VOTO DE LA SEÑORA VICEPRESIDENTA"); el caso falso del test inicial
+era una línea SUBSIGUIENTE al header (continuación, no header).
+F009 retractado, no se registra como bug.
+
+### Cuestión abierta para próxima sesión: alerta de líneas vacías consecutivas
+
+Validación empírica:
+- LibroVol339_2.md: 898 runs de 1 vacía / 3 runs de 2 vacías / cero
+  de 3+. Los 3 runs de 2 vacías son transiciones macro del libro
+  (título, índice, apéndice).
+- LibroVol329_2.md (72k líneas): 1836 runs de 1 vacía / cero de 2+.
+
+Conclusión: entre fallos contiguos del catálogo, lo normal es 0-1
+línea vacía. 2+ vacías seguidas es estadísticamente muy raro y
+anómalo. Propuesta: agregar alerta `vacias_consecutivas_anomalas`
+con umbral `UMBRAL_VACIAS_CONSECUTIVAS = 2`. Decisión final queda
+para sesión de implementación.
+
+### Plan de validación post-implementación (próxima sesión)
+
+1. Caso paradigmático 339_p1648 debe reportar:
+   - estado: gap_con_residuo
+   - delta: 4
+   - lineas_gap: 4 entradas (firma_arrastrada L26599 + vacia L26600
+     + header_pagina L26601 + header_pagina L26602)
+   - alerta: firma_multilinea_partida_por_fin_real (apunta a L26599)
+
+2. Comparación con corrida `--random 50` previa
+   (`auditoria_2026-05-08_16-23-05.md`).
+
+3. Corrida nueva `--random 50` con detector activo. Cifras agregadas
+   esperadas (a contrastar con datos):
+   - ~70-85% header_normal
+   - ~5-15% gap_con_residuo
+   - ~5-10% continuo
+   - ~5-10% fin_archivo
+   - <5% solapado_con_proximo
+
+### Pendientes ordenados por prioridad para próximas sesiones
+
+- **Próxima sesión**: implementar `borde_inferior` integrado dentro
+  de `auditar_fallo.py` (NO archivo separado). Validar contra
+  339_p1648. Corrida `--random 50`. Decidir versión robusta según
+  datos.
+- F010 (alta): off-by-one de detectar_fin_real en firmas multilínea.
+  Sesión separada del parser.
+- F011 (media): catálogo extendido sobre próximo caso. Sesión
+  separada del proceso de localización.
+- F008 (preexistente): off-by-one entre reporte del auditor y líneas
+  reales del .md. Sesión separada.
+- F007 (preexistente): detectar_votos_y_disidencias no respeta
+  carátula como límite inferior.
+- 5 casos con residuo >20% sin investigar: 333_p2420, 330_p1854,
+  330_p2746, 341_p1617, 341_p221.
+- Decisión A pendiente: metadatos_editoriales como partición rígida
+  o no.
+

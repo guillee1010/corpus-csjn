@@ -87,3 +87,9 @@ Ver historial de git y comentarios en cabecera de cada archivo.
 
 Sesión de diseño puro, sin commits de código. Se cierra decisión sobre variante a implementar (clasificador activo del gap, no pasivo ni con reclasificación), tipos de span de iteración 1 (firma_arrastrada, header_pagina, no_clasificable), alertas estructurales (firma_truncada_en_silabacion, caratula_siguiente_anticipada), y heurística de firma multilínea sin tope arbitrario de líneas (cierre por límites estructurales). Se identifica F008 (off-by-one entre reporte de auditoría y líneas reales del .md, pendiente investigar). Detalle completo en BITACORA H017.
 
+
+
+## 2026-05-09 — Diseño detector amputación inferior (H016)
+
+Sesión de diseño puro, sin commits de código. Se cierra decisión sobre variante a implementar (clasificador activo del gap, no pasivo ni con reclasificación), tipos de span de iteración 1 (firma_arrastrada, header_pagina, no_clasificable), alertas estructurales (firma_truncada_en_silabacion, caratula_siguiente_anticipada), y heurística de firma multilínea sin tope arbitrario de líneas (cierre por límites estructurales). Se identifica F008 (off-by-one entre reporte de auditoría y líneas reales del .md, pendiente investigar). Detalle completo en BITACORA H017.
+
