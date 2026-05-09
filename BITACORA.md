@@ -707,3 +707,167 @@ para sesión de implementación.
 - Decisión A pendiente: metadatos_editoriales como partición rígida
   o no.
 
+---
+
+## Sesión 2026-05-09 (continuación nocturna) — Validación empírica de H018 con `--random 80`
+
+Sesión corta de validación post-implementación del detector de borde
+inferior (H018, implementado 2026-05-10 según header del script). Se
+corrió `--random 80` sobre el corpus completo y se contrastó la
+distribución observada con la predicción registrada en H018. Resultado
+principal: la predicción no se cumple. Adicionalmente, la inspección
+caso por caso reveló dos hallazgos nuevos no registrados en bitácora.
+
+### Resultados de la corrida `auditoria_2026-05-09_17-41-42.md`
+
+- 80 casos auditados, todos con `status_localizacion=ok`.
+- 23.895 líneas de bloques totales, 819 líneas de residuo.
+- Residuo global: **3,43%** (media). Mediana 3,00%, p75 8,14%, p90 17,12%.
+- 7 casos con `disjunción=FALLA` (no solo el outlier de residuo alto).
+
+### Distribución observada vs predicción de H018
+
+| Estado | Predicción H018 | Observado | Delta |
+|---|---:|---:|---|
+| `header_normal` | 70-85% | **0%** | desplome |
+| `gap_con_residuo` | 5-15% | 10% | dentro de rango |
+| `continuo` | 5-10% | 0% | ausente |
+| `fin_archivo` | 5-10% | 0% | ausente |
+| `solapado_con_proximo` | <5% | **90%** | sobre-disparo |
+
+La predicción y la realidad están invertidas en los dos estados
+extremos. `header_normal` (transición editorial limpia, esperado como
+caso típico) **no apareció en ningún caso**, mientras que
+`solapado_con_proximo` (anomalía esperada como marginal) apareció en
+72/80 = 90%.
+
+Inspección caso por caso confirma que el `solapado_con_proximo`
+dispara incluso en casos visualmente sanos. Ejemplo: `349_p1` tiene
+residuo 0%, cobertura OK, disjunción OK, estructura completa
+(mayoría + 2 votos), y aun así borde inferior reporta
+`solapado_con_proximo` con `delta=-12`.
+
+### Hipótesis sobre la calibración
+
+`fin_extendido_pag_compartida` apareció como pista de corte en 72/80
+casos (idéntica frecuencia que `solapado_con_proximo`). Esto sugiere
+que **ambos estados son la misma cosa vista desde dos ángulos**: el
+parser extiende `linea_fin` hasta la carátula del próximo (porque
+detecta página compartida) y el detector de borde inferior lo lee
+como solapamiento. La página compartida es la regla en el formato
+editorial Fallos, no la excepción.
+
+La predicción de H018 estaba implícitamente pensando en transiciones
+con header de página intermedio (3 líneas editoriales seguidas:
+número de tomo, número de página, "DE JUSTICIA DE LA NACIÓN" o
+"FALLOS DE LA CORTE SUPREMA"). En la práctica, el patrón dominante
+parece ser página compartida sin header completo intermedio, lo que
+hace que `header_normal` sea poco frecuente.
+
+**Cuestión abierta**: ¿la calibración de H018 era ingenua o el
+detector está clasificando como `solapado` cosas que deberían ser
+`header_normal`? Decisión pendiente para próxima sesión.
+
+### F012 (nuevo) — Firma multilínea partida por header de página intra-bloque cae a catch_all
+
+**Caso testigo**: caso del tomo 329 (visto durante inspección de
+auditoría, span 53). Pattern observado:
+
+```
+Línea N:   ...— Carmen           <- final del span firma
+Línea N+1: 329                   <- header_pagina
+Línea N+2: <num pag>             <- header_pagina
+Línea N+3: DE JUSTICIA...        <- header_pagina
+Línea N+4: M. Argibay.           <- ESTA cae a catch_all
+```
+
+La cola de la firma (`"M. Argibay."`) cumple los criterios de
+`linea_es_continuacion_firma()`: contiene apellido titular
+(`ARGIBAY`), longitud ≤80, termina en punto. El detector funcionaría
+bien si se aplicara acá. **El problema no es el detector — es dónde
+se aplica**: hoy solo se invoca en el borde inferior (transición
+entre fallos), no en transiciones intra-bloque por header de página.
+
+Diferencia con F007: F007 es contaminación cross-bloque del fallo
+**previo** invadiendo el bloque del actual. F012 es fragmentación
+intra-bloque del fallo **actual** por inserción editorial de header
+de página entre líneas semánticamente continuas.
+
+**Fix conceptual (no implementado)**: aplicar
+`linea_es_continuacion_firma` también dentro del bloque, no solo en
+el borde inferior. Probablemente como paso de post-procesamiento
+sobre los catch_all de 1-3 líneas que están entre un span de firma y
+el siguiente span semántico, cuando todas las líneas del catch_all
+son apellido titular o header de página.
+
+**Severidad**: baja en residuo (1-3 líneas por caso), pero sistemática
+(ocurre cada vez que firma multilínea atraviesa salto de página). En
+la corrida de 80, la cola larga de residuo (p90=17%) probablemente
+está alimentada parcialmente por F012 acumulado.
+
+### Hallazgo abierto — Acordadas, resoluciones y discursos como tipo de documento distinto al fallo
+
+Detectado conceptualmente (no en caso testigo concreto de esta
+corrida). Los tomos de Fallos contienen, además de sentencias,
+acordadas (actos institucionales de la Corte), resoluciones
+administrativas y eventualmente discursos de apertura del año
+judicial. El catálogo (Etapa 2) a veces los lista como entradas y a
+veces no. El parser asume que toda entrada del catálogo es un fallo
+y aplica heurísticas de fallo (RE_APERTURA, considerando, dispositivo,
+firma).
+
+Cuando una entrada es acordada o discurso, esas heurísticas no
+matchean y el caso cae sin estructura. Caso visto en sesión:
+`342_p1313` ("Integración Eléctrica Sur c/ EN-AGIP"). Resultó ser
+**fallo regular**, no acordada — los sumarios doctrinales tenían
+header `"ACORDADA 4/2007"` como voz temática (norma citada por el
+fallo), pero la pieza era un fallo común con `FALLO DE LA CORTE
+SUPREMA`. **El hallazgo queda abierto sin caso testigo confirmado**:
+hace falta ver si el catálogo realmente lista acordadas como
+entradas, o si las excluye de raíz.
+
+**Acción pendiente**: cuando aparezca el primer caso real (entrada
+del catálogo que no es fallo), registrar como F013 o equivalente.
+
+### Hallazgo accesorio — `disjunción=FALLA` es más frecuente de lo esperado
+
+7/80 casos (8,75%) tienen `disjunción=FALLA`, no solo los outliers
+de residuo alto. Cinco de los siete tienen residuo bajo (≤8%):
+`330_p2064` (5,8%), `344_p983` (0,0%), `331_p2827` (1,1%),
+`329_p2946` (3,6%), `329_p2944` (8,1%), `329_p513` (0,0%).
+
+Particularmente extraño: `344_p983` y `329_p513` con residuo 0% y
+disjunción rota — cobertura completa sin residuo, pero spans que se
+pisan. Probable F007 (detectar_votos_y_disidencias arrastrando
+contenido del previo y solapando con la carátula del actual). No
+investigado en detalle.
+
+### Pendientes ordenados por prioridad — actualización post-validación
+
+- **Decisión H018**: con `solapado_con_proximo=90%` la métrica
+  pierde poder de filtrado. Dos opciones para próxima sesión:
+  (a) recalibrar — entender qué constituye un solapamiento "real"
+  (con residuo) vs solapamiento estructural (página compartida sin
+  residuo); o (b) eliminar el estado y reemplazarlo por una métrica
+  binaria (residuo en gap sí/no).
+- **§4.6.b RE_CONSIDERANDO** (PIPELINE_HALLAZGOS.md, prioridad
+  alta): fix de regex ya validado, sin aplicar. Una línea de
+  cambio. Caso testigo confirmado en validación: `344_p2835` (80%
+  residuo, considerando con prefijo "Vistos los autos;
+  Considerando:" no detectado, todo el cuerpo cae a catch_all).
+- **F010** (alta): off-by-one de detectar_fin_real en firmas
+  multilínea. Confirmado adicional en `348_p955` ("Lorenzetti."
+  como cola sin reconocer) y `339_p488` (efecto cascada por
+  contaminación del fallo previo). Sesión separada del parser.
+- **F012** (nueva): firma multilínea partida intra-bloque cae a
+  catch_all. Fix conceptual conocido. Sesión separada.
+- **F011** (media): catálogo extendido sobre próximo caso. Sesión
+  separada del proceso de localización.
+- **F008, F007** (preexistentes).
+- **5 casos con residuo >20% sin investigar** (lista preexistente):
+  333_p2420, 330_p1854, 330_p2746, 341_p1617, 341_p221.
+- **Sesgo por tomo confirmado**: tomos viejos (329-333) concentran
+  residuo, tomos modernos (345+) son casi limpios. El parser está
+  optimizado para formato editorial moderno.
+- Acordadas/discursos como tipo distinto: hallazgo abierto, sin
+  caso testigo. Anotar cuando aparezca.
