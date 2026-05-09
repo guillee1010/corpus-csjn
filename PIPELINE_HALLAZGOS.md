@@ -14,12 +14,13 @@
 > cruzada (post-§4) y validaciones contra `.md` real que no se
 > hicieron en la sesión.
 >
-> **Estado tras sesión 2026-05-09 (auditoría empírica + fix §3.6.a)**:
-> auditoría completa replicada en PowerShell sobre los CSVs vivos,
-> bug §3.6.a fixeado en código y reprocesado el pipeline entero
-> (Etapa 3 + Etapa 4). §3.6.d disuelto como efecto colateral. Bugs
-> §4.6.a, §4.6.b, §4.6.g, §4.6.h re-evaluados con números post-fix.
-> Detalles abajo en la sección "Sesión 2026-05-09 (auditoría + fix)".
+> **Estado tras sesión 2026-05-09 (auditoría empírica + fix §3.6.a +
+> fix RE_APERTURA + hallazgo hojas complementarias)**: auditoría
+> completa replicada en PowerShell sobre los CSVs vivos. Dos fixes
+> aplicados al pipeline (cruzador L235 y parser L57). §3.6.d disuelto
+> como efecto colateral de §3.6.a. Bugs §4.6.a, §4.6.b, §4.6.g,
+> §4.6.h re-evaluados con números post-fix. Hallazgo nuevo §3.6.e
+> (hojas complementarias en tomos 331-334). Detalles abajo.
 
 ---
 
@@ -329,18 +330,122 @@ correspondientes de PIPELINE.md §4.6.
   ratio `wc_considerando / word_count` más alto. Pasa de 169 a 320
   casos sospechosos.
 
+### Tarea complementaria (cerrada en la misma sesión): fix RE_APERTURA strict
+
+Tras el fix de §3.6.a, se identificó otro problema relacionado en el
+parser. El detector del marcador `FALLO DE LA CORTE SUPREMA`
+(`RE_APERTURA`, línea 57) era estricto a espaciado literal. Búsqueda
+contra el corpus reveló 18 ocurrencias del marcador con doble espacio
+entre `CORTE` y `SUPREMA`, todas concentradas en `LibroVol343-1.md`.
+
+Fix aplicado: cambio de regex literal a `\s+` libre, alineado con el
+patrón de las regex hermanas `RE_FECHA_LINEA` y `RE_FECHA_EXTRACT`
+(líneas 58-59). Agregado `re.I` por consistencia.
+
+```diff
+-RE_APERTURA      = re.compile(r"^(FALLO|SENTENCIA) DE LA CORTE SUPREMA\s*$")
++RE_APERTURA = re.compile(r"^(FALLO|SENTENCIA)\s+DE\s+LA\s+CORTE\s+SUPREMA\s*$", re.I)
+```
+
+Validación post-fix:
+
+| Status | Pre | Post | Δ |
+|---|---:|---:|---:|
+| `ok` | 5.394 | 5.410 | +16 |
+| `ok_sin_marcador_apertura` | 347 | 331 | −16 |
+| `fallo_cruza_archivos_sin_marcador` | 1 | 0 | −1 |
+| `fallo_cruza_archivos` | 19 | 20 | +1 |
+
+17 de 18 casos capturados (94%). Cero regresiones. El caso 18
+(`343_p646`, línea 24641 de `LibroVol343-1.md`) no fue capturado por
+una razón distinta: la cascada `detectar_fin_real` cortó el bloque del
+fallo en línea 24618 (antes del marcador en 24641). Inspección del
+`.md` reveló estructura editorial irregular en este fallo (carátula
+en mayúsculas, sumario editorial antes del marcador, header de página
+intermedio entre el sumario y el marcador). Documentado en
+PIPELINE.md §4.6.j como caso testigo del patrón.
+
+### Hallazgo nuevo: hojas complementarias en tomos 331-334 (§3.6.e)
+
+Los 39 casos `pagina_fin_no_en_mapa` que aparecieron tras el fix de
+§3.6.a NO son bug del pipeline. Investigación caso por caso reveló
+que son artefactos editoriales del corpus.
+
+Caso testigo: `331_p373` (Pizarro c/ Orígenes A.F.J.P.). Ocupa páginas
+372-377. El catálogo registra `pagina_fin = 379` porque ese es el
+inicio del fallo siguiente (`331_p379`, Villarreal). Pero las
+páginas 378-379 no existen físicamente: tras la 377 hay una `HOJA
+COMPLEMENTARIA` y la 380 arranca directamente con la sección de
+marzo. Comprobación contra el `.md` confirma el salto: el header de
+página 377 está en línea 14080, y el siguiente header (página 380)
+está en 14129.
+
+Los tomos 331-334 contienen 95 hojas complementarias en total
+(distribuidas en 11 `.md`):
+
+| Archivo | Hojas |
+|---|---:|
+| LibroVol331.1.md | 13 |
+| LibroVol331.2.md | 3 |
+| LibroVol331.3.md | 13 |
+| LibroVol332.1.md | 11 |
+| LibroVol332.3.md | 10 |
+| LibroVol333.1.md | 7 |
+| LibroVol333.2.md | 8 |
+| LibroVol333.3.md | 7 |
+| LibroVol334.1.md | 9 |
+| LibroVol334.2.md | 11 |
+| LibroVol334.3.md | 3 |
+
+De las 95, solo 39 caen exactamente en una `pagina_fin` esperada por
+el catálogo (las otras 56 caen en lugares intra-fallo o post-último
+fallo del tomo donde no afectan al cruzador).
+
+**Pre-fix §3.6.a, el bug `pg_fin + 1` "compensaba" el problema
+editorial por accidente** (buscaba página 380, que sí existe →
+bloque "ok" pero inflado). **Post-fix, el cruzador busca página 379,
+no la encuentra, y cae al fallback "última línea del archivo"** →
+bloque gigantesco. Para `331_p373`: word_count pasó de 449 a 293.804
+palabras.
+
+89 casos en total tienen este patrón (los 39 `pagina_fin_no_en_mapa`
++ 50 fallos intermedios cuyo bloque se extiende hasta el final del
+archivo en algunos casos donde el siguiente fallo cae en
+`pagina_fin_no_en_mapa`).
+
+Mitigación temporal: filtrar `status_localizacion ==
+'pagina_fin_no_en_mapa'` en análisis estadístico (igual que
+`fallo_cruza_archivos`). Cobertura efectiva: 99,0% (5760/5819).
+
+Fix estructural propuesto (próxima sesión): en
+`cruzar_catalogo_y_mapa.py`, cuando `pg_fin` no esté en el mapa,
+usar la `linea_inicio` del fallo siguiente del catálogo (si está
+localizado) y restarle 1, en lugar del fallback "última línea del
+archivo". Documentado en PIPELINE.md §3.6.e.
+
 ### Pendientes para próxima sesión
 
-- Fix §4.6.e (trivial, tipos): cambiar `0` por `False` en línea 1295
-  del parser. 30 segundos.
-- Fix §4.6.b: ahora prioritario. Una línea: cambiar fallback para que
-  use `apertura_rel + 1` cuando hay apertura.
-- Validaciones contra `.md` real (Tarea 3 del plan de auditoría):
-  §3.6.b (línea 33525 de `LibroVol339.2.md`), §3.6.c (tomos 331–334),
-  §4.6.c (3 fechas sospechosas), §4.6.h (3-5 casos modernos).
-- Cuantificar daño efectivo de §4.6.a post-fix (Tarea 2): cuántos de
-  los 3.682 *realmente* capturan tribunal del fallo siguiente. Ahora
-  baja prioridad porque el fix §3.6.a probablemente lo evaporó.
+Por orden de prioridad estimada:
+
+1. **Fix §3.6.e** (cruzador, fallback en `pagina_fin_no_en_mapa`).
+   Es del mismo tipo que §3.6.a: cambio chico en `cruzar_catalogo_y_mapa.py`,
+   alta validabilidad. Eliminaría 39 casos con bloques gigantescos
+   y subiría la cobertura efectiva de 99,0% a 99,7%.
+2. **Fix §4.6.b** (parser, fallback `inicio_cons = 0`). Subió de
+   prioridad tras fix §3.6.a (de 169 a 320 casos sospechosos). Una
+   línea de cambio.
+3. **Fix §4.6.e** (parser, `dictamen_presente` como string). Trivial,
+   30 segundos. Cambiar `0` por `False` en línea 1295.
+4. **Validaciones contra `.md` real** (Tarea 3 del plan original):
+   §3.6.b (línea 33525 de `LibroVol339.2.md`), §3.6.c (tomos 331-334
+   — parcialmente cubierto por el hallazgo §3.6.e), §4.6.c (3 fechas
+   sospechosas), §4.6.h (3-5 casos modernos).
+5. **Investigación: `'FALLO DE LA CORTE'` sin `SUPREMA`** (33 casos
+   en top desconocidos de firma post-fix RE_APERTURA). Fragmentos
+   de OCR o patrón editorial distinto. No urgente.
+6. **Cuantificar daño efectivo de §4.6.a post-fix** (cuántos de los
+   3.682 *realmente* capturan tribunal del fallo siguiente). Baja
+   prioridad porque el fix §3.6.a probablemente lo evaporó.
 
 ---
 

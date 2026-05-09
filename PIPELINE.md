@@ -2,7 +2,8 @@
 
 > **Estado del documento**: borrador en construcción.
 > Sesiones: 2026-05-08 (mapeo §2, §3), 2026-05-09 (mapeo §4 + cierre
-> auditoría + fix §3.6.a), 2026-05-11 (mapeo §1).
+> auditoría + fix §3.6.a + fix RE_APERTURA + hallazgo hojas
+> complementarias), 2026-05-11 (mapeo §1).
 > Cubre: diagrama global + las cuatro etapas + auditoría empírica de
 > bugs.
 > Pendiente: sección de arquitectura cruzada (por qué cuatro scripts y
@@ -11,13 +12,20 @@
 > §4.6.h).
 >
 > **Bugs cerrados**: §3.6.a (resuelto 2026-05-09), §3.6.d (disuelto
-> 2026-05-09 como efecto colateral de §3.6.a), §4.6.f (refutado).
+> 2026-05-09 como efecto colateral de §3.6.a), §4.6.f (refutado),
+> RE_APERTURA strict (resuelto 2026-05-09, ver §4.6.j).
 >
 > **Bugs abiertos con prioridad subida tras fix §3.6.a**: §4.6.b
 > (fallback considerando, 320 casos sospechosos).
 >
 > **Bugs abiertos con prioridad bajada tras fix §3.6.a**: §4.6.a
-> (cosmético, daño efectivo evaporado), §4.6.g (contenido a 20 casos).
+> (cosmético, daño efectivo evaporado), §4.6.g (contenido a 20 casos,
+> pero ahora con 39 casos adicionales del mismo tipo en
+> `pagina_fin_no_en_mapa` por hojas complementarias — ver §3.6.e).
+>
+> **Hallazgos nuevos sin acción inmediata**: §3.6.e (hojas
+> complementarias en tomos 331-334), caso testigo `343_p646` (patrón
+> editorial irregular en tomo 343, documentado en §4.6.j).
 
 ## Propósito
 
@@ -1141,6 +1149,123 @@ Ambos son aproximadamente equivalentes en la mayoría de los casos
 suelen estar contiguas físicamente), pero pueden divergir en bordes
 exactos. Después de corregir 3.6.a, este status habría que revisarlo
 para ver si captura lo correcto.
+
+#### 3.6.e — Hojas complementarias en tomos 331-334 (efecto colateral del fix §3.6.a)
+
+> **🟡 HALLAZGO 2026-05-09: 39 casos `pagina_fin_no_en_mapa` con
+> bloques gigantescos. Causa estructural en el corpus, no bug del
+> pipeline.**
+
+##### El fenómeno
+
+Tras el fix de §3.6.a, aparecieron 39 casos con status
+`pagina_fin_no_en_mapa`, concentrados en tomos 331-334 (10+11+10+9).
+Investigación caso por caso reveló que **estos fallos no tienen bug
+en el pipeline — tienen un problema estructural en el corpus
+editorial**.
+
+##### Causa
+
+Los tomos 331-334 contienen **hojas complementarias**: páginas que
+aparecen en el índice editorial pero no existen físicamente en el
+`.md`. Marca textual literal:
+
+```
+HOJA COMPLEMENTARIA
+Hoja incorporada a los efectos de permitir la búsqueda por
+página dentro del Volumen.
+```
+
+Búsqueda contra el corpus muestra **95 ocurrencias** de "HOJA
+COMPLEMENTARIA" distribuidas en los 11 `.md` de tomos 331-334. La
+distribución por archivo:
+
+| Archivo | Hojas complementarias |
+|---|---:|
+| LibroVol331.1.md | 13 |
+| LibroVol331.2.md | 3 |
+| LibroVol331.3.md | 13 |
+| LibroVol332.1.md | 11 |
+| LibroVol332.3.md | 10 |
+| LibroVol333.1.md | 7 |
+| LibroVol333.2.md | 8 |
+| LibroVol333.3.md | 7 |
+| LibroVol334.1.md | 9 |
+| LibroVol334.2.md | 11 |
+| LibroVol334.3.md | 3 |
+
+Cuando una hoja complementaria cae exactamente en la `pagina_fin` que
+el catálogo registró para un fallo (porque el fallo siguiente arranca
+después del salto), el cruzador busca esa página en el mapa, no la
+encuentra (porque no existe físicamente), y cae al fallback "última
+línea del archivo". Eso produce un bloque gigantesco que se procesa
+mal en Etapa 4.
+
+##### Caso testigo: `331_p373`
+
+`331_p373` (Pizarro, Julio César c/ Orígenes A.F.J.P.) ocupa páginas
+372-377 del tomo 331. El catálogo registra `pagina_fin = 379` porque
+ese es el inicio del fallo siguiente (`331_p379`, Villarreal). Pero
+las páginas 378 y 379 no existen físicamente: tras la página 377 hay
+una `HOJA COMPLEMENTARIA` y después arranca directamente la página
+380 con la sección de marzo. El mapa de páginas confirma el salto:
+
+```
+331  LibroVol331.1.md  14080  377
+331  LibroVol331.1.md  14129  380   ← saltó de 377 a 380
+```
+
+Resultado pre-fix §3.6.a: el bug `pg_fin + 1` buscaba página 380, que
+sí existe → bloque "ok" pero inflado por la página extra (~32 líneas).
+
+Resultado post-fix §3.6.a: el cruzador busca página 379, que no
+existe → cae al fallback → bloque desde línea 13935 hasta el final
+físico del `.md` (~32.000 líneas). El parser procesa todo eso como
+un solo fallo y produce `word_count = 293.804` (vs 449 pre-fix).
+
+**El bug original "compensaba" el problema editorial por accidente.**
+Cuando se arregló el bug, el problema editorial quedó al descubierto.
+
+##### Diagnóstico: no es bug del pipeline
+
+El cruzador hace lo correcto: busca la página y no la encuentra
+porque el catálogo registró una `pg_fin` que no existe físicamente.
+El error está aguas arriba: el catálogo (Etapa 2) extrae `pg_fin` del
+índice editorial sin saber que entre dos fallos puede haber una hoja
+complementaria. El detector de páginas (Etapa 1) tampoco está
+fallando: las páginas 378-379 efectivamente no existen.
+
+##### Mitigación temporal
+
+Los 39 casos son identificables vía
+`status_localizacion == 'pagina_fin_no_en_mapa'`. Filtrarlos antes de
+análisis estadístico, igual que se filtran `fallo_cruza_archivos`.
+
+Cobertura efectiva post-mitigación: 5760/5819 = 99,0% (vs 99,7% antes
+de descontar los 39).
+
+##### Fix estructural propuesto (próxima sesión)
+
+Cuando `pg_fin` no está en el mapa, en lugar de usar el final del
+archivo como fallback, el cruzador puede:
+
+- **Opción A**: buscar `pg_fin - 1, pg_fin - 2, ...` hasta encontrar
+  una página que sí existe en el mapa, y usar ésa.
+- **Opción B**: usar la `linea_inicio` del fallo siguiente del
+  catálogo (si está localizado) y restarle 1.
+
+Opción B es más robusta porque depende del catálogo y la
+localización, no de búsquedas iterativas en el mapa. Pendiente para
+próxima sesión.
+
+##### Distinción importante con §4.6.g
+
+§4.6.g (`fallo_cruza_archivos`) es un fenómeno *real*: hay 20 fallos
+que efectivamente cruzan archivos. §3.6.e es un fenómeno *espurio*:
+los 39 casos no cruzan archivos, simplemente tienen una hoja
+complementaria entre el fin del fallo actual y el inicio del
+siguiente. Pero ambos producen el mismo síntoma operativo (bloques
+gigantescos), por lo que la mitigación es la misma.
 
 ### 3.7 Limitaciones conocidas
 
@@ -2309,6 +2434,96 @@ relevo.
 Ningún cambio. Es información descriptiva sobre el corpus, útil
 para entender por qué la cascada tiene cuatro pistas distintas
 en vez de una sola.
+
+#### 4.6.j — RE_APERTURA estricto: doble espacio en CORTE  SUPREMA
+
+> **✅ RESUELTO 2026-05-09**
+>
+> Fix aplicado: parser.py línea 57. Regex `RE_APERTURA` cambió de
+> espaciado literal a `\s+` libre (alineado con el patrón de
+> `RE_FECHA_LINEA` y `RE_FECHA_EXTRACT` líneas 58-59). También se
+> agregó `re.I` por consistencia con el resto del parser.
+
+##### El problema
+
+El detector del marcador `FALLO DE LA CORTE SUPREMA` tenía la regex:
+
+```python
+RE_APERTURA = re.compile(r"^(FALLO|SENTENCIA) DE LA CORTE SUPREMA\s*$")
+```
+
+Espaciado literal entre cada par de palabras. El comentario interno
+del código (línea 1043) lo declara: "RE_APERTURA es estricto (línea
+exacta = 'FALLO DE LA CORTE SUPREMA')".
+
+##### El hallazgo
+
+Búsqueda contra el corpus reveló 18 ocurrencias del marcador con
+**doble espacio entre `CORTE` y `SUPREMA`**, todas concentradas en
+`LibroVol343-1.md` (tomo 343, parte 1). Verificación caracter por
+caracter: ambos espacios son código ASCII 32 (espacio normal, no
+nbsp ni tab).
+
+| Variante | Casos |
+|---|---:|
+| `FALLO DE LA CORTE SUPREMA` (espacio normal) | 5.717 |
+| `SENTENCIA DE LA CORTE SUPREMA` | 120 |
+| `FALLO DE LA CORTE  SUPREMA` (doble espacio) | 18 |
+
+##### Por qué `\s+` libre y no tope (como `\s{1,2}`)
+
+Las regex hermanas en el parser (`RE_FECHA_LINEA`, `RE_FECHA_EXTRACT`)
+ya usan `\s+` libre sin tope. Aplicar el mismo patrón mantiene
+consistencia interna del código. El riesgo de matchear líneas
+anómalas con whitespace excesivo está mitigado por el `^...$` que
+requiere que la línea entera sea exactamente el marcador.
+
+##### Validación post-fix
+
+| Métrica | Pre-fix | Post-fix |
+|---|---:|---:|
+| `ok` | 5.394 | 5.410 |
+| `ok_sin_marcador_apertura` | 347 | 331 |
+| `fallo_cruza_archivos_sin_marcador` | 1 | 0 |
+
+**17 de 18 casos capturados** (16 pasaron de `ok_sin_marcador_apertura`
+a `ok`, 1 de `fallo_cruza_archivos_sin_marcador` a
+`fallo_cruza_archivos`). Cero regresiones.
+
+##### El caso 18: `343_p646` (no capturado, patrón editorial irregular)
+
+La línea 24641 de `LibroVol343-1.md` tiene el marcador con doble
+espacio. Pero la cascada `detectar_fin_real` cortó el bloque del
+caso `343_p646` en línea 24618 — antes del marcador. Por eso el
+parser nunca lo procesa.
+
+Inspección del `.md` reveló estructura editorial irregular:
+
+1. Carátula del fallo en MAYÚSCULAS (`MONTEVER SA c/ DGA s/...`).
+2. Tema en mayúsculas (`RECURSO EXTRAORDINARIO`).
+3. **Sumario editorial** (~10 líneas).
+4. Header tipográfico de página (`647 / DE JUSTICIA DE LA NACIÓN / 343`).
+5. **Marcador `FALLO DE LA CORTE  SUPREMA`** (línea 24641).
+6. Cuerpo del fallo.
+
+La cascada cortó en (4) tomando el header de página como pista de
+fin. Pre-fix §3.6.a, el bloque inflado tapaba este problema. Post-fix
+queda al descubierto.
+
+Esto **no es bug del fix RE_APERTURA**. Es un patrón editorial
+distinto del estándar que la cascada `detectar_fin_real` no
+contempla. Caso aislado en este corpus (1 detectado), documentado
+para registro. Si aparecieran más en futuros catálogos, podría
+justificarse extender la cascada para mirar más adelante antes de
+aceptar un corte basado en header de página.
+
+##### Otro patrón a futuro: 'FALLO DE LA CORTE' (sin SUPREMA)
+
+El reporte post-fix de "Top desconocidos en firma" registra 33 casos
+donde aparece la cadena `'FALLO DE LA CORTE'` (sin la palabra
+`SUPREMA`). Es un patrón distinto, posiblemente fragmentos de OCR
+roto o variantes editoriales. No relacionado con el fix actual,
+documentado para investigación futura.
 
 ### 4.7 Limitaciones conocidas
 
