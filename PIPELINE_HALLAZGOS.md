@@ -7,6 +7,12 @@
 >
 > **Cuando `PIPELINE.md` cubra las cuatro etapas, este archivo debería
 > quedar vacío o casi vacío y archivarse.**
+>
+> **Estado tras sesión 2026-05-09 (cierre §4)**: las cuatro etapas
+> están cubiertas en PIPELINE.md. Lo que queda en este archivo es
+> exclusivamente trabajo pendiente para la sección de arquitectura
+> cruzada (post-§4) y validaciones contra `.md` real que no se
+> hicieron en la sesión.
 
 ---
 
@@ -44,178 +50,235 @@
 
 - **Discordancia docstring/código en `pagina_fin`**: docstring línea 57
   dice "siguiente - 1", código línea 410 hace "siguiente" (sin restar).
-  Verificado contra datos: 5.800/5.800 filas con `pagina_fin` no vacío
-  cumplen `pagina_fin == pagina_inicio_siguiente`. Integrado en §2.5.a
-  con marca de discordancia. Pista crítica para §3 — confirmada en §3.6.a.
+  Verificado contra datos. Integrado en §2.5.a. Pista crítica para §3
+  — confirmada en §3.6.a.
 
 - **Convención de indexación de `secciones_indices.csv`**: 1-indexed
-  inclusivo, confirmado contra código (línea 195) y datos.
-  Integrado en §2.2 y §2.6.b.
+  inclusivo. Integrado en §2.2 y §2.6.b.
 
-- **Fix v15 (`extender_inicio_indice_nombres`)**: leído en código,
-  documentado en §2.5.b. **Validación contra `.md` real pendiente.**
+- **Fix v15 (`extender_inicio_indice_nombres`)**: documentado en
+  §2.5.b. Validación contra `.md` real pendiente.
 
 - **`catalogo_volumenes.csv` no lo produce `construir_catalogo.py`**:
-  origen no identificado. Documentado en §2.9 con hipótesis a verificar
-  cuando se incorporen otros scripts. Hallazgos exploratorios sobre el
-  archivo asentados allí.
+  origen no identificado. Documentado en §2.9.
 
-- **Tomos 335 y 336 ausentes** del catálogo, coherente con Etapa 1.
-  Confirmado contra datos: 19 tomos presentes en `catalogo.csv`.
-  Integrado en §2.7.
+- **Tomos 335 y 336 ausentes** del catálogo. Integrado en §2.7.
 
-### Pendientes residuales para §2 (`construir_catalogo.py`)
+### Pendientes residuales para §2
 
 (Todos requieren `.md` reales para validar.)
 
 - ⏳ **Fix v15**: validar comportamiento real contra `LibroVol339.1.md`
-  o cualquier `.md` del rango 337–349. Verificar que el fix se dispara
-  y captura las entradas pre-portadilla. Quedó marcado en §2.5.b y §2.8.
+  o cualquier `.md` del rango 337–349.
 
-- ⏳ **Slice `lines[linea_inicio_1:linea_fin_1]`**: con valores
-  1-indexed inclusivos, el slice de Python excluye la línea
-  `linea_fin_1` del bloque parseado. Validar empíricamente si esa línea
-  típicamente contiene una entrada del índice o está vacía. Si está
-  vacía sistemáticamente, es intencional. Si tiene contenido, es bug
-  menor. Quedó marcado en §2.6.c y §2.8.
+- ⏳ **Slice `lines[linea_inicio_1:linea_fin_1]`**: validar
+  empíricamente si la línea `linea_fin_1` típicamente contiene una
+  entrada del índice o está vacía.
 
 - ⏳ **Tomos 348–349 sin `materias`/`sumario`/`legislacion`**:
   determinar si es cambio editorial real o fallo de detección de
-  regex. Requiere mirar el final de `LibroVol348-1.md` y
-  `LibroVol349-1.md`.
+  regex.
 
 ## Sesión 2026-05-08 (mapeo §3)
 
 ### Ya integrados en `PIPELINE.md` §3
 
-- **Bug `pg_fin + 1` (CRÍTICO)**: hipótesis original confirmada, pero
-  con consecuencia distinta a la prevista. Lo previsto: gatillaría
-  `pagina_fin_no_en_mapa`. La realidad: cero casos en ese status; en
-  cambio, el detector de páginas registra **todas** las páginas (no
-  sólo inicios de fallo), entonces `pg_fin + 1` casi siempre tiene
-  header detectado. Esto produce 5.773 `ok` con bloques sistemáticamente
-  inflados ~32 líneas (el cuerpo de la primera página del fallo
-  siguiente queda mal atribuido al fallo actual). Validado contra datos:
-  5.695/5.695 pares consecutivos (100%) muestran inflado, promedio
-  32,4 líneas, distribución concentrada en 21–40 líneas (= una página
-  del corpus). Integrado en §3.6.a.
+- **Bug `pg_fin + 1` (CRÍTICO)**: confirmado, 5.695/5.695 pares
+  consecutivos (100%) muestran inflado promedio 32,4 líneas.
+  Integrado en §3.6.a.
 
-- **Bug indexación 0/1 en `ok_cortado_en_indice`**: hipótesis confirmada
-  al leer línea 222 del cruzador. Resta `1` a un valor 1-indexed sin
-  convertir a 0-indexed. Resultado: `linea_fin` apunta exactamente al
-  header del índice de nombres, no a la línea anterior. Afecta los 19
-  últimos del tomo. Severidad baja (una línea de ruido tipográfico, no
-  página entera). Integrado en §3.6.b.
+- **Bug indexación 0/1 en `ok_cortado_en_indice`**: integrado en
+  §3.6.b.
 
-- **`fallo_cruza_archivos`**: validado contra
-  `fallos_localizados_huerfanos.csv` — 27 casos, todos en bordes
-  editoriales entre `.md`s del mismo tomo. Definición operacional
-  ambigua post-corrección de `pg_fin+1`. Integrado en §3.6.d.
+- **`fallo_cruza_archivos`**: integrado en §3.6.d.
 
-- **Solapamientos página-archivo**: ya documentados en §2.9
-  (`catalogo_volumenes.csv`). El cruzador los resuelve con "línea más
-  baja gana" (línea 100). Integrado implícitamente en §3.5.d.
+- **`pagina_no_en_mapa` concentrado en tomos 331–334**: integrado
+  en §3.6.c con ⏳.
 
-### Hallazgos nuevos no anticipados detectados al mapear §3
-
-- **`pagina_no_en_mapa` concentrado en tomos 331–334**: 43/43 casos
-  exclusivamente en cuatro tomos consecutivos, mayoría en primeras
-  páginas de cada `.md` físico. No estaba previsto en HALLAZGOS.
-  Hipótesis: particularidad editorial de esos tomos o limitación del
-  detector en bordes iniciales de archivo. Integrado en §3.6.c con ⏳.
-
-- **Tres status fantasma** (`ultimo_del_tomo`, `ultimo_del_tomo_sin_fin`,
-  `pagina_fin_no_en_mapa`): contemplados en código pero con cero
-  observaciones cuando todos los inputs opcionales están provistos.
-  El primero y el segundo son fallbacks para cuando falta
-  `secciones_indices.csv`. El tercero es el fallback que "debería"
-  capturar el bug `pg_fin+1` pero no lo hace por la razón explicada
-  arriba. Documentado en §3.4.
-
-- **Existencia de `fallos_localizados_huerfanos.csv` como output
-  secundario**: no estaba en el diagrama global del documento. El
-  diagrama hay que actualizarlo cuando se cierre el doc.
+- **Tres status fantasma**: documentado en §3.4.
 
 ### Pendientes residuales para §3
 
 - ⏳ **Validar 3.6.b contra `.md` real**: abrir `LibroVol339.2.md`
-  línea 33525 (caso `339_p1834`) — verificar si esa línea es el
-  header `INDICE POR LOS NOMBRES DE LAS PARTES` (bug confirmado) o la
-  línea anterior (no hay bug, el ajuste compensa). Cualquiera de los
-  19 `.md` afectados sirve.
+  línea 33525 (caso `339_p1834`).
 
-- ⏳ **Validar hipótesis 3.6.c**: pedir un `.md` de tomos 331–334
-  (ej. `LibroVol331.1.md`) e inspeccionar las primeras ~100 líneas:
-  ¿hay header tipográfico para la página 7? ¿está la marca del tomo
-  aislada? Cruzar con `mapa_paginas.csv` para tomos 331-334 y comparar
-  con tomo 329 (sin casos) para identificar la diferencia.
+- ⏳ **Validar hipótesis 3.6.c**: pedir un `.md` de tomos 331–334.
 
-- ⏳ **Re-evaluar `fallo_cruza_archivos` post-corrección de 3.6.a**:
-  ver si los 27 casos siguen siendo los mismos o si la definición
-  cambia significativamente cuando el cursor de búsqueda apunte al
-  lugar correcto.
+- ⏳ **Re-evaluar `fallo_cruza_archivos` post-corrección de 3.6.a**.
 
-### Pendientes para §4 (`parser.py`)
+## Sesión 2026-05-09 (mapeo §4)
 
-- **Filtro `>= 5` chars en `primer_token_siguiente`**: tanto
-  `detectar_fin_real` (línea 1190 del parser) como el detector
-  `borde_inferior` del auditor aplican este filtro. Si la carátula del
-  fallo siguiente arranca con un apellido de ≤4 chars (ej. "DIEZ" en
-  el caso 339_p1651 ya identificado), nunca se usa como pista. Cae al
-  fallback de firma o sumario.
-  - **Qué hacer**: documentar como PF-4.x. Aclarar que es decisión
-    consciente (consistencia parser+auditor), no bug. Revisar si el
-    umbral 5 es óptimo o si bajar a 4 ayudaría sin generar falsos
-    positivos.
+### Ya integrados en `PIPELINE.md` §4
 
-- **Mezcla de fuentes en parser**: el parser consume tres fuentes
-  simultáneas (`fallos_localizados.csv`, `mapa_paginas.csv`, `.md`
-  del corpus). No es una cadena lineal. Documentar el grafo de
-  dependencias en §4.
+- **Cascada como "una sola pista"** (hipótesis 4.h del handoff):
+  confirmada contra datos. 86,0% caen en `caratula_siguiente`,
+  97,9% en pistas 1–3 combinadas. Integrado en §4.5.b.
 
-- **`detectar_fin_real` con búsqueda bidireccional como compensación
-  de §3.6.a (NUEVO ÉNFASIS)**: confirmado al validar §3 — el bloque
-  que recibe el parser está sistemáticamente inflado ~32 líneas. La
-  cascada de pistas (carátula del siguiente → sumario nuevo → marcador
-  de apertura → firma actual) es la compensación específica de Etapa
-  4 para el bug 3.6.a. Hipótesis fuerte: corregir 3.6.a permitiría
-  simplificar drásticamente la cascada. Documentar en §4 con ejemplo
-  trazado contra caso real.
+- **Bug aritmético `apertura_idx + len(bloque)` (4.b del handoff)**:
+  confirmado leyendo código. Integrado en §4.6.a con cuantificación
+  (cota superior 3.863 casos).
 
-- **Los 70 huérfanos requieren tratamiento especial**: 43
-  `pagina_no_en_mapa` (sin archivo/línea) + 27 `fallo_cruza_archivos`
-  (con `linea_fin` = última línea del `.md` de inicio). Documentar en
-  §4 cómo el parser decide qué hacer con cada uno.
+- **Fallback `inicio_cons = 0` en `extraer_considerando` (4.c del
+  handoff)**: confirmado, cuantificado (169 casos sospechosos).
+  Hallazgo adicional al revisar el código: la discrepancia entre
+  comentario y código (el comentario dice "desde apertura", el
+  código hace `0`). Integrado en §4.6.b.
 
-### Hallazgos transversales (afectan a todo el doc)
+- **Fecha sin marcador captura del dictamen (4.d del handoff)**:
+  confirmado en código y cuantificado (35/70 casos potenciales).
+  Integrado en §4.6.c.
 
-- **Convenciones de indexación NO uniformes en el pipeline**
-  (estado tras §3):
-  - Etapa 1 produce 0-indexed.
-  - Etapa 2 produce mezcla: `pagina_inicio` natural; secciones
-    `linea_inicio`/`linea_fin` 1-indexed.
-  - Etapa 3 hereda 0-indexed de Etapa 1 para `linea_inicio` y
-    `linea_fin` de fallos, **y mezcla con 1-indexed cuando consume
-    secciones — esto produjo el bug 3.6.b** (confirmado).
-  - Etapa 4 asume 0-indexed (comentario línea 1022 del parser).
-  - **Qué hacer**: agregar tabla resumen de convenciones de indexación
-    al documento, en una sección "Convenciones cruzadas" después de §4.
+- **`extraer_textos_votos` incluye header (4.e del handoff)**:
+  confirmado. Discrepancia entre comentario (línea 577) y código
+  (línea 578). Efecto cuantitativo despreciable. Integrado en
+  §4.6.d.
 
-- **Acoplamiento del parser a tres fuentes**: confirmar que el grafo
-  de dependencias del diagrama global (Claude lo dibujó al inicio de
-  §1) sigue siendo correcto después de leer §4 con detalle. Pendiente:
-  agregar `fallos_localizados_huerfanos.csv` al diagrama si corresponde.
+- **Bug 4.f (descarte silencioso) refutado**: 0 casos en producción,
+  cero diferencia entre `fallos_localizados.csv` − 43 y
+  `csjn_casos.csv`. Integrado en §4.6.f.
 
-- **Sección de impacto cuantitativo de bugs**: con §3 cerrada hay
-  números concretos del impacto:
-  - Bug 3.6.a: 5.773 fallos (98,5% del corpus) con bloque inflado
-    ~32 líneas.
-  - Bug 3.6.b: 19 fallos con `linea_fin` corrida en uno.
-  - 70 huérfanos sin localización limpia (1,2% del corpus).
+- **Bug 4.g (cruza_archivos con bloques gigantescos)**: confirmado
+  contra datos, los 5 outliers de `word_count` del corpus son los 5
+  más grandes de cruza_archivos. 37% caen al fallback de firma vs
+  ~2% del corpus general. Integrado en §4.6.g.
 
-  Considerar una tabla de "salud del corpus" después de §4 que
-  consolide estos números antes/después de las correcciones
-  propuestas.
+- **Inconsistencia de filtros 4 vs 5 chars**: documentada en §4.5.a
+  como decisión consciente.
+
+- **Detector v17 anti-contaminación por diseño**: integrado en
+  §4.4.g y §4.5.e con razón estructural del comentario del código.
+
+- **`mitad_bloque` se calcula sobre el bloque inflado**: integrado
+  en §4.5.d como punto de fricción con §3.6.a.
+
+- **Tres versiones declaradas (v16, v17, v18)**: integrado en §4.7
+  como limitación menor.
+
+### Hallazgos nuevos detectados al cuantificar §4
+
+- **39 columnas en `csjn_casos.csv`, no 38**: las notas previas
+  contaron mal (probable miscount de las líneas 1858–1873 del
+  parser). El `fieldnames` del writer (líneas 1858–1873) declara
+  exactamente 39 columnas, coincidiendo con el header del CSV.
+  Integrado en §4.2.a sin marca de discrepancia.
+
+- **`dictamen_presente == '0'`** (string `'0'`) en los 164
+  `sumario_con_link`, mientras el resto tiene `True`/`False`. Bug
+  de inicialización de tipos en `construir_caso_sumario_link`.
+  Integrado en §4.6.e.
+
+- **Decisión de diseño de `csjn_casos_votos.csv`**: 89,5% de las
+  filas son `posicion == 'mayoria'` con `wc_voto = 0` y
+  `tipo_voto_sep = ''`. La unidad es (caso, juez), no (caso, voto
+  separado). Documentado en §4.2.b como regla central de
+  interpretación.
+
+- **967 filas con `posicion == 'mayoria'` y `texto_voto != ''`**:
+  caso intermedio raro (4,8% de las mayorías). No inspeccionado
+  contra `.md`. Marcado en §4.7 y §4.8 como pendiente de
+  validación.
+
+- **`ok_sin_marcador_apertura` concentrado en tomos modernos
+  (343–348)**: 161/185 (87%) en ese rango. Hipótesis: cambio
+  editorial del marcador o degradación de OCR. Integrado en §4.6.h
+  con ⏳ para validación.
+
+- **Inversión `marcador_apertura_siguiente` ↔ `sumario_siguiente`
+  entre tomos viejos y modernos**: tomos 329–334 casi nunca usan
+  pista 3, pero usan pista 2 mucho; tomos 337–349 al revés.
+  Integrado en §4.6.i como hallazgo descriptivo.
+
+- **El parser produce sub-status del `status_localizacion`**:
+  `ok_sin_marcador_apertura`, `ok_cortado_en_indice_sin_marcador`,
+  `fallo_cruza_archivos_sin_marcador`. Esos sub-status no aparecen
+  en `fallos_localizados.csv` (Etapa 3) — son creación del parser
+  durante el refinamiento. Integrado en §4.4.f.
+
+- **Filtrado de los 43 `pagina_no_en_mapa` en `cargar_localizados`**:
+  el parser nunca ve a esos huérfanos. Es el único filtro
+  silencioso del parser, con `print` que lo declara
+  (línea 1782). Integrado en §4.3.c y §4.4.a.
+
+### Pendientes residuales para §4
+
+- ⏳ **Daño efectivo del bug §4.6.a**: hay 3.863 casos con
+  `apertura_rel > 0` y `tribunal_origen` detectado. La cota
+  superior es alta, pero el daño efectivo depende de cuántos
+  fallos siguientes tienen `Tribunal de origen:` en sus primeras
+  líneas. Validación contra `.md` no hecha.
+
+- ⏳ **Fechas sospechosas (§4.6.c)**: 35 casos donde el fallback
+  podría haber capturado fecha del dictamen. Validar 2-3 contra
+  `.md`.
+
+- ⏳ **44 `ok_sin_marcador_apertura` no-sumario en tomos modernos
+  (§4.6.h)**: causa no diagnosticada. Inspeccionar 3-5 casos
+  contra `.md` real.
+
+- ⏳ **Validación de `wc_dictamen`**: limitación reconocida en
+  docstring del parser. No hecho en esta sesión.
+
+- ⏳ **967 filas `mayoria` con `texto_voto != ''`**: caso
+  intermedio no inspeccionado contra `.md`.
+
+---
+
+## Hallazgos transversales (post-§4)
+
+> Estos son los hallazgos que tienen alcance superior a una sola
+> sección. Insumo para la sección de arquitectura cruzada que
+> cierra el documento.
+
+### Convenciones de indexación NO uniformes
+
+Estado consolidado tras leer las cuatro etapas:
+
+| Etapa | Convención | Validado |
+|---|---|---|
+| 1 (`detectar_paginas`) | 0-indexed | §1.3 |
+| 2 (`construir_catalogo`) | mixta: `pagina_inicio` natural; secciones 1-indexed inclusivo | §2.2, §2.6.b |
+| 3 (`cruzar_catalogo_y_mapa`) | hereda 0-indexed para fallos, **mezcla con 1-indexed cuando consume secciones — produce bug §3.6.b** | §3.3.b |
+| 4 (`parser`) | 0-indexed homogéneo. **No consume `secciones_indices.csv`**, por eso no hereda el bug 0/1 | §4.3.a |
+
+Acción: agregar tabla resumen de convenciones de indexación al
+documento, en una sección "Convenciones cruzadas" después de §4.
+
+### Acoplamiento del parser a tres fuentes
+
+Confirmado al cerrar §4. El diagrama global del documento (al inicio
+de PIPELINE.md) ya refleja el acoplamiento triple del parser. Lo que
+falta:
+
+- Agregar `fallos_localizados_huerfanos.csv` al diagrama global
+  (output secundario de Etapa 3 no representado).
+- Agregar nota explícita: el parser **filtra** los 43
+  `pagina_no_en_mapa` antes de procesar; los 27 `fallo_cruza_archivos`
+  los procesa pero produce outliers (§4.6.g).
+
+### Tabla de salud del corpus (números consolidados)
+
+Con las cuatro etapas mapeadas:
+
+| Métrica | Valor | Origen |
+|---|---:|---|
+| Fallos en `catalogo.csv` (Etapa 2) | 5.819 | §2.2 |
+| Fallos en `fallos_localizados.csv` (Etapa 3) | 5.862 | §3.2 (incluye `pagina_no_en_mapa` con archivo vacío) |
+| Fallos `ok` en Etapa 3 | 5.773 | §3.4 |
+| Fallos `ok_cortado_en_indice` en Etapa 3 | 19 | §3.4 |
+| Fallos `fallo_cruza_archivos` en Etapa 3 | 27 | §3.4 |
+| Fallos `pagina_no_en_mapa` (descartados al entrar al parser) | 43 | §3.4, §4.3.c |
+| Fallos en `csjn_casos.csv` (output del parser) | 5.819 | §4.2 |
+| Fallos `sumario_con_link` (cortocircuitados) | 164 | §4.4.g |
+| Fallos con `wc_considerando ≥ 0,9 × wc` (sospecha §4.6.b) | 169 | §4.6.b |
+| Fallos con bug §4.6.a (cota superior) | 3.863 | §4.6.a |
+| Pares consecutivos con bloque inflado (§3.6.a) | 5.695 / 5.695 (100%) | §3.6.a |
+| Inflado promedio del bloque del catálogo | 32,4 líneas | §3.6.a |
+| Recorte real del parser (mediana, ok* puros) | 16 líneas | §4.5.b |
+
+Tras corregir §3.6.a, la cascada de `detectar_fin_real` se
+reduciría de cuatro pistas usadas a una pista efectiva
+(`firma_actual`) más fallback adelante. El parser perdería peso y
+ganaría legibilidad. Cuantificación exacta del impacto: pendiente.
 
 ---
 

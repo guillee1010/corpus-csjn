@@ -31,3 +31,7 @@ output/auditoria/auditar_fallo/
 bak/
 
 bak/
+
+prompts/
+
+PROMPT_*.md
