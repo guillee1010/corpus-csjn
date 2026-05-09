@@ -1,11 +1,23 @@
 # Pipeline corpus-csjn
 
-> **Estado del documento**: borrador en construcción (sesión 2026-05-11,
-> continuada el 2026-05-08).
-> Cubre: diagrama global + Etapa 1 + Etapa 2.
-> Pendiente: Etapa 3 (`cruzar_catalogo_y_mapa.py`), Etapa 4 (`parser.py`),
-> bugs F001–F011 reorganizados, contradicciones cruzadas consolidadas,
-> sección de arquitectura (por qué cuatro scripts y no uno).
+> **Estado del documento**: borrador en construcción.
+> Sesiones: 2026-05-08 (mapeo §2, §3), 2026-05-09 (mapeo §4 + cierre
+> auditoría + fix §3.6.a), 2026-05-11 (mapeo §1).
+> Cubre: diagrama global + las cuatro etapas + auditoría empírica de
+> bugs.
+> Pendiente: sección de arquitectura cruzada (por qué cuatro scripts y
+> no uno), recálculo de algunas métricas históricas con datos
+> post-fix, validaciones contra `.md` real (§3.6.b, §3.6.c, §4.6.c,
+> §4.6.h).
+>
+> **Bugs cerrados**: §3.6.a (resuelto 2026-05-09), §3.6.d (disuelto
+> 2026-05-09 como efecto colateral de §3.6.a), §4.6.f (refutado).
+>
+> **Bugs abiertos con prioridad subida tras fix §3.6.a**: §4.6.b
+> (fallback considerando, 320 casos sospechosos).
+>
+> **Bugs abiertos con prioridad bajada tras fix §3.6.a**: §4.6.a
+> (cosmético, daño efectivo evaporado), §4.6.g (contenido a 20 casos).
 
 ## Propósito
 
@@ -326,7 +338,7 @@ y bajo qué nombres aparecen en el índice oficial.
 **No usa `mapa_paginas.csv`**: esta etapa es independiente de Etapa 1.
 La validación cruzada entre ambas se hace en Etapa 3.
 
-Estructura de `catalogo.csv` (5.819 filas con datos actuales):
+Estructura de `catalogo.csv` (5.862 filas con datos actuales):
 
 | Columna | Tipo | Significado |
 |---|---|---|
@@ -451,8 +463,8 @@ El código (línea 410) hace:
 
 > `pagina_fin = (página del siguiente fallo)`
 
-**Verificado contra datos**: en `catalogo.csv` (5.819 filas), las 5.800
-entradas con `pagina_fin` no vacío cumplen exactamente
+**Verificado contra datos**: en `catalogo.csv` (5.862 filas), las entradas
+con `pagina_fin` no vacío cumplen exactamente
 `pagina_fin == pagina_inicio_del_siguiente_fallo`. Cero excepciones.
 
 **Conclusión**: el código manda, el docstring está desactualizado.
@@ -747,47 +759,67 @@ compensar esto desde el cuerpo del bloque.
 
 ### 3.4 Los siete status del cruce
 
+> **Nota documental (2026-05-09)**: la columna se llama `status` en
+> `fallos_localizados.csv` (Etapa 3), no `status_localizacion`. El
+> parser sí la renombra a `status_localizacion` al volcarla en
+> `csjn_casos.csv` (Etapa 4). Esta inconsistencia entre los dos CSVs
+> existe pero no afecta el funcionamiento.
+
 El docstring (líneas 30–38) los enumera. Se observan así en los datos
-actuales:
+actuales (post-fix §3.6.a, sesión 2026-05-09):
 
 | Status | n | % | Significado |
 |---|---:|---:|---|
-| `ok` | 5.773 | 98,48% | Cruce limpio (con caveat — ver §3.6.a) |
+| `ok` | 5.741 | 97,93% | Cruce limpio |
 | `pagina_no_en_mapa` | 43 | 0,73% | `pagina_inicio` del catálogo no aparece como header en el mapa |
-| `fallo_cruza_archivos` | 27 | 0,46% | El "siguiente fallo" arranca en otro `.md` del mismo tomo |
+| `pagina_fin_no_en_mapa` | 39 | 0,67% | `pagina_fin` no aparece como header en el mapa (desenmascarado por el fix) |
+| `fallo_cruza_archivos` | 20 | 0,34% | El "siguiente fallo" arranca en otro `.md` del mismo tomo |
 | `ok_cortado_en_indice` | 19 | 0,32% | Último fallo del tomo, cortado antes del aparato editorial de índices |
 | `ultimo_del_tomo` | 0 | 0% | Último fallo del tomo, fallback sin secciones de índice |
 | `ultimo_del_tomo_sin_fin` | 0 | 0% | Último fallo del tomo, sin acceso al corpus |
-| `pagina_fin_no_en_mapa` | 0 | 0% | `pagina_fin + 1` no aparece como header en el mapa |
 
-**Total: 5.862 filas. 98,80% (5.792) en estados "limpios" (`ok` +
-`ok_cortado_en_indice`); 1,20% (70) huérfanos.**
+**Total: 5.862 filas. 98,25% (5.760) en estados "limpios" (`ok` +
+`ok_cortado_en_indice`); 1,75% (102) huérfanos.**
 
-Los tres status con cero observaciones son fallbacks que el código
-contempla pero que no se gatillan en producción con todos los inputs
-opcionales provistos:
+Los dos status restantes con cero observaciones son fallbacks que el
+código contempla pero que no se gatillan con todos los inputs
+opcionales provistos: `ultimo_del_tomo` y `ultimo_del_tomo_sin_fin`
+solo aparecerían si no se pasara `secciones_indices.csv` o si éste no
+incluyera el archivo del último fallo del tomo. Como el archivo se
+pasa y los 19 últimos del tomo tienen su `secciones_indices`
+correspondiente, todos caen en `ok_cortado_en_indice`.
 
-- `ultimo_del_tomo` y `ultimo_del_tomo_sin_fin` solo aparecerían si no
-  se pasara `secciones_indices.csv` o si éste no incluyera el archivo
-  del último fallo del tomo. Como el archivo se pasa y los 19 últimos
-  del tomo tienen su `secciones_indices` correspondiente, todos caen
-  en `ok_cortado_en_indice`.
-- `pagina_fin_no_en_mapa` requeriría que `(tomo, pg_fin + 1)` no
-  estuviera en el mapa. Esto efectivamente pasaría en una sola
-  configuración: cuando el bug `pg_fin + 1` (§3.6.a) busca una página
-  que no existe físicamente en el libro. En la práctica, como el
-  detector de páginas registra **todas** las páginas (no sólo las de
-  inicio de fallo), `pg_fin + 1` casi siempre tiene un header
-  detectado. Por eso este status nunca se activa.
+#### Comparación pre/post fix §3.6.a
+
+Pre-fix (sesión 2026-05-08), `pagina_fin_no_en_mapa` registraba 0
+casos. La razón aparente era que `pg_fin + 1` casi siempre tenía
+header detectado en el mapa. Una vez aplicado el fix (búsqueda de
+`pg_fin` en lugar de `pg_fin + 1`), aparecen 39 casos en este status,
+concentrados en tomos 331–334 (10+10+10+9). Hipótesis: estos tomos
+tienen una particularidad editorial o de OCR que el detector de
+páginas (Etapa 1) no capta para ciertas páginas. El bug `pg_fin + 1`
+los enmascaraba pidiendo *la página siguiente*, que casi siempre sí
+estaba detectada.
+
+| Status | Pre-fix | Post-fix | Δ |
+|---|---:|---:|---:|
+| `ok` | 5.773 | 5.741 | −32 |
+| `pagina_fin_no_en_mapa` | 0 | 39 | +39 |
+| `fallo_cruza_archivos` | 27 | 20 | −7 |
+| Otros | 62 | 62 | 0 |
+
+Aritmética: −32 = −39 + 7. Los 39 nuevos `pagina_fin_no_en_mapa`
+salieron de `ok` (32) y de `fallo_cruza_archivos` (7).
 
 ### 3.5 Cómo se calcula `linea_fin` por status
 
 #### 3.5.a — `ok` y `fallo_cruza_archivos`
 
-Lógica del código (líneas 234–249):
+Lógica del código **post-fix §3.6.a (sesión 2026-05-09)**, líneas
+234–249:
 
 ```python
-clave_fin = (tomo, pg_fin + 1)
+clave_fin = (tomo, pg_fin)
 if clave_fin in mapa_pagina:
     archivo_fin, linea_fin_header = mapa_pagina[clave_fin]
     if archivo_fin == archivo_ini:
@@ -796,9 +828,14 @@ if clave_fin in mapa_pagina:
         out['linea_fin'] = n_lineas[archivo_ini] - 1   # status 'fallo_cruza_archivos'
 ```
 
-El cursor de búsqueda del cruce es `pg_fin + 1`, no `pg_fin`. Tal como
-quedó documentado en F2.6.a, esto es incompatible con la convención
-real del catálogo. El bug se trata en §3.6.a.
+El cursor de búsqueda es ahora `pg_fin` (la página de inicio del fallo
+siguiente). El `linea_fin_header - 1` da la línea anterior al header
+del fallo siguiente — el comportamiento esperado.
+
+Pre-fix, el código tenía `clave_fin = (tomo, pg_fin + 1)`. Ese era el
+bug §3.6.a y producía bloques inflados en una página entera (~32
+líneas extra del fallo siguiente, en el 100% de los casos `ok`). Ver
+§3.6.a para detalles del bug y del fix.
 
 #### 3.5.b — `ok_cortado_en_indice`
 
@@ -839,6 +876,29 @@ documentada también en el docstring (línea 71).
 ### 3.6 Bugs detectados
 
 #### 3.6.a — Bug `pg_fin + 1`: bloque inflado en una página entera
+
+> **✅ RESUELTO 2026-05-09**
+>
+> Fix aplicado: línea 235 del cruzador, cambio de `clave_fin = (tomo,
+> pg_fin + 1)` a `clave_fin = (tomo, pg_fin)`. Una sola línea.
+>
+> Validación post-fix:
+> - 5.663/5.663 pares consecutivos sin bloque inflado (vs 5.695/5.695
+>   inflados pre-fix).
+> - 32 fallos pasaron de `ok` a `pagina_fin_no_en_mapa` (status
+>   desenmascarado, ver §3.4).
+> - 7 fallos `fallo_cruza_archivos` recalibrados (de 27 a 20 — el bug
+>   §3.6.d se disolvió como efecto colateral del fix).
+> - 162 fallos pasaron de tener `apertura_tipo` espurio a
+>   `ok_sin_marcador_apertura`. Validación caso por caso confirmó que
+>   el marcador detectado pre-fix era del fallo siguiente (ver
+>   bitácora: 151/163 con `wc_pre > wc_post`, delta de palabras
+>   coherente con el inflado de ~30 líneas; 0 regresiones).
+>
+> El contenido original del bug se conserva debajo para registro
+> histórico.
+
+---
 
 **Severidad: crítica. Afecta el 100% de los `ok` (5.773 fallos).**
 
@@ -1047,6 +1107,22 @@ caen muy cerca de los bordes editoriales entre `.md`s. Hipótesis:
 hipótesis.
 
 #### 3.6.d — Solapamiento conceptual: `fallo_cruza_archivos` con la convención correcta
+
+> **✅ RESUELTO 2026-05-09**
+>
+> Disuelto como efecto colateral del fix §3.6.a. Con el cursor
+> apuntando ahora a `pg_fin` (no `pg_fin + 1`), el detector de
+> `fallo_cruza_archivos` queda correctamente calibrado: detecta cuando
+> la primera página del fallo siguiente está en otro archivo.
+>
+> Cuantitativamente: 27 casos pre-fix → 20 casos post-fix. Los 7
+> casos que salieron del status eran los falsos positivos predichos
+> por el análisis original.
+>
+> El contenido original del bug se conserva debajo para registro
+> histórico.
+
+---
 
 **Severidad: baja, posible falso positivo/negativo.**
 
@@ -1719,6 +1795,34 @@ múltiples → uno solo. No tocan acentos, may/min ni OCR raro.
 
 #### 4.6.a — Bug aritmético en `apertura_idx + len(bloque)`
 
+> **🟡 RE-EVALUADO 2026-05-09: bug aritmético sobrevive, daño efectivo
+> evaporado tras fix §3.6.a.**
+>
+> Re-cuantificación post-fix:
+>
+> | Métrica | Pre-fix §3.6.a | Post-fix §3.6.a | Δ |
+> |---|---:|---:|---:|
+> | tipo_entrada == fallo | 5.655 | 5.659 | +4 |
+> | ... y apertura_tipo ≠ '' | 5.585 | 5.435 | −150 |
+> | ... y tribunal_origen_status=apelado | 3.863 | 3.682 | −181 |
+>
+> La cota superior bajó de 3.863 a 3.682. Pero el cambio sustantivo
+> es otro: con bloques que ya no incluyen 32 líneas del fallo
+> siguiente, las "líneas extra" que el bug aritmético lee caen sobre
+> líneas vacías, header de página, o final del archivo — no sobre un
+> fallo siguiente. **El bug aritmético sigue pero el daño efectivo
+> plausible es ~0.**
+>
+> Prioridad de fix: **baja** (cosmético post-fix §3.6.a). La aritmética
+> sigue siendo incorrecta y vale la pena fixearla por higiene del
+> código, pero no produce sesgo material en el output.
+>
+> Corrección original (sigue siendo válida): pasar `linea_inicio +
+> len(bloque)` en lugar de `apertura_idx + len(bloque)`. El contenido
+> original se conserva debajo.
+
+---
+
 **Severidad: media. Aritmética confirmada en código; daño
 efectivo no medido contra `.md`. Afecta hasta 5.585 casos.**
 
@@ -1798,6 +1902,29 @@ tribunal_str = find_tribunal_origen(lines, apertura_idx, linea_fin_real + 1)
 ```
 
 #### 4.6.b — Fallback `inicio_cons = 0` en `extraer_considerando`
+
+> **🔴 PRIORIDAD SUBIDA 2026-05-09: pasó de 169 a 320 casos
+> sospechosos post-fix §3.6.a.**
+>
+> Re-cuantificación post-fix:
+>
+> | Métrica | Pre-fix §3.6.a | Post-fix §3.6.a | Δ |
+> |---|---:|---:|---:|
+> | wc_considerando ≥ 0,9 × word_count | 169 | 320 | +151 |
+> | ... y apertura_tipo == fallo | 152 | 229 | +77 |
+> | wc_considerando == 0 | 1.751 | 1.681 | −70 |
+>
+> Los casos sospechosos casi se duplicaron. Lectura: con bloques más
+> cortos (sin la página extra del fallo siguiente), un fallback que
+> arrastra "todo el bloque" produce considerandos relativamente más
+> cercanos al `word_count`. El bug se vuelve más visible porque el
+> denominador (word_count) bajó.
+>
+> Prioridad de fix: **media-alta**. Pasa a ser el bug más relevante
+> por fixear en el parser ahora que §3.6.a está resuelto. El contenido
+> original se conserva debajo.
+
+---
 
 **Severidad: baja a media. 169 casos con `wc_considerando ≥ 0,9 ×
 word_count` (sospecha de fallback gatillado).**
@@ -1983,6 +2110,29 @@ dispara. Documentado por completitud, sin acción inmediata.
 
 #### 4.6.g — `fallo_cruza_archivos` produce bloques gigantescos
 
+> **🟡 RE-EVALUADO 2026-05-09: 20 casos post-fix (vs 27 pre-fix), pero
+> outlier máximo persiste.**
+>
+> Tras el fix §3.6.a, el detector de `fallo_cruza_archivos` quedó
+> calibrado correctamente (§3.6.d disuelto). Cantidad bajó de 27 a 20
+> casos legítimos.
+>
+> Sin embargo, el problema estructural sigue: los 20 casos que
+> realmente cruzan archivos reciben `linea_fin = última línea física
+> del .md` y producen bloques que pueden incluir el aparato editorial
+> del final del archivo. El outlier máximo (`wc_mayoria` = 105.559)
+> persiste post-fix.
+>
+> Prioridad: **media** (contenida a 20 casos identificables). Mitigación
+> temporal sigue siendo la misma: filtrar
+> `status_localizacion in ('fallo_cruza_archivos',
+> 'fallo_cruza_archivos_sin_marcador')` antes de análisis estadístico.
+> Costo de cobertura: 20/5.819 ≈ 0,3%.
+>
+> El contenido original se conserva debajo.
+
+---
+
 **Severidad: alta para los 27 casos afectados, contenida en
 ese subset.**
 
@@ -2046,6 +2196,38 @@ estadístico. Son 27 casos identificables. Con 5.819 casos en
 total, descartarlos cuesta 0,5% de cobertura.
 
 #### 4.6.h — `ok_sin_marcador_apertura` concentrado en tomos modernos
+
+> **🟢 RECLASIFICADO 2026-05-09: 185 → 347 post-fix §3.6.a. No es
+> bug, es información descriptiva.**
+>
+> El status `ok_sin_marcador_apertura` casi se duplicó tras el fix:
+> 185 → 347 (+162). La lectura del cambio:
+>
+> - Pre-fix, el bug §3.6.a regalaba al parser ~32 líneas extra del
+>   fallo siguiente. La cascada `detectar_fin_real` encontraba
+>   marcadores de apertura del fallo *siguiente* en esas líneas y los
+>   asignaba como si fueran del fallo actual.
+> - Post-fix, esos marcadores espurios desaparecen. 162 fallos quedan
+>   correctamente clasificados como "sin marcador detectado".
+>
+> Validación caso por caso (sesión 2026-05-09): de 163 fallos que
+> pasaron de `ok` (pre) a `ok_sin_marcador_apertura` (post), 151
+> tienen `wc_pre > wc_post` (consistente con "el bloque dejó de
+> incluir contenido del fallo siguiente"), 11 tienen wc igual (con
+> linea_fin más corto, casos sin contenido sustantivo), 1 tiene wc
+> subió (caso pre con `wc=0` que pasó a `wc=132`, mejora). **Cero
+> regresiones.**
+>
+> Prioridad: ninguna. Es un fenómeno editorial real del corpus que
+> ahora se mide correctamente. Las hipótesis (a) cambio editorial,
+> (b) OCR degradado, (c) fallos sin marcador como diseño editorial,
+> son todas plausibles y la métrica honesta es 347, no 185.
+>
+> El contenido original se conserva debajo. Algunos números absolutos
+> de la versión original (los 161/185 en tomos 343–348) ya no son
+> aplicables — la nueva distribución requiere recálculo.
+
+---
 
 **Severidad: media, posible cambio editorial no contemplado.**
 

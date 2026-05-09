@@ -231,8 +231,8 @@ def cruzar(catalogo, mapa_pagina, n_lineas_por_archivo, indices_nombres_por_arch
             resultados.append(out)
             continue
 
-        # Buscar header de la página siguiente (pg_fin + 1)
-        clave_fin = (tomo, pg_fin + 1)
+        # Buscar header del fallo siguiente (pg_fin)
+        clave_fin = (tomo, pg_fin)
         if clave_fin in mapa_pagina:
             archivo_fin, linea_fin_header = mapa_pagina[clave_fin]
             if archivo_fin == archivo_ini:
