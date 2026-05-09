@@ -35,3 +35,7 @@ bak/
 prompts/
 
 PROMPT_*.md
+
+# Backups de editor y scripts ad-hoc
+*.bak
+*.ps1
