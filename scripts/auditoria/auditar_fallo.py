@@ -64,6 +64,7 @@ from pipeline.parser import (  # noqa: E402
     RE_SUMARIO_LINK,
     RE_PAGE_HEADER,
     RE_TOMO,
+    RE_VISTOS_LOS_AUTOS,
     detectar_apertura_dispositivo,
     detectar_apertura_en_bloque,
     construir_bloque_desde_localizacion,
@@ -105,6 +106,342 @@ TIPOS_SEMANTICOS = {  # disjuntos entre sí, excluyen TIPO_HEADER_PAGINA y TIPO_
     TIPO_CARATULA, TIPO_SUMARIO, TIPO_DICTAMEN, TIPO_CUERPO_MAYORIA,
     TIPO_VOTO, TIPO_DISIDENCIA, TIPO_FIRMA, TIPO_SUMARIO_CON_LINK,
 }
+
+# ── Detector borde_inferior (transición fin_real → próximo caso) ──────────────
+#
+# Inspecciona la franja entre `linea_fin_real` (lo que el parser declara como
+# fin del fallo X) y `linea_inicio` del fallo siguiente, según el catálogo.
+# Su trabajo es detectar residuo del fallo X que el parser dejó "del otro
+# lado" del corte: típicamente continuaciones de firma multilínea (caso
+# paradigmático 339_p1648), pero también votos/disidencias huérfanos o
+# carátulas adelantadas. Es una herramienta DE AUDITORÍA: no corrige el
+# parser, solo expone lo que el parser está tirando al residuo del próximo
+# caso.
+#
+# Diseñado en BITACORA H018 (sesión 2026-05-09). Implementado en sesión
+# 2026-05-10. Ver H018 para la discusión completa de criterios.
+
+# Apellidos canónicos de ministros titulares CSJN (Tomos 344-349 + retroactivo).
+# Se usa para detectar continuaciones de firma multilínea que cayeron del
+# lado de "después de fin_real". Capturado en MAYÚSCULAS para match
+# case-insensitive contra cualquier formato (Title Case, ALL CAPS).
+APELLIDOS_FIRMA_TITULARES = {
+    "ROSATTI", "ROSENKRANTZ", "LORENZETTI", "MAQUEDA",
+    "HIGHTON", "NOLASCO", "MANSILLA",
+    "ZAFFARONI", "PETRACCHI", "ARGIBAY", "FAYT",
+    "BOGGIANO", "BELLUSCIO", "LÓPEZ", "LOPEZ",
+    "VÁZQUEZ", "VAZQUEZ", "NAZARENO",
+}
+
+# Umbral para distinguir gap de transición editorial normal (header_normal)
+# de gap_grande_solo_headers (anomalía estructural: hueco grande lleno solo
+# de headers, sugiere tomo con espacios "decorativos"). Ver H018.
+UMBRAL_GAP_RESIDUO = 4
+
+# Clasificaciones posibles de líneas del gap (orden de prioridad en
+# _clasificar_linea_gap).
+CLAS_VACIA = "vacia"
+CLAS_HEADER_PAGINA = "header_pagina"
+CLAS_APERTURA_PROXIMO = "apertura_proximo_caso"
+CLAS_VOTO_DISID_INDIV = "voto_disidencia_individual"
+CLAS_FIRMA_ARRASTRADA = "firma_arrastrada"
+CLAS_NO_CLASIFICABLE = "no_clasificable"
+
+# Estados del borde inferior.
+EST_CONTINUO = "continuo"
+EST_HEADER_NORMAL = "header_normal"
+EST_GAP_RESIDUO = "gap_con_residuo"
+EST_GAP_SOLO_HEADERS = "gap_grande_solo_headers"
+EST_SOLAPADO = "solapado_con_proximo"
+EST_FIN_ARCHIVO = "fin_archivo"
+
+
+def linea_es_continuacion_firma(linea):
+    """
+    Detecta si una línea suelta es una continuación de firma multilínea
+    (cola de un bloque de firma cuya cabecera quedó del lado del fallo X
+    y cuya cola cayó después de `linea_fin_real`).
+
+    Caso paradigmático (339_p1648, línea 26599):
+        "Carlos Maqueda."
+
+    Criterio (H018):
+      (1) Hay al menos un apellido del set APELLIDOS_FIRMA_TITULARES
+          presente en la línea (match case-insensitive sobre la palabra
+          completa).
+      (2) Compatibilidad discursiva: cumple ALGUNA de —
+            (a) ratio de mayúsculas ≥ 70% sobre las letras de la línea
+                (firma en formato ALL CAPS, ej. "JUAN CARLOS MAQUEDA"),
+            (b) longitud ≤ 80 caracteres y termina en punto o em-dash o
+                guión largo,
+            (c) contiene em-dash (\u2013) o m-dash (\u2014) que es el
+                separador típico entre firmantes en el formato Fallos.
+
+    Devuelve bool.
+    """
+    s = linea.strip()
+    if not s:
+        return False
+
+    # (1) Presencia de apellido titular (case-insensitive, palabra completa).
+    s_upper = s.upper()
+    apellido_presente = False
+    for ap in APELLIDOS_FIRMA_TITULARES:
+        # \b sobre Unicode mayúsculas funciona bien con re.UNICODE (default
+        # en Python 3 para str). Evitamos subcadenas accidentales.
+        if re.search(r"\b" + re.escape(ap) + r"\b", s_upper):
+            apellido_presente = True
+            break
+    if not apellido_presente:
+        return False
+
+    # (2) Compatibilidad discursiva — basta con una.
+    letras = [c for c in s if c.isalpha()]
+    if letras:
+        n_mayus = sum(1 for c in letras if c.isupper())
+        ratio_mayus = n_mayus / len(letras)
+    else:
+        ratio_mayus = 0.0
+
+    cumple_a = ratio_mayus >= 0.70
+    cumple_b = len(s) <= 80 and (s.endswith(".") or s.endswith("\u2013")
+                                 or s.endswith("\u2014") or s.endswith("-"))
+    cumple_c = ("\u2013" in s) or ("\u2014" in s)
+
+    return cumple_a or cumple_b or cumple_c
+
+
+def _clasificar_linea_gap(linea, primer_token_siguiente):
+    """
+    Clasifica una línea del gap entre `linea_fin_real` y `linea_inicio` del
+    próximo caso. El orden de las pruebas implementa la prioridad fijada en
+    H018:
+
+      1. vacia              (línea en blanco o solo whitespace)
+      2. header_pagina      (RE_PAGE_HEADER del parser)
+      3. apertura_proximo_caso  (RE_VISTOS_LOS_AUTOS o primer_token_siguiente)
+      4. voto_disidencia_individual  (RE_VOTO_HDR / RE_DISID_HDR)
+      5. firma_arrastrada   (linea_es_continuacion_firma)
+      6. no_clasificable    (catch-all; suele ser texto en cuerpo de
+                             dispositivo/párrafo final que el parser cortó
+                             antes de tiempo)
+
+    Notar el orden: header_pagina ANTES que firma, porque "339" como línea
+    sola es header de página, no firma. apertura_proximo_caso ANTES que
+    firma porque la carátula del próximo caso a veces contiene apellidos
+    del set (ej. "MAQUEDA" en una causa donde es parte). voto/disid ANTES
+    que firma porque un header de voto puede contener "Maqueda" en el
+    encabezado ("Voto del señor ministro doctor don Juan Carlos Maqueda").
+
+    `primer_token_siguiente` puede ser "" si no se pudo calcular; en ese
+    caso solo se usa RE_VISTOS_LOS_AUTOS para detectar apertura.
+    """
+    s = linea.strip()
+    if not s:
+        return CLAS_VACIA
+    if RE_PAGE_HEADER.match(s):
+        return CLAS_HEADER_PAGINA
+    if RE_VISTOS_LOS_AUTOS.match(s):
+        return CLAS_APERTURA_PROXIMO
+    if primer_token_siguiente and len(primer_token_siguiente) >= 5:
+        if re.search(r"\b" + re.escape(primer_token_siguiente) + r"\b", s, re.I):
+            return CLAS_APERTURA_PROXIMO
+    if RE_VOTO_HDR.match(s) or RE_DISID_HDR.match(s):
+        return CLAS_VOTO_DISID_INDIV
+    if linea_es_continuacion_firma(s):
+        return CLAS_FIRMA_ARRASTRADA
+    return CLAS_NO_CLASIFICABLE
+
+
+def detectar_borde_inferior(lines, linea_fin_real, linea_inicio_proximo_caso,
+                            primer_token_siguiente):
+    """
+    Inspecciona la franja entre `linea_fin_real` (inclusive) y
+    `linea_inicio_proximo_caso` (exclusivo) y produce un diagnóstico
+    estructurado. Ver el bloque de comentario al inicio de esta sección
+    para el contexto.
+
+    Parámetros:
+      lines: lista global de líneas del archivo .md (0-indexed).
+      linea_fin_real: índice 0-based de la última línea declarada como
+                      contenido del fallo X.
+      linea_inicio_proximo_caso: índice 0-based del inicio del bloque del
+                                 fallo X+1 según el catálogo de localización.
+                                 None si X es el último caso del archivo.
+      primer_token_siguiente: string ya calculado vía
+                              primer_token_de_caratula(); puede ser "".
+
+    Devuelve dict con la estructura definida en H018:
+      {
+        "linea_fin_real": int,
+        "linea_inicio_proximo_caso": int | None,
+        "delta": int,
+        "estado": str (uno de EST_*),
+        "lineas_gap": list[dict],
+        "alertas": list[str],
+      }
+
+    Nota sobre `linea_abs` en lineas_gap: se reporta como índice 0-based
+    del archivo, consistente con linea_fin_real y linea_inicio (otros
+    campos del catálogo). El renderer suma offset si corresponde.
+    """
+    alertas = []
+
+    # Caso terminal: fallo X es el último del archivo. No hay próximo caso
+    # contra el cual medir gap.
+    if linea_inicio_proximo_caso is None:
+        return {
+            "linea_fin_real": linea_fin_real,
+            "linea_inicio_proximo_caso": None,
+            "delta": 0,
+            "estado": EST_FIN_ARCHIVO,
+            "lineas_gap": [],
+            "alertas": alertas,
+        }
+
+    delta = linea_inicio_proximo_caso - linea_fin_real - 1
+
+    # Caso solapado: el catálogo del próximo caso empieza ANTES o EN la
+    # línea declarada como fin del fallo X. Es una inconsistencia del
+    # catálogo o del detector_fin_real (F011). Alerta crítica.
+    if delta < 0:
+        alertas.append("solapado_con_proximo")
+        return {
+            "linea_fin_real": linea_fin_real,
+            "linea_inicio_proximo_caso": linea_inicio_proximo_caso,
+            "delta": delta,
+            "estado": EST_SOLAPADO,
+            "lineas_gap": [],
+            "alertas": alertas,
+        }
+
+    # Caso continuo: pegado, sin franja de transición.
+    if delta == 0:
+        return {
+            "linea_fin_real": linea_fin_real,
+            "linea_inicio_proximo_caso": linea_inicio_proximo_caso,
+            "delta": 0,
+            "estado": EST_CONTINUO,
+            "lineas_gap": [],
+            "alertas": alertas,
+        }
+
+    # delta > 0: hay franja entre fin_real y inicio del próximo. Clasificar
+    # cada línea por contenido y decidir estado por composición.
+    lineas_gap = []
+    for ln_abs in range(linea_fin_real + 1, linea_inicio_proximo_caso):
+        if 0 <= ln_abs < len(lines):
+            texto = lines[ln_abs].rstrip("\r\n")
+        else:
+            texto = ""
+        clas = _clasificar_linea_gap(texto, primer_token_siguiente)
+        lineas_gap.append({
+            "linea_abs": ln_abs,
+            "clasificacion": clas,
+            "texto": texto,
+        })
+
+    # Las "benignas" son las que NO indican residuo del fallo X.
+    BENIGNAS = {CLAS_VACIA, CLAS_HEADER_PAGINA}
+
+    no_benignas = [g for g in lineas_gap if g["clasificacion"] not in BENIGNAS]
+
+    if no_benignas:
+        estado = EST_GAP_RESIDUO
+
+        # Alerta: firma multilínea partida por fin_real.
+        # Si la primera línea no-vacía del gap es firma_arrastrada, hay
+        # alta probabilidad de que detectar_fin_real haya cortado en medio
+        # de un bloque de firma (F010).
+        primera_no_vacia = next(
+            (g for g in lineas_gap if g["clasificacion"] != CLAS_VACIA),
+            None,
+        )
+        if primera_no_vacia and primera_no_vacia["clasificacion"] == CLAS_FIRMA_ARRASTRADA:
+            alertas.append("firma_multilinea_partida_por_fin_real")
+
+        # Alerta: apellido repetido en firma arrastrada.
+        # Dentro de spans contiguos de firma_arrastrada, contar apariciones
+        # de cada apellido titular. Si alguno aparece ≥2 veces, es señal
+        # de que el detector concatenó dos firmas separadas (raro pero
+        # diagnóstico).
+        spans_firma = []
+        actual = []
+        for g in lineas_gap:
+            if g["clasificacion"] == CLAS_FIRMA_ARRASTRADA:
+                actual.append(g)
+            else:
+                if actual:
+                    spans_firma.append(actual)
+                    actual = []
+        if actual:
+            spans_firma.append(actual)
+
+        for span in spans_firma:
+            counter_apellidos = Counter()
+            for g in span:
+                s_up = g["texto"].upper()
+                for ap in APELLIDOS_FIRMA_TITULARES:
+                    if re.search(r"\b" + re.escape(ap) + r"\b", s_up):
+                        counter_apellidos[ap] += 1
+            if any(v >= 2 for v in counter_apellidos.values()):
+                alertas.append("apellido_repetido_en_firma_arrastrada")
+                break
+
+        # Alerta: voto/disidencia individual en gap.
+        if any(g["clasificacion"] == CLAS_VOTO_DISID_INDIV for g in lineas_gap):
+            alertas.append("voto_disidencia_individual_en_gap")
+
+        # Alerta: carátula del próximo caso adelantada al gap.
+        if any(g["clasificacion"] == CLAS_APERTURA_PROXIMO for g in lineas_gap):
+            alertas.append("caratula_siguiente_en_gap")
+
+    else:
+        # Todas las líneas del gap son benignas (vacia o header_pagina).
+        if delta <= UMBRAL_GAP_RESIDUO:
+            estado = EST_HEADER_NORMAL
+        else:
+            estado = EST_GAP_SOLO_HEADERS
+            alertas.append("gap_grande_sin_residuo_aparente")
+
+    return {
+        "linea_fin_real": linea_fin_real,
+        "linea_inicio_proximo_caso": linea_inicio_proximo_caso,
+        "delta": delta,
+        "estado": estado,
+        "lineas_gap": lineas_gap,
+        "alertas": alertas,
+    }
+
+
+# ── Versión robusta documentada (NO IMPLEMENTADA — reserva para iteración) ───
+#
+# La implementación actual de detectar_borde_inferior() asume que
+# `linea_fin_real` proveniente de detectar_fin_real() es razonablemente
+# correcta y solo audita la franja "más allá" del corte. Esto deja
+# vulnerabilidades a bugs heredados del parser: si detectar_fin_real()
+# devuelve una línea claramente prematura (ej. corta en medio del cuerpo
+# del fallo X, no en la firma), el detector la va a tomar al pie de la
+# letra y reportar falsos positivos de tipo "firma_multilinea_partida".
+#
+# La VERSIÓN ROBUSTA, no implementada acá, agregaría una ventana de
+# búsqueda de cierre estructural alrededor de linea_fin_real:
+#
+#   1. Buscar en [linea_fin_real - W, linea_fin_real + W] (W~10) la línea
+#      que más probable cierra el fallo (firma completa, dispositivo
+#      cerrado con punto final, "Hágase saber.", etc.).
+#   2. Reportar dos cierres: el del parser y el "estructuralmente probable",
+#      con su delta entre sí.
+#   3. Si difieren en > UMBRAL_DESVIO_PARSER (ej. 5 líneas), emitir
+#      alerta `desvio_estructural_significativo` y elevar la criticidad
+#      del span de borde.
+#
+# Criterio para activar: si la corrida `--random 50` con el detector
+# actual muestra > 10% de falsos positivos en `firma_multilinea_partida_por_fin_real`
+# (verificado por inspección humana), implementar la versión robusta.
+# Hasta entonces, la versión simple es preferible: menos código que
+# debuggear y sus falsos positivos son interpretables (siempre apuntan a
+# F010 o F011).
 
 # ── Detección de span "header de página" (transversal) ────────────────────────
 
@@ -969,6 +1306,25 @@ def auditar_fallo(tomo, pagina, *,
                 primer_token_siguiente = primer_token_de_caratula(siguiente["nombres_indice"])
             break
 
+    # ── Calcular linea_inicio del próximo caso DEL MISMO ARCHIVO (no solo
+    # del mismo tomo). Necesario para detectar_borde_inferior — filtrar por
+    # tomo solo no alcanza porque un tomo puede dividirse en varios .md
+    # (ej. LibroVol339.1.md, LibroVol339.2.md), y el "siguiente caso" del
+    # último caso de un .md sería el primero del .md siguiente, generando
+    # delta nonsense de líneas entre archivos distintos.
+    archivo_actual = fila["archivo"]
+    filas_mismo_archivo = [
+        r for r in filas_loc
+        if r["archivo"] == archivo_actual and r.get("linea_inicio", "").strip()
+    ]
+    filas_mismo_archivo.sort(key=lambda r: int(r["linea_inicio"]))
+    linea_inicio_proximo_caso = None
+    for i, r in enumerate(filas_mismo_archivo):
+        if r["caso_id_canonico"] == fila["caso_id_canonico"]:
+            if i + 1 < len(filas_mismo_archivo):
+                linea_inicio_proximo_caso = int(filas_mismo_archivo[i + 1]["linea_inicio"])
+            break
+
     # Headers del archivo (mismo tomo)
     headers_archivo = headers_por_archivo.get((tomo_int, fila["archivo"]), [])
     headers_archivo = sorted(headers_archivo)
@@ -1020,6 +1376,13 @@ def auditar_fallo(tomo, pagina, *,
         for sp in spans if sp["tipo"] == TIPO_CATCH_ALL
     )
 
+    # ── Auditar borde inferior (transición fin_real → próximo caso) ─────────
+    # Esto NO afecta la segmentación ni los spans del bloque del fallo X;
+    # es un diagnóstico transversal que mira "del otro lado" del corte.
+    borde_inferior = detectar_borde_inferior(
+        lines, linea_fin_real, linea_inicio_proximo_caso, primer_token_siguiente
+    )
+
     return {
         "caso_id_canonico": fila["caso_id_canonico"],
         "tomo": tomo_int,
@@ -1040,6 +1403,7 @@ def auditar_fallo(tomo, pagina, *,
         "porcentaje_residuo": round(100 * lineas_residuo / n, 2) if n > 0 else 0.0,
         "invariante_cobertura": invariante_cobertura,
         "invariante_disjuncion": invariante_disjuncion,
+        "borde_inferior": borde_inferior,
     }
 
 
@@ -1131,6 +1495,38 @@ def _render_caso(resultado, abs_offset_lines=True):
         out.append("```")
         out.append("")
 
+    # ── Sección Borde inferior (render condicional) ────────────────────────
+    # Solo se imprime si hay algo digno de mirar: residuo, solapado, gap
+    # grande de solo headers, o cualquier alerta. En estados continuo /
+    # header_normal / fin_archivo se omite para no inundar el reporte.
+    bi = r.get("borde_inferior")
+    if bi is not None:
+        ESTADOS_VISIBLES = {EST_GAP_RESIDUO, EST_SOLAPADO, EST_GAP_SOLO_HEADERS}
+        if bi["estado"] in ESTADOS_VISIBLES or bi["alertas"]:
+            out.append("### Borde inferior (transición al próximo caso)")
+            lipc = bi["linea_inicio_proximo_caso"]
+            lipc_str = str(lipc) if lipc is not None else "(fin_archivo)"
+            out.append(
+                f"**Estado**: `{bi['estado']}` | "
+                f"linea_fin_real={bi['linea_fin_real']} | "
+                f"linea_inicio_proximo_caso={lipc_str} | "
+                f"delta={bi['delta']}"
+            )
+            if bi["alertas"]:
+                out.append("**Alertas**: " + ", ".join(f"`{a}`" for a in bi["alertas"]))
+            if bi["lineas_gap"]:
+                out.append("")
+                out.append("| Línea | Clasificación | Texto |")
+                out.append("|------:|---------------|-------|")
+                for g in bi["lineas_gap"]:
+                    # Escapar pipes en el texto para no romper la tabla MD
+                    txt = (g["texto"] or "").replace("|", "\\|")
+                    # Truncar muy largas para no romper la tabla visualmente
+                    if len(txt) > 120:
+                        txt = txt[:117] + "..."
+                    out.append(f"| {g['linea_abs']} | `{g['clasificacion']}` | {txt} |")
+            out.append("")
+
     return "\n".join(out)
 
 
@@ -1140,15 +1536,43 @@ def _render_doc_completo(resultados, comando_args):
     n_casos = len([r for r in resultados if "error" not in r])
     n_errores = len([r for r in resultados if "error" in r])
 
+    # Resumen global de estados de borde inferior
+    estados_borde = Counter()
+    n_alertas = 0
+    for r in resultados:
+        if "error" in r:
+            continue
+        bi = r.get("borde_inferior")
+        if bi is not None:
+            estados_borde[bi["estado"]] += 1
+            n_alertas += len(bi.get("alertas", []))
+
     out = [
         "# Auditoría de fallos",
         f"Generado: {ts}",
         f"Comando: `{comando_args}`",
         f"Casos auditados: {n_casos}" + (f" (errores: {n_errores})" if n_errores else ""),
+    ]
+    if estados_borde:
+        # Orden estable: primero los más críticos, después los benignos
+        orden = [
+            EST_SOLAPADO, EST_GAP_RESIDUO, EST_GAP_SOLO_HEADERS,
+            EST_HEADER_NORMAL, EST_CONTINUO, EST_FIN_ARCHIVO,
+        ]
+        partes = [f"{e}={estados_borde[e]}" for e in orden if estados_borde.get(e)]
+        # Cualquier estado no esperado (defensivo)
+        for e, v in estados_borde.items():
+            if e not in orden:
+                partes.append(f"{e}={v}")
+        resumen_borde = "Borde inferior: " + ", ".join(partes)
+        if n_alertas:
+            resumen_borde += f" | alertas totales: {n_alertas}"
+        out.append(resumen_borde)
+    out.extend([
         "",
         "---",
         "",
-    ]
+    ])
     for r in resultados:
         out.append(_render_caso(r))
         out.append("")
