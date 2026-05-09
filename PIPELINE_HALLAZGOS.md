@@ -14,6 +14,17 @@
 > cruzada (post-§4) y validaciones contra `.md` real que no se
 > hicieron en la sesión.
 >
+> **Estado tras sesión 2026-05-09 (cierre §3.6.e Fase 1)**: aplicado
+> fix estructural en cruzador para los 39 casos
+> `pagina_fin_no_en_mapa` por hojas complementarias. 32 reasignados
+> a `ok_pg_fin_redirigida`, 7 a `ok_cortado_en_indice`. Cero
+> regresiones. Cobertura efectiva: 5799/5862 = 98,9% (+0,7 sobre
+> sesión anterior). Detalles abajo. Hallazgos nuevos detectados
+> durante la validación: §3.6.e Fase 2 (43 `pagina_no_en_mapa`
+> simétricos), headers de meses como ruptores, hojas complementarias
+> no flagueadas, `detectar_fin_real` traspasando `linea_fin` en
+> `ok_cortado_en_indice` (≤13 líneas).
+>
 > **Estado tras sesión 2026-05-09 (auditoría empírica + fix §3.6.a +
 > fix RE_APERTURA + hallazgo hojas complementarias)**: auditoría
 > completa replicada en PowerShell sobre los CSVs vivos. Dos fixes
@@ -423,29 +434,118 @@ usar la `linea_inicio` del fallo siguiente del catálogo (si está
 localizado) y restarle 1, en lugar del fallback "última línea del
 archivo". Documentado en PIPELINE.md §3.6.e.
 
+---
+
+## Sesión 2026-05-09 (cierre §3.6.e Fase 1)
+
+### Resuelto
+
+- **§3.6.e Fase 1** (cruzador, fallback `pagina_fin_no_en_mapa`).
+  Aplicado fix estructural sobre `cruzar_catalogo_y_mapa.py`. La
+  Opción B propuesta originalmente (usar `linea_inicio` del fallo
+  siguiente) resultó inviable: en los 39 casos el fallo siguiente
+  está en estado especular `pagina_no_en_mapa` con `linea_inicio`
+  vacío. Se aplicó **Opción A** (próxima página existente en el
+  mismo archivo) en cascada con `ok_cortado_en_indice` y
+  `ultimo_del_tomo` para los 7 casos sin próxima página.
+
+  **Resultado**:
+
+  | Status | Pre-fix | Post-fix |
+  |---|---:|---:|
+  | `pagina_fin_no_en_mapa` | 39 | 0 |
+  | `ok_pg_fin_redirigida` (nuevo) | — | 32 |
+  | `ok_cortado_en_indice` | 19 | 26 (+7) |
+
+  **Caso testigo `331_p373` (Pizarro)**: word_count pasó de 293.804
+  a 449 (igual al pre-§3.6.a). `pista_fin = caratula_siguiente`,
+  `linea_fin = 14128`. Distribución de los 32 redirigidos: 30 con
+  `pista_fin = sumario_siguiente`, 2 con `caratula_siguiente`, 0 con
+  `fallback_catalogo`. Ningún caso patológico observado.
+
+  Cero efectos colaterales sobre los 5780 casos no afectados (ok,
+  fallo_cruza_archivos, pagina_no_en_mapa sin cambio). Detalles
+  completos en PIPELINE.md §3.6.e.
+
+### Hallazgos nuevos detectados durante la validación
+
+Anotados para sesiones futuras, sin acción inmediata.
+
+- **§3.6.e Fase 2 (43 `pagina_no_en_mapa`)**. Fenómeno especular al
+  resuelto en Fase 1: la `pagina_inicio` declarada por el catálogo no
+  existe físicamente porque hay una hoja complementaria
+  inmediatamente antes. La lógica simétrica al fix Fase 1 sería:
+  cuando `(tomo, pagina_inicio)` no está en el mapa, inferir
+  `archivo` desde el fallo anterior del catálogo y usar la próxima
+  página existente como `linea_inicio` real. Más invasiva que Fase 1
+  porque requiere acceso al fallo anterior y traer su `archivo`.
+  Recuperaría los 43 fallos descartados hoy por el parser.
+
+- **Headers de meses como ruptores estructurales**. Entre fallos
+  aparecen `MARZO`, `ABRIL`, etc. como separadores editoriales del
+  índice del libro. Hipótesis: estos tokens podrían interferir con
+  `detectar_caratula` cuando el detector busca el nombre del caso
+  inmediatamente después de `FALLO DE LA CORTE SUPREMA` o
+  `FALLOS DE LA CORTE SUPREMA`. Causa potencial de algunas rupturas
+  pre-§3.6.a. Revisar en próxima sesión: ¿el detector de carátula
+  filtra explícitamente estos tokens? ¿Cuántos casos podrían estar
+  afectados?
+
+- **Hojas complementarias no flagueadas explícitamente**. Aunque
+  identificamos `HOJA COMPLEMENTARIA` como problema editorial y
+  desarrollamos el fix Fase 1 alrededor del fenómeno, el pipeline no
+  produce un flag explícito que indique "este fallo tiene una hoja
+  complementaria entre su fin y el inicio del siguiente". Sería útil
+  para auditoría tener un campo derivado o un CSV separado que
+  liste los 95 casos. Implementación posible: detector en Etapa 1 o
+  2 que cuente ocurrencias de `HOJA COMPLEMENTARIA` por archivo y
+  asocie cada una a la página donde aparece.
+
+- **`construir_catalogo` saltea las hojas complementarias**. Es
+  probablemente la razón última por la que `pg_fin = 379` queda en
+  el catálogo cuando físicamente la 379 no existe: el detector de
+  páginas (Etapa 1) no asigna número de página a las hojas
+  complementarias, y por eso quedan registros `(tomo, pagina)`
+  faltantes en el mapa pero presentes en el índice editorial.
+  Verificar comportamiento exacto en próxima sesión.
+
+- **`detectar_fin_real` puede traspasar `linea_fin` en
+  `ok_cortado_en_indice`**. Observado en `333_p1869`
+  (`linea_fin_real = 43590` vs `linea_fin = 43589`) y `334_p698`
+  (`linea_fin_real = 27875` vs `linea_fin = 27862`). El contenido
+  excedido es el inicio del aparato de índices del tomo (no contenido
+  de otro fallo). Comportamiento preexistente del detector
+  (independiente del fix §3.6.e). Impacto acotado, ≤13 líneas
+  observadas. Auditoría futura: verificar si pasa también en los 19
+  `ok_cortado_en_indice` originales y cuantificar el contenido
+  espurio capturado.
+
 ### Pendientes para próxima sesión
 
 Por orden de prioridad estimada:
 
-1. **Fix §3.6.e** (cruzador, fallback en `pagina_fin_no_en_mapa`).
-   Es del mismo tipo que §3.6.a: cambio chico en `cruzar_catalogo_y_mapa.py`,
-   alta validabilidad. Eliminaría 39 casos con bloques gigantescos
-   y subiría la cobertura efectiva de 99,0% a 99,7%.
-2. **Fix §4.6.b** (parser, fallback `inicio_cons = 0`). Subió de
+1. **Fix §4.6.b** (parser, fallback `inicio_cons = 0`). Subió de
    prioridad tras fix §3.6.a (de 169 a 320 casos sospechosos). Una
    línea de cambio.
-3. **Fix §4.6.e** (parser, `dictamen_presente` como string). Trivial,
+2. **Fix §4.6.e** (parser, `dictamen_presente` como string). Trivial,
    30 segundos. Cambiar `0` por `False` en línea 1295.
-4. **Validaciones contra `.md` real** (Tarea 3 del plan original):
-   §3.6.b (línea 33525 de `LibroVol339.2.md`), §3.6.c (tomos 331-334
-   — parcialmente cubierto por el hallazgo §3.6.e), §4.6.c (3 fechas
-   sospechosas), §4.6.h (3-5 casos modernos).
+3. **Fix §3.6.e Fase 2** (cruzador, fallback `pagina_no_en_mapa`).
+   Recuperaría 43 fallos descartados hoy. Más invasivo que Fase 1,
+   requiere su propio diseño y validación.
+4. **Validaciones contra `.md` real**: §3.6.b (línea 33525 de
+   `LibroVol339.2.md`), §3.6.c (tomos 331-334 — parcialmente
+   cubierto por el cierre §3.6.e Fase 1, los 43 restantes son los de
+   Fase 2), §4.6.c (3 fechas sospechosas), §4.6.h (3-5 casos
+   modernos).
 5. **Investigación: `'FALLO DE LA CORTE'` sin `SUPREMA`** (33 casos
    en top desconocidos de firma post-fix RE_APERTURA). Fragmentos
    de OCR o patrón editorial distinto. No urgente.
 6. **Cuantificar daño efectivo de §4.6.a post-fix** (cuántos de los
    3.682 *realmente* capturan tribunal del fallo siguiente). Baja
    prioridad porque el fix §3.6.a probablemente lo evaporó.
+7. **Auditoría detallada**: headers de meses, flag de hojas
+   complementarias, comportamiento de `detectar_fin_real` en
+   `ok_cortado_en_indice` (los tres hallazgos nuevos arriba).
 
 ---
 

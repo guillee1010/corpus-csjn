@@ -1,7 +1,7 @@
-Catálogo: ../../output/catalogo/catalogo.csv
-Mapa:     ../../output/mapa/mapa_paginas.csv
-Corpus:   ../../corpus
-Secciones índices: ../../output/catalogo/secciones_indices.csv
+Catálogo: ..\..\output\catalogo\catalogo.csv
+Mapa:     ..\..\output\mapa\mapa_paginas.csv
+Corpus:   ..\..\corpus
+Secciones índices: ..\..\output\catalogo\secciones_indices.csv
 
 Filas en catálogo: 5862
 Páginas únicas en mapa: 46933
@@ -17,19 +17,18 @@ Resumen del cruce
 ======================================================================
 Total de fallos:                 5862
   ok                            5741  (97.9%)
-  ok_cortado_en_indice            19  (0.3%)
+  ok_cortado_en_indice            26  (0.4%)
   pagina_no_en_mapa               43  (0.7%)
-  pagina_fin_no_en_mapa           39  (0.7%)
   fallo_cruza_archivos            20  (0.3%)
 
 Por tomo:
    tomo   total      ok   sin_mapa   ult_tomo   pg_fin_nm   cruza_arch
     329    1063    1059          0          0           0            3
     330     757     753          0          0           0            3
-    331     376     354         11          0          10            0
-    332     330     308         11          0          10            0
-    333     252     230         11          0          10            0
-    334     199     178         10          0           9            1
+    331     376     354         11          0           0            0
+    332     330     308         11          0           0            0
+    333     252     230         11          0           0            0
+    334     199     178         10          0           0            1
     337     130     128          0          0           0            1
     338     167     165          0          0           0            1
     339     328     326          0          0           0            1
@@ -47,4 +46,4 @@ Por tomo:
 
 CSV principal: ..\..\output\localizacion\fallos_localizados.csv  (5862 filas)
 Resumen por tomo: ..\..\output\localizacion\fallos_localizados_resumen.csv  (19 filas)
-Huérfanos (status != ok): ..\..\output\localizacion\fallos_localizados_huerfanos.csv  (102 filas)
+Huérfanos (status != ok): ..\..\output\localizacion\fallos_localizados_huerfanos.csv  (95 filas)

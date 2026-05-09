@@ -170,10 +170,15 @@ def cargar_indices_nombres(ruta):
 # Cruce
 # ---------------------------------------------------------------------------
 
-def cruzar(catalogo, mapa_pagina, n_lineas_por_archivo, indices_nombres_por_archivo=None):
+def cruzar(catalogo, mapa_pagina, mapa_por_archivo, n_lineas_por_archivo, indices_nombres_por_archivo=None):
     """
     Para cada fila del catálogo, calcula archivo, linea_inicio, linea_fin
     y status. Devuelve lista de dicts.
+
+    mapa_por_archivo: dict {(tomo, archivo): [(linea_header, pagina), ...]}
+    con las páginas detectadas en cada .md, ordenadas por línea. Se usa
+    para resolver el fallback cuando pagina_fin no aparece en el mapa
+    (ver §3.6.e en PIPELINE.md: hojas complementarias).
 
     indices_nombres_por_archivo: dict {archivo: linea_inicio_indice_nombres}.
     Si se provee y el archivo del fallo está en el dict, los últimos
@@ -248,14 +253,30 @@ def cruzar(catalogo, mapa_pagina, n_lineas_por_archivo, indices_nombres_por_arch
                 )
                 out['status'] = 'fallo_cruza_archivos'
         else:
-            # pagina_fin + 1 no es header detectado — fallback
-            # Buscar el último header del archivo
-            ult_linea = (
-                n_lineas_por_archivo[archivo_ini] - 1
-                if archivo_ini in n_lineas_por_archivo else ''
+            # pagina_fin no es header detectado en el mapa.
+            # Posible hoja complementaria entre el fallo actual y el siguiente
+            # (ver §3.6.e en PIPELINE.md). Buscar la próxima página existente
+            # en el mismo archivo y usar esa línea − 1.
+            entradas = mapa_por_archivo.get((tomo, archivo_ini), [])
+            proxima = next(
+                ((linea, pag) for linea, pag in entradas if pag > pg_fin),
+                None
             )
-            out['linea_fin'] = ult_linea
-            out['status'] = 'pagina_fin_no_en_mapa'
+            if proxima is not None:
+                linea_proxima, _pag_proxima = proxima
+                out['linea_fin'] = linea_proxima - 1
+                out['status'] = 'ok_pg_fin_redirigida'
+            elif archivo_ini in indices_nombres_por_archivo:
+                # No hay próxima página en este archivo: el fallo es de hecho
+                # el último útil (lo que sigue es el aparato de índices del tomo).
+                out['linea_fin'] = indices_nombres_por_archivo[archivo_ini] - 1
+                out['status'] = 'ok_cortado_en_indice'
+            elif archivo_ini in n_lineas_por_archivo:
+                out['linea_fin'] = n_lineas_por_archivo[archivo_ini] - 1
+                out['status'] = 'ultimo_del_tomo'
+            else:
+                out['linea_fin'] = ''
+                out['status'] = 'pagina_fin_no_en_mapa'
 
         resultados.append(out)
 
@@ -317,7 +338,7 @@ def procesar(ruta_catalogo, ruta_mapa, carpeta_corpus, salida_csv, ruta_seccione
     emit()
 
     # Cruce
-    resultados = cruzar(catalogo, mapa_pagina, n_lineas_por_archivo, indices_nombres_por_archivo)
+    resultados = cruzar(catalogo, mapa_pagina, mapa_por_archivo, n_lineas_por_archivo, indices_nombres_por_archivo)
 
     # Resumen
     total, por_tomo = resumir(resultados)

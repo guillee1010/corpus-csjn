@@ -3,7 +3,7 @@
 > **Estado del documento**: borrador en construcción.
 > Sesiones: 2026-05-08 (mapeo §2, §3), 2026-05-09 (mapeo §4 + cierre
 > auditoría + fix §3.6.a + fix RE_APERTURA + hallazgo hojas
-> complementarias), 2026-05-11 (mapeo §1).
+> complementarias + fix §3.6.e Fase 1), 2026-05-11 (mapeo §1).
 > Cubre: diagrama global + las cuatro etapas + auditoría empírica de
 > bugs.
 > Pendiente: sección de arquitectura cruzada (por qué cuatro scripts y
@@ -12,20 +12,30 @@
 > §4.6.h).
 >
 > **Bugs cerrados**: §3.6.a (resuelto 2026-05-09), §3.6.d (disuelto
-> 2026-05-09 como efecto colateral de §3.6.a), §4.6.f (refutado),
-> RE_APERTURA strict (resuelto 2026-05-09, ver §4.6.j).
+> 2026-05-09 como efecto colateral de §3.6.a), §3.6.e Fase 1
+> (resuelto 2026-05-09 — los 39 casos `pagina_fin_no_en_mapa`
+> reasignados a `ok_pg_fin_redirigida` (32) o `ok_cortado_en_indice`
+> (7)), §4.6.f (refutado), RE_APERTURA strict (resuelto 2026-05-09,
+> ver §4.6.j).
 >
 > **Bugs abiertos con prioridad subida tras fix §3.6.a**: §4.6.b
 > (fallback considerando, 320 casos sospechosos).
 >
 > **Bugs abiertos con prioridad bajada tras fix §3.6.a**: §4.6.a
-> (cosmético, daño efectivo evaporado), §4.6.g (contenido a 20 casos,
-> pero ahora con 39 casos adicionales del mismo tipo en
-> `pagina_fin_no_en_mapa` por hojas complementarias — ver §3.6.e).
+> (cosmético, daño efectivo evaporado), §4.6.g (contenido a 20 casos
+> reales de cruce de archivos; los 39 casos espurios por hojas
+> complementarias se cerraron en §3.6.e Fase 1).
 >
-> **Hallazgos nuevos sin acción inmediata**: §3.6.e (hojas
-> complementarias en tomos 331-334), caso testigo `343_p646` (patrón
-> editorial irregular en tomo 343, documentado en §4.6.j).
+> **Hallazgos nuevos sin acción inmediata**: §3.6.e Fase 2 (los 43
+> `pagina_no_en_mapa`, "otra cara" del mismo fenómeno editorial —
+> requiere su propio fix), headers de meses como ruptores de detección
+> de carátula (`MARZO`/`ABRIL`/etc. entre fallos pueden confundirse
+> con nombre de caso tras `FALLO DE LA CORTE SUPREMA`), hojas
+> complementarias no flagueadas explícitamente en el pipeline,
+> `detectar_fin_real` puede traspasar `linea_fin` en `ok_cortado_en_indice`
+> (≤13 líneas observadas, contenido = inicio del aparato de índices),
+> caso testigo `343_p646` (patrón editorial irregular en tomo 343,
+> documentado en §4.6.j).
 
 ## Propósito
 
@@ -1152,9 +1162,11 @@ para ver si captura lo correcto.
 
 #### 3.6.e — Hojas complementarias en tomos 331-334 (efecto colateral del fix §3.6.a)
 
-> **🟡 HALLAZGO 2026-05-09: 39 casos `pagina_fin_no_en_mapa` con
-> bloques gigantescos. Causa estructural en el corpus, no bug del
-> pipeline.**
+> **✅ RESUELTO Fase 1 2026-05-09: 39 casos `pagina_fin_no_en_mapa`
+> reasignados (32 → `ok_pg_fin_redirigida`, 7 →
+> `ok_cortado_en_indice`). Causa estructural en el corpus, fix
+> estructural en el cruzador. Fase 2 pendiente para los 43
+> `pagina_no_en_mapa` (fenómeno especular).**
 
 ##### El fenómeno
 
@@ -1235,37 +1247,109 @@ El error está aguas arriba: el catálogo (Etapa 2) extrae `pg_fin` del
 complementaria. El detector de páginas (Etapa 1) tampoco está
 fallando: las páginas 378-379 efectivamente no existen.
 
-##### Mitigación temporal
+##### Mitigación temporal (superada por Fase 1)
 
-Los 39 casos son identificables vía
-`status_localizacion == 'pagina_fin_no_en_mapa'`. Filtrarlos antes de
-análisis estadístico, igual que se filtran `fallo_cruza_archivos`.
+Pre-fix, los 39 casos eran identificables vía
+`status_localizacion == 'pagina_fin_no_en_mapa'` y se filtraban
+antes de análisis estadístico (igual que `fallo_cruza_archivos`).
+Post-fix Fase 1, este filtro ya no es necesario: los 32 redirigidos
+quedaron como `ok_pg_fin_redirigida` (status análogo a `ok` para
+fines analíticos), y los 7 sin próxima página quedaron como
+`ok_cortado_en_indice` (mismo tratamiento que los últimos fallos
+genuinos).
 
-Cobertura efectiva post-mitigación: 5760/5819 = 99,0% (vs 99,7% antes
-de descontar los 39).
+##### Fix aplicado: Fase 1 (resuelto 2026-05-09)
 
-##### Fix estructural propuesto (próxima sesión)
+**Diseño**. En `cruzar_catalogo_y_mapa.py`, la rama del fallback
+`pagina_fin_no_en_mapa` se reemplazó por una cascada que primero
+busca la **próxima página existente en el mismo archivo** después de
+`pg_fin` y la usa como `linea_fin = linea_proxima - 1` (status
+`ok_pg_fin_redirigida`). Si no hay próxima página en el archivo
+(fallo es de hecho el último útil), reusa la lógica ya validada de
+`ok_cortado_en_indice` o `ultimo_del_tomo`.
 
-Cuando `pg_fin` no está en el mapa, en lugar de usar el final del
-archivo como fallback, el cruzador puede:
+La función `cruzar` recibió un argumento adicional, `mapa_por_archivo`
+(dict `{(tomo, archivo): [(linea_header, pagina), ...]}`), que ya era
+producido por `cargar_mapa` y se descartaba. La firma cambió y la
+llamada en `procesar` se actualizó correspondientemente.
 
-- **Opción A**: buscar `pg_fin - 1, pg_fin - 2, ...` hasta encontrar
-  una página que sí existe en el mapa, y usar ésa.
-- **Opción B**: usar la `linea_inicio` del fallo siguiente del
-  catálogo (si está localizado) y restarle 1.
+**Por qué Opción A y no Opción B**. La Opción B propuesta
+originalmente (usar `linea_inicio` del fallo siguiente) resultó
+inviable: en los 39 casos, el fallo siguiente está exactamente en el
+estado especular `pagina_no_en_mapa` (su `pagina_inicio` también es
+una página inexistente porque la hoja complementaria ocupa el lugar
+donde debería arrancar). La Opción A (próxima página existente)
+resolvió 32 de los 39 directamente; los 7 restantes son últimos
+útiles del archivo y se cerraron por la rama `ok_cortado_en_indice`.
 
-Opción B es más robusta porque depende del catálogo y la
-localización, no de búsquedas iterativas en el mapa. Pendiente para
-próxima sesión.
+**Resultado empírico**.
+
+| Status | Pre-fix | Post-fix |
+|---|---:|---:|
+| `pagina_fin_no_en_mapa` | 39 | 0 |
+| `ok_pg_fin_redirigida` (nuevo) | — | 32 |
+| `ok_cortado_en_indice` | 19 | 26 (+7) |
+| `ok` | 5741 | 5741 (sin cambio) |
+| `fallo_cruza_archivos` | 20 | 20 (sin cambio) |
+| `pagina_no_en_mapa` | 43 | 43 (sin cambio) |
+| **Total** | 5862 | 5862 |
+
+**Validación caso testigo `331_p373` (Pizarro)**:
+
+| Métrica | Pre-§3.6.a | Post-§3.6.a (gigante) | Post-§3.6.e |
+|---|---:|---:|---:|
+| `word_count` | 449 (compensado por bug) | 293.804 | **449** |
+| `linea_fin` | — | ~32.000 (final del .md) | 14.128 |
+| `pista_fin` | — | (cascada agotada) | `caratula_siguiente` |
+
+El parser cierra el bloque en la línea anterior al header de página
+380 (`linea_fin = 14128`) y `detectar_fin_real` corta más arriba,
+sobre la disidencia de Argibay. El word_count vuelve exactamente al
+valor pre-§3.6.a, confirmando que el fix no introduce ruido sobre los
+casos previamente correctos.
+
+**Validación distribución de los 32 redirigidos**: 30 con
+`pista_fin = sumario_siguiente`, 2 con `caratula_siguiente`, 0 con
+`fallback_catalogo`. Esto significa que el detector siempre encontró
+una pista real dentro del bloque acotado — confirmación
+estructural, no por accidente. Word counts en rango natural (378 -
+12.126).
+
+**Cobertura efectiva post-fix**: `ok` + `ok_pg_fin_redirigida` +
+`ok_cortado_en_indice` = 5799/5862 = 98,9%. Si se cuentan también
+los `fallo_cruza_archivos` con su mitigación, sube a 99,3%. Los 43
+`pagina_no_en_mapa` quedan como residuo legítimo, pendientes para
+Fase 2.
+
+**Caveat menor**. Para algunos casos `ok_cortado_en_indice`,
+`detectar_fin_real` puede asignar `linea_fin_real` levemente
+superior a `linea_fin` del cruzador (≤13 líneas observadas en
+`333_p1869` y `334_p698`). El contenido excedido pertenece al inicio
+del aparato de índices del tomo, no a otro fallo. Es comportamiento
+preexistente del detector (independiente del fix §3.6.e), de impacto
+acotado y no bloqueante. Se anota para auditoría futura.
+
+##### Fase 2 (pendiente)
+
+Los 43 casos `pagina_no_en_mapa` son la "otra cara" del mismo
+fenómeno editorial: fallos cuya `pagina_inicio` declarada por el
+catálogo no existe físicamente porque hay una hoja complementaria
+inmediatamente antes. La lógica simétrica al fix Fase 1 sería:
+cuando `(tomo, pagina_inicio)` no está en el mapa, inferir `archivo`
+desde el fallo anterior del catálogo y usar la próxima página
+existente como `linea_inicio` real. Más invasiva que Fase 1, requiere
+diseño y validación propios.
 
 ##### Distinción importante con §4.6.g
 
 §4.6.g (`fallo_cruza_archivos`) es un fenómeno *real*: hay 20 fallos
 que efectivamente cruzan archivos. §3.6.e es un fenómeno *espurio*:
-los 39 casos no cruzan archivos, simplemente tienen una hoja
+los 39 casos no cruzaban archivos, simplemente tenían una hoja
 complementaria entre el fin del fallo actual y el inicio del
-siguiente. Pero ambos producen el mismo síntoma operativo (bloques
-gigantescos), por lo que la mitigación es la misma.
+siguiente. Pre-fix, ambos producían el mismo síntoma operativo
+(bloques gigantescos), por lo que la mitigación era la misma.
+Post-fix Fase 1, los 39 casos espurios se cerraron y los 20 casos
+reales de §4.6.g siguen requiriendo su propia mitigación.
 
 ### 3.7 Limitaciones conocidas
 

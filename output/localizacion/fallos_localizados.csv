@@ -1878,7 +1878,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 331_p364,331,LibroVol331.1.md,364,368,13614,13759,Justicia Ambiental Asociación Civil | Municipalidad de Concepción del Uruguay y otro,2,ok
 331_p368,331,LibroVol331.1.md,368,371,13760,13871,"V., L. E.",1,ok
 331_p371,331,LibroVol331.1.md,371,373,13872,13934,"Pizarro, Julio César | Orígenes A.F.J.P.",2,ok
-331_p373,331,LibroVol331.1.md,373,379,13935,45673,"Farías de Fenoglio, Graciela Rosa | Caja de Jubilaciones, Pensiones y Retiros de Córdoba",2,pagina_fin_no_en_mapa
+331_p373,331,LibroVol331.1.md,373,379,13935,14128,"Farías de Fenoglio, Graciela Rosa | Caja de Jubilaciones, Pensiones y Retiros de Córdoba",2,ok_pg_fin_redirigida
 331_p379,331,,379,382,,,"Villarreal, Daniel Alberto | Fernández, Andrés Alejandro",2,pagina_no_en_mapa
 331_p382,331,LibroVol331.1.md,382,391,14202,14559,"Buenos Aires, Provincia de | Asociación de Empresas de Correo de la República Argentina",2,ok
 331_p391,331,LibroVol331.1.md,391,400,14560,14913,"Chaves, Fabián Mario | Tucumán, Provincia de",2,ok
@@ -1891,7 +1891,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 331_p430,331,LibroVol331.1.md,430,432,15997,16072,"Bidegain, Luisa Esther | ANSeS",2,ok
 331_p432,331,LibroVol331.1.md,432,434,16073,16148,"Duarte, Nilda Eulalia | ANSeS",2,ok
 331_p434,331,LibroVol331.1.md,434,436,16149,16224,"García Méndez, Emilio y Musa, María Laura",1,ok
-331_p436,331,LibroVol331.1.md,436,439,16225,45673,"Krumpeter, Alberto",1,pagina_fin_no_en_mapa
+331_p436,331,LibroVol331.1.md,436,439,16225,16343,"Krumpeter, Alberto",1,ok_pg_fin_redirigida
 331_p439,331,,439,446,,,"Barhoumi, Mohamed Ben Sadoc Ajili",1,pagina_no_en_mapa
 331_p446,331,LibroVol331.1.md,446,453,16574,16832,"Salazar, Eduardo Pedro",1,ok
 331_p453,331,LibroVol331.1.md,453,462,16833,17190,"Chamorro, Carlos | Sociedad Argentina de Autores y Compositores de Música",2,ok
@@ -1958,7 +1958,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 331_p989,331,LibroVol331.1.md,989,994,37415,37600,"Zeverin, Alejandro | Citibank NA Argentina y otro",2,ok
 331_p994,331,LibroVol331.1.md,994,1004,37601,37993,"Morales, Jorgelina Nilda y otros | Buenos Aires, Provincia de y otros",2,ok
 331_p1004,331,LibroVol331.1.md,1004,1007,37994,38092,Correo Oficial de la República Argentina S.A. | G.C.B.A.,2,ok
-331_p1007,331,LibroVol331.1.md,1007,1013,38093,45673,"Nally, Adolfo José | ANSeS",2,pagina_fin_no_en_mapa
+331_p1007,331,LibroVol331.1.md,1007,1013,38093,38262,"Nally, Adolfo José | ANSeS",2,ok_cortado_en_indice
 331_p1013,331,,1013,1024,,,Estado Nacional - Ministerio de Cultura y Educación | Universidad de General Sarmiento,2,pagina_no_en_mapa
 331_p1024,331,LibroVol331.2.md,1024,1028,492,641,"Viñuela, María del Carmen y otro | Ferrari, Susana Mirta",2,ok
 331_p1028,331,LibroVol331.2.md,1028,1036,642,949,"Cerboni, Alejandro D.",1,ok
@@ -1997,7 +1997,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 331_p1336,331,LibroVol331.2.md,1336,1344,12689,13007,"(2) González, Oscar Hipólito y Argüello, Sara Beatriz | Salinas, María Ester | González, Oscar Hipólito y Argüello, Sara Beatriz",3,ok
 331_p1344,331,LibroVol331.2.md,1344,1352,13008,13319,"Vallejos, Norabuena y Gaccio, Fabiani Noemí",1,ok
 331_p1352,331,LibroVol331.2.md,1352,1364,13320,13775,"Lagos Quispe, Leónidas",1,ok
-331_p1364,331,LibroVol331.2.md,1364,1369,13776,44357,"Zatloukal, Jorge | Estado Nacional (Ministerio de Economía y Producción)",2,pagina_fin_no_en_mapa
+331_p1364,331,LibroVol331.2.md,1364,1369,13776,13975,"Zatloukal, Jorge | Estado Nacional (Ministerio de Economía y Producción)",2,ok_pg_fin_redirigida
 331_p1369,331,,1369,1382,,,Camuzzi Gas Pampeana S.A.,1,pagina_no_en_mapa
 331_p1382,331,LibroVol331.2.md,1382,1387,14452,14638,"Tomasella, Hemilse María I. | Resolución 359/00 del Consejo Superior de la U.N.N.E.",2,ok
 331_p1387,331,LibroVol331.2.md,1387,1397,14639,15011,"Hadid, Jaled Osman | (4) Nación Argentina | (3) Hadid, Jaled Osman | Nación Argentina",4,ok
@@ -2025,7 +2025,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 331_p1519,331,LibroVol331.2.md,1519,1524,19658,19850,Transportes Jac de Andrés José Capararo | Y.P.F. S.A.,2,ok
 331_p1524,331,LibroVol331.2.md,1524,1528,19851,19999,"B., M. A.",1,ok
 331_p1528,331,LibroVol331.2.md,1528,1530,20000,20071,"Suárez, Temístocles Gualterio | ANSeS",2,ok
-331_p1530,331,LibroVol331.2.md,1530,1581,20072,44357,"Patitó, José Ángel y otro | Diario La Nación y otros",2,pagina_fin_no_en_mapa
+331_p1530,331,LibroVol331.2.md,1530,1581,20072,22093,"Patitó, José Ángel y otro | Diario La Nación y otros",2,ok_pg_fin_redirigida
 331_p1581,331,,1581,1583,,,"ANSeS | Bianchi, Olga",2,pagina_no_en_mapa
 331_p1583,331,LibroVol331.2.md,1583,1592,22134,22491,EN Mº Público arts. 110 y 120 C.N.,1,ok
 331_p1592,331,LibroVol331.2.md,1592,1596,22492,22635,"D., M. de los A. | I.N.S.S.J.P. y/o E.N.",2,ok
@@ -2043,7 +2043,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 331_p1664,331,LibroVol331.2.md,1664,1672,25224,25524,"Fermín, Mauricio",1,ok
 331_p1672,331,LibroVol331.2.md,1672,1674,25525,25587,"Velázquez, José María | Administración Nacional de la Seguridad Social",2,ok
 331_p1674,331,LibroVol331.2.md,1674,1676,25588,25659,"Guillermo, Sebastián",1,ok
-331_p1676,331,LibroVol331.2.md,1676,1679,25660,44357,"Mendoza, Beatriz Silvia y otros | Estado Nacional y otros",2,pagina_fin_no_en_mapa
+331_p1676,331,LibroVol331.2.md,1676,1679,25660,25797,"Mendoza, Beatriz Silvia y otros | Estado Nacional y otros",2,ok_pg_fin_redirigida
 331_p1679,331,,1679,1690,,,"Buenos Aires, Provincia de y otros | Asociación Ecológica Social de Pesca, Caza y Náutica",2,pagina_no_en_mapa
 331_p1690,331,LibroVol331.2.md,1690,1701,26197,26640,"Reynot Blanco, Salvador Carlos | Santiago del Estero, Provincia de",2,ok
 331_p1701,331,LibroVol331.2.md,1701,1712,26641,27087,"San Luis, Provincia de | Graciela Puw Producciones",2,ok
@@ -2069,7 +2069,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 331_p1910,331,LibroVol331.2.md,1910,1917,34874,35148,Y.P.F. S.A. y otros | Asociación de Superficiarios de la Patagonia,2,ok
 331_p1917,331,LibroVol331.2.md,1917,1927,35149,35544,"Fridman, Ana María y otros | Banco Hipotecario S.A. y otro",2,ok
 331_p1927,331,LibroVol331.2.md,1927,1942,35545,36147,"Instituto Nacional de Servicios Sociales para Jubilados y Pensionados | Caligiuri, Rosa Clara",2,ok
-331_p1942,331,LibroVol331.2.md,1942,1985,36148,44357,Mexicana de Aviación S.A. de cv c/EN Mº de Defensa - FAA dto. 557/02 | EN Mº de Defensa - FAA dto. 557/02,2,pagina_fin_no_en_mapa
+331_p1942,331,LibroVol331.2.md,1942,1985,36148,37882,Mexicana de Aviación S.A. de cv c/EN Mº de Defensa - FAA dto. 557/02 | EN Mº de Defensa - FAA dto. 557/02,2,ok_cortado_en_indice
 331_p1985,331,,1985,1987,,,"Bassano, Mario Marcelo | Estado Nacional (Comité Federal de Radiodifusión)",2,pagina_no_en_mapa
 331_p1987,331,LibroVol331.3.md,1987,2002,124,719,"Núñez de Zanetti, Mónica Viviana | Famyl S.A. Salud para la Familia",2,ok
 331_p2002,331,LibroVol331.3.md,2002,2006,720,853,Estado Nacional – Ministerio del Interior – Policía Federal,1,ok
@@ -2088,7 +2088,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 331_p2149,331,LibroVol331.3.md,2149,2156,6476,6744,"Murillo, Héctor Octavio | Compibal",2,ok
 331_p2156,331,LibroVol331.3.md,2156,2163,6745,7030,"Rodríguez, Ademar Jorge",1,ok
 331_p2163,331,LibroVol331.3.md,2163,2166,7031,7142,"Gaitán, Juan Pablo | ANSeS",2,ok
-331_p2166,331,LibroVol331.3.md,2166,2169,7143,43623,"Neuberger, Erico | ANSeS",2,pagina_fin_no_en_mapa
+331_p2166,331,LibroVol331.3.md,2166,2169,7143,7264,"Neuberger, Erico | ANSeS",2,ok_pg_fin_redirigida
 331_p2169,331,,2169,2174,,,"Torrez, Tráncito y otro | Supermercados Norte S.A. y otro",2,pagina_no_en_mapa
 331_p2174,331,LibroVol331.3.md,2174,2178,7412,7558,"Moreno, José Ramón | Pizzería Centro S.A.",2,ok
 331_p2178,331,LibroVol331.3.md,2178,2195,7559,8215,"Camuzzi Gas del Sur S.A. | Río Negro, Provincia de",2,ok
@@ -2118,7 +2118,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 331_p2325,331,LibroVol331.3.md,2325,2336,13159,13569,Tan-Co S.A. (TF 9794-A) | DGA.,2,ok
 331_p2336,331,LibroVol331.3.md,2336,2343,13570,13821,"Leiva, Adriana",1,ok
 331_p2343,331,LibroVol331.3.md,2343,2353,13822,14203,"Romano, Hugo Enrique",1,ok
-331_p2353,331,LibroVol331.3.md,2353,2359,14204,43623,"De Majo, Salvador Félix | ANSeS",2,pagina_fin_no_en_mapa
+331_p2353,331,LibroVol331.3.md,2353,2359,14204,14395,"De Majo, Salvador Félix | ANSeS",2,ok_pg_fin_redirigida
 331_p2359,331,,2359,2363,,,Asociación Técnico Constructora S.A. y otro | B.C.R.A.,2,pagina_no_en_mapa
 331_p2363,331,LibroVol331.3.md,2363,2366,14522,14637,"Campos, Gabriela Viviana",1,ok
 331_p2366,331,LibroVol331.3.md,2366,2376,14638,15037,"Neumann, Gerardo | Servicios Eléctricos del Gran Buenos Aires S.A.",2,ok
@@ -2158,7 +2158,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 331_p2621,331,LibroVol331.3.md,2621,2628,24534,24800,Asociación Mutual del Personal Jerárquico de Bancos Oficiales Nacionales | Superintendencia de Servicios de Salud y ots.,2,ok
 331_p2628,331,LibroVol331.3.md,2628,2633,24801,24990,Edesur S.A. | Estado Nacional - Dirección Nacional de Bienes del Estado,2,ok
 331_p2633,331,LibroVol331.3.md,2633,2638,24991,25170,"Losa, Héctor Enrique | A.F.I.P. - región La Plata",2,ok
-331_p2638,331,LibroVol331.3.md,2638,2649,25171,43623,Asociación de Trabajadores del Estado (A.T.E.) | Estado Nacional y otro (Provincia de Salta),2,pagina_fin_no_en_mapa
+331_p2638,331,LibroVol331.3.md,2638,2649,25171,25556,Asociación de Trabajadores del Estado (A.T.E.) | Estado Nacional y otro (Provincia de Salta),2,ok_pg_fin_redirigida
 331_p2649,331,,2649,2652,,,DGI (en autos BBVA TF-19.323-I),1,pagina_no_en_mapa
 331_p2652,331,LibroVol331.3.md,2652,2656,25641,25787,"Benettini, Pedro José | Lotería Nacional Sociedad del Estado",2,ok
 331_p2656,331,LibroVol331.3.md,2656,2663,25788,26051,"Barolo, Guillermo A. por El Lomo y Cía. S.R.L. | Por nombre del demandado A.F.I.P.",2,ok
@@ -2219,7 +2219,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 332_p211,332,LibroVol332.1.md,211,212,8210,8241,"Machado, Epitafio Roque",1,ok
 332_p212,332,LibroVol332.1.md,212,244,8242,9535,"Misiones, Provincia de | Estado Nacional",2,ok
 332_p244,332,LibroVol332.1.md,244,249,9536,9713,"Fernández, Elva Graciela | Federación de Asociaciones Católicas de Empleadas Asoc. Civil.",2,ok
-332_p249,332,LibroVol332.1.md,249,253,9714,40612,"Dalmonte, Eduardo",1,pagina_fin_no_en_mapa
+332_p249,332,LibroVol332.1.md,249,253,9714,9850,"Dalmonte, Eduardo",1,ok_pg_fin_redirigida
 332_p253,332,,253,271,,,Siembra Seguros de Retiro,1,pagina_no_en_mapa
 332_p271,332,LibroVol332.1.md,271,274,10539,10650,Insurance Company of North America | Empresa Ferrocarriles Argentinos,2,ok
 332_p274,332,LibroVol332.1.md,274,276,10651,10718,"Jalife, Enrique",1,ok
@@ -2283,7 +2283,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 332_p674,332,LibroVol332.1.md,674,700,26157,27223,Instituto de Vivienda del Ejército | Indeco S.A. y Crivelli S.R.L. y otro,2,ok
 332_p700,332,LibroVol332.1.md,700,709,27224,27563,"Chacoma, Claudio Gustavo",1,ok
 332_p709,332,LibroVol332.1.md,709,731,27564,28471,"Torrillo, Atilio Amadeo y otro | Gulf Oil Argentina S.A. y otro",2,ok
-332_p731,332,LibroVol332.1.md,731,737,28472,40612,"Chimondeguy, Alfredo | ANSeS",2,pagina_fin_no_en_mapa
+332_p731,332,LibroVol332.1.md,731,737,28472,28722,"Chimondeguy, Alfredo | ANSeS",2,ok_pg_fin_redirigida
 332_p737,332,,737,752,,,Curi Hnos. S.A.,1,pagina_no_en_mapa
 332_p752,332,LibroVol332.1.md,752,761,29299,29661,"Defranco Fantín, Reynaldo Luis y otro | Estado Nacional - Ministerio de Economía",2,ok
 332_p761,332,LibroVol332.1.md,761,764,29662,29776,Honorable Junta Electoral,1,ok
@@ -2318,7 +2318,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 332_p903,332,LibroVol332.1.md,903,911,35048,35335,"B., A. B.",1,ok
 332_p911,332,LibroVol332.1.md,911,913,35336,35408,"Fisco Nacional | Claudio Arens y Carlos Forestier | Arens, Claudio y Carlos Forestier",3,ok
 332_p913,332,LibroVol332.1.md,913,917,35409,35558,"Deluca, Susana Ana | ANSeS",2,ok
-332_p917,332,LibroVol332.1.md,917,921,35559,40612,"Heredia, Jorgelina Martina | ANSeS",2,pagina_fin_no_en_mapa
+332_p917,332,LibroVol332.1.md,917,921,35559,35710,"Heredia, Jorgelina Martina | ANSeS",2,ok_cortado_en_indice
 332_p921,332,,921,930,,,Transportes Línea 104 S.A.,1,pagina_no_en_mapa
 332_p930,332,LibroVol332.2.md,930,936,401,629,Banco Basel S.A.,1,ok
 332_p936,332,LibroVol332.2.md,936,943,630,898,Estado Nacional | Caja de Jubilaciones y Pensiones de Abogados y Procuradores de la Provincia de Mendoza,2,ok
@@ -2366,7 +2366,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 332_p1290,332,LibroVol332.2.md,1290,1293,14358,14471,"Schinocca, Rodolfo",1,ok
 332_p1293,332,LibroVol332.2.md,1293,1298,14472,14646,"Bullrich, Esteban José",1,ok
 332_p1298,332,LibroVol332.2.md,1298,1304,14647,14876,"Patiño, Raúl Osvaldo | Gobierno Pcia. de San Juan (Unidad de Control Prev.)",2,ok
-332_p1304,332,LibroVol332.2.md,1304,1309,14877,47871,"Cirillo, Rafael | ANSeS",2,pagina_fin_no_en_mapa
+332_p1304,332,LibroVol332.2.md,1304,1309,14877,15039,"Cirillo, Rafael | ANSeS",2,ok_pg_fin_redirigida
 332_p1309,332,,1309,1322,,,"Foye, Hernán Fernando",1,pagina_no_en_mapa
 332_p1322,332,LibroVol332.2.md,1322,1332,15511,15884,"Machado de Souza, José Alexandre",1,ok
 332_p1332,332,LibroVol332.2.md,1332,1338,15885,16101,"Levin, Ernesto Ariel (TF 15.148-I) | D.G.I.",2,ok
@@ -2398,13 +2398,13 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 332_p1531,332,LibroVol332.2.md,1531,1544,23496,24020,Cerro Vanguardia S.A. (TF 22.172-I) | D.G.I.,2,ok
 332_p1544,332,LibroVol332.2.md,1544,1555,24021,24455,Cremer y Asociados S.A. | Estado Nacional,2,ok
 332_p1555,332,LibroVol332.2.md,1555,1564,24456,24803,"Gómez, Francisco y otros",1,ok
-332_p1564,332,LibroVol332.2.md,1564,1571,24804,47871,"Catalano, Hugo Norberto y otros | Estado Nacional - Poder Ejecutivo Nacional",2,pagina_fin_no_en_mapa
+332_p1564,332,LibroVol332.2.md,1564,1571,24804,25032,"Catalano, Hugo Norberto y otros | Estado Nacional - Poder Ejecutivo Nacional",2,ok_pg_fin_redirigida
 332_p1571,332,,1571,1598,,,AFIP y otro | Candy S.A.,2,pagina_no_en_mapa
 332_p1598,332,LibroVol332.2.md,1598,1600,26078,26148,Instituto Cibernos S.A. | Universidad Nacional de Formosa,2,ok
 332_p1600,332,LibroVol332.2.md,1600,1616,26149,26798,Municipalidad de Berazategui | Aguas Argentinas S.A.,2,ok
 332_p1616,332,LibroVol332.2.md,1616,1622,26799,27032,"Yapur, Elvio Alberto | Caja de Previsión y Seguro Medico de la Provincia de Buenos Aires | Caja de Previsión y Seguro Médico de la Provincia de Buenos Aires",3,ok
 332_p1622,332,LibroVol332.2.md,1622,1624,27033,27101,"Dito, Fernando y Adao, Joao Abel",1,ok
-332_p1624,332,LibroVol332.2.md,1624,1629,27102,47871,"Compañía Micrómnibus La Colorada S.A.C.I. | Buenos Aires, Provincia de",2,pagina_fin_no_en_mapa
+332_p1624,332,LibroVol332.2.md,1624,1629,27102,27304,"Compañía Micrómnibus La Colorada S.A.C.I. | Buenos Aires, Provincia de",2,ok_pg_fin_redirigida
 332_p1629,332,,1629,1633,,,E.D.E.M.S.A. | E.N.A. y M.E.O.S.P.N.,2,pagina_no_en_mapa
 332_p1633,332,LibroVol332.2.md,1633,1651,27433,28178,Esso S.A.P.A. (TF 8997-A) | (3) D.G.A. | D.G.A.,3,ok
 332_p1651,332,LibroVol332.2.md,1651,1655,28179,28328,"Sciammarella, Romeo | EN-Ministerio de Educación | EN - Ministerio de Educación",3,ok
@@ -2428,7 +2428,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 332_p1933,332,LibroVol332.2.md,1933,1952,39394,40156,ANSeS,1,ok
 332_p1952,332,LibroVol332.2.md,1952,1957,40157,40344,Líneas Aéreas Costarricenses S.A. - LACSA | EN - Mº Defensa - FAA - dto. 577/02,2,ok
 332_p1957,332,LibroVol332.2.md,1957,1960,40345,40446,"Cagnetta, Damián",1,ok
-332_p1960,332,LibroVol332.2.md,1960,2033,40447,47871,Massuh S.A.,1,pagina_fin_no_en_mapa
+332_p1960,332,LibroVol332.2.md,1960,2033,40447,43306,Massuh S.A.,1,ok_cortado_en_indice
 332_p2033,332,,2033,2043,,,"Fiscal | Ferreyra, José; Almeida, Alberto y Díaz, Jorge.",2,pagina_no_en_mapa
 332_p2043,332,LibroVol332.3.md,2043,2068,445,1471,"Pérez, Aníbal Raúl | Disco S. A.",2,ok
 332_p2068,332,LibroVol332.3.md,2068,2088,1472,2283,"S. de B., M. del C. | Ministerio de Justicia - Poder Judicial - Estado Nacional.",2,ok
@@ -2444,7 +2444,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 332_p2142,332,LibroVol332.3.md,2142,2146,4330,4478,Erke S.R.L.,1,ok
 332_p2146,332,LibroVol332.3.md,2146,2152,4479,4690,"Malizia Viuda de Cecchini, Norma Susana | La Buenos Aires New York Life Seguros de Vida S. A.",2,ok
 332_p2152,332,LibroVol332.3.md,2152,2153,4691,4722,"Belsito, Ana | ANSeS",2,ok
-332_p2153,332,LibroVol332.3.md,2153,2159,4723,38438,"Roux, María Estela | Administración Nacional de la Seguridad Social",2,pagina_fin_no_en_mapa
+332_p2153,332,LibroVol332.3.md,2153,2159,4723,4912,"Roux, María Estela | Administración Nacional de la Seguridad Social",2,ok_pg_fin_redirigida
 332_p2159,332,,2159,2203,,,E.N. (Min. de Educación y Justicia de la Nación),1,pagina_no_en_mapa
 332_p2203,332,LibroVol332.3.md,2203,2208,6714,6898,"Bardecio Marzoa, Nelson",1,ok
 332_p2208,332,LibroVol332.3.md,2208,2228,6899,7682,"Maza, Ángel E.",1,ok
@@ -2462,7 +2462,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 332_p2397,332,LibroVol332.3.md,2397,2414,14443,15121,"Ciraolo, Jorge Ramón Daniel",1,ok
 332_p2414,332,LibroVol332.3.md,2414,2418,15122,15273,"Cisneros de Bau, Norma Beatríz | Telecom Argentina Stet France Telecom S.A.",2,ok
 332_p2418,332,LibroVol332.3.md,2418,2425,15274,15558,"Ortega, Diego Nicolás | Transporte Metropolitanos General Roca S.A.",2,ok
-332_p2425,332,LibroVol332.3.md,2425,2435,15559,38438,"Sosa, Eduardo Emilio | Provincia de Santa Cruz",2,pagina_fin_no_en_mapa
+332_p2425,332,LibroVol332.3.md,2425,2435,15559,15951,"Sosa, Eduardo Emilio | Provincia de Santa Cruz",2,ok_pg_fin_redirigida
 332_p2435,332,,2435,2441,,,Cri Holding Inc. | Compañía Argentina de Comodoro Rivadavia S.A.,2,pagina_no_en_mapa
 332_p2441,332,LibroVol332.3.md,2441,2446,16143,16336,"Barria, Alejandro Cruz y otros | Estado Nacional - Ministerio de Economía",2,ok
 332_p2446,332,LibroVol332.3.md,2446,2454,16337,16643,"Romero, Estela Suárez de | Instituto de Obra Social del Ejército (I.O.S.E.)",2,ok
@@ -2488,7 +2488,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 332_p2614,332,LibroVol332.3.md,2614,2625,22868,23324,"Lago Castro, Andrés Manuel | Cooperativa Nueva Salvia limitada y otros",2,ok
 332_p2625,332,LibroVol332.3.md,2625,2630,23325,23512,"Lalo, Aarón | Yacimientos Petrolíferos Fiscales S.A.",2,ok
 332_p2630,332,LibroVol332.3.md,2630,2633,23513,23620,"Moreno, Guillermo",1,ok
-332_p2633,332,LibroVol332.3.md,2633,2657,23621,38438,"Trejo, Jorge Elías | Stema S.A. y otros",2,pagina_fin_no_en_mapa
+332_p2633,332,LibroVol332.3.md,2633,2657,23621,24551,"Trejo, Jorge Elías | Stema S.A. y otros",2,ok_pg_fin_redirigida
 332_p2657,332,,2657,2659,,,Fiszman y Compañía S.C.A. | Dirección General Impositiva,2,pagina_no_en_mapa
 332_p2659,332,LibroVol332.3.md,2659,2671,24583,25057,"Rossi, Domingo Daniel",1,ok
 332_p2671,332,LibroVol332.3.md,2671,2673,25058,25129,"Entre Ríos, Provincia de | Emprendimientos Energéticos Binacionales",2,ok
@@ -2543,7 +2543,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 333_p95,333,LibroVol333.1.md,95,108,3500,4010,"Federación Argentina de la Magistratura y otra | Neuquén, Provincia del",2,ok
 333_p108,333,LibroVol333.1.md,108,119,4011,4444,"Municipalidad de Gualeguaychú | Entre Ríos, Provincia de y otros",2,ok
 333_p119,333,LibroVol333.1.md,119,123,4445,4604,Fiscal,1,ok
-333_p123,333,LibroVol333.1.md,123,133,4605,33645,"ANSeS | Bidau, Sara Margarita y otros",2,pagina_fin_no_en_mapa
+333_p123,333,LibroVol333.1.md,123,133,4605,4991,"ANSeS | Bidau, Sara Margarita y otros",2,ok_pg_fin_redirigida
 333_p133,333,,133,138,,,Textil Pegaso S.R.L. | Banco de la Nación Argentina,2,pagina_no_en_mapa
 333_p138,333,LibroVol333.1.md,138,143,5151,5341,"Policía Federal Argentina y otro | Caraballo, Jorge Oscar y otros",2,ok
 333_p143,333,LibroVol333.1.md,143,155,5342,5807,"Martinelli, Carlos Luis | Caja Notarial Complementaria de Seguridad Social",2,ok
@@ -2565,7 +2565,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 333_p290,333,LibroVol333.1.md,290,294,11089,11237,D.G.A.,1,ok
 333_p294,333,LibroVol333.1.md,294,296,11238,11312,"Caruso, Enrique Eduardo y otros",1,ok
 333_p296,333,LibroVol333.1.md,296,300,11313,11451,"Romero, Mariano | AMX Argentina S.A.",2,ok
-333_p300,333,LibroVol333.1.md,300,311,11452,33645,Frimetal S.A. y otros | Por nombre del demandado Administración Federal de Ingresos Públicos - Dirección General Impositiva | Administración Federal de Ingresos Públicos - Dirección General Impositiva,3,pagina_fin_no_en_mapa
+333_p300,333,LibroVol333.1.md,300,311,11452,11852,Frimetal S.A. y otros | Por nombre del demandado Administración Federal de Ingresos Públicos - Dirección General Impositiva | Administración Federal de Ingresos Públicos - Dirección General Impositiva,3,ok_pg_fin_redirigida
 333_p311,333,,311,327,,,"Ramos, José Luis | Estado Nacional (Min. de Defensa - A.R.A.)",2,pagina_no_en_mapa
 333_p327,333,LibroVol333.1.md,327,329,12460,12532,"De la Riva, Guillermo Horacio y otro. | Carregal, César Hugo y otro",2,ok
 333_p329,333,LibroVol333.1.md,329,333,12533,12670,"Dirección Nacional de Recaudación Provisional | Vidal de Docampo, Aurora.",2,ok
@@ -2593,7 +2593,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 333_p527,333,LibroVol333.1.md,527,530,20314,20419,"López, Diego Javier y otros | Estado Nacional - Ministerio de Defensa - Armada Argentina",2,ok
 333_p530,333,LibroVol333.1.md,530,535,20420,20611,Tecno Sudamericana S.A | Gobierno de la Ciudad de Buenos Aires,2,ok
 333_p535,333,LibroVol333.1.md,535,538,20612,20719,"Editorial Río Negro S.A. | Neuquén, Provincia del",2,ok
-333_p538,333,LibroVol333.1.md,538,561,20720,33645,"Línea 22 S.A. | Buenos Aires, Provincia de",2,pagina_fin_no_en_mapa
+333_p538,333,LibroVol333.1.md,538,561,20720,21621,"Línea 22 S.A. | Buenos Aires, Provincia de",2,ok_pg_fin_redirigida
 333_p561,333,,561,563,,,Grumenco Developers S.A. | Banco Hipotecario Sociedad Anónima | Banco Hipotecario S.A.,3,pagina_no_en_mapa
 333_p563,333,LibroVol333.1.md,563,566,21661,21772,"Mena, José Rodolfo | Citibank NA",2,ok
 333_p566,333,LibroVol333.1.md,566,570,21773,21926,Rainly S.A. | Lindsay International Sales Corporation,2,ok
@@ -2621,7 +2621,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 333_p762,333,LibroVol333.1.md,762,765,29416,29526,Publicidad Sarmiento S.A. y otros | GCBA,2,ok
 333_p765,333,LibroVol333.1.md,765,769,29527,29666,Unity Oil S.A. | Golo Kids S. A. y otro,2,ok
 333_p769,333,LibroVol333.1.md,769,772,29667,29775,"Baldomero, Santiago",1,ok
-333_p772,333,LibroVol333.1.md,772,777,29776,33645,Microómnibus Norte S.A.,1,pagina_fin_no_en_mapa
+333_p772,333,LibroVol333.1.md,772,777,29776,29942,Microómnibus Norte S.A.,1,ok_cortado_en_indice
 333_p777,333,,777,792,,,EN Mº Planificación dto. 118/06 (ST),1,pagina_no_en_mapa
 333_p792,333,LibroVol333.2.md,792,796,640,786,"EN Mº Justicia y DDHH | Chedufau de Pinto, María Lilian",2,ok
 333_p796,333,LibroVol333.2.md,796,802,787,1006,"Keiler, Claudio David y otro",1,ok
@@ -2649,13 +2649,13 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 333_p1130,333,LibroVol333.2.md,1130,1133,14059,14170,"Editorial Río Negro S.A. | Neuquén, Provincia del",2,ok
 333_p1133,333,LibroVol333.2.md,1133,1140,14171,14439,"Longombardo, Marta Cristina | EN Mº J DNRA Y CREDITOS PERSONALES",2,ok
 333_p1140,333,LibroVol333.2.md,1140,1143,14440,14551,Rot Automotores S.A.C.I.F. | Sevel Argentina S.A.,2,ok
-333_p1143,333,LibroVol333.2.md,1143,1147,14552,47271,"P., C. J.",1,pagina_fin_no_en_mapa
+333_p1143,333,LibroVol333.2.md,1143,1147,14552,14711,"P., C. J.",1,ok_pg_fin_redirigida
 333_p1147,333,,1147,1152,,,"Quiroga, Gabriela Beatriz | Universidad Nac. de Córdoba (Fac. de Cs. Agropecuarias)",2,pagina_no_en_mapa
 333_p1152,333,LibroVol333.2.md,1152,1156,14864,15007,"Rivera, Rosa Patricia (en nombre y representación de sus hijos menores) | Estado Nacional y/o Est. Mayor Gral. del Ejército Arg.",2,ok
 333_p1156,333,LibroVol333.2.md,1156,1163,15008,15273,"Ortiz, Marcelino y otros | Caja de Retiros, Jubilaciones y Pensiones de la Policía Federal",2,ok
 333_p1163,333,LibroVol333.2.md,1163,1179,15274,15880,"Moshe, Ben Ivgy",1,ok
 333_p1179,333,LibroVol333.2.md,1179,1192,15881,16384,"Perriod, Christophe Alain Laurent",1,ok
-333_p1192,333,LibroVol333.2.md,1192,1205,16385,47271,(3) Estado Nacional y Obr. y Serv. Publ. | Centrales Térmicas Patagónicas S.A. | Estado Nacional y Obr. y Serv. Publ.,3,pagina_fin_no_en_mapa
+333_p1192,333,LibroVol333.2.md,1192,1205,16385,16867,(3) Estado Nacional y Obr. y Serv. Publ. | Centrales Térmicas Patagónicas S.A. | Estado Nacional y Obr. y Serv. Publ.,3,ok_pg_fin_redirigida
 333_p1205,333,,1205,1212,,,"Valenzuela, César",1,pagina_no_en_mapa
 333_p1212,333,LibroVol333.2.md,1212,1217,17100,17292,Estado Nacional - ley 26.124 (DECI 495/06),1,ok
 333_p1217,333,LibroVol333.2.md,1217,1218,17293,17326,Estado Nacional - ley 26.122,1,ok
@@ -2701,7 +2701,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 333_p1671,333,LibroVol333.2.md,1671,1674,35389,35506,"Guzmán, Jorge Alberto",1,ok
 333_p1674,333,LibroVol333.2.md,1674,1687,35507,36014,"Quaranta, José Carlos",1,ok
 333_p1687,333,LibroVol333.2.md,1687,1710,36015,36899,"Sandoval, David Andrés",1,ok
-333_p1710,333,LibroVol333.2.md,1710,1723,36900,47271,"Ojeda, Eduardo Ariel y otros | San Luis, provincia de | San Luis, Provincia de",3,pagina_fin_no_en_mapa
+333_p1710,333,LibroVol333.2.md,1710,1723,36900,37401,"Ojeda, Eduardo Ariel y otros | San Luis, provincia de | San Luis, Provincia de",3,ok_pg_fin_redirigida
 333_p1723,333,,1723,1729,,,"Soria, Carlos Alberto | Provincia Aseguradora de Riesgos de Trabajo S.A.",2,pagina_no_en_mapa
 333_p1729,333,LibroVol333.2.md,1729,1732,37597,37707,"Centurión, Noel Arnaldo y otros",1,ok
 333_p1732,333,LibroVol333.2.md,1732,1759,37708,38770,"Ochoa, José María y otros",1,ok
@@ -2721,7 +2721,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 333_p1849,333,LibroVol333.2.md,1849,1857,42239,42549,Central Dock Sud S.A. y otro,1,ok
 333_p1857,333,LibroVol333.2.md,1857,1863,42550,42783,"Bukosky, Mariela",1,ok
 333_p1863,333,LibroVol333.2.md,1863,1869,42784,43019,"Por nombre del demandado Administración Federal de Ingresos Públicos | Casarino, Graciela Guillermina y otros",2,ok
-333_p1869,333,LibroVol333.2.md,1869,1885,43020,47271,"Lipnizky, Leonardo Jorge y otro",1,pagina_fin_no_en_mapa
+333_p1869,333,LibroVol333.2.md,1869,1885,43020,43589,"Lipnizky, Leonardo Jorge y otro",1,ok_cortado_en_indice
 333_p1885,333,,1885,1891,,,Grupo Clarín y otros S.A.,1,pagina_no_en_mapa
 333_p1891,333,LibroVol333.3.md,1891,1909,277,1000,"N., J. G.",1,ok
 333_p1909,333,LibroVol333.3.md,1909,1916,1001,1272,"Oriolo, Jorge Humberto y otros | EN - M° Justicia Seguridad y DDHH - PFA - dto. 2133/91",2,ok
@@ -2741,7 +2741,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 333_p2040,333,LibroVol333.3.md,2040,2044,6019,6166,"Rodríguez, Hermes Oscar",1,ok
 333_p2044,333,LibroVol333.3.md,2044,2052,6167,6472,Y.P.F. SA | Mercante Hnos. SACI y A.,2,ok
 333_p2052,333,LibroVol333.3.md,2052,2055,6473,6581,Jurin Istueta,1,ok
-333_p2055,333,LibroVol333.3.md,2055,2061,6582,25253,Fiscalía General Cámara Nac. Apel. Comercial | Gobierno de la Ciudad de Buenos Aires,2,pagina_fin_no_en_mapa
+333_p2055,333,LibroVol333.3.md,2055,2061,6582,6784,Fiscalía General Cámara Nac. Apel. Comercial | Gobierno de la Ciudad de Buenos Aires,2,ok_pg_fin_redirigida
 333_p2061,333,,2061,2065,,,"Sandobal, Juan Luis | Ferrocarriles Metropolitanos S.A.",2,pagina_no_en_mapa
 333_p2065,333,LibroVol333.3.md,2065,2073,6899,7222,Banco Francés SA (TF 18.2080-I) | D.G.I.,2,ok
 333_p2073,333,LibroVol333.3.md,2073,2079,7223,7453,EN AGN disp 70/05,1,ok
@@ -2760,7 +2760,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 333_p2218,333,LibroVol333.3.md,2218,2222,12921,13060,"Jabour, Yamil",1,ok
 333_p2222,333,LibroVol333.3.md,2222,2237,13061,13648,Massuh S.A. | Estado Nacional - Administración Federal de Ingresos Públicos,2,ok
 333_p2237,333,LibroVol333.3.md,2237,2251,13649,14219,Gobierno de la Provincia de Mendoza,1,ok
-333_p2251,333,LibroVol333.3.md,2251,2261,14220,25253,Superior Gobierno de la Provincia de Córdoba,1,pagina_fin_no_en_mapa
+333_p2251,333,LibroVol333.3.md,2251,2261,14220,14574,Superior Gobierno de la Provincia de Córdoba,1,ok_pg_fin_redirigida
 333_p2261,333,,2261,2271,,,Banco Sidesa S.A.,1,pagina_no_en_mapa
 333_p2271,333,LibroVol333.3.md,2271,2296,14963,15986,"Monserrat, Gabriel y ots. | Estado Nacional",2,ok
 333_p2296,333,LibroVol333.3.md,2296,2306,15987,16384,"Pellejero, María Nole",1,ok
@@ -2782,7 +2782,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 334_p13,334,LibroVol334.1.md,13,30,363,1050,Banco Hipotecario S.A.,1,ok
 334_p30,334,LibroVol334.1.md,30,35,1051,1247,"Saglietti, Inés Marina | EN - Mº Justicia - resol. 28/08 - SSI (expte. 23.002/08)",2,ok
 334_p35,334,LibroVol334.1.md,35,44,1248,1580,Nuevo Ideal S.A.,1,ok
-334_p44,334,LibroVol334.1.md,44,53,1581,30679,"Peña, Orlando | Dirección General Impositiva",2,pagina_fin_no_en_mapa
+334_p44,334,LibroVol334.1.md,44,53,1581,1914,"Peña, Orlando | Dirección General Impositiva",2,ok_pg_fin_redirigida
 334_p53,334,,53,62,,,D.G.I.,1,pagina_no_en_mapa
 334_p62,334,LibroVol334.1.md,62,95,2249,3650,"Girondo, Alberto Eduardo | Estado Nacional - Museo Nacional de Bellas Artes",2,ok
 334_p95,334,LibroVol334.1.md,95,109,3651,4234,(2) Ingenio Río Grande S.A. | Estado Nacional - Mº de Economía y de Obra y Servicios Públicos | Ingenio Río Grande S.A.,3,ok
@@ -2812,7 +2812,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 334_p304,334,LibroVol334.1.md,304,312,11900,12205,Metrovías S.A.,1,ok
 334_p312,334,LibroVol334.1.md,312,324,12206,12685,"Muravchik, Abraham Jaime | Comafi Fiduciario Financiero S.A.",2,ok
 334_p324,334,LibroVol334.1.md,324,343,12686,13445,"San Luis, Provincia de y otra | Consejo Vial Federal y otras",2,ok
-334_p343,334,LibroVol334.1.md,343,349,13446,30679,"Fleita, Nilda Ester | Administración Nacional de la Seguridad Social",2,pagina_fin_no_en_mapa
+334_p343,334,LibroVol334.1.md,343,349,13446,13645,"Fleita, Nilda Ester | Administración Nacional de la Seguridad Social",2,ok_pg_fin_redirigida
 334_p349,334,,349,357,,,Sindicato de Trabajadores de Correos y Telecomunicaciones de Bs. As. | Ministerio de Trabajo de la Nación,2,pagina_no_en_mapa
 334_p357,334,LibroVol334.1.md,357,362,13929,14116,Grainco Pampa S.A. | Provincia de La Pampa - Dirección General de Rentas,2,ok
 334_p362,334,LibroVol334.1.md,362,365,14117,14227,"Berthet, Emilio",1,ok
@@ -2829,7 +2829,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 334_p454,334,LibroVol334.1.md,454,458,17726,17870,"Sosena, Elena Romana | ANSeS",2,ok
 334_p458,334,LibroVol334.1.md,458,463,17871,18054,"Fisco Nacional - Administración Federal de Ingresos Públicos ¿ Dirección General Impositiva | Tarchini, Irma Susana. | Fisco Nacional - Administración Federal de Ingresos Públicos - Dirección General Impositiva",3,ok
 334_p463,334,LibroVol334.1.md,463,468,18055,18248,(3) Marítima Integrada de Armadores S.R.L. | Banco de la Nación Argentina | Marítima Integrada de Armadores S.R.L.,3,ok
-334_p468,334,LibroVol334.1.md,468,471,18249,30679,"Organbide, Pedro Antonio",1,pagina_fin_no_en_mapa
+334_p468,334,LibroVol334.1.md,468,471,18249,18368,"Organbide, Pedro Antonio",1,ok_pg_fin_redirigida
 334_p471,334,,471,474,,,Morán Juan Carlos,1,pagina_no_en_mapa
 334_p474,334,LibroVol334.1.md,474,476,18452,18518,"Pontoni, Roberto Luis y otros S.H. | P.E.N. - A.F.I.P.-D.G.I.",2,ok
 334_p476,334,LibroVol334.1.md,476,485,18519,18876,"Rivarola, Martín Ramón | Rutilex Hidrocarburos S.A.",2,ok
@@ -2851,7 +2851,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 334_p666,334,LibroVol334.1.md,666,681,25966,26536,Interpol Moscú,1,ok
 334_p681,334,LibroVol334.1.md,681,690,26537,26894,Direct TV Argentina S.A.,1,ok
 334_p690,334,LibroVol334.1.md,690,698,26895,27203,Estudio Consultor de Obras Públicas S.R.L. | Ej. Arg. - Comando de Ing. - Mº de Economía de la Nación,2,ok
-334_p698,334,LibroVol334.1.md,698,715,27204,30679,"Slatapolsky, Jorge Alberto | Banco do Brasil S.A.",2,pagina_fin_no_en_mapa
+334_p698,334,LibroVol334.1.md,698,715,27204,27862,"Slatapolsky, Jorge Alberto | Banco do Brasil S.A.",2,ok_cortado_en_indice
 334_p715,334,,715,725,,,Estado Nacional | Barrick Exploraciones Argentinas S.A. y otro,2,pagina_no_en_mapa
 334_p725,334,LibroVol334.2.md,725,736,441,876,"Gallo López, Javier",1,ok
 334_p736,334,LibroVol334.2.md,736,742,877,1098,"Manso, José Benigno | (3) Universidad Nacional de la Plata | Universidad Nacional de la Plata",3,ok
@@ -2866,7 +2866,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 334_p784,334,LibroVol334.2.md,784,796,2683,3158,"Miyazono, Ricardo",1,ok
 334_p796,334,LibroVol334.2.md,796,799,3159,3265,"Quiroga, Valeria Analía",1,ok
 334_p799,334,LibroVol334.2.md,799,829,3266,4473,Compañía de Radiocomunicaciones Móviles S.A.,1,ok
-334_p829,334,LibroVol334.2.md,829,837,4474,15263,"P., A. | ANSeS",2,pagina_fin_no_en_mapa
+334_p829,334,LibroVol334.2.md,829,837,4474,4801,"P., A. | ANSeS",2,ok_pg_fin_redirigida
 334_p837,334,,837,842,,,JP Morgan Chase Bank NA (Sucursal Bs. As.) | Banco Central de la Republica Argentina,2,pagina_no_en_mapa
 334_p842,334,LibroVol334.2.md,842,847,4967,5167,M. M. M. G. | Ministerio de Economía (Estado Nacional),2,ok
 334_p847,334,LibroVol334.2.md,847,852,5168,5364,"Soto, Marcos Sergio y Otro | Federación Argentina de Box y Otro | Soto, Marcos Sergio y otro | Federación Argentina de Box y otro",4,ok
@@ -2874,7 +2874,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 334_p858,334,LibroVol334.2.md,858,864,5603,5843,"Renault Argentina S.A. | Barrionuevo, Juan Carlos",2,ok
 334_p864,334,LibroVol334.2.md,864,871,5844,6115,"L., M. E. | C., L.C.",2,ok
 334_p871,334,LibroVol334.2.md,871,875,6116,6255,"Gaetti, Gaston Ceferino",1,ok
-334_p875,334,LibroVol334.2.md,875,885,6256,15263,Rectificaciones Rivadavia S.A. | A.F.I.P. | Por nombre del demandado A.F.I.P.,3,pagina_fin_no_en_mapa
+334_p875,334,LibroVol334.2.md,875,885,6256,6611,Rectificaciones Rivadavia S.A. | A.F.I.P. | Por nombre del demandado A.F.I.P.,3,ok_pg_fin_redirigida
 334_p885,334,,885,891,,,"Embajada de la Federación Rusa y Otros | Clementi, Edgar Omar y otro | Embajada de la Federación Rusa y otros",3,pagina_no_en_mapa
 334_p891,334,LibroVol334.2.md,891,896,6802,6993,D.G.I. | COVIMET S.A. (TF 19404-I),2,ok
 334_p896,334,LibroVol334.2.md,896,900,6994,7139,Poder Ejecutivo de la Ciudad de Buenos Aires | Poder Judicial de la Ciudad de Buenos Aires,2,ok
@@ -2886,7 +2886,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 334_p950,334,LibroVol334.2.md,950,959,9126,9477,(2) Obra Social del Personal de Encotesa y de las Com. de R.A. | Obra Social del Personal de Encotesa y de las Com. de R.A.,2,ok
 334_p959,334,LibroVol334.2.md,959,970,9478,9893,Papamundo S.A. y Otra | Solvay Indupa S.A.I.C. | Papamundo S.A. y otra,3,ok
 334_p970,334,LibroVol334.2.md,970,972,9894,9962,"Hirzy, Silvia Beatriz | E.N. C.S.J.N. Ac. 75/93 y 37/94",2,ok
-334_p972,334,LibroVol334.2.md,972,983,9963,15263,Oscar Melendez Construcciones y Otro | A.N.A. | Oscar Meléndez Construcciones y otro,3,pagina_fin_no_en_mapa
+334_p972,334,LibroVol334.2.md,972,983,9963,10374,Oscar Melendez Construcciones y Otro | A.N.A. | Oscar Meléndez Construcciones y otro,3,ok_pg_fin_redirigida
 334_p983,334,,983,988,,,"Mara, Hugo Jorge | E.N. M° Defensa SSI GN Resol 1219/96 y 1307/97 SS",2,pagina_no_en_mapa
 334_p988,334,LibroVol334.2.md,988,996,10529,10843,"Nieto, Nicolasa del Valle | La Cabaña S.A. y Otros | La Cabaña S.A. y otros",3,ok
 334_p996,334,LibroVol334.2.md,996,1002,10844,11068,"SIDERAR S.A.I.C. | Buenos Aires, Provincia de y Otro | Buenos Aires, Provincia de y otro",3,ok
@@ -2909,7 +2909,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 334_p1113,334,LibroVol334.3.md,1113,1123,1988,2386,Empresa Distribuidora y Comercializadora Norte Sociedad Anónima (EDENOR S.A.) | Municipalidad de Pilar,2,ok
 334_p1123,334,LibroVol334.3.md,1123,1133,2387,2779,"Giachino, Luis Alberto y otro | Estado Nacional – Dirección General de Sanidad de Fronteras y Terminales de Transporte y otros",2,ok
 334_p1133,334,LibroVol334.3.md,1133,1139,2780,3015,"Gioia, Gustavo Américo y otro | Consolidar A.R.T. S.A.",2,ok
-334_p1139,334,LibroVol334.3.md,1139,1143,3016,37709,"Suárez, Carlos Alberto | Representaciones S.R.L. y otros",2,pagina_fin_no_en_mapa
+334_p1139,334,LibroVol334.3.md,1139,1143,3016,3170,"Suárez, Carlos Alberto | Representaciones S.R.L. y otros",2,ok_pg_fin_redirigida
 334_p1143,334,,1143,1162,,,"Buenos Aires, Provincia de y otros",1,pagina_no_en_mapa
 334_p1162,334,LibroVol334.3.md,1162,1172,3886,4268,"Chevron San Jorge S.R.L. | Neuquén, Provincia del",2,ok
 334_p1172,334,LibroVol334.3.md,1172,1182,4269,4663,"Finocchietti, Enrique Augusto y otro | Administración Nacional de la Seguridad Social",2,ok
@@ -2951,7 +2951,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 334_p1622,334,LibroVol334.3.md,1622,1626,22314,22451,"Rigamonti, Carlos Alberto | AMSA S.A.",2,ok
 334_p1626,334,LibroVol334.3.md,1626,1640,22452,23005,"Transportes Metropolitanos Belgrano S.A. y otros | Buenos Aires, Provincia de",2,ok
 334_p1640,334,LibroVol334.3.md,1640,1644,23006,23155,"Trinchieri, Antonio | Billinghurst Place S.A. y otro",2,ok
-334_p1644,334,LibroVol334.3.md,1644,1659,23156,37709,"Vecchi, Amado Alejandro",1,pagina_fin_no_en_mapa
+334_p1644,334,LibroVol334.3.md,1644,1659,23156,23719,"Vecchi, Amado Alejandro",1,ok_pg_fin_redirigida
 334_p1659,334,,1659,1673,,,"Calafell, Roque Esteban",1,pagina_no_en_mapa
 334_p1673,334,LibroVol334.3.md,1673,1691,24225,24927,"Centurión, Luis Alberto y Baini, Andrés Maximiliano",1,ok
 334_p1691,334,LibroVol334.3.md,1691,1714,24928,25842,"P., H. P. y otro | Di Cesare, Luis Alberto y otro",2,ok
