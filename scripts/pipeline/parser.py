@@ -54,7 +54,7 @@ from itertools import combinations
 
 # ── Marcadores estructurales ──────────────────────────────────────────────────
 
-RE_APERTURA      = re.compile(r"^(FALLO|SENTENCIA) DE LA CORTE SUPREMA\s*$")
+RE_APERTURA = re.compile(r"^(FALLO|SENTENCIA)\s+DE\s+LA\s+CORTE\s+SUPREMA\s*$", re.I)
 RE_FECHA_LINEA   = re.compile(r"^Buenos Aires[,]?\s+\d{1,2}\s+(?:de\s+)?\w+\s+(?:de\s+)?\d{4}", re.I)
 RE_FECHA_EXTRACT = re.compile(r"Buenos Aires[,]?\s+(\d{1,2}\s+(?:de\s+)?\w+\s+(?:de\s+)?\d{4})", re.I)
 
