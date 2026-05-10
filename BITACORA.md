@@ -871,3 +871,55 @@ investigado en detalle.
   optimizado para formato editorial moderno.
 - Acordadas/discursos como tipo distinto: hallazgo abierto, sin
   caso testigo. Anotar cuando aparezca.
+
+## Sesión 2026-05-10 — Lectura del código y refinación de hallazgos
+
+Continúa la sesión nocturna del 09/05. La sesión anterior había validado H018 con `--random 80` y registrado la calibración fallida del detector de borde inferior (mediana de residuo OK pero `solapado_con_proximo` disparando en 90% de los casos, contra los <5% esperados). El diagnóstico de la sesión anterior fue mecánico pero parcial: identificó que el delta sale negativo cuando el parser usa `caratula_siguiente`, pero atribuyó la falla a la calibración de H018.
+
+La presente sesión avanzó por dos pasos: primero auditoría manual de los cinco casos pendientes de residuo alto (333_p2420, 330_p1854, 330_p2746, 341_p1617, 341_p221), después lectura del código real de `auditar_fallo.py` y `parser.py` para chequear cada conclusión preliminar contra la implementación. La lectura del código corrigió varias afirmaciones de la sesión anterior y precisó la causa-raíz de tres bugs.
+
+### Resultados empíricos de los cinco casos
+
+Ninguno superó el umbral del 20% de residuo declarado en BITACORA H018. El mayor fue 341_p221 con 17,09%; 341_p1617 bajó a 0,41%. Esto pone en duda la lista misma — los outliers de "más de 20%" deben provenir de una corrida anterior al random-80 cuyo registro no se preservó. Cuadro resumen:
+
+| Caso (línea_inicio_real) | Residuo | Diagnóstico |
+|---|---|---|
+| `333_p2410` | 4,64% | F007 entrada + F012 (firma cortada) + disidencia glotona (no visible al auditor) |
+| `330_p1849` | 12,95% | F007 entrada + R-postfirma + F007 salida |
+| `330_p2739` | 10,13% | **F013 candidato**: parser corta caso al final del dictamen, omite cuerpo de mayoría + firma |
+| `341_p1611` | 0,41% | Sano. `solapado_con_proximo` con delta=-15 puro estructural |
+| `341_p218` | 17,09% | F012 (firma cortada por header) + R-postfirma |
+
+### Hallazgos refinados con base en el código
+
+**Sobre `solapado_con_proximo` y H018.** La sesión anterior leyó el detector de borde inferior y atribuyó la falla a su calibración. La lectura de `detectar_fin_real` (parser.py, línea 1153) corrige la atribución: la métrica geométrica del borde inferior no falla por calibración propia, falla porque mide contra una decisión semántica del parser que es estructuralmente prospectiva. Las cuatro pistas de `detectar_fin_real` priorizan referencias al fallo siguiente (carátula_siguiente, sumario_siguiente, marcador_apertura_siguiente), y la firma del propio fallo es solo fallback. Cuando la pista 1 acierta y la carátula del siguiente está físicamente debajo de la firma del actual (página compartida, patrón editorial estándar), `linea_fin_real > linea_inicio_proximo_caso` por construcción, y delta resulta negativo. El estado `solapado_con_proximo` mide geometría correctamente — lo que no captura es que esa geometría es la norma, no la patología. Para que la métrica recupere poder de filtrado, tendría que ajustarse al pista usada por `detectar_fin_real` (si pista=`caratula_siguiente`, esperar delta negativo y no alarmar).
+
+**F013 con causa-raíz mecánica: caso 330_p2739.** El parser corta el caso al final del dictamen (`linea_fin_real=54297`, `status=fin_dentro_bloque`, pista=`caratula_siguiente`). El span de dictamen también termina en 54297. La lectura del código revela que la pista 1 hace búsqueda hacia atrás dentro del bloque (`buscar_atras(es_caratula, lfc, li + 5)`) usando un regex sobre primer_token. Cuando ese token aparece como mención dentro del cuerpo del dictamen, la pista 1 matchea ahí y corta. Después `construir_bloque_desde_localizacion` recibe `linea_fin_real` como tope, el bloque queda truncado, y `segmentar_bloque` trabaja sobre lo que sobrevive — sin ver el cuerpo de la mayoría ni la firma que vienen después de 54297. El bug se manifiesta en cadena pero la causa-raíz es la pista 1 con falso positivo. Pendiente de confirmación: chequear el .md crudo entre líneas 54165–54297 para identificar la mención que disparó el match.
+
+Caracter sistémico: esto es invisible al auditor. La invariante de cobertura da OK porque cubre el bloque truncado. La de disjunción también, porque ningún span se pisa con otro dentro del rango truncado. **Solo la inspección humana detecta que falta el dispositivo del fallo.** El blind-spot real está acá.
+
+**F012 con causa-raíz precisa: granularidad de JUECES_CONOCIDOS.** Los 14 patrones de JUECES_CONOCIDOS (parser.py, línea 283) exigen nombre+apellido en la misma línea (ej. `r"carmen\s+m\.?\s*argibay"`). Cuando la firma se parte por corte editorial entre nombre y apellido, la línea aislada con el apellido suelto no matchea ningún patrón. Caso testigo: 333_p2410, línea 20848 con "M. Argibay." cae al catch_all 31 porque la línea anterior (20847, dentro del span de firma) termina en "Carmen" y el siguiente match esperado sería el patrón completo "Carmen ... Argibay" — que no existe en una línea sola.
+
+Esto cambia el fix conceptual de F012. La opción D del prompt previo ("aplicar `linea_es_continuacion_firma` intra-bloque, no solo en borde inferior") era correcta de fondo pero imprecisa en el mecanismo. El fix concreto es: agregar reconocimiento de apellido suelto como continuación de firma. La función `linea_es_continuacion_firma` del auditor (líneas 159-211) ya hace exactamente eso, usa `APELLIDOS_FIRMA_TITULARES` con apellidos sueltos. Esa función está pensada para borde inferior pero la lógica es directamente reutilizable en `detectar_firma_mayoria` del segmentador.
+
+**Disidencia glotona en 333_p2410.** `detectar_votos_y_disidencias` asigna a la última disidencia el rango `[k_ini, len(bloque) - 1]` sin verificar cierre estructural. En 333_p2410, el span 32 disidencia (20849–20983) absorbe la firma de la disidencia, su bloque post-firma editorial y la línea de carátula "JUAN JOSE GOMEZ c/ ALTO PARANA S.A. y Otro" del próximo caso. Es invisible al invariante de disjunción porque ningún otro span pisa ese rango. Es el mismo tipo de blind-spot que F013: el segmentador toma decisiones que el auditor respeta, y el contenido equivocado dentro de un span no se chequea.
+
+**R-postfirma: patrón estructural confirmado.** El bloque editorial post-firma ("Recurso extraordinario interpuesto por...", "Tribunal de origen...", "Tribunal que intervino con anterioridad...") cae sistemáticamente a catch_all en casos sanos. No tiene span dedicado. Aporta entre 5-15 líneas de residuo no patológico. Confirmado en 342_p1313, 341_p218 y 330_p1849. Decisión pendiente: o se le crea un span dedicado al segmentador (p.ej. `metadata_editorial`), o se acepta como ruido editorial conocido y se descuenta del cómputo de residuo.
+
+### Hallazgos del propio auditor
+
+**F-AUDITOR-01: colisión de timestamp.** `auditar_fallo.py` línea 1694: `ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")` con resolución de segundos. `out_path.write_text(md, encoding="utf-8")` sobreescribe sin avisar. Confirmado hoy: tres llamadas seguidas (333_p2420, 330_p1854, 330_p2746) cayeron todas en `21-15-54`, las dos primeras se perdieron. Hubo que reorrer 333_p2420 y 330_p1854. Fix simple: agregar microsegundos al timestamp, o sufijo numérico cuando el archivo ya existe.
+
+**F-AUDITOR-02 descartado.** En la primera lectura propuse "el invariante de disjunción no detecta contaminación intra-span" como bug del auditor. Lectura del código (línea 1365-1372) muestra que la disjunción solo chequea solapamiento entre spans semánticos — eso es lo que define que hace. Que un span de disidencia absorba contenido del próximo caso no es violación de disjunción, es bug del segmentador. El invariante hace su trabajo. La idea original sigue siendo válida pero no como bug del invariante: lo que falta es **otro chequeo**, no una corrección al existente. Idea anotada como mejora futura del auditor: validador de "límite estructural de span" que mire los últimos N caracteres de spans semánticos buscando carátulas embebidas o firmas posteriores.
+
+### Lección de método
+
+La sesión anterior diagnosticó la calibración fallida desde la lectura del detector de borde inferior pero sin abrir `detectar_fin_real`. Eso permitió ver el síntoma (delta negativo en 90% de los casos) pero no la causa. La sesión actual leyó el código de las dos funciones y corrigió tres atribuciones — solapado estructural no es bug de calibración, F012 no es bug del extensor de span sino de la granularidad de patrones, F013 no es bug de detección del cuerpo sino de la pista 1 con falso positivo en cuerpo del dictamen. Ratifica el principio de la BITACORA: chequear código real antes de diagnosticar. La conclusión de hoy puede tener errores que se vean recién cuando se aplique algún fix.
+
+### Pendientes inmediatos
+
+1. Verificar F013 contra el .md crudo: leer LibroVol330.2.md líneas 54165–54310 e identificar qué mención del primer_token del siguiente caso disparó la pista 1.
+2. Definir si R-postfirma se crea como span dedicado en el segmentador o se descuenta del cómputo de residuo. Decisión de diseño pendiente.
+3. Fix conceptual de F012 con `linea_es_continuacion_firma` reutilizable en `detectar_firma_mayoria`. Precondición: confirmar caso testigo en el .md crudo.
+4. Fix de F-AUDITOR-01 con microsegundos en timestamp. Trivial.
+5. Pendiente sin fecha: aplicar fix de §4.6.b RE_CONSIDERANDO al parser (caso testigo 344_p2835 con 80% de residuo en la corrida del 09/05). Este pendiente sigue pendiente.
