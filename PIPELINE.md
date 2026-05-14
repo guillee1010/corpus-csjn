@@ -2112,26 +2112,54 @@ tribunal_str = find_tribunal_origen(lines, apertura_idx, linea_fin_real + 1)
 
 #### 4.6.b — Fallback `inicio_cons = 0` en `extraer_considerando`
 
-> **🔴 PRIORIDAD SUBIDA 2026-05-09: pasó de 169 a 320 casos
-> sospechosos post-fix §3.6.a.**
+> **🟠 PRIORIDAD ALTA. Rediagnóstico 2026-05-09 (continuación),
+> recalibrado contra CSV vivo 2026-05-14.**
 >
-> Re-cuantificación post-fix:
+> El diagnóstico original apuntaba al fallback `inicio_cons = 0` como
+> causa. Sesión 2026-05-09 (continuación) reidentificó la causa raíz:
+> `RE_CONSIDERANDO` (línea 121) está anclado con `^...$` y se invoca
+> con `.match()`, por lo que solo detecta `Considerando:` como línea
+> aislada. Las variantes con prefijo (`Vistos los autos; Considerando:`)
+> caen al fallback y producen considerando inflado. El fallback es
+> síntoma, no causa.
 >
-> | Métrica | Pre-fix §3.6.a | Post-fix §3.6.a | Δ |
-> |---|---:|---:|---:|
-> | wc_considerando ≥ 0,9 × word_count | 169 | 320 | +151 |
-> | ... y apertura_tipo == fallo | 152 | 229 | +77 |
-> | wc_considerando == 0 | 1.751 | 1.681 | −70 |
+> Sesión 2026-05-14: recálculo del cluster contra CSV vivo
+> (`csjn_casos.csv`, 5.819 filas, sin cambios al parser desde la
+> sesión del 9/5):
 >
-> Los casos sospechosos casi se duplicaron. Lectura: con bloques más
-> cortos (sin la página extra del fallo siguiente), un fallback que
-> arrastra "todo el bloque" produce considerandos relativamente más
-> cercanos al `word_count`. El bug se vuelve más visible porque el
-> denominador (word_count) bajó.
+> | Variable | Plan S09 cont. | CSV vivo S14 |
+> |---|---:|---:|
+> | Total cluster (`wc_cons ≥ 0.9 × wc`) | 480 | **320** |
+> | Apertura `fallo` | 229 | 229 |
+> | Apertura `sentencia` | 3 | 3 |
+> | Sin apertura | 248 | **88** |
+> | Vacíos (`wc_cons == 0`) | — | 1.672 |
 >
-> Prioridad de fix: **media-alta**. Pasa a ser el bug más relevante
-> por fixear en el parser ahora que §3.6.a está resuelto. El contenido
-> original se conserva debajo.
+> El cluster §4.6.b puro (con apertura detectada) **no cambió**:
+> 232 casos. Los "sin apertura" bajaron de 248 a 88 porque el commit
+> `2aeb280` del 2/5 (`RE_APERTURA` tolerante a doble espacio) detectó
+> aperturas que antes no detectaba — esos casos salieron del cluster
+> al acotarse su `wc_considerando`. No es §4.6.b, es bug separado de
+> `RE_APERTURA` ya parcialmente resuelto.
+>
+> Verificación 2026-05-14: el fix §4.6.b nunca llegó al código.
+> `git log -p --all -S "RE_CONSIDERANDO"` muestra solo el commit
+> `cf836cc` de introducción. Los logs postfix del 9/5 (`+0/+0`)
+> fueron validación prematura, no fix fallido. El bug está vivo,
+> intacto, y el CSV vivo refleja ese estado.
+>
+> Hallazgo lateral: existe `RE_CONSIDERANDO_NUMERADO_1`
+> (`r"Considerando\s*:\s*1\s*[°ºª]\s*\)"`) separado, usado en
+> detección de "estructura autónoma" en votos largos. No afecta el
+> cluster (mide `wc_considerando` del fallo principal, no de votos),
+> pero el diseño del fix debe considerar si unificar criterios con
+> el numerado.
+>
+> Prioridad: **alta** entre los bugs abiertos del parser. Próximo
+> paso: diagnóstico fino del cluster de 232 con
+> `scripts/auditoria/auditar_fallo.py`, antes de diseñar el fix con
+> guard espacial. Detalle en BITACORA H019 y PIPELINE_HALLAZGOS
+> sesión 2026-05-14.
 
 ---
 

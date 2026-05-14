@@ -625,3 +625,247 @@ peso de cada pista en la cascada: pendiente.
 3. **Hallazgo se descarta** → se mueve a "Descartados" con razón breve.
 4. **No mantener este archivo cuando PIPELINE.md esté cerrado**:
    archivar o borrar.
+
+
+
+# Sesión 2026-05-09 (continuación) — Diagnóstico §4.6.b
+
+## Resumen ejecutivo
+
+Sesión dedicada a fixear §4.6.b (fallback `inicio_cons = 0` en
+`extraer_considerando`). El diagnóstico original del PIPELINE resultó
+ser **un síntoma menor de un problema más grande**. El fix concreto se
+descartó tras dos intentos fallidos sin tiempo para validar el corregido,
+pero la sesión produjo hallazgos importantes sobre el corpus y el código
+que reescriben el alcance de §4.6.b.
+
+**Resultado**: rollback completo. `parser.py` y CSVs en estado
+pre-sesión. Snapshot de baseline preservado en
+`archivo/snapshots_ad_hoc/pre_fix_4_6_b_20260509_1715/`.
+
+## Hallazgos sobre el corpus
+
+### El marcador `Considerando:` tiene tres formatos en el corpus, no uno
+
+Conteo empírico sobre los 46 archivos `.md`:
+
+| Formato | Ocurrencias | % |
+|---|---:|---:|
+| `Considerando:` aislado (línea propia) | 1.349 | 80,5% |
+| `Vistos los autos; Considerando:` y variantes con `;` | 319 | 19% |
+| Variantes residuales con `:` u otro separador | ~4 | <1% |
+| **Total ocurrencias `Considerando:` en corpus** | **1.676** | 100% |
+
+Variantes detectadas del formato 2:
+- `Autos y Vistos; Considerando:`
+- `Vistos los autos; Considerando:`
+- `Vistos los Autos; Considerando:`
+
+Variantes residuales detectadas (formato 3):
+- `Autos y Vistos:` (con `:` en lugar de `;`) — 3 casos
+- `Y Considerando` — 1 caso
+
+### El parser actual solo detecta el formato 1
+
+`RE_CONSIDERANDO` en línea 121 está definido como:
+
+```python
+RE_CONSIDERANDO  = re.compile(r"^Considerando\s*[:.]?\s*$", re.I)
+```
+
+El ancla `^` y la exigencia de fin de línea con `$` solo aceptan
+"Considerando" como línea aislada. Las 327 ocurrencias en formato 2 y 3
+**no son detectadas**, lo que dispara el fallback `inicio_cons = 0`.
+
+### Los formatos 2 y 3 explican la mayoría de los sospechosos §4.6.b
+
+Sospechosos `wc_considerando >= 0,9 × word_count` en CSV vivo: 480.
+
+| Categoría | n | Causa probable |
+|---|---:|---|
+| Apertura `fallo` detectada (formato 2 esperable) | 229 | `RE_CONSIDERANDO` no matchea formato `Vistos…; Considerando:` |
+| Apertura `sentencia` detectada | 3 | Idem |
+| Sin apertura detectada (mayormente tomos 345+) | 248 | Bug separado de `RE_APERTURA` (ver hallazgo siguiente) |
+
+La cuenta del PIPELINE pre-sesión decía 320 sospechosos. La nueva cuenta
+es 480. La diferencia (160) son los 248 sin apertura detectada que se
+revelaron al volver a auditar contra el CSV vivo. El cambio probablemente
+viene de algún reprocesado intermedio entre el redactado original del
+PIPELINE y la sesión de hoy.
+
+## Hallazgos sobre el código
+
+### Bug de `.match()` vs `.search()` en `RE_CONSIDERANDO`
+
+`RE_CONSIDERANDO` se invoca con `.match()` en dos lugares:
+- Línea 546 (dentro de `extraer_considerando`)
+- Línea 1549 (detección de fin de header de voto)
+
+Implicación crítica: `.match()` ancla a posición 0 del string. Cualquier
+regex que intente capturar variantes con prefijo (como `Vistos…;
+Considerando:`) **fallará silenciosamente** porque `.match()` solo prueba
+desde el inicio.
+
+Verificación empírica:
+```python
+r = re.compile(r'(?:^|;\s*)Considerando\s*[:.]\s*$', re.I)
+r.match('Autos y Vistos; Considerando:')   # → None
+r.search('Autos y Vistos; Considerando:')  # → match en (14, 29)
+```
+
+Cualquier intento futuro de ampliar la cobertura de `RE_CONSIDERANDO`
+debe contemplar el cambio a `.search()` o reescribir el regex con
+consumo explícito del prefijo (`r".*?(?:^|;\s*)Considerando…"`).
+
+### Quiebre estructural entre tomos 344 y 345
+
+Distribución de los 248 sospechosos sin apertura por tomo:
+
+| Tomo | Sin apertura | % de sospechosos del tomo |
+|---|---:|---:|
+| 345 | 67 | 88% |
+| 346 | 42 | 84% |
+| 347 | 29 | 81% |
+| 348 | 38 | 79% |
+| 329-344 | concentrados | 25-35% |
+
+Hay un quiebre de formato editorial en tomos 345+ que rompe `RE_APERTURA`
+sistemáticamente. Probablemente conectado al ítem 5 del plan de sesión
+("FALLO DE LA CORTE sin SUPREMA"). Bug separado, requiere su propio
+diagnóstico.
+
+### Fallos por remisión al dictamen del Procurador
+
+Caso `345_p156` revela un patrón: fallos donde la Corte se remite al
+dictamen del Procurador sin redactar considerando propio. Estructura del
+bloque:
+
+```
+[sumarios doctrinales]
+-Del dictamen de la Procuración General al que la Corte remite-
+[carátula del fallo siguiente]
+```
+
+Estos casos genuinamente **no tienen** `FALLO DE LA CORTE SUPREMA` ni
+considerando propio. No son un bug recuperable; son una categoría
+distinta de fallo que el parser debería marcar explícitamente.
+
+### Modelo estructural del bloque (corregido respecto a sesión anterior)
+
+Confirmado a partir de la inspección de `331_p211`:
+
+```
+[carátula + dictamen del Procurador]
+"Por ello..."           ← cierre del dictamen del Procurador
+FALLO DE LA CORTE       ← apertura clásica del fallo (apertura_rel)
+"Autos y Vistos; Considerando:"  ← inicio del considerando real
+[texto del considerando]
+"Por ello..."           ← cierre del considerando, inicio dispositivo
+FALLO DE LA CORTE       ← se repite (segunda mención)
+[dispositivo + firma]
+```
+
+El modelo estructural del parser (apertura → considerando → "Por ello" →
+dispositivo) es correcto. Lo que está roto es la detección del marcador
+"Considerando:" en su variante con prefijo, no la lógica del flujo.
+
+## Hallazgo metodológico
+
+El diagnóstico original del PIPELINE §4.6.b apuntaba al fallback
+(`inicio_cons = 0`) como bug. La auditoría empírica reveló que:
+
+1. El fallback **es un síntoma**, no la causa.
+2. La causa raíz es la combinación de `RE_CONSIDERANDO` restrictivo +
+   `.match()` en lugar de `.search()`.
+3. El fix correcto es a nivel de regex y método de invocación, no del
+   fallback.
+
+Lección para futuros diagnósticos: cuando un fallback se gatilla con
+frecuencia inesperada, auditar primero **por qué** falla la detección
+principal antes de intentar mejorar el fallback. Un fallback que se
+gatilla 320+ veces no es un fallback — es la ruta principal disfrazada.
+
+## Estado del fix §4.6.b al cierre de sesión
+
+**Sin aplicar.** Tanto el fix original del PIPELINE (Opción A: pasar
+`apertura_rel` al fallback) como el fix corregido durante la sesión
+(regex permisivo + `.search()`) quedan **sin validar empíricamente**.
+
+El fix corregido (regex `(?:^|;\s*)Considerando\s*[:.]\s*$` + cambiar
+`.match()` por `.search()` en líneas 546 y 1549) es el camino más
+prometedor según el análisis, pero no se completó la validación
+post-reprocesado.
+
+Próxima sesión sobre §4.6.b: arrancar desde aquí, no desde el plan
+original del PIPELINE.
+
+## Estado de los CSVs y código
+
+- `parser.py`: revertido a estado pre-sesión.
+- CSVs vivos: regenerados con parser pre-fix. Idénticos al snapshot.
+- Snapshot disponible: `archivo/snapshots_ad_hoc/pre_fix_4_6_b_20260509_1715/`
+- Scripts de auditoría: preservados en
+  `archivo/exploratorios/diagnostico/4_6_b/`. No requieren cambio para
+  futura sesión.
+
+## Pendientes anotados durante la sesión
+
+1. **Fix §4.6.b versión corregida**: aplicar y validar el fix combinado
+   (regex permisivo + `.search()`) en sesión limpia.
+2. **Bug `RE_APERTURA` en tomos 345+**: 248 casos sin apertura detectada
+   concentrados en cuatro tomos. Diagnóstico propio.
+3. **Fallos por remisión al dictamen**: definir cómo categorizar y marcar
+   estos casos en el corpus. Probablemente nueva columna o `tipo_entrada`
+   adicional.
+4. **Investigar discrepancia de 320 vs 480 sospechosos**: el PIPELINE
+   pre-sesión documentaba 320, el CSV vivo da 480. Diferencia explicable
+   en parte por los 248 sin apertura, pero amerita confirmación.
+
+
+## Sesión 2026-05-14 — Rediagnóstico §4.6.b contra CSV vivo, descarte de herramienta paralela
+
+### Recálculo del cluster §4.6.b
+
+El "Draft — Reescritura §4.6.b" registrado al final de este archivo (sesión 2026-05-09 cont.) cuantificaba 480 sospechosos / 248 sin apertura. Auditoría contra CSV vivo (`output/parser/csjn_casos.csv`, 5.819 filas, 14/5):
+
+| Variable | Draft S09 | CSV vivo S14 |
+|---|---:|---:|
+| Total cluster `wc_cons ≥ 0.9 × wc` | 480 | **320** |
+| Apertura `fallo` | 229 | 229 |
+| Apertura `sentencia` | 3 | 3 |
+| Sin apertura | 248 | **88** |
+| Vacíos `wc_cons == 0` | (no medido) | 1.672 |
+
+Los 232 con apertura detectada coinciden — el cluster §4.6.b puro no cambió. Lo que difiere son los "sin apertura" (88 vs 248). Probable explicación: el commit `2aeb280` del 2/5 (RE_APERTURA tolerante a doble espacio) detectó aperturas en casos que antes el draft contaba como "sin apertura". El draft fue redactado pre-2aeb280; la diferencia es consistente con eso.
+
+Implicancia: la estructura del diagnóstico §4.6.b (RE_CONSIDERANDO no detecta formatos 2/3, fix con regex permisivo + `.search()` + guard espacial) sigue siendo correcta. Las cifras del draft hay que actualizarlas: 320 (no 480), 88 sin apertura (no 248).
+
+**Acción**: corregir el cuerpo de PIPELINE.md §4.6.b con las cifras del CSV vivo. Eliminar el "Draft — Reescritura" del final del archivo (queda integrado al cuerpo de la sección). Hecho en esta sesión.
+
+### Verificación: el fix §4.6.b nunca llegó al código
+
+`git log -p --all -S "RE_CONSIDERANDO" scripts/pipeline/parser.py` confirma que el único commit que modifica el regex es `cf836cc` (2/5, introducción). Los dos commits posteriores que tocan `parser.py` no afectan `RE_CONSIDERANDO`. El regex está intacto como `r"^Considerando\s*[:.]?\s*$"`. Los logs postfix del 9/5 (`+0/+0`) fueron validación prematura, no fix fallido. Detalle en BITACORA H019.
+
+### Hallazgo nuevo: `RE_CONSIDERANDO_NUMERADO_1`
+
+Existe `RE_CONSIDERANDO_NUMERADO_1 = re.compile(r"Considerando\s*:\s*1\s*[°ºª]\s*\)", re.I)` separado del `RE_CONSIDERANDO` principal. Se usa en `parser.py` para detectar "estructura autónoma" en votos largos (`wc_voto >= 1500 and es_estructura_autonoma`). No afecta el cluster §4.6.b (que mide `wc_considerando` del fallo principal, no de votos individuales), pero al diseñar el fix de `RE_CONSIDERANDO` hay que decidir si conviene unificar criterios con el numerado o dejarlos separados a propósito. Anotado para próxima sesión.
+
+### Limpieza de scripts diagnóstico
+
+Durante la sesión se armó `scripts/diagnostico/auditoria_4_6_b_prefix.py` que reimplementaba regex en paralelo al parser. Una pregunta del usuario reveló que `scripts/auditoria/auditar_fallo.py` ya existe (construido en sesión 2026-05-08, BITACORA H014) y reusa por importación los regex de `parser.py`. El script paralelo es estructuralmente inferior: reimplementa lo que el parser ya tiene, y no particiona el bloque en spans tipados.
+
+Decisión: descartar el script paralelo, adoptar `auditar_fallo.py` como herramienta canónica para diagnóstico fino del cluster §4.6.b.
+
+- `scripts/diagnostico/auditoria_4_6_b_prefix.py` → archivado en `archivo/exploratorios/diagnostico/4_6_b/auditoria_4_6_b_prefix_v2.py` (junto al del 9/5).
+- Log del 14/5 → `archivo/exploratorios/diagnostico/4_6_b/salida/auditoria_4_6_b_prefix_20260514_1931.txt`.
+- `scripts/diagnostico/diagnostico_4_6_b_cluster.py` (también creado y descartado en esta sesión) → eliminado, sin valor documental.
+
+Convención reafirmada: `scripts/diagnostico/` queda para diagnósticos cuantitativos sobre los CSVs producidos. Cualquier diagnóstico fino del cuerpo del corpus va via `auditar_fallo.py` en `scripts/auditoria/`.
+
+### Estado al cierre
+
+- `parser.py` sin cambios.
+- CSVs vivos sin regenerar.
+- Cluster §4.6.b dimensionado contra CSV vivo (320 / 232 / 88 / 1.672).
+- Herramienta canónica para próximo paso: `auditar_fallo.py` con sample dirigido del cluster.
+

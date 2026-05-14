@@ -93,3 +93,16 @@ Sesión de diseño puro, sin commits de código. Se cierra decisión sobre varia
 
 Sesión de diseño puro, sin commits de código. Se cierra decisión sobre variante a implementar (clasificador activo del gap, no pasivo ni con reclasificación), tipos de span de iteración 1 (firma_arrastrada, header_pagina, no_clasificable), alertas estructurales (firma_truncada_en_silabacion, caratula_siguiente_anticipada), y heurística de firma multilínea sin tope arbitrario de líneas (cierre por límites estructurales). Se identifica F008 (off-by-one entre reporte de auditoría y líneas reales del .md, pendiente investigar). Detalle completo en BITACORA H017.
 
+
+## 2026-05-14 — Limpieza scripts diagnóstico §4.6.b
+
+Sin cambios al parser ni a los CSVs vivos. `RE_CONSIDERANDO` sigue intacto en `scripts/pipeline/parser.py:121`.
+
+Cambios operativos:
+- `scripts/diagnostico/auditoria_4_6_b_prefix.py` archivado en `archivo/exploratorios/diagnostico/4_6_b/auditoria_4_6_b_prefix_v2.py`. El script reimplementaba regex en paralelo al parser; descartado a favor de `scripts/auditoria/auditar_fallo.py` que importa los regex de `parser.py` (decisión H015 reafirmada).
+- `scripts/diagnostico/diagnostico_4_6_b_cluster.py` eliminado (creado y descartado en la misma sesión).
+- Log de dimensionamiento del 14/5 preservado en `archivo/exploratorios/diagnostico/4_6_b/salida/auditoria_4_6_b_prefix_20260514_1931.txt` (cluster vivo: 320 sospechosos / 232 con apertura / 88 sin apertura / 1.672 vacíos).
+
+Convención: `scripts/diagnostico/` queda para diagnósticos cuantitativos sobre CSVs. Diagnóstico fino del cuerpo del corpus via `scripts/auditoria/auditar_fallo.py`.
+
+Detalle en BITACORA H019 y PIPELINE_HALLAZGOS sesión 2026-05-14.

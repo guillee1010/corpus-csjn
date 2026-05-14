@@ -923,3 +923,73 @@ La sesión anterior diagnosticó la calibración fallida desde la lectura del de
 3. Fix conceptual de F012 con `linea_es_continuacion_firma` reutilizable en `detectar_firma_mayoria`. Precondición: confirmar caso testigo en el .md crudo.
 4. Fix de F-AUDITOR-01 con microsegundos en timestamp. Trivial.
 5. Pendiente sin fecha: aplicar fix de §4.6.b RE_CONSIDERANDO al parser (caso testigo 344_p2835 con 80% de residuo en la corrida del 09/05). Este pendiente sigue pendiente.
+
+
+## Sesión 2026-05-14 — H019: rediagnóstico §4.6.b sobre CSV vivo, descarte de herramienta paralela, adopción de `auditar_fallo.py`
+
+Sesión corta de auditoría sin commits de código. Objetivo declarado al inicio: implementar el fix §4.6.b siguiendo el "Draft — Reescritura" registrado al final de PIPELINE.md (sesión 2026-05-09 continuación). La sesión derivó en limpieza de premisas, recálculo del cluster contra CSV vivo, descarte de un script paralelo que se había armado sin conocer la infraestructura existente, y reafirmación de `scripts/auditoria/auditar_fallo.py` como la herramienta correcta para el diagnóstico fino.
+
+### Verificación: el fix §4.6.b nunca llegó al código
+
+Los logs postfix del 9/5 (`+0/+0` sospechosos, `+0` vacíos) habían quedado registrados ambiguamente como "el fix no movió la aguja". `git log -p --all -S "RE_CONSIDERANDO" scripts/pipeline/parser.py` confirma que el único commit que toca el regex es `cf836cc` (2/5, reorganización estructural — commit de introducción del regex, no de modificación). Los dos commits posteriores que tocan `parser.py` (`2adda06` Fix1 V1 case_name, `2aeb280` RE_APERTURA tolerante doble espacio) no modifican `RE_CONSIDERANDO`. El regex está exactamente como dice el plan original: `r"^Considerando\s*[:.]?\s*$"`.
+
+Lectura: la validación postfix del 9/5 fue prematura. No hubo fix aplicado al código y por eso pre vs post salieron idénticos. **El bug §4.6.b está vivo, intacto, y el CSV vivo refleja ese estado.** El terreno está limpio para diagnóstico fino.
+
+Hallazgo lateral: existe `RE_CONSIDERANDO_NUMERADO_1` (`r"Considerando\s*:\s*1\s*[°ºª]\s*\)"`), distinto del `RE_CONSIDERANDO` principal, usado en detección de "estructura autónoma" para votos largos (`wc_voto >= 1500 and es_estructura_autonoma`). No afecta el cluster pre-fix (el cluster mide `wc_considerando` del fallo principal, no de votos individuales), pero hay que tenerlo presente al diseñar el fix: cualquier cambio en `RE_CONSIDERANDO` debe considerar si conviene unificar criterios con el numerado o dejarlos separados a propósito.
+
+### Cluster vivo recontado: 320 / 232 / 88 / 1672
+
+El plan original de sesión arrastraba "480 sospechosos" como tamaño del cluster. La auditoría contra `output/parser/csjn_casos.csv` (5.819 filas) sobre el CSV vivo dio:
+
+| Variable | Plan original (S2026-05-09 cont.) | CSV vivo (S2026-05-14) | Coincide |
+|---|---:|---:|---|
+| Total cluster (`wc_cons ≥ 0.9 × wc`) | 480 | **320** | ✗ |
+| Apertura `fallo` | 229 | 229 | ✓ |
+| Apertura `sentencia` | 3 | 3 | ✓ |
+| Sin apertura | 248 | **88** | ✗ |
+| Vacíos (`wc_cons == 0`) | — | 1.672 | — |
+
+Los **232 con apertura detectada coinciden exactamente** entre plan y vivo. Lo que difiere son los "sin apertura" (88 vs 248), y por arrastre el total. Probable explicación: el commit `2aeb280` del 2/5 ("RE_APERTURA tolerante a doble espacio") detectó aperturas que antes no detectaba, y esos casos salieron del cluster porque su `wc_considerando` se acotó al haber apertura.
+
+Implicancia: **el cluster relevante para §4.6.b (los 232) sigue intacto**. La hipótesis del bug se mantiene (`RE_CONSIDERANDO` no detecta formatos 2/3). Lo que cambió es la magnitud del bug paralelo "sin apertura detectada": de 248 a 88. No es §4.6.b — es otro bug aún sin diagnóstico propio.
+
+### Hipótesis vieja vs nueva, redefinición de §4.6.b
+
+El diagnóstico original de PIPELINE §4.6.b apuntaba al fallback `inicio_cons = 0` como causa. La sesión del 9/5 (continuación) ya había rediagnosticado: el fallback es síntoma, la causa raíz es `RE_CONSIDERANDO` restrictivo + invocación con `.match()` en lugar de `.search()`. El "Draft — Reescritura §4.6.b" al final de PIPELINE.md registra ese rediagnóstico.
+
+Esta sesión confirma la hipótesis del 9/5 y la actualiza con cifras del CSV vivo (320, no 480; 88 sin apertura, no 248).
+
+### Descarte de herramienta paralela: `auditoria_4_6_b_prefix.py` (v2)
+
+Durante la sesión se construyó un script nuevo en `scripts/diagnostico/auditoria_4_6_b_prefix.py` que reimplementaba regex en paralelo al parser (RE_F1, RE_F2, RE_PERMISIVO). El script corrió y dio el dimensionamiento del cluster (Bloques 1, 2, 5), pero el Bloque 3 (clasificación f1/f2/f3 con lectura de `.md`) abortó por nombres de columna distintos a los asumidos (`archivo` y `linea_fin` en lugar de `source_file` y `linea_fin_real`).
+
+Antes de arreglar las columnas, una pregunta del usuario ("¿no hicimos un script auditoría_csjn que separaba bien las secciones con info del regex?") reveló la existencia de `scripts/auditoria/auditar_fallo.py` (69 KB, construido en sesión 2026-05-08 según H014). Inspección del docstring confirmó: **`auditar_fallo.py` reusa los regex y helpers de `parser.py` por importación** ("No reimplementa heurísticas. Si una heurística está rota en parser.py, acá va a estar igual de rota — y el catch-all lo va a delatar"). Es exactamente la arquitectura que `auditoria_4_6_b_prefix.py` no tenía.
+
+Lectura crítica del propio trabajo:
+- El script paralelo reimplementaba regex que el parser ya tenía → mala práctica (si el parser cambia, el diagnóstico mide el viejo).
+- El script paralelo no particionaba el bloque en spans tipados → no podía dar input al diseño del fix con guard espacial.
+- El script paralelo había sido construido sin antes inventariar las herramientas existentes → trabajo duplicado e inferior.
+
+Decisión: descartar `auditoria_4_6_b_prefix.py`, archivar en `archivo/exploratorios/diagnostico/4_6_b/auditoria_4_6_b_prefix_v2.py` (junto al del 9/5 que también está archivado ahí). El log de la única corrida útil (dimensionamiento) queda en `archivo/exploratorios/diagnostico/4_6_b/salida/auditoria_4_6_b_prefix_20260514_1931.txt`. El script anterior `diagnostico_4_6_b_cluster.py` que también se había creado y descartado en esta sesión fue eliminado directamente, sin valor documental.
+
+### Conexión con H015 (estrategia de promoción gradual del auditor)
+
+Esta sesión es evidencia operativa de la decisión H015: cuando aparece un problema de diagnóstico, **no escribir herramienta ad-hoc paralela; usar el auditor**. El auditor materializa la arquitectura de "separación entre segmentación y extracción de features" que el parser actual no tiene (BITACORA H014). Para §4.6.b específicamente, el catch-all del auditor sobre el cluster de 232 es el camino correcto: va a delatar dónde el cuerpo del fallo cae porque `RE_CONSIDERANDO` no matchea.
+
+Convención reafirmada: cualquier diagnóstico fino del corpus va via `auditar_fallo.py`, no via scripts ad-hoc en `scripts/diagnostico/`. Esto deja a `scripts/diagnostico/` solo para diagnósticos cuantitativos sobre los CSVs producidos, no sobre el cuerpo del corpus.
+
+### Sin fix aplicado al cierre
+
+- `parser.py`: sin cambios.
+- CSVs vivos: sin regenerar.
+- `RE_CONSIDERANDO` sigue intacto en línea 121.
+
+### Pendientes para próxima sesión
+
+1. **Diagnóstico fino del cluster con `auditar_fallo.py`.** Sample dirigido de ~5 casos al azar del cluster de 232 (con seed reproducible). El catch-all del auditor va a mostrar dónde cada "Considerando" no detectado cae respecto a los spans (dictamen vs cuerpo_mayoria). Esto da el input directo para diseñar el fix con guard espacial.
+2. **Diseño del fix con guard espacial.** Sobre la base del diagnóstico fino, decidir si el fix es `RE_CONSIDERANDO` permisivo + `.search()` dentro de la ventana `(apertura, por_ello)` excluyendo span del dictamen, u otra estrategia. F013 ya enseñó que `permisivo + .search()` sin guard rompe fallos.
+3. **Validación postfix.** El script `archivo/exploratorios/diagnostico/4_6_b/auditoria_4_6_b_postfix.py` sigue siendo válido como base (compara métricas pre/post, detecta regresiones). Reusable sin cambios para esta iteración.
+
+### Lección de método
+
+Antes de construir herramienta nueva, inventario de herramientas existentes. Esta sesión perdió ~2 horas reconstruyendo en paralelo lo que `auditar_fallo.py` ya hacía mejor. El inventario formal de scripts (`scripts/diagnostico/`, `scripts/auditoria/`, `archivo/`) sigue pendiente — anotado al cierre de la sesión como trabajo separado para sesión dedicada.
