@@ -1254,7 +1254,7 @@ con seed, y produce tres outputs en `output/auditoria/auditar_fallo/`:
 Defaults: `--random 80 --seed 15052026`. Reusa funciones del auditor
 (`_seleccionar_random`, `_render_doc_completo`) en vez de duplicar
 lógica. Cache compartido entre las 80 invocaciones para no recargar
-CSVs grandes. Commit `<hash del wrapper>`.
+CSVs grandes. Commit 5156523.
 
 Decisión metodológica clave: la tabla agrupa **señales crudas** del
 auditor, no diagnósticos por bug B0NN. El mapeo señal → bug se hace
