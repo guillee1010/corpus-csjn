@@ -1210,3 +1210,97 @@ persistan en el CSV actual. Próxima sesión: auditar con
 auditar_fallo.py sobre muestra random para evaluar cuáles bugs siguen
 vivos y priorizar a partir de eso, en vez de seguir trabajando la
 lista existente como si todo estuviera al día.
+
+## H021 — Infraestructura para auditoría de persistencia de bugs (15/5/2026)
+
+Sesión enfocada en preparar la auditoría planificada en H020. No se
+ejecutaron los Pasos 4-6 del plan (tabulación, spot-check,
+re-priorización); quedan para H022. Lo que sí se hizo: agregar
+infraestructura mínima para que la corrida de 80 sea reproducible y
+tabulable.
+
+### Cambios al auditor (regla del plan violada deliberadamente)
+
+El plan H020 decía "no tocar auditar_fallo.py". Se incumplió esa regla
+con justificación: agregar un flag `--seed N` al CLI para sampling
+reproducible. La modificación es de infraestructura (5 + 3 líneas), no
+de lógica de detección — la API canónica `auditar_fallo(tomo, pagina)`
+no cambió. Implementación con `random.Random(N)` (instancia local) en
+vez de `random.seed()` global para evitar contaminación del PRNG del
+módulo si el auditor se importa desde otro script.
+
+Verificación: dos corridas con `--seed 15052026 --random 5` devolvieron
+exactamente los mismos 5 case_ids en el mismo orden. Dos corridas sin
+seed dieron muestras distintas (control negativo OK). Commit `a0809ee`.
+
+Alternativa descartada: script de sampling efímero al lado del auditor.
+Razón: scripts de un solo uso se vuelven ilegibles en pocas semanas
+("no sabemos qué son los archivos o qué hacen"). Mejor flag permanente
+documentado en `--help`.
+
+### Wrapper de tabulación en lote
+
+Archivo nuevo: `scripts/auditoria/tabular_senales_lote.py` (260 líneas).
+Orquesta corrida en lote de `auditar_fallo()` sobre una muestra random
+con seed, y produce tres outputs en `output/auditoria/auditar_fallo/`:
+
+1. `tabla_senales_<N>_<seed>.csv` — 25 columnas crudas por caso
+   (identificación, cobertura, estructura de spans, borde inferior,
+   status del parser).
+2. `dicts_<N>_<seed>.json` — los N dicts completos del auditor, para
+   regenerar la tabla con columnas distintas sin re-correr el lote.
+3. `auditoria_<N>_<seed>.md` — idéntico al output del CLI del auditor.
+
+Defaults: `--random 80 --seed 15052026`. Reusa funciones del auditor
+(`_seleccionar_random`, `_render_doc_completo`) en vez de duplicar
+lógica. Cache compartido entre las 80 invocaciones para no recargar
+CSVs grandes. Commit `<hash del wrapper>`.
+
+Decisión metodológica clave: la tabla agrupa **señales crudas** del
+auditor, no diagnósticos por bug B0NN. El mapeo señal → bug se hace
+post hoc en spot-check (Paso 5), no a priori. Razón: la lista de
+DEUDA_TECNICA puede tener bugs que el auditor no sabe detectar y
+señales del auditor que no tienen entrada en DEUDA_TECNICA. Tabular
+por señal evita que el mapeo sesgue lo que se ve.
+
+### Muestra de 80 (seed 15052026)
+
+Corrida ejecutada al final de la sesión. Outputs commiteados en
+`output/auditoria/auditar_fallo/` con sufijo `80_15052026`. Commit
+`<hash de outputs>`.
+
+### Hallazgo preliminar (no interpretado)
+
+En el test con `--random 5 --seed 999` previo a la corrida real, 4 de
+5 casos cayeron en `borde_estado = solapado_con_proximo` y 2 con
+porcentaje de residuo >50%. No se interpretó: n=5 no permite inferir
+prevalencia, y la magnitud del solapamiento (`borde_delta`) no se
+revisó. El estado solapado puede ser ruido editorial (1-2 líneas) o
+bug serio (20+ líneas) — pendiente análisis sobre los 80 en H022.
+
+### Pendiente para H022
+
+1. Análisis exploratorio de `tabla_senales_80_15052026.csv`:
+   distribuciones por señal, especialmente `borde_estado`,
+   `borde_delta`, `porcentaje_residuo`, `pista_fin`.
+2. Mapeo de señales observadas a bugs de DEUDA_TECNICA.
+3. Spot-check de 5-10 casos contra `.md` (Paso 5 del plan H020).
+4. Conclusiones de re-priorización en
+   `output/auditoria/auditar_fallo/conclusiones.md` (Paso 6).
+5. **No** actualizar DEUDA_TECNICA en H022 — las conclusiones quedan
+   como insumo para una sesión posterior dedicada a esa re-priorización.
+
+### Ideas anotadas para sesiones futuras
+
+- **Integración auditor → parser productivo.** El auditor segmenta el
+  bloque de un fallo en 10 tipos de span (carátula, sumario, dictamen,
+  cuerpo_mayoría, voto, disidencia, firma, sumario_con_link,
+  header_pagina, catch_all) con mejor granularidad que el parser
+  actual. Evaluar si esa segmentación puede reemplazar o complementar
+  la del parser productivo. Decisión arquitectónica grande, sesión
+  dedicada.
+- **Expansión de tabla de señales a 40+ columnas.** Hoy en 25. Si la
+  auditoría escala a corpus completo (5800+ casos), conviene agregar
+  flags derivados (`tiene_firma_sin_votos`, `voto_sin_firma`) y
+  alertas individuales como columnas booleanas separadas. Marginal a
+  80 casos, útil a escala.
