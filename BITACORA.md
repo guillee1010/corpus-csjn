@@ -1265,9 +1265,10 @@ por señal evita que el mapeo sesgue lo que se ve.
 
 ### Muestra de 80 (seed 15052026)
 
-Corrida ejecutada al final de la sesión. Outputs commiteados en
-`output/auditoria/auditar_fallo/` con sufijo `80_15052026`. Commit
-`<hash de outputs>`.
+Corrida ejecutada al final de la sesión. Outputs en `output/auditoria/auditar_fallo/` con sufijo `80_15052026`
+(no versionados — `.gitignore` excluye `output/auditoria/auditar_fallo`).
+Archivos: `tabla_senales_80_15052026.csv` (15 KB),
+`dicts_80_15052026.json` (2.0 MB), `auditoria_80_15052026.md` (1.8 MB).
 
 ### Hallazgo preliminar (no interpretado)
 
