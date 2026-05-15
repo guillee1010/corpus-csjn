@@ -1052,3 +1052,100 @@ queda como única evidencia histórica del experimento.
 - **No crear archivos .md nuevos** sin antes verificar si la información va en alguno de los 5 existentes.
 - Editar archivos con acentos en VS Code, nunca PowerShell.
 - No tocar `parser.py`, no regenerar CSVs vivos.
+## Sesión 2026-05-14 (cont.) — Inventario del repo, bloque docs (parcial)
+
+Continuación de la sesión de inventario. El bloque docs era el más
+delicado y se planeó como "tabla de cobertura completa de hallazgos
+con freno, plan (a) o caer a plan (b)". El recorrido cambió ese plan:
+no hay 6 docs fragmentados que mergear, hay dos eras documentales con
+un puente entre ellas.
+
+### Recorrido y método
+
+Se leyeron las cabeceras de `docs/analisis_forense_pipeline.md` (Niveles
+1-3), y las secciones XVII-XXI palabra por palabra. Después se leyeron
+las cabeceras de `PIPELINE.md` y `PIPELINE_HALLAZGOS.md`. Ningún archivo
+se editó (el doc forense queda como journal congelado).
+
+### Hipótesis de la estructura documental real
+
+- **`PIPELINE.md` = spec técnica viva** del pipeline, organizada por
+  etapas (1-4), con bugs catalogados §X.Y anclados al código. Es el
+  ground truth técnico actual. Cubre fixes hasta el 9/5 (§3.6.a fix
+  pg_fin+1, §3.6.e fase 1 hojas complementarias, §4.6.j RE_APERTURA
+  doble espacio).
+- **`PIPELINE_HALLAZGOS.md` = journal de actualización de `PIPELINE.md`**,
+  con tracking por sesión: "Ya integrados / Pendientes residuales /
+  Hallazgos nuevos". Última entrada: 14/5 — rediagnóstico §4.6.b sobre
+  CSV vivo (= H019).
+- **`docs/analisis_forense_pipeline.md` = journal histórico anterior**,
+  del 1/5 al 4/5. Cerrado con la sesión XXI, que produjo el "inventario
+  consolidado de bugs vivos a-v". Era anterior a la era PIPELINE.
+- **`BITACORA.md` = journal general del proyecto**, distinto y más alto
+  nivel que los anteriores. H001-H019 son sus hallazgos.
+- **`CHANGELOG.md`, `DEUDA_TECNICA.md`** = formales, no abiertos esta
+  sesión.
+
+### Zona muerta del forense: sesiones XVI-XVIII
+
+Las sesiones XVI, XVII (duplicada en el journal: 2941 y 3029) y XVIII
+fueron pseudocódigo y refactor abandonados ("Tanda 1 / Tanda 2"
+alucinadas, basadas en código supuesto en vez de leer `parser.py` real).
+**Nunca tocaron el código**: confirmado por `git log --all --follow
+scripts/pipeline/parser.py` — entre `7f245a6` (v17 beta v1, 1/5) y
+`2adda06` (Fix 1 aplicado, post-XX) no hay commits al parser. XVIII
+contiene el reconocimiento del error y desarma la narrativa. XXI agrega
+flags retrospectivas a XVIII y XIX-XX señalando exactamente qué fue
+alucinación y qué fue medición sólida. No se reescribe nada: la franja
+queda como capa geológica con sus propias flags.
+
+### El inventario a-v de XXI
+
+XXI armó un inventario consolidado de 22 bugs (a-v), cada uno con lugar
+exacto en el código, síntoma, casos cuando se midió, estado del fix,
+referencia a la sesión donde se diagnosticó. La nomenclatura "Fix 1 /
+Fix 2 / Fix 3" del cierre XIX-XX se descarta porque el usuario nunca la
+aprobó; sólo Fix 1 (V1 como fuente primaria de `case_name_cuerpo`)
+corresponde a una decisión real.
+
+Estado del inventario al 14/5:
+- Fix 1: aplicado y commiteado (`2adda06`).
+- Bug XXI-g (RE_APERTURA estricto): parcialmente fixeado (`2aeb280`,
+  variante doble espacio). Variante "header partido en dos líneas"
+  sigue abierta.
+- Resto del inventario a-v: presumiblemente cubierto/actualizado en
+  `PIPELINE.md` con su sistema §X.Y, pero el cruce no se hizo aún.
+
+### Hallazgo lateral
+
+`csjn_casos.csv` productivo es **byte-a-byte idéntico** a
+`csjn_casos_pre_refactor_subloques.csv` (MD5 confirmado en XXI). El
+snapshot es redundante; se puede archivar cuando se llegue al bloque
+snapshots de la Fase 2.
+
+### Bug de duplicado en `BITACORA.md`
+
+El commit `e3c53b2` (anoche) commiteó la entrada del 14/5 duplicada (la
+escribió dos veces consecutivas; primera con redacción "commit pendiente
+con READMEs", segunda con redacción "commits e695e16 + este"). El
+duplicado se detectó hoy revisando los headers con `Select-String
+"^## Sesión 2026-05-14"`. Se deduplicó conservando la segunda versión
+(redacción correcta). Commit `4248ba1` con -35 líneas / +0.
+
+### Trabajo pendiente del bloque docs
+
+1. **Cruzar el inventario a-v de XXI contra los bugs §X.Y de
+   `PIPELINE.md`** para confirmar la hipótesis de que PIPELINE.md cubre
+   y supera el inventario. Producir una tabla a-v → §X.Y con huérfanos.
+2. **Cruzar BITACORA H001-H019 + F-numerados contra el resultado del
+   paso anterior** para detectar hallazgos no recogidos en ninguno de
+   los dos.
+3. **Decidir destino de `docs/analisis_forense_pipeline.md`**: dejarlo
+   como histórico congelado (probable), o mover a `archivo/` (poco
+   probable, es valioso como journal de aprendizaje).
+4. **Recién entonces**, decidir qué va en `DEUDA_TECNICA.md` como lista
+   viva y qué se queda en PIPELINE.md como spec.
+
+### Bloque snapshots: pendiente
+
+Sin avance esta sesión. Se mantiene el plan original.
