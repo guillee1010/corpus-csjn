@@ -886,6 +886,13 @@ explícito.
 **Convención adoptada:** antes de modificar archivo X, copiar X al
 snapshot del día sin asumir que el snapshot inicial cubre todo.
 
+> **⚠ FLAGUEADO 15/5/2026 PARA RECONSIDERAR.** La redacción de esta entrada está cuestionada en dos planos:
+> 1. Confunde XXI-v con XXI-f: nombra "Bloque B", que en realidad se menciona en XXI-f (= B025), no en XXI-v.
+> 2. La premisa "probablemente son los mismos 32 casos" no se sostiene tras releer Hallazgo 7 del forense (= XXI-v). Los 32 de XXI-v pasaron de `pagina_fin_no_en_mapa` a `ok` por un cambio aguas arriba sin git log. Los 32 de §3.6.a pasaron de `ok` a `pagina_fin_no_en_mapa` post-fix B001. Direcciones opuestas; probablemente grupos distintos.
+> 3. La identificación caso-a-caso de los 32 originales de XXI-v es imposible sin git log de ese período.
+>
+> Decisión: pendiente. Esta entrada se reconsidera en sesión futura — opciones: cerrarla como no-resoluble, reformularla como cierre indirecto, o eliminarla.
+
 ### M05 — Verificación caso-a-caso de identidad de los 32 oks de XXI-v
 
 **Pendiente derivado de la sesión del 14/5.** XXI-v ("32 oks falsos")
