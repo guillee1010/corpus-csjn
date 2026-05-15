@@ -1149,3 +1149,44 @@ duplicado se detectó hoy revisando los headers con `Select-String
 ### Bloque snapshots: pendiente
 
 Sin avance esta sesión. Se mantiene el plan original.
+
+## Sesión 2026-05-15 (apertura, cierre rápido)
+
+**Estado al cierre:** sin commits, sin cambios en código. Sesión de planning
+y corrección de doc pendiente.
+
+**Hallazgo:** M05 en DEUDA_TECNICA está mal redactado. Dice "comparar lista 
+de los 32 documentados en §3.6.a contra el Bloque B mencionado en XXI-v". 
+Confusión: Bloque B se menciona en XXI-f (= B025, los 414 sospechosos 
+unanime), no en XXI-v. XXI-v dice explícitamente "los casos específicos 
+nunca se identificaron; sin git log no hay forma de diagnosticar el cambio 
+que los generó". No hay lista archivada para cruzar.
+
+**Lección operativa:** el mapeo histórico XXI-letra → B0NN (tabla al final 
+de DEUDA_TECNICA) puede estar correcto pero generar confusión si no se 
+cruza contra el contenido real de cada letra del forense al redactar 
+acciones. El error en M05 vino exactamente de no hacer ese cruce.
+
+**Plan para próxima sesión:**
+
+1. Releer XXI-v contra el mapeo histórico — confirmar la confusión 
+   con propios ojos antes de corregir.
+2. Reformular M05 en DEUDA_TECNICA. Nueva redacción acordada: 
+   "Identificar los 32 casos desenmascarados por §3.6.a filtrando 
+   `fallos_localizados.csv` por status_localizacion = pagina_fin_no_en_mapa, 
+   separar por tomo (331-334 = B009; otros = los 32 de B001), spot-check 
+   3-5 contra .md para verificar legitimidad del status nuevo." Esfuerzo: 
+   30 min, no 10.
+3. Nota a incorporar dentro de M05: la coincidencia entre los 32 de §3.6.e 
+   (reasignados pagina_fin_no_en_mapa → ok_pg_fin_redirigida) y los 32 de 
+   §3.6.a (desenmascarados ok → pagina_fin_no_en_mapa) es sospechosa. 
+   Antes de ejecutar el filtro, fijar expectativa: ¿32, 43, 75, o algo 
+   distinto? La distribución por tomo es el diagnóstico.
+4. Nota a incorporar dentro de M05: alcance excluido — el spot-check 
+   verifica legitimidad del status, NO ausencia de falsos negativos en 
+   csjn_casos.csv. Validación cruzada contra parser queda como alcance 
+   separado.
+5. Ejecutar M05 reformulado.
+6. Si cierra rápido, seguir con B025 (re-medición 414 contra CSV vivo).
+
+**No se commiteó nada porque no hubo cambios en código ni en doc.**
