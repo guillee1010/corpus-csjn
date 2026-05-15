@@ -1017,3 +1017,38 @@ Inferencia por nombres:
 
 Decisión: eliminar `tests/` durante Fase 1 de inventario. Esta entrada
 queda como única evidencia histórica del experimento.
+## Sesión 2026-05-14 — Inventario del repo, Fases 1 y 2
+
+### Fase 1 — Zona OLVIDADA  [CERRADA]
+- Raíz canónica: 9 archivos. `bak/` solo con sesión actual. Eliminadas carpetas `logs/`, `tests/`, `validacion/`, `prompts/`. `archivo/snapshots_ad_hoc/` con 12 sub-carpetas legibles.
+- Commits: `671d796`, `eac5a06`.
+- Hallazgo lateral: `.pytest_cache/` en raíz, residuo de tests fantasma del 4/5 → diferido a Fase 4.
+
+### Fase 2 — Zona DUPLICADA  [EN CURSO]
+
+**Bloque scripts** [cerrado, commit `e695e16` + commit pendiente con READMEs]
+- Rescatados a `scripts/analisis/`: `csjn_analisis_v3.py`, `clasificador_tipo_caso.py`, `detector_templates.py`.
+- Rescatado a `scripts/pipeline/`: `diagnostico_fin_fallo_v1.py` (relevante para bug Y.P.F.).
+- Archivados en `archivo/scripts_historicos/`: parsers v10-v16, `csjn_analisis_v2.py`, 6 auxiliares de QA.
+- Verificado: padrón de jueces históricos ya está en `parser.py` vivo (líneas 294-299).
+- README de auxiliares documenta activos rescatables (regex, padrones, umbrales, diagnósticos congelados en `archivo/data/`).
+
+**Bloque docs** [pendiente, próxima sesión]
+- Hallazgo: sistema de docs fragmentado entre `BITACORA.md` (75 KB), `docs/analisis_forense_pipeline.md` (254 KB), `PIPELINE.md` (121 KB), `PIPELINE_HALLAZGOS.md` (39 KB), `CHANGELOG.md`, `DEUDA_TECNICA.md`.
+- Posibles contradicciones y alucinaciones/rollbacks entre archivos sin mapear.
+- Plan acordado: inventario de hallazgos por archivo, plan (a) con freno → si se complica, caer a (b) críticos.
+- Inventario de BITACORA ya hecho: 19 hallazgos H001-H019 + 4 F-numerados (F007, F010-F012).
+- Bugs críticos a no perder: Y.P.F. (`pista_fin=caratula_siguiente`), 19 `ok_cortado_en_indice`, 121 orphans, Bug XII (sin_firma cascada), F010-F012, H019.
+
+**Bloque snapshots** [pendiente]
+- Tres snapshots completos por procesar: `snapshots/snapshot_2026-05-02_1559/`, `snapshots/snapshot_pre_reorg_2026-05-02_1843/`, `archivo/snapshots_ad_hoc/pre_fix_xii_20260503_1308/`.
+
+### Hallazgos laterales pendientes (acumulan para Fase 4)
+- `.pytest_cache/` en raíz
+- `scripts/pipeline/parser.py.bak` del 9/5 — decidir si se queda al lado del parser o va a `bak/`.
+
+### Convenciones fijadas en esta sesión
+- **Esquema de docs:** solo 5 .md en raíz (README, MAPA, BITACORA, CHANGELOG, DEUDA_TECNICA). Otros .md viven en carpetas específicas como README.md de la carpeta.
+- **No crear archivos .md nuevos** sin antes verificar si la información va en alguno de los 5 existentes.
+- Editar archivos con acentos en VS Code, nunca PowerShell.
+- No tocar `parser.py`, no regenerar CSVs vivos.
