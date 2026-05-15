@@ -1588,7 +1588,9 @@ def _parse_paginas(s):
     return [int(p.strip()) for p in s.split(",") if p.strip()]
 
 
-def _seleccionar_random(filas_loc, n, tomo=None, status=None):
+def _seleccionar_random(filas_loc, n, tomo=None, status=None, rng=None):
+    if rng is None:
+        rng = random
     candidatos = filas_loc
     if tomo is not None:
         candidatos = [r for r in candidatos if int(r["tomo"]) == int(tomo)]
@@ -1597,7 +1599,7 @@ def _seleccionar_random(filas_loc, n, tomo=None, status=None):
     if not candidatos:
         return []
     n = min(n, len(candidatos))
-    return random.sample(candidatos, n)
+    return rng.sample(candidatos, n)
 
 
 def main():
@@ -1607,6 +1609,8 @@ def main():
     ap.add_argument("--tomo", type=int, help="Tomo (ej: 349)")
     ap.add_argument("--pagina", type=str, help="Página o lista coma-separada (ej: 306 o 306,309)")
     ap.add_argument("--random", type=int, help="Seleccionar N casos al azar")
+    ap.add_argument("--seed", type=int, default=None,
+                    help="Seed para --random (reproducibilidad). Sin esto, cada corrida da una muestra distinta.")
     ap.add_argument("--status", type=str, help="Filtrar --random por status (ej: ok_cortado_en_indice)")
     ap.add_argument("--corpus", type=str, default=str(DEFAULT_CORPUS),
                     help=f"Directorio del corpus (default: {DEFAULT_CORPUS})")
@@ -1640,9 +1644,10 @@ def main():
     # Construir lista de (tomo, pagina) a auditar
     pares = []  # lista de (tomo, pagina)
     if args.random:
+        rng = random.Random(args.seed) if args.seed is not None else None
         seleccion = _seleccionar_random(
             cache["filas_loc"], args.random,
-            tomo=args.tomo, status=args.status
+            tomo=args.tomo, status=args.status, rng=rng,
         )
         for r in seleccion:
             pares.append((int(r["tomo"]), int(r["pagina_inicio"])))
