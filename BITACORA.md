@@ -1190,3 +1190,23 @@ acciones. El error en M05 vino exactamente de no hacer ese cruce.
 6. Si cierra rápido, seguir con B025 (re-medición 414 contra CSV vivo).
 
 **No se commiteó nada porque no hubo cambios en código ni en doc.**
+## H020 — Flag de M05 + decisión de auditar persistencia de bugs (15/5/2026)
+
+Sesión corta. Releyendo Hallazgo 7 del forense (= XXI-v) en función
+de corregir M05 según plan del 14/5, se identificó que la
+reformulación propuesta también era incorrecta. Los 32 de §3.6.a y
+los 32 de XXI-v son fenómenos de direcciones opuestas (uno desenmascarado
+post-fix B001, otro enmascarado pre-fix por cambio sin git log).
+Probablemente grupos distintos. Identificación caso-a-caso de los
+originales de XXI-v es imposible sin git log de ese período.
+
+Decisión: en lugar de reformular M05 una segunda vez sobre supuestos
+frágiles, flaguearlo en DEUDA_TECNICA con las dudas concretas y dejar
+la resolución para sesión futura. Flag aplicado en commit da70e04.
+
+Hallazgo más amplio: la lista de bugs de DEUDA_TECNICA mezcla
+diagnósticos de distintas épocas del parser, sin garantía de que
+persistan en el CSV actual. Próxima sesión: auditar con
+auditar_fallo.py sobre muestra random para evaluar cuáles bugs siguen
+vivos y priorizar a partir de eso, en vez de seguir trabajando la
+lista existente como si todo estuviera al día.
