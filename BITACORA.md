@@ -993,3 +993,27 @@ Convención reafirmada: cualquier diagnóstico fino del corpus va via `auditar_f
 ### Lección de método
 
 Antes de construir herramienta nueva, inventario de herramientas existentes. Esta sesión perdió ~2 horas reconstruyendo en paralelo lo que `auditar_fallo.py` ya hacía mejor. El inventario formal de scripts (`scripts/diagnostico/`, `scripts/auditoria/`, `archivo/`) sigue pendiente — anotado al cierre de la sesión como trabajo separado para sesión dedicada.
+### Hallazgo lateral durante inventario Fase 1 — tests fantasma del 4/5
+
+Durante la Fase 1 del inventario se encontró `tests/__pycache__/` con cinco
+`.pyc` del 4/5/2026 ~00:35:25 sin sus `.py` correspondientes:
+
+- `test_corte_indice.cpython-314-pytest-9.0.3.pyc`
+- `test_fix_mas_uno.cpython-314-pytest-9.0.3.pyc`
+- `test_salto_huerfano.cpython-314-pytest-9.0.3.pyc`
+- `conftest.cpython-314-pytest-9.0.3.pyc`
+- `__init__.cpython-314.pyc`
+
+Los `.py` originales no existen en filesystem (búsqueda recursiva en repo
+vivo, `snapshots/` y `archivo/`), ni en git history
+(`git log --diff-filter=D` vacío). Tests escritos, ejecutados al menos
+una vez (de ahí los `.pyc`) y borrados sin llegar a commit. No mencionados
+en BITACORA ni CHANGELOG previos.
+
+Inferencia por nombres:
+- `corte_indice` → probablemente `ok_cortado_en_indice` (cerrado §3.6.e Fase 1).
+- `fix_mas_uno` → probablemente `pg_fin+1` (bug abierto del cruzador).
+- `salto_huerfano` → bug temprano del cruzador, no identificado.
+
+Decisión: eliminar `tests/` durante Fase 1 de inventario. Esta entrada
+queda como única evidencia histórica del experimento.
