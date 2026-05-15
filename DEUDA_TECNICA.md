@@ -7,7 +7,8 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-14.
+**Última actualización:** 2026-05-15 (sesión H023: refinación de B018,
+B022 con testigo y variante nueva, B043 nuevo).
 
 ---
 
@@ -358,35 +359,95 @@ línea 923).
 **Referencias cruzadas:** F012. Sin §X.Y en PIPELINE (línea 2834 reconoce
 la deuda). Sin ID histórico.
 
-### B018 — Pista 1 `detectar_fin_real` con falso positivo en cuerpo del dictamen
+### B018 — Pista 1 `detectar_fin_real` con falso positivo en el bloque
 
 **Componente:** parser.
 **Origen / fuente del diagnóstico:** F013 (BITACORA sesión 2026-05-09,
-línea 897). Equivalente a XXI-m.
-**Causa raíz:** la pista 1 de `detectar_fin_real` hace búsqueda hacia atrás
-dentro del bloque (`buscar_atras(es_caratula, lfc, li + 5)`) usando un
-regex sobre `primer_token`. Cuando ese token aparece como mención dentro
-del cuerpo del dictamen previo, la pista 1 matchea ahí y corta. Después
-`construir_bloque_desde_localizacion` recibe `linea_fin_real` truncado y
-`segmentar_bloque` trabaja sobre lo que sobrevive — sin ver cuerpo de
-mayoría ni firma posteriores.
-**Diagnóstico / evidencia:** caso testigo `330_p2739`,
-`linea_fin_real=54297`, `status=fin_dentro_bloque`, pista=`caratula_siguiente`.
-El span de dictamen también termina en 54297. Magnitud agregada: no
-cuantificada.
-**Estado de verificación:** `confirmado_caso_testigo`.
-**Validador propuesto:** revisar el `.md` crudo entre líneas 54165-54310
-de `LibroVol330.2.md` para identificar la mención del primer_token del
-siguiente caso que disparó el match. Una vez confirmado mecánicamente,
-script de auditoría que para cada caso con `pista=caratula_siguiente`
-verifique que el match no cae dentro de un span de dictamen detectado.
-Plan.
-**Estado del fix:** no diseñado. La salida natural sería un guard espacial
-(no aceptar match de pista 1 si cae dentro del span del dictamen
-detectado), pero requiere que el span del dictamen esté detectado antes
-de la pista 1 — orden de operaciones del parser.
-**Referencias cruzadas:** F013. XXI-m. Sin §X.Y en PIPELINE. Sin ID
-histórico.
+línea 897). Equivalente a XXI-m. H023 refina causa raíz y agrega
+testigos.
+**Causa raíz (refinada en H023):** la pista 1 de `detectar_fin_real`
+(parser.py líneas 1189-1202) busca el `primer_token_siguiente` dentro
+del bloque con `buscar_atras(es_caratula, lfc, li + 5)`. El defecto
+tiene tres componentes acoplados:
+1. **`primer_token_de_caratula` (parser.py 1138-1150) no excluye
+   sustantivos institucionales genéricos.** La lista de exclusión
+   cubre `otro/otros/sociedad/sucesión/empresa/compañía` pero no
+   `provincia/estado/nación/ciudad/buenos/aires/banco/ministerio/
+   municipalidad/...`. En carátulas como `PROVINCIA DEL NEUQUÉN c/...`
+   o `PROVINCIA DE BUENOS AIRES c/...`, el primer token devuelto es
+   un sustantivo común que aparece masivamente en otros fallos. Ver
+   B043.
+2. **El test `es_caratula` no verifica estructura.** Sólo testea
+   presencia de la palabra con boundaries `\b...\b` case-insensitive.
+   No exige `c/` cercano, mayúsculas, ni que la línea sea corta.
+   Acepta cualquier mención en prosa.
+3. **El orden de operaciones impide guardias espaciales.**
+   `detectar_fin_real` corre antes de detectar el span del dictamen
+   o de la firma, así que no puede rechazar matches que caigan
+   dentro de esos spans del propio caso. Documentado como limitación
+   en el fix propuesto original (DEUDA_TECNICA pre-H023).
+
+**Variantes empíricas (H023):**
+- **V1 — match en arrastre del caso anterior:** el bloque arranca con
+  contenido del caso previo (B022), donde aparecen apellidos casuales
+  que matchean el primer_token siguiente. Resultado: el parser corta
+  el bloque casi al inicio. Testigo: `344_p3543`, primer_token =
+  `Sánchez`, match contra "Carlos Sánchez Herrera" en lista de
+  profesionales del caso arrastrado (Coihue c/ Provincia de Santa
+  Cruz). Bloque truncado a ~30 líneas iniciales, residuo 77.78%.
+- **V2 — match en cuerpo o dictamen del caso actual con token
+  genérico:** el primer_token siguiente es un sustantivo institucional
+  que aparece naturalmente en el propio dictamen o cuerpo del fallo
+  actual. Testigo: `339_p1393`, primer_token = `Provincia` (caso
+  siguiente: `PROVINCIA DEL NEUQUÉN c/...`), múltiples menciones de
+  "provincia" en el dictamen del Procurador y la dispositiva del
+  FALLO. El parser corta al medio del bloque, perdiendo el FALLO de
+  la Corte entero. Residuo 0% engañoso (lo procesado está bien
+  clasificado, pero se asignó intervalo corto).
+
+**Diagnóstico / evidencia:** tres testigos confirmados:
+- `330_p2739` (V0 original, F013): match dentro del cuerpo del
+  dictamen previo.
+- `344_p3543` (V1, H023): gap +133, residuo 77.78%.
+- `339_p1393` (V2, H023): gap +84, residuo 0% engañoso.
+H022 sube prevalencia esperada a ~570 casos proyectados sobre corpus
+completo a partir del cluster `pista_fin=caratula_siguiente` +
+`borde_alertas=caratula_siguiente_en_gap` (7/80 en muestra del
+spot-check).
+**Estado de verificación:** `confirmado_mecanismo` (causa raíz en
+código + tres testigos cubriendo dos variantes claramente
+caracterizadas). Subido desde `confirmado_caso_testigo` en H023.
+**Validador propuesto:** script de auditoría que, para cada caso con
+`pista=caratula_siguiente`, verifique (a) si el primer_token es un
+sustantivo institucional (cluster V2), (b) si el match cae en el
+arrastre del previo (cluster V1), (c) si el match cae dentro de un
+span de dictamen detectado (cluster V0). Permite cuantificar prevalencia
+por variante.
+**Estado del fix:** rediseñado en H023. Matriz de opciones evaluadas:
+
+| Opción | Riesgo | Facilidad | Tiempo | Robustez | Escalabilidad |
+|---|---|---|---|---|---|
+| A — engrosar lista exclusión en `primer_token_de_caratula` | medio-alto: en `PROVINCIA DE BUENOS AIRES c/...` todos los primeros tokens son genéricos | alta | 30 min | baja | pobre |
+| B — endurecer test `es_caratula` (línea corta, `c/` cercano, mayúsculas) | medio: OCR puede partir carátulas reales | media | 2-3 hs | media-alta | buena |
+| C — guard espacial sobre span de dictamen | bajo en daño, alto en intrusividad arquitectónica | baja (requiere reordenar pipeline) | 1-2 días | media (sólo V0/V2 con match dentro del dictamen) | buena para su scope |
+| **D — validación cruzada con `proximo_header_pagina`** (rechazar matches lejos de la frontera del mapa) | bajo | alta | 1-2 hs | alta | muy buena |
+| E — validación cruzada con segundo token de carátula | bajo | media | 3-4 hs | alta | buena |
+| F — multi-strategy con voto | bajo en FP, medio en FN | baja-media | 1 día | muy alta | excelente |
+| G — no-op, downstream filtra | cero al pipeline, alto en pérdida (~570 casos) | trivial | 30 min | baja a medio plazo | mala |
+
+**Recomendación direccional H023:** orden D → B → E. D ataca raíz
+(usa el mapa de páginas como anclaje estructural confiable, captura
+todas las variantes), bajo costo. B y E como refuerzo si queda
+residual. A descartada como solución principal (techo bajo por
+carátulas con todos los tokens contaminados). C en cartera para
+refactor más amplio. F sobreintensiva. G sólo si conviene postergar.
+No aplicado.
+**Interacciones con otros bugs:** alimentado por B022 (variante V1).
+Fijar B022 reduce el subset V1. Acoplado a B043 (defecto de
+`primer_token_de_caratula`).
+**Referencias cruzadas:** F013. XXI-m. H022 §2 (mecanismo M2). H023
+sección M2. PIPELINE §4.4.k (loop principal). Sin §X.Y en PIPELINE.md
+para esta lógica de pista 1. Sin ID histórico.
 
 ### B019 — `detectar_fin_real` off-by-one en firmas multilínea
 
@@ -442,21 +503,42 @@ dominio: cascada `detectar_fin_real`).
 
 ### B022 — Arrastre del fallo previo al inicio del bloque (sistemático)
 
-**Componente:** parser.
+**Componente:** parser (síntoma); etapas 2-3 (causa probable).
 **Origen / fuente del diagnóstico:** F004 (BITACORA sesión H014).
-**Causa raíz:** no diagnosticada al nivel de mecanismo. El bloque inicia
-incluyendo firma y metadatos editoriales del caso anterior. Sistemático
-en muestra auditada.
+H023 amplía con testigos nuevos y caracterización de variantes.
+**Causa raíz:** no diagnosticada al nivel de mecanismo en el catálogo
+(etapa 2) ni en el cruzador (etapa 3). El bloque que llega al parser
+inicia con contenido del caso anterior. Dos variantes observadas:
+- **V1 (chica):** firma + metadatos editoriales del caso anterior,
+  ~5-25 líneas.
+- **V2 (grande, H023):** la línea inicial del bloque cae sobre un
+  `FALLO DE LA CORTE SUPREMA` completo del caso anterior, con
+  `Autos y Vistos`, dispositiva breve, firma y carátula del actual
+  como cierre del previo. ~30-50 líneas.
 **Diagnóstico / evidencia:** sistemático en Sivaslian, Cerboni, Macri,
-Lavrentiev (muestra H014).
+Lavrentiev (V1, muestra H014); `330_p829` (V1, gap +7, span 2 catch_all
+de 25 líneas, spot-check H022); `332_p913` (V2, solapado -22, residuo
+86.05%; identificado primero como mecanismo M3 en H022 y re-asignado
+a B022 en H023 tras lectura del .md crudo — el bloque arrastra el
+cierre de una resolución sobre competencia en Bahía Blanca antes de
+la carátula real `Deluca c/ ANSeS`).
 **Estado de verificación:** `confirmado_caso_testigo` (sistemático en
-4 casos auditados). Magnitud agregada no cuantificada.
+6 testigos, dos variantes caracterizadas). Magnitud agregada no
+cuantificada.
 **Validador propuesto:** corrida `--random 50` con detector de borde
 **superior** del auditor (análogo al de borde inferior implementado en
-H018). Plan. Decisión "A" (mencionada en BITACORA como
-`metadatos_editoriales`) pendiente.
+H018). El detector debe cubrir ambas variantes.
+**Interacciones con otros bugs:** alimenta B018. El arrastre introduce
+líneas del caso anterior donde la pista 1 de `detectar_fin_real` puede
+matchear contra menciones del primer_token siguiente (confirmado en
+H023 con `344_p3543`: la mención "Carlos Sánchez Herrera" en la lista
+de profesionales del caso arrastrado matchea como falso positivo de
+carátula). Fijar B022 reduce indirectamente el subset de B018 con
+esa forma.
 **Estado del fix:** no diseñado. Severidad: sistemática.
-**Referencias cruzadas:** F004. Sin §X.Y en PIPELINE. Sin ID histórico.
+**Referencias cruzadas:** F004. H022 §2 (mecanismos M3 refutado y M4
+confirmado). H023 sección M3 (refutación y re-asignación de
+`332_p913`). Sin §X.Y en PIPELINE. Sin ID histórico.
 
 ### B023 — Fin del dictamen pisa el FALLO DE LA CORTE
 
@@ -761,6 +843,54 @@ BITACORA con ese nombre. Sin ID histórico.
 para entender por qué la cascada tiene cuatro pistas distintas. No
 requiere fix.
 **Referencias cruzadas:** PIPELINE §4.6.i.
+
+### B043 — `primer_token_de_caratula` no excluye sustantivos institucionales genéricos
+
+**Componente:** parser.
+**Origen / fuente del diagnóstico:** H023 sección M2 (verificación de
+B018 contra .md crudo).
+**Causa raíz:** `primer_token_de_caratula` (parser.py líneas 1138-1150)
+itera tokens de longitud ≥ 4 de la primera mitad de la carátula (lo
+que está antes del `|` que separa actor de demandado) y devuelve el
+primero que no esté en una lista de exclusión. La lista actual cubre
+`otro/otros/sociedad/sucesion/sucesión/empresa/compania/compañia/
+compañía` — pensada para evitar genéricos relacionados con tipos
+societarios. No cubre sustantivos institucionales que aparecen
+masivamente como cabeza de carátula en casos de competencia:
+`provincia/estado/nación/nacional/ciudad/banco/ministerio/
+municipalidad/universidad/superintendencia/dirección/administración/
+instituto/secretaría/gobierno`. El token devuelto en esos casos es
+una palabra de uso común que aparece naturalmente en el cuerpo de
+casi cualquier fallo.
+**Diagnóstico / evidencia:** testigo `339_p1393`, caso siguiente
+`PROVINCIA DEL NEUQUÉN c/ VITAL SOJA S.A.`, primer_token devuelto =
+`Provincia`. Cuatro apariciones de "provincia" en el bloque del caso
+actual (dos en el dictamen, una en la dispositiva, una al inicio de
+la carátula del siguiente). La pista 1 de `detectar_fin_real`
+matchea contra una de las apariciones interiores. Esta es la causa
+inmediata del comportamiento documentado en B018 V2.
+**Caso patológico no resuelto por engrosar lista:** carátulas como
+`PROVINCIA DE BUENOS AIRES c/ Y.P.F.` tienen **todos los primeros
+tokens contaminados** (`PROVINCIA`, `BUENOS`, `AIRES`). Excluirlos
+todos lleva el token a `Y.P.F.` si el regex lo acepta, o a cadena
+vacía. Engrosar la lista de exclusión es paliativo, no solución.
+**Estado de verificación:** `confirmado_mecanismo` (causa raíz en
+código + un testigo claro `339_p1393` + caso patológico identificado).
+**Validador propuesto:** script que recorra `csjn_casos.csv`,
+calcule `primer_token_de_caratula` para cada caso, y cuente cuántas
+veces el primer_token cae en la lista de sustantivos institucionales
+genéricos. Sirve para acotar el universo de casos potencialmente
+afectados por B018 V2.
+**Estado del fix:** acoplado a B018. La opción A de la matriz de
+fixes de B018 (engrosar lista de exclusión) ataca esto pero tiene
+techo bajo. La opción D (validación cruzada con `proximo_header_pagina`)
+hace que el defecto de B043 sea inocuo en la pista 1 sin necesidad de
+arreglar `primer_token_de_caratula`. Por eso B043 no requiere fix
+propio si se aplica D en B018. Si después se quiere usar `primer_token`
+para otra cosa (ej. validación de carátula del caso actual), B043 sí
+hay que fixarlo aparte.
+**Referencias cruzadas:** H023 sección M2. Acoplado a B018 (alimenta
+V2). Sin §X.Y en PIPELINE. Sin ID histórico.
 
 ---
 
