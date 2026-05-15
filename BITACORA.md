@@ -1305,3 +1305,217 @@ bug serio (20+ líneas) — pendiente análisis sobre los 80 en H022.
   flags derivados (`tiene_firma_sin_votos`, `voto_sin_firma`) y
   alertas individuales como columnas booleanas separadas. Marginal a
   80 casos, útil a escala.
+## H022 — Auditoría exploratoria de 80 casos: spot-check de 7 testigos y mapeo preliminar a deuda (15/5/2026)
+
+Ejecución de los Pasos 4-6 del plan H020 sobre la muestra de 80 casos
+con seed 15052026 generada en H021. Outputs en
+`output/auditoria/auditar_fallo/conclusiones_h022.md` (no versionado).
+
+### Análisis exploratorio de la tabla de señales (80 casos)
+
+Distribución de `borde_estado`: 71 `solapado_con_proximo` (88.8%), 9
+`gap_con_residuo` (11.2%). **Ningún caso de la muestra cierra
+exactamente donde el catálogo dice.** Magnitud del solapamiento
+(n=71): mediana 16 líneas, máx 43. Magnitud del gap (n=9): mediana
+23 líneas, máx 485. Cuatro casos con gap > 50 con alerta
+`caratula_siguiente_en_gap`.
+
+`porcentaje_residuo`: mediana 6.0%, media 12.4%, máx 86.1%. Diez
+casos con residuo > 25%; cinco con residuo > 50%. `invariante_cobertura
+== False`: 0/80. `invariante_disjuncion == False`: 5/80, de los
+cuales dos con residuo 0% (señal aparentemente limpia que esconde bug
+catastrófico).
+
+### Spot-check de 7 casos extremos
+
+Selección: tres por gap (`343_p2243`, `344_p3543`, `339_p1393`), dos
+por residuo alto (`332_p913`, `346_p1205`), uno con disjunción rota
+y residuo 0% (`332_p244`), uno para conectar con bug multi-volume
+conocido (`330_p829`).
+
+Identificación a ojo de cinco mecanismos preliminares contra el .md:
+
+- **M1 — Cierre prematuro por firma falsa.** Testigo `343_p2243`. El
+  parser cerró en una firma de la Corte que pertenecía al fallo
+  anterior. Mapeo preliminar → B025.
+- **M2 — Cierre prematuro por carátula falsa.** Testigos `344_p3543`,
+  `339_p1393`. El parser interpretó una línea interna del cuerpo o
+  dictamen como inicio del próximo caso. Mapeo preliminar → B018.
+- **M3 — Cuerpo cerrado antes de dispositiva extendida.** Testigos
+  `332_p913`, `346_p1205`. Hipótesis: el parser asume one fallo per
+  case. Mapeo preliminar → no listado, propuesto como B043. **(Ver
+  H023 para refutación.)**
+- **M4 — Mala localización del inicio del bloque.** Testigo
+  `330_p829`. El catálogo apunta al inicio del bloque varias líneas
+  antes del fallo real; las líneas iniciales son cierre del caso
+  anterior. Mapeo preliminar → B022.
+- **M5 — Apertura espuria de span voto sobre header de sentencia
+  previa.** Testigo `332_p244`. El parser matcheó "Voto del señor
+  ministro doctor don Enrique Santiago Petracchi" de una sentencia
+  previa publicada antes del fallo plenario, y abrió span voto que
+  envolvió la sentencia plenaria entera. Mapeo preliminar → no
+  listado en parser (sólo B040 en auditor), propuesto como B044.
+
+### Trampa metodológica detectada
+
+`porcentaje_residuo == 0%` no implica "el parser hizo bien". Residuo
+mide calidad de clasificación dentro del intervalo que el parser se
+asignó, no respecto del intervalo que debería haber procesado. En
+los Mecanismos M2 (cierre prematuro) y M5 (apertura espuria
+envolvente), residuo 0% es engañoso. Implicancia operativa: cualquier
+criterio futuro de calidad debe combinar `residuo` con `borde_estado` +
+`borde_delta` + `invariante_disjuncion`. El residuo aislado tiene
+falsos negativos.
+
+### Regla operativa heredada
+
+H022 deja proposiciones de mecanismos y mapeos preliminares pero
+**no actualiza DEUDA_TECNICA.md** (regla del plan H020). La
+verificación contra código y la actualización de deuda quedan para
+H023.
+
+### Pendiente para H023
+
+Verificación de los cinco mecanismos contra `parser.py`. Para cada
+uno: lectura dirigida del código, confirmación de causa raíz, estado
+de verificación propuesto, propuesta de fix direccional. Orden:
+M3 → M2 → M5 → M4 → M1 (priorizando los más novedosos primero).
+**Verificar mecanismos contra .md crudo antes de declararlos** —
+el spot-check de H022 es rápido y puede haber confundido patrones
+distintos.
+
+## H023 — Verificación de mecanismos H022 contra parser.py: M3 refutado, M2 confirmado y refinado (15/5/2026)
+
+Sesión enfocada en verificar contra `parser.py` los cinco mecanismos
+identificados a ojo en H022. Se cubrieron M3 y M2; M1, M4, M5 quedan
+para sesión posterior.
+
+**Cambio metodológico crítico aplicado mid-sesión:** chequear cada
+mecanismo contra el .md crudo antes de declararlo. La regla emergió
+de la refutación de M3 (ver abajo) y se aplicó retroactivamente a
+M2. Se documenta como lección para sesiones siguientes.
+
+### M3 refutado: no existe como mecanismo independiente
+
+Los dos testigos de M3 (`332_p913` y `346_p1205`) fallan por motivos
+distintos, ninguno por "doble dispositiva legítima del mismo caso".
+
+**`332_p913` (caso Deluca c/ ANSeS).** Lectura del .md mostró que las
+líneas iniciales del bloque son el cierre de **otro fallo** (una
+resolución sobre competencia en Bahía Blanca, no Deluca). El parser
+matchea `De conformidad con lo dictaminado` (variante del detector
+de dispositivo) en ese cierre arrastrado, captura la firma del fallo
+anterior como firma del caso Deluca, y deja el verdadero fallo de
+Deluca (con su `FALLO DE LA CORTE SUPREMA / Vistos los autos /
+Considerandos 1°-10° / Por ello / firma Lorenzetti-Fayt-Maqueda-
+Zaffaroni) en catch_all. Es B022 (arrastre del previo) con una
+variante nueva: el arrastre puede incluir un FALLO completo del caso
+anterior, no sólo líneas residuales de firma. B022 se actualiza
+en DEUDA_TECNICA con `332_p913` como testigo y la Variante 2
+caracterizada.
+
+**`346_p1205` (caso Osorio c/ GCBA).** Lectura del .md mostró un
+único fallo, una única dispositiva, fecha única (10 de octubre de
+2023). La afirmación de H022 sobre "dos resoluciones, 10-oct-2023 y
+19-oct-2023" no se sostiene en el .md. El residuo alto del 80.30%
+no se explica por doble dispositiva. Hipótesis abierta: el bloque
+está dominado por el dictamen del Procurador (3 de las 5 páginas
+del caso), y algo en la separación dictamen/cuerpo dejó parte del
+dictamen contado fuera. Mecanismo no determinado en H023. Caso
+huérfano para sesión posterior.
+
+**B043 propuesta retirada.** No corresponde abrir entrada nueva por
+M3. El ID B043 queda libre y se reutiliza para el defecto de
+`primer_token_de_caratula` (ver M2).
+
+### M2 confirmado y refinado: B018 con tres componentes acoplados
+
+Los dos testigos de M2 (`344_p3543` y `339_p1393`) confirman el
+mecanismo de B018 (pista 1 de `detectar_fin_real` matchea mención
+casual del primer_token del siguiente), con dos variantes distintas
+que refinan la causa raíz:
+
+**`344_p3543` (V1, gap +133, residuo 77.78%).** Caso siguiente:
+`SÁNCHEZ, MARTÍN IGNACIO c/ PRUZZO PINNA`. primer_token = `Sánchez`.
+La mención que disparó el match: **"Carlos Sánchez Herrera"** en la
+lista de profesionales del **caso anterior** (Coihue c/ Provincia
+de Santa Cruz, página 3543). Esa línea estaba en el bloque sólo
+porque el catálogo arrastró el cierre del caso anterior (B022). El
+parser cortó el bloque al principio, dejando el verdadero fallo
+Sancor entero fuera. Esto demuestra **interacción B022 → B018**:
+el arrastre del previo introduce líneas donde hay apellidos
+casuales que matchean el primer_token siguiente.
+
+**`339_p1393` (V2, gap +84, residuo 0% engañoso).** Caso siguiente:
+`PROVINCIA DEL NEUQUÉN c/ VITAL SOJA S.A.`. primer_token =
+`Provincia`. Cuatro apariciones de "provincia" en el bloque actual
+(dos en el dictamen, una en la dispositiva del FALLO, una en la
+carátula del siguiente). El parser corta en alguna de las
+apariciones interiores. Esto expone un **defecto adyacente**:
+`primer_token_de_caratula` no excluye sustantivos institucionales
+genéricos. La lista de exclusión cubre tipos societarios pero no
+`provincia/estado/nación/ciudad/...`. Se abre **B043** para este
+defecto.
+
+**Causa raíz refinada (tres componentes acoplados):**
+1. `primer_token_de_caratula` puede devolver sustantivos genéricos
+   (B043).
+2. El test `es_caratula` en pista 1 no verifica estructura, sólo
+   presencia de la palabra.
+3. El orden de operaciones impide guardias espaciales —
+   `detectar_fin_real` corre antes de detectar dictamen o firma.
+
+**Caso patológico identificado:** carátulas como `PROVINCIA DE
+BUENOS AIRES c/ Y.P.F.` tienen todos los primeros tokens
+contaminados. Engrosar la lista de exclusión es paliativo, no
+solución. Esto descarta la "Opción A" de fix simple.
+
+**Matriz de opciones de fix (7 opciones evaluadas).** Detalle en
+DEUDA_TECNICA B018. Recomendación direccional: **D → B → E**.
+D (validación cruzada con `proximo_header_pagina`) ataca raíz con
+costo bajo. B y E como refuerzo si queda residual. C en cartera
+para refactor más amplio. F sobreintensiva. G sólo si conviene
+postergar. A descartada como solución principal.
+
+B018 sube de `confirmado_caso_testigo` a `confirmado_mecanismo`
+(causa raíz en código + tres testigos cubriendo dos variantes).
+
+### Cambios aplicados a DEUDA_TECNICA en esta sesión
+
+- **B018** reescrito: causa raíz refinada con tres componentes, dos
+  variantes empíricas caracterizadas, dos testigos nuevos
+  (`344_p3543`, `339_p1393`), matriz de fixes en "Estado del fix",
+  sección de interacciones con B022 y B043, estado subido a
+  `confirmado_mecanismo`.
+- **B022** ampliado: testigo nuevo `332_p913` (Variante 2 con FALLO
+  completo arrastrado), `330_p829` confirmado como testigo (era de
+  XXI pero el spot-check H022 lo verificó), sección de interacciones
+  con B018. Sigue en `confirmado_caso_testigo` (6 testigos).
+- **B043** abierto: defecto de `primer_token_de_caratula`,
+  `confirmado_mecanismo`, acoplado a B018.
+
+### Pendiente para sesión posterior
+
+1. Verificación de M1 (`343_p2243` → B025), M4 (`330_p829` → B022,
+   pero ya parcialmente cubierto en H023), M5 (`332_p244` →
+   propuesta B044) contra parser.py. Mismo método: lectura .md crudo
+   primero, código después.
+2. Diagnóstico individual de `346_p1205` (caso huérfano).
+3. Aplicación de fix de B018 (recomendación direccional: opción D
+   primero). Sesión dedicada con snapshot/commit antes.
+4. Eventual nota a PIPELINE §4.4.k señalando que "primera apertura
+   de dispositivo" es el defecto arquitectónico subyacente de B013
+   y de futuros bugs análogos.
+
+### Lección metodológica registrada
+
+El spot-check de H022 fue rápido (7 casos, lectura a ojo) y mezcló
+tres patrones que dan al auditor residuos parecidos pero causas
+distintas: doble dispositiva legítima (no observada en realidad),
+arrastre del previo con FALLO completo (`332_p913`), y dictamen
+mayoritario con cuerpo breve (`346_p1205`). H023 confirmó que
+**verificar mecanismo contra .md crudo antes de declararlo es
+indispensable**. La regla operativa del plan H020 ("el spot-check
+identifica patrones, no causas raíz") se cumplió literalmente: M3
+era un patrón, no un mecanismo. La verificación contra código + .md
+lo disuelve.
