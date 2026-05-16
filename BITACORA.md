@@ -1914,3 +1914,306 @@ Regla operativa actualizada para sesiones futuras:
    auditoría, mantiene lenguaje de "Bug D" ya cerrado. Sesión
    dedicada de housekeeping, idealmente cruzada con el inventario
    de zona DUPLICADA y zona OLVIDADA (H020 Fases 1-2).
+
+   ## H025 — Reflexión arquitectónica sobre el pipeline: dos manifestaciones de B045, propuesta de gramática del fallo (16/5/2026)
+
+Continuación de H024. Plan original: reflexión profunda sobre cómo
+funciona el pipeline en conjunto, mapeando el orden de operaciones y
+los acoplamientos entre las cuatro etapas, con foco en comprobar la
+declaración fuerte de H024 ("fix de B045 elimina B022, B025, B044 y
+subset V1 de B018 por construcción"). Seis fases previstas: mapa
+estructural (1), modelo conceptual del catálogo y cruzador (2),
+ballet del parser (3), comparación contra auditor (3-bis), experimento
+mental de bugs sobrevivientes (4), matriz de opciones de fix (5),
+roadmap (6).
+
+La sesión avanzó por las fases 1, 2 y 3. A mitad de fase 3 emergió
+una propuesta arquitectónica alternativa que reorientó el cierre de
+la sesión hacia documentarla. Las fases 3-bis, 4, 5 y 6 se posponen
+a H026.
+
+### Fase 1: mapa estructural del pipeline
+
+Inventario de funciones top-level y docstrings de los cinco scripts
+relevantes: `detectar_paginas.py` (551 líneas), `construir_catalogo.py`
+(650), `cruzar_catalogo_y_mapa.py` (435), `parser.py` (1.944),
+`auditar_fallo.py` (1.729). El auditor tiene volumen comparable al
+parser, no es herramienta auxiliar — es un segundo parser con
+arquitectura diferente: funciones `segmentar_bloque`,
+`_agregar_catch_all`, `_ordenar_y_validar` no existen en el parser
+y sugieren un modelo de spans tipados con cobertura total e
+invariante de "toda línea pertenece a al menos un span". El docstring
+del auditor declara explícitamente que "REUSA por importación los
+regex y helpers de parser.py. No reimplementa heurísticas. Si una
+heurística está rota en parser.py, acá va a estar igual de rota". La
+hipótesis previa de que el auditor segmenta mejor que el parser por
+tener mejor información queda descartada: la diferencia tiene que
+estar en cómo procesan, no en qué reciben.
+
+`fallos_localizados.csv` se identifica como **frontera arquitectónica**
+del pipeline. Es el output de etapa 3 y el input compartido del parser
+de producción y del auditor. Cualquier defecto aguas arriba (catálogo
+o cruzador) se propaga simétricamente a ambos. Cualquier divergencia
+entre parser y auditor sobre el mismo caso es divergencia en el
+procesamiento del bloque, no en su acotación.
+
+### Fase 2: las dos manifestaciones de B045
+
+Lectura dirigida de `construir_catalogo.py` y `cruzar_catalogo_y_mapa.py`
+con foco en cómo se decide la frontera entre casos consecutivos.
+
+**Hallazgo H025-F2-01.** B045, tal como está documentado en
+DEUDA_TECNICA con seis testigos, mezcla dos manifestaciones distintas
+del mismo defecto arquitectónico. La separación de ambas surge del
+análisis de las decisiones de cada etapa.
+
+`construir_catalogo.py` línea 410 escribe
+`pagina_fin_map[(tomo, pag)] = pags_ordenadas[i + 1]`. **No resta uno.**
+El docstring del archivo (línea 57) y de la función (línea 381)
+prometen "(página del siguiente fallo − 1)" pero el código asigna
+directamente la página de inicio del siguiente, sin transformación.
+La discordancia ya estaba documentada en PIPELINE §2.5.a. Lo que H025
+agrega es la consecuencia aguas abajo.
+
+`cruzar_catalogo_y_mapa.py` línea 245 escribe
+`out['linea_fin'] = linea_fin_header - 1`. Es decir, busca el header
+de página de `pagina_fin` (que es la página de inicio del siguiente)
+y le resta uno para obtener la última línea del caso actual. Esta
+resta es correcta cuando los casos están en páginas físicas distintas.
+Cuando dos casos comparten una sola página, el header de
+`pagina_inicio` del actual y el header de `pagina_fin` del actual son
+**la misma línea** del `.md`, y la operación produce
+`linea_fin = linea_inicio − 1`. El bloque queda vacío o de longitud
+negativa.
+
+Grep sobre el cruzador confirma que **no hay guarda**: línea 175
+(arriba) hasta 281 (abajo) no contiene ninguna validación de
+`linea_fin vs linea_inicio`, ningún warning, ninguna comparación
+entre filas consecutivas del catálogo. El status escrito en el caso
+degenerado sigue siendo `'ok'`.
+
+Las dos manifestaciones que se distinguen son:
+
+- **Manifestación A — caso desaparecido (silenciosa).** Cuando dos
+  casos comparten una sola página, el caso N recibe del cruzador un
+  bloque vacío. `procesar_archivo` en `parser.py` línea 1365-1367
+  hace `bloque = construir_bloque_desde_localizacion(lines, linea_inicio, linea_fin); if not bloque: continue`.
+  El caso se saltea **silenciosamente** sin warning, sin contador, sin
+  log. La fila no aparece en `csjn_casos.csv` o aparece con campos
+  vacíos. Sub-diagnosticado en H022/H024 porque no produce filas con
+  error en el CSV: produce ausencia de fila, que es invisible salvo
+  que se compare conteos catálogo vs CSV.
+
+- **Manifestación B — bloque con arrastre.** Cuando dos casos no
+  comparten página única pero el cierre del N físicamente cae dentro
+  de la página de inicio del N+1 (escenario típico en `343_p2243`,
+  `346_p1205`), el bloque del N queda truncado al final y el bloque
+  del N+1 hereda el cierre del N como arrastre. Es la manifestación
+  ya documentada en B045 con sus seis testigos y la responsable de
+  B022, B025, B044.
+
+H024 había declarado a B045 como causa raíz arquitectónica común de
+B022, B025, B044 y subset V1 de B018. H025 refina esa declaración:
+B045 es causa raíz pero produce **dos modos de falla distintos** que
+requieren tratamiento separado, incluso si comparten origen.
+
+**Observación lateral sobre la composición de redundancias.** El
+`pagina_fin` sin restar en el catalogador (línea 410) y el
+`linea_fin_header - 1` en el cruzador (línea 245) constituyen una
+**redundancia arquitectónica**: dos etapas implementando media operación
+cada una sin saber la otra. Cuando los casos están en páginas
+distintas, las dos mitades se complementan y el resultado es correcto.
+Cuando comparten página, las dos mitades se cancelan y producen
+bloque vacío. La memoria de H022 registra que el `-1` fue removido
+deliberadamente del catalogador para mejorar `sin_firma` aguas abajo;
+pero la remoción se hizo sin verificar si otro script ya asumía el
+`-1` previo. Hipótesis fuerte de fix: revertir uno de los dos `-1`
+restaura coherencia. Pendiente de verificación contra el código
+completo del pipeline antes de implementar.
+
+### Fase 3: ballet del parser
+
+Lectura de `procesar_archivo` (parser.py 1326-1620) con foco en orden
+de operaciones, decisiones irreversibles y compensaciones documentadas.
+
+**Decisiones tempranas (1326-1500).** Antes del loop por línea, el
+parser toma seis decisiones cuyo orden no respeta la estructura
+tipográfica del documento que procesa. (1) Construye el bloque desde
+la localización del cruzador. Si el bloque es vacío, hace `continue`
+silencioso — la guarda que captura sin warning la manifestación A de
+B045. (2) Llama a `detectar_fin_real` (parser.py 1153-1234), que
+implementa búsqueda en cascada de cuatro pistas para ajustar
+`linea_fin`. La cascada es asimétrica: ajusta el final del bloque
+pero nunca el principio. Si el bloque tiene arrastre al inicio
+(manifestación B), ninguna función lo detecta. (3) Llama a
+`detectar_apertura_en_bloque` (parser.py 1034-1051) que devuelve la
+primera línea del bloque que matchea `RE_APERTURA`. Cero validación
+de contexto. La decisión es irreversible: `apertura_rel` se usa como
+referencia para extracción de fecha, carátula y tribunal de origen
+sin que ningún paso posterior la revise. (4) Si el bloque matchea
+`RE_SUMARIO_LINK`, se trata como nota editorial y se sale del
+procesamiento con registro vacío. (5) Se extrae la fecha del fallo,
+con comentario explícito del autor (parser.py 1446-1449) reconociendo
+que la extracción ocurre antes de la detección de dictamen y que
+puede capturar la fecha del dictamen en vez de la del fallo:
+"Es lo mejor que podemos hacer sin reordenar el código entero". (6)
+Se extrae `case_name_cuerpo` con `extraer_caratula_v1` desde la
+posición de apertura, más fallback a `find_case_name`.
+
+**Loop por línea (1513-1564).** Después de las decisiones tempranas,
+el parser entra a un loop con prioridades en serie: dictamen primero
+(activa estado `en_dictamen` como guarda espacial), después votos y
+disidencias, después detección de "Por ello". El estado `en_dictamen`
+funciona razonablemente bien — es una pequeña máquina de estados
+implícita que protege las líneas del dictamen de ser evaluadas con
+regex de voto o de dispositiva. Pero llega tarde: la decisión sobre
+`apertura_rel` ya está tomada cuando el loop empieza.
+
+**Post-loop (1565-1620).** `collect_firma_lines` arranca desde
+`por_ello_idx + 1`. Si `por_ello_idx` quedó mal por una apertura
+espuria, la firma recogida puede ser de un voto y no de la mayoría.
+
+**Tres compensaciones documentadas en código.** El parser tiene tres
+parches defensivos contra problemas arquitectónicos que el autor
+reconoció pero no resolvió. (a) Guardia de sumario-con-link
+(parser.py 1410-1421): comentario explícito sobre que en bloques con
+solapamiento de páginas la firma detectada puede pertenecer al fallo
+anterior, por eso se ignora cuando el bloque matchea
+`RE_SUMARIO_LINK`. (b) Orden de extracción de fecha (1446-1449,
+citado arriba). (c) Fallback de fecha en tres niveles (1471-1476)
+cuando la lógica nueva no encuentra. Tres soluciones locales para un
+mismo problema: el orden de operaciones está mal pero parcharlo es
+más barato que repensarlo.
+
+**Acoplamiento B018 → `detectar_fin_real` no documentado en
+DEUDA_TECNICA.** La pista 1 de `detectar_fin_real` (parser.py 1190)
+usa `primer_token_siguiente` como ancla de búsqueda. Si el primer
+token del caso siguiente es genérico (B018 documentado en
+DEUDA_TECNICA con `primer_token_de_caratula` capturando sustantivos
+institucionales como "RECURSO" o "BANCO"), la regex de la línea 1191
+puede matchear cualquier mención del token dentro del bloque del
+caso actual, induciendo cortes prematuros. B018, hasta ahora
+documentado como bug puntual de detección de carátula, también
+contamina la detección de fin del caso anterior. Acoplamiento abierto
+para anotar en DEUDA_TECNICA al cierre de H025.
+
+### Reorientación de la sesión: propuesta de gramática del fallo
+
+A mitad de Fase 3, en intercambio sobre el orden de operaciones del
+parser, emergió una propuesta arquitectónica alternativa: que el
+parser respete el orden tipográfico del documento (carátula →
+sumarios → dictamen → fallo → firma → votos y disidencias → cierre
+editorial), modelando la estructura como una gramática en la que
+cada sección detectada define qué secciones son válidas a
+continuación. La idea creció en sucesivos intercambios hasta
+incorporar dos componentes adicionales: (a) validación de transiciones
+entre secciones como mecanismo de auto-corrección frente a arrastres
+(una transición FIRMA → CARATULA es violación de gramática y señal
+de que el bloque contiene dos casos pegados); (b) diálogo entre
+bloques vecinos para resolver el caso específico de páginas
+compartidas (una firma huérfana al inicio del bloque N+1 pertenece
+al caso N, y reasignarla resuelve B045 sin tocar el catálogo ni el
+cruzador).
+
+La propuesta queda documentada en `docs/GRAMATICA_DEL_FALLO.md` como
+borrador conceptual sin compromiso de implementación. El documento
+desarrolla las tres formas posibles de implementación (dos pasadas
+separadas; una pasada con vista relacional; convergencia iterativa)
+con pros y contras de cada una, y recomienda preliminarmente empezar
+por Forma 1 sólo pasada 1 — gramática local sobre cada bloque sin
+diálogo entre vecinos — para validar el modelo antes de agregar
+complejidad. Incluye dos diagramas: el de las dos manifestaciones
+de B045 (motivación) y el del ballet actual del parser (contraste).
+
+Pregunta abierta y aplazada a H026: cuánto de esta propuesta ya está
+implementado en `auditar_fallo.py`. La lectura preliminar de nombres
+de funciones (`detectar_apertura_mayoria`, `_ordenar_y_validar`,
+`_agregar_catch_all`) sugiere que el auditor implementa una versión
+parcial de la gramática. Si la lectura detallada lo confirma, el
+camino a implementación se acorta: no sería refactor desde cero del
+parser, sino promoción del auditor a parser de producción con el
+agregado de validaciones de transición. Fase 3-bis original de H025
+se reanuda en H026 con foco específico en esta hipótesis.
+
+### Decisiones tomadas en H025
+
+Más allá del documento conceptual, H025 produce cuatro cambios
+operativos en los archivos del proyecto:
+
+(a) **B045 refinado** en DEUDA_TECNICA con bloque "Refinamiento
+H025" agregado al final de la entrada vigente, sin tocar el texto
+previo. Separa las dos manifestaciones, identifica las líneas de
+código exactas (catalogador 410, cruzador 245), marca como completado
+el diagnóstico a nivel código que H024 había declarado pendiente,
+referencia el documento `docs/GRAMATICA_DEL_FALLO.md` como propuesta
+arquitectónica de fix.
+
+(b) **B046 abierto** para la manifestación A (casos desaparecidos
+por bloque vacío en el cruzador). Estado de verificación:
+`abierto_pendiente_de_medicion`. Acción inmediata propuesta: contar
+sobre `catalogo.csv` cuántas filas tienen `pagina_fin == pagina_inicio`
+del caso siguiente del mismo tomo y comparar contra `csjn_casos.csv`
+para cuantificar la magnitud.
+
+(c) **B018 ampliado** con nota de acoplamiento a `detectar_fin_real`
+pista 1 (parser.py 1190). Hasta H024, B018 figuraba como bug puntual
+de detección de carátula. H025 documenta el efecto colateral sobre la
+detección de fin del caso anterior.
+
+(d) **M01 actualizado** en alcance: la sesión pendiente de
+re-recorrer parser.py y actualizar PIPELINE.md ahora debe incorporar
+también B045 manifestaciones A/B, B046, el acoplamiento B018 →
+detectar_fin_real, y eventualmente referenciar `GRAMATICA_DEL_FALLO.md`
+como insumo conceptual.
+
+PIPELINE.md recibe cuatro fricciones nuevas o ampliadas (§2.5.a con
+consecuencia aguas abajo del `pagina_fin` sin restar; §3.5 con
+escenario degenerado del bloque vacío; §3.9 con F3.9.d sobre el
+silenciamiento por la guarda de bloque vacío en parser; §4 con
+asimetría de `detectar_fin_real` y acoplamiento con B018).
+
+### Pendientes para H026
+
+Fases 3-bis, 4, 5, 6 del plan original.
+
+Específicamente:
+
+- Lectura detallada de `auditar_fallo.py` para verificar cuánto de la
+  gramática propuesta ya está implementado.
+- Medición empírica sobre `catalogo.csv` y `csjn_casos.csv` de la
+  cardinalidad de B045 manifestaciones A y B (cuántas filas con
+  `pagina_fin == pagina_inicio_siguiente`, cuántas terminan en CSV con
+  campos vacíos, cuántas son caso N+1 con apertura sospechosa).
+- Experimento mental bifurcado: qué bugs sobreviven a un fix de B045
+  manifestación A, qué bugs sobreviven a un fix de B045 manifestación
+  B, qué bugs son independientes de ambos.
+- Matriz de opciones de fix con criterios estandarizados (costo,
+  riesgo, cobertura).
+- Roadmap propuesto para sesiones siguientes.
+
+### Pendientes operativos
+
+- Los archivos `.txt` de bloques producidos en H024 (`h024_blocks/`)
+  siguen en raíz del repo, pendientes de moverse a directorio de
+  output diagnóstico. Heredado de H024.
+
+- Snapshot de DEUDA_TECNICA.md previo a las modificaciones de H025,
+  para preservar el estado pre-edit según M04 (convención de
+  snapshots cubren todo archivo modificable).
+
+### Notas metodológicas
+
+H025 confirmó dos reglas operativas heredadas. (1) Verificar contra
+el código vivo, no contra la documentación: la inconsistencia del
+catalogador entre docstring y código (línea 381 vs 410) habría
+pasado desapercibida si se confiaba en el docstring. (2) Identificar
+mecanismo antes de proponer fix: el hallazgo de las dos
+manifestaciones de B045 sólo aparece al leer el código completo del
+cruzador, no al pensar abstractamente en "el catalogador asigna mal
+la página".
+
+Una regla nueva surge en H025: las propuestas arquitectónicas se
+documentan conceptualmente en `docs/` y se referencian desde
+BITACORA y DEUDA_TECNICA, sin pretender implementación inmediata. La
+existencia del documento no compromete a actuar; preserva el
+pensamiento para sesiones futuras.
