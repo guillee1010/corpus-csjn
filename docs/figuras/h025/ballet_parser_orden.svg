@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 680 820" role="img" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <title>Ballet del parser — orden real de operaciones</title>
+  <desc>Diagrama del flujo de procesar_archivo mostrando las decisiones tempranas que condicionan todo el procesamiento y el loop línea por línea con su orden de regex.</desc>
+  <style>
+    .t-th { font-size: 14px; font-weight: 500; fill: #2C2C2A; }
+    .t-ts { font-size: 12px; font-weight: 400; fill: #444441; }
+    .t-c-gray-th { font-size: 14px; font-weight: 500; fill: #2C2C2A; }
+    .t-c-gray-ts { font-size: 12px; font-weight: 400; fill: #444441; }
+    .t-c-teal-ts { font-size: 12px; font-weight: 400; fill: #085041; }
+    .t-c-coral-th { font-size: 14px; font-weight: 500; fill: #4A1B0C; }
+    .t-c-coral-ts { font-size: 12px; font-weight: 400; fill: #712B13; }
+    .t-amber-section { font-size: 14px; font-weight: 500; fill: #854F0B; }
+    .t-teal-section { font-size: 14px; font-weight: 500; fill: #0F6E56; }
+    .arr { stroke: #888780; stroke-width: 1.5; fill: none; }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <text class="t-th" x="340" y="28" text-anchor="middle">Ballet del parser — orden real de operaciones</text>
+
+  <text class="t-amber-section" x="340" y="58" text-anchor="middle">Decisiones tempranas (irreversibles)</text>
+
+  <rect x="40" y="72" width="600" height="50" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+  <text class="t-c-coral-th" x="60" y="92" dominant-baseline="central">1. construir_bloque (1365). Si vacío → continue silencioso.</text>
+  <text class="t-c-coral-ts" x="60" y="110" dominant-baseline="central">Captura silenciosa de la manifestación A de B045 (casos desaparecidos).</text>
+
+  <line x1="340" y1="122" x2="340" y2="135" class="arr" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="140" width="600" height="50" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+  <text class="t-c-coral-th" x="60" y="160" dominant-baseline="central">2. detectar_fin_real (1375). Cascada de 4 pistas, ajusta linea_fin.</text>
+  <text class="t-c-coral-ts" x="60" y="178" dominant-baseline="central">Pista 1 usa primer_token_siguiente → vulnerable a B018. Asimétrico: no toca linea_inicio.</text>
+
+  <line x1="340" y1="190" x2="340" y2="203" class="arr" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="208" width="600" height="50" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+  <text class="t-c-coral-th" x="60" y="228" dominant-baseline="central">3. detectar_apertura_en_bloque (1391). Primer match de RE_APERTURA gana.</text>
+  <text class="t-c-coral-ts" x="60" y="246" dominant-baseline="central">Cero validación de contexto. Si hay arrastre (B045 manif. B), gana apertura espuria.</text>
+
+  <line x1="340" y1="258" x2="340" y2="271" class="arr" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="276" width="600" height="50" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text class="t-c-gray-th" x="60" y="296" dominant-baseline="central">4. Guardia sumario-con-link (1422). Si presente, escribe registro vacío y sale.</text>
+  <text class="t-c-gray-ts" x="60" y="314" dominant-baseline="central">Compensación documentada por el autor contra B045. Local, no generalizada.</text>
+
+  <line x1="340" y1="326" x2="340" y2="339" class="arr" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="344" width="600" height="50" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text class="t-c-gray-th" x="60" y="364" dominant-baseline="central">5. Fecha del fallo (1450). Antes de detectar dictamen.</text>
+  <text class="t-c-gray-ts" x="60" y="382" dominant-baseline="central">Comentario del autor reconoce el problema: puede capturar fecha del dictamen.</text>
+
+  <line x1="340" y1="394" x2="340" y2="407" class="arr" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="412" width="600" height="50" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text class="t-c-gray-th" x="60" y="432" dominant-baseline="central">6. case_name del cuerpo (1491). V1 desde apertura_rel + fallback find_case_name.</text>
+  <text class="t-c-gray-ts" x="60" y="450" dominant-baseline="central">Si apertura_rel es espuria, busca carátula en lugar equivocado.</text>
+
+  <line x1="340" y1="462" x2="340" y2="490" class="arr" marker-end="url(#arrow)"/>
+
+  <text class="t-teal-section" x="340" y="488" text-anchor="middle">Loop línea por línea (1513-1564) — orden por prioridad</text>
+
+  <rect x="40" y="500" width="600" height="40" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text class="t-c-teal-ts" x="60" y="522" dominant-baseline="central">7a. ¿RE_DICT_HDR? → en_dictamen=True. Guarda espacial activada. continue.</text>
+
+  <rect x="40" y="544" width="600" height="40" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text class="t-c-teal-ts" x="60" y="566" dominant-baseline="central">7b. ¿en_dictamen y RE_FECHA con prev corta? → en_dictamen=False. continue.</text>
+
+  <rect x="40" y="588" width="600" height="40" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text class="t-c-teal-ts" x="60" y="610" dominant-baseline="central">7c. ¿RE_VOTO_HDR o RE_DISID_HDR? → registra marcador, busca juez 3 líneas. continue.</text>
+
+  <rect x="40" y="632" width="600" height="40" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text class="t-c-teal-ts" x="60" y="654" dominant-baseline="central">7d. ¿detectar_apertura_dispositivo? (Por ello, etc.) → por_ello_idx = k. NO continue.</text>
+
+  <line x1="340" y1="672" x2="340" y2="685" class="arr" marker-end="url(#arrow)"/>
+
+  <text class="t-amber-section" x="340" y="703" text-anchor="middle">Post-loop (1565-1620)</text>
+
+  <rect x="40" y="716" width="600" height="50" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text class="t-c-gray-th" x="60" y="736" dominant-baseline="central">8. extraer_considerando, classify_outcome, collect_firma_lines (desde por_ello_idx+1).</text>
+  <text class="t-c-gray-ts" x="60" y="754" dominant-baseline="central">Si por_ello_idx mal detectado, firma proviene de un voto, no de la mayoría.</text>
+
+  <rect x="40" y="770" width="600" height="40" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text class="t-c-gray-ts" x="60" y="792" dominant-baseline="central">9. Segmentación de votos/mayoría (1584), conteos, output.</text>
+</svg>
