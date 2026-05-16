@@ -1905,3 +1905,12 @@ Regla operativa actualizada para sesiones futuras:
 5. Recién entonces formular hipótesis de mecanismo y verificar contra
    el código.
 
+6. **Actualizar `README.md` global del repo:** desactualizado desde
+   antes del sprint 2026-05-09. No refleja la estructura actual
+   (`scripts/pipeline/` + `output/{catalogo,mapa,localizacion,parser,auditoria}/`),
+   sigue documentando rutas viejas (`paginas/`, archivos `_v15.csv`
+   en raíz), no menciona `auditar_fallo.py` (herramienta central de
+   diagnóstico desde H013), no menciona la carpeta de outputs de
+   auditoría, mantiene lenguaje de "Bug D" ya cerrado. Sesión
+   dedicada de housekeeping, idealmente cruzada con el inventario
+   de zona DUPLICADA y zona OLVIDADA (H020 Fases 1-2).
