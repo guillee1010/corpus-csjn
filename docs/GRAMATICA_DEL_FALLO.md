@@ -278,6 +278,116 @@ registra individualmente.
 La gramática no es un lujo conceptual. Es la diferencia entre un
 parser que silencia los problemas y un parser que los identifica.
 
+### El epílogo: producción faltante
+
+La descripción en lenguaje natural de más arriba menciona que
+"eventualmente cierra una sección editorial con referencias
+procesales". Esa sección editorial merece tratamiento explícito como
+producción gramatical propia, porque tiene estructura interna estable
+y porque sin reconocerla el parser pierde información o la asigna al
+caso equivocado.
+
+Llamamos **epílogo** al bloque que va entre la firma del cuerpo
+principal del fallo y la carátula del caso siguiente. Empíricamente
+identificado en la corrida `--random 80` de la sesión H026, el
+epílogo tiene los siguientes componentes posibles, en este orden
+cuando coexisten:
+
+1. **Continuación de firma.** Apellidos de jueces o conjueces que el
+   detector de firma cortó. Una o dos líneas, típicamente con punto
+   final o separador em-dash.
+2. **Bloque de recurso.** "Recurso [extraordinario / de hecho / de
+   queja / ordinario / de reposición / de apelación / de revocatoria
+   / directo] interpuesto por X, representado por el Dr. Y, con el
+   patrocinio letrado del Dr. Z." Una variante usa "Recursos
+   extraordinarios" o "deducido" en lugar de "interpuesto".
+3. **Bloque de traslado.** "Traslado [del recurso extraordinario]
+   contestado por W, representado por...". Aparece típicamente
+   después del bloque de recurso. Puede aparecer un segundo bloque
+   de recurso después del traslado.
+4. **Bloque de partes alternativo.** "Parte actora: X.", "Parte
+   demandada: Y.", "Tercero citado: Z.", "Parte ejecutante: ...",
+   "Profesionales intervinientes: doctores...". Convive con el bloque
+   de recurso en algunos casos.
+5. **Bloque de nombres legacy.** "Nombre del actor: ...", "Nombre de
+   los actores: ...", "Nombre de la demandada: ...". Convención
+   editorial más antigua, todavía presente en tomos altos. Convive
+   con la convención "Recurso ... interpuesto por" sin reemplazarla
+   limpiamente.
+6. **Tribunal de origen.** "Tribunal de origen: [nombre del
+   tribunal]." Único marcador del tribunal de la instancia inmediata
+   anterior. Casi siempre presente cuando hay epílogo.
+7. **Tribunales intervinientes anteriores.** "Tribunal que intervino
+   con anterioridad: ..." / "Tribunales que intervinieron con
+   anterioridad: ..." / "Otros tribunales que intervinieron con
+   anterioridad: ...". Lista de instancias inferiores intermedias.
+
+Todos opcionales. El orden interno es estable cuando coexisten:
+continuación de firma primero, recurso/traslado/partes después,
+tribunal de origen, tribunales intervinientes al final. Los headers
+de página atraviesan el epílogo transversalmente (el corte de página
+no termina el epílogo).
+
+**Por qué este span importa.**
+
+El modelo actual del auditor (diez tipos de span) no tiene producción
+para el epílogo. El contenido editorial post-firma cae en `catch_all`
+cuando queda dentro del bloque correcto, o arrastra al catch_all
+inicial del caso siguiente cuando `detectar_fin_real` corta antes.
+La consecuencia es triple:
+
+- El catch_all pierde poder diagnóstico: ya no es "lo que la
+  heurística no logró clasificar" sino "lo que la heurística no
+  logró clasificar más lo que sistemáticamente no busca clasificar".
+- `detectar_borde_inferior` reporta falsos positivos de
+  `EST_GAP_RESIDUO` para epílogos editoriales normales.
+- La lógica de extracción de tribunal de origen del parser actual
+  busca en todo el bloque, sin restricción de span. Un "Tribunal de
+  origen" mencionado dentro de un sumario o dictamen puede contaminar
+  la extracción. Con span propio, la búsqueda se restringe al lugar
+  correcto.
+
+**Marcadores explícitos del epílogo.**
+
+Cada componente abre con una línea identificable por regex:
+
+1. `^(Recurso|Recursos)\s+(extraordinario|de\s+hecho|de\s+queja|ordinario|de\s+reposición|de\s+apelación|de\s+revocatoria|directo|directos)\s+(interpuesto|deducido|interpuestos)`
+2. `^Traslado\s+(contestado|recibido|del\s+recurso)`
+3. `^(Parte|Partes)\s+(actora|demandada|ejecutante|querellante|recurrente|coactora|codemandada)`
+4. `^Tercero\s+(citado|interviniente)`
+5. `^Profesionales\s+intervinientes`
+6. `^Nombre\s+(del|de\s+los|de\s+la|de\s+las)\s+(actor|demandado|demandada|actores|demandados|actoras|demandadas)`
+7. `^Tribunal\s+de\s+origen\s*:`
+8. `^(Tribunal|Tribunales|Otros\s+tribunales)\s+(que\s+intervino|que\s+intervinieron|intervinientes)`
+9. Continuación de firma: `linea_es_continuacion_firma` ya
+   implementado en `scripts/auditoria/auditar_fallo.py` líneas
+   159-211.
+
+Estos nueve marcadores cubren todos los componentes del epílogo
+observados en los 48 catch_all finales de la corrida `--random 80`.
+La verificación de persistencia editorial sobre el corpus completo
+queda pendiente (M06 en `DEUDA_TECNICA.md`).
+
+**El detector de epílogo resuelve implícitamente el borde superior.**
+
+El borde superior es el problema simétrico del borde inferior:
+detectar qué líneas, antes de la carátula declarada del caso N+1,
+son en realidad residuo del caso N. La auditoría empírica muestra
+que en aproximadamente el 78 % del corpus el inicio del bloque del
+caso N+1 viene contaminado (catch_all inicial no vacío en 62 de 80
+casos).
+
+De ese 78 %, aproximadamente la cuarta parte (16 casos, 25,8 % del
+catch_all inicial) es epílogo del caso N arrastrado. Si el detector
+de epílogo se extiende "hacia adelante" desde la firma del caso N
+hasta encontrar la carátula del N+1, lo que quede arrastrado al N+1
+será solo el residuo verdadero (los otros bugs: corte a mitad de
+oración, corte antes del Por ello, carátula no detectada). Es decir,
+el detector de epílogo **es** el detector de borde superior para el
+subset epílogo-puro. Los otros componentes del borde superior
+requieren fixes independientes (B048 modos A y B en
+`DEUDA_TECNICA.md`).
+
 ---
 
 ## El diálogo entre vecinos
@@ -456,6 +566,206 @@ estimado: no sería refactor desde cero del parser, sino promoción del
 auditor a parser de producción con el agregado de la gramática
 explícita y las validaciones de transición entre secciones. Es una
 hipótesis a verificar en H026.
+
+### Refinamiento post-lectura del auditor (H026)
+
+La lectura del código del auditor en H026 (hasta línea 414,
+`detectar_borde_inferior` inclusive) y la corrida empírica
+`--random 80` permiten precisar qué de la gramática ya está y qué
+falta concretamente.
+
+**Lo que está implementado:**
+
+- Modelo de spans tipados disjuntos con cobertura total. Diez tipos
+  (carátula, sumario, dictamen, cuerpo_mayoria, voto, disidencia,
+  firma, sumario_con_link, header_pagina, catch_all). Invariante
+  declarado y verificado: toda línea del bloque pertenece a al menos
+  un span.
+- Reuso por importación de los regex y helpers de `parser.py`. La
+  diferencia entre auditor y parser no está en qué reciben sino en
+  cómo procesan.
+- API canónica `auditar_fallo(tomo, pagina) -> dict` pensada para uso
+  programático, no solo para output Markdown.
+- Diálogo entre vecinos en la dirección N → N+1: la función
+  `_clasificar_linea_gap` usa `primer_token_siguiente` (dato del
+  caso siguiente) para clasificar líneas del gap del caso actual.
+  El orden de prioridad de las clasificaciones está pensado para que
+  la información del vecino tenga precedencia.
+- Detector `linea_es_continuacion_firma` con set hardcodeado de 17
+  apellidos titulares y tres pistas discursivas (mayúsculas, longitud
+  + puntuación, em-dash).
+- Detector `detectar_borde_inferior` con 6 estados y 4 alertas
+  independientes. Diagnostica composición del gap entre
+  `linea_fin_real` y `linea_inicio` del próximo caso.
+
+**Lo que falta:**
+
+- **Producción `epilogo`** (ver sección "El epílogo: producción
+  faltante"). Diez tipos pasarían a once + sub-componentes
+  opcionales.
+- **Detector de borde superior** simétrico al inferior. En su forma
+  más simple, lo provee el detector de epílogo al extender el span
+  del caso N hasta la carátula del N+1. En su forma robusta, sería
+  un detector independiente que mira las líneas previas a
+  `linea_inicio` del caso actual y emite indicios sobre arrastre del
+  anterior.
+- **Modelo por evidencia, no por reglas duras.** Las pistas que
+  viajan entre vecinos (`primer_token_siguiente`,
+  `linea_es_continuacion_firma`, marcadores del epílogo) hoy disparan
+  clasificación dura por orden de prioridad. Un modelo más robusto
+  trata cada detección como indicio con peso y resuelve por
+  acumulación o desvirtuación. Esto cambia el modelo de decisión,
+  no solo agrega detectores nuevos.
+- **Validación de orden** (transiciones legítimas entre producciones).
+  El auditor hoy clasifica spans pero no valida que la secuencia
+  respeta la gramática. La transición FIRMA → CARATULA dentro del
+  mismo bloque, por ejemplo, no se reporta como violación: se
+  clasifica como dos spans contiguos sin alerta.
+- **Validación de cardinalidad.** Múltiples sumarios consecutivos, o
+  un solo voto sin disidencia, o disidencias sin votos
+  correspondientes, no se reportan como anomalías.
+- **Extracción de campos desde los spans.** El parser actual extrae
+  tribunal de origen, fecha, status, etc. buscando en todo el bloque.
+  En el modelo de spans, esa búsqueda se restringe al span
+  correspondiente (tribunal de origen al span `epilogo`, fecha al
+  span `cuerpo_mayoria` o al inicio del fallo). Esto requiere
+  trasladar la lógica de `parser.py` (líneas 365-444 para tribunal
+  de origen, líneas 1450-1475 para fecha) a operar sobre spans.
+
+**Evidencia empírica de los límites del modelo actual.**
+
+La corrida `--random 80` cuantifica varios límites:
+
+- 91,2 % de los casos están en `EST_SOLAPADO`: el parser
+  sistemáticamente extiende el bloque del caso N más allá del inicio
+  del N+1. El borde inferior está sobre-disparado.
+- 77,5 % de los casos tienen catch_all al inicio del bloque del N+1
+  (residuo arrastrado del N). De ese residuo, el 25,8 % es epílogo
+  puro (resoluble con la producción `epilogo`), el 56,4 % son modos
+  de falla de `detectar_fin_real` (B048 modos A y B en
+  `DEUDA_TECNICA.md`), y el 12,9 % son carátulas no detectadas del
+  N+1 (B049).
+- 55,7 % de los casos tienen catch_all al final del bloque (epílogo
+  propio del caso). 48 % de esos catch_all finales son epílogo
+  reconocible con los marcadores listados en la sección "El epílogo:
+  producción faltante".
+
+**Implicación para las tres formas de implementación** (sección
+anterior "Tres formas posibles de implementar"). La promoción del
+auditor a parser (cualquiera de las tres formas) no resuelve por sí
+sola los modos de falla de `detectar_fin_real`. Esa función está
+importada de `parser.py` y se ejecuta igual en el auditor. La
+promoción del auditor a parser convierte al auditor en pasada 1 de
+Forma 1, pero exige una pasada 0 o un fix in-place de
+`detectar_fin_real` para resolver los modos A y B de B048.
+
+### Refinamiento post-Fase A continuación (H027)
+
+La lectura completa del auditor en H027 (detectores 4-12 del listado
+H026 + orquestador `segmentar_bloque` + closers `_agregar_catch_all`,
+`_ordenar_y_validar`, `_resolver_caso`) confirma y precisa dos cosas
+declaradas previamente y agrega tres mecanismos nuevos.
+
+**Confirmación: el borde superior y el epílogo son el mismo problema
+estructural, en dos direcciones.**
+
+H026 ya había identificado que el modelo de spans del auditor "carece
+de producción `epilogo`" y que "el borde superior es estructural, no
+marginal". La lectura H027 muestra que ambas afirmaciones describen
+caras de un mismo problema: **el catch_all es un colector pasivo, no
+un clasificador**, y por construcción absorbe cualquier residuo que
+los detectores no clasifican, sin distinguir entre (a) material del
+fallo previo arrastrado al inicio del bloque actual y (b) material
+del fallo actual no clasificado al final. Las dos formas de residuo
+operan en direcciones opuestas pero comparten causa:
+
+- **Borde inferior (epílogo no detectado al final del fallo N):** el
+  material editorial post-firma — tribunal de origen, recurso de
+  queja interpuesto por, partes, representación letrada — no tiene
+  detector propio. Cae en catch_all final, o queda absorbido por el
+  span del último voto/disidencia (B051), o por extensión espuria del
+  span de firma de la mayoría (B050).
+- **Borde superior (catch_all inicial como prosa del previo):** las
+  primeras líneas del bloque del fallo N+1 pueden contener residuo
+  del N (B045 mB). El detector de carátula (B049) no usa el último
+  header de página antes del dictamen/apertura como ancla del rango
+  de búsqueda, por lo que puede devolver una línea de prosa de
+  epílogo del previo como carátula del N+1.
+
+Los dos bordes son la misma producción `epilogo` (faltante) vista
+desde dos lados: desde el caso N (cierre que no se detecta) y desde
+el caso N+1 (apertura cuya ancla superior está corrida por el
+residuo). Implementar la producción `epilogo` resolvería ambos:
+
+1. El span `epilogo` del N termina en su última línea estructuralmente
+   válida (último marcador del epílogo).
+2. El detector de carátula del N+1 puede anclar su `inicio_busqueda`
+   en la línea siguiente al último header de página después del fin
+   del epílogo del N.
+
+**Mecanismos nuevos identificados:**
+
+- **`detectar_firma_mayoria` puede contaminar el span de firma con
+  líneas del epílogo (B050).** El loop de extensión acepta líneas
+  cortas que contengan un apellido de `JUECES_CONOCIDOS`. Ese set
+  incluye 14 conjueces con apellidos comunes (Otero, Catania,
+  Cavallo, Petrone, Hornos, Riggi, Mahiques, Figueroa, entre otros)
+  que aparecen frecuentemente en el epílogo (representación letrada,
+  tribunal de origen, integrantes de tribunales previos). La firma
+  se extiende sobre la cola del fallo.
+- **El último voto/disidencia absorbe el epílogo cuando hay votos
+  disidentes (B051).** `detectar_votos_y_disidencias` cierra el
+  último span en `len(bloque) - 1`. El epílogo queda dentro del span
+  del último voto, no en catch_all. Esto explica parcialmente por
+  qué el catch_all final aparece solo en el 55,7 % de los casos de
+  `--random 80`: en casos con votos disidentes, está escondido.
+- **`_ordenar_y_validar` no valida (M08).** La función ordena y
+  devuelve. Las invariantes declaradas en `segmentar_bloque`
+  (disjunción, cobertura) no se verifican en runtime. Una violación
+  pasaría silenciosamente. Implicación para el modelo: la cobertura
+  total que el auditor declara como invariante es un postulado, no
+  un check.
+
+**Refutaciones por lectura de código:**
+
+- La hipótesis preliminar de B049 ("formato de carátula `X y otros
+  c/ Y` o `APELLIDO, Nombre c/ Y` no contemplado") quedó refutada:
+  ninguna de las tres estrategias del detector (formato B con `:`,
+  formato A con par X-Y, fallback final) impone filtro de formato
+  sobre la línea devuelta. La causa real es la falta de ancla
+  superior, no el formato.
+- La hipótesis HN3 del prompt H027 ("`APELLIDOS_FIRMA_TITULARES`
+  incompleto para conjueces") quedó parcialmente refutada al
+  encontrar que existen **dos sets paralelos**:
+  `APELLIDOS_FIRMA_TITULARES` (9 apellidos, todos titulares, usado
+  solo en `detectar_borde_inferior`) y `JUECES_CONOCIDOS` (29
+  patrones, 14 conjueces, usado en `detectar_firma_mayoria`). El
+  detector de firma principal SÍ cubre conjueces. El sesgo, si
+  existe, opera en el borde inferior — específicamente en la
+  clasificación `firma_arrastrada` de `_clasificar_linea_gap`, que
+  perdería diagnóstico fino para casos con conjueces. Magnitud
+  pendiente de cuantificar.
+
+**Implicación operativa concreta: ancla candidata para `detectar_caratula`.**
+
+El detector `detectar_headers_pagina` (paso 0 del orquestador) ya
+identifica las líneas de header. Esa información no se está usando
+como ancla del rango de búsqueda en `detectar_caratula`. Mejora
+barata candidata: anclar el `inicio_busqueda` del detector de
+carátula al último header de página antes del dictamen/apertura, no
+en `0`. Esto no resuelve el problema estructural (el epílogo sigue
+sin tener producción propia) pero corta el subset de B049 cuya
+carátula real está pegada o muy cerca del último header de página.
+Verificación necesaria sobre los 8 testigos antes de implementar.
+
+**Lo que no cambia respecto de H026:**
+
+- La sección "El epílogo: producción faltante" sigue siendo la
+  referencia conceptual.
+- Las tres formas de implementar siguen abiertas con la misma
+  recomendación preliminar.
+- La estimación de qué porcentaje del auditor se reutiliza en un
+  parser de Forma 1 sigue pendiente (Fase F).
 
 ---
 
