@@ -343,6 +343,22 @@ del N como arrastre. Es la manifestación ya documentada en B045 con
 los seis testigos vigentes (`343_p2243`, `346_p1205`, etc.) y la
 responsable de B022, B025, B044.
 
+**Refinamiento post-verificación empírica (16/5/2026, al cierre de H025).**
+La caracterización original de las manifestaciones A y B como
+alternativas excluyentes está **refutada**. La verificación dirigida
+del caso `346_p1205` muestra que ambas manifestaciones operan
+**simultáneamente** sobre el mismo par (N, N+1) cuando dos casos
+comparten página única: el caso N se evapora (B046, fila ausente
+en `fallos_localizados.csv`) y el caso N+1 hereda el cierre del N
+(B045 manifestación B). Verificado en el par (`346_p1205` evaporado,
+`346_p1208` con arrastre). Los seis testigos de B045 documentados
+en H024 son las seis caras visibles del lado N+1; cada uno tiene
+probablemente su par evaporado del lado N que no había sido
+identificado. La consulta de cuantificación propuesta en B046 da
+una cota inferior de seis casos B046 y una cota superior limitada
+por el conteo de pares (N, N+1) con `pagina_inicio_N+1 == pagina_inicio_N`
+en `catalogo.csv`. Pendiente para H026.
+
 **Observación lateral sobre redundancia +1/−1.** La coexistencia del
 `pagina_fin` sin restar (catalogador) y el `linea_fin_header − 1`
 (cruzador) constituye redundancia arquitectónica: dos etapas
@@ -411,9 +427,17 @@ el bloque del cruzador, llama a `construir_bloque_desde_localizacion`
 que devuelve algo falsy, y la línea 1367 hace `continue` silencioso.
 El caso no aparece en `csjn_casos.csv` o aparece con campos vacíos.
 **Diagnóstico / evidencia:** identificado por lectura del código en
-H025. Sin testigo verificado todavía. Magnitud desconocida.
-**Estado de verificación:** `hipotesis_no_verificada`. Pendiente de
-medición sobre `catalogo.csv` y `csjn_casos.csv`.
+H025; **primer testigo empírico confirmado al cierre de H025**:
+`346_p1205` (Álvarez, Armando David c/ EN - M° RREECI). Catálogo
+línea 5279 lo lista correctamente (tomo 346, pagina_inicio 1205,
+pagina_fin 1208). `fallos_localizados.csv` no tiene ninguna fila
+con `pagina_inicio = 1205` para tomo 346. El caso se evapora entre
+catalogador y cruzador. Coincide con el caso documentado en H024
+como testigo de B045 manifestación B sobre `346_p1208` (Frigorífico
+Paladini): el cierre del Álvarez aparece en el bloque del Paladini
+como arrastre, pero el bloque del Álvarez mismo nunca se procesó.
+**Estado de verificación:** `confirmado_caso_testigo`. Pendiente de
+cuantificación sobre corpus completo.
 **Validador propuesto:** consulta sobre catálogo: contar filas con
 `pagina_fin == pagina_inicio_caso_siguiente_mismo_tomo`. Para cada
 una, verificar si la fila correspondiente en `csjn_casos.csv` tiene
@@ -421,17 +445,22 @@ campos vacíos o si la fila falta. Cuantifica cardinalidad. Plan.
 **Estado del fix:** no diseñado. Acoplado al fix de B045 manifestación
 B: ambos comparten causa raíz (redundancia +1/−1 entre catalogador
 y cruzador). Ver hipótesis fuerte de fix anotada en B045.
-**Severidad:** desconocida hasta cuantificar. Si la cardinalidad es
-chica (decenas de casos), severidad baja. Si es alta (centenas),
-severidad alta — significaría que la cobertura real del corpus es
-menor que el 99,3% reportado.
+**Severidad:** desconocida hasta cuantificar. El testigo `346_p1205`
+sugiere que los seis testigos de B045 en H024 pueden tener su par
+correspondiente de caso desaparecido (`346_p1205` es el par del
+`346_p1208` documentado, etc.). Si esto se confirma sobre los otros
+cinco testigos, la cardinalidad mínima de B046 es seis casos. La
+cardinalidad real puede ser mayor.
 **Interacciones con otros bugs:** comparte causa raíz con B045
-manifestación B. Mutuamente excluyentes en cualquier caso dado:
-una fila es **caso desaparecido** (B046) o **bloque con arrastre**
-(B045 B), no ambos.
-**Referencias cruzadas:** BITACORA H025 (hallazgo H025-F2-01).
-B045 (causa raíz común). Sin §X.Y en PIPELINE — se agrega como
-F3.9.d en M01.
+manifestación B. **Refinamiento H025 post-verificación**: las dos
+manifestaciones no son alternativas sino **simultáneas en el mismo
+escenario**. Cuando dos casos comparten página única, ambas ocurren
+sobre el par (N, N+1): N se evapora (B046), N+1 hereda el cierre
+(B045 B). Verificado empíricamente en el par (`346_p1205` evaporado,
+`346_p1208` con arrastre).
+**Referencias cruzadas:** BITACORA H025 (hallazgo H025-F2-01 y
+verificación de cierre). B045 (manifestación B, par del mismo
+escenario). Sin §X.Y en PIPELINE — se agrega como F3.9.d en M01.
 
 ---
 

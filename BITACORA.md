@@ -1915,7 +1915,7 @@ Regla operativa actualizada para sesiones futuras:
    dedicada de housekeeping, idealmente cruzada con el inventario
    de zona DUPLICADA y zona OLVIDADA (H020 Fases 1-2).
 
-   ## H025 — Reflexión arquitectónica sobre el pipeline: dos manifestaciones de B045, propuesta de gramática del fallo (16/5/2026)
+## H025 — Reflexión arquitectónica sobre el pipeline: dos manifestaciones de B045, propuesta de gramática del fallo (16/5/2026)
 
 Continuación de H024. Plan original: reflexión profunda sobre cómo
 funciona el pipeline en conjunto, mapeando el orden de operaciones y
@@ -2217,3 +2217,49 @@ documentan conceptualmente en `docs/` y se referencian desde
 BITACORA y DEUDA_TECNICA, sin pretender implementación inmediata. La
 existencia del documento no compromete a actuar; preserva el
 pensamiento para sesiones futuras.
+
+### Verificación empírica al cierre: B046 confirmado sobre `346_p1205`
+
+Después de los cinco commits de H025, al preparar insumos para H026,
+se corre `auditar_fallo.py --tomo 346 --pagina 1205`. El auditor
+devuelve **el caso `346_p1201` (Osorio), no `346_p1205` (Álvarez)**.
+La página 1205 está cubierta por el rango del Osorio (1201-1205) y
+el auditor la encuentra por contenido, no por `pagina_inicio` exacta.
+
+Verificación dirigida sobre los CSV:
+
+- `output/catalogo/catalogo.csv` línea 5279: `346,1205,1208,346_p1205,"Álvarez, Armando David c/ EN - M° RREECI..."`.
+  El caso existe en el catálogo.
+- `output/localizacion/fallos_localizados.csv` con grep `346,1205,`:
+  cero matches. **El caso se evapora entre catalogador y cruzador.**
+
+Esto es **el primer testigo empírico confirmado de B046** (manifestación
+A de B045): el caso `346_p1205` desaparece silenciosamente del corpus
+de producción porque el cruzador produce bloque vacío y el parser hace
+`continue` silencioso en línea 1367.
+
+**Inversión del entendimiento previo de H024.** H024 documenta
+`346_p1205` como testigo de B045 (entonces manifestación B): el bloque
+del Frigorífico Paladini (caso siguiente al Álvarez) hereda el cierre
+del Álvarez. Pero el Álvarez **como caso parseado** no existe. Lo que
+H024 vio era el cierre del Álvarez dentro del bloque del Paladini, no
+el bloque del Álvarez. El bloque del Álvarez nunca se procesó porque
+era vacío o negativo.
+
+**Refinamiento del modelo H025 sobre B045.** Las dos manifestaciones
+A y B no son alternativas, son **simultáneas en el mismo escenario**.
+Cuando dos casos comparten página única (`pagina_inicio_N+1 == pagina_inicio_N`
+en el catálogo), ocurren ambas a la vez: el caso N se evapora
+(manifestación A, bloque vacío en cruzador) y el caso N+1 hereda el
+cierre del N en su bloque (manifestación B, arrastre).
+
+Los seis testigos de B045 documentados en H024 son las seis caras
+visibles (manifestación B sobre el N+1) de seis solapamientos donde
+también hay un caso evaporado del lado N que nadie había detectado
+hasta H025. Cuantificar este lado oculto requiere la consulta sobre
+catálogo vs localizados propuesta en B046.
+
+Esta verificación se hace después de los commits de H025 — no
+modifica los cuatro entregables principales, pero motiva un sexto
+commit con el refinamiento sobre B045 y B046 actualizados con el
+testigo.
