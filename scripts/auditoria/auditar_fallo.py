@@ -552,6 +552,28 @@ def detectar_caratula(bloque, headers_pagina, dictamen_inicio, apertura_rel):
             s = bloque[k].strip()
             if not s:
                 continue
+            # ── Fix B049 Var-A: detectar carátula partida ──────────────
+            if 'c/' not in s and 's/' not in s and ' | ' not in s and not s.endswith('.'):
+                for k2 in range(k - 1, -1, -1):
+                    if k2 in headers_pagina:
+                        continue
+                    s2 = bloque[k2].strip()
+                    if not s2:
+                        continue
+                    # Guardia: s2 debe parecer primera mitad de carátula
+                    if s2.upper() in {'ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'}:
+                        break
+                    if s2.startswith('V. ') or s2.startswith('v. '):
+                        break
+                    if s2.endswith('.') or (s2 and s2[0].islower()):
+                        break
+                    # Concatenar con manejo de silabación
+                    if s2.endswith('­') or s2.endswith('-'):
+                        bloque[k] = s2.rstrip('­-') + s + '\n'
+                    else:
+                        bloque[k] = s2 + ' ' + s + '\n'
+                    break
+            # ── Fin fix B049 ───────────────────────────────────────────
             return k
         return None
 
@@ -568,6 +590,29 @@ def detectar_caratula(bloque, headers_pagina, dictamen_inicio, apertura_rel):
         if es_header_sumario_auditoria(s):
             # Si hay una línea anterior no-header registrada, es candidata
             if prev_no_header is not None:
+                # ── Fix B049 Var-A: detectar carátula partida ──────────────
+                s_cand = bloque[prev_no_header].strip()
+                if 'c/' not in s_cand and 's/' not in s_cand and ' | ' not in s_cand and not s_cand.endswith('.'):
+                    for k2 in range(prev_no_header - 1, -1, -1):
+                        if k2 in headers_pagina:
+                            continue
+                        s2 = bloque[k2].strip()
+                        if not s2:
+                            continue
+                        # Guardia: s2 debe parecer primera mitad de carátula
+                        if s2.upper() in {'ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'}:
+                            break
+                        if s2.startswith('V. ') or s2.startswith('v. '):
+                            break
+                        if s2.endswith('.') or (s2 and s2[0].islower()):
+                            break
+                        # Concatenar con manejo de silabación
+                        if s2.endswith('­') or s2.endswith('-'):
+                            bloque[prev_no_header] = s2.rstrip('­-') + s_cand + '\n'
+                        else:
+                            bloque[prev_no_header] = s2 + ' ' + s_cand + '\n'
+                        break
+                # ── Fin fix B049 ───────────────────────────────────────────
                 return prev_no_header
             # Si no hay anterior, este header podría ser la propia
             # carátula (caso límite: bloque empieza con carátula+sumarios

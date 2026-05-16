@@ -1,108 +1,143 @@
 # Changelog
 
-Registro de versiones del parser de fallos CSJN (`csjnvN.py`) y scripts auxiliares.
-
-## v17 beta v2 — 2026-05-01
-
-### Estado: en pruebas, no validado.
-
-### Cambios respecto a v17 beta:
-
-- **Detector de fin de dictamen reescrito.** Reemplaza la heurística "línea con fecha + previa corta" por una regla OR de dos señales:
-  - Firma de Procurador conocido al final de línea corta. Lista ampliada empíricamente del corpus: Casal, Monti, Abramovich, Cosarin, Righi, Bausset, Warcalde, Netto, Becerra, Carbó, Obarrio, Beiró, Sachetta.
-  - Línea que empieza con "Buenos Aires, X de mes de YYYY" (fecha al pie típica del dictamen).
-  - Ambas señales con exclusión de contextos de cita (comillas, "Fallos:", "fs.", "Procurador Fiscal", "Ministerio Público:", "precedente").
-- **Nueva columna `wc_fallo_neto = word_count - wc_dictamen`.** Permite análisis del cuerpo decisorio separado del aporte del dictamen.
-- **Tipos unificados.** `dictamen_presente`, `is_originaria`, `is_full_bench`, `is_merit_decision` se exportan como `int` (0/1) en todos los casos. v17 beta v1 tenía mezcla de `True/False` (para fallos) y `0` (para sumarios).
-
-### Pendientes / problemas conocidos:
-
-- En la primera corrida con la regla AND (solo firma), `sin_firma` saltó a 1093 (vs 312 en v17 beta v1) y 2600 casos tuvieron `wc_dictamen >= word_count` (dictamen comió todo el bloque). La regla OR busca corregir esto.
-- Si la corrida con OR sigue mostrando >500 casos sin firma, considerar rollback a v17 beta v1 o v16.
-- 22 casos sospechosos de falso positivo en `tipo_entrada = sumario_con_link` con `status_localizacion = ok` (Ruiz c/ AFIP, Asociación Gremial). No abordado en esta versión.
+Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
 ---
 
-## v17 beta — 2026-05-01
+## 2026-05-16 — Fix B049 Var-A: concatenar carátula partida en `detectar_caratula` (H028)
 
-### Estado: validado parcialmente (4 casos de sumario-con-link verificados manualmente; 2 casos de falso positivo identificados pero no resueltos).
+Fix en `scripts/auditoria/auditar_fallo.py`. `detectar_caratula` retrocedía
+una sola línea desde el primer header de sumario; en casos de carátula partida
+por salto de página devolvía solo la segunda mitad. Fix en Estrategia 1 y
+Estrategia 2: si la candidata no tiene `c/`, `s/` ni `|` y no termina en
+punto, busca la línea anterior y concatena con manejo de silabación. Guardia:
+la línea anterior no debe ser mes calendario solo, no debe empezar con `V.`,
+no debe terminar en punto ni empezar en minúscula. Validado con seed 15052026,
+n=80: 7 mejoras, 0 regresiones. Var-B (340_p1551) pendiente. No afecta corpus
+productivo. Detalle en BITACORA H028.
 
-### Cambios respecto a v16:
+## 2026-05-16 — Documentación H027: refinamiento post-Fase A continuación
 
-- **Detector de sumarios-con-link.** A partir del tomo 345, la CSJN publica algunos casos solo como sumario editorial con link al fallo online, sin reproducir el fallo completo. v17 detecta el patrón `(*) Sentencia del [fecha]. Ver en https://sj.csjn.gov.ar/...` (variantes "Ver fallo." en tomos 347-349) y marca esos casos como `tipo_entrada = "sumario_con_link"`. Campos analíticos quedan vacíos. Metadata estructural (linea_inicio, linea_fin, source_file, etc.) se conserva.
-- **Nueva columna `tipo_entrada`** con valores `"fallo"` (default) o `"sumario_con_link"`.
-- **Nueva columna `wc_dictamen`** que exporta el word count del dictamen (heurística heredada de v16, no validada).
+Tres commits de documentación:
+- `GRAMATICA_DEL_FALLO.md`: refinamiento post-Fase A continuación (paralelo
+  borde superior ↔ epílogo, HN3 → HN3').
+- `BITACORA.md`: append H027 — lectura completa del auditor + mapeo
+  producción × auditor (Fase B).
+- `DEUDA_TECNICA.md`: B049 mecanismo refinado, B050/B051 nuevos, M07/M08
+  nuevos, conteos del resumen ejecutivo actualizados.
 
-### Resultados:
+## 2026-05-16 — Documentación H025: reflexión arquitectónica + revert
 
-- 5647 casos procesados.
-- 160 marcados como `sumario_con_link`:
-  - 104 con `status_localizacion = ok_sin_marcador_apertura` (limpios).
-  - 56 con `status_localizacion = ok` (ambiguos: 3/5 verificados son sumarios reales; 2/5 son fallos legítimos contaminados por solapamiento de páginas).
-- `sin_firma` bajó de 399 (v16 fix1) a 312.
-
-### Pendientes / problemas conocidos:
-
-- Solapamiento estructural del catálogo: una misma página de la edición oficial puede contener dos casos distintos (fallo + sumario, o dos sumarios encadenados), pero el catálogo asigna un solo `caso_id_canonico`. Esto produce:
-  - Falsos positivos del detector (~22 casos: fallos largos cuyo bloque incluye un sumario-con-link siguiente).
-  - 28 sumarios-con-link cuya firma es del fallo anterior, no propia.
-- Solución estructural pendiente (ver "Opción C" en bitácora): post-procesar el catálogo para dividir entradas con múltiples casos. Postergado a v18.
-
----
-
-## v16 fix1 — 2026-04-29
-
-### Estado: producción (baseline actual).
-
-### Cambios respecto a v16:
-
-- Fix aplicado en `construir_catalogo.py`. Output regenerado como `csjn_casos_v16_fix1.csv`.
-
----
-
-## v16 — 2026-04-29
-
-### Cambios respecto a v15:
-
-- Fix de extracción de fecha. v15 buscaba la fecha solo en las primeras 8 líneas del bloque, pero el bloque arranca con sumarios y dictamen. v16 busca la fecha cerca del marcador `FALLO DE LA CORTE SUPREMA` (caso a) o como última fecha "Buenos Aires" del bloque (caso b).
-- Solo el 5.6% de los fallos tenía fecha extraída en v15. v16 mejora sustancialmente.
+Commits de documentación sobre páginas compartidas y `detectar_fin_real`:
+- `GRAMATICA_DEL_FALLO.md`: propuesta arquitectónica de parser por gramática
+  del fallo + diálogo entre vecinos.
+- `BITACORA.md`: H025 — reflexión arquitectónica, dos manifestaciones de B045.
+- `DEUDA_TECNICA.md`: B045 refinado con manifestaciones A/B, B046 nuevo,
+  B018 nota, M01 ampliada.
+- `PIPELINE.md`: H025 — 4 fricciones nuevas/ampliadas.
+- Intento fallido de verificación empírica B046 en 346_p1205 (commiteado,
+  revertido y documentado honestamente al cierre).
 
 ---
 
-## v15 — 2026-04-28
+## 2026-05-15 — Documentación H022-H024: verificación mecanismos B022/B025/B044/B045
 
-### Cambios respecto a v14:
+Commits de documentación sobre verificación de bugs contra `.md` crudo:
+- `DEUDA_TECNICA.md`: B045 nuevo (causa raíz arquitectónica), B044 nuevo,
+  B022 y B025 con estado `confirmado_mecanismo`. B018 causa raíz refinada,
+  B022 variante 2, B043 nuevo.
+- `BITACORA.md`: H022 spot-check 7 testigos + H023 verificación contra
+  `parser.py` (M3 refutado, M2 confirmado) + H024 verificación M5/M4/M1
+  + 346_p1205, hallazgo arquitectónico B045.
 
-- Detección de fin real del fallo dentro del bloque (`linea_fin_real`). Permite cortar el bloque cuando empieza el caso siguiente, evitando contaminación.
-- Output bifurcado: CSV de casos + CSV de votos (uno por juez por caso).
+## 2026-05-15 — feat(auditoria): --seed y wrapper tabular para auditar_fallo
+
+- `feat`: agregar `--seed` a `auditar_fallo.py` para muestreo reproducible.
+- `feat`: wrapper `tabular_senales_lote` para análisis en lote.
+- `docs`: H021 — infraestructura auditoría persistencia. H020 — flag M05 +
+  plan auditoría. `DEUDA_TECNICA.md`: reescritura canónica B001-B042 + M01-M08.
 
 ---
 
-## v14, v12, anteriores
+## 2026-05-14 — Inventario y limpieza del repositorio (Fase 1 y 2)
 
-Ver historial de git y comentarios en cabecera de cada archivo.
+Reorganización documental en varias fases:
+- Rescate de análisis a rama viva, archivado de scripts históricos.
+- READMEs de `scripts/` y subdirectorios.
+- Deduplicación de entradas en BITACORA.
+- Untrack de prompts de continuación (scaffolding personal, no producto).
+- Rediagnóstico §4.6.b contra CSV vivo; descarte de herramienta paralela
+  (`auditoria_4_6_b_prefix.py` archivado, `diagnostico_4_6_b_cluster.py`
+  eliminado). Convención: `scripts/diagnostico/` para diagnósticos
+  cuantitativos sobre CSVs; diagnóstico fino del corpus vía
+  `scripts/auditoria/auditar_fallo.py`.
 
+---
 
-## 2026-05-09 — Diseño detector amputación inferior (H016)
+## 2026-05-09 — fix(parser) + fix(cruzador): RE_APERTURA y bug pg_fin+1
 
-Sesión de diseño puro, sin commits de código. Se cierra decisión sobre variante a implementar (clasificador activo del gap, no pasivo ni con reclasificación), tipos de span de iteración 1 (firma_arrastrada, header_pagina, no_clasificable), alertas estructurales (firma_truncada_en_silabacion, caratula_siguiente_anticipada), y heurística de firma multilínea sin tope arbitrario de líneas (cierre por límites estructurales). Se identifica F008 (off-by-one entre reporte de auditoría y líneas reales del .md, pendiente investigar). Detalle completo en BITACORA H017.
+Dos fixes con impacto en corpus productivo:
+- `fix(cruzador)`: resuelto bug `pg_fin+1` (§3.6.a) en
+  `cruzar_catalogo_y_mapa.py`. Output regenerado.
+- `fix(parser)`: `RE_APERTURA` tolerante a doble espacio + hallazgo hojas
+  complementarias tomos 331-334.
+- `fix(cruzador)`: §3.6.e Fase 1 — resolver `pagina_fin_no_en_mapa` por
+  hojas complementarias.
+- Docs: PIPELINE cerrado §3 y §4; HALLAZGOS reorganizado.
+- BITACORA: sesiones 2026-05-09 nocturna (validación H018 random-80 + F012)
+  y 2026-05-10 (refinación de hallazgos).
 
+## 2026-05-08 — feat(auditoria): auditar_fallo.py v1
 
+- `auditar_fallo.py` v1: módulo de auditoría manual del corpus CSJN.
+- Fix paths default + corrida random 50. F007 nuevo. Estrategia
+  auditor→parser (H015).
+- Docs: H014/H015, H016 (punto ciego del auditor), H017 (diseño detector
+  amputación inferior), H018 (diseño detector borde inferior, implementación
+  pospuesta, F010/F011 nuevos).
 
-## 2026-05-09 — Diseño detector amputación inferior (H016)
+---
 
-Sesión de diseño puro, sin commits de código. Se cierra decisión sobre variante a implementar (clasificador activo del gap, no pasivo ni con reclasificación), tipos de span de iteración 1 (firma_arrastrada, header_pagina, no_clasificable), alertas estructurales (firma_truncada_en_silabacion, caratula_siguiente_anticipada), y heurística de firma multilínea sin tope arbitrario de líneas (cierre por límites estructurales). Se identifica F008 (off-by-one entre reporte de auditoría y líneas reales del .md, pendiente investigar). Detalle completo en BITACORA H017.
+## 2026-05-03 — Fix 1: V1 como fuente primaria de `case_name_cuerpo`
 
+- Cobertura `case_name_cuerpo` sube de 48.3 % a 84.1 %, 0 regresiones.
+- Fix 1 commiteado en CSV productivo. Snapshots movidos a
+  `archivo/snapshots_ad_hoc/`. Detalle en
+  `docs/analisis_forense_pipeline.md` §XX-XXI.
 
-## 2026-05-14 — Limpieza scripts diagnóstico §4.6.b
+---
 
-Sin cambios al parser ni a los CSVs vivos. `RE_CONSIDERANDO` sigue intacto en `scripts/pipeline/parser.py:121`.
+## 2026-05-02 — Reorganización estructural del proyecto + re-corrida pipeline
 
-Cambios operativos:
-- `scripts/diagnostico/auditoria_4_6_b_prefix.py` archivado en `archivo/exploratorios/diagnostico/4_6_b/auditoria_4_6_b_prefix_v2.py`. El script reimplementaba regex en paralelo al parser; descartado a favor de `scripts/auditoria/auditar_fallo.py` que importa los regex de `parser.py` (decisión H015 reafirmada).
-- `scripts/diagnostico/diagnostico_4_6_b_cluster.py` eliminado (creado y descartado en la misma sesión).
-- Log de dimensionamiento del 14/5 preservado en `archivo/exploratorios/diagnostico/4_6_b/salida/auditoria_4_6_b_prefix_20260514_1931.txt` (cluster vivo: 320 sospechosos / 232 con apertura / 88 sin apertura / 1.672 vacíos).
+- Reorganización estructural de directorios.
+- Re-corrida pipeline post-migración: 5.819 fallos, 21.876 votos
+  (genera `csjn_casos_votos.csv`). Validación funcional OK.
+- `.gitattributes`: forzar LF en `.py/.md/.csv/.txt`, CRLF en `.ps1`.
+- Actualización de paths en `scripts/pipeline/` (15 reemplazos, sin
+  cambios de lógica de runtime).
 
-Convención: `scripts/diagnostico/` queda para diagnósticos cuantitativos sobre CSVs. Diagnóstico fino del cuerpo del corpus via `scripts/auditoria/auditar_fallo.py`.
+---
 
-Detalle en BITACORA H019 y PIPELINE_HALLAZGOS sesión 2026-05-14.
+## 2026-05-01 — v17 beta (descartada) + fix catálogo
+
+- `construir_catalogo_v15.py`: fix detección inicio de índice de nombres
+  en tomos modernos.
+- v17 beta v1 conservado; v17 beta v2 descartada (rollback protocol
+  documentado en CHANGELOG anterior). Scripts diagnósticos movidos a
+  `scripts/diagnosticos/`.
+
+---
+
+## 2026-04-30 — v16 fix1 + merge v17 + outputs pipeline
+
+- Fix 1 en `construir_catalogo.py` (sacar `-1` en línea 341): resuelve
+  página compartida. Output: `csjn_casos_v16_fix1.csv` con 175 mejoras
+  `sin_firma→firma`.
+- Merge branch `v17`.
+- Changelog reconstruido v1-v17 (`docs/changelog_parser.md`).
+
+---
+
+## Versiones anteriores del parser (v10-v16)
+
+Ver `docs/changelog_parser.md` y historial de git (`git log --oneline`).

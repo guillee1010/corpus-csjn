@@ -1635,82 +1635,80 @@ catch_all". Sin ID histórico.
 
 ---
 
-### B049 — Detector de carátula del auditor falla en carátulas presentes
+### B049 — Detector de carátula del auditor falla en carátulas partidas
 
 **Componente:** auditor (`auditar_fallo.py`) — función
 `detectar_caratula` (línea 499).
 **Origen / fuente del diagnóstico:** H026 (auditoría `--random 80`
 del 2026-05-16). Causa raíz refinada por lectura de código en H027.
-**Causa raíz:** falta de ancla superior en el detector de carátula.
-La función no impone ningún filtro de formato sobre la línea devuelta
-(esto refuta la hipótesis preliminar registrada en la versión H026 de
-esta entrada: "formato `X y otros c/ Y` o `APELLIDO, Nombre c/ Y` no
-contemplados" — el detector es agnóstico al formato). El mecanismo real
-es la interacción entre tres ingredientes:
+Verificación empírica sobre 8 testigos y fix implementado en H028.
+**Causa raíz:** `detectar_caratula` retrocede exactamente una línea
+no-vacía no-header_pagina desde el primer header de sumario con `:`
+(Estrategia 1, líneas 548-556) o devuelve la línea previa al primer
+header de sumario (Estrategia 2, línea 571). No verifica si la línea
+encontrada es una carátula completa ni si es continuación de la
+línea anterior.
 
-1. **Orden de invocación en `segmentar_bloque` (paso 7).** La carátula
-   se detecta después de dictamen, apertura, votos, por_ello y firma.
-   Para entonces, el bloque tiene tope superior `dictamen_inicio` o
-   `apertura_mayoria`, pero el **inicio del rango de búsqueda sigue
-   siendo `0`** (la primera línea del bloque del catálogo).
+Dos variantes de falla identificadas en Fase D2 (H028):
 
-2. **Catch_all inicial como prosa de epílogo del previo (B045 mB).**
-   En casos donde el bloque arrastra epílogo del fallo anterior (frecuente
-   per B045: 91,2 % de los casos en `EST_SOLAPADO`), las líneas en
-   `[0, dictamen/apertura)` mezclan epílogo del previo, carátula real,
-   sumarios y eventualmente más metadata editorial.
+- **Var-A (4 casos):** la carátula está partida en dos líneas por
+  salto de página editorial. El catch_all absorbe la primera línea
+  junto con el epílogo anterior; el detector retrocede una línea y
+  encuentra solo la segunda mitad (sin `c/`, `s/` ni `|`).
+  Casos auditados: 331_p1516, 344_p2665, 348_p751, 348_p1505.
 
-3. **Las tres estrategias del detector pueden devolver línea del epílogo
-   del previo:**
-   - **Estrategia 1** (primer header con `":"` formato B): retrocede
-     a la línea no-vacía no-header_pagina anterior. Si esa línea es
-     prosa de epílogo del previo, la devuelve como carátula.
-   - **Estrategia 2** (par X-Y donde Y es header de sumario): devuelve
-     X. Si X es prosa de epílogo, idem.
-   - **Fallback final** (última línea no-trivial antes del tope): no
-     impone ningún patrón sobre la línea. Cualquier cosa sirve.
+- **Var-B (1 caso):** la carátula detectada es la firma del caso
+  anterior al auditado — doble solapamiento hacia atrás.
+  Caso: 340_p1551.
+
+**Nota sobre IDs:** el auditor con `--pagina N` audita el caso que
+*termina* en página N (`fin_extendido_pag_compartida`), no el que
+empieza. Los IDs de H026 (331_p1519, 344_p2669, 348_p755, 348_p1511,
+340_p1554, 343_p988, 348_p1352, 348_p1277) son del parser (caso
+siguiente); los IDs auditados (caso anterior) son los listados arriba.
+343_p987 y 348_p1351 no presentaron falla. 348_p1351 es
+`sumario_con_link`, no aplica.
 
 **Diagnóstico / evidencia:**
 
-- 8 de 62 catch_all iniciales (12,9 %) en la muestra `--random 80`.
-- Casos testigo:
-  - `331_p1519`: "TRANSPORTES JAC de ANDRES JOSE CAPARARO c/ YPF S.A."
-  - `348_p1352`: "Pereyra, Diego Jorge y otro s/ recurso extraordinario..."
-  - `348_p755`: "Carol, María Luisa y otros c/ Haras El Moro SA y otro"
-  - `348_p1511`: "Solís, Juan Antonio c/ Liberty ART S.A. s/ recurso de apelación"
-  - `340_p1554`: "HSBC BANK ARGENTINA SA y Otros c/ UIF s/ Código Penal"
-  - `344_p2669`, `348_p1277`, `343_p988`.
+- 5/7 casos evaluables con carátula espuria (71 %).
+- Verificación de código: Estrategia 1 retrocede una sola línea
+  (auditar_fallo.py líneas 548-556). Sin verificación de formato
+  ni concatenación con línea anterior.
+- Señal disponible no usada: en Var-A la línea candidata no contiene
+  `c/`, `s/` ni `|`. La línea anterior sí tiene la primera parte.
 
-**Fix candidato (no diseñado todavía):** anclar `inicio_busqueda` de
-`detectar_caratula` al **último header de página antes del
-dictamen/apertura**, no en `0`. El detector `detectar_headers_pagina`
-(paso 0 del orquestador) ya tiene esta información disponible y no
-la está usando. Mejora barata candidata, sin tocar las estrategias
-internas del detector. Verificación: los 8 casos testigo deberían
-mostrar que la carátula real está pegada o muy cerca del último
-header de página, mientras que el material previo cae antes.
+**Cruce con corpus productivo:** los 8 casos tienen `case_name_indice`
+correcto en `csjn_casos.csv`. B049 es bug del auditor únicamente.
+Corpus productivo sano.
 
-**Estado de verificación:** `confirmado_cuantificado` (muestra n=80,
-mecanismo confirmado por lectura de código H027).
+**Fix implementado (H028, Var-A):** en Estrategia 1 y Estrategia 2,
+si la candidata no tiene `c/`, `s/`, `|` y no termina en punto,
+se busca la línea anterior y se concatenan con manejo de silabación.
+Guardia sobre la línea anterior: no debe ser mes calendario solo
+(`ENERO`...`DICIEMBRE`), no debe empezar con `V.` o `v.`, no debe
+terminar en punto ni empezar en minúscula.
+Validación: seed 15052026, n=80. 7 mejoras, 0 regresiones.
 
-**Estado del fix:** candidato identificado, no diseñado en detalle.
-Verificación empírica sobre los 8 testigos pendiente (Fase D2).
+**Fix pendiente (Var-B):** requiere análisis separado. El ancla al
+último header de página antes del dictamen/apertura reduce el rango
+de búsqueda pero no resuelve si la firma del previo está dentro de
+esa ventana.
 
-**Interacciones con otros bugs:** B049 es la **cara dual interna** de
-B045 manifestación B (catch_all extendido). B045 corre hacia adelante
-(el fallo N "se come" parte del N+1); B049 corre hacia atrás (el
-detector de N+1 no encuentra ancla y devuelve material del N como
-carátula). Ambos derivan estructuralmente de la **ausencia de un
-borde superior detectado**. La sección "Refinamiento post-Fase A
-continuación (H027)" de `docs/GRAMATICA_DEL_FALLO.md` desarrolla este
-paralelo conceptual. Separable de B048 (modos A/B de `fin_real`) y
-B047 (modelo sin producción epílogo) en cuanto al fix, aunque los
-tres comparten origen estructural.
+**Estado de verificación:** `confirmado_cuantificado` (n=80 H026) +
+`verificado_testigos` (8/8 Fase D2 H028).
 
-**Referencias cruzadas:** B045 (cara N→N+1 del problema), B047
-(otro contribuyente al catch_all inicial), B048 (id.), BITACORA H026
-sección "Fase D — análisis empírico del catch_all" + H027 Fase A
-continuación. Sin ID histórico.
+**Estado del fix:** Var-A implementado y validado (commit H028).
+Var-B pendiente de diagnóstico.
+
+**Interacciones con otros bugs:** B049 es la cara dual interna de
+B045 manifestación B. B045 corre hacia adelante (N se come parte
+del N+1); B049 corre hacia atrás (detector de N+1 no encuentra ancla
+y devuelve material del N como carátula). Separable de B048 y B047
+en cuanto al fix, aunque los tres comparten origen estructural.
+
+**Referencias cruzadas:** B045, B047, B048. BITACORA H026 Fase D +
+H027 Fase A continuación + H028 Fase D2. Sin ID histórico.
 
 ### B050 — `detectar_firma_mayoria` puede absorber líneas del epílogo
 

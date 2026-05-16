@@ -2985,3 +2985,83 @@ resuelta: la mejora del ancla del detector de carátula que podría
 implementarse tras D2 es insumo para Fase G (diseño del detector de
 epílogo + borde superior). El orden razonado es: cuantificar y
 verificar primero, diseñar después.
+
+---
+
+# H028 — Fase D2: diagnóstico B049 sobre 8 testigos + fix Var-A (16/5/2026)
+
+## Objetivo
+
+Sesión de ejecución sobre el corpus. Continuación de H027 (lectura del
+auditor). Foco principal: Fase D2 (verificación empírica de B049 sobre
+los 8 testigos) + implementación del fix Var-A de B049.
+
+## Fase D2 — Diagnóstico B049 sobre 8 testigos
+
+Corrida de `auditar_fallo.py` para los 8 casos testigos de B049.
+Hallazgo estructural clave: el auditor con `--pagina N` audita el caso
+que *termina* en página N (`fin_extendido_pag_compartida`), no el que
+empieza. Los IDs del parser y del auditor siempre difieren en un caso.
+
+**Tabla de resultados (8/8):**
+
+| Consultado | Auditado | Carátula detectada | Veredicto |
+|---|---|---|---|
+| 331_p1519 | 331_p1516 | `ARGENTINA` | ✗ Var-A |
+| 340_p1554 | 340_p1551 | `Carlos Maqueda — Horacio Rosatti — ...` | ✗ Var-B |
+| 343_p988 | 343_p987 | `LESTELLE, MANUEL ÁNGEL c/ ANSES...` | ✓ OK |
+| 344_p2669 | 344_p2665 | `Pablo Gustavo` | ✗ Var-A |
+| 348_p755 | 348_p751 | `Familia, Niñez y Adolescencia n° 4` | ✗ Var-A |
+| 348_p1352 | 348_p1351 | N/A (sumario_con_link) | — |
+| 348_p1277 | 348_p1269 | `S., N. s/ incidente de competencia` | ✓ OK |
+| 348_p1511 | 348_p1505 | `extraordinario` | ✗ Var-A |
+
+5/7 evaluables con carátula espuria (71 %). Var-A dominante (4 casos):
+carátula partida en dos líneas por salto de página, detector toma solo
+la segunda mitad. Var-B (1 caso, 340_p1551): detector toma la firma
+del caso anterior al auditado.
+
+Cruce con `csjn_casos.csv`: los 8 casos tienen `case_name_indice`
+correcto. B049 es bug del auditor únicamente. Corpus productivo sano.
+
+Lectura de código (`detectar_caratula`, línea 499): Estrategia 1
+retrocede una sola línea desde el primer header con `:`; Estrategia 2
+devuelve la línea previa al primer header de sumario. Sin verificación
+de formato ni concatenación. Señal disponible no usada: candidata
+en Var-A no tiene `c/`, `s/` ni `|`.
+
+## Fix B049 Var-A
+
+Fix implementado en `detectar_caratula`, Estrategia 1 y Estrategia 2:
+si la candidata no tiene `c/`, `s/`, `|` y no termina en punto, busca
+la línea anterior y concatena con manejo de silabación.
+
+Guardia sobre la línea anterior (para evitar concatenar fragmentos de
+epílogo): no debe ser mes calendario solo (`ENERO`...`DICIEMBRE`), no
+debe empezar con `V.` o `v.`, no debe terminar en punto ni empezar en
+minúscula.
+
+Proceso de validación:
+- Primera iteración (sin guardia): 21 cambios, 4 regresiones parciales
+  donde el fix concatenaba fragmentos de epílogo con carátulas espurias.
+- Segunda iteración (con guardia v3 + excepción meses): 7 mejoras,
+  0 regresiones, 0 pérdidas de detección (seed 15052026, n=80).
+- 4 testigos Var-A re-corridos: carátulas completas post-fix.
+
+Var-B pendiente: 340_p1551 requiere análisis separado.
+
+## Fases no abordadas
+
+Fase E (B046, 43 casos faltantes), B050-quant, B051-quant,
+HN3'-quant — pasan a H029.
+
+## Commits
+
+- `fix(auditor): B049 Var-A — concatenar carátula partida en dos líneas`
+
+## Estado de fases
+
+- **Fase D2** — cerrada.
+- **Fase E** — abierta, prioritaria H029.
+- **B050-quant, B051-quant, HN3'-quant** — abiertas, H029.
+- **Fases C, F, G** — abiertas, sin sesión asignada.
