@@ -7,8 +7,9 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-15 (sesión H023: refinación de B018,
-B022 con testigo y variante nueva, B043 nuevo).
+**Última actualización:** 2026-05-16 (sesión H025: B045 refinado con
+dos manifestaciones, B046 nuevo, B018 nota de acoplamiento, M01
+alcance ampliado).
 
 ---
 
@@ -303,6 +304,70 @@ V1), B043. Ver tabla arriba.
 común). B022 (cara N+1 del mismo bug). PIPELINE §X.Y a definir (no
 hay sección documentada para esta lógica). Sin ID histórico.
 
+**Refinamiento H025 (16/5/2026).** Inspección directa de
+`construir_catalogo.py` y `cruzar_catalogo_y_mapa.py` (no realizada
+en H024) identifica las líneas exactas y revela que B045 produce
+**dos manifestaciones distintas** del mismo defecto arquitectónico,
+no una única "frontera mal puesta" simétrica.
+
+`construir_catalogo.py` línea 410 escribe
+`pagina_fin_map[(tomo, pag)] = pags_ordenadas[i + 1]` sin restar uno.
+Discordancia entre docstring (línea 57 y línea 381 prometen "− 1") y
+código ya documentada en PIPELINE §2.5.a.
+
+`cruzar_catalogo_y_mapa.py` línea 245 escribe
+`out['linea_fin'] = linea_fin_header - 1`. La resta es correcta
+cuando los casos no comparten página. Cuando dos casos comparten una
+sola página física, el header de `pagina_inicio` del actual y el
+header de `pagina_fin` (= `pagina_inicio` del siguiente) son la
+misma línea X del `.md`. La operación produce `linea_fin = X − 1` y
+`linea_inicio = X`, es decir bloque vacío o de longitud negativa.
+
+Grep sobre el cruzador confirma ausencia de guarda: ninguna validación
+de `linea_fin vs linea_inicio` entre líneas 175-281. Status escrito
+en el caso degenerado: `'ok'`.
+
+**Manifestación A — caso desaparecido (silenciosa).** Cuando dos casos
+comparten página, el caso N recibe del cruzador un bloque vacío. El
+parser, en `procesar_archivo` línea 1365-1367, hace
+`if not bloque: continue` sin warning. La fila no aparece en
+`csjn_casos.csv` o aparece con campos vacíos. Sub-diagnosticado en
+H022/H024: no produce filas con error en el CSV, produce ausencia
+de fila (invisible salvo comparación catálogo vs CSV). Tratamiento
+separado como **B046**.
+
+**Manifestación B — bloque con arrastre.** Cuando el cierre del N cae
+físicamente dentro de la página de inicio del N+1 sin que sea
+exactamente la misma página única, el bloque del N+1 hereda el cierre
+del N como arrastre. Es la manifestación ya documentada en B045 con
+los seis testigos vigentes (`343_p2243`, `346_p1205`, etc.) y la
+responsable de B022, B025, B044.
+
+**Observación lateral sobre redundancia +1/−1.** La coexistencia del
+`pagina_fin` sin restar (catalogador) y el `linea_fin_header − 1`
+(cruzador) constituye redundancia arquitectónica: dos etapas
+implementando media operación cada una sin comunicación. Cuando los
+casos están en páginas distintas, las dos mitades se complementan
+correctamente. Cuando comparten página, se cancelan y producen
+bloque vacío. Memoria de H022 indica que el `-1` fue removido
+deliberadamente del catalogador para mejorar `sin_firma` aguas
+abajo, pero la remoción se hizo sin verificar si otro script ya
+asumía el `-1` previo. **Hipótesis fuerte de fix:** revertir uno de
+los dos `-1` restaura coherencia. Pendiente de verificación contra
+el código completo del pipeline antes de implementar (sesión
+dedicada).
+
+**Causa raíz a nivel código:** identificada en H025 (catalogador 410
++ cruzador 245). El estado "Causa raíz a nivel código (etapa catálogo
+o cruzador) pendiente de diagnóstico" anotado en H024 queda
+**superado** por esta inspección.
+
+**Propuesta arquitectónica alternativa:** ver `docs/GRAMATICA_DEL_FALLO.md`.
+Documento conceptual que propone un parser por gramática del fallo
+más diálogo entre bloques vecinos, con resolución de B045 sin tocar
+catálogo ni cruzador. Sin compromiso de implementación; insumo para
+H026+.
+
 ---
 
 ## Deuda ACTIVA — Cruzador (Etapa 3)
@@ -328,6 +393,45 @@ Cuantificar magnitud antes de diseñar fix. Plan.
 **Estado del fix:** no diseñado.
 **Referencias cruzadas:** F011. Sin §X.Y en PIPELINE. Sin ID histórico.
 Probable relación con la dinámica de §3.6.a residual.
+
+### B046 — Casos desaparecidos por bloque vacío en cruzador
+
+**Componente:** cruzador (etapa 3) con captura silenciosa en parser
+(etapa 4).
+**Origen / fuente del diagnóstico:** H025 (inspección directa de
+`cruzar_catalogo_y_mapa.py` líneas 173-283 y de `procesar_archivo`
+parser.py líneas 1365-1367). Separado de B045 manifestación A para
+trazamiento independiente.
+**Causa raíz:** cuando dos casos del catálogo comparten una sola
+página física (`pagina_inicio_caso_N+1 == pagina_inicio_caso_N`), el
+cruzador asigna `linea_fin = linea_fin_header − 1` y
+`linea_inicio = linea_fin_header`, produciendo bloque de longitud
+negativa o nula. El status escrito es `'ok'`. El parser, al recibir
+el bloque del cruzador, llama a `construir_bloque_desde_localizacion`
+que devuelve algo falsy, y la línea 1367 hace `continue` silencioso.
+El caso no aparece en `csjn_casos.csv` o aparece con campos vacíos.
+**Diagnóstico / evidencia:** identificado por lectura del código en
+H025. Sin testigo verificado todavía. Magnitud desconocida.
+**Estado de verificación:** `hipotesis_no_verificada`. Pendiente de
+medición sobre `catalogo.csv` y `csjn_casos.csv`.
+**Validador propuesto:** consulta sobre catálogo: contar filas con
+`pagina_fin == pagina_inicio_caso_siguiente_mismo_tomo`. Para cada
+una, verificar si la fila correspondiente en `csjn_casos.csv` tiene
+campos vacíos o si la fila falta. Cuantifica cardinalidad. Plan.
+**Estado del fix:** no diseñado. Acoplado al fix de B045 manifestación
+B: ambos comparten causa raíz (redundancia +1/−1 entre catalogador
+y cruzador). Ver hipótesis fuerte de fix anotada en B045.
+**Severidad:** desconocida hasta cuantificar. Si la cardinalidad es
+chica (decenas de casos), severidad baja. Si es alta (centenas),
+severidad alta — significaría que la cobertura real del corpus es
+menor que el 99,3% reportado.
+**Interacciones con otros bugs:** comparte causa raíz con B045
+manifestación B. Mutuamente excluyentes en cualquier caso dado:
+una fila es **caso desaparecido** (B046) o **bloque con arrastre**
+(B045 B), no ambos.
+**Referencias cruzadas:** BITACORA H025 (hallazgo H025-F2-01).
+B045 (causa raíz común). Sin §X.Y en PIPELINE — se agrega como
+F3.9.d en M01.
 
 ---
 
@@ -539,6 +643,18 @@ Fijar B022 reduce el subset V1. Acoplado a B043 (defecto de
 **Referencias cruzadas:** F013. XXI-m. H022 §2 (mecanismo M2). H023
 sección M2. PIPELINE §4.4.k (loop principal). Sin §X.Y en PIPELINE.md
 para esta lógica de pista 1. Sin ID histórico.
+
+**Nota H025 (16/5/2026).** Lectura dirigida de `detectar_fin_real`
+(parser.py 1153-1234) confirma el acoplamiento ya documentado en
+causa raíz componente 3 y en variante V1. H025 aporta foco inverso:
+la pista 1 no sólo se dispara espuriamente cuando hay arrastre, sino
+que **también puede inducir cortes prematuros en bloques sin arrastre**
+cuando el `primer_token_siguiente` es un sustantivo institucional
+genérico que aparece naturalmente en cuerpo o dictamen del caso
+actual (variante V2). El defecto de `primer_token_de_caratula`
+(B043) tiene entonces dos efectos colaterales sobre `detectar_fin_real`,
+no uno. Sin testigos nuevos en H025: la nota es por completitud del
+mapa arquitectónico, no por verificación empírica adicional.
 
 ### B019 — `detectar_fin_real` off-by-one en firmas multilínea
 
@@ -1266,11 +1382,22 @@ como cuadros "RESUELTO". Pero la línea 2834 reconoce explícitamente:
 "incorporación de bugs F001–F011 reorganizados, actualización del diagrama
 global". F012, F013 y F-AUDITOR-01 son aún más recientes.
 
-**Acción pendiente:** sesión dedicada a re-recorrer `parser.py` vivo y
-`cruzar_catalogo_y_mapa.py` vivo contra PIPELINE.md, agregando §X.Y nuevos
-para los bugs B017, B018, B019, B020, B021, B022, B023, B024, B025 que
-hoy no están como §X.Y en PIPELINE. Conservar la versión actual de
-PIPELINE.md como referencia (trabajo de muchas sesiones, no se descarta).
+**Acción pendiente:** sesión dedicada a re-recorrer `parser.py` vivo,
+`construir_catalogo.py` vivo y `cruzar_catalogo_y_mapa.py` vivo contra
+PIPELINE.md, agregando §X.Y nuevos para los bugs B017, B018, B019,
+B020, B021, B022, B023, B024, B025 que hoy no están como §X.Y en
+PIPELINE. Incorporar adicionalmente (H025): B045 manifestaciones A/B
+con la causa raíz a nivel código identificada (catalogador 410 +
+cruzador 245), B046 (casos desaparecidos por bloque vacío), nota de
+acoplamiento B018 → `detectar_fin_real` pista 1, y referencia a
+`docs/GRAMATICA_DEL_FALLO.md` como insumo conceptual sobre arquitectura
+deseada del parser. Cuatro fricciones nuevas o ampliadas a agregar en
+PIPELINE: §2.5.a (consecuencia aguas abajo del `pagina_fin` sin restar),
+§3.5 (escenario degenerado del bloque vacío), §3.9.d nuevo (caso
+desaparecido silenciado por guarda en parser), §4 (asimetría de
+`detectar_fin_real` y acoplamiento con B018). Conservar la versión
+actual de PIPELINE.md como referencia (trabajo de muchas sesiones,
+no se descarta).
 
 **Precondición:** ninguna. Trabajo en sesión limpia con backup de
 PIPELINE.md previo.
