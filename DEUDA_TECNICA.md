@@ -2140,3 +2140,11 @@ canónicos actuales B0NN.
    detector de borde superior + detector de epílogo).
 7. M06 antes de implementar detector de epílogo: verificar persistencia
    editorial de la gramática sobre el corpus completo.
+
+
+**Nota H028 — argumento de diseño para Fase F:** la fuente canónica para
+`case_name_cuerpo` es el índice editorial (líneas antes del primer sumario),
+no el cuerpo del fallo. Buscar en `Vistos los autos: "X"` introduce ruido
+por remisiones a otras causas y carátulas de recursos de hecho.
+`detectar_caratula` del auditor ya implementa esta estrategia correctamente
+y es el candidato natural a portar al parser como fuente primaria.
