@@ -489,6 +489,34 @@ con `pagina_fin` no vacío cumplen exactamente
 Corregir el docstring del script en una sesión futura. **Esta convención
 afecta directamente a Etapa 3** — ver fricción F2.6.a.
 
+##### Refinamiento H025: consecuencia aguas abajo cuando dos casos comparten página
+
+H025 inspeccionó `cruzar_catalogo_y_mapa.py` y observó que esta etapa
+escribe `linea_fin = linea_fin_header - 1` (línea 245). La resta del
+cruzador y la no-resta del catalogador (`pagina_fin =
+pagina_inicio_siguiente`, línea 410) constituyen una **redundancia
+arquitectónica** entre las dos etapas, no documentada como tal. La
+secuencia funciona correctamente cuando los casos consecutivos están en
+páginas físicas distintas: catalogador entrega `pagina_fin = N`,
+cruzador busca header de N y resta 1 → `linea_fin` cae en la página
+anterior, intencionalmente.
+
+Cuando dos casos comparten una **sola página física** (`pagina_inicio`
+del caso actual = `pagina_inicio` del caso siguiente del mismo tomo),
+ambos casos remiten al **mismo header** en el mapa de páginas. Para
+el caso actual, `linea_inicio = X` (el header de su página) y
+`linea_fin = X − 1` (header de `pagina_fin` − 1, que coincide con su
+propia página menos uno). Resultado: bloque vacío o de longitud
+negativa, sin warning del cruzador.
+
+Este escenario corresponde a B045 manifestación A (DEUDA_TECNICA),
+separado como B046 para tratamiento independiente. Memoria de H022
+indica que el `-1` del catalogador fue removido deliberadamente para
+mejorar `sin_firma` aguas abajo, pero la remoción no verificó que el
+cruzador ya implementaba un `-1` propio. Hipótesis fuerte de fix:
+revertir uno de los dos `-1` restaura coherencia. Sesión dedicada
+pendiente.
+
 #### 2.5.b Fix v15: extender inicio del índice (líneas 216–282)
 
 En tomos modernos (337–349), el reflow PDF→Markdown a veces ubicó la
@@ -890,6 +918,30 @@ elegida = min(entradas, key=lambda e: e['linea_header'])
 La estabilidad del orden depende de que `detectar_paginas.py` recorra
 los archivos en orden — verificado en §1.10.c. La política está
 documentada también en el docstring (línea 71).
+
+#### 3.5.x Escenario degenerado: bloque vacío cuando dos casos comparten página
+
+H025 identificó un escenario no contemplado explícitamente en los siete
+status: cuando dos casos consecutivos del catálogo comparten una sola
+página física (mismo `pagina_inicio` para ambos), el cruzador escribe
+`linea_inicio = linea_fin_header` y `linea_fin = linea_fin_header − 1`
+(ambos resolviendo al mismo header de página), produciendo un bloque
+de longitud negativa o nula. El status escrito es `'ok'` — no hay
+detección del caso degenerado.
+
+El parser, al recibir este bloque, hace `continue` silencioso en
+`procesar_archivo` línea 1367 (`if not bloque: continue`), eliminando
+el caso del corpus de producción sin warning. Es la causa raíz de
+B046 (DEUDA_TECNICA) y la manifestación A de B045.
+
+El cruzador tiene en su input toda la información para detectar este
+caso: bastaría comparar `pagina_inicio` del caso actual contra
+`pagina_inicio` del caso siguiente del mismo tomo, o equivalentemente
+comparar `linea_fin` vs `linea_inicio` resueltos antes de escribir
+la fila. Ninguna validación de este tipo existe (líneas 175-281,
+verificado por grep). Status nuevo propuesto:
+`solapamiento_de_pagina` o equivalente. Cuantificación de magnitud
+pendiente (consultas sobre `catalogo.csv` documentadas en B046).
 
 ### 3.6 Bugs detectados
 
@@ -1429,6 +1481,26 @@ Reiteración de F1.10.a. El parser tiene que avanzar desde
 header tipográfico, líneas acompañantes, posibles colas del fallo
 anterior).
 
+#### F3.9.d — Bloque vacío del cruzador silenciado por guarda del parser (H025)
+
+Cuando dos casos comparten una página física, el cruzador escribe
+una fila con `linea_fin < linea_inicio` (ver §3.5.x) y status `'ok'`.
+El parser, al construir el bloque desde esa fila, obtiene una lista
+vacía o de longitud negativa. La guarda `if not bloque: continue` en
+`procesar_archivo` línea 1367 saltea silenciosamente al siguiente
+fallo: no hay log, no hay contador, no hay flag en el CSV de
+producción. El caso desaparece sin trazas.
+
+La guarda es defensiva razonable a nivel del parser (evita exception
+sobre lista vacía), pero **convierte un error del cruzador en una
+ausencia silenciosa de fila**. Documentado como B046 en DEUDA_TECNICA.
+
+Acción propuesta: o bien el cruzador detecta el caso y emite un
+status nuevo (`solapamiento_de_pagina`), o bien el parser registra
+en su output que el bloque venía vacío (e.g., fila con campos vacíos
+y status diagnóstico). La primera opción es preferible: aísla la
+responsabilidad en la etapa donde nace el problema.
+
 ---
 
 ## Etapa 4 — `parser.py`
@@ -1673,6 +1745,38 @@ contiene en promedio 32 líneas extra del fallo siguiente (§3.6.a).
 
 Cascada de cuatro pistas (línea 1153). Detallada en §4.5.b.
 Devuelve la tupla `(linea_fin_real, status_fin, pista_fin)`.
+
+##### 4.4.c.x Refinamiento H025: asimetría y acoplamiento con B018
+
+H025 hizo dos observaciones sobre esta cascada que vale la pena
+registrar como anotación arquitectónica:
+
+**Asimetría.** `detectar_fin_real` ajusta `linea_fin` mediante búsqueda
+de pistas anclas (carátula del siguiente, sumario nuevo, marcador de
+apertura del siguiente, firma actual). **No existe función equivalente
+que ajuste `linea_inicio`**. Si el bloque entregado por el cruzador
+contiene arrastre del caso anterior al principio (B045 manifestación B
+/ B022), el parser no tiene mecanismo para detectarlo y corregir el
+inicio. La asimetría es estructural: el cierre del bloque es revisable,
+el inicio no.
+
+**Acoplamiento con B018.** La pista 1 de la cascada (parser.py 1189-1202)
+usa `primer_token_siguiente` como ancla de búsqueda regex. Cuando el
+primer token del caso siguiente es un sustantivo institucional
+genérico (`PROVINCIA`, `BANCO`, `MINISTERIO`...), defecto documentado
+en B043 y B018, la regex matchea cualquier mención del token dentro
+del bloque del caso actual, induciendo cortes prematuros. El defecto
+de `primer_token_de_caratula` tiene entonces **dos efectos colaterales**
+sobre `detectar_fin_real`: el ya conocido (V1 de B018, cuando hay
+arrastre) y el agregado en H025 (cortes prematuros incluso sin arrastre,
+variante V2). Documentado en DEUDA_TECNICA B018 nota H025.
+
+Ambas observaciones son ingredientes de la propuesta arquitectónica
+desarrollada en `docs/GRAMATICA_DEL_FALLO.md`: un parser por gramática
+del fallo (que valida transiciones entre secciones) más diálogo entre
+bloques vecinos (que permite ajustar tanto inicio como fin del bloque)
+resolvería ambas asimetrías por construcción. Sin compromiso de
+implementación.
 
 #### 4.4.d — Reconstrucción del bloque
 
