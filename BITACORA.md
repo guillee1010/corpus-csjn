@@ -1915,7 +1915,7 @@ Regla operativa actualizada para sesiones futuras:
    dedicada de housekeeping, idealmente cruzada con el inventario
    de zona DUPLICADA y zona OLVIDADA (H020 Fases 1-2).
 
-   ## H025 — Reflexión arquitectónica sobre el pipeline: dos manifestaciones de B045, propuesta de gramática del fallo (16/5/2026)
+## H025 — Reflexión arquitectónica sobre el pipeline: dos manifestaciones de B045, propuesta de gramática del fallo (16/5/2026)
 
 Continuación de H024. Plan original: reflexión profunda sobre cómo
 funciona el pipeline en conjunto, mapeando el orden de operaciones y
@@ -2217,3 +2217,127 @@ documentan conceptualmente en `docs/` y se referencian desde
 BITACORA y DEUDA_TECNICA, sin pretender implementación inmediata. La
 existencia del documento no compromete a actuar; preserva el
 pensamiento para sesiones futuras.
+
+### Intento de verificación al cierre, error operativo y revert (16/5/2026)
+
+Después de los cinco commits originales de H025 (`7f23128` →
+`2583a3f`), al preparar insumos para H026 se intentó verificar
+empíricamente B046 contra el caso `346_p1205`. La verificación se
+hizo en dos pasos: corrida del auditor sobre `--pagina 1205` (que
+devolvió `346_p1201`, no `346_p1205`) y `Select-String` sobre
+`fallos_localizados.csv` con patrón `"346,1205,"` (que devolvió
+vacío). De ambos resultados se concluyó erróneamente que `346_p1205`
+había desaparecido del corpus.
+
+Con esa conclusión falsa se commiteó `890714a` ("verificación
+empírica al cierre"), agregando a BITACORA una sección que declaraba
+a `346_p1205` como primer testigo de B046, y a DEUDA_TECNICA una
+nota de "Refinamiento post-verificación empírica" sobre B045 con
+manifestaciones A y B simultáneas. Ambas afirmaciones falsas.
+
+El error operativo: el patrón `Select-String "346,1205,"` no
+matcheaba ninguna fila porque el orden real de columnas de
+`fallos_localizados.csv` es
+`caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,...`. El
+literal `346,1205,` no aparece en ese formato. La consulta correcta
+(`csv.DictReader` filtrando por columna) muestra que `346_p1205`
+está en `fallos_localizados.csv` con líneas 16883-16988 y status
+`ok`, **y también está en `csjn_casos.csv` línea 5236** con todos
+los campos del fallo procesados correctamente (carátula, firma
+Rosatti/Rosenkrantz/Maqueda/Lorenzetti, dispositivo, voting_pattern
+unanime, status_fin `fin_extendido_pag_compartida`, pista_fin
+`caratula_siguiente`).
+
+**El caso no se evaporó. B046 no tiene testigo empírico.** El commit
+`890714a` fue revertido con `52d0bc6` (revert automático con `git
+revert --no-edit`).
+
+**Lección operativa.** Una consulta `Select-String` que devuelve
+vacío no es evidencia de ausencia hasta que el patrón se valide
+contra el formato real del archivo. Regla nueva para sesiones
+posteriores: antes de declarar "testigo empírico confirmado", la
+verificación debe hacerse por dos vías independientes; si una sola
+consulta no encuentra evidencia esperada, el primer paso es validar
+la consulta misma, no concluir la ausencia.
+
+### Hallazgos parciales pendientes de procesar en H026
+
+Durante el intento fallido de verificación, varias consultas
+laterales aportaron información útil que sí está verificada
+cruzadamente y queda como insumo para H026. No se incorporan a
+DEUDA_TECNICA ahora porque cada una requiere análisis adicional
+antes de afirmar conclusiones; el commit revertido enseñó que
+declarar prematuramente cuesta caro.
+
+**Catalogador deduplica por `(tomo, pagina_inicio)`.** Consulta sobre
+`catalogo.csv`: pares de filas con el mismo `pagina_inicio` en el
+mismo tomo: cero. Coherente con la lógica de `construir_filas_catalogo`
+en `construir_catalogo.py` (líneas 388-397): el agrupamiento por
+`(tomo, pag)` consolida múltiples entradas del índice editorial bajo
+una sola fila con `nombres_indice` separado por `" | "`. Implicación
+para B046: el mecanismo escrito en DEUDA_TECNICA ("dos casos del
+catálogo comparten `pagina_inicio`") no se manifiesta en el catálogo
+real porque la deduplicación lo impide. Si B046 existe como bug
+arquitectónico, su mecanismo de manifestación es otro, todavía no
+identificado.
+
+**34% del catálogo tiene `n_nombres > 1`.** 2.023 filas sobre 5.862
+tienen más de un nombre asociado. Esto es deduplicación legítima del
+editor (mismo caso listado bajo nombre del actor, del demandado,
+etc.) y no es bug. Importante para H026: si dos casos físicamente
+distintos compartían `pagina_inicio` en el índice editorial, el
+catalogador los habría fusionado en una fila con `n_nombres > 1`
+(carátulas distintas en `nombres_indice`). Para detectar B046
+correctamente habría que buscar filas con `n_nombres > 1` donde las
+carátulas sean **claramente distintas** (no variantes de un mismo
+caso). Plan para H026.
+
+**Auditor con `--pagina N` busca por rango contenedor, no por
+`pagina_inicio` exacta.** El primer intento de auditar `346_p1205`
+con `--pagina 1205` devolvió `346_p1201` (Osorio), cuyo rango
+catalográfico es 1201-1205. Es decir, la página 1205 está cubierta
+por el rango del Osorio y el auditor la encuentra ahí. Para auditar
+el Álvarez específicamente hay que invocar con su `pagina_inicio`
+exacta o con un argumento que diga "caso cuyo `pagina_inicio` es N".
+Detalle de interfaz a confirmar en H026 leyendo `_resolver_caso` en
+`auditar_fallo.py`.
+
+**Caso `346_p1208` (Frigorífico Paladini) tiene 80.3% de residuo en
+auditor.** 106 líneas sin clasificar sobre 132 totales del bloque.
+Este caso es el N+1 del par Álvarez-Paladini que H024 documentó
+como testigo de B045 manifestación B. El residuo alto del auditor es
+consistente con arrastre masivo del Álvarez en el bloque del
+Paladini. Este sí es candidato fuerte a inspección detallada en
+H026: el output del auditor (en
+`output/auditoria/auditar_fallo/auditoria_2026-05-16_05-54-53.md`)
+permite ver qué líneas quedaron sin clasificar y dónde está el
+límite real entre los dos casos.
+
+**Mecanismo extensión-de-fin operando en Álvarez.** La fila de
+`346_p1205` en `csjn_casos.csv` tiene `status_fin =
+fin_extendido_pag_compartida` y `pista_fin = caratula_siguiente`. Es
+decir, `detectar_fin_real` extendió el bloque del Álvarez **más
+allá** de su `linea_fin` catalográfica (16988), llegando hasta 17014
+(26 líneas adicionales). Esto es la cara observable del caso que
+H024 había caracterizado como B045 testigo: el Álvarez físicamente
+extiende hasta dentro de la página de inicio del Paladini, y el
+parser lo detecta y compensa. El cuadro de H024 sobre B045
+manifestación B sigue siendo válido. Lo que sí cae con el revert es
+la idea de "manifestaciones simultáneas": no hay evidencia de
+manifestación A en este caso. El Álvarez se procesa correctamente.
+
+**Implicación para B046 en DEUDA_TECNICA.** El mecanismo escrito en
+la entrada vigente (cuando dos casos comparten `pagina_inicio`,
+bloque vacío) está refutado por la consulta sobre catálogo. La
+entrada queda con mecanismo incorrecto. Refinamiento al cierre: la
+entrada se ajusta para reflejar que el mecanismo está bajo revisión,
+sin pretender un mecanismo alternativo todavía no verificado.
+
+### Estado de cierre H025
+
+Cinco commits originales en `origin/main` con material verificado
+contra el código. Un commit revertido (`890714a` → `52d0bc6`)
+preserva la trazabilidad del error. Este append documenta lo que
+sí se aprendió en el intento. H026 hereda cuatro hipótesis abiertas
+sobre B046 y el auditor, listas para investigación dirigida con la
+disciplina de verificación cruzada que el error de cierre enseñó.

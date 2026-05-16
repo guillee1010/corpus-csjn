@@ -394,7 +394,7 @@ Cuantificar magnitud antes de diseñar fix. Plan.
 **Referencias cruzadas:** F011. Sin §X.Y en PIPELINE. Sin ID histórico.
 Probable relación con la dinámica de §3.6.a residual.
 
-### B046 — Casos desaparecidos por bloque vacío en cruzador
+### B046 — Casos desaparecidos por bloque vacío en cruzador (hipótesis, mecanismo bajo revisión)
 
 **Componente:** cruzador (etapa 3) con captura silenciosa en parser
 (etapa 4).
@@ -402,36 +402,76 @@ Probable relación con la dinámica de §3.6.a residual.
 `cruzar_catalogo_y_mapa.py` líneas 173-283 y de `procesar_archivo`
 parser.py líneas 1365-1367). Separado de B045 manifestación A para
 trazamiento independiente.
-**Causa raíz:** cuando dos casos del catálogo comparten una sola
-página física (`pagina_inicio_caso_N+1 == pagina_inicio_caso_N`), el
-cruzador asigna `linea_fin = linea_fin_header − 1` y
-`linea_inicio = linea_fin_header`, produciendo bloque de longitud
-negativa o nula. El status escrito es `'ok'`. El parser, al recibir
-el bloque del cruzador, llama a `construir_bloque_desde_localizacion`
-que devuelve algo falsy, y la línea 1367 hace `continue` silencioso.
-El caso no aparece en `csjn_casos.csv` o aparece con campos vacíos.
-**Diagnóstico / evidencia:** identificado por lectura del código en
-H025. Sin testigo verificado todavía. Magnitud desconocida.
-**Estado de verificación:** `hipotesis_no_verificada`. Pendiente de
-medición sobre `catalogo.csv` y `csjn_casos.csv`.
-**Validador propuesto:** consulta sobre catálogo: contar filas con
-`pagina_fin == pagina_inicio_caso_siguiente_mismo_tomo`. Para cada
-una, verificar si la fila correspondiente en `csjn_casos.csv` tiene
-campos vacíos o si la fila falta. Cuantifica cardinalidad. Plan.
-**Estado del fix:** no diseñado. Acoplado al fix de B045 manifestación
-B: ambos comparten causa raíz (redundancia +1/−1 entre catalogador
-y cruzador). Ver hipótesis fuerte de fix anotada en B045.
-**Severidad:** desconocida hasta cuantificar. Si la cardinalidad es
-chica (decenas de casos), severidad baja. Si es alta (centenas),
-severidad alta — significaría que la cobertura real del corpus es
-menor que el 99,3% reportado.
-**Interacciones con otros bugs:** comparte causa raíz con B045
-manifestación B. Mutuamente excluyentes en cualquier caso dado:
-una fila es **caso desaparecido** (B046) o **bloque con arrastre**
-(B045 B), no ambos.
-**Referencias cruzadas:** BITACORA H025 (hallazgo H025-F2-01).
-B045 (causa raíz común). Sin §X.Y en PIPELINE — se agrega como
-F3.9.d en M01.
+
+**Causa raíz hipotética (lectura del código, pendiente de verificación):**
+si el cruzador recibiera dos casos con la misma `pagina_inicio` en
+el mismo tomo, el header de `pagina_inicio` y el header de
+`pagina_fin` resolverían a la misma línea X y la operación produciría
+`linea_fin = X − 1` y `linea_inicio = X`, es decir, bloque de
+longitud negativa. El parser saltearía silenciosamente esa fila en
+línea 1367 (`if not bloque: continue`). El caso desaparecería del
+corpus sin warning.
+
+**Refutación parcial del mecanismo escrito (verificado al cierre de H025):**
+consulta sobre `catalogo.csv` con `csv.DictReader` agrupando por
+`tomo`: hay cero pares de filas con el mismo `pagina_inicio` en el
+mismo tomo. El catalogador deduplica por `(tomo, pagina_inicio)` en
+`construir_filas_catalogo` (`construir_catalogo.py` líneas 388-397),
+consolidando carátulas distintas bajo un solo `caso_id_canonico` con
+`nombres_indice` separado por `" | "`. **El mecanismo descrito arriba
+no se manifiesta en el catálogo real porque la deduplicación lo
+impide aguas arriba.**
+
+**Estado de la hipótesis:** abierta. El intento de verificación
+empírica al cierre de H025 con caso testigo `346_p1205` (commit
+`890714a`, revertido en `52d0bc6`) fue inválido: la consulta
+`Select-String "346,1205,"` que devolvió vacío era una consulta mal
+formada (el orden de columnas del CSV es
+`caso_id_canonico,tomo,archivo,pagina_inicio,...`, no
+`tomo,pagina_inicio,...`). La verificación correcta con DictReader
+muestra que `346_p1205` está en `fallos_localizados.csv` con líneas
+16883-16988 y status `ok`, y en `csjn_casos.csv` línea 5236
+procesado correctamente. **B046 no tiene testigo empírico
+confirmado.**
+
+**Hipótesis alternativa para H026:** si B046 existe como bug
+arquitectónico, su mecanismo de manifestación no es "dos filas del
+catálogo con misma `pagina_inicio`" sino algo más sutil. Posibles
+caminos: filas con `n_nombres > 1` donde las carátulas son
+claramente casos distintos consolidados por error de la
+deduplicación; algún filtro intermedio del cruzador que descarte
+filas; alguna combinación específica de páginas en el mapa que
+produzca el escenario degenerado por otra ruta. Investigación
+dirigida pendiente.
+
+**Validador propuesto:** dado que el mecanismo escrito está
+refutado, el validador previo (contar filas con
+`pagina_fin == pagina_inicio_siguiente`) tampoco aplica. Nuevo
+validador: comparar el conteo de filas únicas en `catalogo.csv`
+contra el conteo de filas únicas en `csjn_casos.csv`. Si ambos
+coinciden (5862 vs ~5819), B046 puede no estar afectando filas. Si
+hay diferencia, identificar qué `caso_id_canonico` falta entre
+catálogo y producción. Plan para H026.
+
+**Estado del fix:** no diseñado. La hipótesis de fix anotada en
+B045 (revertir uno de los dos `-1`) sigue siendo válida como
+exploración para B045 manifestación B, independientemente del
+estado de B046.
+
+**Severidad:** desconocida. Si el conteo cataloga-vs-producción
+no muestra discrepancia, B046 puede ser un bug que la deduplicación
+del catalogador previene en la práctica y queda como nota
+arquitectónica sin manifestación real. Si hay discrepancia,
+severidad por cuantificar.
+
+**Interacciones con otros bugs:** comparte familia con B045
+manifestación B (ambas surgen de leer el código del cruzador con
+foco en páginas compartidas), pero los mecanismos de manifestación
+real son distintos.
+
+**Referencias cruzadas:** BITACORA H025 (hallazgo H025-F2-01 y
+sección de cierre con el revert documentado). B045 (familia
+arquitectónica común, hipótesis de fix +1/-1). Sin §X.Y en PIPELINE.
 
 ---
 
@@ -1388,8 +1428,9 @@ PIPELINE.md, agregando §X.Y nuevos para los bugs B017, B018, B019,
 B020, B021, B022, B023, B024, B025 que hoy no están como §X.Y en
 PIPELINE. Incorporar adicionalmente (H025): B045 manifestaciones A/B
 con la causa raíz a nivel código identificada (catalogador 410 +
-cruzador 245), B046 (casos desaparecidos por bloque vacío), nota de
-acoplamiento B018 → `detectar_fin_real` pista 1, y referencia a
+cruzador 245), B046 (hipótesis de casos desaparecidos por bloque
+vacío, mecanismo bajo revisión), nota de acoplamiento B018 →
+`detectar_fin_real` pista 1, y referencia a
 `docs/GRAMATICA_DEL_FALLO.md` como insumo conceptual sobre arquitectura
 deseada del parser. Cuatro fricciones nuevas o ampliadas a agregar en
 PIPELINE: §2.5.a (consecuencia aguas abajo del `pagina_fin` sin restar),
