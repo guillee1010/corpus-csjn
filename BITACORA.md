@@ -2341,3 +2341,647 @@ preserva la trazabilidad del error. Este append documenta lo que
 sí se aprendió en el intento. H026 hereda cuatro hipótesis abiertas
 sobre B046 y el auditor, listas para investigación dirigida con la
 disciplina de verificación cruzada que el error de cierre enseñó.
+
+
+
+---
+
+## H026 — Lectura del auditor + gramática empírica del epílogo (primera mitad)
+
+Sesión abierta. Este append documenta lo verificado en la primera
+mitad: Fase A parcial (lectura estructural de `auditar_fallo.py`
+hasta línea 414, `detectar_borde_inferior` inclusive) + Fase D parcial
+(análisis del catch_all sobre corrida `--random 80`). Las Fases B, C,
+E, F, G quedan pendientes para continuación.
+
+### Pivote conceptual al inicio de sesión
+
+Conversación inicial sobre el camino arquitectónico hacia Forma 1.
+Tres precisiones que redirigen la lectura del auditor:
+
+**El camino no es "promover el auditor a parser".** Es "tomar del
+auditor lo que el auditor hace mejor (segmentación tipada con
+cobertura total) y combinarlo con lo que el parser hace mejor
+(extracción de campos del resumen final: tribunal de origen, fecha,
+status, etc.)". El parser ya emite 38 columnas con `tribunal_origen`,
+`tribunal_origen_status`, `date`, etc. (parser.py líneas 1858-1874).
+Esa lógica de extracción no se reescribe, se traslada al modelo de
+spans.
+
+**Falta una sección al modelo de spans del auditor.** El modelo
+actual tiene 10 tipos (carátula, sumario, dictamen, cuerpo_mayoria,
+voto, disidencia, firma, sumario_con_link, header_pagina, catch_all).
+No hay span para el bloque editorial post-firma que contiene partes,
+representación letrada, tribunal de origen y tribunales
+intervinientes anteriores. Sin span propio, ese material cae en
+catch_all (cuando queda dentro del caso correcto) o arrastra al
+catch_all inicial del caso siguiente (cuando el detector de fin_real
+corta antes).
+
+**El borde superior es estructural, no marginal.** El detector
+`detectar_borde_inferior` mira hacia adelante desde `linea_fin_real`
+hasta el inicio del próximo caso, pero no hay detector simétrico que
+mire hacia atrás desde el inicio del caso actual. Si la primera
+página del caso es compartida con el anterior, las líneas previas a
+`linea_inicio` pueden contener residuo del anterior. La auditoría
+empírica de Fase D (más abajo) confirma que el borde superior es
+necesario en la mayoría de los casos del corpus, no en una minoría.
+
+**Las pistas que viajan entre vecinos son indicios, no verdades.**
+`primer_token_siguiente` aparece hoy como argumento de
+`_clasificar_linea_gap` y dispara clasificación dura (`CLAS_APERTURA_PROXIMO`)
+por orden de prioridad: el primer regex que matchea, gana. Un modelo
+más robusto trata cada detección como indicio con peso y resuelve
+por acumulación o desvirtuación con otros indicios. Conceptualmente
+es la diferencia entre parsing por reglas duras y parsing por
+evidencia. La lectura del auditor en Fase A se hace con doble lente:
+qué decisión dura toma cada función, y qué información disponible no
+está usando que podría confirmarla o desvirtuarla.
+
+### Fase A — lectura estructural (parcial)
+
+Cubierto hasta línea 414. Resumen:
+
+**Encabezado y declaraciones (líneas 1-160).** Confirma que el
+auditor reusa por importación los regex y helpers de `parser.py`
+(líneas 16-20, 57-79): RE_APERTURA, RE_FECHA_LINEA, RE_CONSIDERANDO,
+RE_DICT_HDR, RE_VOTO_HDR, RE_DISID_HDR, RE_SUMARIO_LINK,
+RE_PAGE_HEADER, RE_TOMO, RE_VISTOS_LOS_AUTOS, y nueve helpers. La
+diferencia entre auditor y parser está en cómo procesan, no en qué
+reciben. Invariante declarado: toda línea pertenece a al menos un
+span (catch_all si nada más matchea). Doble propósito declarado:
+output Markdown legible + API canónica `auditar_fallo(tomo, pagina)
+-> dict` (la función ya está pensada para uso programático).
+
+**`linea_es_continuacion_firma` (159-211).** Detector con dos
+criterios: (1) presencia de apellido titular en
+`APELLIDOS_FIRMA_TITULARES` (set hardcodeado de 17 apellidos
+cubriendo titulares 329-349); (2) una de tres pistas discursivas
+(ratio mayúsculas ≥70%, línea corta terminada en punto/em-dash, o
+contiene em-dash/m-dash como separador entre firmantes).
+**Limitación visible:** depende del set hardcodeado. Conjueces con
+apellido fuera del set no se detectan como continuación de firma.
+Esto es relevante para Y.P.F. (caso H025 con cinco firmantes
+incluyendo tres conjueces) y para cualquier caso colegiado donde
+participe un conjuez. Pendiente medir cuántos apellidos de conjueces
+aparecen en el corpus 329-349 fuera del set.
+
+**`_clasificar_linea_gap` (214-253).** Esta función ya implementa
+diálogo entre vecinos en la dirección N → N+1: usa
+`primer_token_siguiente` (dato del caso siguiente) para clasificar
+líneas del gap del caso actual. El orden de prioridad de las seis
+clasificaciones está pensado para que la información del vecino
+tenga precedencia: `apertura_proximo_caso` se chequea **antes** que
+`firma_arrastrada` porque la carátula del próximo caso puede contener
+apellidos del set (ejemplo: "MAQUEDA" como parte en una causa).
+**Confirma una hipótesis arquitectónica grande:** el diálogo entre
+vecinos ya existe parcialmente, en la dirección descendente. Lo que
+falta es la dirección simétrica (N+1 mira a N), o sea el borde
+superior.
+
+**`detectar_borde_inferior` (256-414).** Cuatro casos terminales
+tempranos + un caso productivo. En el caso productivo, clasifica
+cada línea del gap y dispara hasta cuatro alertas independientes
+(`firma_multilinea_partida_por_fin_real`,
+`apellido_repetido_en_firma_arrastrada`,
+`voto_disidencia_individual_en_gap`, `caratula_siguiente_en_gap`).
+Bloque de comentario explícito (líneas 417-444) documenta una
+**versión robusta no implementada**: agregaría búsqueda en ventana
+W~10 alrededor de `linea_fin_real` para detectar desvíos sistémicos
+del detector de fin. Criterio de activación: si `--random 50` muestra
+>10% de falsos positivos en `firma_multilinea_partida_por_fin_real`.
+**El criterio nunca se evaluó empíricamente.** La corrida `--random 80`
+de esta sesión es una primera medición indirecta (ver Fase D).
+
+### Fase D — análisis empírico del catch_all sobre `--random 80`
+
+Corrida: `python scripts/auditoria/auditar_fallo.py --random 80`
+Output: `output/auditoria/auditar_fallo/auditoria_2026-05-16_06-51-29.md`
+Resumen de la corrida (header del archivo):
+
+```
+Borde inferior: solapado_con_proximo=73, gap_con_residuo=7
+Alertas totales: 80
+Casos: 80 | Líneas totales: 22.424 | Líneas residuo: 1.731 (7,72 %)
+Top residuo: 333_p1732 70,14 % | 332_p1362 49,44 % | 330_p3758 30,0 %
+```
+
+**Hallazgo grande #1 — `EST_SOLAPADO` es la norma, no la excepción.**
+73 de 80 casos (91,2 %) están en `EST_SOLAPADO`: el catálogo del
+próximo caso empieza antes o en la línea declarada como fin del
+fallo actual. Solo 7 (8,8 %) están en `EST_GAP_CON_RESIDUO`. Ningún
+caso en `EST_CONTINUO`, `EST_HEADER_NORMAL`, `EST_GAP_SOLO_HEADERS`
+ni `EST_FIN_ARCHIVO`. Implicación: el parser sistemáticamente extiende
+el bloque del caso N más allá del inicio del N+1 según catálogo. El
+detector de borde inferior está pensado como diagnóstico de excepción;
+la realidad empírica es que casi todos los casos lo disparan.
+
+**Hallazgo grande #2 — distribución de catch_all por posición.** En
+los 70 casos con al menos un catch_all (87,5 % del total):
+
+- 62 / 70 (88,5 %) tienen catch_all al inicio del bloque (con o sin
+  catch_all final adicional).
+- 39 / 70 (55,7 %) tienen catch_all al final del bloque.
+- 0 / 70 tienen catch_all solo en el medio: el modelo de spans del
+  auditor segmenta bien el interior; el residuo es estructuralmente
+  periférico.
+
+El catch_all al inicio es el fenómeno dominante. Esto valida la
+necesidad de un detector de borde superior: en ~78 % del corpus el
+inicio de bloque viene contaminado.
+
+**Hallazgo grande #3 — clasificación del catch_all inicial por tipo
+de bug.** Análisis automatizado sobre los 62 catch_all iniciales,
+clasificando por la primera línea del catch_all:
+
+| Tipo | Casos | % | Diagnóstico |
+| --- | ---: | ---: | --- |
+| `mitad_oracion` | 25 | 40,3 % | Línea comienza con minúscula. Texto del cuerpo del considerando del caso anterior cortado a mitad de oración. **Bug grave de `detectar_fin_real`**: corta dentro del cuerpo del fallo, no en el cierre. |
+| `epilogo` | 16 | 25,8 % | Línea comienza con marcador editorial (`Tribunal de origen:`, `Recurso extraordinario interpuesto por`, `Traslado contestado por`, `Nombre de los actores:`, `Parte demandada:`, etc.). **Falta del span `epilogo`** en el modelo del auditor. |
+| `por_ello` | 10 | 16,1 % | Línea comienza con "Por ello", "Por lo expuesto", "Por lo tanto". El cierre dispositivo + firma + epílogo del caso anterior arrastrado. **`detectar_fin_real` corta antes del Por ello.** |
+| `caratula` | 8 | 12,9 % | Línea es la carátula del caso actual. **Bug del detector de carátula del auditor**: la carátula está en el texto pero no se detecta. |
+| `otro` | 3 | 4,8 % | Fragmento ambiguo o caso especial (dictamen mal ubicado, etc.). |
+
+**Reformulación crítica del problema.** Solo el 25,8 % del catch_all
+inicial se explica por la falta del span `epilogo` (hallazgo
+arquitectónico). El 74 % restante son bugs distintos:
+
+- 40,3 % bug grave de fin_real (mitad de oración).
+- 16,1 % bug menor de fin_real (corta antes del Por ello).
+- 12,9 % bug del detector de carátula del auditor.
+
+**Implicación:** la promoción del auditor a parser, por sí sola, no
+resuelve la mayoría del problema de catch_all inicial. El detector
+`fin_real` necesita revisión independientemente del modelo de spans.
+
+**Hallazgo grande #4 — gramática empírica del epílogo.** Análisis de
+los 48 catch_all finales (caso con epílogo propio):
+
+Distribución por tamaño:
+- 1 línea: 17 casos (35 %)
+- 2-3 líneas: 7 casos (15 %)
+- 4-10 líneas: 23 casos (48 %)
+- 11-30 líneas: 1 caso (2 %)
+
+Tres patrones identificados:
+
+1. **Epílogo propio (23 casos, 48 %).** Tamaño 4-10 líneas. Contenido
+   editorial post-firma con orden interno estable:
+
+   ```
+   epilogo := continuacion_firma?            ← apellidos cortados
+              bloque_recurso?                ← "Recurso [extraordinario/de hecho/...] interpuesto por X, representado por Y"
+              bloque_traslado?               ← "Traslado [contestado/recibido] por Z"
+              bloque_recurso?                ← puede haber un segundo recurso (caso 339_p919)
+              bloque_partes_alt*             ← "Parte actora:" / "Parte demandada:" / "Tercero citado:"
+              bloque_nombres_legacy*         ← "Nombre del actor:" / "Nombre de los actores:" (tomos viejos)
+              tribunal_origen?               ← "Tribunal de origen: ..."
+              tribunales_intervinientes?     ← "Tribunal/es que intervinieron con anterioridad: ..."
+   ```
+
+   Todos opcionales, orden estable cuando coexisten. Conviven dos
+   convenciones editoriales: "Nombre del actor/demandado:" (tomos
+   más antiguos, ej. 329, 330, 333) y "Recurso ... interpuesto por"
+   (tomos más recientes, ej. 346-349). La convivencia es real,
+   no reemplazo limpio.
+
+2. **Continuación de firma (≈17 casos, 35 %).** Tamaño 1-2 líneas.
+   Una o dos líneas con apellido de juez que quedó cortado: "Carlos
+   Maqueda.", "Lorenzetti.", "M. ARGIBAY.", "(según su voto)." Esto
+   es B045 manifestación A o B operando en escala: el detector
+   `linea_es_continuacion_firma` ya existe en el auditor pero solo
+   se usa en el borde inferior; no se incorpora al span `firma`.
+
+3. **Ruido editorial / vacío (≈8 casos, 15 %).** Líneas vacías o
+   fragmentos editoriales menores benignos. Catch_all que no
+   indica bug.
+
+**Hallazgo grande #5 — marcadores explícitos del epílogo.** Cada
+componente del epílogo abre con una línea que matchea un marcador
+identificable. Lista empírica:
+
+1. `^(Recurso|Recursos)\s+(extraordinario|de\s+hecho|de\s+queja|ordinario|de\s+reposición|de\s+apelación|de\s+revocatoria|directo|directos)\s+(interpuesto|deducido|interpuestos)`
+2. `^Traslado\s+(contestado|recibido|del\s+recurso)`
+3. `^(Parte|Partes)\s+(actora|demandada|ejecutante|querellante|recurrente|coactora|codemandada)`
+4. `^Tercero\s+(citado|interviniente)`
+5. `^Profesionales\s+intervinientes`
+6. `^Nombre\s+(del|de\s+los|de\s+la|de\s+las)\s+(actor|demandado|demandada|actores|demandados|actoras|demandadas)`
+7. `^Tribunal\s+de\s+origen\s*:`
+8. `^(Tribunal|Tribunales|Otros\s+tribunales)\s+(que\s+intervino|que\s+intervinieron|intervinientes)`
+9. **Continuación de firma**: `linea_es_continuacion_firma` ya existe.
+
+Estos nueve marcadores cubren todos los componentes observados en
+los 48 catch_all finales. Pendiente verificar empíricamente la
+persistencia editorial en el corpus completo (no en 80 casos).
+
+**Hallazgo grande #6 — el detector de epílogo resuelve borde superior
+para el subset epílogo-puro.** Si el detector de epílogo se aplica
+"hacia atrás" desde la firma del caso N (extendiendo el span hasta
+encontrar la carátula del caso N+1), lo que quede arrastrado al
+inicio del N+1 será solo el residuo verdadero (mitad_oracion,
+por_ello, caratula-no-detectada). Es decir, **el detector de epílogo
+resuelve implícitamente el borde superior para el 25,8 % que es
+epílogo puro**. El 74 % restante sigue siendo bug separado.
+
+### Hipótesis abiertas de H025 — estado al cierre de la primera mitad
+
+- **H1 (B046 mecanismo desconocido):** sin investigar todavía. La
+  corrida `--random 80` muestra que los 80 casos seleccionados están
+  en `csjn_casos.csv`, sin testigos empíricos de B046. Pendiente
+  Fase E (comparar `catalogo.csv` 5.862 vs `csjn_casos.csv` 5.819 con
+  `csv.DictReader`).
+
+- **H2 (Paladini 80,3 % residuo):** no cayó en la muestra random,
+  pero el análisis del catch_all sobre los 80 casos confirma que el
+  mecanismo de arrastre del Álvarez sería consistente con la
+  distribución observada en el resto del corpus: combinación de
+  bugs `mitad_oracion` (40 %) + `por_ello` (16 %) de
+  `detectar_fin_real`. No corresponde clasificarlo como bug aislado
+  del Paladini; es un caso extremo del fenómeno sistémico.
+
+- **H3 (auditor con `--pagina N` busca por rango contenedor):**
+  pendiente. La función `_resolver_caso` (línea 1188) está
+  identificada pero no leída todavía. Diferida a Fase A continuación.
+
+- **H4 (`346_p1205` Álvarez procesado con `fin_extendido_pag_compartida`):**
+  consistente con todo lo aprendido. La extensión del Álvarez 26
+  líneas más allá del catálogo es exactamente el mecanismo de los
+  16 catch_all "epilogo" puros y de los 10 "por_ello", combinado.
+
+### Hipótesis nuevas surgidas en H026
+
+- **HN1.** El detector `fin_real` tiene **al menos dos modos de
+  falla independientes**, ambos cuantificables en la muestra:
+
+  - **Modo A — corta a mitad de oración del considerando.** 40,3 % de
+    los catch_all iniciales. Bug grave. Causa raíz a determinar:
+    podría ser pista de fin que matchea texto del cuerpo (falso
+    positivo de pista_fin), o regex de cierre que matchea
+    prematuramente.
+  - **Modo B — corta antes del cierre dispositivo.** 16,1 % de los
+    catch_all iniciales. Bug menor pero sistémico. Causa raíz a
+    determinar: probablemente RE_CONSIDERANDO o equivalente fallando
+    en variantes de "Por ello" (ej. "Por lo expuesto").
+
+- **HN2.** El detector de carátula del auditor falla en
+  aproximadamente 12,9 % de los casos del corpus donde la carátula
+  está físicamente presente pero no se detecta. Requiere inspección
+  de los 8 casos identificados (`331_p1519`, `348_p1352`, `348_p755`,
+  `348_p1511`, `340_p1554`, `344_p2669`, `348_p1277`, `343_p988`)
+  para identificar el patrón.
+
+- **HN3.** El catálogo `APELLIDOS_FIRMA_TITULARES` está incompleto
+  para casos con conjueces. La detección de continuación de firma
+  falla cuando el apellido del conjuez no está en el set hardcodeado.
+  Pendiente medir cobertura.
+
+### Decisiones operativas
+
+- No tocar código en esta primera mitad. La sesión es de lectura y
+  diagnóstico; las modificaciones esperan a tener el mapa completo.
+- Anotar gramática del epílogo en `GRAMATICA_DEL_FALLO.md` como
+  producción nueva.
+- Actualizar `DEUDA_TECNICA.md`: agregar evidencia empírica a B045
+  (manifestación B verificada en escala), nota empírica a B046
+  (ausencia de testigos en la muestra), e incorporar dos items
+  nuevos (B047 — span `epilogo` faltante; B048 — `fin_real` modos
+  A y B). Refrescar M-items si corresponde.
+
+### Continuación pendiente
+
+Sesión H026 abierta. Fases pendientes:
+
+- Fase A continuación: leer detectores 4-7 del auditor
+  (`detectar_caratula`, `detectar_sumarios`, `detectar_dictamen`,
+  `detectar_votos_y_disidencias`, `detectar_firma_mayoria`,
+  `detectar_por_ello_mayoria`, `detectar_apertura_mayoria`,
+  `detectar_sumario_con_link`), `segmentar_bloque`,
+  `_agregar_catch_all`, `_ordenar_y_validar`, `_resolver_caso`.
+- Fase B: para cada producción de `GRAMATICA_DEL_FALLO.md`, mapear
+  si el auditor la detecta, valida orden, detecta múltiples
+  instancias, reporta violaciones.
+- Fase C: confirmar que el diálogo entre vecinos N → N+1 está
+  implementado en `_clasificar_linea_gap`. Identificar qué le falta
+  para la dirección simétrica N+1 → N.
+- Fase E: comparar `catalogo.csv` vs `csjn_casos.csv` con
+  `csv.DictReader` para verificar B046.
+- Fase F: síntesis de reutilización (qué fracción del código del
+  auditor se promueve, qué se reescribe, qué es nuevo). Estimación
+  en sesiones.
+- Fase G (nueva): diseño del detector de borde superior + detector
+  de epílogo + integración con la fase de extracción de campos del
+  parser.
+
+
+### Cierre del día H026 — sesión queda abierta
+
+Tres commits realizados al cierre del día:
+
+1. `docs(h026): append bitacora H026 primera mitad - lectura auditor + analisis empirico catch_all sobre random N=80`
+2. `docs(h026): actualizar deuda tecnica - B045 evidencia escala, B046 sin testigos, agregar B047/B048/B049/M06`
+3. `docs(h026): agregar produccion epilogo a gramatica + refinamiento post-lectura H026`
+
+Estado al cierre del día:
+
+**Lo entregado:** Fase A parcial (lectura del auditor hasta línea
+414, `detectar_borde_inferior` inclusive), Fase D completa (análisis
+empírico del catch_all sobre `--random 80` con clasificación
+cuantificada de 6 hallazgos grandes), gramática empírica del epílogo
+con 9 marcadores explícitos, identificación de 3 bugs nuevos
+(B047/B048/B049) y 1 ítem metodológico (M06).
+
+**Lo pendiente para H027:**
+
+- Fase A continuación: leer detectores 4-7 del auditor
+  (`detectar_caratula`, `detectar_sumarios`, `detectar_dictamen`,
+  `detectar_votos_y_disidencias`, `detectar_firma_mayoria`,
+  `detectar_por_ello_mayoria`, `detectar_apertura_mayoria`,
+  `detectar_sumario_con_link`), `segmentar_bloque`,
+  `_agregar_catch_all`, `_ordenar_y_validar`, `_resolver_caso`
+  (responde H3).
+- Fase B: mapeo producción × auditor (¿detecta? ¿valida orden?
+  ¿múltiples instancias? ¿reporta violaciones?).
+- Fase C: confirmar diálogo entre vecinos N → N+1 + identificar qué
+  falta para N+1 → N.
+- Fase E: verificar B046 con `csv.DictReader` — identificar los 43
+  casos faltantes entre `fallos_localizados.csv` y `csjn_casos.csv`.
+- Fase F: síntesis de reutilización del auditor para parser de
+  Forma 1, estimación en sesiones.
+- Fase G (nueva, surgida en H026): diseño detector de borde superior
+  + detector de epílogo + integración con extracción de campos del
+  parser.
+- B049 diagnóstico fino: leer `detectar_caratula` con foco en los 8
+  casos testigo de la muestra.
+- B048 diagnóstico fino de causa raíz: trazar 3-5 casos testigo por
+  modo (A y B) línea por línea en `detectar_fin_real`.
+
+Sesión H026 queda **abierta**. H027 retoma desde Fase A continuación.
+
+## H027 — Lectura del auditor completa: detectores 4-12 + orquestador + closers (16/5/2026)
+
+Sesión que cierra Fase A continuación. Documenta: lectura de los
+detectores 4-12 del auditor (desde `detectar_headers_pagina` línea
+414 hasta `detectar_sumario_con_link` línea 952), del orquestador
+`segmentar_bloque` (línea 967), de los closers `_agregar_catch_all`
+(línea 1133), `_ordenar_y_validar` (línea 1176) y `_resolver_caso`
+(línea 1188). Fase B (mapeo producción × auditor) embebida como
+subsección de esta entrada. Fases C, D2, E, F, G quedan pendientes
+para H028+.
+
+### Fase A continuación — síntesis por detector
+
+La lectura siguió doble lente: qué decisión dura toma cada función,
+y qué información disponible no está usando. Los hallazgos
+funcionales por detector quedaron así:
+
+- **`detectar_headers_pagina` (línea 456).** Devuelve `set[int]` de
+  índices relativos al bloque. Doble vía: autoridad `headers_archivo`
+  con halo asimétrico (`-1, 1, 2`) + barrido auxiliar con
+  confirmación por adyacencia. Asimetría del halo solo es correcta si
+  el mapa ancla la primera línea del header de 3 líneas; si anclara
+  la del medio, hay subdetección silenciosa. No verificado.
+
+- **`detectar_caratula` (línea 499).** Devuelve índice único o `None`.
+  Tres estrategias en cascada: (1) primer header con `:` → línea
+  anterior; (2) par X-Y con Y header de sumario → X; (3) fallback
+  final: última línea no-trivial antes del tope. **Ninguna estrategia
+  impone filtro de formato sobre la línea devuelta.** La hipótesis
+  preliminar de B049 sobre formatos de carátula no contemplados queda
+  refutada por lectura — la causa real es la falta de ancla superior
+  (ver B049 refinado en DEUDA).
+
+- **`es_header_sumario_auditoria` (línea 607) + `detectar_sumarios`
+  (línea 670).** Detector propio del auditor, más permisivo que
+  `linea_es_header_sumario` del parser. La docstring del módulo
+  prohíbe reimplementación de heurísticas. Violación documentada en
+  M07.
+
+- **`detectar_dictamen` (línea 741).** Reusa `RE_DICT_HDR` por
+  importación pero reimplementa el algoritmo de barrido. Segunda
+  violación de M07. Parámetro `headers_pagina` recibido y no usado.
+
+- **`detectar_votos_y_disidencias` (línea 791).** Todos los matches
+  de `RE_VOTO_HDR`/`RE_DISID_HDR`, partición por inicios sucesivos.
+  El último span se cierra en `len(bloque) - 1`. **Implicación
+  estructural:** el epílogo queda absorbido dentro del último voto/
+  disidencia cuando los hay. Hallazgo nuevo → B051.
+
+- **`detectar_firma_mayoria` (línea 835).** Loop de extensión acepta
+  líneas cortas con apellido de `JUECES_CONOCIDOS`. **Vulnerabilidad
+  por amplitud del set:** apellidos comunes en el epílogo (letrados,
+  conjueces previos, integrantes de tribunales de origen) pueden
+  hacer que la firma se extienda sobre la cola del fallo. Hallazgo
+  nuevo → B050.
+
+- **`detectar_por_ello_mayoria` (línea 900).** Ancla en
+  `apertura_mayoria` para evitar arrastre del previo o del dictamen.
+  Toma el primer match. Vulnerable si `apertura_mayoria` está mal
+  detectada.
+
+- **`detectar_apertura_mayoria` (línea 931).** Primer match de
+  `RE_APERTURA` después del dictamen. Limpio.
+
+- **`detectar_sumario_con_link` (línea 952).** Decisión de
+  clasificación de bloque entero, no de span dentro de bloque. No
+  cruza con el campo `tipo_entrada` del catálogo (información
+  disponible y no usada).
+
+- **`segmentar_bloque` (línea 967).** Orquestador en 9 pasos. La
+  decisión clave es el orden: la carátula se detecta en **paso 7**,
+  después de dictamen, apertura, votos, por_ello y firma. Para
+  entonces el bloque está prácticamente segmentado, pero el rango
+  de búsqueda de la carátula sigue empezando en `0`. Esta es la
+  raíz mecánica de B049 (ver entrada en DEUDA).
+
+- **`_agregar_catch_all` (línea 1133).** Colector pasivo, no
+  clasificador. Marca cubierto a todo span semántico + header_pagina,
+  y emite catch_all sobre cualquier hueco contiguo no cubierto. No
+  distingue entre residuo del vecino y laguna interna.
+
+- **`_ordenar_y_validar` (línea 1176).** Solo ordena. No valida nada
+  pese a nombre y docstring. Las invariantes declaradas en
+  `segmentar_bloque` (disjunción, cobertura) no se verifican en
+  runtime. Hallazgo nuevo → M08.
+
+- **`_resolver_caso` (línea 1188).** Match por rango contenedor
+  (`p_ini <= P <= p_fin`). Tres fuentes para `p_fin`: catálogo
+  explícito, `pagina_inicio` del siguiente menos 1, o `pagina_inicio +
+  50` para el último caso del tomo. La heurística +50 es ciega al
+  contenido pero defensiva. Confirma H026-H1 con matiz.
+
+### Fase B — mapeo producción × auditor
+
+Mapeo de cada producción de GRAMATICA contra qué hace el auditor con
+ella. Las cuatro columnas son: ¿detecta como span?, ¿valida orden?,
+¿maneja múltiples instancias?, ¿reporta violaciones?
+
+| Producción | ¿Span? | ¿Valida orden? | ¿Múltiples? | ¿Reporta violaciones? |
+|---|---|---|---|---|
+| `header_pagina` | sí (transversal) | n/a (transversal) | sí | no |
+| `caratula` | sí (índice único) | implícito por tope superior | no (una por caso, correcto) | no (silencioso ante fallo: `None`) |
+| `sumario` | sí (lista de spans) | implícito (entre carátula y fin_busqueda) | sí | no |
+| `dictamen` | sí | implícito | toma solo el primero (no verificado si correcto) | no |
+| `apertura_mayoria` | no (índice interno, no span emitido) | implícito (después de dictamen) | toma el primero | no |
+| `por_ello_mayoria` | no (índice interno) | implícito (después de apertura, antes de votos) | toma el primero | no |
+| `cuerpo_mayoria` | sí | implícito (apertura → firma/votos) | no (uno por caso, correcto) | no |
+| `firma` (mayoría) | sí | implícito (después de por_ello, antes de votos) | una | no, pero contaminable por B050 |
+| `voto` | sí (lista) | implícito | sí | no |
+| `disidencia` | sí (lista) | implícito | sí | no |
+| **`epilogo`** | **no (faltante, B047)** | n/a | n/a | n/a |
+| `sumario_con_link` | sí (cobertura total del bloque) | n/a | no | no |
+| `catch_all` | sí (huecos contiguos) | n/a | sí | no (es residuo, no anomalía clasificada) |
+
+La tabla deja explícito qué está y qué falta. Ninguna producción
+tiene validación de orden activa (todas son implícitas por
+construcción del orquestador, no chequeadas). Ninguna reporta
+violaciones de la gramática. La única producción faltante con
+identidad propia es `epilogo`.
+
+### Síntesis de hallazgos H027
+
+1. **H026-H1 confirmada** con matiz: `_resolver_caso` busca por rango
+   contenedor con `p_fin` imputado heurísticamente cuando el catálogo
+   no lo trae explícito. Heurística defensiva +50 páginas para el
+   último caso del tomo. No bug per se.
+
+2. **B049 refinado** — causa raíz reformulada. No es el formato de
+   carátula sino la falta de ancla superior. Mecanismo detallado en
+   la entrada B049 reescrita de DEUDA. Mejora barata candidata:
+   anclar `inicio_busqueda` al último header de página antes del
+   dictamen/apertura.
+
+3. **B050 nuevo** — `detectar_firma_mayoria` puede extender el span
+   de firma sobre el epílogo cuando una línea de la cola contiene un
+   apellido común de `JUECES_CONOCIDOS`. Hipótesis no verificada,
+   cuantificable sobre `--random 80`.
+
+4. **B051 nuevo** — `detectar_votos_y_disidencias` cierra el último
+   voto/disidencia en `len(bloque) - 1`. El epílogo queda absorbido.
+   Explica parcialmente por qué el catch_all final aparece solo en el
+   55,7 % de los casos: en casos con votos disidentes, el epílogo
+   está escondido dentro del último voto, no en catch_all.
+
+5. **HN3 reformulada como HN3'** — el sesgo opera en el borde
+   inferior, no en la firma principal. Existen dos sets paralelos:
+   `APELLIDOS_FIRMA_TITULARES` (9 apellidos, solo titulares, usado en
+   `detectar_borde_inferior`) y `JUECES_CONOCIDOS` (29 patrones, 14
+   conjueces, usado en `detectar_firma_mayoria`). La firma principal
+   SÍ cubre conjueces. El sesgo, si existe, opera en la clasificación
+   `firma_arrastrada` de `_clasificar_linea_gap`, donde continuaciones
+   de firma de conjuez se clasifican como `no_clasificable`,
+   perdiendo el diagnóstico fino. Magnitud pendiente de cuantificar.
+   No promovido a bug — queda como hipótesis abierta hasta medir.
+
+6. **M07 nuevo** — `es_header_sumario_auditoria` y `detectar_dictamen`
+   reimplementan lógica del parser pese a la prohibición declarada
+   en la docstring del módulo.
+
+7. **M08 nuevo** — `_ordenar_y_validar` no implementa la validación
+   que su nombre y docstring prometen.
+
+8. **Paralelo conceptual borde superior ↔ epílogo.** B045 (catch_all
+   extendido del N hacia N+1) y B049 (catch_all inicial del N+1 que
+   contiene prosa del N) son **caras duales** del mismo problema
+   estructural: ausencia de la producción `epilogo`. Documentado en
+   GRAMATICA, subsección "Refinamiento post-Fase A continuación
+   (H027)".
+
+9. **Catch_all como colector pasivo.** Confirmado por lectura de
+   `_agregar_catch_all`: el catch_all no clasifica, solo recoge.
+   Cualquier residuo no clasificado por los detectores semánticos
+   cae acá, sin distinción entre arrastre del vecino y laguna
+   interna. Esto es coherente con el hallazgo H026 de que el
+   catch_all es estructuralmente periférico (88,5 % al inicio, 55,7 %
+   al final, 0 % solo en el medio).
+
+### Estado de hipótesis al cierre de H027
+
+- **H026-H1:** confirmada con matiz (rango contenedor + heurística
+  +50 para último caso del tomo).
+- **H026-H2:** parcialmente refutada por HN3' (ver punto 5). Pendiente
+  de medir magnitud sobre el corpus.
+- **H025-H1 (B046, mecanismo desconocido):** pendiente. Fase E sigue
+  abierta para H028+.
+- **HN1 (B048, dos modos de falla):** pendiente. La lectura H027 no
+  abordó `detectar_fin_real` (vive en parser.py, no en auditor.py).
+  Diagnóstico fino sigue como pendiente del prompt H028.
+- **HN2 (B049, mecanismo):** **resuelta**. Causa raíz documentada:
+  falta de ancla superior. Mejora candidata identificada.
+- **HN3 (set incompleto para conjueces):** reformulada como HN3'.
+  Magnitud pendiente.
+- **HN4 (nueva, firma de mayoría absorbe epílogo):** promovida a
+  B050. Pendiente de cuantificar.
+
+### Commits programados al cierre
+
+Tres commits planificados para H027:
+
+1. `docs(h027): append bitacora H027 - lectura completa auditor + mapeo produccion x auditor (fase B)`
+2. `docs(h027): actualizar deuda tecnica - B049 mecanismo refinado, B050/B051 nuevos, M07/M08 nuevos, conteos resumen ejecutivo`
+3. `docs(h027): agregar refinamiento post-fase A continuacion a gramatica del fallo`
+
+### Pendientes para H028+
+
+- **Fase C (dirección N+1 → N):** identificar qué le falta a
+  `_clasificar_linea_gap` para tener simetría con el detector de
+  carátula. Decidir si la dirección simétrica se construye con un
+  detector independiente o emerge del detector de epílogo extendiendo
+  hacia adelante.
+- **Fase D2 (diagnóstico fino B049):** sobre los 8 casos testigo
+  (`331_p1519`, `348_p1352`, `348_p755`, `348_p1511`, `340_p1554`,
+  `344_p2669`, `348_p1277`, `343_p988`), verificar que el mecanismo
+  documentado en B049 refinado se cumple. Confirmar que la carátula
+  real está pegada o muy cerca del último header de página antes del
+  dictamen/apertura. Si se confirma, implementar la mejora del ancla.
+- **Fase E (verificación B046):** comparar `catalogo.csv` /
+  `fallos_localizados.csv` (5862) vs `csjn_casos.csv` (5819) con
+  `csv.DictReader`. Identificar los 43 `caso_id_canonico` faltantes
+  e inspección caso a caso.
+- **Fase F (síntesis de reutilización):** estimar qué fracción del
+  código del auditor se promueve a parser de Forma 1, cuántas
+  funciones nuevas, cuánto refactor vs código nuevo.
+- **Fase G (diseño detector de epílogo + borde superior):** boceto
+  de `detectar_epilogo(bloque, headers_pagina, firma_fin)`. Interfaz
+  análoga a `detectar_borde_inferior`. Integración con extracción de
+  `tribunal_origen` del parser.
+- **Cuantificación de B050 y B051 sobre `--random 80`.**
+- **Cuantificación de HN3' sobre el corpus** (apariciones de
+  continuaciones de firma de conjuez en gaps de borde inferior).
+- **Decisión sobre M07** — promover lógica al parser, documentar
+  forks deliberados, o refactor con split de funciones.
+- **Decisión sobre M08** — implementar validación o renombrar.
+- **Diagnóstico fino de B048** (causa raíz de los dos modos, sigue
+  pendiente desde H026).
+
+Sesión H027 queda **cerrada**. H028 retoma con las prioridades de
+arriba; el orden lo decide la próxima sesión.
+
+### Nota de cierre — estado de fases del proyecto
+
+Para evitar ambigüedad sobre qué fase está abierta y qué fase cerrada
+(la letra "B" se usó con dos sentidos distintos entre H026 y H027), el
+estado al cierre de H027 es:
+
+- **Fase A** (lectura del auditor) — cerrada en H027.
+- **Fase B** (mapeo producción × auditor) — cerrada en H027 como tabla
+  embebida en esta entrada.
+- **Fase C** (dirección N+1 → N) — abierta, sin sesión asignada.
+- **Fase D** (análisis empírico del catch_all sobre `--random 80`) —
+  cerrada en H026.
+- **Fase D2** (diagnóstico fino B049 sobre 8 testigos) — abierta,
+  prioritaria para H028.
+- **Fase E** (verificación B046 con `csv.DictReader`) — abierta,
+  prioritaria para H028.
+- **Fase F** (síntesis de reutilización auditor → parser de Forma 1) —
+  abierta, sin sesión asignada.
+- **Fase G** (diseño detector de epílogo + borde superior) — abierta,
+  sin sesión asignada.
+- **Cuantificaciones nuevas** (B050-quant, B051-quant, HN3'-quant) —
+  abiertas, candidatas para H028.
+
+H028 salta a D2 + E + cuantificaciones porque las Fases C, F y G son
+discusión arquitectónica que se enmarca mejor **después** de tener D2
+resuelta: la mejora del ancla del detector de carátula que podría
+implementarse tras D2 es insumo para Fase G (diseño del detector de
+epílogo + borde superior). El orden razonado es: cuantificar y
+verificar primero, diseñar después.
