@@ -1519,3 +1519,389 @@ indispensable**. La regla operativa del plan H020 ("el spot-check
 identifica patrones, no causas raíz") se cumplió literalmente: M3
 era un patrón, no un mecanismo. La verificación contra código + .md
 lo disuelve.
+## H024 — Verificación de M5/M4/M1 + huérfano 346_p1205: B044 nuevo, B045 nuevo, B022 ampliado, B025 confirmado (15/5/2026)
+
+Continuación directa de H023. Plan: verificar contra `parser.py` y
+contra el `.md` crudo los mecanismos M5, M4, M1 + el huérfano
+`346_p1205`, aplicando la regla operativa que emergió en H023
+(verificar cada mecanismo contra el `.md` crudo antes de declararlo).
+
+Método aplicado en los cuatro casos: pedir bordes exactos del bloque
+al localizador (`output/localizacion/fallos_localizados.csv`),
+extraer el bloque al archivo `.txt`, aplicar regex reales del parser
+mecánicamente (RE_APERTURA, RE_FECHA_LINEA, RE_DICT_HDR, RE_VOTO_HDR,
+RE_DISID_HDR), interpretar matches contra la estructura del bloque, y
+recién ahí formular hipótesis sobre causa raíz para verificación
+dirigida del código. Los `.txt` quedan en raíz del repo, pendientes
+de moverse a directorio de output diagnóstico (ver §H024.pendientes).
+
+### M5 confirmado, etiología corregida: B044 nuevo
+
+Testigo `332_p244` (Fernández c/ Federación de Asociaciones Católicas
+de Empleadas Asoc. Civil). Bloque `LibroVol332.1.md` líneas 9536-9713
+(178 líneas, gap +7 según H022). Carátula real en L13-14, apertura
+del FALLO en L62.
+
+**Hipótesis H022 (etiología):** "el caso publica primero una sentencia
+per saltum vieja con voto de Petracchi y después el fallo plenario
+del propio caso; el parser matcheó el header de la per saltum y
+abrió un span voto de 114 líneas que se tragó la sentencia plenaria
+entera". El `n_votos=3` resultaba de span voto espurio + dos votos
+legítimos al final.
+
+**Verificación contra `.md`:** RE_VOTO_HDR matchea tres veces sobre el
+bloque: L3 ("Voto del señor ministro" + L4 "doctor don Enrique
+Santiago Petracchi"), L117 ("Voto de los señores ministros doctores"),
+L166 ("Voto del señor ministro"). El match L3 ocurre **antes** de la
+carátula (L13-14) y de la apertura del FALLO (L62), y antes del
+dictamen del Procurador del propio caso (L41). El cierre del voto
+unipersonal en L12 con firma simple "Enrique Santiago Petracchi."
+muestra que **L3-L12 son arrastre completo de un fallo anterior** —
+una resolución de competencia (Santa Fe vs Juzgado Civil 26 sobre
+quiebra), no una per saltum del propio caso. Los matches de L117 y
+L166 son legítimos del caso Fernández ("según su voto" en la firma
+colegiada de L114-116).
+
+**Verificación contra el código (parser.py 1513-1552):** el loop
+principal de `procesar_archivo` arranca en `k=0` y recorre todo el
+bloque. No hay guardia espacial tipo `if k < apertura_rel: continue`
+ni `if k < idx_caratula: continue` antes de aplicar
+`RE_VOTO_HDR`/`RE_DISID_HDR`/`RE_DICT_HDR`. La protección de
+`en_dictamen` (1518-1529) sólo cubre matches dentro del dictamen
+ya detectado. El match espurio de L3 entra al `marcadores_votos`
+sin filtrado.
+
+**Mecanismo confirmado, causa raíz refinada:** composición de B022
+(arrastre del previo) + falta de guardia espacial. Pero el arrastre
+en `332_p244` no es V1 ni V2 conocidos: arrastra **un voto unipersonal
+entero** del previo (header `Voto del señor ministro doctor don X` +
+`Autos y Vistos:` + cuerpo del voto + firma simple), ~10 líneas. Se
+abre **variante V2b** de B022.
+
+**Daño cuantificado:** el span voto resultante se extiende desde L3
+hasta el siguiente marcador de voto en L117 (cuando `extraer_textos_votos`
+parser.py 559-582 toma el rango hasta el próximo marcador). 114 líneas
+envueltas como "voto Petracchi del caso Fernández" que en realidad
+contienen carátula + sumarios + dictamen + cuerpo plenario + firma
+colegiada de la mayoría del Fernández. El conteo `114 líneas` cuadra
+con la cifra reportada por H022.
+
+**Se abre B044** (parser, `confirmado_mecanismo`) con causa raíz
+acoplada a B022 V2b y al loop de votos. Fix: dos vías independientes
+(fijar B022 elimina el arrastre; introducir guardia espacial cubre
+una familia de bugs análogos en otros detectores).
+
+### M4 confirmado, B022 V1 desdoblada en V1a/V1b
+
+Testigo `330_p829` (Brandsen c/ AFIP-DGI). Bloque `LibroVol330.1.md`
+líneas 31412-31591 (180 líneas, gap +7).
+
+H022 reportó que las primeras 25 líneas son cierre del fallo anterior
+(recurso de hecho ANSeS con firma colegiada y "Tribunal de origen:")
+antes de la carátula real del Brandsen partida en tres líneas. H023
+incorporó el caso como testigo a B022 V1 sin verificar contra `.md`.
+
+**Verificación contra `.md`:** los matches regex sobre el bloque son
+RE_APERTURA en L141, RE_FECHA_LINEA en L142, RE_DICT_HDR en L60,
+RE_DISID_HDR en L165, y RE_VOTO_HDR sin matches. L1-25 no disparan
+ningún match estructural. L22 es la firma colegiada del fallo anterior
+(Lorenzetti/Fayt/Petracchi/Maqueda/Argibay). L25 contiene "Tribunal de
+origen: Cámara Federal de la Seguridad Social, Sala II" del ANSeS. La
+carátula real del Brandsen está partida en L27-29 con formato editorial
+viejo de tomos 329-330 ("V." en mayúsculas, conectado con B026).
+
+**Verificación del daño concreto:** `find_tribunal_origen` (parser.py
+383-412) recorre desde `idx_inicio` del bloque y devuelve el **primer**
+match de `RE_TRIB_ORIG`. En `330_p829` captura "Cámara Federal de la
+Seguridad Social, Sala II" de L25 (del ANSeS arrastrado) en lugar de
+"Sala III, Cámara Federal de la Seguridad Social" del Brandsen (después
+de L165). El campo `tribunal_origen` del CSV de producción queda
+contaminado. `extraer_caratula_v1` (parser.py 170) captura bien el
+case_name desde el "Vistos los autos:" del FALLO real en L143-145
+(buscado desde apertura_rel hacia adelante, fuera del rango del
+arrastre). `find_case_name` (parser.py 344) hubiera fallado (carátula
+con "V." no matchea su búsqueda de "c/" en `max_back=15`), pero como
+Fix 1 prima V1 sobre find_case_name, el daño no llega al CSV.
+
+**Refinamiento de B022:** la variante V1 actual ("firma + metadatos
+editoriales, ~5-25 líneas") subsume dos sub-patrones distintos. El
+arrastre en `330_p829` (25 líneas con considerandos argumentales 3°-5°
++ dispositiva + firma + pie editorial + tribunal de origen) no es lo
+mismo que el arrastre chico de Sivaslian/Cerboni/Macri/Lavrentiev
+(~5-15 líneas con sólo firma + metadatos). Se distinguen V1a (chica,
+≤15 líneas, sólo firma + metadatos) y V1b (grande, 15-30 líneas,
+incluye considerandos del cuerpo del previo). La distinción importa
+porque V1b incluye texto argumental que aumenta el residuo del
+auditor y porque genera daño específico en `find_tribunal_origen`
+cuando el arrastre incluye el pie editorial completo del previo.
+
+### Caso huérfano 346_p1205: doble corrección de H022 + H023
+
+Testigo `346_p1205` (Álvarez c/ EN - M° RREECI Cancillería). Bloque
+`LibroVol346-2.md` líneas 16883-16988 (106 líneas).
+
+**Hipótesis H022:** "el parser detecta correctamente cuerpo + firma
+de una primera dispositiva breve, pero el caso continúa con sumarios
++ un segundo `FALLO DE LA CORTE SUPREMA` con su dispositiva extendida.
+Hay dos resoluciones distintas (10-oct-2023 y 19-oct-2023) en el mismo
+expediente". H022 lo nombró M3 ("cuerpo cerrado antes de dispositiva
+extendida, doble fallo en mismo caso").
+
+**Refutación de H023:** "Lectura del .md mostró un único fallo, una
+única dispositiva, fecha única (10 de octubre de 2023). La afirmación
+de H022 sobre dos resoluciones no se sostiene en el .md. Hipótesis
+abierta: el bloque está dominado por el dictamen del Procurador".
+
+**Verificación contra `.md` (H024):** matches sobre bloque + extensión
+post-16988 muestran tres RE_APERTURA (L3, L45, L152) y tres
+RE_FECHA_LINEA (L4=10/10/2023, L46=19/10/2023, L153=19/10/2023). El
+fallo de L3-15 (10/10/2023) **no es del caso Álvarez** — es una
+resolución sobre conflicto de competencia entre Juzgado Federal de
+la Seguridad Social n°4 y Contencioso Administrativo n°20 CABA, sin
+relación con la carátula del Álvarez (M° RREECI sobre reintegro de
+gastos médicos en Shanghái). El fallo del Álvarez arranca en L45-46
+(19/10/2023) y se extiende por considerandos 1°-4° hasta L107, donde
+el bloque del catálogo termina **al medio del considerando 4°**.
+
+La extensión (líneas absolutas 16989 en adelante) muestra que el
+fallo Álvarez continúa por ~34 líneas más (considerando 4° final + 5°
++ "Por ello, se declara procedente" + firma colegiada
+Rosatti/Rosenkrantz/Maqueda/Lorenzetti + pie editorial). El caso
+siguiente del catálogo (`346_p1208`, Frigorífico Paladini, según
+`fallos_localizados.csv` fila 5280) arranca en línea 16989, es decir
+**al medio del fallo Álvarez**.
+
+**Doble corrección:**
+1. H022 erró en la etiología: las dos fechas son de dos casos
+   **consecutivos distintos**, no del mismo expediente. M3 como
+   mecanismo de "doble dispositiva legítima" no existe.
+2. H023 también erró: leyó las primeras líneas, vio una sola fecha
+   en L4 ("10 de octubre de 2023") y supuso que era del caso, sin
+   notar la segunda fecha en L46 ("19 de octubre de 2023"). La regla
+   "leer el .md crudo" se cumplió, pero la lectura fue incompleta.
+
+**Lección metodológica adicional:** la regla de H023 ("verificar
+contra `.md` crudo antes de declarar") se refuerza con un paso de
+identificación previa: localizar la **carátula real** del caso antes
+que cualquier otro marcador. Carátula primero, después dispositiva,
+firma, dictamen — no por orden de aparición en el bloque. Si H023
+hubiera identificado la carátula del Álvarez (L17-18, ÁLVAREZ
+ARMANDO DAVID) antes que la fecha de L4, habría notado de inmediato
+que el FALLO de L3 no podía pertenecer al Álvarez.
+
+**Diagnóstico real de 346_p1205:**
+- **B022 V2** al inicio del bloque (L3-L15 = fallo completo del caso
+  anterior con FALLO + Autos y Vistos + dispositiva + firma colegiada,
+  ~15 líneas). Mismo patrón que `332_p913` (también re-asignado en
+  H023 a B022 V2). Se suma como segundo testigo de V2.
+- **Truncamiento al final** del bloque (~34 líneas del fallo Álvarez
+  quedan fuera del bloque del catálogo, asignadas al bloque siguiente
+  `346_p1208`). Esto **no tiene ID en DEUDA_TECNICA actual** —
+  componente catálogo (etapa 2) o cruzador (etapa 3), distinto de
+  B011 (caso aislado) y de B012 (`linea_fin` extendido). Acá es
+  `linea_fin` **acortado**. Se abre **B045**.
+
+### M1 confirmado, B025 sube a confirmado_mecanismo
+
+Testigo `343_p2243` (Salvatierra y Otros s/ Daño agravado). Bloque
+`LibroVol343-3.md` líneas 30534-31027 (494 líneas, gap +485, el más
+extremo de la muestra H022).
+
+**Hipótesis H022:** el parser detectó una firma real
+(Rosenkrantz/Maqueda/Lorenzetti/Rosatti) en líneas 30541-30542 y cerró
+el fallo ahí. Esa firma pertenece al fallo anterior; el Salvatierra no
+había arrancado. Las 485 líneas del gap son cuerpo + dictamen + sumarios
++ firma de la Corte del fallo real.
+
+**Verificación contra `.md`:** extracto inicio (30534-30563) + extracto
+fin (30987-31027). Cero matches estructurales (RE_APERTURA,
+RE_FECHA_LINEA, RE_DICT_HDR, RE_VOTO_HDR, RE_DISID_HDR) en ambos
+extractos. Las 423 líneas del medio (30564-30986) no fueron chequeadas
+con regex, no necesario.
+
+- **Inicio:** L1-2 header de página. L3-9 cierre del fallo anterior
+  "Gente Grossa S.R.L." sobre publicación satírica, dispositiva
+  "se rechaza la demanda" en L7-8, firma colegiada
+  Rosenkrantz/Maqueda/Lorenzetti/Rosatti en L8-9 (líneas absolutas
+  **30541-30542 — exactamente las que H022 reporta**). L10-14 pie
+  editorial. L16-17 carátula real del Salvatierra. L19-31 sumarios.
+- **Fin:** L1-39 cuerpo argumental (considerandos 3°-4° con citas
+  Fallos 155:374, 312:1042, 329:1219). L41 "2255" (número de página).
+  **No hay "Por ello", no hay dispositiva, no hay firma del Salvatierra
+  dentro del bloque del catálogo.**
+
+**Verificación del código (parser.py 1153-1234, `detectar_fin_real`):**
+- Pista 1 (carátula del siguiente, líneas 1189-1202): falla. No hay
+  matches del `primer_token_siguiente` ni dentro del bloque ni en
+  el rango `limite_adelante`.
+- Pista 2 (header de sumario, 1204-1212): falla. La mitad inferior
+  del bloque es cuerpo argumental del Salvatierra, sin headers de
+  sumario.
+- Pista 3 (RE_APERTURA o RE_DICT_HDR del siguiente, 1214-1223):
+  falla. La apertura del fallo siguiente está más allá de
+  `lfc + 200 ≈ 31227`.
+- Fallback (1225-1231): `buscar_atras(linea_es_firma_de_juez, lfc=31027,
+  li=30534)`. Como la firma del Salvatierra fue truncada por el bug
+  catalográfico, no la encuentra al retroceder. Encuentra primero la
+  firma del Gente Grossa en 30542. **Cierra ahí, status
+  `fin_por_firma_actual`, pista `firma_actual`.**
+
+**Caso resultante:** cuerpo de ~9 líneas (sólo el arrastre del Gente
+Grossa procesado, las 485 líneas restantes del Salvatierra quedan
+como catch_all), firma del previo capturada, `voting_pattern=unanime`
+espurio. Este es **el mecanismo concreto de B025** (414 falsos `unanime`).
+
+**Cambios a B025:** sube de `sospecha_cardinal` a `confirmado_mecanismo`.
+Causa raíz refinada como composición:
+1. Bug catalográfico de frontera (B045 nuevo): truncamiento del caso
+   al fin del bloque deja al `detectar_fin_real` sin firma real para
+   anclar.
+2. Arrastre del previo al inicio (B022 V1b típicamente): provee la
+   firma alternativa que el fallback captura.
+3. Fallback de `detectar_fin_real` (parser.py 1225-1231): busca hacia
+   atrás sin verificar si la firma pertenece al caso actual o a
+   contenido arrastrado.
+
+### B045 nuevo — Bug catalográfico de frontera mal puesta
+
+Componente: catálogo (etapa 2) o cruzador (etapa 3) — causa raíz a
+nivel de quién decide las fronteras entre casos consecutivos.
+
+Caracterización: cuando una página del PDF contiene **final del caso N
++ inicio del caso N+1** (típico cuando el cierre del N termina al
+medio de página y el N+1 arranca en la misma página), el catalogador
+asigna la **página entera** al caso N+1. Resultado simultáneo:
+- Caso N queda **truncado** antes de su dispositiva/firma.
+- Caso N+1 hereda **arrastre del caso N** al inicio del bloque
+  (= B022).
+
+Los dos síntomas son **las dos caras del mismo bug**. B022 venía
+documentando sólo la cara visible desde el parser (arrastre al
+inicio). B045 documenta la cara del catálogo y unifica el cuadro
+causal.
+
+Testigos verificados en H024:
+- `343_p2243` (Salvatierra): truncamiento al medio del considerando 4°,
+  hereda al caso siguiente.
+- `346_p1205` (Álvarez): truncamiento al medio del considerando 4°,
+  hereda al `346_p1208` (Paladini).
+
+**B045 acopla con:**
+- **B022** (arrastre al inicio del bloque siguiente): mismo bug visto
+  desde la otra cara. Fix de B045 a nivel catálogo elimina B022 por
+  construcción.
+- **B025** (414 falsos `unanime`): cuando B045 trunca antes de la
+  firma real, `detectar_fin_real` cae al fallback de firma y captura
+  la del previo arrastrado. Fix de B045 elimina B025 por
+  construcción.
+- **B044** (apertura espuria de span voto): cuando B045 + B022 V2b
+  arrastra un voto unipersonal entero, B044 se dispara. Fix de B045
+  reduce el universo de B044 (pero no lo elimina del todo: B044
+  también puede activarse por arrastres V2b que no impliquen
+  truncamiento).
+
+### Hallazgo arquitectónico
+
+H024 establece que **B045 es la causa raíz común de M1, M3-refutado,
+M4 y M5**. Las cinco hipótesis de mecanismo de H022, después de
+H023 + H024:
+
+| Hipótesis H022 | Status final | Bug actualizado |
+|---|---|---|
+| M1 (cierre por firma falsa) | Confirmado | B025 (refinado a `confirmado_mecanismo`) |
+| M2 (cierre por carátula falsa) | Confirmado en H023 | B018 (`confirmado_mecanismo` + B043) |
+| M3 (doble dispositiva legítima) | Refutado | Inexistente; ambos testigos eran B022 |
+| M4 (mala localización inicio) | Confirmado | B022 (V1 desdoblada en V1a/V1b) |
+| M5 (apertura espuria span voto) | Confirmado con etiología nueva | B044 nuevo |
+
+De los cinco mecanismos propuestos por H022, **cuatro tienen causa
+raíz común en B045** (frontera catalográfica mal puesta). El único
+mecanismo independiente es **B018/M2**, que puede dispararse aún sin
+arrastre por el defecto de `primer_token_de_caratula` (B043) en
+carátulas con sustantivos institucionales genéricos.
+
+**Consecuencia para priorización de fix:** B045 es prioridad máxima
+arquitectónica. Su fix elimina B022/B025/B044 por construcción y
+reduce el universo de B018. La opción D recomendada para B018 en
+H023 (validación cruzada con `proximo_header_pagina`) podría ser un
+patrón aplicable también para detectar y corregir las fronteras mal
+puestas de B045.
+
+### Cambios aplicados a DEUDA_TECNICA en esta sesión
+
+- **B022** reescrito: causa raíz movida a "B045 visto desde el lado
+  parser". Variantes refinadas a V1a/V1b/V2/V2b (cuatro testigos
+  verificados en H024 cubren las cuatro variantes). Sección de
+  interacciones ampliada (acopla con B045, B025, B044 además de
+  B018).
+- **B025** subido de `sospecha_cardinal` a `confirmado_mecanismo`.
+  Causa raíz refinada (composición B045 + B022 + fallback parser.py
+  1225-1231). Testigo verificado `343_p2243`.
+- **B044** abierto: apertura espuria de span voto sobre header
+  arrastrado del previo. Composición B022 V2b + falta de guardia
+  espacial en loop de parser.py 1513-1552. Testigo `332_p244`.
+  Estado `confirmado_mecanismo`.
+- **B045** abierto: frontera catalográfica mal puesta entre casos
+  consecutivos. Causa raíz arquitectónica común de B022/B025/B044.
+  Testigos `343_p2243`, `346_p1205`. Componente: catálogo o
+  cruzador. Estado `confirmado_caso_testigo`.
+
+### Pendientes inmediatos
+
+1. **Mover archivos diagnóstico:** los `.txt` generados en raíz del
+   repo (`bloque_332_p244.txt`, `bloque_330_p829.txt`,
+   `bloque_346_p1205.txt`, `bloque_346_p1205_extension.txt`,
+   `bloque_343_p2243_inicio.txt`, `bloque_343_p2243_fin.txt`)
+   deberían moverse a un directorio dedicado, e.g.
+   `output/auditoria/auditar_fallo/h024_blocks/`. Esto al cierre o
+   en sesión de housekeeping.
+
+2. **Diagnóstico al nivel código de B045:** abrir
+   `scripts/pipeline/construir_catalogo.py` (etapa 2) o el equivalente
+   del cruzador (etapa 3) e identificar la lógica que decide las
+   fronteras entre casos. Hipótesis fuerte: la asignación de página
+   entera al caso N+1 cuando una página contiene cierre del N +
+   inicio del N+1. Sesión dedicada.
+
+3. **Fix de B018 (recomendación H023, opción D):** sigue pendiente.
+   Vale evaluarlo en conjunto con B045 ahora que se identificó la
+   causa raíz arquitectónica común.
+
+4. **Re-medición de cardinalidad de B025** post §3.6.a (B001
+   resuelto). H022 estimó 414 casos en el cluster pre-fix. Verificar
+   contra CSV vivo (`output/parser/csjn_casos.csv`).
+
+5. **Aplicar fix de B044:** dos vías ya documentadas (fix de B022 vía
+   B045, o guardia espacial en parser.py 1513-1552). La primera es
+   estructural; la segunda cubre familia de bugs análogos. Decidir
+   en sesión dedicada.
+
+### Lección metodológica acumulada (H023 → H024)
+
+La regla operativa de H023 ("verificar mecanismo contra .md crudo
+antes de declararlo") se refuerza en H024 con dos correcciones
+concretas a H023 mismo:
+
+1. `346_p1205` se había clasificado como huérfano en H023 con
+   hipótesis abierta sobre "dictamen domina el bloque". H024 muestra
+   que ni hay dictamen en el bloque (`RE_DICT_HDR` = 0 matches) ni
+   hay un único fallo. Es B022 V2 + B045. H023 leyó las primeras
+   líneas y supuso fecha única.
+
+2. `343_p2243` fue procesado en H024 directo, no había verificación
+   previa de H023. Pero el caso aporta una segunda lección:
+   identificar la **carátula real** del caso debe ser el primer paso
+   de la lectura, antes que dispositiva/fecha/firma. La carátula
+   ancla el caso; los otros marcadores sin carátula identificada
+   pueden ser arrastre o caso anterior.
+
+Regla operativa actualizada para sesiones futuras:
+1. Pedir bordes exactos al localizador.
+2. Aplicar regex mecánicamente sobre el bloque.
+3. **Identificar carátula real primero.** Después dispositiva, fecha,
+   firma, dictamen.
+4. Verificar arrastre al inicio (B022) y truncamiento al fin (B045)
+   como pasos separados.
+5. Recién entonces formular hipótesis de mecanismo y verificar contra
+   el código.
+
