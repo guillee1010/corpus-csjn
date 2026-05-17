@@ -2422,32 +2422,36 @@ no contempladas en el regex, pasan sin filtrar.
 bloqueado por M08 (refactorización arquitectónica).
 **Referencias:** H032, M08.
 ---
----
-### B055 — Firma multilinea truncada cuando hay paréntesis en línea siguiente
-**Componente:** parser / auditor.
-**Origen:** sesión H032, auditoría de muestra de 80 casos.
-**Causa raíz:** el parser detecta la firma en la primera línea pero
-cuando el nombre de un ministro continúa en la línea siguiente entre
-paréntesis (`(en disidencia parcial)`, `(según su voto)`), esa línea
-cae en `catch_all`. Resultado: `firma_raw` truncada, `n_jueces`
-incorrecto en el CSV.
-**Diagnóstico / evidencia:** confirmado en múltiples casos:
-- `347_p178` (Perret): "Ricardo Luis Lorenzetti (en" en firma,
-  "disidencia parcial)— Rocio Alcala." en catch_all.
-- `348_p1540` (Guardia): "Horacio Rosatti — Carlos Fernando
-  Rosenkrantz — Ricardo Luis" en firma, "Lorenzetti (según su
-  voto)." en catch_all.
-- `333_p1254`: "Juan / Carlos Maqueda" partido por salto de línea.
-**Impacto:** `n_jueces` subestimado, `voting_pattern` potencialmente
-incorrecto, datos de composición del tribunal poco confiables en
-casos con votos o disidencias individuales.
-**Fix propuesto:** ampliar el span de firma para incluir la línea
-siguiente cuando la firma detectada termina con un nombre incompleto
-(sin punto final o sin separador `—`). Requiere análisis cuidadoso
-del regex de detección de firma en `parser.py`.
-**Estado de verificación:** confirmado_casos_testigo múltiples.
+### B055 — Firma multilinea truncada (nombre partido por salto de línea)
+**Componente:** parser.
+**Origen:** sesión H032, auditoría de muestra de 80 casos. Revisado H033.
+**Causa raíz:** `collect_firma_lines` corta la recolección de firma antes
+de completar el nombre cuando hay un salto de línea en medio de un nombre
+de ministro (ej: `"...— JUAN"` en línea 1, `"CARLOS MAQUEDA —..."` en
+línea 2). La línea siguiente no activa ninguna condición de break pero
+tampoco se incorpora correctamente. Resultado: `firma_raw` truncada sin
+punto final, `n_jueces` subestimado.
+**Diagnóstico / evidencia (H033):** 345 casos en CSV con `firma_raw` no
+vacío pero sin punto final — confirmado como firma truncada. Muestra:
+- `329_p9`: `firma_raw` termina en `"...ELENA I. HIGHTON DE NOLASCO — JUAN"`,
+  `n_jueces=2`.
+- `329_p49`: termina en `"...ELENA I. HIGHTON DE NOLASCO — CARLOS"`.
+- `329_p241`: termina en `"...CARLOS S. FAYT — JUAN CARLOS"`.
+**Casos testigo de H032 revisados en H033:**
+- `347_p128` (Perret): causa raíz es **B013** (por_ello prematuro), no B055.
+  `firma_raw` vacío, `n_jueces=0`. El `por_ello_text` captura texto argumental
+  del considerando (`"De conformidad con la regulación prevista..."`).
+- `348_p1540` (Guardia): parser OK. `firma_raw` completo, `n_jueces=3`.
+  No es B055.
+- `333_p1254`: parser OK. `firma_raw` completo, `n_jueces=4`. No es B055.
+**Impacto:** 345 casos con `n_jueces` subestimado y `voting_pattern`
+potencialmente incorrecto. Afecta datos de composición del tribunal.
+**Fix propuesto:** en `collect_firma_lines`, continuar recolectando líneas
+mientras la última línea recolectada no termine en punto y no haya línea
+vacía ni marcador estructural. Requiere análisis de condiciones de corte.
+**Estado de verificación:** confirmado_cuantificado (345 casos en CSV).
 **Estado del fix:** no diseñado.
-**Referencias:** H032, B054.
+**Referencias:** H032, H033, B013.
 ---
 ### B056 — Apertura de mayoría no detectada cuando hay residuo antes de "FALLO DE LA CORTE SUPREMA"
 **Componente:** parser / auditor.

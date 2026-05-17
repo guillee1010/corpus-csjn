@@ -3508,3 +3508,42 @@ de los outputs de `auditar_fallo.py`. Mejoras menores a `auditar_fallo.py`.
 - Fix dictamen que consume "FALLO DE LA CORTE SUPREMA" — ver B057.
 - Fix pérdida de `°` en numeración de considerandos (encoding) — ver B058, caso testigo 329_p3546.
 - Ningún fix al parser commiteado en esta sesión.
+
+---
+**Fecha:** 2026-05-17
+**Sesión:** H033
+### Objetivo
+Auditar casos testigo de B055 (firma multilinea) en el MD crudo y el CSV
+productivo para confirmar causa raíz y diseñar fix.
+### Trabajo realizado
+- Revisión de los tres casos testigo documentados en B055:
+  - `347_p128` (Perret): causa raíz es B013, no B055. El parser captura
+    `"De conformidad con la regulación prevista..."` (texto argumental del
+    considerando) como dispositivo `de_conformidad`. `por_ello_idx` queda
+    en mitad del cuerpo y `collect_firma_lines` no llega a la firma real.
+    `firma_raw` vacío, `n_jueces=0`. Adicionalmente: `Rocio Alcala` (conjuez)
+    no está en `JUECES_CONOCIDOS`.
+  - `348_p1540` (Guardia): parser correcto. Firma multilinea reconstruida
+    bien por join. `n_jueces=3`, calificadores presentes.
+  - `333_p1254`: parser correcto. Fallo auditado era el equivocado (zona
+    17229, no 18719). El fallo real no tiene calificadores — unanime limpio.
+- Cuantificación de `sin_firma` en CSV: 872 casos (15% del corpus).
+  - 479 con `por_ello_text` no vacío → probable B013.
+  - 393 sin `por_ello_text` → causa distinta (B057 u otros).
+- Cuantificación de B055 real: 345 casos con `firma_raw` no vacío pero
+  sin punto final. Muestra confirma nombres truncados (`JUAN`, `CARLOS`,
+  `E. RAÚL`). Este es el universo real de B055.
+- Hallazgo: el auditor y el parser detectan universos consistentes de
+  `sin_firma` (~15%). El auditor es más robusto para firmas partidas
+  (usa `APELLIDOS_FIRMA_TITULARES`), el parser no.
+### Decisiones
+- B055 redocumentado en DEUDA_TECNICA: casos testigo originales
+  corregidos, cuantificación actualizada a 345 casos.
+- No se commiteó ningún fix. Sesión de auditoría pura (M04).
+### Pendiente
+- Fix B055: diseñar condición de continuación en `collect_firma_lines`
+  para firmas sin punto final.
+- Fix B013: sigue pendiente (479 casos sin firma por dispositivo prematuro).
+- Agregar `Rocio Alcala` y otros conjueces recientes a `JUECES_CONOCIDOS`
+  si se confirman más apariciones.
+- Auditar los 393 `sin_firma` sin `por_ello_text` para identificar causa.
