@@ -7,9 +7,10 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-16 (sesión H025: B045 refinado con
-dos manifestaciones, B046 nuevo, B018 nota de acoplamiento, M01
-alcance ampliado).
+**Última actualización:** 2026-05-16 (sesión H029: B009 causa raíz
+confirmada — hojas complementarias + inicio de volumen; B046 Fase E
+ejecutada, hipótesis de bloque vacío sin testigo empírico, 43 faltantes
+explicados por B009; Fase F abierta — título como ancla).
 
 ---
 
@@ -145,25 +146,57 @@ porque XXI fue del 3-4/5 y el commit posterior).
 
 ### B009 — `pagina_no_en_mapa` tomos 331-334 (Fase 2 de §3.6.e)
 
-**Componente:** cruzador.
+**Componente:** cruzador (localizador).
 **Origen / fuente del diagnóstico:** XXI-d del forense. BITACORA H001, H002.
-**Causa raíz:** hipótesis 1: el detector de páginas no detecta el primer
-header tipográfico al inicio de cada `.md` (limitación en §1.5). Hipótesis 2:
-particularidad editorial de tomos 331-334 con índices o aparato preliminar al
-**inicio** en vez de al final.
-**Diagnóstico / evidencia:** 43 casos. Distribución: tomo 331: 11, tomo 332: 11,
-tomo 333: 11, tomo 334: 10. Caso paradigmático: Boston Cía. de Seguros
-(331_p7), línea 58 cabecera mayúsculas, dictamen 97-230, fallo desde 232.
-Patrón: cabecera mayúsculas + sumarios + dictamen previo al
-`FALLO DE LA CORTE SUPREMA`.
-**Estado de verificación:** `confirmado_cuantificado` (43 casos identificados).
-**Validador propuesto:** inspeccionar primeras ~100 líneas de
-`LibroVol331.1.md` (¿hay header tipográfico para la página 7?). Comparar
-`mapa_paginas.csv` para 331-334 contra 329. Comparar con tomo 329 (sin casos)
-para identificar qué hace distinto su `.md` 1. Plan, no codear.
-**Estado del fix:** no diseñado.
-**Referencias cruzadas:** PIPELINE §3.6.c. XXI-d. BITACORA H001, H002. ID
-histórico: era **Bug A** del documento del 2/5.
+Causa raíz confirmada en H029 (Fase E).
+**Causa raíz:** los 43 casos tienen `status: pagina_no_en_mapa` y campos
+`archivo` y `linea_inicio` vacíos en `fallos_localizados.csv`. El localizador
+los detecta en el índice editorial del tomo pero no puede anclarlos en el
+cuerpo del `.md` porque el marcador numérico de página no aparece como línea
+standalone. Dos sub-causas verificadas:
+
+- **Sub-causa 1 — hoja complementaria consume la página de inicio de
+  sección mensual:** la página N es una hoja complementaria editorial
+  (separador de mes: "MARZO", "ABRIL", etc.). En el `.md` esa página
+  se renderiza como texto de la hoja complementaria + encabezado de mes
+  sin el número N como línea sola. El caso que el índice editorial ubica
+  en página N arranca en página N+1 con su título limpio. Verificado con
+  `331_p379` (Marzo=379, cuerpo arranca en 380) y `331_p439` (Abril=439).
+
+- **Sub-causa 2 — inicio de volumen sin marcador previo:** el primer caso
+  del volumen arranca antes del primer marcador de página. El índice
+  editorial lo ubica en página 7 (`331_p7`) pero el cuerpo del `.md`
+  no tiene línea `7` standalone antes del título del caso.
+
+**Análisis de saltos en `mapa_paginas.csv` (H029):** script sobre el mapa
+detectó 86 saltos de página (diferencia > 1 entre consecutivos) en todo
+el corpus (tomos 329-348). El patrón es universal, no exclusivo de 331-334.
+Los 43 faltantes coinciden con saltos de esos tomos. Salto negativo aislado
+en `LibroVol338.2.md` (de=1591 a=338, salto=-1253): causa probable OCR
+defectuoso en una página, no sistemático.
+
+**Diagnóstico / evidencia:** 43 casos. Distribución: tomo 331: 11,
+tomo 332: 11, tomo 333: 11, tomo 334: 10. Casos paradigmáticos verificados:
+`331_p7` (Boston Cía. de Seguros c/ Federal Express) — título limpio en
+línea 57 del `.md`, antes de sumarios, dictamen y cuerpo. `331_p379`
+(Villarreal c/ Fernández) — hoja complementaria "MARZO" consume página 379,
+cuerpo arranca en 380.
+
+**Magnitud:** 43/5.862 = 0,73%. Pérdida aceptable, no requiere fix urgente.
+
+**Hallazgo estructural (H029):** el título del caso que aparece antes de los
+sumarios es una señal más robusta que "Vistos los autos" para anclar el
+inicio de cada fallo. `detectar_caratula` del auditor ya implementa esta
+lógica con guardias y detectó correctamente estos títulos en las pruebas.
+Portar esa lógica al parser (Fase F) resolvería también estos 43 casos.
+Requiere muestras representativas de tomos viejos antes de implementar
+(variaciones conocidas: `V.`, mayúsculas, sin separador `c/`/`s/`/`|`).
+
+**Estado de verificación:** `confirmado_cuantificado` (43 casos
+identificados, causa raíz verificada empíricamente en H029).
+**Estado del fix:** no diseñado. Dirección: Fase F (título como ancla).
+**Referencias cruzadas:** PIPELINE §3.6.c. XXI-d. BITACORA H001, H002,
+H029. ID histórico: era **Bug A** del documento del 2/5.
 
 ### B010 — `RE_CONSIDERANDO` restrictivo + `.match()` con anclaje `^...$`
 
@@ -561,12 +594,23 @@ B046 quedaría confirmado con mecanismo concreto. Si la diferencia se
 explica por otras causas (filtrado intencional, errores de
 localización, etc.), B046 queda refutado.
 
-**Decisión a tomar en Fase E:** identificar los 43 `caso_id_canonico`
-faltantes (presentes en `fallos_localizados.csv`, ausentes en
-`csjn_casos.csv`) e inspeccionar individualmente para determinar el
-mecanismo. La verificación se hace con `csv.DictReader` y comparación
-de sets, no con `Select-String` posicional. Ver corrección de método
-en el cierre honesto de H025.
+**Resultado de Fase E (H029):** verificación ejecutada con `csv.DictReader`
+y comparación de sets. Los 43 `caso_id_canonico` faltantes fueron
+identificados y todos tienen `status: pagina_no_en_mapa` en
+`fallos_localizados.csv` — con `archivo` y `linea_inicio` vacíos.
+El mecanismo de B046 (casos desaparecidos por bloque vacío en el cruzador)
+**no se manifiesta en estos 43 casos**. La causa real es la documentada
+en B009: el localizador no pudo anclarlos porque el marcador numérico de
+página está ausente del `.md` (consumido por hojas complementarias o inicio
+de volumen). El parser nunca los recibió como entrada porque el localizador
+los dejó sin coordenadas — no porque el cruzador produjera bloques vacíos.
+
+**Conclusión sobre B046:** la hipótesis de bloque vacío por páginas
+compartidas sigue sin testigo empírico confirmado. Los 43 faltantes se
+explican íntegramente por B009. B046 queda como nota arquitectónica: el
+mecanismo descrito en el código es real, pero la deduplicación del
+catalogador lo previene en la práctica. Severidad: baja. Sin fix requerido
+salvo que aparezca un testigo empírico en otra inspección.
 
 ---
 
@@ -2132,13 +2176,14 @@ canónicos actuales B0NN.
 4. Cuantificar los `hipotesis_no_verificada` antes de fixearlos. Prioridad
    especial: B025 (414 unanime) re-medir post §3.6.a.
 5. Bloque snapshots Fase 2 (M02).
-6. H026 continuación: Fase A completa (leer detectores 4-7 del auditor +
-   `segmentar_bloque` + helpers internos), Fase E (verificar B046 con
-   `csv.DictReader` sobre los 43 casos faltantes entre
-   `fallos_localizados.csv` y `csjn_casos.csv`), Fase F (síntesis de
-   reutilización del auditor para parser de Forma 1), Fase G (diseño
-   detector de borde superior + detector de epílogo).
-7. M06 antes de implementar detector de epílogo: verificar persistencia
+6. **Fase F (H030, prioritaria):** portar `detectar_caratula` del auditor
+   al parser como ancla de inicio de caso. Tomar muestras representativas
+   de tomos viejos y nuevos antes de implementar. Snapshot pre-fix +
+   auditoría antes y después. Ver hallazgo estructural en B009 y nota
+   H028 al pie.
+7. B049 Var-B (H030): diagnóstico fino de `340_p1551`.
+8. Cuantificaciones B050-quant, B051-quant, HN3'-quant (H030).
+9. M06 antes de implementar detector de epílogo: verificar persistencia
    editorial de la gramática sobre el corpus completo.
 
 

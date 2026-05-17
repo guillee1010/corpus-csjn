@@ -3065,3 +3065,92 @@ HN3'-quant — pasan a H029.
 - **Fase E** — abierta, prioritaria H029.
 - **B050-quant, B051-quant, HN3'-quant** — abiertas, H029.
 - **Fases C, F, G** — abiertas, sin sesión asignada.
+
+---
+# H029 — Fase E: diagnóstico B046 (43 faltantes) + hallazgo estructural título como ancla (16/5/2026)
+
+## Objetivo
+Continuación de H028. Foco principal: Fase E (verificación B046 —
+43 casos en `fallos_localizados` ausentes de `csjn_casos`).
+Cuantificaciones B050, B051, HN3' postergadas a H030.
+
+## Fase E — Diagnóstico B046
+
+Comparación de sets `caso_id_canonico` entre `csjn_casos.csv`
+(5.819 filas) y `fallos_localizados.csv` (5.862 filas) con
+`csv.DictReader`. Diferencia: 43 casos presentes en localizados
+pero ausentes en casos.
+
+**Distribución por tomo:**
+
+| Tomo | en casos | en localizados | faltantes |
+|------|----------|----------------|-----------|
+| 331  | 365      | 376            | 11        |
+| 332  | 319      | 330            | 11        |
+| 333  | 241      | 252            | 11        |
+| 334  | 189      | 199            | 10        |
+| **Total** | | | **43** |
+
+Tomos 335 y 336 ausentes del parser por diseño (PDFs ilegibles,
+firmas holográficas que rompen el OCR). No es bug.
+
+**Causa raíz confirmada:** los 43 tienen `status: pagina_no_en_mapa`
+y `archivo: ''`, `linea_inicio: ''` vacíos en `fallos_localizados`.
+El localizador los detecta en el índice editorial pero no puede
+anclarlos en el cuerpo del `.md` porque el marcador numérico de
+página no aparece como línea standalone — está consumido por una
+hoja complementaria (separador de sección mensual) o es el inicio
+del volumen (página 7 de 331, antes del primer marcador).
+
+Ejemplo verificado: `331_p379` corresponde a "Marzo" — la hoja
+complementaria ocupa la página 379, el cuerpo arranca en 380.
+El marcador `379` no existe en el `.md`; el parser no puede anclar.
+
+**Análisis de saltos en `mapa_paginas.csv`:** script sobre
+`mapa_paginas.csv` detectó 86 saltos de página en todo el corpus
+(tomos 329–348). El patrón es universal, no exclusivo de 331–334.
+Los 43 faltantes coinciden con saltos de esos tomos. Salto negativo
+aislado en `LibroVol338.2.md` (de=1591 a=338, salto=-1253):
+causa probable OCR defectuoso en una página, no sistemático.
+
+**Magnitud:** 43/5.862 = 0,73%. Pérdida aceptable, no requiere
+fix urgente.
+
+## Hallazgo estructural — título del caso como ancla
+
+Durante el diagnóstico se identificó que cada fallo tiene un título
+limpio antes de los sumarios, dictamen y cuerpo, coincidente con
+el índice editorial. Este título es una señal más robusta que
+"Vistos los autos" para delimitar el inicio de cada caso.
+
+Ejemplo verificado (331_p7):
+
+```
+BOSTON Cía. de SEGUROS S.A. c/ FEDERAL EXPRESS
+[sumarios]
+[dictamen]
+[cuerpo]
+```
+
+`detectar_caratula` del auditor ya implementa esta lógica con
+guardias (no mes solo, no empieza con V., no termina en punto,
+no empieza en minúscula) y la detectó correctamente en las pruebas.
+Es el candidato natural a portar al parser como ancla de inicio
+de caso — reemplazando o complementando la búsqueda por "Vistos
+los autos". Esto resolvería también los 43 faltantes de B046.
+
+Requiere muestras representativas de tomos viejos y nuevos antes
+de implementar (variaciones conocidas: `V.`, mayúsculas, sin
+separador `c/`/`s/`/`|`). Fase asignada a H030.
+
+## Fases no abordadas
+B049 Var-B, B050-quant, B051-quant, HN3'-quant — pasan a H030.
+
+## Commits
+- Ninguno. Sesión de diagnóstico puro, sin cambios al pipeline.
+
+## Estado de fases
+- **Fase E** — cerrada. Causa raíz documentada, fix diferido.
+- **Fase F (título como ancla)** — abierta, prioritaria H030.
+- **B049 Var-B** — abierta, H030.
+- **B050-quant, B051-quant, HN3'-quant** — abiertas, H030.
