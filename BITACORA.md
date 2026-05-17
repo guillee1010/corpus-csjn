@@ -3436,3 +3436,36 @@ del caso siguiente o fin de bloque. Documentar y priorizar.
   para evitar falsos positivos. H031.
 - **B049 Var-B, B050-quant, B051-quant, HN3'-quant** — sin abordar,
   pasan a H031.
+
+## H031 — Auditoría B052: carátula partida y catch_all inicial
+
+**Fecha:** 2026-05-17
+**Sesión:** H031 (continuación de H030)
+
+### Objetivo
+
+Investigar B052 (crosscheck título vs índice) y B054 (separar
+catch_all anterior del posterior). Sesión de diagnóstico puro —
+ningún fix commiteado.
+
+### Hallazgos
+
+**B052 — no es un problema crítico:**
+La carátula correcta ya está en `nombres_indice` / `case_name_indice`
+por definición del índice editorial. El parser no depende de
+`detectar_caratula()` del auditor para ese dato. El catch_all inicial
+es basura por definición (epílogo del anterior, firma arrastrada) y
+no tiene valor analítico. El sumario es la señal confiable. B052 en
+el auditor es cosmético — afecta el rendering del MD pero no el CSV.
+
+**Bug en `_resolver_caso()` del auditor (B_nuevo):**
+Introducido por Fase F (C4). Cuando dos casos comparten página
+límite (`pagina_fin` del anterior = `pagina_inicio` del siguiente),
+el loop devuelve el primero en orden de iteración. Caso testigo:
+`--pagina 885` resuelve Schenone en vez de Wang. Fix trivial: pase
+previo de match exacto por `pagina_inicio` antes del loop de rangos.
+Solo afecta al auditor — el parser usa `linea_inicio` directamente.
+
+**B054 — separación posicional trivial:**
+`linea_inicio` y `linea_fin_real` ya están disponibles. Todo lo que
+está antes de la carátula dentro del bloque es catch_

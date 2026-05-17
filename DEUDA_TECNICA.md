@@ -2195,32 +2195,31 @@ por remisiones a otras causas y carátulas de recursos de hecho.
 y es el candidato natural a portar al parser como fuente primaria.
 
 
-### B052 — `refinar_inicio_por_titulo`: falso positivo en epílogo del fallo anterior
+### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula
 
-**Componente:** parser.
+**Componente:** auditor (cosmético — no afecta CSV).
 **Origen:** sesión H030, inspección auditoría postfix_fase_f_v2, caso `346_p885`.
-**Causa raíz:** `refinar_inicio_por_titulo()` busca `\btoken\b` del
-`nombres_indice` en las primeras 50 líneas del bloque. El epílogo del
-fallo anterior (que cae al inicio del bloque por página compartida)
-puede contener el mismo token si el apellido aparece en la
-representación letrada o en la carátula del caso siguiente que el
-fallo anterior menciona en su metadata de cierre.
-**Diagnóstico / evidencia:** `346_p885` (Wang, Dingjian): el token
-`Wang` matcheó en la línea `WANG, DINGJIAN c/ EN - M INTERIOR OP y V – DNM`
-que es la primera línea de la carátula de Wang incluida en el epílogo
-del fallo anterior. El refinador recortó correctamente hasta ahí, pero
-`detectar_caratula` del auditor tomó la segunda línea (`s/ Recurso
-directo DNM`) como carátula porque la primera quedó clasificada como
-catch_all.
-**Estado de verificación:** confirmado_caso_testigo.
-**Fix propuesto:** búsqueda probabilista con tokens distribuidos del
-`nombres_indice` (inicio + medio + final). Cada token que matchea en
-una ventana de 2-3 líneas contiguas suma peso; threshold para declarar
-match. Robusto a OCR, saltos de página, mayúsculas, variaciones
-editoriales. Implementar en sandbox con `--random 80 --seed 42`
-antes/después antes de commitear.
-**Estado del fix:** no diseñado.
-**Referencias:** H030, commit `27bf3d5`.
+**Causa raíz (corregida en H031):** el refinador `refinar_inicio_por_titulo()`
+ancló correctamente en la primera línea de la carátula de Wang. El problema
+real es que `detectar_caratula()` del auditor toma solo la segunda mitad de
+la carátula como carátula porque la primera quedó en el catch_all inicial
+(zona de residuo del caso anterior). Cuando la carátula está partida en dos
+o más líneas por salto de página, `prev_no_header` se pisa en cada iteración
+y devuelve solo la línea más cercana al primer sumario.
+**Diagnóstico / evidencia:** `346_p885` (Wang, Dingjian): catch_all inicial
+contiene epílogo de Schenone + `WANG, DINGJIAN c/ EN - M INTERIOR OP y V – DNM`.
+El auditor detecta como carátula solo `s/ Recurso directo DNM`. Mismo patrón
+en `329_p9` (carátula en 3 líneas) y `329_p5` (carátula con `V.`).
+**Severidad:** cosmético. El dato correcto ya está en `nombres_indice` por
+definición del índice editorial. No afecta `case_name_indice` del CSV ni
+ningún campo analítico.
+**Fix propuesto:** usar el primer token de `nombres_indice` como límite
+dentro del catch_all anterior para identificar el inicio real de la carátula.
+Dependiente de B054 (separar catch_all anterior del posterior por posición).
+POC disponible en `scripts/auditoria/poc_b052v3.py` — 1 mejora, 0 regresiones
+sobre 11 casos testigo.
+**Estado del fix:** poc_validado. Pendiente integración con B054.
+**Referencias:** H030, H031, commit `27bf3d5`.
 
 ---
 
@@ -2281,32 +2280,31 @@ gramática del epílogo sobre corpus completo) antes de implementar.
 
 
 
-### B052 — `refinar_inicio_por_titulo`: falso positivo en epílogo del fallo anterior
+### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula
 
-**Componente:** parser.
+**Componente:** auditor (cosmético — no afecta CSV).
 **Origen:** sesión H030, inspección auditoría postfix_fase_f_v2, caso `346_p885`.
-**Causa raíz:** `refinar_inicio_por_titulo()` busca `\btoken\b` del
-`nombres_indice` en las primeras 50 líneas del bloque. El epílogo del
-fallo anterior (que cae al inicio del bloque por página compartida)
-puede contener el mismo token si el apellido aparece en la
-representación letrada o en la carátula del caso siguiente que el
-fallo anterior menciona en su metadata de cierre.
-**Diagnóstico / evidencia:** `346_p885` (Wang, Dingjian): el token
-`Wang` matcheó en la línea `WANG, DINGJIAN c/ EN - M INTERIOR OP y V – DNM`
-que es la primera línea de la carátula de Wang incluida en el epílogo
-del fallo anterior. El refinador recortó correctamente hasta ahí, pero
-`detectar_caratula` del auditor tomó la segunda línea (`s/ Recurso
-directo DNM`) como carátula porque la primera quedó clasificada como
-catch_all.
-**Estado de verificación:** confirmado_caso_testigo.
-**Fix propuesto:** búsqueda probabilista con tokens distribuidos del
-`nombres_indice` (inicio + medio + final). Cada token que matchea en
-una ventana de 2-3 líneas contiguas suma peso; threshold para declarar
-match. Robusto a OCR, saltos de página, mayúsculas, variaciones
-editoriales. Implementar en sandbox con `--random 80 --seed 42`
-antes/después antes de commitear.
-**Estado del fix:** no diseñado.
-**Referencias:** H030, commit `27bf3d5`.
+**Causa raíz (corregida en H031):** el refinador `refinar_inicio_por_titulo()`
+ancló correctamente en la primera línea de la carátula de Wang. El problema
+real es que `detectar_caratula()` del auditor toma solo la segunda mitad de
+la carátula como carátula porque la primera quedó en el catch_all inicial
+(zona de residuo del caso anterior). Cuando la carátula está partida en dos
+o más líneas por salto de página, `prev_no_header` se pisa en cada iteración
+y devuelve solo la línea más cercana al primer sumario.
+**Diagnóstico / evidencia:** `346_p885` (Wang, Dingjian): catch_all inicial
+contiene epílogo de Schenone + `WANG, DINGJIAN c/ EN - M INTERIOR OP y V – DNM`.
+El auditor detecta como carátula solo `s/ Recurso directo DNM`. Mismo patrón
+en `329_p9` (carátula en 3 líneas) y `329_p5` (carátula con `V.`).
+**Severidad:** cosmético. El dato correcto ya está en `nombres_indice` por
+definición del índice editorial. No afecta `case_name_indice` del CSV ni
+ningún campo analítico.
+**Fix propuesto:** usar el primer token de `nombres_indice` como límite
+dentro del catch_all anterior para identificar el inicio real de la carátula.
+Dependiente de B054 (separar catch_all anterior del posterior por posición).
+POC disponible en `scripts/auditoria/poc_b052v3.py` — 1 mejora, 0 regresiones
+sobre 11 casos testigo.
+**Estado del fix:** poc_validado. Pendiente integración con B054.
+**Referencias:** H030, H031, commit `27bf3d5`.
 
 ---
 
