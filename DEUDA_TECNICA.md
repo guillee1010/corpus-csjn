@@ -2363,3 +2363,62 @@ gramática del epílogo sobre corpus completo) antes de implementar.
 **Estado del fix:** no diseñado.
 **Referencias:** H030, M06.
 
+---
+### VIS001 — Clasificación robusta de catch_all_inicio en auditar_fallo
+**Componente:** auditor (`auditar_fallo.py`).
+**Origen:** sesión H032.
+**Causa raíz:** el primer `catch_all` de cada caso es residuo del caso
+anterior (epílogo arrastrado, firma del fallo previo). Hoy se distingue
+en el visor por posición (termina antes del primer span semántico), pero
+esta heurística falla cuando hay una firma arrastrada al inicio del bloque
+que el parser detecta como span semántico, o cuando `caratula_rel` es
+None (casos sin carátula detectada).
+**Solución de fondo:** implementar la clasificación en `auditar_fallo.py`
+usando `caratula_rel` como referencia principal, con fallback al primer
+span semántico, y emitir tipos explícitos `catch_all_inicio` /
+`catch_all_fin` en lugar de `catch_all` genérico. Requiere análisis
+cuidadoso de casos con dos fallos cortos en la misma página y casos
+con firma arrastrada al inicio del bloque.
+**Estado de verificación:** identificado, no verificado exhaustivamente.
+**Estado del fix:** no diseñado. Workaround activo en visor (posicional).
+**Referencias:** H031 (B054), H032.
+---
+### VIS002 — Tipificación de epílogo como span propio en auditar_fallo
+**Componente:** auditor / parser.
+**Origen:** sesión H032 (referenciado desde B054).
+**Nota:** este ítem complementa B054. La clasificación `catch_all_fin`
+como `epilogo` requiere primero resolver VIS001 (distinguir inicio/fin
+de forma robusta). Una vez resuelto VIS001, el `catch_all_fin` con señal
+`Recurso .* interpuesto por` puede tipificarse como `epilogo`.
+**Estado del fix:** bloqueado por VIS001.
+**Referencias:** B054, H032.
+---
+### VIS003 — Soporte de rango en --pagina de auditar_fallo
+**Componente:** auditor (`auditar_fallo.py`), CLI.
+**Origen:** sesión H032.
+**Causa raíz:** `--pagina` solo acepta lista comma-separated. Para
+auditar casos consecutivos hay que conocer las páginas válidas de
+antemano. Un rango `344-354` debería resolver automáticamente qué
+páginas de inicio existen en ese intervalo según el catálogo.
+**Fix propuesto:** en `_parse_paginas()`, detectar tokens con `-`,
+splitear en inicio/fin, filtrar contra `fallos_localizados.csv` las
+páginas válidas en ese rango. Sin cambios de lógica de auditoría.
+**Estado del fix:** no diseñado.
+**Referencias:** H032.
+---
+### VIS004 — Headers de página embebidos en contenido de spans (visor)
+**Componente:** visor (`visor_auditoria.py`).
+**Origen:** sesión H032.
+**Causa raíz:** el parser deja líneas de `header_pagina` dentro del
+texto de los spans semánticos (sumarios, cuerpos, votos). El visor
+los filtra con `_limpiar_headers_embebidos()` pero el filtro es
+heurístico (número de página, "FALLOS DE LA CORTE SUPREMA",
+"DE JUSTICIA DE LA NACIÓN"). Si aparecen variantes editoriales
+no contempladas en el regex, pasan sin filtrar.
+**Impacto en tesis:** leve inflación de `wc_considerando` y
+`wc_votos`. No afecta firma ni carátula.
+**Fix de fondo:** resolver en el parser, no en el visor.
+**Estado del fix:** workaround activo en visor. Fix de fondo
+bloqueado por M08 (refactorización arquitectónica).
+**Referencias:** H032, M08.
+---

@@ -3469,3 +3469,39 @@ Solo afecta al auditor — el parser usa `linea_inicio` directamente.
 **B054 — separación posicional trivial:**
 `linea_inicio` y `linea_fin_real` ya están disponibles. Todo lo que
 está antes de la carátula dentro del bloque es catch_
+
+---
+**Fecha:** 2026-05-17
+**Sesión:** H032
+### Objetivo
+Desarrollar `visor_auditoria.py`: herramienta de visualización compacta
+de los outputs de `auditar_fallo.py`. Mejoras menores a `auditar_fallo.py`.
+### Trabajo realizado
+- Diseño e implementación de `scripts/visor/visor_auditoria.py` desde cero.
+  Agrupa spans por tipo, silencia `header_pagina` y `catch_all_inicio` por
+  default, limpia headers de página embebidos dentro del contenido de spans.
+  Opciones: `--solo`, `--excluir`, `--incluir`, `--tomo`, `--pagina`,
+  `--con-alertas`, `--formato` (md/txt/csv), `--preview`, `--resumen`,
+  `--stats`, `--stdout`, `--output`.
+- Output default en `output/visor/<nombre>_vista.md` (crea directorio).
+- `auditar_fallo.py`: agrega `__version__ = "1.0.0"`, campo `Versión` y
+  `Seed` en encabezado del MD generado.
+- Reorganización de `output/auditoria/auditar_fallo/`: outputs viejos
+  movidos a `archivo/auditoria/auditar_fallo/` (de versión de script
+  desconocida). `.gitignore` actualizado.
+- Validación con diff pre/post versión: solo difieren `Generado` y
+  `Versión: 1.0.0` — sin regresiones.
+- Pruebas con múltiples auditorías reales (random + tomo/página).
+### Decisiones
+- `visor_auditoria.py` vive en `scripts/visor/` (no es pipeline),
+  con espejo en `output/visor/`.
+- `catch_all_inicio` se silencia en el visor por posición (termina antes
+  del primer span semántico), sin modificar `auditar_fallo.py`.
+- Clasificación robusta de `catch_all_inicio`/`catch_all_fin` en
+  `auditar_fallo.py` postergada — requiere análisis más profundo del
+  parser (ver DEUDA_TECNICA VIS001, VIS002).
+### Pendiente
+- Soporte de rango en `--pagina` (ej: `344-354`) — ver VIS003.
+- Clasificación robusta catch_all inicio/fin en auditar_fallo — ver VIS001.
+- Ningún fix al parser commiteado en esta sesión.
+---

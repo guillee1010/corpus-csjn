@@ -3,6 +3,20 @@
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
 ---
+## 2026-05-17 — visor_auditoria.py + auditar_fallo v1.0.0
+- `scripts/visor/visor_auditoria.py`: nuevo script de visualización
+  compacta de outputs de `auditar_fallo.py`. Agrupa spans por tipo,
+  silencia headers embebidos y `catch_all_inicio` por posición.
+  Opciones completas: `--solo`, `--excluir`, `--incluir`, `--tomo`,
+  `--pagina`, `--con-alertas`, `--formato` (md/txt/csv), `--preview`,
+  `--resumen`, `--stats`, `--stdout`, `--output`.
+  Output default: `output/visor/<nombre>_vista.md`.
+- `scripts/auditoria/auditar_fallo.py`: `__version__ = "1.0.0"`.
+  Encabezado MD ahora incluye `Versión` y `Seed` (cuando aplica).
+- `.gitignore`: agrega `archivo/auditoria/` y `output/visor/`.
+- Reorganización: outputs viejos de `output/auditoria/auditar_fallo/`
+  movidos a `archivo/auditoria/auditar_fallo/`.
+---
 
 ## 2026-05-16 — Fix B049 Var-A: concatenar carátula partida en `detectar_caratula` (H028)
 
