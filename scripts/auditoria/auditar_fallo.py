@@ -46,6 +46,8 @@ from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
+__version__ = "1.0.0"
+
 # ── Importar parser.py (fuente única de verdad para heurísticas) ──────────────
 
 # El script vive en scripts/auditoria/, parser.py vive en scripts/pipeline/.
@@ -1575,7 +1577,7 @@ def _render_caso(resultado, abs_offset_lines=True):
     return "\n".join(out)
 
 
-def _render_doc_completo(resultados, comando_args):
+def _render_doc_completo(resultados, comando_args, seed=None):
     """Renderiza la cabecera del MD + todos los casos separados por ---."""
     ts = datetime.now().strftime("%Y-%m-%d %H:%M")
     n_casos = len([r for r in resultados if "error" not in r])
@@ -1595,9 +1597,12 @@ def _render_doc_completo(resultados, comando_args):
     out = [
         "# Auditoría de fallos",
         f"Generado: {ts}",
+        f"Versión: {__version__}",
         f"Comando: `{comando_args}`",
         f"Casos auditados: {n_casos}" + (f" (errores: {n_errores})" if n_errores else ""),
     ]
+    if seed is not None:
+        out.append(f"Seed: {seed}")
     if estados_borde:
         # Orden estable: primero los más críticos, después los benignos
         orden = [
@@ -1732,7 +1737,11 @@ def main():
 
     # Renderizar
     cmd_str = " ".join(sys.argv[1:])
-    md = _render_doc_completo(resultados, cmd_str)
+    seed_efectivo = args.seed
+    if args.random and args.seed is None:
+        # Si fue random sin seed explícito, no hay seed reproducible — lo dejamos None
+        seed_efectivo = None
+    md = _render_doc_completo(resultados, cmd_str, seed=seed_efectivo)
 
     # Output
     if args.stdout:
