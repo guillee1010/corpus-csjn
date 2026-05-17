@@ -1150,6 +1150,54 @@ def primer_token_de_caratula(nombres_indice):
     return tokens[0] if tokens else ""
 
 
+# ── v18 Fase F: refinador de linea_inicio por título ─────────────────────────
+#
+# El localizador ancla linea_inicio en el header de página del .md, que
+# frecuentemente cae en medio de la página anterior e incluye residuo del
+# fallo previo (firma arrastrada, metadata editorial, representación letrada).
+# Este refinador recorta ese residuo buscando el título del caso como ancla
+# más precisa.
+#
+# Señal primaria : primer_token_de_caratula(nombres_indice) — token del título.
+# Señal secundaria: "Vistos los autos" — emite warning en status_localizacion.
+# Fallback final  : linea_inicio del catálogo sin cambios — emite warning.
+#
+# La búsqueda se restringe a las primeras MAX_LINEAS_BUSQUEDA_TITULO líneas
+# del bloque para no matchear citas del caso en el cuerpo del fallo.
+
+MAX_LINEAS_BUSQUEDA_TITULO = 50
+
+
+def refinar_inicio_por_titulo(bloque, nombres_indice):
+    """
+    Intenta refinar linea_inicio recortando residuo pre-título.
+
+    Devuelve (offset_recorte, ancla_usada) donde:
+      offset_recorte : int — líneas a recortar del inicio del bloque.
+                       0 si no hay refinamiento o título está en línea 0.
+      ancla_usada    : str — 'titulo' | 'vistos' | 'catalogo'
+
+    El llamador aplica:
+        linea_inicio += offset_recorte
+        bloque = bloque[offset_recorte:]
+    """
+    # ── Señal primaria: token del título ──────────────────────────────────────
+    token = primer_token_de_caratula(nombres_indice)
+    if token and len(token) >= 4:
+        pat = re.compile(r'\b' + re.escape(token) + r'\b', re.I)
+        for k, ln in enumerate(bloque[:MAX_LINEAS_BUSQUEDA_TITULO]):
+            if pat.search(ln):
+                return (k, 'titulo')
+
+    # ── Señal secundaria: "Vistos los autos" ─────────────────────────────────
+    for k, ln in enumerate(bloque[:MAX_LINEAS_BUSQUEDA_TITULO]):
+        if RE_VISTOS_LOS_AUTOS.match(ln):
+            return (k, 'vistos')
+
+    # ── Fallback: sin refinamiento ────────────────────────────────────────────
+    return (0, 'catalogo')
+
+
 def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
                       proximo_header_pagina, primer_token_siguiente):
     """
@@ -1386,6 +1434,21 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         if not bloque:
             continue
 
+        # ── v18 Fase F: refinar linea_inicio por título ──────────────────────
+        # Recorta residuo del fallo anterior incluido por el localizador
+        # (arranca desde header de página compartida). Señal primaria: token
+        # del título en nombres_indice. Secundaria: "Vistos los autos".
+        # Fallback: linea_inicio del catálogo sin cambios.
+        # ancla_inicio se propaga a status_localizacion para auditoría.
+        offset_titulo, ancla_inicio = refinar_inicio_por_titulo(
+            bloque, nombres_indice
+        )
+        if offset_titulo > 0:
+            linea_inicio = int(linea_inicio) + offset_titulo
+            bloque = bloque[offset_titulo:]
+            if not bloque:
+                continue
+
         # Detectar apertura clásica dentro del bloque (para apertura_tipo y
         # como referencia para find_case_name del cuerpo)
         apertura_tipo, apertura_rel = detectar_apertura_en_bloque(bloque)
@@ -1406,6 +1469,21 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                 status_loc_final = "ok_sin_marcador_apertura"
             else:
                 status_loc_final = status_loc + "_sin_marcador"
+        # v18 Fase F: registrar ancla de inicio para auditoría posterior.
+        # 'titulo'  → ancló por token del título (caso limpio, no modifica status)
+        # 'vistos'  → ancló por "Vistos los autos" (título no detectado en bloque)
+        # 'catalogo'→ sin refinamiento, usa linea_inicio del catálogo
+        if ancla_inicio == 'vistos':
+            if status_loc_final in ("ok", "ok_sin_marcador_apertura"):
+                status_loc_final = status_loc_final + "_ancla_vistos"
+            else:
+                status_loc_final = status_loc_final + "_ancla_vistos"
+        elif ancla_inicio == 'catalogo':
+            if status_loc_final in ("ok", "ok_sin_marcador_apertura"):
+                status_loc_final = status_loc_final + "_ancla_catalogo"
+            else:
+                status_loc_final = status_loc_final + "_ancla_catalogo"
+        # ancla_inicio == 'titulo': status_loc_final no cambia (caso limpio)
 
         # ── v17: detector de sumarios-con-link ───────────────────────────────
         # Si el bloque contiene el patrón "(*) Sentencia del ... Ver ...",
@@ -1725,21 +1803,83 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
 def cargar_localizados(ruta):
     """
     Carga fallos_localizados.csv. Devuelve lista de dicts.
-    Filtra los fallos con status='pagina_no_en_mapa' (no son procesables).
+
+    v18 Fase F: los fallos con status='pagina_no_en_mapa' ya no se descartan
+    automáticamente. Se intenta inferir su archivo .md y una linea_inicio
+    estimada desde los vecinos del mismo tomo. El refinador de título en
+    procesar_archivo corrige la linea_inicio en runtime buscando el título
+    del caso en el bloque estimado.
+
+    Si no hay ningún vecino con archivo conocido en el mismo tomo, el fallo
+    se descarta igual (sin archivo no hay bloque posible).
     """
     filas = []
     descartadas_sin_localizacion = 0
+    todas = []
     with open(ruta, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            if row["status"] == "pagina_no_en_mapa":
+            todas.append(row)
+
+    # Índice de vecinos con archivo y linea_inicio conocidos, por tomo.
+    # Cada entrada: (pagina_inicio_int, archivo, linea_inicio_int)
+    vecinos_por_tomo = {}
+    for row in todas:
+        if row.get("archivo") and row.get("linea_inicio"):
+            t = row["tomo"]
+            try:
+                p  = int(row["pagina_inicio"])
+                li = int(row["linea_inicio"])
+            except (ValueError, TypeError):
+                continue
+            vecinos_por_tomo.setdefault(t, []).append((p, row["archivo"], li))
+    for t in vecinos_por_tomo:
+        vecinos_por_tomo[t].sort()
+
+    for row in todas:
+        if row["status"] == "pagina_no_en_mapa":
+            # Inferir archivo y linea_inicio estimada desde vecinos del tomo
+            t = row["tomo"]
+            try:
+                p = int(row["pagina_inicio"])
+            except (ValueError, TypeError):
                 descartadas_sin_localizacion += 1
                 continue
-            # Validar que tenga linea_inicio (defensivo: no debería ocurrir si status != pagina_no_en_mapa)
-            if not row.get("linea_inicio"):
+            vecinos = vecinos_por_tomo.get(t, [])
+            # Vecino siguiente: primer vecino con pagina > p
+            sig_arch = None
+            sig_li   = None
+            for vp, va, vli in vecinos:
+                if vp > p:
+                    sig_arch = va
+                    sig_li   = vli
+                    break
+            # Si no hay siguiente, usar el anterior más cercano
+            if sig_arch is None:
+                for vp, va, vli in reversed(vecinos):
+                    if vp < p:
+                        sig_arch = va
+                        sig_li   = vli
+                        break
+            if sig_arch is None:
+                # Sin vecinos: imposible inferir archivo
                 descartadas_sin_localizacion += 1
                 continue
+            row = dict(row)  # no mutar el original
+            row["archivo"]      = sig_arch
+            # linea_inicio estimada: ventana de 200 líneas antes del vecino
+            # siguiente. El refinador de título la corrige en runtime.
+            row["linea_inicio"] = str(max(0, sig_li - 200))
+            row["linea_fin"]    = str(sig_li - 1)
             filas.append(row)
+            continue
+
+        # Casos normales: validar que tengan linea_inicio
+        if not row.get("linea_inicio"):
+            descartadas_sin_localizacion += 1
+            continue
+        filas.append(row)
+
     return filas, descartadas_sin_localizacion
 
 
