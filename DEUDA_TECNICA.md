@@ -2193,3 +2193,175 @@ no el cuerpo del fallo. Buscar en `Vistos los autos: "X"` introduce ruido
 por remisiones a otras causas y carátulas de recursos de hecho.
 `detectar_caratula` del auditor ya implementa esta estrategia correctamente
 y es el candidato natural a portar al parser como fuente primaria.
+
+
+### B052 — `refinar_inicio_por_titulo`: falso positivo en epílogo del fallo anterior
+
+**Componente:** parser.
+**Origen:** sesión H030, inspección auditoría postfix_fase_f_v2, caso `346_p885`.
+**Causa raíz:** `refinar_inicio_por_titulo()` busca `\btoken\b` del
+`nombres_indice` en las primeras 50 líneas del bloque. El epílogo del
+fallo anterior (que cae al inicio del bloque por página compartida)
+puede contener el mismo token si el apellido aparece en la
+representación letrada o en la carátula del caso siguiente que el
+fallo anterior menciona en su metadata de cierre.
+**Diagnóstico / evidencia:** `346_p885` (Wang, Dingjian): el token
+`Wang` matcheó en la línea `WANG, DINGJIAN c/ EN - M INTERIOR OP y V – DNM`
+que es la primera línea de la carátula de Wang incluida en el epílogo
+del fallo anterior. El refinador recortó correctamente hasta ahí, pero
+`detectar_caratula` del auditor tomó la segunda línea (`s/ Recurso
+directo DNM`) como carátula porque la primera quedó clasificada como
+catch_all.
+**Estado de verificación:** confirmado_caso_testigo.
+**Fix propuesto:** búsqueda probabilista con tokens distribuidos del
+`nombres_indice` (inicio + medio + final). Cada token que matchea en
+una ventana de 2-3 líneas contiguas suma peso; threshold para declarar
+match. Robusto a OCR, saltos de página, mayúsculas, variaciones
+editoriales. Implementar en sandbox con `--random 80 --seed 42`
+antes/después antes de commitear.
+**Estado del fix:** no diseñado.
+**Referencias:** H030, commit `27bf3d5`.
+
+---
+
+### B053 — Parser reimplementa lógica de segmentación del auditor
+
+**Componente:** parser / auditor.
+**Origen:** sesión H030, observación durante auditoría postfix.
+**Causa raíz:** `segmentar_bloque()` del auditor (carátula, sumarios,
+dictamen, cuerpo_mayoria, firma, votos, disidencias) fue construida
+iterativamente con inspección humana y produce segmentación más
+confiable que la lógica paralela del parser productivo. El parser
+reimplementa las mismas heurísticas de forma más cruda, sin el
+refinamiento acumulado del auditor.
+**Diagnóstico / evidencia:** comparación visual en auditorías H030 —
+el auditor detecta correctamente secciones que el parser procesa
+como ruido (epílogo en catch_all, carátulas partidas, dictamenes
+embebidos).
+**Impacto:** todos los campos analíticos del CSV (`wc_mayoria`,
+`wc_votos`, `wc_considerando`, `firma_raw`, `dictamen_presente`)
+son menos confiables de lo que serían si el parser consumiera
+`segmentar_bloque()`.
+**Estado de verificación:** confirmado_caso_testigo.
+**Fix propuesto:** refactorizar `procesar_archivo` para que llame a
+`segmentar_bloque()` del auditor como fuente de segmentación, en lugar
+de reimplementar. Requiere mover `segmentar_bloque()` a un módulo
+compartido (`scripts/pipeline/segmentador.py`) e importarlo desde
+ambos. Cambio arquitectónico — requiere planificación cuidadosa y
+validación exhaustiva.
+**Estado del fix:** no diseñado.
+**Referencias:** H030.
+
+---
+
+### B054 — Epílogo post-firma no tipificado (catch_all)
+
+**Componente:** parser / auditor.
+**Origen:** sesión H030, observación durante auditoría postfix.
+**Causa raíz:** el bloque post-firma de cada fallo contiene información
+analíticamente valiosa (representación letrada de cada parte, tribunal
+de origen, tribunales intervinientes) que hoy cae en `catch_all` porque
+ni el parser ni el auditor lo tipifican como span propio.
+**Diagnóstico / evidencia:** casos Buttice (329_p5368) y Andreani
+(329_p1301) auditados en H030 — el catch_all final tiene estructura
+consistente y delimitable.
+**Señal de inicio:** primera línea post-firma que matchea
+`Recurso .* interpuesto por` | `Traslado contestado por` |
+`Nombre de la actora` | `Nombre del actor`.
+**Señal de fin:** carátula del caso siguiente o fin de bloque.
+**Impacto:** tribunal de origen hoy se extrae desde el cuerpo del fallo
+(menos confiable); desde el epílogo sería más preciso. Representación
+letrada no se extrae en absoluto — datos para análisis de litigantes
+frecuentes.
+**Estado de verificación:** confirmado_caso_testigo.
+**Validador propuesto:** M06 (verificar persistencia editorial de la
+gramática del epílogo sobre corpus completo) antes de implementar.
+**Estado del fix:** no diseñado.
+**Referencias:** H030, M06.
+
+
+
+### B052 — `refinar_inicio_por_titulo`: falso positivo en epílogo del fallo anterior
+
+**Componente:** parser.
+**Origen:** sesión H030, inspección auditoría postfix_fase_f_v2, caso `346_p885`.
+**Causa raíz:** `refinar_inicio_por_titulo()` busca `\btoken\b` del
+`nombres_indice` en las primeras 50 líneas del bloque. El epílogo del
+fallo anterior (que cae al inicio del bloque por página compartida)
+puede contener el mismo token si el apellido aparece en la
+representación letrada o en la carátula del caso siguiente que el
+fallo anterior menciona en su metadata de cierre.
+**Diagnóstico / evidencia:** `346_p885` (Wang, Dingjian): el token
+`Wang` matcheó en la línea `WANG, DINGJIAN c/ EN - M INTERIOR OP y V – DNM`
+que es la primera línea de la carátula de Wang incluida en el epílogo
+del fallo anterior. El refinador recortó correctamente hasta ahí, pero
+`detectar_caratula` del auditor tomó la segunda línea (`s/ Recurso
+directo DNM`) como carátula porque la primera quedó clasificada como
+catch_all.
+**Estado de verificación:** confirmado_caso_testigo.
+**Fix propuesto:** búsqueda probabilista con tokens distribuidos del
+`nombres_indice` (inicio + medio + final). Cada token que matchea en
+una ventana de 2-3 líneas contiguas suma peso; threshold para declarar
+match. Robusto a OCR, saltos de página, mayúsculas, variaciones
+editoriales. Implementar en sandbox con `--random 80 --seed 42`
+antes/después antes de commitear.
+**Estado del fix:** no diseñado.
+**Referencias:** H030, commit `27bf3d5`.
+
+---
+
+### B053 — Parser reimplementa lógica de segmentación del auditor
+
+**Componente:** parser / auditor.
+**Origen:** sesión H030, observación durante auditoría postfix.
+**Causa raíz:** `segmentar_bloque()` del auditor (carátula, sumarios,
+dictamen, cuerpo_mayoria, firma, votos, disidencias) fue construida
+iterativamente con inspección humana y produce segmentación más
+confiable que la lógica paralela del parser productivo. El parser
+reimplementa las mismas heurísticas de forma más cruda, sin el
+refinamiento acumulado del auditor.
+**Diagnóstico / evidencia:** comparación visual en auditorías H030 —
+el auditor detecta correctamente secciones que el parser procesa
+como ruido (epílogo en catch_all, carátulas partidas, dictamenes
+embebidos).
+**Impacto:** todos los campos analíticos del CSV (`wc_mayoria`,
+`wc_votos`, `wc_considerando`, `firma_raw`, `dictamen_presente`)
+son menos confiables de lo que serían si el parser consumiera
+`segmentar_bloque()`.
+**Estado de verificación:** confirmado_caso_testigo.
+**Fix propuesto:** refactorizar `procesar_archivo` para que llame a
+`segmentar_bloque()` del auditor como fuente de segmentación, en lugar
+de reimplementar. Requiere mover `segmentar_bloque()` a un módulo
+compartido (`scripts/pipeline/segmentador.py`) e importarlo desde
+ambos. Cambio arquitectónico — requiere planificación cuidadosa y
+validación exhaustiva.
+**Estado del fix:** no diseñado.
+**Referencias:** H030.
+
+---
+
+### B054 — Epílogo post-firma no tipificado (catch_all)
+
+**Componente:** parser / auditor.
+**Origen:** sesión H030, observación durante auditoría postfix.
+**Causa raíz:** el bloque post-firma de cada fallo contiene información
+analíticamente valiosa (representación letrada de cada parte, tribunal
+de origen, tribunales intervinientes) que hoy cae en `catch_all` porque
+ni el parser ni el auditor lo tipifican como span propio.
+**Diagnóstico / evidencia:** casos Buttice (329_p5368) y Andreani
+(329_p1301) auditados en H030 — el catch_all final tiene estructura
+consistente y delimitable.
+**Señal de inicio:** primera línea post-firma que matchea
+`Recurso .* interpuesto por` | `Traslado contestado por` |
+`Nombre de la actora` | `Nombre del actor`.
+**Señal de fin:** carátula del caso siguiente o fin de bloque.
+**Impacto:** tribunal de origen hoy se extrae desde el cuerpo del fallo
+(menos confiable); desde el epílogo sería más preciso. Representación
+letrada no se extrae en absoluto — datos para análisis de litigantes
+frecuentes.
+**Estado de verificación:** confirmado_caso_testigo.
+**Validador propuesto:** M06 (verificar persistencia editorial de la
+gramática del epílogo sobre corpus completo) antes de implementar.
+**Estado del fix:** no diseñado.
+**Referencias:** H030, M06.
+

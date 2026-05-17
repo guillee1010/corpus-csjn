@@ -3154,3 +3154,285 @@ B049 Var-B, B050-quant, B051-quant, HN3'-quant — pasan a H030.
 - **Fase F (título como ancla)** — abierta, prioritaria H030.
 - **B049 Var-B** — abierta, H030.
 - **B050-quant, B051-quant, HN3'-quant** — abiertas, H030.
+
+
+## H030 — Fase F: refinador linea_inicio por título (B009)
+
+**Fecha:** 2026-05-16
+**Sesión:** H030 (continuación de H029)
+
+### Objetivo
+
+Portar `detectar_caratula` del auditor al parser como ancla de inicio
+de caso (Fase F). Resolver los 43 faltantes de B009 y reducir el residuo
+pre-título que contamina los bloques de todos los casos.
+
+### Diagnóstico previo a la implementación
+
+**Diagnóstico de los 43 faltantes (B009):**
+- Todos tienen `status=pagina_no_en_mapa`, `archivo=''`,
+  `linea_inicio=''` vacíos en `fallos_localizados.csv`.
+- Distribuidos en tomos 331, 332, 333, 334 (no solo 331 como se
+  creía). Confirmado con script diagnóstico.
+- `primer_token_de_caratula` matchea en el `.md` para 43/43 —
+  el título existe en el corpus, el localizador simplemente no
+  pudo anclarlos por página.
+- 6 tokens ambiguos (`Estado`, `Buenos`, `autos`, `E`, `Fiscal`,
+  `Banco`) — ambigüedad resuelta por ventana de vecinos.
+
+**Diagnóstico del residuo pre-título (sistémico):**
+- Script sobre muestra de 200 casos ok: 64.5% tienen residuo
+  pre-título (promedio 6.2 líneas). El localizador ancla en el
+  header de página compartida, que incluye epílogo del fallo anterior.
+- Script de cobertura de título en bloque: 89% de casos tienen el
+  token del título detectable en las primeras 60 líneas del bloque.
+- 11% sin título en bloque: fallos cortos sin sumarios editoriales
+  donde la carátula quedó en el bloque anterior.
+
+**Hallazgo arquitectónico:**
+El auditor segmenta mejor que el parser productivo. `segmentar_bloque()`
+del auditor (carátula, sumarios, dictamen, cuerpo, firma, epílogo)
+produce resultados más confiables que la lógica paralela del parser.
+A largo plazo el parser debería consumir `segmentar_bloque()` en lugar
+de reimplementar las heurísticas. Anotado como bug nuevo.
+
+**Hallazgo: epílogo como span propio:**
+El catch_all post-firma contiene información analíticamente valiosa
+(representación letrada, tribunal de origen, tribunales intervinientes).
+Su delimitación es precisa: empieza después de la firma con
+`Recurso ... interpuesto por` o `Traslado contestado por` o
+`Tribunal de origen`. Anotado como bug nuevo.
+
+### Implementación
+
+**Patch aplicado** (`27bf3d5`): cuatro cambios en `parser.py`:
+
+- **C1** — `refinar_inicio_por_titulo()`: función nueva que busca el
+  token del título en las primeras 50 líneas del bloque y recorta
+  el residuo pre-título. Señal secundaria: `RE_VISTOS_LOS_AUTOS`.
+  Fallback: `linea_inicio` del catálogo sin cambios.
+- **C2** — Llamada al refinador en `procesar_archivo` post construcción
+  de bloque, antes de `detectar_apertura_en_bloque`.
+- **C3** — `ancla_inicio` propagada a `status_localizacion`:
+  `ok` (título), `ok_ancla_vistos`, `ok_ancla_catalogo`.
+- **C4** — `cargar_localizados`: no descarta `pagina_no_en_mapa`,
+  infiere `archivo` y `linea_inicio` desde vecinos del mismo tomo.
+
+**Resultado de corrida completa del parser:**
+- Cobertura: 5819 → 5862 casos (+43 faltantes recuperados)
+- Votos: 21876 → 22489 (+613)
+- Status breakdown: `ok=4938`, `ok_ancla_catalogo=387`,
+  `ok_sin_marcador_apertura=330`, `ok_ancla_vistos=8`,
+  `pagina_no_en_mapa=14` (parcialmente recuperados), otros.
+
+**Resultado de auditoría (seed=42, n=80):**
+- Baseline: 2201 / 36208 líneas residuo (6.08%)
+- Postfix:  1055 / 29711 líneas residuo (3.55%)
+- Mejora: -52% en residuo absoluto, -2.53pp en porcentaje
+
+### Bugs identificados durante la sesión
+
+**Bug en `refinar_inicio_por_titulo` (B_nuevo — pendiente ID):**
+El refinador busca el token del título con `\btoken\b` en las
+primeras 50 líneas del bloque. Puede matchear en el epílogo del
+fallo anterior si el apellido aparece en la representación letrada
+o en la carátula del caso siguiente que el fallo anterior menciona
+como metadata de cierre. Caso testigo: `346_p885` (Wang) — el token
+`Wang` matcheó en la línea de carátula del caso Wang que el fallo
+anterior incluye en su epílogo, dejando la primera línea de la
+carátula en catch_all.
+
+Rediseño acordado: búsqueda probabilista con tokens distribuidos
+del `nombres_indice` (inicio + medio + final). Cada token que matchea
+en una ventana de 2-3 líneas suma peso; umbral de coincidencia para
+declarar match. Robusto a OCR, saltos de página, mayúsculas.
+Fix pendiente para H031.
+
+**Bug en `detectar_fin_real` (B_existente — ver B021):**
+Caso `342_p148`: `detectar_fin_real` cortó el bloque en línea 5949
+usando `caratula_siguiente` como pista, dejando el bloque con 11
+líneas (casi todo residuo). El fallo completo quedó sin cuerpo ni
+firma. Acumulación con `detectar_caratula` que tomó una línea de
+firma como carátula. Ambos bugs preexistentes, no introducidos por
+Fase F.
+
+**Bug arquitectónico: parser reimplementa lógica del auditor (B_nuevo):**
+`segmentar_bloque()` del auditor produce segmentación más confiable
+que la lógica del parser productivo. El parser debería consumir
+`segmentar_bloque()` como fuente canónica en lugar de reimplementar
+heurísticas paralelas. Impacto: todos los campos analíticos del CSV
+(`wc_mayoria`, `wc_votos`, `firma_raw`, etc.) son menos confiables
+que lo que el auditor produciría.
+
+**Hallazgo: epílogo como span propio (B_nuevo):**
+El catch_all post-firma contiene representación letrada y tribunal
+de origen — información analítica valiosa hoy no tipificada.
+Señal de inicio: `Recurso .* interpuesto por` | `Traslado contestado
+por` | `Nombre de` | `Tribunal de origen`. Señal de fin: carátula
+del caso siguiente o fin de bloque. Documentar y priorizar.
+
+### Pendientes que pasan a H031
+
+- Rediseño de `refinar_inicio_por_titulo` con tokens distribuidos
+- Verificación de que los 43 faltantes recuperados tienen datos
+  correctos en el CSV (auditoría caso por caso de los 43)
+- Diff formal baseline vs postfix sobre mismos 80 casos
+  (bloqueado por cambio de universo en C4)
+- B049 Var-B, B050-quant, B051-quant, HN3'-quant — sin abordar
+- Limpieza de archivos temporales: `test_fase_f/`, `diag*.py`,
+  `ver_zona.py`, `aplicar_patch_fase_f.py` → mover a lugar canónico
+
+### Commits
+
+- `27bf3d5` — feat(parser): Fase F — refinador linea_inicio por
+  titulo (B009)
+- CSV regenerados: pendiente commit (en stash)
+
+### Estado de fases
+
+- **Fase F** — aplicada parcialmente. Fix funciona para los 43
+  faltantes y reduce residuo global. Refinador necesita rediseño
+  para evitar falsos positivos. H031.
+- **B049 Var-B, B050-quant, B051-quant, HN3'-quant** — sin abordar,
+  pasan a H031.
+
+
+## H030 — Fase F: refinador linea_inicio por título (B009)
+
+**Fecha:** 2026-05-16
+**Sesión:** H030 (continuación de H029)
+
+### Objetivo
+
+Portar `detectar_caratula` del auditor al parser como ancla de inicio
+de caso (Fase F). Resolver los 43 faltantes de B009 y reducir el residuo
+pre-título que contamina los bloques de todos los casos.
+
+### Diagnóstico previo a la implementación
+
+**Diagnóstico de los 43 faltantes (B009):**
+- Todos tienen `status=pagina_no_en_mapa`, `archivo=''`,
+  `linea_inicio=''` vacíos en `fallos_localizados.csv`.
+- Distribuidos en tomos 331, 332, 333, 334 (no solo 331 como se
+  creía). Confirmado con script diagnóstico.
+- `primer_token_de_caratula` matchea en el `.md` para 43/43 —
+  el título existe en el corpus, el localizador simplemente no
+  pudo anclarlos por página.
+- 6 tokens ambiguos (`Estado`, `Buenos`, `autos`, `E`, `Fiscal`,
+  `Banco`) — ambigüedad resuelta por ventana de vecinos.
+
+**Diagnóstico del residuo pre-título (sistémico):**
+- Script sobre muestra de 200 casos ok: 64.5% tienen residuo
+  pre-título (promedio 6.2 líneas). El localizador ancla en el
+  header de página compartida, que incluye epílogo del fallo anterior.
+- Script de cobertura de título en bloque: 89% de casos tienen el
+  token del título detectable en las primeras 60 líneas del bloque.
+- 11% sin título en bloque: fallos cortos sin sumarios editoriales
+  donde la carátula quedó en el bloque anterior.
+
+**Hallazgo arquitectónico:**
+El auditor segmenta mejor que el parser productivo. `segmentar_bloque()`
+del auditor (carátula, sumarios, dictamen, cuerpo, firma, epílogo)
+produce resultados más confiables que la lógica paralela del parser.
+A largo plazo el parser debería consumir `segmentar_bloque()` en lugar
+de reimplementar las heurísticas. Anotado como bug nuevo.
+
+**Hallazgo: epílogo como span propio:**
+El catch_all post-firma contiene información analíticamente valiosa
+(representación letrada, tribunal de origen, tribunales intervinientes).
+Su delimitación es precisa: empieza después de la firma con
+`Recurso ... interpuesto por` o `Traslado contestado por` o
+`Tribunal de origen`. Anotado como bug nuevo.
+
+### Implementación
+
+**Patch aplicado** (`27bf3d5`): cuatro cambios en `parser.py`:
+
+- **C1** — `refinar_inicio_por_titulo()`: función nueva que busca el
+  token del título en las primeras 50 líneas del bloque y recorta
+  el residuo pre-título. Señal secundaria: `RE_VISTOS_LOS_AUTOS`.
+  Fallback: `linea_inicio` del catálogo sin cambios.
+- **C2** — Llamada al refinador en `procesar_archivo` post construcción
+  de bloque, antes de `detectar_apertura_en_bloque`.
+- **C3** — `ancla_inicio` propagada a `status_localizacion`:
+  `ok` (título), `ok_ancla_vistos`, `ok_ancla_catalogo`.
+- **C4** — `cargar_localizados`: no descarta `pagina_no_en_mapa`,
+  infiere `archivo` y `linea_inicio` desde vecinos del mismo tomo.
+
+**Resultado de corrida completa del parser:**
+- Cobertura: 5819 → 5862 casos (+43 faltantes recuperados)
+- Votos: 21876 → 22489 (+613)
+- Status breakdown: `ok=4938`, `ok_ancla_catalogo=387`,
+  `ok_sin_marcador_apertura=330`, `ok_ancla_vistos=8`,
+  `pagina_no_en_mapa=14` (parcialmente recuperados), otros.
+
+**Resultado de auditoría (seed=42, n=80):**
+- Baseline: 2201 / 36208 líneas residuo (6.08%)
+- Postfix:  1055 / 29711 líneas residuo (3.55%)
+- Mejora: -52% en residuo absoluto, -2.53pp en porcentaje
+
+### Bugs identificados durante la sesión
+
+**Bug en `refinar_inicio_por_titulo` (B_nuevo — pendiente ID):**
+El refinador busca el token del título con `\btoken\b` en las
+primeras 50 líneas del bloque. Puede matchear en el epílogo del
+fallo anterior si el apellido aparece en la representación letrada
+o en la carátula del caso siguiente que el fallo anterior menciona
+como metadata de cierre. Caso testigo: `346_p885` (Wang) — el token
+`Wang` matcheó en la línea de carátula del caso Wang que el fallo
+anterior incluye en su epílogo, dejando la primera línea de la
+carátula en catch_all.
+
+Rediseño acordado: búsqueda probabilista con tokens distribuidos
+del `nombres_indice` (inicio + medio + final). Cada token que matchea
+en una ventana de 2-3 líneas suma peso; umbral de coincidencia para
+declarar match. Robusto a OCR, saltos de página, mayúsculas.
+Fix pendiente para H031.
+
+**Bug en `detectar_fin_real` (B_existente — ver B021):**
+Caso `342_p148`: `detectar_fin_real` cortó el bloque en línea 5949
+usando `caratula_siguiente` como pista, dejando el bloque con 11
+líneas (casi todo residuo). El fallo completo quedó sin cuerpo ni
+firma. Acumulación con `detectar_caratula` que tomó una línea de
+firma como carátula. Ambos bugs preexistentes, no introducidos por
+Fase F.
+
+**Bug arquitectónico: parser reimplementa lógica del auditor (B_nuevo):**
+`segmentar_bloque()` del auditor produce segmentación más confiable
+que la lógica del parser productivo. El parser debería consumir
+`segmentar_bloque()` como fuente canónica en lugar de reimplementar
+heurísticas paralelas. Impacto: todos los campos analíticos del CSV
+(`wc_mayoria`, `wc_votos`, `firma_raw`, etc.) son menos confiables
+que lo que el auditor produciría.
+
+**Hallazgo: epílogo como span propio (B_nuevo):**
+El catch_all post-firma contiene representación letrada y tribunal
+de origen — información analítica valiosa hoy no tipificada.
+Señal de inicio: `Recurso .* interpuesto por` | `Traslado contestado
+por` | `Nombre de` | `Tribunal de origen`. Señal de fin: carátula
+del caso siguiente o fin de bloque. Documentar y priorizar.
+
+### Pendientes que pasan a H031
+
+- Rediseño de `refinar_inicio_por_titulo` con tokens distribuidos
+- Verificación de que los 43 faltantes recuperados tienen datos
+  correctos en el CSV (auditoría caso por caso de los 43)
+- Diff formal baseline vs postfix sobre mismos 80 casos
+  (bloqueado por cambio de universo en C4)
+- B049 Var-B, B050-quant, B051-quant, HN3'-quant — sin abordar
+- Limpieza de archivos temporales: `test_fase_f/`, `diag*.py`,
+  `ver_zona.py`, `aplicar_patch_fase_f.py` → mover a lugar canónico
+
+### Commits
+
+- `27bf3d5` — feat(parser): Fase F — refinador linea_inicio por
+  titulo (B009)
+- CSV regenerados: pendiente commit (en stash)
+
+### Estado de fases
+
+- **Fase F** — aplicada parcialmente. Fix funciona para los 43
+  faltantes y reduce residuo global. Refinador necesita rediseño
+  para evitar falsos positivos. H031.
+- **B049 Var-B, B050-quant, B051-quant, HN3'-quant** — sin abordar,
+  pasan a H031.
