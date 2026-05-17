@@ -2422,3 +2422,116 @@ no contempladas en el regex, pasan sin filtrar.
 bloqueado por M08 (refactorización arquitectónica).
 **Referencias:** H032, M08.
 ---
+---
+### B055 — Firma multilinea truncada cuando hay paréntesis en línea siguiente
+**Componente:** parser / auditor.
+**Origen:** sesión H032, auditoría de muestra de 80 casos.
+**Causa raíz:** el parser detecta la firma en la primera línea pero
+cuando el nombre de un ministro continúa en la línea siguiente entre
+paréntesis (`(en disidencia parcial)`, `(según su voto)`), esa línea
+cae en `catch_all`. Resultado: `firma_raw` truncada, `n_jueces`
+incorrecto en el CSV.
+**Diagnóstico / evidencia:** confirmado en múltiples casos:
+- `347_p178` (Perret): "Ricardo Luis Lorenzetti (en" en firma,
+  "disidencia parcial)— Rocio Alcala." en catch_all.
+- `348_p1540` (Guardia): "Horacio Rosatti — Carlos Fernando
+  Rosenkrantz — Ricardo Luis" en firma, "Lorenzetti (según su
+  voto)." en catch_all.
+- `333_p1254`: "Juan / Carlos Maqueda" partido por salto de línea.
+**Impacto:** `n_jueces` subestimado, `voting_pattern` potencialmente
+incorrecto, datos de composición del tribunal poco confiables en
+casos con votos o disidencias individuales.
+**Fix propuesto:** ampliar el span de firma para incluir la línea
+siguiente cuando la firma detectada termina con un nombre incompleto
+(sin punto final o sin separador `—`). Requiere análisis cuidadoso
+del regex de detección de firma en `parser.py`.
+**Estado de verificación:** confirmado_casos_testigo múltiples.
+**Estado del fix:** no diseñado.
+**Referencias:** H032, B054.
+---
+### B056 — Apertura de mayoría no detectada cuando hay residuo antes de "FALLO DE LA CORTE SUPREMA"
+**Componente:** parser / auditor.
+**Origen:** sesión H032, análisis de `344_p1695`.
+**Causa raíz:** cuando el bloque comienza con residuo del caso
+anterior (catch_all_inicio), `detectar_apertura_mayoria` no
+encuentra "FALLO DE LA CORTE SUPREMA" / "Vistos los autos" en la
+posición esperada porque el rango de búsqueda queda contaminado
+por los spans previos o porque el residuo desplaza la posición
+relativa del indicador.
+**Diagnóstico / evidencia:** `344_p1695` (Corvalán c/ Intercórdoba):
+el parser CSV tiene firma correcta (5 jueces, disidencia), pero el
+auditor no detecta cuerpo_mayoria ni firma. El bug es del auditor,
+no afecta el CSV productivo en este caso.
+**Impacto en auditor:** cuerpo_mayoria y firma caen en catch_all,
+dificultando la inspección visual. No confirmado impacto en CSV.
+**Estado de verificación:** confirmado_caso_testigo (auditor).
+**Estado del fix:** no diseñado. Requiere análisis de
+`detectar_apertura_mayoria()` en auditar_fallo.py.
+**Referencias:** H032, B057.
+---
+### B057 — Dictamen consume "FALLO DE LA CORTE SUPREMA" y cuerpo de mayoría cae en catch_all
+**Componente:** parser / auditor.
+**Origen:** sesión H032, análisis de `333_p1257`.
+**Causa raíz:** cuando el dictamen es largo y termina con la firma
+de la Procuradora justo antes de "FALLO DE LA CORTE SUPREMA",
+el span del dictamen incluye esa línea. `detectar_apertura_mayoria`
+busca después del dictamen y no encuentra nada — el cuerpo ya fue
+consumido. Resultado: cuerpo_mayoria cae en catch_all como dos
+spans separados ("Vistos los autos" y "Considerando").
+**Diagnóstico / evidencia:** `333_p1257` (El Trébol S.A.): dictamen
+(18880–19064, 185 líneas) incluye "FALLO DE LA CORTE SUPREMA" y
+"Buenos Aires, 3 de agosto de 2010". Catch_all tiene "Vistos los
+autos" (19065–19069) y "Considerando" (19073–19083).
+**Impacto:** wc_mayoria=0, cuerpo del fallo no extraído, datos de
+votación potencialmente incorrectos.
+**Estado de verificación:** confirmado_caso_testigo.
+**Fix propuesto:** en `detectar_dictamen()`, establecer como límite
+fin del dictamen la línea inmediatamente anterior a "FALLO DE LA
+CORTE SUPREMA" cuando este patrón aparece dentro del bloque del
+dictamen. Requiere validación con M06 antes de implementar.
+**Estado del fix:** no diseñado.
+**Referencias:** H032, B056.
+---
+### B058 — Pérdida de símbolo de grado (°) en numeración de considerandos
+**Componente:** visor / parser (encoding).
+**Origen:** sesión H032, caso testigo `329_p3546`.
+**Causa raíz:** el símbolo `°` en numeración ordinal (`1°`, `2°`)
+parece perderse en algún punto del pipeline, dejando solo el número.
+El filtro `_limpiar_headers_embebidos()` del visor tiene un regex
+`\d{1,4}` que podría estar eliminando líneas que son solo un número
+si el `°` ya se perdió antes. Requiere verificación contra el MD
+original y el PDF para determinar si el problema está en el corpus,
+el parser o el visor.
+**Diagnóstico / evidencia:** caso `329_p3546`, considerandos
+aparecen como `1` en lugar de `1°` en la vista del visor.
+**Impacto:** leve — cosmético en el visor, posible inflación mínima
+de wc si líneas de numeración se pierden.
+**Estado de verificación:** identificado, pendiente comparación
+MD original vs PDF.
+**Estado del fix:** no diseñado. Primera acción: ajustar regex de
+`_limpiar_headers_embebidos` de `\d{1,4}` a `\d{3,4}` para no
+eliminar números de 1-2 dígitos que podrían ser numeración de
+considerandos.
+**Referencias:** H032.
+---
+
+---
+
+## CHANGELOG.md — agregar antes de "Versiones anteriores del parser"
+
+(ya incluido en la primera parte de H032 — no agregar nueva entrada)
+
+---
+
+## NOTAS PARA LA SESIÓN SIGUIENTE
+
+Bugs documentados en H032 pendientes de fix:
+- B055 (firma multilinea con paréntesis) — impacto en CSV confirmado, prioridad alta
+- B056 (apertura mayoría perdida) — solo auditor por ahora, prioridad media
+- B057 (dictamen consume FALLO DE LA CORTE) — impacto en CSV probable, prioridad alta
+- B058 (pérdida de °) — prioridad baja, verificar primero
+
+Metodología acordada: auditar antes de fijar (M04).
+Casos testigo disponibles en output/auditoria/auditar_fallo/.
+
+---

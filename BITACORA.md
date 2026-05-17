@@ -3503,5 +3503,8 @@ de los outputs de `auditar_fallo.py`. Mejoras menores a `auditar_fallo.py`.
 ### Pendiente
 - Soporte de rango en `--pagina` (ej: `344-354`) — ver VIS003.
 - Clasificación robusta catch_all inicio/fin en auditar_fallo — ver VIS001.
+- Fix firma multilinea con paréntesis en parser — ver B055.
+- Fix apertura mayoría perdida cuando hay residuo antes de "FALLO DE LA CORTE SUPREMA" — ver B056.
+- Fix dictamen que consume "FALLO DE LA CORTE SUPREMA" — ver B057.
+- Fix pérdida de `°` en numeración de considerandos (encoding) — ver B058, caso testigo 329_p3546.
 - Ningún fix al parser commiteado en esta sesión.
----
