@@ -1733,6 +1733,56 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             por_ello_idx = _fallback_idx
             por_ello_text = _fallback_text
 
+        # -- H041 Tier 2: .search() mid-line para patrones seguros -----
+        # Solo se activa si Tier 1 no encontro NADA (ni validado ni fallback).
+        # Guardas: (a) patrones seguros, (b) fin de oracion antes del match,
+        #          (c) filtro argumental, (d) firma validada sin fallback.
+        if por_ello_idx is None:
+            _t2_pats = [
+                re.compile(r"Por ello[,.]?\s", re.I),
+                re.compile(r"Por lo expuesto\b", re.I),
+                re.compile(r"Por las razones\b", re.I),
+                re.compile(r"Por lo expresado\b", re.I),
+                re.compile(r"Por las consideraciones\b", re.I),
+                re.compile(r"Que[,]?\s+por\s+ello\b", re.I),
+                re.compile(r"O[íi]dos?\s+(el|la|los|las)\b", re.I),
+            ]
+            for k in range(inicio_busqueda, fin_busqueda):
+                if k in lineas_dictamen:
+                    continue
+                stripped = bloque[k].strip()
+                if not stripped:
+                    continue
+                _t2_hit = False
+                for _t2_pat in _t2_pats:
+                    _t2_m = _t2_pat.search(stripped)
+                    if _t2_m and _t2_m.start() > 0:
+                        # Guarda: fin de oracion antes del match
+                        _t2_pre = stripped[:_t2_m.start()].rstrip()
+                        if not (_t2_pre.endswith(".") or _t2_pre.endswith(")")
+                                or stripped.lstrip().startswith("Que")):
+                            continue
+                        # Guarda argumental
+                        _t2_rest = stripped[_t2_m.end():].strip()
+                        _t2_fw = _t2_rest.split()[0].lower().rstrip(",;") if _t2_rest.split() else ""
+                        if _t2_fw in POR_ELLO_ARGUMENTAL:
+                            continue
+                        # Firma validada obligatoria
+                        if any(linea_es_firma_de_juez(bloque[j])
+                               for j in range(k + 1, min(k + 41, len(bloque)))):
+                            chunk = []
+                            for m2 in range(k, min(k + 6, len(bloque))):
+                                chunk.append(bloque[m2])
+                                if bloque[m2].strip().endswith("."):
+                                    break
+                            por_ello_idx = k
+                            por_ello_text = " ".join(chunk).strip()
+                            _t2_hit = True
+                            break
+                if _t2_hit:
+                    break
+
+
         considerando_text = extraer_considerando(bloque, por_ello_idx, lineas_dictamen)
 
         outcome = classify_outcome(por_ello_text, considerando_text) if por_ello_text else "sin_dispositivo"
