@@ -3892,3 +3892,23 @@ post-H038.
 - 89 con dispositivo sin firma: clasificar sub-causas.
 - Actualizar DEUDA_TECNICA con conteos post-H039.
 - Limpiar output/diagnostico/H039/ (conservar solo diag_formato_detalle.md).
+
+### Validación post-H039: auditoría comparativa (18/5/2026)
+
+Corrida de validación para confirmar que los cambios acumulados
+(Fase F, B049, B052, variantes de dispositivo) no introdujeron
+regresiones en el parser.
+
+| Muestra | N | Baseline | Resultado |
+|---|---|---|---|
+| Casos individuales (archivo/, 08-09/05) | 7 | Pre-Fase F | 6 idénticos, 1 mejora |
+| 80 casos seed 2024 (17/05) | 80 | Pre-H039 | Idéntico |
+| 12 casos seed 891 (17/05) | 12 | Pre-H039 | Idéntico |
+| 5 casos seed 137 (17/05) | 5 | Pre-H039 | Idéntico |
+| **Total** | **104** | | **0 regresiones, 1 mejora** |
+
+Mejora detectada: `339_p1648` (B.C., J.G. c/ R.P.) — el catálogo
+viejo incluía 32 líneas de residuo del caso siguiente (DANNA);
+el nuevo las excluye correctamente.
+
+Outputs en `output/auditoria/auditar_fallo/compare_*.md` (no versionados).
