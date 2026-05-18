@@ -1659,8 +1659,17 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         else:
             fin_busqueda = len(bloque)
 
+        # ── Fix B059: forward con validación de firma ─────────────
+        # Busca el primer dispositivo que tenga firma de juez en las
+        # 40 líneas siguientes. Si ninguno tiene firma, usa el primero
+        # como fallback (= comportamiento pre-fix, sin regresión).
+        # Motivación: variantes como "en consecuencia", "de conformidad"
+        # matchean texto argumental antes del dispositivo real. El
+        # dispositivo real siempre tiene firma después.
         por_ello_idx = None
         por_ello_text = ""
+        _fallback_idx = None
+        _fallback_text = ""
         for k in range(inicio_busqueda, fin_busqueda):
             if k in lineas_dictamen:
                 continue
@@ -1669,14 +1678,23 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                 continue
             es_disp, tipo_disp = detectar_apertura_dispositivo(stripped)
             if es_disp:
-                por_ello_idx = k
                 chunk = []
                 for m2 in range(k, min(k + 6, len(bloque))):
                     chunk.append(bloque[m2])
                     if bloque[m2].strip().endswith("."):
                         break
-                por_ello_text = " ".join(chunk).strip()
-                break
+                candidate_text = " ".join(chunk).strip()
+                if _fallback_idx is None:
+                    _fallback_idx = k
+                    _fallback_text = candidate_text
+                if any(linea_es_firma_de_juez(bloque[j])
+                       for j in range(k + 1, min(k + 41, len(bloque)))):
+                    por_ello_idx = k
+                    por_ello_text = candidate_text
+                    break
+        if por_ello_idx is None and _fallback_idx is not None:
+            por_ello_idx = _fallback_idx
+            por_ello_text = _fallback_text
 
         considerando_text = extraer_considerando(bloque, por_ello_idx, lineas_dictamen)
 
