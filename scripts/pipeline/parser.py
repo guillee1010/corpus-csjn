@@ -1599,12 +1599,20 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                 lineas_dictamen.add(k)
                 continue
             elif en_dictamen:
-                lineas_dictamen.add(k)
-                if RE_FECHA_LINEA.match(stripped) and k > 5:
-                    prev = bloque[k - 1].strip() if k > 0 else ""
-                    if prev and len(prev) < 80:
-                        en_dictamen = False
-                continue
+                # Backstop: "FALLO/SENTENCIA DE LA CORTE SUPREMA" cierra
+                # el dictamen sin consumir la línea. Resuelve dictámenes
+                # largos donde len(prev) >= 80 impide el cierre por fecha.
+                if RE_APERTURA.match(stripped):
+                    en_dictamen = False
+                    # No agregar a lineas_dictamen, no continue:
+                    # la línea es la apertura del fallo, no del dictamen.
+                else:
+                    lineas_dictamen.add(k)
+                    if RE_FECHA_LINEA.match(stripped) and k > 5:
+                        prev = bloque[k - 1].strip() if k > 0 else ""
+                        if prev and len(prev) < 80:
+                            en_dictamen = False
+                    continue
 
             if RE_VOTO_HDR.match(stripped) or RE_DISID_HDR.match(stripped):
                 tipo = "voto" if RE_VOTO_HDR.match(stripped) else "disidencia"
