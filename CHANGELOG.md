@@ -2,6 +2,27 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+### 2026-05-18 — H038: Fix B059 forward con validación de firma
+
+**Fix:** en la búsqueda de dispositivo post-apertura, buscar el primer
+match de `detectar_apertura_dispositivo` que tenga `linea_es_firma_de_juez`
+en las 40 líneas siguientes. Si ningún match tiene firma, usa el primero
+como fallback (comportamiento pre-fix, sin regresión). Resuelve falsos
+positivos donde variantes débiles ("en consecuencia", "de conformidad",
+"por lo expuesto") matcheaban texto argumental antes del dispositivo real.
+
+**Impacto:** 279 casos recuperados (sin_firma 782 → 503). 0 regresiones.
+Cobertura firma: 86.3% → 91.2%.
+
+**Líneas modificadas:** `parser.py`, bloque de búsqueda de dispositivo
+(~línea 1662). 18 líneas reemplazan 8.
+
+**Estrategias evaluadas y descartadas:**
+- Reversa pura: 278 mejoras, 86 regresiones (dispositivos de votos/resoluciones secundarias).
+- Reversa desde inicio_votos_indiv: 146 mejoras, 8 regresiones.
+- Reversa desde votos + firma: 147 mejoras, 7 regresiones.
+- Forward + firma (elegida): 280 mejoras, 0 regresiones.
+
 ### 2026-05-18 — H036: Backstop dictamen con RE_APERTURA
 
 **Fix:** en el loop de detección de dictamen de `procesar_archivo`, si

@@ -7,10 +7,8 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-16 (sesión H029: B009 causa raíz
-confirmada — hojas complementarias + inicio de volumen; B046 Fase E
-ejecutada, hipótesis de bloque vacío sin testigo empírico, 43 faltantes
-explicados por B009; Fase F abierta — título como ancla).
+**Última actualización:** 2026-05-18 (sesión H038: fix B059 forward+firma,
+279 mejoras 0 regresiones; sin_firma 782 → 503; B013 cerrado).
 
 ---
 
@@ -46,14 +44,19 @@ a las hipótesis de la tesis (H1-H5).
 
 - **Catálogo:** 5862 entradas (v15).
 - **Universo procesable:** 19 tomos (329-349, exclusión metodológica de 335-336).
-- **Output parser productivo:** 5819 casos en `output/parser/csjn_casos.csv`
-  (Fix 1 aplicado, commit `2adda06`).
-- **Cobertura sobre catálogo:** 5819 / 5862 = **99,3%**.
-- **Fixes aplicados en sprint 2026-05-09:** §3.6.a `pg_fin+1`, §3.6.e Fase 1
-  (39 casos `pagina_fin_no_en_mapa` reasignados), §4.6.j `RE_APERTURA` doble
-  espacio (17/18 casos), Fix 1 (V1 como fuente primaria de `case_name_cuerpo`).
-- **Pendiente verificación post-sprint:** identificación caso-a-caso de los
-  32 oks que cambiaron de status post §3.6.a (eran XXI-v).
+- **Output parser productivo:** 5862 casos en `output/parser/csjn_casos.csv`
+  (incluye 160 `sumario_con_link`; 5702 fallos procesables).
+- **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV;
+  cobertura de firma = 91,2%).
+- **Sin firma:** 503 casos (post-fix B059 H038). Desglose residual:
+  ~223 truncamiento B1b, ~165 sin apertura B2, ~90 fallback B059
+  (single-match o firma no detectada), ~25 otros.
+- **Fixes aplicados:**
+  - Sprint 2026-05-09: §3.6.a `pg_fin+1`, §3.6.e Fase 1, §4.6.j
+    `RE_APERTURA` doble espacio, Fix 1 (V1 → `case_name_cuerpo`).
+  - H035: búsqueda anclada de dispositivo (B013, 302 prematuros).
+  - H036: backstop dictamen con RE_APERTURA (31 casos).
+  - H038: forward con validación de firma (B059, 279 casos).
 
 ---
 
@@ -626,17 +629,19 @@ loop principal "primera ocurrencia gana" (líneas 1554-1563). Variantes
 alternativas del dispositivo (`En consecuencia`, `Por los fundamentos`,
 etc.) matchean en cuerpo argumental antes del verdadero dispositivo.
 Cascadea a firma capturada de lugar incorrecto.
-**Diagnóstico / evidencia:** 234 casos identificados con
-`voting_pattern=sin_firma` o firma anómala.
-**Estado de verificación:** `confirmado_cuantificado` (234 casos).
-**Validador propuesto:** auditar caso Benedetti con `auditar_fallo.py`
-para confirmar mecanismo. Sample dirigido de N=5 sobre el cluster de 234
-para verificar que todos tienen el mismo patrón. Plan.
-**Estado del fix:** diseñado conceptualmente — cuatro opciones en XXI:
-A (variantes solo en mitad inferior del bloque), B (validar con verbos
-institucionales en línea siguiente), C (`Por ello` posterior como veto),
-D (combinación A+C). No aplicado.
-**Referencias cruzadas:** XXI-c. Sin §X.Y en PIPELINE. Sin ID histórico.
+**Diagnóstico / evidencia:** 234 casos originales → 302 prematuros
+(dispositivo antes de apertura) + 329 post-apertura (B059, dispositivo
+en texto argumental después de apertura).
+**Estado de verificación:** `confirmado_cuantificado`.
+**Estado del fix:** aplicado y validado en dos fases:
+  - **H035:** búsqueda anclada con cascada apertura_rel → dictamen_end+1 → 0.
+    Resuelve 302 prematuros. 0 regresiones.
+  - **H038:** forward con validación de firma (`linea_es_firma_de_juez` en
+    40 líneas). Primer match con firma gana; fallback al primero si ninguno
+    tiene firma. Resuelve 279 post-apertura (B059). 0 regresiones.
+    Estrategias descartadas: reversa pura (86 regresiones), reversa desde
+    votos (8), reversa+firma (7).
+**Referencias cruzadas:** XXI-c. BITACORA H035, H036, H038.
 
 ### B014 — `find_case_name` retrocede y captura citas del dictamen previo (fallback Fix 1)
 
@@ -2151,14 +2156,14 @@ canónicos actuales B0NN.
 
 ## Resumen ejecutivo
 
-- **Bugs cerrados:** 8 (B001-B008).
+- **Bugs cerrados:** 9 (B001-B008, B013).
 - **Bugs en validación:** 2 (B009 cuantificado pendiente fix, B010
   rediagnosticado pendiente fix).
-- **Bugs activos del pipeline (catálogo + cruzador + parser):** 31
-  (B011-B039, B048). De ellos:
+- **Bugs activos del pipeline (catálogo + cruzador + parser):** 30
+  (B011, B012, B014-B039, B048). De ellos:
   - 1 confirmado_cuantificado pendiente de aplicar fix de higiene (B028)
-  - ~14 confirmado_caso_testigo o confirmado_cuantificado (B011, B012,
-    B013, B014, B016, B017, B018, B019, B020, B021, B022, B023,
+  - ~13 confirmado_caso_testigo o confirmado_cuantificado (B011, B012,
+    B014, B016, B017, B018, B019, B020, B021, B022, B023,
     B035-B039, B048)
   - 1 sospecha_cardinal (B025)
   - 7 hipotesis_no_verificada — identificados leyendo código en XXI sin
@@ -2542,26 +2547,28 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
 
 ## NOTAS PARA LA SESIÓN SIGUIENTE
 
-### Fix commiteado H036 — Backstop dictamen con RE_APERTURA
-31 casos recuperados (813 → 782 sin_firma). CSV productivo pendiente
-de regenerar.
+### Fixes commiteados H036 + H038
+- H036: backstop dictamen con RE_APERTURA (31 casos, 813 → 782 sin_firma).
+- H038: forward con validación de firma (279 casos, 782 → 503 sin_firma).
+  CSV productivo regenerado.
 
-### Matriz pendiente post-H036
+### Matriz pendiente post-H038
 
-| # | Línea de trabajo | Casos | Riesgo | Dificultad | Dependencia | Recomendación |
-|---|-----------------|------:|--------|------------|-------------|---------------|
-| 1 | Formato no reconocido (B1a+A2) | 65 | bajo | baja | — | H037: auditar, agregar variantes |
-| 2 | B059 falso positivo (A1+A3) | 329 | medio | media | — | H037-38: evaluar búsqueda reversa vs filtro |
+| # | Línea de trabajo | Casos | Riesgo | Dificultad | Dependencia | Estado |
+|---|-----------------|------:|--------|------------|-------------|--------|
+| 1 | Formato no reconocido (B1a+A2) | 65 | bajo | baja | — | Pendiente: auditar patrones |
+| 2 | ~~B059 falso positivo (A1+A3)~~ | ~~329~~ | — | — | — | **Cerrado H038** |
 | 3 | Truncamiento fin_real (B1b) | 223 | alto | alta | M08 | Postergado: requiere dos zonas |
 | 4 | Sin apertura (B2) | 165 | medio | alta | M08 | Postergado: mismo dominio que B1b |
+| 5 | Fallback B059 (single-match/sin firma) | 90 | bajo | media | — | Nuevo: clasificar sub-causas |
 
 Concentración: tomos 329 (92), 330 (63), 339 (24).
 M08 resolvería B1b + B2 de raíz (~388 casos).
 
 ### Pendientes menores
-- B055 (firma partida) — pendiente post-B013 (29 "RICARDO LUIS" en desconocidos).
+- B055 (firma partida) — pendiente (30 "RICARDO LUIS" en desconocidos).
 - B056 (apertura mayoría perdida) — solo auditor.
 - B057 (dictamen consume FALLO DE LA CORTE) — parcialmente resuelto por backstop H036.
 - B058 (pérdida de °, regex visor) — prioridad baja.
+- 98 cambio_outcome del full pipeline H038: investigar si son mejoras o neutros.
 - Investigar n_jueces=11 y n_jueces=14.
-- Regenerar CSV productivo post-fix H036.

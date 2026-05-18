@@ -3759,3 +3759,59 @@ Fix de dictamen no cerrado (backstop RE_APERTURA).
 - Regenerar CSV productivo con el fix commiteado.
 - Actualizar DEUDA_TECNICA: cerrar fix dictamen, documentar categorías.
 
+---
+**Fecha:** 2026-05-18
+**Sesión:** H038
+### Objetivo
+Fix B059: falso positivo post-apertura. Variantes de dispositivo ("en
+consecuencia", "de conformidad", etc.) matchean texto argumental, no
+dispositivo real. 329 casos identificados en H036 (265 A1 + 59 A3 + 5
+expuestos por backstop).
+### Trabajo realizado
+- Diagnóstico con `diag_h038_b059.py`: para cada caso B059, buscar TODOS
+  los matches de dispositivo en la ventana y verificar presencia de firma
+  en 40 líneas. Hallazgo clave: 0/363 primeros matches tienen firma;
+  273/283 últimos matches sí tienen firma.
+- Evaluación de 4 estrategias con pipeline paralelo sobre 5702 fallos:
+  1. Reversa pura (desde fin_busqueda): 278 mejoras, 86 regresiones.
+     Causa: dispositivos de votos individuales o resoluciones secundarias.
+  2. Reversa desde inicio_votos_indiv: 146 mejoras, 8 regresiones.
+     Mejora el techo pero pierde casos sin votos detectados.
+  3. Reversa desde votos + validación firma: 147 mejoras, 7 regresiones.
+     Salva acordadas pero no resuelve múltiples resoluciones en mayoría.
+  4. Forward + validación firma: 280 mejoras, 0 regresiones. Elegida.
+- Fix aplicado en parser.py: forward con firma. Primer match con
+  `linea_es_firma_de_juez` en 40 líneas gana. Si ninguno tiene firma,
+  fallback al primer match (= comportamiento pre-fix).
+- Pipeline completo: 5862 casos, 0 errores. sin_firma 782 → 503.
+  Verificación CSV a CSV: 0 regresiones confirmadas.
+### Hallazgos principales
+- **La firma como discriminador perfecto de falso positivo:** en los 363
+  casos B059, 0 primeros matches tienen firma. En los ~5000 normales, el
+  primer match sí tiene firma. La señal es binaria y no requiere
+  heurísticas argumentales.
+- **La búsqueda reversa es peligrosa:** bloques con múltiples "Por ello"
+  en la zona de mayoría (resoluciones con puntos I, II, III; acordadas
+  embebidas) hacen que el último match no sea el principal. Forward con
+  validación es más robusto que reverse con cualquier guardia.
+- **90 casos fallback_sin_firma:** 90 casos donde ningún dispositivo tiene
+  firma en 40 líneas. Son los mismos 88 sin_cambio del diagnóstico parcial
+  (81 con un solo match, 7 con cambio de dispositivo pero sin firma).
+  Requieren fix separado (B055 firma partida, formatos no reconocidos).
+### Scripts generados
+- `diag_h038_b059.py` — diagnóstico: todos los matches por caso.
+- `pipeline_h038_reversa.py` — test reversa pura (descartada).
+- `pipeline_h038_full.py` — test reversa full 5702 (descartada).
+- `pipeline_h038_desde_votos.py` — test reversa desde votos (descartada).
+- `pipeline_h038_reversa_firma.py` — test reversa+firma (descartada).
+- `pipeline_h038_forward_firma.py` — test forward+firma (elegida).
+### Decisiones
+- Fix commiteado: forward con validación de firma.
+- CSV productivo actualizado (5862 casos, 503 sin_firma).
+- B059 cerrado como bug activo. 90 residuales son sub-problemas distintos.
+### Pendiente → H039
+- Actualizar DEUDA_TECNICA: cerrar B059, actualizar conteos.
+- 90 fallback_sin_firma: clasificar (¿B055? ¿formato? ¿single-match?).
+- Formato no reconocido (B1a 27 + A2 39): postergado de H037.
+- Investigar los 98 cambio_outcome del full pipeline.
+
