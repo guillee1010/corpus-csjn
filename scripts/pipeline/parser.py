@@ -1141,6 +1141,35 @@ def linea_es_firma_de_juez(linea):
     return False
 
 
+# ── H040: wrapper con guardas para Pista 2 de detectar_fin_real ──────────────
+#
+# linea_es_header_sumario matchea falsos positivos en la zona de firma:
+# líneas como "ARGIBAY (en disidencia)." pasan porque empiezan con ≥5
+# mayúsculas y terminan en punto. Las guardas excluyen firmas, calificadores,
+# headers de página y marcadores de apertura antes de aceptar el match.
+
+def linea_es_header_sumario_guardado(linea):
+    """linea_es_header_sumario + guardas de exclusión para Pista 2."""
+    if not linea_es_header_sumario(linea):
+        return False
+    s = linea.strip()
+    if linea_es_firma_de_juez(linea):
+        return False
+    if RE_CALIFICADOR.search(s):
+        return False
+    if RE_PAGE_HEADER.match(s):
+        return False
+    if RE_APERTURA.match(s):
+        return False
+    if RE_DICT_HDR.match(s):
+        return False
+    if s.upper().startswith("DICTAMEN"):
+        return False
+    if RE_HEADER_VOTO_DISIDENCIA.match(s):
+        return False
+    return True
+
+
 def primer_token_de_caratula(nombres_indice):
     """Extrae el primer apellido/nombre principal de nombres_indice."""
     if not nombres_indice:
@@ -1257,11 +1286,13 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
 
     # Pista 2: header de sumario nuevo. Búsqueda atrás solo en mitad inferior
     # del bloque para no confundir con sumarios del propio fallo X.
+    # H040: usa wrapper con guardas para excluir firmas, calificadores,
+    # headers de página y marcadores de apertura.
     mitad_bloque = li + (lfc - li) // 2
-    k = buscar_atras(linea_es_header_sumario, lfc, mitad_bloque)
+    k = buscar_atras(linea_es_header_sumario_guardado, lfc, mitad_bloque)
     if k is not None:
         return (k - 1, "fin_dentro_bloque", "sumario_siguiente")
-    k = buscar_adelante(linea_es_header_sumario, lfc + 1, limite_adelante)
+    k = buscar_adelante(linea_es_header_sumario_guardado, lfc + 1, limite_adelante)
     if k is not None:
         return (k - 1, "fin_extendido_pag_compartida", "sumario_siguiente")
 
