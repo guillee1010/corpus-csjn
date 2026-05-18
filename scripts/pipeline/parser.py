@@ -87,6 +87,12 @@ RE_DISPOSITIVO_VARIANTES = [
     ("en_su_merito",      re.compile(r"^En su m[ée]rito\b", re.I)),
     ("en_consecuencia",   re.compile(r"^En consecuencia\s*,?\s*\b", re.I)),
     ("atento_a",          re.compile(r"^Atento\s+(a\s+)?(que|lo|el)\b", re.I)),
+    # ── H039: variantes confirmadas empíricamente (24 mejoras, 0 regresiones) ──
+    ("por_lo_expresado",        re.compile(r"^Por lo expresado\b", re.I)),
+    ("por_las_razones",         re.compile(r"^Por las razones\b", re.I)),
+    ("por_las_consideraciones", re.compile(r"^Por las consideraciones\b", re.I)),
+    ("oido_el",                 re.compile(r"^O[íi]dos?\s+(el|la|los|las)\b", re.I)),
+    ("que_por_ello",            re.compile(r"^Que[,]?\s+por\s+ello\b", re.I)),
 ]
 
 def detectar_apertura_dispositivo(stripped_line):
