@@ -3815,3 +3815,80 @@ expuestos por backstop).
 - Formato no reconocido (B1a 27 + A2 39): postergado de H037.
 - Investigar los 98 cambio_outcome del full pipeline.
 
+---
+**Fecha:** 2026-05-18
+**Sesión:** H039
+### Objetivo
+Formato no reconocido: identificar y agregar variantes de dispositivo
+faltantes en RE_DISPOSITIVO_VARIANTES. Diagnóstico de los 503 sin_firma
+post-H038.
+
+### Trabajo realizado
+- Diagnóstico cuantitativo de los 503 sin_firma:
+  - 165 sin apertura (B2, bloqueado por M08).
+  - 249 sin_dispositivo con apertura → clasificados con `diag_h039_formato.py`:
+    77 B1a (formato no reconocido), 172 B1b (truncamiento).
+  - 89 con dispositivo sin firma (36 con outcome real, 53 fallback B059).
+- Inspección con `inspect_b1a.py` de 18 casos B1a: confirmadas líneas
+  de dispositivo al inicio de línea con variantes no cubiertas.
+- 9 variantes candidatas identificadas:
+  `por_lo_expresado`, `por_las_razones`, `por_las_consideraciones`,
+  `en_atencion`, `en_las_condiciones`, `por_lo_tanto`, `oido_el`,
+  `que_por_ello`, `que_de_conformidad`.
+- Pipeline paralelo forward+firma con 9 variantes: 33 mejoras, 0
+  regresiones firma, **67 regresiones outcome** (specific→otro).
+  Causa: `en_las_condiciones` (40), `por_lo_tanto` (17), `en_atencion` (17)
+  son frases argumentativas comunes que matchean antes del dispositivo real.
+- Pipeline paralelo con 6 variantes (sin las 3 peligrosas): 24 mejoras,
+  0 regresiones firma, 4 cambios outcome (3 de `que_de_conformidad`).
+- Pipeline paralelo reversa desde votos + 9 variantes: 33 mejoras, 0
+  regresiones firma, **193 cambios outcome**. Reversa descartada —
+  confirma hallazgo H038: múltiples "Por ello" en zona de mayoría hacen
+  que el último no sea el principal.
+- Fix final: 5 variantes seguras en forward+firma. Pipeline productivo:
+  22 mejoras, 0 regresiones. sin_firma 503 → 481. Commiteado.
+
+### Hallazgos principales
+- **Clasificación de los 249 sin_disp+apertura:** 77 B1a (31%) tienen
+  texto resolutivo que el parser no reconoce; 172 B1b (69%) están
+  genuinamente truncados. El grueso del problema (B1b + B2 = 337 casos)
+  requiere M08 (arquitectura de dos zonas).
+- **Variantes argumentativas vs dispositivo:** frases como "En las
+  condiciones expresadas", "Por lo tanto", "En atención a" son
+  dispositivo en ~30% de los casos pero argumentativas en ~70%. No sirven
+  para forward search. "Por lo expresado", "Por las razones expuestas",
+  "Oído el" son exclusivas del dispositivo.
+- **Reversa sigue siendo peor que forward:** 193 vs 67 cambios de outcome
+  con las mismas variantes. El último "Por ello" en la zona de mayoría
+  frecuentemente es una resolución accesoria (desestimación de queja,
+  intimación) y no el dispositivo principal.
+- **B055 expuesto:** "RICARDO LUIS" en desconocidos subió de 26 a 30.
+  Casos nuevos con dispositivo detectado exponen firma partida de
+  Lorenzetti.
+
+### Scripts generados (en scripts/diagnostico/H039/)
+- `diag_h039_formato.py` — clasificación B1a vs B1b de los 249 casos.
+- `inspect_b1a.py` — inspección de líneas opener en 18 casos candidatos.
+- `pipeline_h039_variantes.py` / `pipeline_h039_variantesv6.py` — pipelines
+  paralelos forward con 9/6 variantes.
+- `pipeline_h039_reversa.py` — pipeline paralelo reversa desde votos.
+- `analizar_cambios.py` — análisis de cambios de outcome nuevo vs productivo.
+
+### Artefactos en output/diagnostico/H039/
+- `diag_formato_detalle.md` — detalle caso por caso de B1a y B1b.
+- `csjn_casos_h039.csv`, `csjn_casos_votos_h039.csv` — último output paralelo.
+
+### Decisiones
+- Fix commiteado: 5 variantes seguras (`por_lo_expresado`, `por_las_razones`,
+  `por_las_consideraciones`, `oido_el`, `que_por_ello`).
+- Descartadas: `en_las_condiciones`, `por_lo_tanto`, `en_atencion` (falsas
+  en forward), `que_de_conformidad` (3 regresiones, 0 mejoras).
+- Reversa descartada (peor que forward en cambios de outcome).
+
+### Pendiente → H040
+- B055 (firma partida): 30 "RICARDO LUIS" en desconocidos. Prioridad alta.
+- B1b truncamiento (172 casos) + B2 sin apertura (165): requieren M08.
+- B1a residual (~53 casos): dispositivo mid-line por OCR line-wrap.
+- 89 con dispositivo sin firma: clasificar sub-causas.
+- Actualizar DEUDA_TECNICA con conteos post-H039.
+- Limpiar output/diagnostico/H039/ (conservar solo diag_formato_detalle.md).

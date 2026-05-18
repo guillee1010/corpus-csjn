@@ -2,6 +2,26 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+### 2026-05-18 — H039: 5 variantes de dispositivo nuevas
+**Fix:** agregar 5 variantes a `RE_DISPOSITIVO_VARIANTES` en `parser.py`:
+`por_lo_expresado`, `por_las_razones`, `por_las_consideraciones`,
+`oido_el`, `que_por_ello`. Son fórmulas institucionales de apertura del
+dispositivo no cubiertas por las variantes originales. Detectadas mediante
+diagnóstico de los 249 casos sin_dispositivo+con_apertura, clasificados
+en 77 B1a (formato no reconocido) y 172 B1b (truncamiento).
+**Impacto:** 22 casos recuperados (sin_firma 503 → 481). 0 regresiones.
+Cobertura firma: 91,2% → 91,6%.
+**Líneas modificadas:** `parser.py`, lista `RE_DISPOSITIVO_VARIANTES`
+(~línea 90). 6 líneas agregadas (5 variantes + comentario).
+**Variantes evaluadas y descartadas (falsos positivos en forward):**
+- `en_las_condiciones`: 40 regresiones outcome (frase argumentativa común).
+- `por_lo_tanto`: 17 regresiones outcome.
+- `en_atencion`: 17 regresiones outcome.
+- `que_de_conformidad`: 3 regresiones outcome, 0 mejoras.
+**Reversa desde votos testeada con 9 variantes:** 193 cambios outcome
+(peor que forward). Confirma hallazgo H038.
+
+
 ### 2026-05-18 — H038: Fix B059 forward con validación de firma
 
 **Fix:** en la búsqueda de dispositivo post-apertura, buscar el primer
