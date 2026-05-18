@@ -7,8 +7,8 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-18 (sesión H039: 5 variantes dispositivo,
-22 mejoras 0 regresiones; sin_firma 503 → 481; cobertura firma 91,6%).
+**Última actualización:** 2026-05-18 (sesión H040: guardas exclusión Pista 2,
+32 mejoras 0 regresiones; sin_firma 481 → 449; cobertura firma 92,1%).
 
 ---
 
@@ -47,9 +47,9 @@ a las hipótesis de la tesis (H1-H5).
 - **Output parser productivo:** 5862 casos en `output/parser/csjn_casos.csv`
   (incluye 160 `sumario_con_link`; 5702 fallos procesables).
 - **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV;
-  cobertura de firma = 91,6%).
-- **Sin firma:** 481 casos (post-fix H039). Desglose residual:
-  ~172 truncamiento B1b, ~165 sin apertura B2, ~89 con dispositivo
+  cobertura de firma = 92,1%).
+- **Sin firma:** 449 casos (post-fix H040). Desglose residual:
+  ~172 truncamiento B1b, ~165 sin apertura B2, ~57 con dispositivo
   sin firma (B055 + sub-causas), ~53 B1a residual (mid-line), ~2 otros.
 - **Fixes aplicados:**
   - Sprint 2026-05-09: §3.6.a `pg_fin+1`, §3.6.e Fase 1, §4.6.j
@@ -58,6 +58,7 @@ a las hipótesis de la tesis (H1-H5).
   - H036: backstop dictamen con RE_APERTURA (31 casos).
   - H038: forward con validación de firma (B059, 279 casos).
   - H039: 5 variantes dispositivo nuevas (22 casos).
+  - H040: guardas exclusión Pista 2 en detectar_fin_real (32 casos).
 
 ---
 
@@ -228,6 +229,28 @@ espacial es la dirección probable (`RE_CONSIDERANDO` permisivo + `.search()`
 dentro de ventana `(apertura, por_ello)` excluyendo span del dictamen),
 pero F013 enseñó que permisivo + .search() sin guard rompe fallos.
 **Referencias cruzadas:** PIPELINE §4.6.b. BITACORA H019. Sin ID histórico.
+
+---
+
+### B060 — Pista 2 de `detectar_fin_real` matchea firmas como sumarios
+
+**Componente:** parser.
+**Origen:** sesión H040. Diagnóstico comparativo parser vs auditor.
+**Causa raíz:** `detectar_fin_real` Pista 2 usaba `linea_es_header_sumario`
+sin guardas. Líneas de firma como "ARGIBAY (en disidencia)." matcheaban
+porque empiezan con ≥5 mayúsculas y terminan en punto. Al matchear,
+Pista 2 truncaba el bloque antes de la firma real del caso.
+**Diagnóstico / evidencia:** 124 falsos positivos en zona Pista 2 (38
+firma-related: 34 calificadores + 4 firma de juez). Comparación sobre
+1.239.055 líneas con `diagnostico_pista2_sumario.py`.
+**Fix aplicado:** 2026-05-18. Nueva función `linea_es_header_sumario_guardado`
+que excluye `linea_es_firma_de_juez`, `RE_CALIFICADOR`, `RE_PAGE_HEADER`,
+`RE_APERTURA`, `RE_DICT_HDR`, "DICTAMEN", `RE_HEADER_VOTO_DISIDENCIA`.
+32 mejoras, 0 regresiones. sin_firma 481 → 449. 169 n_jueces corregidos,
+55 voting_pattern enriquecidos.
+**Estado de verificación:** confirmado_cuantificado.
+**Estado del fix:** aplicado y validado (H040).
+**Referencias:** H040, B055 (JUECES_CONOCIDOS no matchea apellido solo).
 
 ---
 
@@ -2157,7 +2180,7 @@ canónicos actuales B0NN.
 
 ## Resumen ejecutivo
 
-- **Bugs cerrados:** 9 (B001-B008, B013).
+- **Bugs cerrados:** 10 (B001-B008, B013, B060).
 - **Bugs en validación:** 2 (B009 cuantificado pendiente fix, B010
   rediagnosticado pendiente fix).
 - **Bugs activos del pipeline (catálogo + cruzador + parser):** 30
@@ -2554,8 +2577,11 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
 - H039: 5 variantes dispositivo (22 casos, 503 → 481 sin_firma).
   Variantes: `por_lo_expresado`, `por_las_razones`, `por_las_consideraciones`,
   `oido_el`, `que_por_ello`.
+- H040: guardas exclusión Pista 2 (32 casos, 481 → 449 sin_firma).
+  B060: `linea_es_header_sumario_guardado` excluye firmas, calificadores,
+  headers de página, marcadores de apertura, headers de voto.
 
-### Matriz pendiente post-H039
+### Matriz pendiente post-H040
 
 | # | Línea de trabajo | Casos | Riesgo | Dificultad | Dependencia | Estado |
 |---|-----------------|------:|--------|------------|-------------|--------|
@@ -2563,7 +2589,7 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
 | 2 | ~~B059 falso positivo (A1+A3)~~ | ~~329~~ | — | — | — | **Cerrado H038** |
 | 3 | Truncamiento fin_real (B1b) | 172 | alto | alta | M08 | Postergado: requiere dos zonas |
 | 4 | Sin apertura (B2) | 165 | medio | alta | M08 | Postergado: mismo dominio que B1b |
-| 5 | Con dispositivo sin firma | 89 | bajo | media | B055 | Clasificar sub-causas |
+| 5 | ~~Con dispositivo sin firma~~ | ~~89~~ | — | — | — | **Parcial H040** (32 fijos, ~57 restantes) |
 
 M08 resolvería B1b + B2 de raíz (~337 casos).
 

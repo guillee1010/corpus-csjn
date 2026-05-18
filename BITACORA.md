@@ -3912,3 +3912,85 @@ viejo incluía 32 líneas de residuo del caso siguiente (DANNA);
 el nuevo las excluye correctamente.
 
 Outputs en `output/auditoria/auditar_fallo/compare_*.md` (no versionados).
+---
+**Fecha:** 2026-05-18
+**Sesión:** H040
+### Objetivo
+Reducir sin_firma refinando la detección de sumarios en `detectar_fin_real`
+(Pista 2). Diagnóstico comparativo de heurísticas parser vs auditor.
+
+### Trabajo realizado
+- Diagnóstico cuantitativo `diagnostico_pista2_sumario.py`: comparación
+  línea por línea de `linea_es_header_sumario` (parser) vs
+  `es_header_sumario_auditoria` (auditor) sobre 1.239.055 líneas en la
+  zona exacta donde `detectar_fin_real` aplica Pista 2.
+  - Match ambas funciones: 10.740 (sumarios reales).
+  - Solo parser: 124 falsos positivos (38 firma-related, 38 carátulas,
+    40 otro, 8 mayúsculas cortas).
+  - Solo auditor: 40.798 (15.676 headers de página, 13.955 mayúsculas
+    cortas, 5.719 marcadores apertura, 2.828 firmas, 2.404 carátulas).
+- Resumen desde `csjn_casos.csv`: de los 481 sin_firma, 405 usan
+  `pista_fin=caratula_siguiente`, 58 `sumario_siguiente`, 10
+  `marcador_apertura_siguiente`, 8 `firma_actual`.
+- POC `poc_pista2_guardas.py`: replica `detectar_fin_real` con wrapper
+  `linea_es_header_sumario_guardado` que excluye firmas, calificadores,
+  headers de página, marcadores de apertura y headers de voto/disidencia.
+  Resultado: 238 casos con cambio en `linea_fin_real` (233 extensiones,
+  5 contracciones). 34 sin_firma afectados (candidatos a mejora).
+- Pipeline paralelo `parser_h040_guardas.py` con fix aplicado. Validación
+  campo por campo contra CSV productivo:
+  - firma_raw: 170 cambios (32 sin_firma→con_firma, 138 firmas extendidas).
+  - outcome: 1 cambio (otro→revoca), 0 regresiones a sin_dispositivo.
+  - voting_pattern: 55 cambios (unanime→disidencia/segun_su_voto).
+  - n_jueces: 169 cambios (mayoritariamente al alza: 2→5, 5→7).
+  - 0 regresiones en ningún campo.
+- Fix aplicado a `parser.py` productivo. Pipeline re-corrido. Commiteado.
+
+### Hallazgos principales
+- **El auditor es bueno por arquitectura, no por heurística:** la función
+  `es_header_sumario_auditoria` del auditor matchea 40.798 líneas que NO
+  son sumarios en la zona Pista 2 (headers de página, firmas, aperturas).
+  El auditor funciona bien porque restringe espacialmente (sumarios solo
+  entre carátula y dictamen/apertura), no porque su heurística sea mejor.
+  Adoptar la heurística del auditor en Pista 2 empeoraría las cosas.
+- **El parser tiene pocos falsos positivos, pero letales:** 124 líneas
+  en total, pero 38 son firmas (ARGIBAY en disidencia, calificadores de
+  firma) que truncan bloques antes de la firma real. Fix: guardas de
+  exclusión, no cambio de heurística.
+- **JUECES_CONOCIDOS no matchea apellido solo:** "ARGIBAY (en disidencia)."
+  pasa `linea_es_header_sumario` pero no `linea_es_firma_de_juez` porque
+  el pattern exige nombre de pila ("carmen m. argibay"). La guarda
+  `RE_CALIFICADOR` es la que lo atrapa.
+- **Impacto en cascada:** las 32 firmas recuperadas arrastran 169
+  correcciones de n_jueces y 55 enriquecimientos de voting_pattern.
+  Un bloque más largo → más texto → más votos detectados → mejor análisis.
+- **B054 (epílogo) sigue presente:** las firmas recuperadas incluyen
+  epílogo pegado ("Tribunales que intervinieron con anterioridad: ...").
+  Comportamiento pre-existente, no introducido por este fix.
+
+### Scripts generados (en scripts/diagnostico/)
+- `diagnostico_pista2_sumario.py` — comparación cuantitativa parser vs auditor.
+- `poc_pista2_guardas.py` — POC de exclusión en Pista 2.
+- `parser_h040_guardas.py` — pipeline paralelo con fix.
+- `comparar_h040.py` — comparación antes/después por caso.
+
+### Artefactos en output/diagnostico/H040/
+- `csjn_casos.csv`, `csjn_casos_votos.csv` — output del pipeline con fix.
+- `snapshot_pre_h040_csjn_casos.csv`, `snapshot_pre_h040_csjn_casos_votos.csv`.
+- `pista2_sumario_detalle.csv` — detalle de falsos positivos.
+- `poc_pista2_guardas_cambios.csv` — cambios del POC.
+
+### Decisiones
+- Fix commiteado: guardas de exclusión en Pista 2 (`linea_es_header_sumario_guardado`).
+- Opción 1 (B055 "ricardo luis" en JUECES_CONOCIDOS) postergada — parche
+  nominal, no solución robusta.
+- Opción 2 (refinar heurística de sumario) descartada con datos — el
+  problema no es la heurística sino la falta de exclusiones.
+- Opción 5 (M08 dos zonas) sigue pendiente para B1b+B2 (337 casos).
+
+### Pendiente → H041
+- B055 (firma partida por salto de línea): 345 casos con firma truncada.
+- B1b truncamiento (172) + B2 sin apertura (165): requieren M08.
+- B1a residual (~53): dispositivo mid-line por OCR line-wrap.
+- Investigar 2 casos con wc_mayoria que baja mucho (329_p1307, 329_p4811).
+- Opción 4: diagnosticar los 89 con dispositivo sin firma.

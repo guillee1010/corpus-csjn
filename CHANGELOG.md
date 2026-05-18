@@ -2,6 +2,27 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+### 2026-05-18 — H040: guardas de exclusión en Pista 2 de detectar_fin_real
+**Fix:** en `detectar_fin_real`, Pista 2 usaba `linea_es_header_sumario`
+directamente para detectar el inicio del sumario del caso siguiente.
+La función matcheaba falsos positivos en la zona de firma: líneas como
+"ARGIBAY (en disidencia)." pasan porque empiezan con ≥5 mayúsculas y
+terminan en punto. Fix: nueva función `linea_es_header_sumario_guardado`
+que excluye firmas (`linea_es_firma_de_juez`), calificadores
+(`RE_CALIFICADOR`), headers de página (`RE_PAGE_HEADER`), marcadores de
+apertura (`RE_APERTURA`, `RE_DICT_HDR`, "DICTAMEN") y headers de
+voto/disidencia (`RE_HEADER_VOTO_DISIDENCIA`) antes de aceptar el match.
+**Diagnóstico previo:** comparación cuantitativa de `linea_es_header_sumario`
+(parser) vs `es_header_sumario_auditoria` (auditor) sobre 1.239.055 líneas
+en la zona Pista 2: 124 falsos positivos del parser (38 firma-related),
+10.740 matches reales compartidos. Scripts en `scripts/diagnostico/`.
+**Impacto:** 32 casos recuperados (sin_firma 481 → 449). 0 regresiones.
+Cobertura firma: 91.6% → 92.1%. 169 casos con n_jueces corregido,
+55 con voting_pattern enriquecido (unanime → disidencia/segun_su_voto).
+**Líneas modificadas:** `parser.py`, nueva función
+`linea_es_header_sumario_guardado` (~línea 1151, 20 líneas) + 2 líneas
+en `detectar_fin_real` Pista 2 (~líneas 1292-1295).
+
 ### 2026-05-18 — H039: 5 variantes de dispositivo nuevas
 **Fix:** agregar 5 variantes a `RE_DISPOSITIVO_VARIANTES` en `parser.py`:
 `por_lo_expresado`, `por_las_razones`, `por_las_consideraciones`,
