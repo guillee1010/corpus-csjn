@@ -1629,16 +1629,46 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                         header_completo += " " + sig
                 continue
 
-            if por_ello_idx is None:
-                es_disp, tipo_disp = detectar_apertura_dispositivo(stripped)
-                if es_disp:
-                    por_ello_idx = k
-                    chunk = []
-                    for m2 in range(k, min(k + 6, len(bloque))):
-                        chunk.append(bloque[m2])
-                        if bloque[m2].strip().endswith("."):
-                            break
-                    por_ello_text = " ".join(chunk).strip()
+            pass  # dispositivo detection moved to anchored search below
+
+        # ── Dispositivo: búsqueda anclada (emula auditor) ─────────────
+        # Cascada de inicio: apertura_rel → dictamen_end+1 → 0.
+        # Techo: inicio_votos_indiv (no buscar dentro de votos separados).
+        # Motivación: evita matchear dispositivos prematuros en residuo del
+        # fallo anterior o en el dictamen embebido (B013, 302 casos).
+        dictamen_end = max(lineas_dictamen) if lineas_dictamen else None
+        if apertura_rel is not None:
+            inicio_busqueda = apertura_rel
+        elif dictamen_end is not None:
+            inicio_busqueda = dictamen_end + 1
+        else:
+            inicio_busqueda = 0
+        # Techo: solo usar inicio_votos_indiv si los votos están después
+        # de la apertura (= son del fallo actual, no de residuo previo).
+        if (inicio_votos_indiv is not None
+                and (apertura_rel is None or inicio_votos_indiv > apertura_rel)):
+            fin_busqueda = inicio_votos_indiv
+        else:
+            fin_busqueda = len(bloque)
+
+        por_ello_idx = None
+        por_ello_text = ""
+        for k in range(inicio_busqueda, fin_busqueda):
+            if k in lineas_dictamen:
+                continue
+            stripped = bloque[k].strip()
+            if not stripped:
+                continue
+            es_disp, tipo_disp = detectar_apertura_dispositivo(stripped)
+            if es_disp:
+                por_ello_idx = k
+                chunk = []
+                for m2 in range(k, min(k + 6, len(bloque))):
+                    chunk.append(bloque[m2])
+                    if bloque[m2].strip().endswith("."):
+                        break
+                por_ello_text = " ".join(chunk).strip()
+                break
 
         considerando_text = extraer_considerando(bloque, por_ello_idx, lineas_dictamen)
 
