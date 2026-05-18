@@ -3547,3 +3547,215 @@ productivo para confirmar causa raíz y diseñar fix.
 - Agregar `Rocio Alcala` y otros conjueces recientes a `JUECES_CONOCIDOS`
   si se confirman más apariciones.
 - Auditar los 393 `sin_firma` sin `por_ello_text` para identificar causa.
+
+---
+**Fecha:** 2026-05-17
+**Sesión:** H034
+### Objetivo
+Fix B055 (firma truncada, 345 casos). Auditar mecanismo de corte,
+diseñar fix en `collect_firma_lines`, validar con pipeline paralelo.
+### Trabajo realizado
+- Diagnóstico con `diag_b055_muestra.py` (10 casos, sin seed):
+  confirmado que la firma está partida en 2-3 líneas físicas. En la
+  muestra el mecanismo de corte parecía ser línea vacía intercalada.
+- Comparación con `detectar_firma_mayoria` del auditor: el auditor
+  tolera una línea vacía y además usa `APELLIDOS_FIRMA_TITULARES`
+  como criterio de continuación — más permisivo que `JUECES_CONOCIDOS`.
+- Fix v1 (`parser_b055.py`): tolerar una línea vacía, cortar en dos
+  consecutivas. Sin efecto — 0 casos cambiados. Los mixtos del
+  comparador mostraban firma_raw acumulando texto editorial del caso
+  siguiente (regresión).
+- Fix v2 (`parser_b055_v2.py`): lookahead sobre línea siguiente a la
+  vacía — continuar solo si contiene apellido de `APELLIDOS_FIRMA`
+  (set nuevo de ~35 apellidos de titulares y conjueces). Sin efecto
+  en el pipeline — 0 diferencias en votos y casos respecto al
+  productivo.
+- Diagnóstico profundo: el fix funciona en test directo (`341_p971`
+  con `por_ello_idx` correcto → firma completa). El pipeline no lo
+  activa porque `por_ello_idx` es prematuro — toma el dispositivo
+  del residuo del caso anterior o del dictamen antes de llegar a la
+  firma real.
+- Análisis de muestra de 10 casos B055 con `por_ello_text` no vacío:
+  3 sin dispositivo en bloque (B013 variante), 4 OK en test directo
+  (CSV desactualizado), 3 truncados — los tres son B013 disfrazado.
+- Lectura completa de `procesar_archivo` en `parser.py`: confirmado
+  que el loop toma el primer `detectar_apertura_dispositivo` desde
+  el inicio del bloque sin ancla previa. El dictamen se excluye
+  correctamente por `en_dictamen`, pero el residuo del caso anterior
+  no se excluye si `refinar_inicio_por_titulo` falla.
+- Comparación arquitectónica parser vs auditor: el auditor usa
+  `RE_APERTURA` ("FALLO DE LA CORTE SUPREMA") como ancla antes de
+  buscar el dispositivo. El parser no usa esa ancla para `por_ello_idx`.
+### Hallazgos principales
+- **B055 y B013 están entrelazados:** el universo de 345 casos B055
+  es en su mayoría B013 subyacente — `por_ello_idx` prematuro hace
+  que `collect_firma_lines` arranque lejos de la firma real. B055
+  puro (firma partida sin dispositivo prematuro) es un universo
+  mucho menor, posiblemente cercano a cero casos reproducibles hoy.
+- **La diferencia arquitectónica clave:** el auditor ancla la búsqueda
+  del dispositivo en `apertura_mayoria` ("FALLO DE LA CORTE SUPREMA").
+  El parser no. Adoptar esa ancla en el parser resolvería B013 en la
+  mayoría de los casos y exppondría el universo real de B055 puro.
+- **Fix correcto de B013:** antes de buscar `por_ello_idx`, detectar
+  `RE_APERTURA` en el bloque y restringir la búsqueda del dispositivo
+  a `[apertura_rel, votos_inicio]`. Cambio de superficie acotada,
+  impacto potencialmente alto.
+### Scripts generados (en scripts/diagnostico/)
+- `diag_b055_muestra.py` — muestra líneas crudas de casos B055.
+- `parser_b055.py` — fix v1 (línea vacía, sin efecto).
+- `parser_b055_v2.py` — fix v2 (lookahead apellidos, sin efecto).
+- `comparar_b055.py` — diff caso a caso entre dos CSVs.
+### Artefactos en output/diagnostico/B055/
+- `csjn_casos_b055.csv` — output de parser_b055_v2.py (idéntico al productivo).
+- `csjn_casos_b055_votos.csv` — idem votos.
+### Decisiones
+- No se commitea ningún fix. Pipeline paralelo descartado como solución.
+- B055 se reclasifica: bug dependiente de B013. Fix de B055 puro
+  postergado hasta resolver B013.
+- B013 se eleva a prioridad máxima con dirección de fix documentada.
+### Pendiente → H035
+- Fix B013: usar `RE_APERTURA` como ancla para `por_ello_idx` en
+  `procesar_archivo`. Sesión dedicada, ciclo completo de validación.
+- Verificar universo B055 puro post-fix B013.
+- Limpiar `output/diagnostico/B055/` antes de H035.
+
+---
+**Fecha:** 2026-05-18
+**Sesión:** H035
+### Objetivo
+Fix B013 (dispositivo prematuro, ~479 casos sin firma). Búsqueda anclada
+de dispositivo emulando el approach del auditor.
+### Trabajo realizado
+- Cuantificación del universo B013: 479 casos sin firma con dispositivo.
+  461 con apertura_tipo (fix los cubre), 18 sin marcador.
+- Clasificación por texto del por_ello_text: 66 dictamen, 370
+  argumentativo ("otro"), 46 dispositivo aparentemente real.
+- Diagnóstico con `diag_b013_muestra.py` (12 casos): 6/12 prematuros
+  confirmados (por_ello_idx < apertura_rel), 2 falsos positivos
+  post-apertura, 2 sin marcador, 1 sin dispositivo, 1 anomalía.
+- Cuantificación completa con `diag_b013_cuantificar.py`: 302
+  prematuros (63%), 146 post-apertura (30%), 17 sin marcador, 8
+  sin localización, 6 sin dispositivo.
+- Pipeline paralelo `parser_b013.py` v1: cascada apertura_rel →
+  dictamen_end+1 → 0, techo en inicio_votos_indiv. Resultado:
+  227 mejoras, 139 regresiones. Causa: techo en inicio_votos_indiv
+  tomaba votos de residuo del fallo anterior.
+- Pipeline paralelo v2: techo solo cuando votos post-apertura.
+  Resultado: 268 mejoras, 95 regresiones aparentes.
+- Auditoría manual de 7 casos: las 57 regresion_perdio_firma son
+  fallos cortados por detectar_fin_real o datos del caso equivocado.
+  Las 27 regresion_menos_jueces son correcciones (firma del caso
+  correcto con menos firmantes). 0 regresiones reales confirmadas.
+- Validación estadística: n_jueces=1 baja de 114 a 21 (-82%);
+  n_jueces=5-7 suben +162 casos; outcome "otro" baja 152.
+- Commit del fix en parser.py.
+### Hallazgos principales
+- **B013 ⊂ problema de arquitectura:** el parser procesaba el bloque
+  de principio a fin sin ancla. El auditor ancla en "FALLO DE LA
+  CORTE SUPREMA" y busca el dispositivo solo post-apertura. Adoptar
+  esa arquitectura resuelve B013 y es la dirección correcta para
+  B055, B056, B057.
+- **146 falsos positivos post-apertura:** variantes de dispositivo
+  (`en_consecuencia`, `por_estas_razones`, etc.) matchean texto
+  argumentativo DENTRO del cuerpo del fallo, después de la apertura.
+  El fix B013 no los toca. Requieren tratamiento separado (filtro
+  argumental en variantes, o búsqueda desde el final del bloque).
+- **57 "regresiones" son exposición de bugs preexistentes:**
+  detectar_fin_real corta el bloque antes del dispositivo real
+  (fallo continúa en el gap), o el bloque contiene dos fallos y
+  el caso_id corresponde al fallo previo a la apertura.
+### Scripts generados (en scripts/diagnostico/)
+- `diag_b013_muestra.py` — diagnóstico de 12 casos testigo.
+- `diag_b013_cuantificar.py` — cuantificación completa prematuros
+  vs post-apertura sobre los 479 casos.
+- `parser_b013.py` — pipeline paralelo con fix (v2 final).
+- `comparar_b013.py` — diff caso a caso entre CSV productivo y fix.
+### Artefactos en output/diagnostico/B013/
+- `csjn_casos_b013.csv`, `csjn_casos_b013_votos.csv` — output del
+  pipeline paralelo v2.
+- `parser_b013_log.txt`, `parser_b013_log_v2.txt` — logs de corrida.
+- `comparar_b013_log.txt`, `comparar_b013_log_v2.txt` — logs del
+  comparador.
+### Decisiones
+- Fix commiteado en parser.py. Búsqueda anclada de dispositivo con
+  cascada apertura_rel → dictamen_end+1 → 0 y techo en votos
+  post-apertura.
+- B013 cerrado para el universo de 302 prematuros.
+- 146 post-apertura documentados como sub-problema separado.
+### Pendiente → H036
+- Análisis de los ~813 fallos sin firma (363 con_disp_sin_firma +
+  450 sin_dispositivo, excluidos 160 sumario_con_link).
+- Limpiar output/diagnostico/B013/ y scripts de diagnóstico.
+- Investigar n_jueces=11 y n_jueces=14 (posible B055 expuesto).
+- Actualizar DEUDA_TECNICA: cerrar B013, abrir sub-bug post-apertura.
+
+---
+**Fecha:** 2026-05-18
+**Sesión:** H036
+### Objetivo
+Diagnóstico y clasificación de los 813 fallos sin firma post-fix B013.
+Fix de dictamen no cerrado (backstop RE_APERTURA).
+### Trabajo realizado
+- Corrida del parser con fix B013 commiteado en H035 (CSV estaba desactualizado).
+- Clasificación de los 813 sin_firma en 6 categorías con evidencia empírica:
+  - A1 B059 falso positivo post-apertura: 265 casos.
+  - A2 dispositivo real, firma falla: 39 casos (concentrados en tomos 329-330).
+  - A3 outcome=otro + verbo resolutivo (ambiguos): 59 casos.
+  - B1a dispositivo embebido en considerando (page header mid-line): 27 casos.
+  - B1b sin frase de dispositivo (truncado por detectar_fin_real): 258 casos.
+  - B2 sin apertura: 165 casos.
+- Auditoría con auditar_fallo.py de muestras de 10 casos por categoría (seed=42).
+  Hallazgo: solapado_con_proximo dominante (7-10/10 en cada categoría).
+- Matriz de priorización por impacto, riesgo, robustez, escalabilidad, dificultad.
+- Debug con pipeline real en 4 casos testigo (329_p6064, 340_p812, 330_p1305,
+  348_p1569). Tres causas raíz confirmadas empíricamente:
+  1. Dictamen no cerrado: len(prev) >= 80 impide cierre por fecha, dictamen
+     consume FALLO DE LA CORTE SUPREMA y todo el cuerpo del fallo. Confirmado
+     en 348_p1569 (en_dict_final=True, 135 líneas consumidas).
+  2. Truncamiento por detectar_fin_real: dispositivo cae más allá de fin_real.
+     Confirmado en 329_p6064.
+  3. Formato no reconocido: dispositivo existe pero no matchea variantes.
+     Confirmado en 340_p812.
+- Fix: backstop en loop de dictamen — si en_dictamen=True y la línea matchea
+  RE_APERTURA ("FALLO/SENTENCIA DE LA CORTE SUPREMA"), cerrar dictamen sin
+  consumir la línea. 7 líneas de código.
+- Validación: pipeline paralelo (parser_h036.py), comparador caso a caso.
+  31 mejoras, 0 regresiones, 6 cambios neutros (5 B059 expuestos + 1
+  corrección de dispositivo). Verificación visual con mostrar_caso.py
+  sobre 331_p446: líneas del .md marcadas como dictamen antes vs libres ahora.
+- Commit del fix en parser.py.
+### Hallazgos principales
+- **Dictamen desbordado como causa raíz sistémica:** la heurística de cierre
+  del dictamen (fecha + prev < 80 chars) falla en dictámenes largos donde la
+  última línea del Procurador tiene >= 80 caracteres. Afecta ~31 casos
+  directamente, probablemente más en combinación con otras causas.
+- **813 sin_firma se descomponen en causas raíz independientes:** B059 (265),
+  truncamiento (258), sin apertura (165), formato (66), ambiguos (59).
+  No es un solo bug — son 4-5 problemas ortogonales.
+- **M08 (dos zonas) resolvería 388 casos:** B1b (223) + B2 (165) comparten
+  causa de fondo: el bloque no contiene el fallo completo. La migración a
+  arquitectura de dos zonas (dictamen ← FALLO DE LA CORTE → cuerpo) los
+  resolvería de raíz.
+### Scripts generados (en scripts/diagnostico/)
+- `diag_h036_sin_firma.py` — clasificación + auditoría de los 813.
+- `debug_h036.py` — debug con pipeline real en casos testigo.
+- `validar_fix.py` — comparador antes/después de los 31 mejorados.
+- `mostrar_caso.py` — evidencia visual línea por línea del fix.
+- `H036/parser_h036.py` — pipeline paralelo con fix.
+### Artefactos en output/diagnostico/H036/
+- `csjn_casos_h036.csv`, `csjn_casos_h036_votos.csv` — output del fix.
+- `diag_h036_resumen.txt` — resumen cuantitativo.
+- `ids_*.txt` — IDs de cada categoría.
+- `auditoria_*.md` — auditorías de muestras.
+### Decisiones
+- Fix commiteado: backstop dictamen con RE_APERTURA.
+- B059 (329 casos) postergado: impacto benigno (outcome=otro), fix complejo.
+- B1b + B2 (388 casos) postergados: requieren M08 (dos zonas).
+- Próxima sesión: fix formato no reconocido (65 casos) + clasificar A3 (60).
+### Pendiente → H037
+- Fix formato no reconocido (B1a 26 + A2 39): auditar patrones, agregar variantes.
+- Clasificar A3 (60 casos): ¿B059 sutiles o firma real?
+- Evaluar estrategia B059: búsqueda desde final vs filtro argumental.
+- Regenerar CSV productivo con el fix commiteado.
+- Actualizar DEUDA_TECNICA: cerrar fix dictamen, documentar categorías.
+

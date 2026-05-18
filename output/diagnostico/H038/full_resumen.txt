@@ -1,0 +1,103 @@
+======================================================================
+FULL PIPELINE H038 — Búsqueda reversa sobre todos los casos
+Procesados: 5702
+Errores: 0
+======================================================================
+
+── Resultado global ──
+  Idénticos (sin cambio):  5220
+  Con algún cambio:        482
+
+── Detalle de cambios ──
+   mejora_gano_firma: 278
+   cambio_outcome: 98
+  ⚠️ REGRESION_menos_jueces: 74
+   mejora_mas_jueces: 19
+  ⚠️ REGRESION_perdio_firma: 12
+   cambio_vp: 1
+
+── ⚠️  REGRESIONES (86) — detalle ──
+  329_p437: REGRESION_menos_jueces
+    vp: segun_su_voto→unanime, n: 6→1
+    old: Por ello se declara mal concedido el recurso extraordinario.
+    new: Por ello, se lo desestima. Notifíquese y, oportunamente, dev
+  329_p1343: REGRESION_menos_jueces
+    vp: unanime→unanime, n: 5→2
+    old: Por los fundamentos y conclusiones del dictamen del señor Pr
+    new: Por los fundamentos y conclusiones del dictamen del señor Pr
+  329_p1506: REGRESION_perdio_firma
+    vp: disidencia→sin_firma, n: 6→0
+    old: Por ello, se desestima el recurso de hecho planteado. Intíme
+    new: Por ello, se hace lugar parcialmente a la queja y al recurso
+  329_p1758: REGRESION_menos_jueces
+    vp: disidencia→unanime, n: 7→2
+    old: Por ello y oída la señora Procuradora Fiscal subrogante, se 
+    new: Por ello, con el alcance indicado, se declara formalmente ad
+  329_p2037: REGRESION_menos_jueces
+    vp: disidencia→unanime, n: 14→3
+    old: Por ello, se hace lugar a la queja, se declara procedente el
+    new: Por ello, se desestima la queja. Hágase saber al señor juez 
+  329_p2133: REGRESION_menos_jueces
+    vp: unanime→unanime, n: 7→5
+    old: Por los fundamentos y conclusiones del dictamen del señor Pr
+    new: De conformidad con lo dictaminado por la señora Procuradora 
+  329_p2179: REGRESION_perdio_firma
+    vp: disidencia→sin_firma, n: 6→0
+    old: Por ello, de conformidad con lo dictaminado por aquélla, se 
+    new: Por ello, y habiendo dictaminado por la señora Procuradora F
+  329_p2296: REGRESION_perdio_firma
+    vp: segun_su_voto→sin_firma, n: 5→0
+    old: Por ello, y lo concordemente dictaminado por el señor Procur
+    new: Por ello, se rechaza la solicitud de avocación. Hágase saber
+  329_p2450: REGRESION_menos_jueces
+    vp: disidencia→unanime, n: 6→1
+    old: Por ello, y concordantemente con lo dictaminado por el señor
+    new: Por ello, se desestima la queja. Intímese a la parte recurre
+  329_p2563: REGRESION_menos_jueces
+    vp: disidencia→unanime, n: 9→1
+    old: Por ello, de conformidad con lo dictaminado por aquélla, se 
+    new: Por ello, y oído la señora Procuradora Fiscal subrogante se 
+  329_p2606: REGRESION_menos_jueces
+    vp: disidencia→unanime, n: 7→2
+    old: Por ello, y habiendo dictaminado la señora Procuradora Fisca
+    new: Por ello, de conformidad con lo dictaminado por la señora Pr
+  329_p2949: REGRESION_perdio_firma
+    vp: unanime→sin_firma, n: 5→0
+    old: Por ello, se resuelve: I. Hacer lugar a la medida cautelar p
+    new: Por ello, Acordaron: 1j Incorporar como segundo párrafo del 
+  329_p3074: REGRESION_menos_jueces
+    vp: disidencia→unanime, n: 6→1
+    old: Por ello, oído el señor Procurador Fiscal subrogante, se res
+    new: Por ello, y de conformidad con el dictamen que antecede, se 
+  329_p3884: REGRESION_menos_jueces
+    vp: disidencia→unanime, n: 7→1
+    old: Por ello, se resuelve: I. Rechazar las excepciones opuestas 
+    new: Por ello, se resuelve: I. Rechazar las excepciones opuestas 
+  329_p3956: REGRESION_menos_jueces
+    vp: segun_su_voto→unanime, n: 7→1
+    old: Por ello, y conforme se declara procedente el recurso extrao
+    new: Por ello, y habiendo dictaminado la señora Procuradora Fisca
+  329_p4066: REGRESION_menos_jueces
+    vp: disidencia→unanime, n: 7→1
+    old: Por ello, oído el señor Procurador Fiscal se los desestiman.
+    new: Por lo expuesto, oído el señor Procurador Fiscal debe confir
+  329_p4360: REGRESION_menos_jueces
+    vp: disidencia→unanime, n: 6→1
+    old: Por ello, se desestima la queja. Declárase perdido el depósi
+    new: Por ello, se declara procedente la presentación directa y el
+  329_p4652: REGRESION_menos_jueces
+    vp: disidencia→unanime, n: 6→1
+    old: Por ello, se hace lugar a la queja, se declara procedente el
+    new: Por ello, oído el señor Procurador Fiscal subrogante, se des
+  329_p4682: REGRESION_menos_jueces
+    vp: disidencia→unanime, n: 7→2
+    old: Por ello, se hace lugar parcialmente a las quejas y a los re
+    new: Por ello, y oído el señor Procurador Fiscal subrogante, se d
+  329_p4811: REGRESION_menos_jueces
+    vp: unanime→unanime, n: 5→2
+    old: Por ello, se resuelve: Declarar que la presente causa es aje
+    new: en consecuencia, la oposición incoada por Lago Espejo Resort
+
+── Mejoras totales: 297 ──
+  mejora_gano_firma: 278
+  mejora_mas_jueces: 19

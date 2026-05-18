@@ -2,6 +2,29 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+### 2026-05-18 — H036: Backstop dictamen con RE_APERTURA
+
+**Fix:** en el loop de detección de dictamen de `procesar_archivo`, si
+`en_dictamen=True` y la línea matchea `RE_APERTURA` ("FALLO/SENTENCIA
+DE LA CORTE SUPREMA"), cerrar el dictamen sin consumir la línea. Evita
+que dictámenes largos (donde `len(prev) >= 80` impide el cierre por
+fecha) consuman el cuerpo del fallo, el dispositivo y la firma.
+
+**Impacto:** 31 casos recuperados (sin_firma 813 → 782). 0 regresiones.
+6 cambios neutros (5 B059 expuestos + 1 corrección de dispositivo).
+Cobertura firma: 85.7% → 86.3%.
+
+**Líneas modificadas:** `parser.py`, bloque `elif en_dictamen:` (~línea
+1601). 7 líneas de código agregadas.
+
+### Fix B013 — Búsqueda anclada de dispositivo (2026-05-18, H035)
+
+- Detección de dispositivo movida fuera del loop principal a pasada
+  separada con cascada: apertura_rel → dictamen_end+1 → 0.
+- Techo en inicio_votos_indiv solo cuando votos son post-apertura.
+- 302 casos con dispositivo prematuro resueltos.
+- n_jueces=1 baja de 114 a 21; n_jueces 5-7 sube +162 casos.
+
 ---
 ## 2026-05-17 — visor_auditoria.py + auditar_fallo v1.0.0
 - `scripts/visor/visor_auditoria.py`: nuevo script de visualización

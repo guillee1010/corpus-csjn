@@ -2539,3 +2539,29 @@ Metodología acordada: auditar antes de fijar (M04).
 Casos testigo disponibles en output/auditoria/auditar_fallo/.
 
 ---
+
+## NOTAS PARA LA SESIÓN SIGUIENTE
+
+### Fix commiteado H036 — Backstop dictamen con RE_APERTURA
+31 casos recuperados (813 → 782 sin_firma). CSV productivo pendiente
+de regenerar.
+
+### Matriz pendiente post-H036
+
+| # | Línea de trabajo | Casos | Riesgo | Dificultad | Dependencia | Recomendación |
+|---|-----------------|------:|--------|------------|-------------|---------------|
+| 1 | Formato no reconocido (B1a+A2) | 65 | bajo | baja | — | H037: auditar, agregar variantes |
+| 2 | B059 falso positivo (A1+A3) | 329 | medio | media | — | H037-38: evaluar búsqueda reversa vs filtro |
+| 3 | Truncamiento fin_real (B1b) | 223 | alto | alta | M08 | Postergado: requiere dos zonas |
+| 4 | Sin apertura (B2) | 165 | medio | alta | M08 | Postergado: mismo dominio que B1b |
+
+Concentración: tomos 329 (92), 330 (63), 339 (24).
+M08 resolvería B1b + B2 de raíz (~388 casos).
+
+### Pendientes menores
+- B055 (firma partida) — pendiente post-B013 (29 "RICARDO LUIS" en desconocidos).
+- B056 (apertura mayoría perdida) — solo auditor.
+- B057 (dictamen consume FALLO DE LA CORTE) — parcialmente resuelto por backstop H036.
+- B058 (pérdida de °, regex visor) — prioridad baja.
+- Investigar n_jueces=11 y n_jueces=14.
+- Regenerar CSV productivo post-fix H036.
