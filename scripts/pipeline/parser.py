@@ -1831,6 +1831,42 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                 if _t2_hit:
                     break
 
+        # ── Tier 3: retry sin techo (B067) ─────────────────────────────
+        # Si Tier 1+2 con techo no encontraron NADA, repetir sin techo.
+        # Solo se activa para casos que producirían sin_dispositivo.
+        # Motivación: 17 casos donde inicio_votos_indiv cae antes del
+        # dispositivo real (votos-antes-de-dispositivo o residuo no
+        # recortado). El techo deja el rango de búsqueda vacío.
+        # Validado: PoC B067, 0 regresiones, 17 mejoras, 16 sin_firma
+        # recuperados (422 → 406).
+        if por_ello_idx is None:
+            _t3_fb_idx = None
+            _t3_fb_text = ""
+            for k in range(inicio_busqueda, len(bloque)):
+                if k in lineas_dictamen:
+                    continue
+                stripped = bloque[k].strip()
+                if not stripped:
+                    continue
+                es_disp, tipo_disp = detectar_apertura_dispositivo(stripped)
+                if es_disp:
+                    chunk = []
+                    for m2 in range(k, min(k + 6, len(bloque))):
+                        chunk.append(bloque[m2])
+                        if bloque[m2].strip().endswith("."):
+                            break
+                    candidate_text = " ".join(chunk).strip()
+                    if _t3_fb_idx is None:
+                        _t3_fb_idx = k
+                        _t3_fb_text = candidate_text
+                    if any(linea_es_firma_de_juez(bloque[j])
+                           for j in range(k + 1, min(k + 41, len(bloque)))):
+                        por_ello_idx = k
+                        por_ello_text = candidate_text
+                        break
+            if por_ello_idx is None and _t3_fb_idx is not None:
+                por_ello_idx = _t3_fb_idx
+                por_ello_text = _t3_fb_text
 
         considerando_text = extraer_considerando(bloque, por_ello_idx, lineas_dictamen)
 
