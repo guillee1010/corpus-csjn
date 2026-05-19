@@ -325,6 +325,17 @@ JUECES_CONOCIDOS = [
     (re.compile(r"guillermo\s+yacobucci", re.I),                             "Yacobucci (conjuez)"),
     (re.compile(r"ana\s+mar[íi]a\s+figueroa", re.I),                         "Figueroa (conjuez)"),
     (re.compile(r"carlos\s+a\.?\s*mahiques", re.I),                          "Mahiques (conjuez)"),
+    # ── Conjueces B063 (H043) ───────────────────────────────────────────────
+    (re.compile(r"mar[íi]a\s+susana\s+najurieta", re.I),                    "Najurieta (conjuez)"),
+    (re.compile(r"roc[íi]o\s+alcal[áa]", re.I),                            "Alcalá (conjuez)"),
+    (re.compile(r"jorge\s+eduardo\s+mor[áa]n\.?", re.I),                   "Morán (conjuez)"),
+    (re.compile(r"mirta\s+(d\.?|delia)\s+tyden(?:\s+de\s+skanata)?", re.I), "Tyden de Skanata (conjuez)"),
+    (re.compile(r"juan\s+carlos\s+poclava\s+lafuente", re.I),              "Poclava Lafuente (conjuez)"),
+    (re.compile(r"carlos\s+(m\.?|mart[íi]n)\s+pereyra\s+gonz[áa]lez", re.I), "Pereyra González (conjuez)"),
+    (re.compile(r"jorge\s+ferro", re.I),                                    "Ferro (conjuez)"),
+    (re.compile(r"antonio\s+pacilio", re.I),                                "Pacilio (conjuez)"),
+    (re.compile(r"[áa]ngel\s+a\.?\s*arga[ñn]araz", re.I),                  "Argañaraz (conjuez)"),
+    (re.compile(r"rita\s+(mill|m\.?)\s+de\s+pereyra", re.I),               "Mill de Pereyra (conjuez)"),
 ]
 
 # Ruido OCR (segmentos que no son nombres). Incluimos apellidos de jueces
@@ -427,7 +438,7 @@ def hay_tribunal_interviniente(lines, idx_inicio, idx_fin):
 # ── Firma: collect_firma_lines + parse_firma ──────────────────────────────────
 
 _RE_FIRMA_COMPLETA = re.compile(
-    r"(?:rosatti|rosenkrantz|lorenzetti|maqueda|highton(?:\s+de\s+nolasco)?|nolasco|garc.a.mansilla|mansilla|zaffaroni|petracchi|argibay|fayt|boggiano|belluscio|l.pez|v.zquez|nazareno|rodr.guez\s+basavilbaso|basavilbaso|otero|cavallo|borinsky|catania|gemignani|petrone|ledesma|barroetave.a|hornos|leal\s+de\s+ibarra|catucci|cattucci|riggi|yacobucci|figueroa|mahiques)"
+    r"(?:rosatti|rosenkrantz|lorenzetti|maqueda|highton(?:\s+de\s+nolasco)?|nolasco|garc.a.mansilla|mansilla|zaffaroni|petracchi|argibay|fayt|boggiano|belluscio|l.pez|v.zquez|nazareno|rodr.guez\s+basavilbaso|basavilbaso|otero|cavallo|borinsky|catania|gemignani|petrone|ledesma|barroetave.a|hornos|leal\s+de\s+ibarra|catucci|cattucci|riggi|yacobucci|figueroa|mahiques|najurieta|alcal.a?|mor[áa]n|tyden(?:\s+de\s+skanata)?|skanata|poclava\s+lafuente|lafuente|pereyra\s+gonz.lez|ferro|pacilio|arga.araz|mill\s+de\s+pereyra)"
     r"(?:\s*\((?:en\s+disidencia|seg[uú]n\s+su\s+voto)(?:\s+parcial)?\))?\s*\.\s*$",
     re.I
 )
@@ -547,7 +558,7 @@ def parse_firma(firma_raw):
         })
 
     # 3. Ruido / desconocidos: segmentos que parecen nombres pero no matchearon
-    nombres_jueces = {j["nombre"].lower() for j in jueces_out}
+    nombres_jueces = {j["nombre"].split(" (")[0].lower() for j in jueces_out}
     for token in re.findall(r"[A-ZÁÉÍÓÚÑ][a-záéíóúñA-ZÁÉÍÓÚÑ\.\-]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñA-ZÁÉÍÓÚÑ\.\-]+){1,3}", firma_raw):
         token_l = token.lower()
         if any(r in token_l for r in RUIDO_FIRMA):
