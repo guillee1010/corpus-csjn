@@ -7,9 +7,9 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-19 (sesión H043: B063 conjueces +
-fix cosmético desconocidos, 40 mejoras 0 regresiones; sin_firma 422;
-votos 25603; inventario headers voto/disidencia).
+**Última actualización:** 2026-05-19 (sesión H044: B067 Tier 3
+dispositivo retry sin techo, 17 mejoras 0 regresiones; sin_firma 406;
+B066 invalidado — los ~85 "headers reales" eran citas jurisprudenciales).
 
 ---
 
@@ -49,10 +49,11 @@ a las hipótesis de la tesis (H1-H5).
   (incluye 160 `sumario_con_link`; 5702 fallos procesables).
 - **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV;
   cobertura de firma = 92,6%).
-- **Sin firma:** 422 casos (post-H043). Desglose residual:
+- **Sin firma:** 406 casos (post-H044). Desglose residual:
   ~172 truncamiento B1b, ~165 sin apertura B2, ~57 con dispositivo
   sin firma (B055 + sub-causas), ~42 B1a residual (mid-line), ~2 otros.
-  Nota: 3 casos ganaron firma por reconocimiento de conjueces B063.
+  Nota: 3 casos ganaron firma por reconocimiento de conjueces B063;
+  16 por Tier 3 retry sin techo B067.
 - **Votos:** 25603 filas (post-H043, +55 por conjueces B063).
 - **Jueces conocidos:** 38 entradas en JUECES_CONOCIDOS (28 + 10 conjueces B063).
 - **Fixes aplicados:**
@@ -66,6 +67,7 @@ a las hipótesis de la tesis (H1-H5).
   - H041: Tier 2 mid-line dispositivo search (11 casos).
   - H042: fix B055 firma truncada/contaminada (1262 mejoras calidad).
   - H043: B063 conjueces + fix cosmético desconocidos (40 mejoras, +55 votos).
+  - H044: B067 Tier 3 dispositivo retry sin techo (17 mejoras, sin_firma 422→406).
 
 ---
 
@@ -2635,31 +2637,49 @@ en firma con votos detectados. Loguear warnings.
 (ya incluido en la primera parte de H032 — no agregar nueva entrada)
 
 ---
-### B066 — RE_VOTO_HDR/RE_DISID_HDR: "juez/jueza" requiere filtro posicional
+### B066 — RE_VOTO_HDR/RE_DISID_HDR: "juez/jueza" requiere filtro posicional — INVALIDADO
 **Componente:** parser.
 **Origen:** sesión H043, Fase 2 inventario de headers.
-**Diagnóstico:** inventario del corpus muestra ~85 headers de voto/disidencia
-con "juez/jueza" en vez de "Señor Ministro". Agregar `Juez(?:as?|es)?` al
-grupo de títulos del regex causa **regresiones** (PoC validado):
-sin_firma subió 422→441, sin_dispositivo 380→400, votos bajaron 25603→25519.
-Causa: "voto del juez [NOMBRE]" aparece frecuentemente en texto corrido
-(considerandos, citas de jurisprudencia) y RE_VOTO_HDR.match() lo interpreta
-como header de sección, cortando el bloque y perdiendo firma/dispositivo.
-**Contraste:** "Señor Ministro" es formal y casi exclusivo de headers;
-"juez" es coloquial y ubicuo en el cuerpo del texto.
-**Fix requerido:** filtro posicional — buscar headers de voto/disidencia
-solo DESPUÉS del cierre de la mayoría (post-firma/post-dispositivo).
-Requiere M08 (arquitectura de dos zonas) o equivalente.
-**Impacto potencial:** ~85 headers si se resuelve el filtro posicional.
-**Otros gaps del inventario (misma dependencia posicional):**
-- "concurrente" (~12 headers)
-- "doctor/doctora" (~15 headers)
-- "vicepresidenta" (~3 headers)
-- multi-línea B061 (26 headers)
-- "Ampliación de fundamentos" (8 headers, tipo nuevo)
-**Estado de verificación:** confirmado_cuantificado (inventario completo).
-**Estado del fix:** no diseñado (requiere M08).
-**Referencias:** H043 Fase 2, inventario_headers_voto.py.
+**Diagnóstico original (H043):** inventario del corpus mostraba ~85 headers de
+voto/disidencia con "juez/jueza" en vez de "Señor Ministro". Agregar
+`Juez(?:as?|es)?` al grupo de títulos causaba regresiones (sin_firma +19).
+Se estimó que un filtro posicional (post-firma) resolvería el problema.
+**Invalidado (H044):** PoC empírico con regex ampliado restringido a zona
+post-firma encontró 42 matches, de los cuales **42/42 son citas
+jurisprudenciales** (texto corrido que cita votos de otros fallos), no
+headers de sección. Diagnóstico de contexto ±5 líneas confirmó que ninguno
+es un header real: todos son mid-sentence wraps de OCR tipo
+"(Fallos: 328:3312, voto del juez Fayt)." o "voto del juez Lorenzetti,
+considerando 6°).".
+Los ~85 "headers reales" del inventario H043 eran en su mayoría citas.
+**Impacto real:** ~0 headers recuperables con filtro posicional.
+**Estado:** INVALIDADO. No requiere fix. B066 no existe como fue estimado.
+**Lección:** validar matches contra contexto real antes de estimar impacto.
+**Referencias:** H043 Fase 2, H044 PoC A + diagnóstico de contexto.
+
+---
+### B067 — Tier 3: dispositivo retry sin techo ✓ CERRADO
+**Componente:** parser (`procesar_archivo`, búsqueda de dispositivo).
+**Origen:** sesión H044, análisis arquitectónico de segmentación por zonas.
+**Causa raíz:** cuando `inicio_votos_indiv` cae antes del dispositivo real
+(por votos-antes-de-dispositivo o residuo de fallo anterior no recortado),
+el techo trunca el rango de búsqueda del dispositivo. Tier 1 y Tier 2
+buscan en rango vacío o insuficiente, y el caso queda como sin_dispositivo
+aunque el "Por ello" existe más adelante en el bloque.
+**Diagnóstico (H044):** 22 casos con votos detectados + sin_dispositivo.
+17 de ellos tienen dispositivo presente pero bloqueado por el techo
+(TECHO_CORTA). Dos patrones: (a) bloque corto que es un voto individual
+completo (first_voto=1, apertura=None); (b) fallo largo con votos
+separados antes del dispositivo colectivo.
+**Fix aplicado (H044):** Tier 3 — si Tier 1+2 con techo no encuentran
+NADA (por_ello_idx queda None), repetir Tier 1 sin techo sobre todo el
+bloque. Solo se activa para casos que producirían sin_dispositivo.
+Incluye fallback (primer candidato sin firma validada) como Tier 1.
+**Resultado:** 17 mejoras (16 recuperan firma, 1 queda sin_firma).
+sin_firma: 422 → 406 (-16). 0 regresiones (validado full corpus, 5702).
+2 casos bonus no anticipados (347_p2160, 348_p728).
+**Estado del fix:** aplicado y validado (PoC B067 full corpus).
+**Referencias:** H044.
 
 ---
 
@@ -2670,7 +2690,7 @@ Bugs documentados en H032 pendientes de fix:
 - B056 (apertura mayoría perdida) — solo auditor por ahora, prioridad media
 - B057 (dictamen consume FALLO DE LA CORTE) — parcialmente resuelto por backstop H036
 - B058 (pérdida de °) — prioridad baja, verificar primero
-- B061-B065 — documentados H042, ver Pendientes menores. B063 y B064 cerrados H043. B066 nuevo.
+- ~~B063 y B064 cerrados H043.~~ B066 invalidado H044. B067 cerrado H044.
 
 Metodología acordada: auditar antes de fijar (M04).
 Casos testigo disponibles en output/auditoria/auditar_fallo/.
@@ -2696,6 +2716,11 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
   Commit `e258f66`. sin_firma 425 (sin cambio — fix de calidad, no cobertura).
 - H043: B063 conjueces + fix cosmético desconocidos (40 mejoras, +55 votos).
   Commit `8a2558e`. sin_firma 425→422. Inventario headers: B066 nuevo.
+- H044: B067 Tier 3 dispositivo retry sin techo (17 mejoras, 0 regresiones).
+  sin_firma 422→406. B066 invalidado (42/42 matches eran citas, no headers).
+  Hallazgo empírico: 12% del corpus tiene votos-antes-de-dispositivo.
+  Análisis arquitectónico: Opción D (reordenamiento) invalidada por estructura
+  del corpus; firma_end funciona (92.6% cobertura, p50=7 líneas).
 
 ### Matriz pendiente post-H040
 
@@ -2719,7 +2744,8 @@ M08 resolvería B1b + B2 de raíz (~337 casos).
 - ~~B063 (conjueces faltantes)~~ — **cerrado H043** (commit `8a2558e`).
 - ~~B064 (Otero encoding)~~ — **cerrado H043** (era bug cosmético, no encoding).
 - B065 (validación firma↔votos) — diagnóstico. Prioridad baja.
-- B066 (juez/jueza en headers) — requiere M08. Bloqueado.
+- B066 (juez/jueza en headers) — **INVALIDADO H044** (42/42 eran citas).
+- ~~B067 (Tier 3 dispositivo sin techo)~~ — **cerrado H044** (17 mejoras, 422→406).
 - Variantes descartadas H039 (`en_las_condiciones`, `por_lo_tanto`, `en_atencion`,
   `que_de_conformidad`): Tier 2 implementado en H041 pero estas variantes siguen
   excluidas (argumentales incluso con firma validada + guarda de contexto).

@@ -4294,3 +4294,113 @@ bloqueado por M08 (arquitectura de dos zonas).
 - Desconocidos residuales: Estado Nacional (45), Fisco Nacional (21)
   son post-firma leaking. Truncados: Ricardo Luis (Lorenzetti),
   CARMEN M. (Argibay), Manuel José García (García Mansilla).
+
+
+# PROMPT H044
+
+## H044 — Análisis arquitectónico de segmentación por zonas + B067
+
+**Sesión:** H044
+**Fecha:** 2026-05-19
+**Objetivo original:** análisis arquitectónico puro — entender cómo
+segmentan parser y auditor, identificar delimitadores robustos para zonas,
+diseñar incorporación de segmentación sin reescritura total.
+**Resultado:** análisis completado + hallazgo empírico que invalidó B066 +
+fix B067 (17 mejoras, sin_firma 422→406).
+
+### Fase 1 — Mapeo de segmentación parser vs auditor
+
+Recorrido completo de `procesar_archivo()` (parser) y `segmentar_bloque()`
+(auditor). Documentado el grafo de dependencias:
+
+**Parser:** loop único → dictamen + votos(narrow) → dispositivo(anchored,
+techo=inicio_votos_indiv) → firma(collect_firma_lines) → analítica.
+Dependencia circular: votos → techo → dispositivo → firma → (se querría
+votos ampliado post-firma).
+
+**Auditor:** pasos independientes modulares. Detecta dictamen, apertura,
+votos, por_ello, firma como funciones separadas con scope restringido.
+PERO: `detectar_votos_y_disidencias()` también busca en todo el bloque
+(misma limitación que el parser, solo que no causa problemas con la
+regex narrow actual).
+
+### Fase 2 — Evaluación de opciones de diseño
+
+Cuatro opciones evaluadas:
+
+| Opción | Idea | Resultado |
+|--------|------|-----------|
+| A — Post-firma aditivo | Agregar scan ampliado post-firma | PoC: 42 matches, 42/42 citas. Beneficio ~0 |
+| B — Two-pass | Separar loop en dos pasadas | No implementado, riesgo medio |
+| C — Auditor portado | Reescribir procesar_archivo como segmentar_bloque | Objetivo final, 4-6 sesiones |
+| D — Reordenado | Pre-computar firma_lines, mover votos post-firma | **Invalidado**: 12% del corpus tiene votos-antes-de-dispositivo |
+
+### Fase 3 — Hallazgo empírico: votos-antes-de-dispositivo
+
+El PoC D reveló que 669/5702 casos (11.7%) tienen headers de voto/disidencia
+ANTES de `firma_end`. Inspección confirmó que es una variante estructural
+real del corpus (especialmente tomos 329-332): los votos individuales se
+redactan antes del dispositivo colectivo y la firma de la mayoría.
+
+Consecuencia: la premisa "votos siempre post-firma" es falsa. Cualquier
+diseño de segmentación debe contemplar ambas variantes.
+
+### Fase 4 — Invalidación de B066
+
+El PoC A encontró 42 matches de regex ampliado (`juez/jueza/doctor`)
+restringido a zona post-firma. Diagnóstico de contexto (±5 líneas) reveló:
+
+- **42/42 son citas jurisprudenciales**, no headers de sección
+- Patrón típico: `"(Fallos: 328:3312, voto del juez Fayt)."` wrapeado
+  por OCR al inicio de línea
+- 1 clasificado como "HEADER REAL" por el detector automático era también
+  cita (referencia a considerandos de otro voto, no inicio de sección)
+
+Los ~85 "headers reales" del inventario H043 eran en su mayoría citas
+clasificadas por inspección superficial. B066 no existe como fue estimado.
+
+### Fase 5 — Descubrimiento y fix de B067 (TECHO_CORTA)
+
+Pregunta derivada: si 12% del corpus tiene votos antes del dispositivo,
+¿el techo de `inicio_votos_indiv` está causando regresiones silenciosas?
+
+Diagnóstico: 22 casos con votos detectados + sin_dispositivo. 17 de ellos
+tienen dispositivo presente pero bloqueado por el techo (TECHO_CORTA).
+
+**Fix B067:** Tier 3 — si Tier 1+2 con techo no encuentran NADA, repetir
+Tier 1 sin techo sobre todo el bloque. Puramente aditivo.
+
+**Validación:**
+- PoC full corpus (5702 fallos): 0 regresiones, 17 mejoras
+- 16 de 17 recuperan firma (sin_firma -16)
+- 2 bonus no anticipados (347_p2160, 348_p728)
+- Diagnóstico de contexto (±3 líneas) de los 17 casos: todos legítimos
+- Patrones: (a) bloque corto = voto individual completo, (b) fallo largo
+  con votos separados antes del dispositivo colectivo
+
+**Métricas post-H044:**
+- sin_firma: 422 → 406 (-16)
+- Trayectoria: 813 → 782 → 503 → 481 → 449 → 438 → 425 → 422 → **406**
+
+### Hallazgos arquitectónicos para C (futuro)
+
+1. `linea_es_firma_de_juez()` es función pura — puede pre-computarse
+   en el loop sin dependencia del dispositivo. firma_end funciona como
+   delimitador (92.6% cobertura, p50=7 líneas del dispositivo).
+2. El 12% de votos-antes-de-dispositivo invalida cualquier diseño que
+   asuma votos siempre post-firma. C debe contemplar ambas variantes.
+3. El techo de votos es protector para 5685 casos pero dañino para 17.
+   Tier 3 lo resuelve sin romper la protección.
+
+### Scripts generados (en scripts/auditoria/)
+- `poc_opcion_d.py` — PoC Opción D (invalidado por votos pre-firma).
+- `poc_opcion_a.py` — PoC Opción A (42 matches, 42/42 citas).
+- `diag_contexto_ampliado.py` — diagnóstico ±5 líneas de los 42 matches.
+- `poc_b067_tier3.py` — PoC B067 Tier 3 (17 mejoras, 0 regresiones).
+- `diag_b067_contexto.py` — diagnóstico ±3 líneas de los 17 mejoras.
+
+### Pendiente para próximas sesiones
+- B1b (172 truncamientos) y B2 (165 sin apertura) siguen siendo el
+  grueso de sin_firma (337/406). Requieren M08 o equivalente.
+- C (arquitectura auditor portada al parser) sigue como objetivo a
+  largo plazo, informado por los hallazgos empíricos de H044.

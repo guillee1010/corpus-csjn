@@ -2,6 +2,46 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+
+## H044 (2026-05-19)
+
+### Fix
+- **B067:** Tier 3 dispositivo retry sin techo. Cuando Tier 1+2 no
+  encuentran dispositivo dentro del techo de `inicio_votos_indiv`,
+  Tier 3 repite la búsqueda sin techo sobre todo el bloque.
+  17 mejoras, 0 regresiones. sin_firma: 422 → 406 (-16).
+
+### Invalidado
+- **B066:** los ~85 "headers reales" con "juez/jueza" del inventario
+  H043 eran citas jurisprudenciales wrapeadas por OCR al inicio de
+  línea (42/42 validados como citas, 0 headers reales). No requiere
+  fix.
+
+### Hallazgos
+- 12% del corpus (669 casos) tiene votos-antes-de-dispositivo: variante
+  estructural donde los votos individuales se redactan antes del "Por
+  ello" colectivo y la firma de la mayoría.
+- `firma_end` pre-computado funciona como delimitador de zona (92.6%
+  cobertura, p50=7 líneas del dispositivo).
+- Opción D (reordenamiento del pipeline) invalidada empíricamente por
+  la variante votos-antes-de-dispositivo.
+
+
+## [H042] - 2026-05-18
+### Fixed
+- **B055 firma truncada/contaminada** (`collect_firma_lines`): eliminado
+  `max_lines=40`; guarda de continuación por texto acumulado
+  (`_RE_FIRMA_COMPLETA` regex de apellidos + calificador + punto);
+  tolerancia a 1 línea vacía intercalada. 1262 mejoras, 0 regresiones
+  reales. Commit `e258f66`.
+### Added
+- Constante `_RE_FIRMA_COMPLETA` en parser.py (regex de apellidos
+  conocidos para detección de firma completa).
+### Documented
+- B061 (RE_DISID_HDR multi-línea), B062 (juez en dispositivo),
+  B063 (conjueces faltantes), B064 (Otero encoding), B065 (validación
+  firma↔votos).
+
 ### 2026-05-18 — H040: guardas de exclusión en Pista 2 de detectar_fin_real
 **Fix:** en `detectar_fin_real`, Pista 2 usaba `linea_es_header_sumario`
 directamente para detectar el inicio del sumario del caso siguiente.
