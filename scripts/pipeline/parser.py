@@ -426,29 +426,67 @@ def hay_tribunal_interviniente(lines, idx_inicio, idx_fin):
 
 # ── Firma: collect_firma_lines + parse_firma ──────────────────────────────────
 
-def collect_firma_lines(bloque, idx_start, max_lines=40):
-    """Junta líneas de firma desde después de 'Por ello' hasta encontrar fin."""
+_RE_FIRMA_COMPLETA = re.compile(
+    r"(?:rosatti|rosenkrantz|lorenzetti|maqueda|highton(?:\s+de\s+nolasco)?|nolasco|garc.a.mansilla|mansilla|zaffaroni|petracchi|argibay|fayt|boggiano|belluscio|l.pez|v.zquez|nazareno|rodr.guez\s+basavilbaso|basavilbaso|otero|cavallo|borinsky|catania|gemignani|petrone|ledesma|barroetave.a|hornos|leal\s+de\s+ibarra|catucci|cattucci|riggi|yacobucci|figueroa|mahiques)"
+    r"(?:\s*\((?:en\s+disidencia|seg[uú]n\s+su\s+voto)(?:\s+parcial)?\))?\s*\.\s*$",
+    re.I
+)
+
+def collect_firma_lines(bloque, idx_start, max_lines=None):
+    """Junta lineas de firma. H042 fix B055 v3.
+
+    - Techo = len(bloque) (bloque acotado por catalogo/mapa).
+    - Guarda: cuando texto acumulado termina en apellido conocido
+      + calificador opcional + punto -> firma podria estar completa
+      -> aplicar guarda estricta. Si no -> seguir con breaks.
+    - Tolera 1 linea vacia intercalada si la siguiente parece firma.
+    """
+    techo = len(bloque) if max_lines is None else min(idx_start + max_lines, len(bloque))
     firma_lines = []
     started = False
-    for k in range(idx_start, min(idx_start + max_lines, len(bloque))):
+
+    def es_continuacion_firma(s):
+        if any(p.search(s) for p, _ in JUECES_CONOCIDOS):
+            return True
+        if "—" in s or " - " in s or "–" in s:
+            return True
+        if RE_CALIFICADOR.search(s):
+            return True
+        return False
+
+    for k in range(idx_start, techo):
         line = bloque[k].strip()
         if not line:
             if started:
+                next_firma = False
+                for j in range(k + 1, min(k + 3, techo)):
+                    nxt = bloque[j].strip()
+                    if not nxt:
+                        continue
+                    if es_continuacion_firma(nxt):
+                        next_firma = True
+                    break
+                if next_firma:
+                    continue
                 break
             continue
-        # Saltarse el dispositivo hasta encontrar firma con jueces conocidos
         if not started:
             if any(p.search(line) for p, _ in JUECES_CONOCIDOS):
                 started = True
                 firma_lines.append(line)
             continue
-        # Una vez empezada la firma, recolectar hasta página/separador/inicio_voto
+        # Breaks estructurales
         if RE_PAGE_HEADER.match(line) or line.startswith("Recurso de"):
             break
         if RE_VOTO_HDR.match(line) or RE_DISID_HDR.match(line):
             break
         if line.startswith("Tribunal de origen") or line.startswith("Tribunal que"):
             break
+        # Guarda: texto acumulado termina en apellido conocido + punto?
+        firma_so_far = " ".join(firma_lines)
+        if _RE_FIRMA_COMPLETA.search(firma_so_far):
+            if not es_continuacion_firma(line):
+                break
         firma_lines.append(line)
     return " ".join(firma_lines)
 
