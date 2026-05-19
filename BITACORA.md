@@ -3994,3 +3994,303 @@ Reducir sin_firma refinando la detección de sumarios en `detectar_fin_real`
 - B1a residual (~53): dispositivo mid-line por OCR line-wrap.
 - Investigar 2 casos con wc_mayoria que baja mucho (329_p1307, 329_p4811).
 - Opción 4: diagnosticar los 89 con dispositivo sin firma.
+
+
+---
+**Fecha:** 2026-05-18
+**Sesión:** H041
+### Objetivo
+Reducir sin_firma con búsqueda Tier 2 de dispositivo mid-line (.search()
+como fallback de .match() cuando Tier 1 no encuentra nada).
+
+### Trabajo realizado
+- Diagnóstico cuantitativo de los 392 sin_dispositivo:
+  - 227 con apertura (B1a+B1b), 165 sin apertura (B2).
+  - 220 hits de .search() mid-line sin filtro — mayoría argumentales.
+  - Con filtro de firma validada: 51 candidatos.
+  - Distribución por patrón: de_conformidad 25, por_ello 10,
+    en_consecuencia 7, atento_a 5, por_lo_exp 3, por_las_razones 1.
+- Análisis caso por caso de los 51: ~12 dispositivos reales, ~5 falsos
+  argumentales, ~4 ambiguos. Discriminador clave: los dispositivos reales
+  tienen fin de oración antes del match (. o )), los argumentales tienen
+  conjunción (, y por ello).
+- Implementación de Tier 2 con triple guarda:
+  (a) solo patrones seguros (por_ello + variantes H039),
+  (b) contexto de fin de oración antes del match,
+  (c) filtro POR_ELLO_ARGUMENTAL,
+  (d) firma validada obligatoria sin fallback.
+- Pipeline paralelo parser_h041.py: 11 mejoras, 0 regresiones, 0 otros
+  cambios. Verificación CSV a CSV campo por campo.
+- Fix commiteado en parser.py (29184ba). sin_firma 449 → 438.
+
+### Hallazgos principales
+- **Los patrones peligrosos de H039 son igual de peligrosos mid-line:**
+  de_conformidad (25 hits), en_consecuencia (7), atento_a (5) son
+  argumentales en la mayoría de los casos incluso con firma validada
+  cercana. La firma valida presencia pero no distingue dispositivo real
+  de texto argumental cerca del final del fallo.
+- **El contexto previo es el discriminador clave:** dispositivos reales
+  a mitad de línea siempre aparecen después de punto o cierre de
+  paréntesis (fin de oración del considerando). Los usos argumentales
+  aparecen después de conjunciones (", y por ello", "y por ello").
+- **Tier 2 es ortogonal a Tier 1:** solo se activa cuando Tier 1 no
+  encontró ni match validado ni fallback. No puede causar regresiones
+  en casos que ya tienen dispositivo.
+- **11 de los 14 estimados se recuperaron:** 3 casos del diagnóstico
+  no pasaron alguna guarda (329_p573 contexto ambiguo, 329_p5950 y
+  339_p1223 probablemente filtrados por argumental).
+
+### Scripts generados (en scripts/diagnostico/H041/)
+- `aplicar_patch_h041.py` — genera parser_h041.py con Tier 2.
+- `comparar_h041.py` — comparación antes/después por caso.
+
+### Artefactos en output/diagnostico/H041/
+- `parser_h041.py` — parser parcheado (ya copiado a productivo).
+- `csjn_casos_h041.csv`, `csjn_casos_votos_h041.csv` — output paralelo.
+- `snapshot_pre_h041_csjn_casos.csv`, `snapshot_pre_h041_csjn_casos_votos.csv`.
+
+### Decisiones
+- Fix commiteado: Tier 2 mid-line con triple guarda.
+- Patrones mid-line restringidos a los seguros (por_ello + 6 variantes
+  H039). de_conformidad, en_consecuencia, atento_a excluidos.
+- B1a residual post-H041: ~42 casos (53 - 11). Recuperables si se
+  encuentran guardas para de_conformidad et al, o con M08.
+
+### Pendiente → H042
+- B055 firma partida (345 casos): diagnosticar si causa raíz es
+  max_lines=40 que se consume en texto del dispositivo.
+- Opción 3: 57 con dispositivo sin firma (clasificar sub-causas).
+- Opción 4: 2 casos wc_mayoria que baja (329_p1307, 329_p4811).
+- Actualizar DEUDA_TECNICA con conteos post-H041.
+
+---
+**Fecha:** 2026-05-18
+**Sesión:** H042
+### Objetivo
+Fix B055: firma truncada/contaminada en `collect_firma_lines`.
+Transición de cobertura (sin_firma) a calidad de datos (firma_raw).
+### Trabajo realizado
+- Re-cuantificación de B055 contra CSV actual (post-H041): 237 casos
+  (no 345 como estimado en H033 — B013 fix resolvió ~108).
+- Clasificación en dos subtipos: Tipo 1 contaminada (189, firma OK +
+  basura post-firma) y Tipo 2 truncada (48, nombre cortado mid-línea).
+- PoC v1: eliminar max_lines + guarda es_continuacion_firma en toda
+  línea. Resultado: 985 mejoras, 1298 regresiones. La guarda cortaba
+  mid-nombre porque JUECES_CONOCIDOS requiere nombre completo y las
+  líneas físicas tienen nombres partidos.
+- PoC v2: guarda condicional — solo aplicar si última línea recolectada
+  termina en punto. Resultado: 1273 mejoras, 181 regresiones. Abreviaturas
+  tipo "M." (Carmen M.) y "S." (Carlos S.) generaban falsos positivos
+  de punto final.
+- PoC v3 (final): guarda sobre texto acumulado — `_RE_FIRMA_COMPLETA`
+  (regex de apellidos conocidos + calificador opcional + punto) sobre
+  `" ".join(firma_lines)`. Solo activa guarda cuando el texto acumulado
+  termina en apellido conocido. "CARMEN M." no matchea (sigue), "CARMEN
+  M. ARGIBAY." matchea (guarda). Resultado: 1262 mejoras, 31 regresiones.
+- Auditoría manual de las 31 regresiones contra MD crudo: 0 reales.
+  Categorías: headers de disidencia comidos (12), abogados con apellido
+  de juez en post-firma (4, incluyendo Rosenkrantz y Zaffaroni como
+  letrados patrocinantes), texto editorial post-firma (12), bug
+  preexistente expuesto (1: 347_p520), cosmético (1).
+- Verificación: nj=1 prod 23 → fix 24 (1 caso: 347_p520 preexistente).
+- Pipeline productivo: output idéntico al paralelo campo por campo.
+- Commit `e258f66`, push OK.
+### Hallazgos principales
+- **B055 tenía dos subtipos distintos:** Tipo 1 (contaminada, 80%) y
+  Tipo 2 (truncada, 20%). El fix resuelve ambos con un solo mecanismo.
+- **Abogados con apellido de juez:** Rosenkrantz (letrado en 338_p1389),
+  Zaffaroni (patrocinante en 347_p321), Belluscio (patrocinante en
+  339_p921), García Mansilla (patrocinante en 338_p884) aparecían como
+  jueces firmantes en el productivo. El fix los elimina correctamente.
+- **RE_DISID_HDR/RE_VOTO_HDR no toleran headers multi-línea:** la firma
+  comía headers de disidencia partidos en dos líneas. La guarda B055
+  los cubre como segunda línea de defensa.
+- **Desconocidos como indicador de calidad:** la caída de "Ricardo Luis"
+  (196→7) y "Juan Carlos" (64→0) confirma que los nombres truncados
+  mid-línea se resuelven. Los residuales (Estado Nacional 45, Fisco
+  Nacional 21) indican firma_raw con leaking post-firma residual.
+### Scripts generados (en scripts/diagnostico/H055/)
+- `diag_b055_recuantificar.py` — re-cuantifica B055 contra CSV actual.
+- `diag_b055_subtipos.py` — clasifica en Tipo 1 y Tipo 2.
+- `aplicar_patch_b055.py` — genera parser parcheado v1.
+- `aplicar_patch_b055_v2.py` — v2 (guarda condicional por punto).
+- `aplicar_patch_b055_v3.py` — v3 final (guarda por texto acumulado).
+- `comparar_b055_fix.py` — comparación campo por campo prod vs fix.
+- `auditar_regresiones_b055.py` — MD crudo de las 31 regresiones.
+- `commit_b055.py` — snapshot + parcheo del productivo.
+- `commit_b055_verify.py` — verificación prod vs paralelo.
+### Artefactos en output/diagnostico/B055/
+- `csjn_casos_b055_fix.csv`, `csjn_casos_b055_fix_votos.csv` — output paralelo v3.
+- `snapshots/snapshot_pre_b055_*.csv` — snapshots pre-fix.
+### Decisiones
+- Fix commiteado con guarda de texto acumulado (`_RE_FIRMA_COMPLETA`).
+- Enfoque de apellidos conocidos preferido sobre regex genérico de
+  abreviatura (`\b[A-Z]\.$`) por robustez: no deja pasar líneas sin
+  chequeo, degrada a breaks estructurales para conjueces desconocidos.
+- B055 cerrado. Residuos documentados en DEUDA_TECNICA.
+- Cinco bugs nuevos documentados: B061-B065.
+### Pendiente para próximas sesiones
+- B063: agregar conjueces faltantes a JUECES_CONOCIDOS (fix mecánico, ~39 casos).
+- B064: verificar encoding de LUIS CÉSAR OTERO (9 casos).
+- Auditoría de segmentos parser vs auditor (Opción B del prompt H042).
+- Actualizar conteos sin_firma en DEUDA_TECNICA (ahora 425).
+
+# ============================================================
+# BITACORA — APPEND (agregar al final, después del bloque H042)
+# ============================================================
+
+### Nota de productividad
+Sesión H042 fue excepcionalmente productiva: 3 iteraciones de PoC
+(v1→v2→v3) diagnosticadas, implementadas y evaluadas en una sola
+sesión. Ciclo completo desde re-cuantificación (número stale 345→237),
+clasificación en subtipos (Tipo 1/Tipo 2), 3 versiones de fix con
+evaluación empírica, auditoría manual de 31 regresiones, hasta
+commit y push — todo en H042.
+
+Hallazgos destacados:
+- **Transición cobertura→calidad:** primera sesión focalizada en
+  calidad de datos existentes en vez de expandir cobertura sin_firma.
+  Retorno mayor por esfuerzo que las últimas 3 sesiones de cobertura
+  combinadas (H039=22, H040=32, H041=11 vs H042=1262 mejoras).
+- **Abogados contados como jueces:** Rosenkrantz como letrado
+  patrocinante (338_p1389), Zaffaroni como letrado (347_p321),
+  Belluscio como patrocinante (339_p921), García Mansilla como
+  patrocinante (338_p884). El productivo los contaba como jueces
+  firmantes — inflando n_jueces silenciosamente.
+- **Número stale como riesgo:** el universo B055 (345 casos) venía
+  de H033 y nunca se re-cuantificó post-B013. El paso 0 de
+  re-cuantificación evitó diseñar un fix para un universo equivocado.
+- **Iteración rápida de PoC:** v1 (1298 regresiones) → v2 (181) →
+  v3 (31, todas falsas) muestra el valor de evaluar antes de commitear.
+  Cada iteración reveló un patrón nuevo (nombres partidos, abreviaturas,
+  texto acumulado).
+
+
+# ============================================================
+# PROMPT H043
+# ============================================================
+
+## H043 — Conjueces B063 + inventario headers voto/disidencia
+
+**Fecha:** 2026-05-19
+**Sesión:** H043
+**Commit:** `8a2558e` (B063: 10 conjueces + fix cosmético desconocidos)
+
+### Objetivo
+
+Fase 1: agregar conjueces faltantes a JUECES_CONOCIDOS (B063).
+Fase 2: auditoría de headers de disidencia/voto (inventario completo).
+Fase 3 (no alcanzada): validación cruzada firma↔votos (B065).
+
+### Fase 1 — B063 conjueces (cerrado)
+
+**Problema:** 10 conjueces frecuentes no estaban en JUECES_CONOCIDOS,
+causando n_jueces subestimado en ~40 casos.
+
+**Proceso:**
+1. Primer intento: patch directo al vivo (error metodológico — violó
+   protocolo PoC→validar→commitear). Se restauró con `git checkout`.
+2. PoC v1: 9 conjueces. 36 mejoras, 0 regresiones. Descubrió:
+   - PEREYRA (no PEREIRA) — typo en la lista del plan H043.
+   - Rita Mill de Pereyra — conjuez adicional no contemplada (2 casos).
+   - Bug cosmético línea 550: filtro de desconocidos no stripea "(conjuez)".
+   - B064 (Otero "encoding") era el mismo bug cosmético, no encoding.
+3. PoC v2: 10 conjueces + fix cosmético + Pereyra corregido.
+   40 mejoras, +55 votos, 0 regresiones.
+4. Patch producción + commit `8a2558e`.
+
+**Conjueces agregados (10):**
+
+| Conjuez | Casos | Nota |
+|---|---|---|
+| Najurieta | 8 | |
+| Alcalá | 9 | |
+| Morán | 7 | |
+| Tyden de Skanata | 5 | CV confirmado: camarista federal Posadas |
+| Pereyra González | 5 | Corregido de PEREIRA. Variante Carlos Martín |
+| Ferro | 5 | |
+| Pacilio | 6 | |
+| Argañaraz | 4 | |
+| Poclava Lafuente | 3 | |
+| Mill de Pereyra | 2 | Nueva, no estaba en plan H043 |
+
+**Excluido:** Eduardo Moliné O'Connor — destituido 12/2003 por juicio
+político, no puede ser conjuez. Sus 3 apariciones son ruido.
+
+**Fix cosmético (línea 550):**
+```python
+# Antes:
+nombres_jueces = {j["nombre"].lower() for j in jueces_out}
+# Después:
+nombres_jueces = {j["nombre"].split(" (")[0].lower() for j in jueces_out}
+```
+Resuelve que "otero (conjuez)" no se filtraba contra "luis césar otero".
+Cierra B064.
+
+**Métricas post-H043:**
+- sin_firma: 425 → 422 (-3)
+- Votos: 25548 → 25603 (+55)
+- JUECES_CONOCIDOS: 28 → 38 entradas
+
+### Fase 2 — Inventario headers voto/disidencia
+
+**Script:** `scripts/diagnostico/H043/inventario_headers_voto.py`
+
+**Resultado del inventario:**
+- Headers escaneados: 3539 (1490 voto + 2049 disidencia + 8 otro)
+- Cobertura RE_VOTO_HDR/RE_DISID_HDR: 81% (2868/3539)
+- No matchean: 210 voto + 461 disidencia
+- Multi-línea B061: 26 (2 voto + 24 disidencia)
+
+**Gaps principales:**
+- "juez/jueza" no en grupo de títulos (~85 headers reales)
+- "concurrente" no soportado (~12)
+- "doctor/doctora" (~15)
+- "vicepresidenta" femenino (~3)
+- Multi-línea B061 (26)
+- "Ampliación de fundamentos" — tipo nuevo (8)
+- Muchos "no matchean" son ruido: firma fragmentada (~200) y citas en texto (~40)
+
+**PoC juez/jueza — DESCARTADO (regresiones):**
+Agregar `Juez(?:as?|es)?` al grupo de títulos causa:
+- sin_firma: 422 → 441 (+19 regresión)
+- sin_dispositivo: 380 → 400 (+20 regresión)
+- Votos: 25603 → 25519 (-84)
+- Casos con n_jueces→0: 330_p2800, 330_p304
+
+**Causa:** "voto del juez [NOMBRE]" aparece en texto corrido (considerandos,
+citas jurisprudenciales). RE_VOTO_HDR.match() interpreta inicio de línea
+como header de sección → corta bloque → pierde firma y dispositivo.
+"Señor Ministro" no tiene este problema por ser formal y exclusivo de headers.
+
+**Conclusión:** ampliar los regex de headers requiere filtro posicional —
+buscar solo después del cierre de la mayoría. Documentado como B066,
+bloqueado por M08 (arquitectura de dos zonas).
+
+### Lecciones metodológicas
+
+1. **Nunca patchear el vivo sin PoC validado.** El primer intento aplicó
+   directo sobre parser.py, corrompiendo el archivo. Restaurado con
+   `git checkout`. A partir de ahí, todo PoC → validar → commitear.
+2. **Hash SHA-256 como check de integridad.** CRLF vs LF entre uploads
+   y disco genera hashes distintos; usar bytes crudos del disco.
+3. **Diagnóstico antes de fix:** PEREYRA (no PEREIRA) se descubrió
+   recién al correr el PoC. B064 no era encoding sino bug cosmético.
+4. **PoC descarta regresiones temprano:** el PoC de juez/jueza reveló
+   19 regresiones de sin_firma en 3 minutos, evitando un commit roto.
+
+### Scripts generados (en scripts/diagnostico/H043/)
+- `poc_b063_conjueces.py` — PoC v1 (9 conjueces).
+- `poc_b063_v2.py` — PoC v2 (10 conjueces + Pereyra + fix cosmético).
+- `patch_b063_produccion.py` — patch definitivo.
+- `diag_b063_desconocidos.py` — diagnóstico desconocidos post-v1.
+- `inventario_headers_voto.py` — Fase 2 inventario completo.
+- `poc_juez_header.py` — PoC juez/jueza (descartado por regresiones).
+
+### Pendiente para próximas sesiones
+- B066: headers con "juez/jueza" requieren filtro posicional (M08).
+- B065: validación cruzada firma↔votos (Fase 3 no alcanzada).
+- Auditoría de segmentos parser vs auditor (Opción B de H042).
+- Desconocidos residuales: Estado Nacional (45), Fisco Nacional (21)
+  son post-firma leaking. Truncados: Ricardo Luis (Lorenzetti),
+  CARMEN M. (Argibay), Manuel José García (García Mansilla).

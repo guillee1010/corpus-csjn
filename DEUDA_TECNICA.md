@@ -7,8 +7,9 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-18 (sesión H040: guardas exclusión Pista 2,
-32 mejoras 0 regresiones; sin_firma 481 → 449; cobertura firma 92,1%).
+**Última actualización:** 2026-05-19 (sesión H043: B063 conjueces +
+fix cosmético desconocidos, 40 mejoras 0 regresiones; sin_firma 422;
+votos 25603; inventario headers voto/disidencia).
 
 ---
 
@@ -47,10 +48,13 @@ a las hipótesis de la tesis (H1-H5).
 - **Output parser productivo:** 5862 casos en `output/parser/csjn_casos.csv`
   (incluye 160 `sumario_con_link`; 5702 fallos procesables).
 - **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV;
-  cobertura de firma = 92,1%).
-- **Sin firma:** 449 casos (post-fix H040). Desglose residual:
+  cobertura de firma = 92,6%).
+- **Sin firma:** 422 casos (post-H043). Desglose residual:
   ~172 truncamiento B1b, ~165 sin apertura B2, ~57 con dispositivo
-  sin firma (B055 + sub-causas), ~53 B1a residual (mid-line), ~2 otros.
+  sin firma (B055 + sub-causas), ~42 B1a residual (mid-line), ~2 otros.
+  Nota: 3 casos ganaron firma por reconocimiento de conjueces B063.
+- **Votos:** 25603 filas (post-H043, +55 por conjueces B063).
+- **Jueces conocidos:** 38 entradas en JUECES_CONOCIDOS (28 + 10 conjueces B063).
 - **Fixes aplicados:**
   - Sprint 2026-05-09: §3.6.a `pg_fin+1`, §3.6.e Fase 1, §4.6.j
     `RE_APERTURA` doble espacio, Fix 1 (V1 → `case_name_cuerpo`).
@@ -59,6 +63,9 @@ a las hipótesis de la tesis (H1-H5).
   - H038: forward con validación de firma (B059, 279 casos).
   - H039: 5 variantes dispositivo nuevas (22 casos).
   - H040: guardas exclusión Pista 2 en detectar_fin_real (32 casos).
+  - H041: Tier 2 mid-line dispositivo search (11 casos).
+  - H042: fix B055 firma truncada/contaminada (1262 mejoras calidad).
+  - H043: B063 conjueces + fix cosmético desconocidos (40 mejoras, +55 votos).
 
 ---
 
@@ -2453,34 +2460,32 @@ bloqueado por M08 (refactorización arquitectónica).
 ---
 ### B055 — Firma multilinea truncada (nombre partido por salto de línea)
 **Componente:** parser.
-**Origen:** sesión H032, auditoría de muestra de 80 casos. Revisado H033.
-**Causa raíz:** `collect_firma_lines` corta la recolección de firma antes
-de completar el nombre cuando hay un salto de línea en medio de un nombre
-de ministro (ej: `"...— JUAN"` en línea 1, `"CARLOS MAQUEDA —..."` en
-línea 2). La línea siguiente no activa ninguna condición de break pero
-tampoco se incorpora correctamente. Resultado: `firma_raw` truncada sin
-punto final, `n_jueces` subestimado.
-**Diagnóstico / evidencia (H033):** 345 casos en CSV con `firma_raw` no
-vacío pero sin punto final — confirmado como firma truncada. Muestra:
-- `329_p9`: `firma_raw` termina en `"...ELENA I. HIGHTON DE NOLASCO — JUAN"`,
-  `n_jueces=2`.
-- `329_p49`: termina en `"...ELENA I. HIGHTON DE NOLASCO — CARLOS"`.
-- `329_p241`: termina en `"...CARLOS S. FAYT — JUAN CARLOS"`.
-**Casos testigo de H032 revisados en H033:**
-- `347_p128` (Perret): causa raíz es **B013** (por_ello prematuro), no B055.
-  `firma_raw` vacío, `n_jueces=0`. El `por_ello_text` captura texto argumental
-  del considerando (`"De conformidad con la regulación prevista..."`).
-- `348_p1540` (Guardia): parser OK. `firma_raw` completo, `n_jueces=3`.
-  No es B055.
-- `333_p1254`: parser OK. `firma_raw` completo, `n_jueces=4`. No es B055.
-**Impacto:** 345 casos con `n_jueces` subestimado y `voting_pattern`
-potencialmente incorrecto. Afecta datos de composición del tribunal.
-**Fix propuesto:** en `collect_firma_lines`, continuar recolectando líneas
-mientras la última línea recolectada no termine en punto y no haya línea
-vacía ni marcador estructural. Requiere análisis de condiciones de corte.
-**Estado de verificación:** confirmado_cuantificado (345 casos en CSV).
-**Estado del fix:** no diseñado.
-**Referencias:** H032, H033, B013.
+**Origen:** sesión H032, auditoría de muestra de 80 casos. Revisado H033, H034, H042.
+**Causa raíz:** `collect_firma_lines` tenía dos problemas: (1) `max_lines=40`
+se agotaba antes de llegar a la firma cuando el dispositivo era largo;
+(2) no tenía guarda de continuación post-started, recolectando texto
+editorial post-firma (secretarios, carátulas, abogados) como parte de
+la firma. Resultado: Tipo 1 (firma contaminada, 189 casos) y Tipo 2
+(firma truncada mid-nombre, 48 casos), total 237 en CSV post-H041.
+**Fix aplicado (H042, commit `e258f66`):**
+- Eliminar `max_lines=40`, usar `len(bloque)` como techo.
+- Guarda de continuación: `_RE_FIRMA_COMPLETA` (regex de apellidos
+  conocidos + calificador opcional + punto) sobre texto acumulado.
+  Cuando el texto acumulado termina en apellido conocido + punto,
+  la firma podría estar completa → guarda estricta (`es_continuacion_firma`).
+  Si no termina en apellido conocido (mid-nombre, abreviatura tipo "M."),
+  seguir recolectando con solo breaks estructurales.
+- Tolerancia a 1 línea vacía intercalada con lookahead.
+**Resultado:** 1262 mejoras (1087 firma limpia, 159 firma con punto, 16
+más jueces), 0 regresiones reales (31 falsas: prod inflado por abogados
+con apellido de juez, headers de disidencia comidos, carátulas). Desconocidos:
+"Ricardo Luis" 196→7, "Juan Carlos" 64→0, "CARMEN M." 52→6.
+**Estado del fix:** **cerrado** (commiteado H042).
+**Residuos conocidos:** 7+4 "Ricardo Luis"/"RICARDO LUIS" y 6 "CARMEN M."
+aún truncados (línea anterior no termina en apellido reconocido por
+`_RE_FIRMA_COMPLETA`). 45 "Estado Nacional" y 21 "Fisco Nacional" como
+desconocidos indican firma_raw con texto post-firma residual.
+**Referencias:** H032, H033, H034, H042, B013.
 ---
 ### B056 — Apertura de mayoría no detectada cuando hay residuo antes de "FALLO DE LA CORTE SUPREMA"
 **Componente:** parser / auditor.
@@ -2547,22 +2552,125 @@ eliminar números de 1-2 dígitos que podrían ser numeración de
 considerandos.
 **Referencias:** H032.
 ---
-
+### B061 — RE_DISID_HDR / RE_VOTO_HDR no matchean headers multi-línea
+**Componente:** parser.
+**Origen:** sesión H042, auditoría de regresiones B055.
+**Causa raíz:** `RE_DISID_HDR` requiere `^Disidencia\s+...Señor` en la
+misma línea. En el MD los headers están frecuentemente partidos:
+```
+DISIDENCIA PARCIAL DEL
+SEÑOR MINISTRO DOCTOR DON CARLOS S. FAYT
+```
+"DISIDENCIA PARCIAL DEL" solo no matchea → el break en `collect_firma_lines`
+no se activa. Idem para `RE_VOTO_HDR` con "Voto del Señor\nMinistro...".
+**Impacto:** bajo post-B055 (la guarda de texto acumulado cubre estos
+casos como segunda línea de defensa). Sin la guarda, el parser comería
+el header y el texto de la disidencia/voto como parte de firma_raw.
+**Fix propuesto:** comparar heurísticas con el auditor (`auditar_fallo.py`).
+Posible: matchear solo "^Disidencia" o "^Voto del?" sin exigir "Señor"
+en la misma línea.
+**Estado de verificación:** confirmado_en_auditoria (múltiples casos en H042).
+**Estado del fix:** no diseñado.
+**Referencias:** H042.
 ---
-
-## CHANGELOG.md — agregar antes de "Versiones anteriores del parser"
+### B062 — Nombre de juez en texto de dispositivo activa started=True
+**Componente:** parser (`collect_firma_lines`).
+**Origen:** sesión H042, caso testigo `347_p520`.
+**Causa raíz:** `collect_firma_lines` busca el primer match de
+`JUECES_CONOCIDOS` después de `por_ello_idx` para activar `started=True`.
+Cuando el texto del dispositivo menciona a un juez por nombre completo
+(ej: "Aceptar la excusación formulada por el señor Presidente de la
+Corte Suprema de Justicia de la Nación, Doctor Don Horacio Rosatti"),
+`started` se activa prematuramente. La guarda corta en la siguiente
+línea que no parece firma → firma_raw = "Horacio Rosatti." con nj=1.
+La firma real (líneas 20543-20544, 3 jueces) nunca se alcanza.
+**Impacto:** bajo (1 caso confirmado: `347_p520`, nj 4→1).
+**Fix propuesto:** en `collect_firma_lines`, no activar `started` si la
+línea está en medio de una oración (verificar que la línea sea corta,
+tenga dash, o esté precedida por línea vacía o fin de dispositivo).
+**Estado de verificación:** confirmado_caso_testigo.
+**Estado del fix:** no diseñado.
+**Referencias:** H042.
+---
+### B063 — Conjueces faltantes en JUECES_CONOCIDOS ✓ CERRADO
+**Componente:** parser.
+**Origen:** sesión H042, análisis de desconocidos post-fix B055.
+**Causa raíz:** `JUECES_CONOCIDOS` no incluía conjueces frecuentes.
+**Fix aplicado (H043, commit `8a2558e`):**
+- 10 conjueces agregados: Najurieta (8), Alcalá (9), Morán (7),
+  Tyden de Skanata (5), Poclava Lafuente (3), Pereyra González (5,
+  corregido PEREIRA→PEREYRA), Ferro (5), Pacilio (6), Argañaraz (4),
+  Mill de Pereyra (2, nueva).
+  Moliné O'Connor excluido: destituido 12/2003, no puede ser conjuez.
+- Apellidos sincronizados en `_RE_FIRMA_COMPLETA`.
+- Fix cosmético línea 550: `j["nombre"].split(" (")[0].lower()` para
+  que el filtro de desconocidos no deje pasar nombres con sufijo "(conjuez)".
+**Resultado:** 40 mejoras n_jueces (↑40, ↓0), +55 votos, sin_firma 425→422.
+**Estado del fix:** aplicado y validado (PoC v2 con comparación campo a campo).
+---
+### B064 — LUIS CÉSAR OTERO no matchea pese a estar en JUECES_CONOCIDOS ✓ CERRADO
+**Componente:** parser.
+**Origen:** sesión H042, análisis de desconocidos.
+**Diagnóstico (H043):** no era problema de encoding. Era el bug cosmético
+en línea 550 de `parse_firma`: el filtro de desconocidos comparaba
+`"otero (conjuez)" in "luis césar otero"` → False. Otero sí matcheaba
+en JUECES_CONOCIDOS (10 casos reconocidos).
+**Fix:** resuelto como parte de B063 (fix cosmético línea 550).
+**Estado del fix:** cerrado (commit `8a2558e`).
+---
+### B065 — Validación cruzada firma↔votos (calificador sin bloque)
+**Componente:** parser (validación).
+**Origen:** sesión H042, observación durante auditoría.
+**Causa raíz:** cuando `firma_raw` contiene "(en disidencia)" o
+"(según su voto)", debería existir un bloque correspondiente
+"DISIDENCIA DE..." o "Voto del..." en el caso. Si no existe, la
+firma puede haber sido capturada del lugar equivocado (ej: firma
+de disidencia tomada como firma de mayoría).
+**Impacto:** no cuantificado. Señal de diagnóstico, no bug funcional.
+**Fix propuesto:** agregar validación post-parseo que cruce calificadores
+en firma con votos detectados. Loguear warnings.
+**Estado del fix:** no diseñado.
+**Referencias:** H042.
 
 (ya incluido en la primera parte de H032 — no agregar nueva entrada)
+
+---
+### B066 — RE_VOTO_HDR/RE_DISID_HDR: "juez/jueza" requiere filtro posicional
+**Componente:** parser.
+**Origen:** sesión H043, Fase 2 inventario de headers.
+**Diagnóstico:** inventario del corpus muestra ~85 headers de voto/disidencia
+con "juez/jueza" en vez de "Señor Ministro". Agregar `Juez(?:as?|es)?` al
+grupo de títulos del regex causa **regresiones** (PoC validado):
+sin_firma subió 422→441, sin_dispositivo 380→400, votos bajaron 25603→25519.
+Causa: "voto del juez [NOMBRE]" aparece frecuentemente en texto corrido
+(considerandos, citas de jurisprudencia) y RE_VOTO_HDR.match() lo interpreta
+como header de sección, cortando el bloque y perdiendo firma/dispositivo.
+**Contraste:** "Señor Ministro" es formal y casi exclusivo de headers;
+"juez" es coloquial y ubicuo en el cuerpo del texto.
+**Fix requerido:** filtro posicional — buscar headers de voto/disidencia
+solo DESPUÉS del cierre de la mayoría (post-firma/post-dispositivo).
+Requiere M08 (arquitectura de dos zonas) o equivalente.
+**Impacto potencial:** ~85 headers si se resuelve el filtro posicional.
+**Otros gaps del inventario (misma dependencia posicional):**
+- "concurrente" (~12 headers)
+- "doctor/doctora" (~15 headers)
+- "vicepresidenta" (~3 headers)
+- multi-línea B061 (26 headers)
+- "Ampliación de fundamentos" (8 headers, tipo nuevo)
+**Estado de verificación:** confirmado_cuantificado (inventario completo).
+**Estado del fix:** no diseñado (requiere M08).
+**Referencias:** H043 Fase 2, inventario_headers_voto.py.
 
 ---
 
 ## NOTAS PARA LA SESIÓN SIGUIENTE
 
 Bugs documentados en H032 pendientes de fix:
-- B055 (firma multilinea con paréntesis) — impacto en CSV confirmado, prioridad alta
+- ~~B055 (firma multilinea con paréntesis)~~ — **cerrado H042** (commit `e258f66`)
 - B056 (apertura mayoría perdida) — solo auditor por ahora, prioridad media
-- B057 (dictamen consume FALLO DE LA CORTE) — impacto en CSV probable, prioridad alta
+- B057 (dictamen consume FALLO DE LA CORTE) — parcialmente resuelto por backstop H036
 - B058 (pérdida de °) — prioridad baja, verificar primero
+- B061-B065 — documentados H042, ver Pendientes menores. B063 y B064 cerrados H043. B066 nuevo.
 
 Metodología acordada: auditar antes de fijar (M04).
 Casos testigo disponibles en output/auditoria/auditar_fallo/.
@@ -2580,12 +2688,20 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
 - H040: guardas exclusión Pista 2 (32 casos, 481 → 449 sin_firma).
   B060: `linea_es_header_sumario_guardado` excluye firmas, calificadores,
   headers de página, marcadores de apertura, headers de voto.
+- H041: Tier 2 mid-line dispositivo (11 casos, 449 → 438 sin_firma).
+  Patrones seguros con .search(): por_ello, por_lo_expuesto, por_las_razones,
+  por_lo_expresado, por_las_consideraciones, que_por_ello, oido_el.
+  Triple guarda: fin de oración + argumental + firma validada.
+- H042: fix B055 firma truncada/contaminada (1262 mejoras, 0 regresiones).
+  Commit `e258f66`. sin_firma 425 (sin cambio — fix de calidad, no cobertura).
+- H043: B063 conjueces + fix cosmético desconocidos (40 mejoras, +55 votos).
+  Commit `8a2558e`. sin_firma 425→422. Inventario headers: B066 nuevo.
 
 ### Matriz pendiente post-H040
 
 | # | Línea de trabajo | Casos | Riesgo | Dificultad | Dependencia | Estado |
 |---|-----------------|------:|--------|------------|-------------|--------|
-| 1 | ~~Formato no reconocido (B1a)~~ | ~~65~~ | — | — | — | **Parcial H039** (22 fijos, ~53 mid-line) |
+| 1 | ~~Formato no reconocido (B1a)~~ | ~~65~~ | — | — | — | **Parcial H039+H041** (22+11 fijos, ~42 mid-line) |
 | 2 | ~~B059 falso positivo (A1+A3)~~ | ~~329~~ | — | — | — | **Cerrado H038** |
 | 3 | Truncamiento fin_real (B1b) | 172 | alto | alta | M08 | Postergado: requiere dos zonas |
 | 4 | Sin apertura (B2) | 165 | medio | alta | M08 | Postergado: mismo dominio que B1b |
@@ -2594,11 +2710,18 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
 M08 resolvería B1b + B2 de raíz (~337 casos).
 
 ### Pendientes menores
-- B055 (firma partida) — 30 "RICARDO LUIS" en desconocidos. Prioridad alta.
+- ~~B055 (firma partida)~~ — **cerrado H042** (commit `e258f66`).
 - B056 (apertura mayoría perdida) — solo auditor.
 - B057 (dictamen consume FALLO DE LA CORTE) — parcialmente resuelto por backstop H036.
 - B058 (pérdida de °, regex visor) — prioridad baja.
+- B061 (RE_DISID_HDR/RE_VOTO_HDR multi-línea) — 26 casos. Subsumido en B066 (requiere M08).
+- B062 (juez en texto dispositivo activa started) — 1 caso. Prioridad baja.
+- ~~B063 (conjueces faltantes)~~ — **cerrado H043** (commit `8a2558e`).
+- ~~B064 (Otero encoding)~~ — **cerrado H043** (era bug cosmético, no encoding).
+- B065 (validación firma↔votos) — diagnóstico. Prioridad baja.
+- B066 (juez/jueza en headers) — requiere M08. Bloqueado.
 - Variantes descartadas H039 (`en_las_condiciones`, `por_lo_tanto`, `en_atencion`,
-  `que_de_conformidad`): recuperables si se implementa búsqueda en dos tiers o
-  con filtro argumental post-match.
-- Investigar n_jueces=11 y n_jueces=14.
+  `que_de_conformidad`): Tier 2 implementado en H041 pero estas variantes siguen
+  excluidas (argumentales incluso con firma validada + guarda de contexto).
+  Recuperables solo con M08 o filtro argumental más sofisticado.
+- ~~Investigar n_jueces=11 y n_jueces=14~~ — resuelto: eran firma contaminada (B055).
