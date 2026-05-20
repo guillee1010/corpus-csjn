@@ -1323,11 +1323,10 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
         pat = re.compile(r"\b" + re.escape(primer_token_siguiente) + r"\b", re.I)
         def es_caratula(linea):
             return bool(pat.search(linea))
-        # Atrás dentro del bloque — acotado a 20 líneas de lfc (B069: evitar
-        # falsos matches de token en cuerpo argumentativo/sumario del caso actual)
-        k = buscar_atras(es_caratula, lfc, max(lfc - 20, li + 5))
-        if k is not None:
-            return (k - 1, "fin_dentro_bloque", "caratula_siguiente")
+        # B069: búsqueda atrás de Pista 1 ELIMINADA. El token del caso
+        # siguiente matcheaba en cuerpo argumentativo, Vistos los autos y
+        # firmas de jueces, cortando centenares de líneas. La búsqueda
+        # hacia adelante (abajo) cubre página compartida correctamente.
         # Adelante hasta limite_adelante
         k = buscar_adelante(es_caratula, lfc + 1, limite_adelante)
         if k is not None:
