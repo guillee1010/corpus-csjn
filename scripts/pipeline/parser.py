@@ -337,6 +337,22 @@ JUECES_CONOCIDOS = [
     (re.compile(r"antonio\s+pacilio", re.I),                                "Pacilio (conjuez)"),
     (re.compile(r"[áa]ngel\s+a\.?\s*arga[ñn]araz", re.I),                  "Argañaraz (conjuez)"),
     (re.compile(r"rita\s+(mill|m\.?)\s+de\s+pereyra", re.I),               "Mill de Pereyra (conjuez)"),
+    # ── Conjueces B072 (H049) ────────────────────────────────────────────────
+    (re.compile(r"alberto\s+manuel\s+garc[íi]a\s+lema", re.I),            "García Lema (conjuez)"),
+    (re.compile(r"luis\s+renato\s+rabbi[\s—-]+baldi\s+cabanillas", re.I),  "Rabbi-Baldi Cabanillas (conjuez)"),
+    (re.compile(r"h[ée]ctor\s+(oscar\s+)?m[ée]ndez", re.I),               "Méndez (conjuez)"),
+    (re.compile(r"graciela\s+susana\s+montesi", re.I),                     "Montesi (conjuez)"),
+    (re.compile(r"marina\s+(josefa\s+)?cossio|cossio\s+marina", re.I),     "Cossio (conjuez)"),
+    (re.compile(r"arturo\s+p[ée]rez\s+petit", re.I),                       "Pérez Petit (conjuez)"),
+    (re.compile(r"otilio\s+roque\s+romano", re.I),                         "Romano (conjuez)"),
+    (re.compile(r"julio\s+demetrio\s+petra\s+fern[áa]ndez", re.I),         "Petra Fernández (conjuez)"),
+    (re.compile(r"gabriel\s+b\.?\s*chausovsky", re.I),                     "Chausovsky (conjuez)"),
+    (re.compile(r"leopoldo\s+h\.?\s*schiffrin", re.I),                     "Schiffrin (conjuez)"),
+    (re.compile(r"horacio\s+jos[ée]\s+aguilar", re.I),                     "Aguilar (conjuez)"),
+    (re.compile(r"victoria\s+patricia\s+p[ée]rez\s+tognola", re.I),        "Pérez Tognola (conjuez)"),
+    (re.compile(r"santiago\s+hern[áa]n\s+corcuera", re.I),                 "Corcuera (conjuez)"),
+    (re.compile(r"silvina\s+mar[íi]a\s+andalaf(?:\s+casiello)?", re.I),    "Andalaf Casiello (conjuez)"),
+    (re.compile(r"cintia\s+fern[áa]ndez\s+g[óo]mez", re.I),               "Fernández Gómez (conjuez)"),
 ]
 
 # Ruido OCR (segmentos que no son nombres). Incluimos apellidos de jueces
@@ -439,7 +455,7 @@ def hay_tribunal_interviniente(lines, idx_inicio, idx_fin):
 # ── Firma: collect_firma_lines + parse_firma ──────────────────────────────────
 
 _RE_FIRMA_COMPLETA = re.compile(
-    r"(?:rosatti|rosenkrantz|lorenzetti|maqueda|highton(?:\s+de\s+nolasco)?|nolasco|garc.a.mansilla|mansilla|zaffaroni|petracchi|argibay|fayt|boggiano|belluscio|l.pez|v.zquez|nazareno|rodr.guez\s+basavilbaso|basavilbaso|otero|cavallo|borinsky|catania|gemignani|petrone|ledesma|barroetave.a|hornos|leal\s+de\s+ibarra|catucci|cattucci|riggi|yacobucci|figueroa|mahiques|najurieta|alcal.a?|mor[áa]n|tyden(?:\s+de\s+skanata)?|skanata|poclava\s+lafuente|lafuente|pereyra\s+gonz.lez|ferro|pacilio|arga.araz|mill\s+de\s+pereyra)"
+    r"(?:rosatti|rosenkrantz|lorenzetti|maqueda|highton(?:\s+de\s+nolasco)?|nolasco|garc.a.mansilla|mansilla|zaffaroni|petracchi|argibay|fayt|boggiano|belluscio|l.pez|v.zquez|nazareno|rodr.guez\s+basavilbaso|basavilbaso|otero|cavallo|borinsky|catania|gemignani|petrone|ledesma|barroetave.a|hornos|leal\s+de\s+ibarra|catucci|cattucci|riggi|yacobucci|figueroa|mahiques|najurieta|alcal.a?|mor[áa]n|tyden(?:\s+de\s+skanata)?|skanata|poclava\s+lafuente|lafuente|pereyra\s+gonz.lez|ferro|pacilio|arga.araz|mill\s+de\s+pereyra|garc.a\s+lema|rabbi.baldi\s+cabanillas|m[ée]ndez|montesi|cossio|p[ée]rez\s+petit|romano|petra\s+fern.ndez|chausovsky|schiffrin|aguilar|p[ée]rez\s+tognola|corcuera|andalaf(?:\s+casiello)?|fern.ndez\s+g[óo]mez)"
     r"(?:\s*\((?:en\s+disidencia|seg[uú]n\s+su\s+voto)(?:\s+parcial)?\))?\s*\.\s*$",
     re.I
 )
