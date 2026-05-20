@@ -1,0 +1,423 @@
+caso_id_canonico,tomo,case_name_indice,pista_fin,status_fin,firma_raw,linea_inicio,linea_fin,linea_fin_real,source_file,tipo_entrada
+329_p53,329,"Juárez, Manuel Alberto y otra c/ Provincia de Catamarca | Provincia de Catamarca (Juárez, Manuel Alberto y otra c/) | (14) Juárez, Manuel Alberto y otra c/ Provincia de Catamarca",caratula_siguiente,fin_dentro_bloque,,1831,2052,1838,LibroVol329.1.md,fallo
+329_p120,329,Olivero y Rodríguez Electricidad S.A.I.C.F.I.,caratula_siguiente,fin_dentro_bloque,,4406,4485,4459,LibroVol329.1.md,fallo
+329_p201,329,Gematec S.R.L. y otros,caratula_siguiente,fin_dentro_bloque,,7448,7599,7480,LibroVol329.1.md,fallo
+329_p237,329,"Barraco, Cora Graciela c/ Instituto Nacional de Servicios Sociales para Jubilados y Pensionados | Instituto Nacional de Servicios Sociales para Jubilados y Pensionados (Barraco, Cora Graciela c/)",caratula_siguiente,fin_dentro_bloque,,8729,8790,8748,LibroVol329.1.md,fallo
+329_p317,329,"Aldasoza Calderón, Sandra Elisabeth y otra c/ Posco, Magdalena Angela Luisa y otras | Posco, Magdalena Angela Luisa y otras (Aldasoza Calderón, Sandra Elisabeth y otra c/) | Albornoz Navor, José c/ Catering y Servicios S.A. y otro: 1484. Aldasoza Calderón, Sandra Elisabeth y otra c/ Posco, Magdalena Angela Luisa y otras",caratula_siguiente,fin_extendido_pag_compartida,,11880,11897,11942,LibroVol329.1.md,fallo
+329_p324,329,"Construcciones Tevet c/ Malvaso, Nicolás y otro | Malvaso, Nicolás y otro (Construcciones Tevet c/)",sumario_siguiente,fin_dentro_bloque,,12144,12187,12156,LibroVol329.1.md,fallo
+329_p472,329,"Barreiro, Bienvenido T. y otro c/ Poder Ejecutivo Nacional | Poder Ejecutivo Nacional (Barreiro, Bienvenido T. y otro c/)",sumario_siguiente,fin_dentro_bloque,,17820,17834,17820,LibroVol329.1.md,fallo
+329_p542,329,Droguería Disval S.R.L. y otros c/ Provincia de Buenos Aires | Provincia de Buenos Aires (Droguería Disval S.R.L. y otros c/),caratula_siguiente,fin_dentro_bloque,,20457,20529,20508,LibroVol329.1.md,fallo
+329_p551,329,"Palumbo, Francisco y otro c/ Provincia de Buenos Aires y otro | Provincia de Buenos Aires y otro (Palumbo, Francisco y otro c/)",caratula_siguiente,fin_dentro_bloque,,20745,20815,20751,LibroVol329.1.md,fallo
+329_p573,329,"ANSeS (Benaben, Carlos Hipólito c/) | Benaben, Carlos Hipólito c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,21559,21662,21627,LibroVol329.1.md,fallo
+329_p792,329,"Massalín Particulares S.A. c/ Provincia de Tierra del Fuego, Antártida e Islas del Atlántico Sur | Provincia de Tierra del Fuego, Antártida e Islas del Atlántico Sur (Massalín Particulares S.A. c/)",caratula_siguiente,fin_dentro_bloque,,29873,30305,30295,LibroVol329.1.md,fallo
+329_p805,329,"Olivo, Raúl y otra c/ Provincia de San Luis y otros | Provincia de San Luis y otros (Olivo, Raúl y otra c/)",caratula_siguiente,fin_dentro_bloque,,30406,30524,30516,LibroVol329.1.md,fallo
+329_p833,329,"Platt, Claudio Guillermo c/ Provincia de Córdoba y otro | Provincia de Córdoba y otro (Platt, Claudio Guillermo c/) | (21) Provincia de Córdoba y otro (Platt, Claudio Guillermo c/)",caratula_siguiente,fin_dentro_bloque,,31496,31674,31656,LibroVol329.1.md,fallo
+329_p899,329,"Mignone, Mario c/ Telefónica de Argentina S.A. y otro | Telefónica de Argentina S.A. y otro (Mignone, Mario c/)",caratula_siguiente,fin_dentro_bloque,,33955,34131,34114,LibroVol329.1.md,fallo
+329_p937,329,Colegio de Abogados de Tucumán c/ Provincia de Tucumán | Provincia de Tucumán (Colegio de Abogados de Tucumán c/),caratula_siguiente,fin_dentro_bloque,,35383,35573,35545,LibroVol329.1.md,fallo
+329_p991,329,"Benito, Fermín c/ Fernández, Nilson Adolfo | Fernández, Nilson Adolfo (Benito, Fermín c/)",caratula_siguiente,fin_extendido_pag_compartida,,37434,37472,37473,LibroVol329.1.md,fallo
+329_p1007,329,"Provincia del Chaco P.E. (Robles, Hugo Antonio y otros c/) | Robles, Hugo Antonio y otros c/ Provincia del Chaco P.E.",caratula_siguiente,fin_dentro_bloque,,37980,38170,38150,LibroVol329.1.md,fallo
+329_p1303,329,"Boggiano, Antonio",caratula_siguiente,fin_dentro_bloque,,49584,49657,49639,LibroVol329.1.md,fallo
+329_p1306,329,"Bordenave, Martha Emilia c/ Galdeano, José Miguel | Galdeano, José Miguel (Bordenave, Martha Emilia c/)",sumario_siguiente,fin_dentro_bloque,,49721,49727,49721,LibroVol329.1.md,fallo
+329_p1311,329,"Contreras, Carlos Walter c/ Provincia de Buenos Aires | Provincia de Buenos Aires (Contreras, Carlos Walter c/)",caratula_siguiente,fin_dentro_bloque,,49887,50094,50028,LibroVol329.1.md,fallo
+329_p1541,329,"Torres, Justo Santiago",caratula_siguiente,fin_dentro_bloque,,6398,6892,6408,LibroVol329.2.md,fallo
+329_p1554,329,Nación A.F.J.P. c/ Provincia de Tucumán | Provincia de Tucumán (Nación A.F.J.P. c/),caratula_siguiente,fin_dentro_bloque,,6898,7433,7396,LibroVol329.2.md,fallo
+329_p1568,329,Nación A.F.J.P. c/ Provincia del Neuquén | Provincia del Neuquén (Nación A.F.J.P. c/),caratula_siguiente,fin_dentro_bloque,,7441,8140,8105,LibroVol329.2.md,fallo
+329_p1669,329,"Germán, Arón",caratula_siguiente,fin_dentro_bloque,,11362,11376,11368,LibroVol329.2.md,fallo
+329_p1672,329,"ANSeS (Germán, Arón c/) | Germán, Arón c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,11411,11431,11425,LibroVol329.2.md,fallo
+329_p1762,329,"Banco Central de la República Argentina (Mathieu, Claudia María c/) | Mathieu, Claudia María c/ Banco Central de la República Argentina | (15) Mathieu, Claudia María c/ Banco Central de la República Argentina",caratula_siguiente,fin_dentro_bloque,,14885,15048,15010,LibroVol329.2.md,fallo
+329_p1859,329,Obra Social para la Actividad Docente (OSPLAD) c/ Provincia de San Luis | Provincia de San Luis (Obra Social para la Actividad Docente –OSPLAD– c/) | Provincia de San Luis (Obra Social para la Actividad Docente (OSPLAD) c/),caratula_siguiente,fin_dentro_bloque,,18555,18641,18607,LibroVol329.2.md,fallo
+329_p1881,329,"Provincia de Buenos Aires y otros (Tortorelli, Mario Nicolás c/) | Tortorelli, Mario Nicolás c/ Provincia de Buenos Aires y otros",caratula_siguiente,fin_dentro_bloque,,19386,20080,20075,LibroVol329.2.md,fallo
+329_p1928,329,"ANSeS (Puente, María Elvira c/) | Puente, María Elvira c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,21209,21252,21244,LibroVol329.2.md,fallo
+329_p2063,329,"Liberty Aseguradora de Riesgos del Trabajo (Rojas, Marcos Efraín c/) | Rojas, Marcos Efraín c/ Liberty Aseguradora de Riesgos del Trabajo",sumario_siguiente,fin_dentro_bloque,,26325,26335,26325,LibroVol329.2.md,fallo
+329_p2088,329,"Cohen, Eleazar c/ Provincia de Río Negro y otros | Provincia de Río Negro y otros (Cohen, Eleazar c/)",caratula_siguiente,fin_dentro_bloque,,27242,27908,27844,LibroVol329.2.md,fallo
+329_p2121,329,"Provincia de Buenos Aires y otros (Urán, Roberto Elías y otros c/) | Urán, Roberto Elías y otros c/ Provincia de Buenos Aires y otros",caratula_siguiente,fin_dentro_bloque,,28498,28638,28594,LibroVol329.2.md,fallo
+329_p2174,329,"Fiat Auto S.A. de Ahorro para Fines Determinados (Hendi, Daniel Alejandro Basilio c/) | Hendi, Daniel Alejandro Basilio c/ Fiat Auto S.A. de Ahorro para Fines Determinados",caratula_siguiente,fin_dentro_bloque,,30368,30534,30517,LibroVol329.2.md,fallo
+329_p2191,329,"ANSeS (Bombelli, Roberto c/) | Bombelli, Roberto c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,30966,31071,31002,LibroVol329.2.md,fallo
+329_p2194,329,"ANSeS (Ferreyra, Guillermo Marcelino c/) | Ferreyra, Guillermo Marcelino c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,31094,31178,31147,LibroVol329.2.md,fallo
+329_p2197,329,"ANSeS (Rasgido, Alicia Zulema c/) | Rasgido, Alicia Zulema c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,31183,31248,31235,LibroVol329.2.md,fallo
+329_p2206,329,"Gobet, Jorge Aníbal c/ Telefónica de Argentina y otros | Telefónica de Argentina y otros (Gobet, Jorge Aníbal c/)",caratula_siguiente,fin_dentro_bloque,,31524,31751,31554,LibroVol329.2.md,fallo
+329_p2218,329,"Bergés, Jorge Antonio",sumario_siguiente,fin_dentro_bloque,,31968,31996,31985,LibroVol329.2.md,fallo
+329_p2351,329,"Clara, Luis Juan Bartolomé y otros c/ Ministerio de Desarrollo Social y Medio Ambiente | Ministerio de Desarrollo Social y Medio Ambiente (Clara, Luis Juan Bartolomé y otros c/)",caratula_siguiente,fin_dentro_bloque,,36948,37102,36964,LibroVol329.2.md,fallo
+329_p2467,329,"Brasburg, Marcelo y otro",caratula_siguiente,fin_dentro_bloque,,41449,41498,41476,LibroVol329.2.md,fallo
+329_p2485,329,Argencard S.A. (Provincia del Chubut (Dirección General de Rentas) c/) | Provincia del Chubut (Dirección General de Rentas) c/ Argencard S.A.,caratula_siguiente,fin_dentro_bloque,,42131,42405,42392,LibroVol329.2.md,fallo
+329_p2539,329,Disco S.A. (City Bell),caratula_siguiente,fin_dentro_bloque,,44187,44490,44473,LibroVol329.2.md,fallo
+329_p2600,329,"Federación de Colegios de Abogados y Procuradores de Mendoza c/ Gómez Chavero, Alfredo | Gómez Chavero, Alfredo (Federación de Colegios de Abogados y Procuradores de Mendoza c/)",sumario_siguiente,fin_dentro_bloque,,46459,46491,46474,LibroVol329.2.md,fallo
+329_p2757,329,Obra Social para la Actividad Docente (OSPLAD) c/ Provincia de San Luis | Provincia de San Luis (Obra Social para la Actividad Docente –OSPLAD– c/) | Provincia de San Luis (Obra Social para la Actividad Docente (OSPLAD) c/),caratula_siguiente,fin_dentro_bloque,,52367,52430,52397,LibroVol329.2.md,fallo
+329_p2784,329,"Lantelme, Marcelo Gabriel c/ OSECAC | OSECAC (Lantelme, Marcelo Gabriel c/)",sumario_siguiente,fin_dentro_bloque,,53410,53507,53453,LibroVol329.2.md,fallo
+329_p2827,329,"Bobadilla, Oscar c/ Máxima A.F.J.P. | Máxima A.F.J.P. (Bobadilla, Oscar c/)",caratula_siguiente,fin_dentro_bloque,,54887,54956,54897,LibroVol329.2.md,fallo
+329_p2829,329,"ANSeS (Bariain, Teresa Amaya c/) | Bariain, Teresa Amaya c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,54972,54989,54984,LibroVol329.2.md,fallo
+329_p2830,329,"ANSeS (Parets, Adriana Hilda c/) | Parets, Adriana Hilda c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,54995,55133,55055,LibroVol329.2.md,fallo
+329_p2896,329,"Mecikovsky, Jaime Leonardo y otro",sumario_siguiente,fin_dentro_bloque,,57497,57511,57501,LibroVol329.2.md,fallo
+329_p2937,329,"ANSeS (Nally, Carlos Alberto c/) | Nally, Carlos Alberto c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,58990,59051,59001,LibroVol329.2.md,fallo
+329_p3006,329,"Squilario, Adrián y otro",caratula_siguiente,fin_dentro_bloque,,1608,2108,1923,LibroVol329.3.md,fallo
+329_p3089,329,"ANSeS (Badaro, Adolfo Valentín c/) | Badaro, Adolfo Valentín c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,4799,5221,5200,LibroVol329.3.md,fallo
+329_p3168,329,"López Casanegra, Antonio y otra c/ Provincia de Santiago del Estero y otro | Provincia de Santiago del Estero y otro (López Casanegra, Antonio y otra c/)",caratula_siguiente,fin_dentro_bloque,,7724,8030,8010,LibroVol329.3.md,fallo
+329_p3184,329,Policonsultorios de Cabecera S.R.L. c/ Provincia de Buenos Aires y otro | Provincia de Buenos Aires y otro (Policonsultorios de Cabecera S.R.L. c/),caratula_siguiente,fin_dentro_bloque,,8374,8572,8516,LibroVol329.3.md,fallo
+329_p3203,329,"ANSeS (Capurro, Nélida Beatriz c/) | Capurro, Nélida Beatriz c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,9061,9179,9089,LibroVol329.3.md,fallo
+329_p3207,329,"(1) ANSeS (Durante de Mondot, María Luján c/) | Durante de Mondot, María Luján c/ ANSeS | Mondot, María Luján Durante de c/ ANSeS | ANSeS (Durante de Mondot, María Luján c/)",caratula_siguiente,fin_dentro_bloque,,9194,9332,9302,LibroVol329.3.md,fallo
+329_p3211,329,"ANSeS (Monzo, Felipe José c/) | Monzo, Felipe José c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,9334,9406,9349,LibroVol329.3.md,fallo
+329_p3373,329,"Alarcón, Marisel y otros c/ Instituto Provincial de la Vivienda y Urbanismo del Neuquén | Instituto Provincial de la Vivienda y Urbanismo del Neuquén (Alarcón, Marisel y otros c/)",caratula_siguiente,fin_dentro_bloque,,16003,16614,16327,LibroVol329.3.md,fallo
+329_p3444,329,"Melchiori, Doli Nora del Valle c/ Provincia de Santa Fe | Provincia de Santa Fe (Melchiori, Doli Nora del Valle c/)",caratula_siguiente,fin_extendido_pag_compartida,,18877,18911,18922,LibroVol329.3.md,fallo
+329_p3564,329,"Buteler Oliva, Luis Alberto c/ Y.P.F. S.A. y otro | Y.P.F. S.A. y otro (Buteler Oliva, Luis Alberto c/)",caratula_siguiente,fin_extendido_pag_compartida,,23429,23571,23585,LibroVol329.3.md,fallo
+329_p3666,329,Distribuidora Norte S.R.L. y otra,caratula_siguiente,fin_dentro_bloque,,27347,27613,27535,LibroVol329.3.md,fallo
+329_p3848,329,"Ferreiro, Benigna Antonia c/ INPS – Caja Nacional de Previsión para el Personal del Estado y Servicios Públicos | INPS – Caja Nacional de Previsión para el Personal del Estado y Servicios Públicos (Ferreiro, Benigna Antonia c/)",caratula_siguiente,fin_dentro_bloque,,34532,34649,34557,LibroVol329.3.md,fallo
+329_p3863,329,"Lavado, Diego Jorge y otros c/ Provincia de Mendoza y otro | (8) Provincia de Mendoza y otro (Lavado, Diego Jorge y otros c/) | Provincia de Mendoza y otro (Lavado, Diego Jorge y otros c/)",caratula_siguiente,fin_dentro_bloque,,35122,35358,35316,LibroVol329.3.md,fallo
+329_p3872,329,El Condor Empresa de Transportes S.A. c/ Provincia del Chubut | Provincia del Chubut (El Condor Empresa de Transportes S.A. c/) | Provincia del Chubut (El Cóndor Empresa de Transportes S.A. c/),caratula_siguiente,fin_dentro_bloque,,35482,35723,35694,LibroVol329.3.md,fallo
+329_p3890,329,Orbis Mertig San Luis S.A.I.C. c/ Provincia de Buenos Aires | Provincia de Buenos Aires (Orbis Mertig San Luis S.A.I.C. c/),caratula_siguiente,fin_dentro_bloque,,36156,36293,36257,LibroVol329.3.md,fallo
+329_p3925,329,"Cinelli, Nicolasa y otro c/ Dispan S.A. | Dispan S.A. (Cinelli, Nicolasa y otro c/)",caratula_siguiente,fin_dentro_bloque,,37458,37559,37509,LibroVol329.3.md,fallo
+329_p4111,329,"IBM Argentina S.A. y otra (Murman, Gabriel Luis c/) | Murman, Gabriel Luis c/ IBM Argentina S.A. y otra",caratula_siguiente,fin_dentro_bloque,,44483,45377,45150,LibroVol329.3.md,fallo
+329_p4135,329,"Empresa Nacional de Telecomunicaciones (Vallejo, Abel Miguel c/) | Vallejo, Abel Miguel c/ Empresa Nacional de Telecomunicaciones",caratula_siguiente,fin_dentro_bloque,,45467,45632,45608,LibroVol329.3.md,fallo
+329_p4148,329,"Aventín, Antonio Juan c/ Provincia de Buenos Aires y otro | Provincia de Buenos Aires y otro (Aventín, Antonio Juan c/)",caratula_siguiente,fin_dentro_bloque,,45938,46006,45967,LibroVol329.3.md,fallo
+329_p4158,329,"Monserrat, José Higinio c/ Provincia de Buenos Aires | (7) Provincia de Buenos Aires (Monserrat, José Higinio c/) | Provincia de Buenos Aires (Monserrat, José Higinio c/)",caratula_siguiente,fin_dentro_bloque,,46312,46423,46336,LibroVol329.3.md,fallo
+329_p4168,329,Plan Ovalo S.A. de Ahorro para Fines Determinados c/ Provincia de Salta | Provincia de Salta (Plan Ovalo S.A. de Ahorro para Fines Determinados c/),caratula_siguiente,fin_dentro_bloque,,46706,46763,46728,LibroVol329.3.md,fallo
+329_p4170,329,Provincia de San Luis y otros (Roque Reymundo e Hijos S.A.C.I.F.A.I. c/) | Roque Reymundo e Hijos S.A.C.I.F.A.I. c/ Provincia de San Luis y otros,caratula_siguiente,fin_dentro_bloque,,46778,46838,46820,LibroVol329.3.md,fallo
+329_p4172,329,Provincia de Buenos Aires y Estado Nacional (tercero) (Trenes de Buenos Aires S.A. y otros c/) | Trenes de Buenos Aires S.A. y otros c/ Provincia de Buenos Aires y Estado Nacional (tercero),caratula_siguiente,fin_dentro_bloque,,46840,46984,46969,LibroVol329.3.md,fallo
+329_p4176,329,Provincia del Chaco (Transnea S.A. c/) | Transnea S.A. c/ Provincia del Chaco,caratula_siguiente,fin_dentro_bloque,,47000,47056,47048,LibroVol329.3.md,fallo
+329_p4243,329,Fuerza Aérea Argentina c/ Pan Ar Industria Aeronáutica S.A. | Pan Ar Industria Aeronáutica S.A. (Fuerza Aérea Argentina c/),sumario_siguiente,fin_dentro_bloque,,49430,49475,49443,LibroVol329.3.md,fallo
+329_p4263,329,"Moscópulo, Juan Carlos c/ Provincia de Buenos Aires y otros | Provincia de Buenos Aires y otros (Moscópulo, Juan Carlos c/)",caratula_siguiente,fin_dentro_bloque,,50149,50261,50241,LibroVol329.3.md,fallo
+329_p4590,329,Juplast S.A. c/ Nación Argentina y AFIP | Nación Argentina y AFIP (Juplast S.A. c/),caratula_siguiente,fin_extendido_pag_compartida,,62496,62571,62582,LibroVol329.3.md,fallo
+329_p4622,329,Gasnor S.A. (Municipalidad de la Ciudad de Salta c/) | Municipalidad de la Ciudad de Salta c/ Gasnor S.A.,caratula_siguiente,fin_dentro_bloque,,63771,63993,63842,LibroVol329.3.md,fallo
+329_p4688,329,"Garrafa, Carlos Francisco y otros",caratula_siguiente,fin_dentro_bloque,,66244,67271,66872,LibroVol329.3.md,fallo
+329_p4755,329,Empresa Nacional de Telecomunicaciones y Estado Nacional (Municipalidad de la Capital de Catamarca c/) | Municipalidad de la Capital de Catamarca c/ Empresa Nacional de Telecomunicaciones y Estado Nacional,caratula_siguiente,fin_dentro_bloque,,68843,69090,68996,LibroVol329.3.md,fallo
+329_p4762,329,"Ministerio del Interior (Romero Ubal, Nicasio Washington c/) | Romero Ubal, Nicasio Washington c/ Ministerio del Interior",caratula_siguiente,fin_dentro_bloque,,69100,69347,69340,LibroVol329.3.md,fallo
+329_p4769,329,"Poder Ejecutivo Nacional (Rodríguez, Rodolfo Enrique c/) | Rodríguez, Rodolfo Enrique c/ Poder Ejecutivo Nacional",sumario_siguiente,fin_dentro_bloque,,69374,69382,69374,LibroVol329.3.md,fallo
+329_p4789,329,American Jet S.A. c/ Provincia de Entre Ríos y/o quien resulte responsable | Provincia de Entre Ríos y/o quien resulte responsable (American Jet S.A. c/),caratula_siguiente,fin_dentro_bloque,,70081,70627,70603,LibroVol329.3.md,fallo
+329_p4822,329,Pluspetrol S.A. c/ Provincia del Neuquén y otro | Provincia del Neuquén y otro (Pluspetrol S.A. c/),caratula_siguiente,fin_dentro_bloque,,71311,71448,71381,LibroVol329.3.md,fallo
+329_p4862,329,"INPS – Caja Nacional de Previsión de la Industria, Comercio y Actividades Civiles (Luchetta, Isabel c/) | Luchetta, Isabel c/ INPS – Caja Nacional de Previsión de la Industria, Comercio y Actividades Civiles",caratula_siguiente,fin_dentro_bloque,,72805,72877,72864,LibroVol329.3.md,fallo
+329_p4865,329,"ANSeS (Boffelli, Santiago Otto Valentín c/) | Boffelli, Santiago Otto Valentín c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,72879,73072,73056,LibroVol329.3.md,fallo
+329_p4870,329,"ANSeS (Grosso, Irma Inés c/) | Grosso, Irma Inés c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,73079,73186,73182,LibroVol329.3.md,fallo
+329_p4873,329,"ANSeS (Hausherr, Arnaldo c/) | Hausherr, Arnaldo c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,73205,73336,73324,LibroVol329.3.md,fallo
+329_p5007,329,"ANSeS (Monge, Platón Alejandro c/) | Monge, Platón Alejandro c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,4481,4596,4581,LibroVol329.4.md,fallo
+329_p5010,329,"ANSeS (Rossi, Osvaldo Omar c/) | Rossi, Osvaldo Omar c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,4599,4788,4753,LibroVol329.4.md,fallo
+329_p5033,329,AADI CAPIF Asociación Civil Recaudadora c/ Hotel Belgrano S.A. | Hotel Belgrano S.A. (AADI CAPIF Asociación Civil Recaudadora c/),caratula_siguiente,fin_dentro_bloque,,5472,5895,5874,LibroVol329.4.md,fallo
+329_p5089,329,"Astiz, Alfredo Ignacio",caratula_siguiente,fin_dentro_bloque,,7614,7681,7663,LibroVol329.4.md,fallo
+329_p5151,329,Asociación de Trabajadores del Estado c/ Provincia de Santa Fe | Provincia de Santa Fe (Asociación de Trabajadores del Estado c/),caratula_siguiente,fin_dentro_bloque,,9945,10177,10155,LibroVol329.4.md,fallo
+329_p5178,329,"Polerio, Norberto c/ Provincia de Buenos Aires | Provincia de Buenos Aires (Polerio, Norberto c/)",caratula_siguiente,fin_dentro_bloque,,11014,11217,11149,LibroVol329.4.md,fallo
+329_p5317,329,"Moldes, Leónidas Juan Gustavo y otros c/ Poder Judicial de la Nación | Poder Judicial de la Nación (Moldes, Leónidas Juan Gustavo y otros c/)",caratula_siguiente,fin_dentro_bloque,,16441,16492,16441,LibroVol329.4.md,fallo
+329_p5346,329,Odstock Group S.A. c/ Provincia del Chaco y otros | Provincia del Chaco y otros (Odstock Group S.A. c/),caratula_siguiente,fin_dentro_bloque,,17527,17729,17722,LibroVol329.4.md,fallo
+329_p5410,329,Agrigenetics S.A. y otros,caratula_siguiente,fin_dentro_bloque,,19951,20481,20359,LibroVol329.4.md,fallo
+329_p5605,329,Caja de Previsión y Seguro Médico de la Provincia de Buenos Aires c/ Poder Ejecutivo Nacional y otro | Poder Ejecutivo Nacional y otro (Caja de Previsión y Seguro Médico de la Provincia de Buenos Aires c/),caratula_siguiente,fin_dentro_bloque,,27202,27263,27250,LibroVol329.4.md,fallo
+329_p5689,329,"Scioscia, Claudio Gerardo",caratula_siguiente,fin_extendido_pag_compartida,,30303,30376,30392,LibroVol329.4.md,fallo
+329_p5702,329,"Johnsons & Sons de Argentina S.A.I.C. (Valente, Estela c/) | Valente, Estela c/ Johnsons & Sons de Argentina S.A.I.C.",caratula_siguiente,fin_dentro_bloque,,30760,30867,30768,LibroVol329.4.md,fallo
+329_p5950,329,"Alsina, Marcos Adolfo y otros c/ Galería Da Vinci S.A.C.I.M.I. y A. | Galería Da Vinci S.A.C.I.M.I. y A. (Alsina, Marcos Adolfo y otros c/)",caratula_siguiente,fin_dentro_bloque,,40006,40532,40266,LibroVol329.4.md,fallo
+329_p6033,329,Henter Industrial y Comercial S.A. y otros c/ Provincia de Misiones | Provincia de Misiones (Henter Industrial y Comercial S.A. y otros c/),caratula_siguiente,fin_dentro_bloque,,43137,43319,43301,LibroVol329.4.md,fallo
+329_p6064,329,"ANSeS (Lucasio, Nélida c/) | Lucasio, Nélida c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,44247,44379,44348,LibroVol329.4.md,fallo
+329_p6081,329,"Hutchinson, Tomás c/ Instituto Provincial de Previsión Social | Instituto Provincial de Previsión Social (Hutchinson, Tomás c/)",caratula_siguiente,fin_dentro_bloque,,44882,45085,45049,LibroVol329.4.md,fallo
+330_p22,330,"Mendoza, Beatriz Silvia y otros c/ Nación Argentina y otros | Nación Argentina y otros (Mendoza, Beatriz Silvia y otros c/)",caratula_siguiente,fin_extendido_pag_compartida,,720,766,767,LibroVol330.1.md,fallo
+330_p88,330,Sitraj – Corrientes,caratula_siguiente,fin_dentro_bloque,,3092,3487,3273,LibroVol330.1.md,fallo
+330_p170,330,Chevron San Jorge S.R.L.,caratula_siguiente,fin_dentro_bloque,,6182,6279,6255,LibroVol330.1.md,fallo
+330_p178,330,Intense Life S.A. c/ Provincia de Tierra del Fuego (Secretaría de Salud Pública) | Provincia de Tierra del Fuego (Secretaría de Salud Pública) (Intense Life S.A. c/),caratula_siguiente,fin_dentro_bloque,,6466,6617,6541,LibroVol330.1.md,fallo
+330_p205,330,"Abad, Pedro",caratula_siguiente,fin_dentro_bloque,,7436,7555,7551,LibroVol330.1.md,fallo
+330_p222,330,"Ezcurra, Sixta Valentina c/ Nación Argentina | Nación Argentina (Ezcurra, Sixta Valentina c/)",caratula_siguiente,fin_extendido_pag_compartida,,8060,8109,8110,LibroVol330.1.md,fallo
+330_p240,330,"Gerpe, Mariano",caratula_siguiente,fin_dentro_bloque,,8722,8799,8765,LibroVol330.1.md,fallo
+330_p358,330,Dominique Val S.A. y otros,caratula_siguiente,fin_dentro_bloque,,13212,13494,13396,LibroVol330.1.md,fallo
+330_p399,330,"López, Ramón A.",caratula_siguiente,fin_dentro_bloque,,14770,16628,15126,LibroVol330.1.md,fallo
+330_p607,330,Nación Argentina (Provincia de Salta c/) | Provincia de Salta c/ Nación Argentina,caratula_siguiente,fin_dentro_bloque,,22891,22997,22976,LibroVol330.1.md,fallo
+330_p610,330,"Provincia de Buenos Aires y otros (Soria, Natalia I. y otro c/) | Soria, Natalia I. y otro c/ Provincia de Buenos Aires y otros",caratula_siguiente,fin_dentro_bloque,,23004,23309,23274,LibroVol330.1.md,fallo
+330_p618,330,Provincia del Chubut (Vieira Argentina S.A. c/) | Vieira Argentina S.A. c/ Provincia del Chubut,caratula_siguiente,fin_dentro_bloque,,23310,23340,23314,LibroVol330.1.md,fallo
+330_p780,330,Instituto de Servicios Sociales Bancarios c/ Provincia de Tucumán y otros | Provincia de Tucumán y otros (Instituto de Servicios Sociales Bancarios c/),caratula_siguiente,fin_dentro_bloque,,29644,29805,29800,LibroVol330.1.md,fallo
+330_p1172,330,"Bagnuelo, Cristián Gabriel y otro",caratula_siguiente,fin_extendido_pag_compartida,,44850,44930,44935,LibroVol330.1.md,fallo
+330_p1236,330,"Comisión Nacional de Energía Atómica (Dima, Juan Carlos c/) | Dima, Juan Carlos c/ Comisión Nacional de Energía Atómica | (5) Comisión Nacional de Energía Atómica (Dima, Juan Carlos c/)",caratula_siguiente,fin_dentro_bloque,,47160,47350,47331,LibroVol330.1.md,fallo
+330_p1257,330,"Rial, Claudio Darío",caratula_siguiente,fin_dentro_bloque,,47952,48074,48065,LibroVol330.1.md,fallo
+330_p1271,330,"Malvicino, Horacio E. c/ Provincia de Misiones | Provincia de Misiones (Malvicino, Horacio E. c/)",caratula_siguiente,fin_dentro_bloque,,48494,48663,48648,LibroVol330.1.md,fallo
+330_p1325,330,Bagley S.A. c/ D.G.I. | D.G.I. (Bagley S.A. c/),caratula_siguiente,fin_dentro_bloque,,49,330,283,LibroVol330.2.md,fallo
+330_p1603,330,Nación Argentina (SE.DRO.NAR.) c/ Provincia de Misiones | Provincia de Misiones (Nación Argentina (SE.DRO.NAR.) c/),caratula_siguiente,fin_dentro_bloque,,10549,10636,10631,LibroVol330.2.md,fallo
+330_p1632,330,"ANSeS (Fernández Duran, Manuel c/) | Fernández Durán, Manuel c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,11611,11696,11666,LibroVol330.2.md,fallo
+330_p1642,330,"Alberti, Edgardo Marcelo y otros c/ Ministerio de Educación y Justicia | Ministerio de Educación y Justicia (Alberti, Edgardo Marcelo y otros c/)",sumario_siguiente,fin_dentro_bloque,,11988,12003,11989,LibroVol330.2.md,fallo
+330_p1643,330,Federación Sindicatos Unidos Petroleros del Estado (S.U.P.E.) c/ Yacimientos Petrolíferos Fiscales | Yacimientos Petrolíferos Fiscales (Federación Sindicatos Unidos Petroleros del Estado [S.U.P.E.] c/) | Y.P.F. (Federación Sindicatos Unidos Petroleros del Estado [S.U.P.E.] c/),sumario_siguiente,fin_dentro_bloque,,12004,12037,12025,LibroVol330.2.md,fallo
+330_p1759,330,"Broda, Roberto Carlos y otros c/ Neuspiller, Nicolás Raúl y otros | Neuspiller, Nicolás Raúl y otros (Broda, Roberto Carlos y otros c/)",sumario_siguiente,fin_dentro_bloque,,16623,16722,16666,LibroVol330.2.md,fallo
+330_p1814,330,"Machuca, Roque Jacinto y otro c/ Provincia de Buenos Aires y otros | Provincia de Buenos Aires y otros (Machuca, Roque Jacinto y otro c/)",caratula_siguiente,fin_dentro_bloque,,18702,18783,18777,LibroVol330.2.md,fallo
+330_p1888,330,"Brizuela, Alfredo Juan c/ Scotiabank Quilmes S.A. | Scotiabank Quilmes S.A. (Brizuela, Alfredo Juan c/)",caratula_siguiente,fin_dentro_bloque,,21548,21717,21711,LibroVol330.2.md,fallo
+330_p1925,330,"Polerio, Norberto c/ Provincia de Buenos Aires | Provincia de Buenos Aires (Polerio, Norberto c/) | (15) Provincia de Buenos Aires (Polerio, Norberto c/)",caratula_siguiente,fin_dentro_bloque,,22929,22984,22974,LibroVol330.2.md,fallo
+330_p1947,330,"ANSeS (Olguín, Victorio c/) | Olguín, Victorio c/ ANSeS | (14) Olguín, Victorio c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,23777,23870,23830,LibroVol330.2.md,fallo
+330_p1971,330,"De los Santos Acosta, Alcino",caratula_siguiente,fin_extendido_pag_compartida,,24656,24803,24828,LibroVol330.2.md,fallo
+330_p2040,330,"Vargas Aignasse, Guillermo",caratula_siguiente,fin_dentro_bloque,,27381,27592,27461,LibroVol330.2.md,fallo
+330_p2059,330,"Márquez Bello, José Benito c/ Provincia de Santa Cruz y otros | Provincia de Santa Cruz y otros (Marquez Bello, José Benito c/)",caratula_siguiente,fin_dentro_bloque,,28081,28136,28117,LibroVol330.2.md,fallo
+330_p2192,330,Repsol Yacimientos Petrolíferos Fiscales Gas S.A. – Cooperativa de Obras y Servicios Públicos Sociales y Viviendas El Bolsón Limitada (Coopetel Ltda.) – Totalgas Argentina S.A. Shell Gas S.A.,caratula_siguiente,fin_dentro_bloque,,33092,33624,33265,LibroVol330.2.md,fallo
+330_p2286,330,ENRE resol. 458/02 (Pluspetrol Energy S.A. c/) | Pluspetrol Energy S.A. c/ ENRE resol. 458/02,caratula_siguiente,fin_dentro_bloque,,36636,37336,36970,LibroVol330.2.md,fallo
+330_p2414,330,"Cherquis, Ernesto",caratula_siguiente,fin_dentro_bloque,,41658,41725,41700,LibroVol330.2.md,fallo
+330_p2452,330,"Fiorentino, Roxana María Luján c/ Socialmed S.A. y otro | Socialmed S.A. y otro (Fiorentino, Roxana María Luján c/)",caratula_siguiente,fin_dentro_bloque,,43118,43595,43377,LibroVol330.2.md,fallo
+330_p2470,330,Capex Sociedad Anónima c/ Provincia del Neuquén | Provincia del Neuquén (Capex Sociedad Anónima c/),caratula_siguiente,fin_dentro_bloque,,43829,44141,44137,LibroVol330.2.md,fallo
+330_p2575,330,"Galiano de Luchetta, Amanda Josefa c/ Provincia de San Luis | Provincia de San Luis (Galiano de Luchetta, Amanda Josefa c/)",caratula_siguiente,fin_dentro_bloque,,47825,48149,48148,LibroVol330.2.md,fallo
+330_p2739,330,Línea 22 S.A. c/ Provincia de Buenos Aires | Provincia de Buenos Aires (Línea 22 S.A. c/),caratula_siguiente,fin_dentro_bloque,,54168,54402,54297,LibroVol330.2.md,fallo
+330_p2746,330,"Mendoza, Beatriz Silvia y otros c/ Nación Argentina y otros | Nación Argentina y otros (Mendoza, Beatriz Silvia y otros c/)",caratula_siguiente,fin_dentro_bloque,,54428,54480,54454,LibroVol330.2.md,fallo
+330_p2792,330,"Celso, Recio Maciel",caratula_siguiente,fin_dentro_bloque,,56257,56270,56265,LibroVol330.2.md,fallo
+330_p2793,330,"Pérez Figueroa, Eduardo y otro",caratula_siguiente,fin_dentro_bloque,,56278,56307,56279,LibroVol330.2.md,fallo
+330_p2794,330,"Daponte, Jorge Luis",caratula_siguiente,fin_extendido_pag_compartida,,56324,56343,56344,LibroVol330.2.md,fallo
+330_p2847,330,"Cedrun Gutiérrez, José Bibiano",caratula_siguiente,fin_dentro_bloque,,58416,58464,58448,LibroVol330.2.md,fallo
+330_p2964,330,"ANSeS (Bonino, Rodolfo c/) | Bonino, Rodolfo c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,3408,3562,3497,LibroVol330.3.md,fallo
+330_p2968,330,"ANSeS (Zanichelli, María Luisa c/) | Zanichelli, María Luisa c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,3577,3636,3619,LibroVol330.3.md,fallo
+330_p3069,330,"Cresto, Juan José c/ Secretaría de Cultura y Comunicación de la Presidencia de la Nación | Secretaría de Cultura y Comunicación de la Presidencia de la Nación (Cresto, Juan José c/)",caratula_siguiente,fin_dentro_bloque,,7455,7637,7556,LibroVol330.3.md,fallo
+330_p3141,330,"Ramírez Osorio, Clider",caratula_siguiente,fin_extendido_pag_compartida,,10314,10415,10441,LibroVol330.3.md,fallo
+330_p3458,330,"ANSeS (Juncos, Juan Ramón c/) | Juncos, Juan Ramón c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,23203,23284,23229,LibroVol330.3.md,fallo
+330_p3463,330,Parques Interama S.A.,caratula_siguiente,fin_dentro_bloque,,23353,23695,23533,LibroVol330.3.md,fallo
+330_p3494,330,Cervecería y Maltería Quilmes S.A.I.C.A. y G. (Distribuidora San Diego S.R.L. c/) | Distribuidora San Diego S.R.L. c/ Cervecería y Maltería Quilmes S.A.I.C.A. y G.,caratula_siguiente,fin_dentro_bloque,,24593,24900,24881,LibroVol330.3.md,fallo
+330_p3685,330,"Diario “El Sol” (Sciammaro, Liliana E. c/) | Sciammaro, Liliana E. c/ Diario “El Sol”",caratula_siguiente,fin_dentro_bloque,,31880,33061,31893,LibroVol330.3.md,fallo
+330_p3714,330,Banco Central de la República Argentina (Banco Latinoamericano Sociedad Anónima c/) | Banco Latinoamericano Sociedad Anónima c/ Banco Central de la República Argentina,caratula_siguiente,fin_dentro_bloque,,33066,33356,33320,LibroVol330.3.md,fallo
+330_p3758,330,"Cesetti, Adolfo A. c/ Ferrocarriles Argentinos | Ferrocarriles Argentinos (Cesetti, Adolfo A. c/)",caratula_siguiente,fin_dentro_bloque,,34836,35041,34897,LibroVol330.3.md,fallo
+330_p3773,330,"Provincia del Chaco y otro (Nación Argentina) (Romanut, Amílcar Rodolfo Eduardo y otros c/) | Romanut, Amílcar Rodolfo Eduardo y otros c/ Provincia del Chaco y otro (Nación Argentina)",caratula_siguiente,fin_dentro_bloque,,35386,35534,35528,LibroVol330.3.md,fallo
+330_p3801,330,"Minaglia, Mauro Omar y otra",caratula_siguiente,fin_extendido_pag_compartida,,36455,37836,37853,LibroVol330.3.md,fallo
+330_p3848,330,A.F.I.P. – D.G.I. c/ Servicios Empresarios Argentinos S.A. | Servicios Empresarios Argentinos S.A. (A.F.I.P. – D.G.I. c/),caratula_siguiente,fin_dentro_bloque,,38304,38466,38441,LibroVol330.3.md,fallo
+330_p4040,330,Papelera Pedotti S.A.,caratula_siguiente,fin_dentro_bloque,,45901,46081,45911,LibroVol330.3.md,fallo
+330_p4064,330,Obra Social para la Actividad Docente (OSPLAD) c/ Provincia de Santiago del Estero | Provincia de Santiago del Estero (Obra Social para la Actividad Docente [OSPLAD] c/),caratula_siguiente,fin_dentro_bloque,,46819,47061,47041,LibroVol330.3.md,fallo
+330_p4429,330,"A.F.I.P. (Belasio, Carlos Alfredo c/) | Belasio, Carlos Alfredo c/ A.F.I.P.",caratula_siguiente,fin_dentro_bloque,,4370,4599,4490,LibroVol330.4.md,fallo
+330_p4483,330,Procefax S.A.,caratula_siguiente,fin_dentro_bloque,,6364,6591,6524,LibroVol330.4.md,fallo
+330_p4528,330,"ANSeS (Panciroli, Dionisio c/) | Panciroli, Dionisio c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,8079,8120,8113,LibroVol330.4.md,fallo
+330_p4590,330,Defensor del Pueblo de la Nación c/ Nación Argentina y otro (Provincia del Chaco) | Nación Argentina y otro (Provincia del Chaco) (Defensor del Pueblo de la Nación c/),caratula_siguiente,fin_extendido_pag_compartida,,10377,10450,10459,LibroVol330.4.md,fallo
+330_p4685,330,"ANSeS (Cardinale Palveruci, Elva Celestina c/) | Cardinale Palveruci, Elva Celestina c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,14102,14160,14151,LibroVol330.4.md,fallo
+330_p4687,330,"(2) ANSeS (Camnasio, Raquel Irma c/) | Camnasio, Raquel Irma c/ ANSeS",caratula_siguiente,fin_dentro_bloque,,14162,14276,14254,LibroVol330.4.md,fallo
+330_p4796,330,"Aramayo, Gloria Serafina c/ Colegio Público de la Capital Federal | Colegio Público de la Capital Federal (Aramayo, Gloria Serafina c/)",sumario_siguiente,fin_dentro_bloque,,18329,18346,18330,LibroVol330.4.md,fallo
+330_p4807,330,"García, Diego Edgardo c/ Provincia de Entre Ríos y otros | Provincia de Entre Ríos y otros (García, Diego Edgardo c/)",caratula_siguiente,fin_dentro_bloque,,18773,18879,18874,LibroVol330.4.md,fallo
+330_p4851,330,Comisión Vecinal Playas de Quequén c/ Provincia de Buenos Aires y otros | Provincia de Buenos Aires y otros (Comisión Vecinal Playas de Quequén c/),caratula_siguiente,fin_dentro_bloque,,20426,20699,20652,LibroVol330.4.md,fallo
+330_p4862,330,"Andia, Juan Ramona c/ ANSeS | ANSeS (Andia, Juan Ramona c/)",caratula_siguiente,fin_dentro_bloque,,20868,21008,20988,LibroVol330.4.md,fallo
+330_p4953,330,Asociación de Bancos de la Argentina y otros c/ Provincia del Chaco | Provincia del Chaco (Asociación de Bancos de la Argentina y otros c/),caratula_siguiente,fin_dentro_bloque,,24255,24494,24433,LibroVol330.4.md,fallo
+330_p4960,330,"Asociación Ecológica Social de Pesca, Caza y Náutica c/ Provincia de Buenos Aires y otros | Provincia de Buenos Aires y otros (Asociación Ecológica Social de Pesca, Caza y Náutica c/ )",caratula_siguiente,fin_dentro_bloque,,24517,24886,24520,LibroVol330.4.md,fallo
+330_p4970,330,Banco de la Provincia de Río Negro c/ Consorcio Argentino de Productores Rionegrinos Integrados S.A. | Consorcio Argentino de Productores Rionegrinos Integrados S.A. (Banco de la Provincia de Río Negro c/),caratula_siguiente,fin_dentro_bloque,,24912,25389,25259,LibroVol330.4.md,fallo
+330_p4983,330,"Banco de la Nación Argentina c/ Volpe de Pasquali, Rosa N. | Volpe de Pasquali, Rosa N. (Banco de la Nación Argentina c/)",caratula_siguiente,fin_dentro_bloque,,25418,25575,25557,LibroVol330.4.md,fallo
+330_p5197,330,"Orígenes A.F.J.P. (Villagra, Ramón Amado c/) | Villagra, Ramón Amado c/ Orígenes A.F.J.P.",caratula_siguiente,fin_dentro_bloque,,33817,33962,33913,LibroVol330.4.md,fallo
+330_p5257,330,Empresa Distribuidora de Energía del Norte S.A.,caratula_siguiente,fin_dentro_bloque,,36140,36488,36420,LibroVol330.4.md,fallo
+330_p5292,330,"Jara, Egidio y otros c/ Ministerio del Interior y otros | Ministerio del Interior y otros (Jara, Egidio y otros c/)",sumario_siguiente,fin_dentro_bloque,,37471,37530,37506,LibroVol330.4.md,fallo
+331_p93,331,"Blazquez, Roberto | Falcón, María Rosa",caratula_siguiente,fin_dentro_bloque,,3206,3255,3247,LibroVol331.1.md,fallo
+331_p96,331,"Kanashiro, Rosa",caratula_siguiente,fin_dentro_bloque,,3296,3424,3346,LibroVol331.1.md,fallo
+331_p303,331,"Ventura, Guillermo Salvador | Organización de Remises Universal S.R.L. y otros",caratula_siguiente,fin_dentro_bloque,,11244,11515,11305,LibroVol331.1.md,fallo
+331_p310,331,"Buenos Aires, Provincia de",caratula_siguiente,fin_dentro_bloque,,11517,11990,11941,LibroVol331.1.md,fallo
+331_p360,331,Defensor Público del Distrito Judicial Sur Dr. Julián De Martino,caratula_siguiente,fin_dentro_bloque,,13478,13613,13607,LibroVol331.1.md,fallo
+331_p410,331,"Río Negro, Provincia de | (3) Por nombre del demandado A.F.I.P. (Dirección General de Aduanas) | A.F.I.P. (Dirección General de Aduanas)",caratula_siguiente,fin_dentro_bloque,,15314,15475,15458,LibroVol331.1.md,fallo
+331_p477,331,"Delfino, Martín Fernando y otros",caratula_siguiente,fin_dentro_bloque,,17741,18149,18106,LibroVol331.1.md,fallo
+331_p583,331,Administración Federal de Ingresos Públicos y otros.,caratula_siguiente,fin_dentro_bloque,,21840,21988,21959,LibroVol331.1.md,fallo
+331_p776,331,"Sauma, Elías Rafael | Ministerio de Justicia y otro.",caratula_siguiente,fin_dentro_bloque,,29295,29444,29406,LibroVol331.1.md,fallo
+331_p1013,331,Estado Nacional - Ministerio de Cultura y Educación | Universidad de General Sarmiento,caratula_siguiente,fin_extendido_pag_compartida,,307,491,513,LibroVol331.2.md,fallo
+331_p1186,331,Yacimientos Petrolíferos Fiscales S.A. | Construcciones SADDEMI S.A.,caratula_siguiente,fin_dentro_bloque,,6881,7391,7032,LibroVol331.2.md,fallo
+331_p1302,331,"Salta, Provincia de",caratula_siguiente,fin_dentro_bloque,,11369,11747,11681,LibroVol331.2.md,fallo
+331_p1397,331,Mybis Sierra Chica S.A. y otros | Cantera Timoteo S.A.,caratula_siguiente,fin_dentro_bloque,,15031,15077,15060,LibroVol331.2.md,fallo
+331_p1403,331,"Melano, Ariel Carlos | AFIP (D.G.I.) | A.F.I.P. - D.G.I.",caratula_siguiente,fin_dentro_bloque,,15222,15568,15481,LibroVol331.2.md,fallo
+331_p1500,331,"San Luis, Provincia de | Estado Nacional",caratula_siguiente,fin_dentro_bloque,,18960,19009,18995,LibroVol331.2.md,fallo
+331_p1581,331,"ANSeS | Bianchi, Olga",caratula_siguiente,fin_dentro_bloque,,21934,22133,22041,LibroVol331.2.md,fallo
+331_p1605,331,"Pranzetti, Aldo Saúl y otros",caratula_siguiente,fin_dentro_bloque,,22990,23201,23103,LibroVol331.2.md,fallo
+331_p1987,331,"Núñez de Zanetti, Mónica Viviana | Famyl S.A. Salud para la Familia",caratula_siguiente,fin_dentro_bloque,,124,719,680,LibroVol331.3.md,fallo
+331_p2309,331,"Paredes, José Roberto y otros",caratula_siguiente,fin_dentro_bloque,,12588,12821,12670,LibroVol331.3.md,fallo
+331_p2363,331,"Campos, Gabriela Viviana",caratula_siguiente,fin_extendido_pag_compartida,,14542,14637,14638,LibroVol331.3.md,fallo
+331_p2545,331,Colminsur S.A. | Administración Federal de Ingresos Públicos - Dirección General Impositiva,caratula_siguiente,fin_dentro_bloque,,21663,21827,21761,LibroVol331.3.md,fallo
+332_p5,332,"Lemes, Mauro Ismael",caratula_siguiente,fin_extendido_pag_compartida,,128,313,323,LibroVol332.1.md,fallo
+332_p89,332,"Santana, Armando Alberto y otros | Yacimientos Petrolíferos Fiscales S.A. y otro",caratula_siguiente,fin_dentro_bloque,,3315,3632,3606,LibroVol332.1.md,fallo
+332_p102,332,Sunflower Argentina S.A. | EN SDC disp. 256/07,caratula_siguiente,fin_dentro_bloque,,3859,3938,3875,LibroVol332.1.md,fallo
+332_p531,332,Y.P.F. S.A. | Provincia de Tierra del Fuego,caratula_siguiente,fin_dentro_bloque,,20564,21243,21208,LibroVol332.1.md,fallo
+332_p585,332,"Márquez, Guillermo César | EN-Mº de Educación | EN - Mº de Educación",caratula_siguiente,fin_extendido_pag_compartida,,22753,22852,22879,LibroVol332.1.md,fallo
+332_p607,332,"Vignaud, Juan Carlos Roland | Mº Relaciones Exteriores, Comercio Internacional y Culto",caratula_siguiente,fin_dentro_bloque,,23605,23727,23628,LibroVol332.1.md,fallo
+332_p826,332,"Fisco de la Provincia de Corrientes | Natalio Acuña y contra el titular del Adrema KL00469-3 y contra quien resulte responsable | Por nombre del demandado Acuña, Natalio y contra el titular del Adrema KL00469-3 y contra quien resulte responsable",caratula_siguiente,fin_dentro_bloque,,32207,32331,32313,LibroVol332.1.md,fallo
+332_p1512,332,"Salgado, Héctor y otros",caratula_siguiente,fin_dentro_bloque,,22765,23022,22938,LibroVol332.2.md,fallo
+332_p1769,332,"Gualtieri Rugnone de Prieto, Emma Elidia y otros",caratula_siguiente,fin_dentro_bloque,,32800,34986,33767,LibroVol332.2.md,fallo
+332_p2136,332,"Corrientes, Provincia de | Misiones, Provincia de",caratula_siguiente,fin_dentro_bloque,,4146,4226,4181,LibroVol332.3.md,fallo
+332_p2237,332,Sancor C.U.L. (TF 18476-A) | D.G.A.,caratula_siguiente,fin_extendido_pag_compartida,,8036,8534,8547,LibroVol332.3.md,fallo
+332_p2265,332,"Shell Compañía Argentina de Petróleo S.A. | Tucumán, Provincia de",caratula_siguiente,fin_dentro_bloque,,9137,9702,9251,LibroVol332.3.md,fallo
+332_p2418,332,"Ortega, Diego Nicolás | Transporte Metropolitanos General Roca S.A.",sumario_siguiente,fin_extendido_pag_compartida,,15295,15558,15560,LibroVol332.3.md,fallo
+332_p2559,332,"Brugo, Jorge Angel | Lanata, Jorge y otros",caratula_siguiente,fin_dentro_bloque,,20740,21796,21254,LibroVol332.3.md,fallo
+332_p2659,332,"Rossi, Domingo Daniel",caratula_siguiente,fin_dentro_bloque,,24584,25057,25024,LibroVol332.3.md,fallo
+332_p2828,332,"Sanmartín, Juan José Félix | Banco de la Nación Argentina",caratula_siguiente,fin_dentro_bloque,,31140,31400,31204,LibroVol332.3.md,fallo
+333_p24,333,Renault Argentina S.A. (TF. 19.292 -A) | D.G.A.,caratula_siguiente,fin_dentro_bloque,,783,1014,863,LibroVol333.1.md,fallo
+333_p39,333,"Mendoza, Provincia de | Petroquímica Comodoro Rivadavia S.A.",caratula_siguiente,fin_dentro_bloque,,1329,2181,1870,LibroVol333.1.md,fallo
+333_p68,333,"Gaya, Norma Mary Beatriz | ANSeS",caratula_siguiente,fin_dentro_bloque,,2482,2581,2524,LibroVol333.1.md,fallo
+333_p78,333,"(2) Gorosito, Marcos | ANSeS | Gorosito, Marcos",caratula_siguiente,fin_dentro_bloque,,2843,3003,2931,LibroVol333.1.md,fallo
+333_p108,333,"Municipalidad de Gualeguaychú | Entre Ríos, Provincia de y otros",caratula_siguiente,fin_dentro_bloque,,4012,4444,4434,LibroVol333.1.md,fallo
+333_p604,333,"P., V. A.",caratula_siguiente,fin_dentro_bloque,,23234,24329,24195,LibroVol333.1.md,fallo
+333_p631,333,"Estado Nacional - AFIP - DGI | Bertoto, Bruera y Cía S.A.C. y F.",sumario_siguiente,fin_dentro_bloque,,24353,24402,24368,LibroVol333.1.md,fallo
+333_p777,333,EN Mº Planificación dto. 118/06 (ST),caratula_siguiente,fin_dentro_bloque,,440,639,607,LibroVol333.2.md,fallo
+333_p855,333,"Rabolini, Germán Adolfo | EN - Mº Economía - resol. 73/02",caratula_siguiente,fin_dentro_bloque,,3078,3220,3210,LibroVol333.2.md,fallo
+333_p1140,333,Rot Automotores S.A.C.I.F. | Sevel Argentina S.A.,sumario_siguiente,fin_extendido_pag_compartida,,14463,14551,14555,LibroVol333.2.md,fallo
+333_p1179,333,"Perriod, Christophe Alain Laurent",caratula_siguiente,fin_dentro_bloque,,15894,16384,16348,LibroVol333.2.md,fallo
+333_p1244,333,"Ticera, Osvaldo Raúl | PEN Mº Justicia y DDHH resol. 273/00",caratula_siguiente,fin_dentro_bloque,,18333,18603,18516,LibroVol333.2.md,fallo
+333_p1251,333,Estado Nacional - ley 26.124,caratula_siguiente,fin_dentro_bloque,,18616,18718,18706,LibroVol333.2.md,fallo
+333_p1304,333,"Zanetti, Héctor Orlando | E.N. - Mº de Justicia y Derechos Humanos de la Nación - Serv. Penit. Federal",caratula_siguiente,fin_dentro_bloque,,20697,20868,20772,LibroVol333.2.md,fallo
+333_p1442,333,"Rota, Sergio | IATA SAIC y F y O.",caratula_siguiente,fin_dentro_bloque,,26138,26293,26288,LibroVol333.2.md,fallo
+333_p1474,333,"Rachid, María de la Cruz y otro | Registro Nacional de Estado Civil y Capacidad de las Personas",caratula_siguiente,fin_dentro_bloque,,27358,33139,29572,LibroVol333.2.md,fallo
+333_p1784,333,"Salas, Dino y otros | Salta, Provincia de y Estado Nacional",caratula_siguiente,fin_extendido_pag_compartida,,39743,39909,39957,LibroVol333.2.md,fallo
+333_p1812,333,"Desch, José Osvaldo",caratula_siguiente,fin_dentro_bloque,,40828,40985,40969,LibroVol333.2.md,fallo
+333_p1869,333,"Lipnizky, Leonardo Jorge y otro",caratula_siguiente,fin_dentro_bloque,,43031,43589,43402,LibroVol333.2.md,fallo
+334_p109,334,Editorial Perfil S.A. y otro | E.N. - Jefatura Gabinete de Ministros - SMC,caratula_siguiente,fin_extendido_pag_compartida,,4265,4666,4693,LibroVol334.1.md,fallo
+334_p178,334,"Vargas Lerena, Álvaro | Cadena País Producciones Publicitarias S.A.",caratula_siguiente,fin_dentro_bloque,,6965,7302,7196,LibroVol334.1.md,fallo
+334_p187,334,Sociedad Argentina de Autores y Compositores de Música | Crazy Confitería,caratula_siguiente,fin_dentro_bloque,,7324,7638,7535,LibroVol334.1.md,fallo
+334_p236,334,Multicanal S.A. y otro | CONADECO - dto. 527/05 y otros,caratula_siguiente,fin_dentro_bloque,,9214,9364,9292,LibroVol334.1.md,fallo
+334_p362,334,"Berthet, Emilio",caratula_siguiente,fin_extendido_pag_compartida,,14130,14227,14276,LibroVol334.1.md,fallo
+334_p541,334,TECSA S.A. | Provincia de Formosa y otro,caratula_siguiente,fin_dentro_bloque,,21080,21489,21093,LibroVol334.1.md,fallo
+334_p698,334,"Slatapolsky, Jorge Alberto | Banco do Brasil S.A.",caratula_siguiente,fin_dentro_bloque,,27219,27862,27502,LibroVol334.1.md,fallo
+334_p749,334,"Secretaría de Desarrollo Social de la Nación | Viviani, Angel Pablo",caratula_siguiente,fin_dentro_bloque,,1377,1545,1540,LibroVol334.2.md,fallo
+334_p763,334,D.G.I.,caratula_siguiente,fin_dentro_bloque,,1896,2070,2035,LibroVol334.2.md,fallo
+334_p891,334,D.G.I. | COVIMET S.A. (TF 19404-I),caratula_siguiente,fin_dentro_bloque,,6802,6993,6971,LibroVol334.2.md,fallo
+334_p1033,334,Administración Nacional de Aduanas | Banco de la Ciudad de Buenos Aires,caratula_siguiente,fin_extendido_pag_compartida,,12320,12384,12389,LibroVol334.2.md,fallo
+334_p1216,334,"Mendez, Daniel Roberto",caratula_siguiente,fin_dentro_bloque,,6017,6621,6112,LibroVol334.3.md,fallo
+334_p1387,334,"Pellicori, Liliana Silvia | Colegio Público de Abogados de la Capital Federal",caratula_siguiente,fin_dentro_bloque,,12902,13703,13623,LibroVol334.3.md,fallo
+334_p1920,334,"Villalba, Raúl Andrés",sumario_siguiente,fin_extendido_pag_compartida,,34014,34186,34225,LibroVol334.3.md,fallo
+337_p166,337,"Monner Sans, Ricardo c/ EN - Secretaría General Presidencia y Otros s/ amparo ley 16.986",caratula_siguiente,fin_extendido_pag_compartida,,6390,6906,6923,LibroVol337.1.md,fallo
+337_p179,337,"Mansilla, Carlos c/ Fortbenton Co Laboratories S.A. s/ despido",caratula_siguiente,fin_dentro_bloque,,6924,7380,7214,LibroVol337.1.md,fallo
+337_p256,337,CIPPEC c/ EN M° Desarrollo Social dto. 1172/03 s/ amparo ley 16.986,caratula_siguiente,fin_dentro_bloque,,9960,11348,10534,LibroVol337.1.md,fallo
+337_p339,337,"Castiglione, María Mercedes c/ EN - Mº Economía - SF nota 2169/07 (expte. s01 131453/06) s/ proceso de conocimiento",caratula_siguiente,fin_dentro_bloque,,13225,13502,13492,LibroVol337.1.md,fallo
+337_p486,337,Banco Columbia SA (TF 22697-I) c/ DGI,caratula_siguiente,fin_dentro_bloque,,19085,19332,19252,LibroVol337.1.md,fallo
+337_p611,337,"Sisnero, Mirtha Graciela y Otros c/ Taldelva SRL y Otros",caratula_siguiente,fin_dentro_bloque,,24068,24736,24294,LibroVol337.1.md,fallo
+337_p731,337,"Louge, Armando Beltrán y Otro c/ Gobierno de su Majestad Británica s/ daños y perjuicios",caratula_siguiente,fin_dentro_bloque,,28891,29047,28919,LibroVol337.1.md,fallo
+337_p753,337,Consumidores Financieros Asoc. Civil para su defensa c/ Banco Itau Buen Ayre Argentina S.A. s/ ordinario,caratula_siguiente,fin_dentro_bloque,,29778,30109,30056,LibroVol337.1.md,fallo
+337_p1006,337,"De Maio, Ana de las Mercedes c/ Mº J y DDHH – art. 3 ley 24.043 - resol 1147/09 (ex 166457/08)",caratula_siguiente,fin_extendido_pag_compartida,,4372,4641,4655,LibroVol337.2.md,fallo
+337_p1108,337,"Oehler, Carlos A. c/ Secretaría de Turismo y Cultura de la Provincia de Jujuy - Estado provincial s/ recurso de inconstitucionalidad",caratula_siguiente,fin_dentro_bloque,,8409,8775,8710,LibroVol337.2.md,fallo
+337_p1439,337,"Municipalidad de Rosario c/ Entre Ríos, provincia de y Otro s/ amparo (daño ambiental)",caratula_siguiente,fin_dentro_bloque,,21567,21874,21591,LibroVol337.2.md,fallo
+337_p1530,337,"Cavallo, Domingo Felipe y Otro s/ incidente de regulación de honorarios de Calcagno, Alfredo E. - causa n° 6420/01 y 11532/09",caratula_siguiente,fin_dentro_bloque,,25206,25583,25561,LibroVol337.2.md,fallo
+338_p29,338,Asociación Civil para la Defensa en el Ambito Federal e Internacional de Derechos c/ Instituto Nacional de Servicios Sociales para Jubilados y Pensionados s/ amparo,caratula_siguiente,fin_dentro_bloque,,915,1347,1222,LibroVol338.1.md,fallo
+338_p80,338,"Mendoza, Beatriz Silvia y otros c/ Estado Nacional y otros s/ daños y perjuicios (daños derivados de la contaminacion ambiental del Río Matanza-Riachuelo)",caratula_siguiente,fin_dentro_bloque,,2925,3247,2987,LibroVol338.1.md,fallo
+338_p221,338,Federación Única de Viajantes de la República Argentina y otra c/ Yell Argentina S.A. y otro s/ cobro de salarios,caratula_siguiente,fin_dentro_bloque,,8443,8842,8609,LibroVol338.1.md,fallo
+338_p298,338,D.G.I. c/ Iberá S.A. Inversiones y Mandatos s/ cobro de pesos,caratula_siguiente,fin_dentro_bloque,,11493,11889,11865,LibroVol338.1.md,fallo
+338_p313,338,"Empresa Pesquera de la Patagonia y Antártida S.A. c/ Tierra del Fuego, Antártida e Islas del Atlántico Sur, provincia de s/ acción declarativa de inconstitucionalidad",caratula_siguiente,fin_dentro_bloque,,12088,12948,12256,LibroVol338.1.md,fallo
+338_p349,338,"Piacquadio, Rolando Antonio y otro c/ Zozzia, Mabel Concepción s/ ejecución",caratula_siguiente,fin_dentro_bloque,,13435,13582,13564,LibroVol338.1.md,fallo
+338_p697,338,N.N. s/ incidente de incompetencia,marcador_apertura_siguiente,fin_extendido_pag_compartida,,326,398,399,LibroVol338.2.md,fallo
+338_p793,338,"Raffo, Julio Cesar Antonio y otros c/ Estado Nacional - Ministerio de Planificacion Federal, Inversion Publica y Servicios y otro s/ amparo",caratula_siguiente,fin_dentro_bloque,,4017,4184,4070,LibroVol338.2.md,fallo
+338_p1356,338,"Santa Fe, Provincia de c/ Estado Nacional s/ acción declarativa de inconstitucionalidad",caratula_siguiente,fin_dentro_bloque,,25933,27205,27192,LibroVol338.2.md,fallo
+339_p61,339,"Deprati, Adrian Francisco c/ ANSeS s/ Amparos y sumarísimos",caratula_siguiente,fin_dentro_bloque,,2024,2746,2701,LibroVol339.1.md,fallo
+339_p94,339,"Caballero López, Pablina s/ Extradición",caratula_siguiente,fin_dentro_bloque,,3266,3826,3499,LibroVol339.1.md,fallo
+339_p160,339,Club de Caza de Tandil s/ Infracción ley 22.421 (art. 25),caratula_siguiente,fin_dentro_bloque,,5895,6177,6059,LibroVol339.1.md,fallo
+339_p168,339,N.N. s/ Infracción ley 22.421,caratula_siguiente,fin_dentro_bloque,,6192,6359,6312,LibroVol339.1.md,fallo
+339_p381,339,"Cejas Meliare, Ariel s/ Hábeas corpus",caratula_siguiente,fin_dentro_bloque,,14106,14417,14327,LibroVol339.1.md,fallo
+339_p434,339,Grupo Posadas S.A. c/ A.F.I.P. - D.G.I. s/ Demanda contenciosa,caratula_siguiente,fin_dentro_bloque,,16126,16502,16408,LibroVol339.1.md,fallo
+339_p464,339,Defensor del Pueblo de la Nación c/ EN-Mº Planificación-resol 1961/06 s/ Proceso de conocimiento,caratula_siguiente,fin_dentro_bloque,,17258,17387,17323,LibroVol339.1.md,fallo
+339_p597,339,Instituto Concepcionista Colegio San Cayetano c/ Administración Federal de Ingresos Públicos - Dirección General Impositiva s/ Impugnación de deuda,caratula_siguiente,fin_dentro_bloque,,22318,22366,22340,LibroVol339.1.md,fallo
+339_p599,339,"M., M. H. s/ Artículo 152 ter. Código Civil - incidente familia",caratula_siguiente,fin_extendido_pag_compartida,,22368,22479,22492,LibroVol339.1.md,fallo
+339_p662,339,Re Dress S.A. y Otro s/ Infracción ley 24.144,caratula_siguiente,fin_dentro_bloque,,24754,25299,24971,LibroVol339.1.md,fallo
+339_p676,339,"P., V. A. s/ Art. 152 ter. Código Civil",caratula_siguiente,fin_extendido_pag_compartida,,25303,25445,25448,LibroVol339.1.md,fallo
+339_p754,339,"Gabellieri, Francisco s/ Causa nº 105/2013",caratula_siguiente,fin_dentro_bloque,,28221,28367,28338,LibroVol339.1.md,fallo
+339_p781,339,"Espósito, Dardo Luis c/ Provincia ART S.A. s/ Accidente - ley especial",caratula_siguiente,fin_dentro_bloque,,29286,29856,29828,LibroVol339.1.md,fallo
+339_p1206,339,Cooperativa de Crédito Premium Limitada y Otros c/ Banco Central de la República Argentina s/ Entidades Financieras - ley 21.526,caratula_siguiente,fin_dentro_bloque,,9877,9905,9887,LibroVol339.2.md,fallo
+339_p1223,339,"Abarca, Walter José y Otros c/ Estado Nacional - Ministerio Energía y Minería y Otro s/ Amparo ley 16.986",caratula_siguiente,fin_dentro_bloque,,10448,11691,11474,LibroVol339.2.md,fallo
+339_p1353,339,"Cantero, Julio Gabriel s/ Lesiones leves",marcador_apertura_siguiente,fin_extendido_pag_compartida,,15463,15518,15519,LibroVol339.2.md,fallo
+339_p1380,339,"Lerman, Marcelo y Otros s/ Su denuncia",marcador_apertura_siguiente,fin_extendido_pag_compartida,,16392,16452,16455,LibroVol339.2.md,fallo
+339_p1393,339,"P., G. H. A. s/ Determinación de la capacidad",caratula_siguiente,fin_dentro_bloque,,16855,17019,16935,LibroVol339.2.md,fallo
+339_p1622,339,"Szedres, Szabolcs s/ Extradición",caratula_siguiente,fin_dentro_bloque,,25505,25733,25561,LibroVol339.2.md,fallo
+339_p1713,339,"Fernández, Iván Alejandro s/ Su denuncia",caratula_siguiente,fin_dentro_bloque,,28842,28898,28877,LibroVol339.2.md,fallo
+339_p1720,339,"Azcona Preuss, María Fabiana c/ Asociación Mutual Círculo Suboficiales del Ejército y Otro s/ despido",caratula_siguiente,fin_dentro_bloque,,29097,29142,29134,LibroVol339.2.md,fallo
+339_p1793,339,"Mendoza, Beatriz Silvia y Otros c/ Estado Nacional y Otros s/ Daños y perjuicios (daños derivados de la contaminación ambiental del Río Matanza Riachuelo)",caratula_siguiente,fin_dentro_bloque,,31882,31954,31889,LibroVol339.2.md,fallo
+339_p1820,339,"Righi, Esteban Justo c/ Garrido, Carlos Manuel s/ Daños y perjuicios",caratula_siguiente,fin_dentro_bloque,,32840,33250,33071,LibroVol339.2.md,fallo
+339_p1834,339,"S., S. M. y Otros c/ F., F. G. s/ Alimentos",sumario_siguiente,fin_dentro_bloque,,33362,33525,33445,LibroVol339.2.md,fallo
+340_p204,340,"Chevron Argentina S.R.L. c/ Mendoza, Provincia de s/ Acción declarativa de certeza",marcador_apertura_siguiente,fin_extendido_pag_compartida,,7403,7513,7553,LibroVol340.1.md,fallo
+340_p232,340,"Delgado, Ariel Alberto c/ López, Carlos Alberto s/ Despido",marcador_apertura_siguiente,fin_extendido_pag_compartida,,8398,8533,8536,LibroVol340.1.md,fallo
+340_p415,340,"I., P. G. y Otro s/ Guarda judicial con fines de adopción",caratula_siguiente,fin_dentro_bloque,,15467,15691,15645,LibroVol340.1.md,fallo
+340_p538,340,"Sánchez, Miguel Ángel s/ Su denuncia",marcador_apertura_siguiente,fin_extendido_pag_compartida,,20262,20336,20339,LibroVol340.1.md,fallo
+340_p626,340,"Fernández, Eduardo Enrique s/ Infracción art. 189 bis del C.P.",caratula_siguiente,fin_dentro_bloque,,23617,23675,23652,LibroVol340.1.md,fallo
+340_p641,340,"Pagés, Juan Edgardo c/ U.T.E. Tartagal Garín, Juan Pedro Romero Igarzábal S.r.l. y Otros s/ Accidente - accion civil",caratula_siguiente,fin_dentro_bloque,,24132,24232,24216,LibroVol340.1.md,fallo
+340_p737,340,"Lerman, Marcelo David y Otro s/ Denuncia defraudación (art. 173, inc. 15 del C.P.)",caratula_siguiente,fin_dentro_bloque,,27725,27793,27786,LibroVol340.1.md,fallo
+340_p739,340,Provincia de Río Negro c/ Fianzas y Créditos S.A. Cia. de Seguros s/ Ejecutivo,caratula_siguiente,fin_dentro_bloque,,27795,27985,27955,LibroVol340.1.md,fallo
+340_p793,340,"N., J. A. s/ Determinación de la capacidad jurídica",marcador_apertura_siguiente,fin_extendido_pag_compartida,,29794,29943,29944,LibroVol340.1.md,fallo
+340_p802,340,"Porta, Pedro Juan c/ Buenos Aires, Provincia de s/ Acción declarativa de certeza",caratula_siguiente,fin_dentro_bloque,,30121,30353,30260,LibroVol340.1.md,fallo
+340_p812,340,"Zayas, Luis Armando c/ Hugo Libedinsky S.A. Instituto Agüero y Otros s/ Daños y perjuicios - responsabilidad profesional",caratula_siguiente,fin_extendido_pag_compartida,,30498,30589,30603,LibroVol340.1.md,fallo
+340_p1094,340,"Sarlenga, Luis Eustaquio Agustín y Otros s/ Infracción ley 22.415",caratula_siguiente,fin_dentro_bloque,,4479,4585,4514,LibroVol340_2.md,fallo
+340_p1129,340,"Cámara Argentina de Arena y Piedra y Otros c/ Buenos Aires, Provincia de s/ Acción declarativa de inconstitucionalidad y repetición",caratula_siguiente,fin_dentro_bloque,,5889,6159,6074,LibroVol340_2.md,fallo
+340_p1213,340,"Ramírez, Víctor Alfredo c/ EN - M° - Defensa EMGE s/ Personal Militar y Civil de las FFAA y de Seg",caratula_siguiente,fin_extendido_pag_compartida,,9116,9635,9651,LibroVol340_2.md,fallo
+340_p1392,340,"La Pampa, Provincia de c/ Mendoza, Provincia de s/ Uso de aguas",caratula_siguiente,fin_extendido_pag_compartida,,15903,15991,16018,LibroVol340_2.md,fallo
+340_p1480,340,"Bayer S.A. c/ Santa Fe, Provincia de s/ Acción declarativa de certeza",caratula_siguiente,fin_dentro_bloque,,19297,20471,20202,LibroVol340_2.md,fallo
+340_p1557,340,Banco de la Provincia de Córdoba S.A. y Otros c/ BCRA - Resol 155/11 (Expte 100655/02 sum fin 1118) s/ Recurso,caratula_siguiente,fin_dentro_bloque,,22270,22795,22603,LibroVol340_2.md,fallo
+340_p1680,340,"Banco de la Nación Argentina c/ Chubut, provincia del s/cobro de sumas de dinero.",caratula_siguiente,fin_dentro_bloque,,27054,27252,27205,LibroVol340_2.md,fallo
+340_p1940,340,"Arregui, Diego Maximiliano c/ Estado Nacional - PFA - y Otros s/ Daños y perjuicios",caratula_siguiente,fin_dentro_bloque,,37240,38214,37965,LibroVol340_2.md,fallo
+341_p122,341,Hospital Privado Nuestra Señora de la Merced SA c/ EN – M° Energía y Minería y Otros s/ Amparo ley 16.986,caratula_siguiente,fin_dentro_bloque,,4582,4622,4611,LibroVol341.1.md,fallo
+341_p424,341,"T., A. A. y Otro c/ L., F. D. s/ Alimentos",firma_actual,fin_por_firma_actual,,16189,16295,16201,LibroVol341.1.md,fallo
+341_p739,341,Consumidores Financieros Asoc. Civil para su Defensa c/ Banco Itaú Buen Ayre Argentina S.A. y otro s/ Ordinario,caratula_siguiente,fin_extendido_pag_compartida,,27845,28077,28078,LibroVol341.1.md,fallo
+341_p892,341,"Rouges, Julio c/ Estado Nacional",marcador_apertura_siguiente,fin_extendido_pag_compartida,,1094,1307,1310,LibroVol341.2.md,fallo
+341_p1246,341,Municipalidad de Berazategui c/ Molinos Río de la Plata S.A. s/ Apremio,caratula_siguiente,fin_dentro_bloque,,14798,14977,14856,LibroVol341.2.md,fallo
+341_p1293,341,Roldán Silvia Beatriz Teresa c/ Edesur SA s/ Daños y perjuicios,marcador_apertura_siguiente,fin_extendido_pag_compartida,,16531,16714,16719,LibroVol341.2.md,fallo
+341_p1408,341,"Carranza, Amanda Marta c/ Ferrocarriles Argentinos - Estado Nacional - ADIF S.E. s/ Acciones reales reivindicatoria - confesoria - posesoria",caratula_siguiente,fin_dentro_bloque,,20976,21201,21173,LibroVol341.2.md,fallo
+341_p1679,341,Talleres Navales Dársena Norte S.A.C.I. y N. s/ Concurso preventivo,sumario_siguiente,fin_dentro_bloque,,31455,32449,31950,LibroVol341.2.md,fallo
+341_p2015,341,"Flores, Héctor Alberto c/ EN - Mº RREE y C - resol. 1008/12 s/ Proceso de conocimiento",caratula_siguiente,fin_extendido_pag_compartida,,44726,44885,44896,LibroVol341.2.md,fallo
+342_p98,342,Cooperativa de Electrificación Rural y Otros Servicios Públicos de Brandsen Limitada c/ Estado Nacional (Ministerio de Economía - Secretaría de Energía) s/ Acción meramente declarativa,caratula_siguiente,fin_extendido_pag_compartida,,3941,3968,3969,LibroVol342-1.md,fallo
+342_p148,342,"García Águila, Mario Gabriel y Otros c/ Techint Compañía Técnica Internacional S.A. y Otro s/ Accidente - acción civil",caratula_siguiente,fin_dentro_bloque,,5939,6371,5949,LibroVol342-1.md,fallo
+342_p643,342,"Catanzaro, Alfredo E. s/ recurso de queja en causa n° 261019 de la Cámara de Apelación en lo Civil y Comercial – Sala I-",caratula_siguiente,fin_dentro_bloque,,25394,25454,25446,LibroVol342-1.md,fallo
+342_p867,342,"Fernández, Sergio Hernán c/ Unilever de Argentina S.A. s/ Despido",caratula_siguiente,fin_dentro_bloque,,34071,34377,34120,LibroVol342-1.md,fallo
+342_p1249,342,Asociación Judicial Bonaerense c/ Poder Ejecutivo s/ Materia a categorizar,caratula_siguiente,fin_dentro_bloque,,48875,48981,48880,LibroVol342-1.md,fallo
+342_p1302,342,"Bambill, Gabriel c/ INIDEP s/ Laboral",caratula_siguiente,fin_dentro_bloque,,169,424,301,LibroVol342-2.md,fallo
+342_p1483,342,"O., Y. s/ Hábeas corpus - casación",firma_actual,fin_por_firma_actual,,6931,6957,6936,LibroVol342-2.md,fallo
+342_p1847,342,"Álvarez, Gladys Stella y Otros c/ EN - CSJN - Consejo de la Magistratura - art. 110 s/ Empleo público",caratula_siguiente,fin_dentro_bloque,,21045,22964,22383,LibroVol342-2.md,fallo
+342_p2125,342,Alpacor Asociados SRL c/ AFIP s/ Amparo ley 16.986,caratula_siguiente,fin_dentro_bloque,,32100,32501,32199,LibroVol342-2.md,fallo
+342_p2251,342,"Cruz, Silvia Brígida c/ PCSJB S.A. s/ Medida precautoria",caratula_siguiente,fin_dentro_bloque,,36983,37143,37139,LibroVol342-2.md,fallo
+343_p300,343,"N.N. s/ Averiguación de delito, resistencia o desobediencia a funcionario público, incendio y otro estrago, lesiones leves y otros",caratula_siguiente,fin_extendido_pag_compartida,,11413,11592,11612,LibroVol343-1.md,fallo
+343_p365,343,"Cantaluppi, Santiago y Otros c/ Municipalidad de San Carlos de Bariloche s/ Acción de inconstitucionalidad",caratula_siguiente,fin_dentro_bloque,,13884,14180,14023,LibroVol343-1.md,fallo
+343_p473,343,"Aiguo, Nie c/ Estado Nacional - Ministerio del Interior, Obras Públicas y Vivienda - Dirección Nacional de Migraciones s/ Civil y comercial varios",caratula_siguiente,fin_extendido_pag_compartida,,17970,18073,18095,LibroVol343-1.md,fallo
+343_p720,343,"Feler, Eduardo Jorge c/ Estado Nacional y Otro s/ Acción mere declarativa de inconstitucionalidad",caratula_siguiente,fin_extendido_pag_compartida,,1556,1665,1668,LibroVol343-2.md,fallo
+343_p1024,343,"Medina, Medardo c/ D.G.A. s/ Reclamos varios",caratula_siguiente,fin_extendido_pag_compartida,,13234,13484,13495,LibroVol343-2.md,fallo
+343_p1181,343,"González, Jorge Enrique s/ Recurso extraordinario de inaplicabilidad de ley en causa n° 43.787 y 43.793",caratula_siguiente,fin_dentro_bloque,,19236,20522,20226,LibroVol343-2.md,fallo
+343_p1247,343,Yoma S.A. y Otras s/ Concurso preventivo por agrupamiento – incidente de pago de gastos de administración posteriores a la quiebra,caratula_siguiente,fin_dentro_bloque,,21786,22041,22018,LibroVol343-2.md,fallo
+343_p1332,343,"Fundación Banco de Bosques para el Manejo Sustentable de los Recursos Naturales c/ EN – PEN – M. Planificación Federal, Inversión P y S y Otros s/ Incidente de apelación",caratula_siguiente,fin_dentro_bloque,,25146,25313,25240,LibroVol343-2.md,fallo
+343_p1684,343,"Bugarini, Omar Rubén c/ Capitán Armador o Propietario del Buque Kramatorsk y Otro s/ Daños y perjuicios",caratula_siguiente,fin_dentro_bloque,,8934,9073,8972,LibroVol343-3.md,fallo
+343_p1758,343,"Antonio, Marta Myriam c/ Prevención ART S.A. s/ Accidente – ley especial",firma_actual,fin_por_firma_actual,,11754,11893,11765,LibroVol343-3.md,fallo
+344_p325,344,"C., A. G. c/ C., C. J. s/ Reintegro de hijo",marcador_apertura_siguiente,fin_extendido_pag_compartida,,12806,12950,12955,LibroVol344-1.md,fallo
+344_p575,344,"Grindetti, Néstor Osvaldo c/ Edesur S.A. y Otro s/ Amparo colectivo",caratula_siguiente,fin_extendido_pag_compartida,,22426,23473,23477,LibroVol344-1.md,fallo
+344_p645,344,GCBA c/ Centro Médico Santa Isabel S.A. s/ Ejecución fiscal – ingresos brutos – convenio multilateral,caratula_siguiente,fin_dentro_bloque,,25152,25463,25164,LibroVol344-1.md,fallo
+344_p757,344,Emdersa Generación Salta S.A. c/ EN – AFIP – DGI – Ley 25063 s/ Proceso de conocimiento,caratula_siguiente,fin_extendido_pag_compartida,,29362,29425,29441,LibroVol344-1.md,fallo
+344_p776,344,"Pérez, Sergio Gabriel c/ Scotton, Jorge Alberto s/ Daños y perjuicios – incump. Contractual (exc. Estado)",caratula_siguiente,fin_extendido_pag_compartida,,30104,30320,30323,LibroVol344-1.md,fallo
+344_p997,344,"R. P., C. A. c/ M. O., N. D. R. s/ Restitución internacional de menores",caratula_siguiente,fin_dentro_bloque,,38722,38909,38893,LibroVol344-1.md,fallo
+344_p1102,344,"Verbitsky, Horacio s/ Hábeas corpus",caratula_siguiente,fin_dentro_bloque,,42735,44121,43888,LibroVol344-1.md,fallo
+344_p1211,344,Sinopec Argentina Exploration and Production Inc (TF 32557-A) c/ DGA s/ Recurso directo de organismo externo,sumario_siguiente,fin_dentro_bloque,,46986,47276,47192,LibroVol344-1.md,fallo
+344_p1920,344,"Comunidad Indígena Toba La Primavera – Navogoh c/ Formosa, Provincia de y Otros s/ Medida cautelar",caratula_siguiente,fin_dentro_bloque,,25784,26092,25788,LibroVol344-2.md,fallo
+344_p1952,344,"Price, Brian Alan y Otros s/ Homicidio simple",caratula_siguiente,fin_extendido_pag_compartida,,27036,28986,28997,LibroVol344-2.md,fallo
+344_p2011,344,"Moneta, Raúl Juan Pedro y Otros s/ Otros, asociación ilícita y quiebra fraudulenta",caratula_siguiente,fin_dentro_bloque,,29357,29487,29399,LibroVol344-2.md,fallo
+344_p2109,344,"S., L. F. c/ D.O.S.E.M. s/ Cobro sumario sumas de dinero",caratula_siguiente,fin_dentro_bloque,,33143,33257,33219,LibroVol344-2.md,fallo
+344_p2115,344,"Conte, Lelia c/ Com. Nac. de Regul. del Transporte s/ Impugnación de acto administrativo",sumario_siguiente,fin_dentro_bloque,,33322,33643,33626,LibroVol344-2.md,fallo
+344_p2123,344,Esso Petrolera Argentina S.R.L. y Otro c/ Municipalidad de Quilmes s/ Acción contencioso administrativa,caratula_siguiente,fin_extendido_pag_compartida,,33657,35537,35540,LibroVol344-2.md,fallo
+344_p2665,344,"N.N. y Otro s/ Incidente de incompetencia. Denunciante: Musse, Pablo Gustavo",caratula_siguiente,fin_dentro_bloque,,1461,1589,1527,LibroVol344-3.md,fallo
+344_p2752,344,"Repetto, Adolfo María c/ Estado Nacional (Ministerio de Justicia) s/ Empleo público",caratula_siguiente,fin_extendido_pag_compartida,,4877,5358,5363,LibroVol344-3.md,fallo
+344_p2779,344,"Caamaño, Analía c/ EN – M° Justicia – DNRPA - RS 27-IV-09 (expte. 138768/03) y Otro s/ Proceso de conocimiento",caratula_siguiente,fin_extendido_pag_compartida,,5939,6379,6384,LibroVol344-3.md,fallo
+344_p3070,344,"Neuquén, Provincia del c/ Estado Nacional s/ Impugnación de actos administrativos (impuesto a las ganancias - retención al trabajo personal en relación de dependencia)",caratula_siguiente,fin_extendido_pag_compartida,,17432,17724,17727,LibroVol344-3.md,fallo
+344_p3543,344,"G., M. B. c/ Sancor Salud S.A. s/ Civil y comercial - varios",caratula_siguiente,fin_dentro_bloque,,36066,36207,36074,LibroVol344-3.md,fallo
+344_p3720,344,"Paoli, Gastón Alejandro s/ Incidente de incompetencia",caratula_siguiente,fin_dentro_bloque,,42775,42921,42872,LibroVol344-3.md,fallo
+344_p3725,344,"Asociación Civil por la Justicia Ambiental y Otros c/ Entre Ríos, Provincia de y Otros s/ Amparo ambiental",caratula_siguiente,fin_dentro_bloque,,42923,43549,43254,LibroVol344-3.md,fallo
+345_p156,345,"Brucco, Marisa s/ Incidente de incompetencia",caratula_siguiente,fin_extendido_pag_compartida,,6063,6075,6080,LibroVol345-1.md,fallo
+345_p159,345,"Calderón Díaz, José Antonio y Otros s/ Incidente de incompetencia",caratula_siguiente,fin_extendido_pag_compartida,,6171,6179,6197,LibroVol345-1.md,fallo
+345_p281,345,"Olivieri, Dora Nanci y Otros c/ EN - (Procuración General de la Nación) 110 120 CN s/ Empleo público",caratula_siguiente,fin_extendido_pag_compartida,,10647,10655,10660,LibroVol345-1.md,fallo
+345_p337,345,Superintendencia de Riesgos del Trabajo c/ Experta Aseguradora de Riesgos del Trabajo S.A. s/ Ejecutivo,caratula_siguiente,fin_extendido_pag_compartida,,12800,12808,12814,LibroVol345-1.md,fallo
+345_p378,345,"Agalor, Héctor Ariel s/ Incidente de incompetencia | Castillo Villablanca, Raúl Edgardo y Otro s/ Incidente de recurso extraordinario",firma_actual,fin_por_firma_actual,,14396,14426,14402,LibroVol345-1.md,fallo
+345_p582,345,"Berenguel, Germán Rodrigo c/ Chevrolet S.A. de Ahorro para Fines Determinados y Otro s/ Incidente de incompetencia",firma_actual,fin_por_firma_actual,,22265,22298,22272,LibroVol345-1.md,fallo
+345_p599,345,"Villafañe, Claudia Rosana c/ BTF Media S.A. y Otros s/ Diligencias preliminares",caratula_siguiente,fin_extendido_pag_compartida,,22956,22961,22983,LibroVol345-1.md,fallo
+345_p632,345,"Nicoletti, Francisco c/ Cipriano, Ambrosio Bartolomé s/ Ejecución hipotecaria",caratula_siguiente,fin_dentro_bloque,,24176,24230,24216,LibroVol345-1.md,fallo
+345_p715,345,"Paz, Carlos Eduardo s/ Incidente de incompetencia",caratula_siguiente,fin_extendido_pag_compartida,,27407,27424,27445,LibroVol345-1.md,fallo
+345_p938,345,"A., B. R. c/ Swiss Medical SA Medicina Privada s/ Amparo ley 16.986",caratula_siguiente,fin_dentro_bloque,,2269,2544,2530,LibroVol345-2.md,fallo
+345_p1370,345,"Fenici, Roberto s/ Extradición",caratula_siguiente,fin_dentro_bloque,,18788,18926,18814,LibroVol345-2.md,fallo
+345_p1417,345,"Laso, José Luis y Otros c/ Transportes Metropolitanos General San Martín S.A. y Otros s/ Daños y perjuicios (acc. trán. c/ les. O muerte)",firma_actual,fin_por_firma_actual,,20604,20751,20608,LibroVol345-2.md,fallo
+345_p1498,345,Gobierno de la Ciudad de Buenos Aires c/ Estado Nacional s/ Acción declarativa de inconstitucionalidad - cobro de pesos,caratula_siguiente,fin_extendido_pag_compartida,,23766,24612,24618,LibroVol345-2.md,fallo
+346_p47,346,Asociación Argentina de Abogados Ambientalistas de la Patagonia c/ Provincia del Chubut y Otro s/ Amparo ley 16.986,caratula_siguiente,fin_extendido_pag_compartida,,1828,1841,1846,LibroVol346-1.md,fallo
+346_p57,346,Colonia Penal de Ezeiza (U.19) y Otros s/ Hábeas corpus,caratula_siguiente,fin_dentro_bloque,,2183,2212,2193,LibroVol346-1.md,fallo
+346_p73,346,"Redondo, Cintia Fabiana c/ Tarjeta Naranja SA s/ Hábeas data",caratula_siguiente,fin_extendido_pag_compartida,,2853,2864,2874,LibroVol346-1.md,fallo
+346_p175,346,"Godoy, Alejandro David Domingo y Otro c/ Santi, Alejandro Luis y Otro s/ Sumarísimo",caratula_siguiente,fin_extendido_pag_compartida,,6798,6806,6816,LibroVol346-1.md,fallo
+346_p235,346,"Ferreyra, Julio Domingo y Otros c/ Municipio de Lomas de Zamora s/ Amparo",caratula_siguiente,fin_extendido_pag_compartida,,9085,9103,9106,LibroVol346-1.md,fallo
+346_p253,346,"Spreafico, Sonia Gabriela c/ Entre Ríos, Provincia de s/ Daños y perjuicios",caratula_siguiente,fin_extendido_pag_compartida,,9790,9795,9818,LibroVol346-1.md,fallo
+346_p314,346,"Núñez, Elsa Rosalía c/ Estado Nacional y Otro s/ daños y perjuicios",caratula_siguiente,fin_dentro_bloque,,12133,12294,12175,LibroVol346-1.md,fallo
+346_p491,346,"E., M. S. y Otro c/ OSDE s/ Sumarísimo de salud",caratula_siguiente,fin_dentro_bloque,,19010,19104,19018,LibroVol346-1.md,fallo
+346_p969,346,"T., R. D. c/ L., E. A. s/ Medidas precautorias",caratula_siguiente,fin_extendido_pag_compartida,,7849,7875,7878,LibroVol346-2.md,fallo
+346_p1068,346,HYGL Construcciones S.A. y Otros c/ Municipalidad de Tres de Febrero s/ Queja por denegatoria de recursos extraordinarios de nulidad e inaplicabilidad de ley,firma_actual,fin_por_firma_actual,,11717,11787,11728,LibroVol346-2.md,fallo
+346_p1081,346,"N.N. s/ Incidente de incompetencia. damnificado: Álvarez, Roberto Walter",caratula_siguiente,fin_extendido_pag_compartida,,12208,12218,12224,LibroVol346-2.md,fallo
+346_p1087,346,UFT 2 s/ Incidente de incompetencia,caratula_siguiente,fin_dentro_bloque,,12402,12423,12416,LibroVol346-2.md,fallo
+346_p1180,346,"Estado Nacional c/ Tucumán, Provincia de s/ Acción de lesividad",caratula_siguiente,fin_dentro_bloque,,15970,16484,16073,LibroVol346-2.md,fallo
+346_p1257,346,Asociación Comunitaria “La Matanza” c/ Estado Nacional – Poder Ejecutivo s/ Daños y perjuicios,caratula_siguiente,fin_dentro_bloque,,18836,19415,19016,LibroVol346-2.md,fallo
+346_p1419,346,Maxicambio S.A. c/ Dirección General Impositiva s/ Recurso directo de organismo externo,caratula_siguiente,fin_dentro_bloque,,25094,25367,25275,LibroVol346-2.md,fallo
+347_p109,347,Rey c/ Rocha,caratula_siguiente,fin_extendido_pag_compartida,,4164,4441,4445,LibroVol347-1.md,fallo
+347_p360,347,"Zamora, Raúl Esteban c/ López, Cristóbal Nazareno y Otro s/ Incidente de incompetencia",caratula_siguiente,fin_dentro_bloque,,13927,14175,14136,LibroVol347-1.md,fallo
+347_p414,347,"Miño, Manuel Alejandro s/ Lesiones graves en grado de tentativa",caratula_siguiente,fin_dentro_bloque,,15920,16405,16340,LibroVol347-1.md,fallo
+347_p1084,347,"Iriarte, Luis y otra c/ Provincia de Tucumán s / Inconstitucionalidad",caratula_siguiente,fin_extendido_pag_compartida,,41731,43448,43460,LibroVol347-1.md,fallo
+347_p1353,347,"Ambrosio, Norberto Nilo c/ Hipódromo Argentino de Palermo SA y Otros s/ Daños y perjuicios",firma_actual,fin_por_firma_actual,,6901,7164,6910,LibroVol347-2.md,fallo
+347_p1593,347,"B., L. B. y Otros c/ Grondona, Mariano y Otros s/ Daños y perjuicios",caratula_siguiente,fin_dentro_bloque,,16078,17155,16707,LibroVol347-2.md,fallo
+347_p1762,347,"Echeverría, Martín y Otros s/ Incidente de incompetencia",caratula_siguiente,fin_dentro_bloque,,22675,22702,22682,LibroVol347-2.md,fallo
+347_p1858,347,"González, Florencio Antonio c/ Colicheo, Florentino y Otros s/ Interdicto (sumarísimo)",caratula_siguiente,fin_dentro_bloque,,26346,26858,26716,LibroVol347-2.md,fallo
+347_p1990,347,"Pego, Natalia Mariel c/ Estado Nacional - Ministerio de Ambiente y Desarrollo Sustentable - Adm. Parques Nac. s/ Impugnación de acto administrativo",caratula_siguiente,fin_dentro_bloque,,31623,31849,31836,LibroVol347-2.md,fallo
+347_p2160,347,"Pilquiman, Crecencio c/ Instituto Autárquico de Colonización y Fomento s/ Acción de amparo",caratula_siguiente,fin_extendido_pag_compartida,,38314,38963,38989,LibroVol347-2.md,fallo
+347_p2314,347,Consumidores Libres Cooperativa Ltda. de Provisión de Servicios de Acción Comunitaria c/ Belt S.A. y Otro s/ Incumplimiento de contrato,caratula_siguiente,fin_dentro_bloque,,44414,44553,44453,LibroVol347-2.md,fallo
+348_p48,348,Asociación de Magistrados y Funcionarios de la Justicia Nacional c/ GCBA s/ inc. de apelación,caratula_siguiente,fin_dentro_bloque,,1844,2023,1975,LibroVol348-1.md,fallo
+348_p53,348,"N.N. s/ incidente de incompetencia. Víctima: B., S. D.",caratula_siguiente,fin_extendido_pag_compartida,,2048,2056,2072,LibroVol348-1.md,fallo
+348_p56,348,"S., A. c/ Estado Nacional - Ministerio del Interior s/ impugnación de acto administrativo",caratula_siguiente,fin_dentro_bloque,,2112,2218,2190,LibroVol348-1.md,fallo
+348_p259,348,"Cillo, Cristian Javier c/ Hidrugo Chiroque, Claudia Mónica s/ desalojo por falta de pago",caratula_siguiente,fin_extendido_pag_compartida,,9959,9965,9979,LibroVol348-1.md,fallo
+348_p261,348,"Rodríguez, Daniel Pascual y otros c/ Telefónica Móviles de Argentina S.A. s/ amparo ambiental",caratula_siguiente,fin_extendido_pag_compartida,,10013,10024,10030,LibroVol348-1.md,fallo
+348_p325,348,"Coca Cola Femsa de Buenos Aires S.A. c/ Buenos Aires, Provincia de s/ incidente",caratula_siguiente,fin_dentro_bloque,,12383,12477,12448,LibroVol348-1.md,fallo
+348_p443,348,"Fernández de Kirchner, Cristina Elisabet y otros s/ incidente de recurso extraordinario.",caratula_siguiente,fin_extendido_pag_compartida,,16884,17216,17219,LibroVol348-1.md,fallo
+348_p494,348,"Fernández de Kirchner, Cristina Elisabet y otros s/ incidente de recurso extraordinario.",caratula_siguiente,fin_dentro_bloque,,18866,19864,19752,LibroVol348-1.md,fallo
+348_p532,348,"Gómez, Luis Florentino c/ Federación Patronal Seg. S.A. y otros s/ regulación de honorarios - incidente civil",caratula_siguiente,fin_extendido_pag_compartida,,20367,20397,20410,LibroVol348-1.md,fallo
+348_p708,348,ASSUPA y otros c/ Y.P.F. S.A. y otros s/ daño ambiental,caratula_siguiente,fin_extendido_pag_compartida,,27269,27548,27554,LibroVol348-1.md,fallo
+348_p728,348,"Naturgy Ban S.A. (antes Gas Natural Ban S.A.) c/ Buenos Aires, Provincia de s/ acción declarativa de inconstitucionalidad",caratula_siguiente,fin_extendido_pag_compartida,,28000,28742,28750,LibroVol348-1.md,fallo
+348_p747,348,"Olguín, Leonardo Enrique Luis c/ Swiss Medical ART SA s/ accidente - ley especial",caratula_siguiente,fin_dentro_bloque,,28751,28894,28873,LibroVol348-1.md,fallo
+348_p756,348,"Pugibet Fevrier, Jacqueline y otro s/ incidente civil",caratula_siguiente,fin_dentro_bloque,,29095,29336,29327,LibroVol348-1.md,fallo
+348_p1149,348,Tucumán Vidrios S.R.L. s/ quiebra declarada s/ incidente de revisión,caratula_siguiente,fin_dentro_bloque,,44251,44362,44268,LibroVol348-1.md,fallo
+348_p1230,348,"Pérez, Gustavo Ramón c/ Liderar Compañía General de Seguros S.A. y otro s/ daños y perjuicios",caratula_siguiente,fin_extendido_pag_compartida,,47461,47470,47488,LibroVol348-1.md,fallo
+348_p1485,348,Comunidad Toba Nam Qom c/ Estado Nacional y otros s/ amparo,caratula_siguiente,fin_dentro_bloque,,57415,57720,57610,LibroVol348-1.md,fallo
+348_p1523,348,Cámara Argentina de Productores de Fonogramas y Videogramas y otros s/ medida autosatisfactiva,caratula_siguiente,fin_extendido_pag_compartida,,58816,58838,58841,LibroVol348-1.md,fallo
+348_p1569,348,Dycasa SA c/ Direccion Nacional de Vialidad s/ proceso de conocimiento,caratula_siguiente,fin_dentro_bloque,,60595,60870,60786,LibroVol348-1.md,fallo
+348_p1593,348,"Bazán Chávez, William c/ Swiss Medical ART S.A. s/ accidente - ley especial",caratula_siguiente,fin_dentro_bloque,,61515,61745,61740,LibroVol348-1.md,fallo
+348_p1721,348,"Santa Cruz, Provincia de c/ Estado Nacional s/ cobro de pesos",caratula_siguiente,fin_dentro_bloque,,66497,66765,66758,LibroVol348-1.md,fallo
+348_p1729,348,"Valloud, Ariel Hernán c/ Mercado Libre SRL y otros s/ amparo",caratula_siguiente,fin_extendido_pag_compartida,,66824,66829,66849,LibroVol348-1.md,fallo

@@ -1,0 +1,4 @@
+  File "<string>", line 16
+    print(f'  {cid}: {p[\
+                       ^
+SyntaxError: '[' was never closed
