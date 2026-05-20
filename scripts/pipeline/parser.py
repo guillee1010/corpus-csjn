@@ -1190,6 +1190,119 @@ def linea_es_firma_de_juez(linea):
     return False
 
 
+# ── A001: búsqueda inversa de firma (fallback post-dispositivo) ───────────────
+#
+# Cuando el parser no detecta dispositivo (por_ello_idx=None) o detecta
+# dispositivo pero collect_firma_lines no encuentra firma, esta función
+# busca desde el final del bloque hacia atrás. Guardas: zona de fallo
+# obligatoria (post-apertura/considerando), span mínimo, filtro de zona
+# post-firma, límite de retroceso.
+# Validado: PoC H045 (poc_firma_independiente_v2.py), 34 recuperados,
+# 0 falsos positivos sobre 148 sin_firma (corpus post-B069).
+
+RE_DATOS_PARTES = re.compile(
+    r"^(Recurso|Nombre del|Tribunal de origen|Tribunal que intervino|"
+    r"Causa|Profesionales|Ministerio|Parte actora|Parte demandada)",
+    re.I,
+)
+
+_SPAN_MINIMO_FIRMA_INVERSA = 20
+
+
+def _encontrar_zona_fallo(bloque):
+    """
+    Encuentra el inicio de la zona del fallo propiamente dicho,
+    excluyendo sumarios y dictamen del Procurador.
+
+    Busca la ÚLTIMA ocurrencia de (en orden de prioridad):
+    1. Apertura: "FALLO DE LA CORTE SUPREMA"
+    2. Fecha: "Buenos Aires, ..."
+    3. Considerando: "Considerando:"
+    4. Vistos: "Vistos los autos:"
+
+    Retorna el índice relativo al bloque, o None.
+    """
+    ultima_apertura = None
+    ultima_fecha = None
+    ultimo_cons = None
+    ultimo_vistos = None
+    for k in range(len(bloque)):
+        s = bloque[k].strip()
+        if RE_APERTURA.match(s):
+            ultima_apertura = k
+        if RE_FECHA_LINEA.match(s):
+            ultima_fecha = k
+        if RE_CONSIDERANDO.match(s):
+            ultimo_cons = k
+        if s.lower().startswith("vistos los autos"):
+            ultimo_vistos = k
+    if ultima_apertura is not None:
+        return ultima_apertura
+    if ultima_fecha is not None:
+        return ultima_fecha
+    if ultimo_cons is not None:
+        return ultimo_cons
+    if ultimo_vistos is not None:
+        return ultimo_vistos
+    return None
+
+
+def buscar_firma_inversa(bloque, max_retroceso=80):
+    """
+    Busca firma desde el final del bloque hacia atrás.
+
+    Retorna (firma_idx, firma_raw, motivo) donde motivo es:
+      'ok'                   — firma encontrada
+      'span_corto'           — bloque menor a _SPAN_MINIMO_FIRMA_INVERSA
+      'sin_zona_fallo'       — no se encontró apertura/fecha/considerando
+      'sin_firma_post_fallo' — zona de fallo encontrada pero sin firma
+    """
+    n = len(bloque)
+    if n < _SPAN_MINIMO_FIRMA_INVERSA:
+        return None, "", "span_corto"
+
+    zona_fallo = _encontrar_zona_fallo(bloque)
+    if zona_fallo is None:
+        return None, "", "sin_zona_fallo"
+
+    limite = max(zona_fallo, n - max_retroceso)
+
+    firma_encontrada = None
+    for k in range(n - 1, limite - 1, -1):
+        s = bloque[k].strip()
+        if not s:
+            continue
+        if RE_PAGE_HEADER.match(s):
+            continue
+        if RE_DATOS_PARTES.match(s):
+            continue
+        if linea_es_firma_de_juez(bloque[k]):
+            firma_encontrada = k
+            break
+
+    if firma_encontrada is None:
+        return None, "", "sin_firma_post_fallo"
+
+    # Subir para encontrar el inicio de la firma (puede ser multi-línea)
+    firma_inicio = firma_encontrada
+    for k in range(firma_encontrada - 1, max(limite, firma_encontrada - 5) - 1, -1):
+        s = bloque[k].strip()
+        if not s:
+            break
+        if RE_PAGE_HEADER.match(s):
+            continue
+        if linea_es_firma_de_juez(bloque[k]):
+            firma_inicio = k
+        else:
+            if any(p.search(s) for p, _ in JUECES_CONOCIDOS) and len(s) < 80:
+                firma_inicio = k
+            else:
+                break
+
+    firma_raw = collect_firma_lines(bloque, firma_inicio)
+    return firma_inicio, firma_raw, "ok"
+
+
 # ── H040: wrapper con guardas para Pista 2 de detectar_fin_real ──────────────
 #
 # linea_es_header_sumario matchea falsos positivos en la zona de firma:
@@ -1885,6 +1998,20 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                 firma_parsed = parse_firma(firma_raw)
                 for d in firma_parsed["desconocidos"]:
                     desconocidos_global[d] += 1
+
+        # ── A001: fallback firma inversa ──────────────────────────────
+        # Si el flujo normal no encontró firma (por_ello_idx=None o
+        # collect_firma_lines vacío), buscar desde el final del bloque
+        # hacia atrás con guardas de zona de fallo y span mínimo.
+        if firma_parsed["voting_pattern"] == "sin_firma":
+            _fi_idx, _fi_raw, _fi_motivo = buscar_firma_inversa(bloque)
+            if _fi_raw:
+                _fi_parsed = parse_firma(_fi_raw)
+                if _fi_parsed["jueces"]:
+                    firma_raw = _fi_raw
+                    firma_parsed = _fi_parsed
+                    for d in firma_parsed["desconocidos"]:
+                        desconocidos_global[d] += 1
 
         if inicio_votos_indiv is not None:
             lineas_mayoria = [bloque[k] for k in range(len(bloque))
