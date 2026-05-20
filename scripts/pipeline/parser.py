@@ -48,6 +48,7 @@ import re
 import csv
 import json
 import argparse
+import unicodedata
 from pathlib import Path
 from collections import Counter
 from itertools import combinations
@@ -1420,6 +1421,83 @@ def refinar_inicio_por_titulo(bloque, nombres_indice):
     return (0, 'catalogo')
 
 
+# ── B070+B071: helpers para Pista 1 forward ──────────────────────────────────
+#
+# B070: cuando Pista 1 forward encuentra un match de primer_token_siguiente,
+# validar que la línea NO sea texto corriente (continuación de oración).
+# Motivación: tokens comunes ("Nación", "Provincia", "Estado") matchean en
+# el cuerpo argumentativo del caso actual, truncando el bloque antes de la firma.
+# Validado: PoC H048 (poc_b070_v6.py), 37 mejoras, 0 regresiones.
+#
+# B071: normalizar tildes para matching tilde-insensitive.
+# Motivación: el catálogo tiene tildes ("Administración") pero las carátulas
+# en el .md son ALL CAPS sin tildes ("ADMINISTRACION"). Sin normalización,
+# Pista 1 no matchea la carátula real.
+# Validado: PoC H048 (poc_b070_v6.py), recupera 8 casos adicionales.
+
+def _strip_accents(s):
+    """á→a, é→e, ñ→n, etc. Para matching tilde-insensitive en Pista 1."""
+    nfkd = unicodedata.normalize('NFKD', s)
+    return ''.join(c for c in nfkd if unicodedata.category(c) != 'Mn')
+
+
+def _es_texto_corriente(lines, k):
+    """
+    True si lines[k] parece continuación de texto corriente,
+    no una carátula/sumario editorial. Usado como guarda en Pista 1 forward.
+
+    Condiciones (OR):
+      (a) Empieza con minúscula (continuación de oración),
+          EXCEPTO si empieza con "c/" o "s/" (conector de carátula).
+      (b) La línea anterior significativa termina con word-split genuino
+          (letra + guión), no guión editorial (puntuación + guión).
+    """
+    s = lines[k].strip()
+    if not s:
+        return False
+
+    # (a) Empieza con minúscula → continuación de oración
+    #     Excepto "c/" y "s/" que son conectores de carátula
+    first_alpha = None
+    for c in s:
+        if c.isalpha():
+            first_alpha = c
+            break
+    if first_alpha and first_alpha.islower():
+        s_stripped = s.lstrip()
+        if not (s_stripped.startswith("c/") or s_stripped.startswith("s/")):
+            return True
+
+    # Buscar línea anterior significativa (no vacía, no page header)
+    prev_line = None
+    for j in range(k - 1, max(k - 5, -1), -1):
+        if j < 0:
+            break
+        ps = lines[j].strip()
+        if not ps:
+            continue
+        if RE_PAGE_HEADER.match(ps):
+            continue
+        if re.match(r'^\d{1,4}$', ps):
+            continue
+        if ps in ("FALLOS DE LA CORTE SUPREMA", "DE JUSTICIA DE LA NACION",
+                   "DE JUSTICIA DE LA NACIÓN"):
+            continue
+        prev_line = ps
+        break
+
+    if prev_line is None:
+        return False
+
+    # (b) Word-split genuino: letra + guión (no puntuación + guión)
+    if prev_line.endswith('-') and len(prev_line) >= 2:
+        char_antes = prev_line[-2]
+        if char_antes.isalpha():
+            return True
+
+    return False
+
+
 def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
                       proximo_header_pagina, primer_token_siguiente):
     """
@@ -1457,17 +1535,27 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
         return None
 
     # Pista 1: carátula del fallo siguiente
+    # B070: loop con validación de texto corriente.
+    # B071: matching tilde-insensitive con _strip_accents.
     if primer_token_siguiente and len(primer_token_siguiente) >= 5:
-        pat = re.compile(r"\b" + re.escape(primer_token_siguiente) + r"\b", re.I)
-        def es_caratula(linea):
-            return bool(pat.search(linea))
-        # B069: búsqueda atrás de Pista 1 ELIMINADA. El token del caso
-        # siguiente matcheaba en cuerpo argumentativo, Vistos los autos y
-        # firmas de jueces, cortando centenares de líneas. La búsqueda
-        # hacia adelante (abajo) cubre página compartida correctamente.
-        # Adelante hasta limite_adelante
-        k = buscar_adelante(es_caratula, lfc + 1, limite_adelante)
-        if k is not None:
+        token_norm = _strip_accents(primer_token_siguiente)
+        pat = re.compile(r"\b" + re.escape(token_norm) + r"\b", re.I)
+        # B069: búsqueda atrás de Pista 1 ELIMINADA.
+        # B070: búsqueda adelante con guarda: si el match cae en texto
+        # corriente (empieza con minúscula o word-split), saltar y seguir.
+        desde = lfc + 1
+        while desde <= limite_adelante:
+            k = None
+            for j in range(desde, limite_adelante + 1):
+                linea_norm = _strip_accents(lines[j])
+                if pat.search(linea_norm):
+                    k = j
+                    break
+            if k is None:
+                break
+            if _es_texto_corriente(lines, k):
+                desde = k + 1
+                continue
             return (k - 1, "fin_extendido_pag_compartida", "caratula_siguiente")
 
     # Pista 2: header de sumario nuevo. Búsqueda atrás solo en mitad inferior
