@@ -2,6 +2,28 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+### H047 (2026-05-20)
+
+- **fix(A001):** fallback `buscar_firma_inversa()` en `procesar_archivo`.
+  Cuando el flujo normal no encuentra firma (`por_ello_idx=None` o
+  `collect_firma_lines` vacío), busca desde el final del bloque hacia
+  atrás con guardas: zona de fallo obligatoria, span ≥ 20 líneas,
+  filtro zona post-firma (`RE_DATOS_PARTES`), retroceso ≤ 80 líneas.
+  Funciones nuevas en parser.py: `buscar_firma_inversa()`,
+  `_encontrar_zona_fallo()`, `RE_DATOS_PARTES`.
+  34 mejoras, 0 regresiones. sin_firma: 148 → 114.
+  Votos: 26959 → 27098. Cobertura firma: 97.4% → 98.0%.
+
+- **fix(A001b):** `_encontrar_zona_fallo()` usa PRIMERA apertura en
+  vez de última. Evita envenenamiento cuando el bloque arrastra
+  residuo del caso siguiente con su propio "FALLO DE LA CORTE SUPREMA".
+  Fecha/considerando/vistos restringidos a primera mitad del bloque.
+  1 mejora (329_p317), 0 regresiones. sin_firma: 114 → 113.
+  Votos: 27098 → 27103.
+
+- **auditoria:** poc_a001_v1.py, poc_a001b_v1.py, diff_a001.py.
+  Auditoría visual 80 casos (seed 420): 0 discrepancias.
+
 ### H046 (2026-05-20)
 
 - **fix(B069):** eliminada búsqueda hacia atrás de Pista 1 en

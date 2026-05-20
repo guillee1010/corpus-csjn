@@ -4559,3 +4559,127 @@ causados por falsos matches de Pista 1 hacia atrás.
 - A001: firma independiente de dispositivo (43 casos originales, verificar cuántos quedan en los 148).
 - Pista 0: marcador INDICE como hard cutoff para últimos casos de cada archivo.
 - Commit de H045 (snapshot ya hecho).
+
+## Sesión H046 — 2026-05-20: B069 cerrado (eliminación búsqueda atrás Pista 1)
+
+### H046-01 — B069: búsqueda atrás de Pista 1 causa 47.6% de sin_firma
+
+**Hipótesis (H045):** Pista 1 en `detectar_fin_real()` busca hacia atrás
+el primer token de la carátula siguiente. Tokens cortos y comunes en
+derecho ("Fisco", "Banco", "Fundación") matchean en citas o texto
+argumentativo → corte falso → firma fuera del bloque → sin_firma.
+
+**Fix:** eliminación total de la búsqueda hacia atrás (`buscar_adelante`).
+Se evaluaron tres variantes:
+- Sin búsqueda atrás: 277 mejoras, 4 regresiones, sf=148.
+- MAX_RETROCESO=20: 209 mejoras, 1 regresión, sf=214.
+- MAX_RETROCESO=10: intermedia, descartada.
+
+Adoptada variante sin búsqueda atrás por ratio 277:4.
+
+**4 regresiones aceptadas:** 330_p747, 330_p4071, 331_p548, 348_p1519.
+Casos donde la búsqueda atrás acertaba; pérdida aceptable vs 277 mejoras.
+
+**Validación:** PoC con pasada completa del parser (poc_b069_v3.py).
+Diff explícito contra CSV baseline.
+
+**Resultado:**
+- sin_firma: 406 → 148. Cobertura firma: 92.9% → 97.4%.
+- Votos: 25603 → 26959.
+- Trayectoria: 813→782→503→481→449→438→425→422→406→148.
+
+---
+
+## Sesión H047 — 2026-05-20: A001 cerrado (fallback firma inversa)
+
+### H047-01 — "Así se decide" como variante de dispositivo
+
+**Hipótesis:** agregar "Así se decide" a RE_DISPOSITIVO_VARIANTES podría
+resolver sin_firma sin necesidad de firma inversa.
+
+**Resultado:** grep en corpus → 1 solo hit (342_p98). Descartado por
+impacto mínimo.
+
+**Lección:** verificar frecuencia en corpus antes de agregar variantes.
+
+---
+
+### H047-02 — A001: fallback firma inversa en procesar_archivo
+
+**Hipótesis:** buscar firma desde el final del bloque hacia atrás
+(independiente de dispositivo) recupera sin_firma donde
+`por_ello_idx is None` o `collect_firma_lines` falla.
+
+**PoC:** poc_a001_v1.py — 34 recuperados, 0 falsos positivos sobre
+los 148 sin_firma post-B069. Todos unanime, todos sin_dispositivo.
+Las funciones del PoC usan las constantes de parser.py directamente
+(RE_APERTURA, RE_CONSIDERANDO, RE_FECHA_LINEA) — código exacto que
+se insertó en producción.
+
+**Guardas:** zona de fallo obligatoria (apertura/fecha/considerando/vistos),
+span mínimo 20 líneas, filtro zona post-firma (RE_DATOS_PARTES),
+límite de retroceso 80 líneas.
+
+**Validación:** pasada completa del parser + diff_a001.py contra
+CSV baseline. 34 mejoras, 0 regresiones, 0 otros cambios.
+
+**Dato notable:** 331_p548 (regresión B069) recuperada por A001.
+
+**Resultado:**
+- sin_firma: 148 → 114. Cobertura firma: 97.4% → 98.0%.
+- Votos: 26959 → 27098.
+
+---
+
+### H047-03 — A001b: _encontrar_zona_fallo primera apertura
+
+**Hallazgo:** caso 329_p317 — auditor del visor ve la firma pero
+buscar_firma_inversa no la encuentra. Causa: el bloque arrastra
+residuo del caso siguiente, que incluye su propio "FALLO DE LA
+CORTE SUPREMA". `_encontrar_zona_fallo` tomaba la ÚLTIMA apertura
+→ zona_fallo queda al final → búsqueda inversa no alcanza la firma
+real del caso.
+
+**Fix:** cambiar de ÚLTIMA a PRIMERA apertura. Para fecha/considerando/
+vistos: restringir a primera mitad del bloque (evita envenenamiento).
+Fallback sin restricción de mitad para bloques cortos.
+
+**Validación:** poc_a001b_v1.py — 1 nuevo recuperado (329_p317),
+0 regresiones. Pasada completa del parser confirma sin_firma 114→113.
+
+**Lección:** cuando el bloque incluye inicio del caso siguiente,
+los marcadores del caso siguiente envenenan heurísticas que buscan
+"el último X". Preferir "el primero" para marcadores del caso actual.
+
+**Resultado:**
+- sin_firma: 114 → 113. Votos: 27098 → 27103.
+
+---
+
+### H047-04 — Auditoría visual 80 casos (seed 420)
+
+**Método:** `auditar_fallo.py --random 80 --seed 420` + visor_auditoria.
+
+**Resultado:** 0 sin_firma en la muestra de 80 (coherente: 113/5702 = 2%,
+esperado ~1.6 sin_firma en 80 casos random). 0 discrepancias
+auditor-parser. Residuo total: 4.67%.
+
+---
+
+### H047-05 — Diagnóstico de los 113 sin_firma residuales
+
+**Desglose por motivo (buscar_firma_inversa):**
+- 57 sin_firma_post_fallo: zona de fallo encontrada pero
+  `linea_es_firma_de_juez` no matchea. Causa probable: firmas en ALL
+  CAPS partidas entre líneas (nombre al final de una línea, apellido
+  al inicio de la siguiente — los regex de JUECES_CONOCIDOS requieren
+  nombre+apellido juntos).
+- 33 sin_zona_fallo: bloques sin apertura, fecha, considerando ni
+  vistos. Contenido mayormente editorial o sumario.
+- 23 span_corto: bloques de menos de 20 líneas. No son fallos reales
+  o son entradas extremadamente breves.
+
+**Estado al cierre H047:**
+- sin_firma: 113 / 5702 fallos (2.0%). Cobertura firma: 98.0%.
+- Votos: 27103.
+- Trayectoria: 813→782→503→481→449→438→425→422→406→148→114→113.
