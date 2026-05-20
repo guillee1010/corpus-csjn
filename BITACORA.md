@@ -4404,3 +4404,106 @@ Tier 1 sin techo sobre todo el bloque. Puramente aditivo.
   grueso de sin_firma (337/406). Requieren M08 o equivalente.
 - C (arquitectura auditor portada al parser) sigue como objetivo a
   largo plazo, informado por los hallazgos empíricos de H044.
+
+# H045 — Visor explorador + diagnóstico sin_firma
+
+**Sesión:** H045
+**Fecha:** 2026-05-20
+**Objetivo original:** construir un visor Streamlit para explorar el
+corpus (Vista 1: Explorador de casos). Objetivo secundario emergente:
+diagnóstico de sin_firma a través de exploración visual.
+**Resultado:** visor funcional + diagnóstico cuantificado de sin_firma
+con causa raíz identificada (B069) + PoC firma independiente v2.
+
+### Fase 1 — Construcción del visor explorador
+
+Visor Streamlit con sidebar de filtros y vista de detalle de caso.
+Ubicación: `scripts/explorador/explorador.py`.
+
+**Funcionalidad:**
+- Tabla de casos paginada con filtros: tomo (input numérico), página,
+  texto libre (carátula + dispositivo + firma + jueces), voting pattern,
+  outcome, solo fallos, solo sin_firma.
+- Vista de detalle: panel izquierdo (metadatos parseados, votos
+  individuales, dispositivo, firma) + panel derecho (bloque fuente .md
+  con resaltado por secciones).
+- Resaltado con regex del parser: apertura, fecha, considerando,
+  dictamen, dispositivo (15+ variantes), firma (post-apertura), voto/
+  disidencia, headers de sumario, headers de página.
+- Navegación anterior/siguiente dentro del filtro activo.
+
+**Decisiones de diseño:**
+- El visor muestra el voting_pattern del CSV (lo que el parser
+  determinó), no recomputa nada. Los colores del bloque fuente son
+  detección visual independiente.
+- Firma solo se resalta post-apertura (evita falso positivo con
+  carátulas que contienen guiones largos, e.g. "BFSA –ex Nación–").
+- Los regex del visor NO son idénticos a los del parser. Discrepancias
+  entre resaltado visual y metadata del CSV = bugs del parser visibles.
+- Color de sumario headers: celeste (#5cb8ff) por pedido explícito.
+
+### Fase 2 — Diagnóstico de sin_firma vía exploración
+
+La exploración visual con el visor reveló tres bugs y un hallazgo
+arquitectónico mayor:
+
+**B067 — "En virtud de lo expuesto"** no está en DISPOSITIVO_ALT.
+Caso 348_p443 (Fernández de Kirchner, recusación). El visor mostró
+firma en azul pero metadata dice sin_firma. Validación empírica:
+5 hits en tomo 346-2, solo 2 son dispositivos (60% falsos positivos).
+Patrón demasiado amplio — pospuesto.
+
+**B068 — Moliné O'Connor — CANCELADO.** El visor mostró 5 hits para
+"Moliné": 3 como juez en firma, 2 como parte demandante
+(340_p1993, 347_p1673 — juicios post-remoción). Agregar a
+JUECES_CONOCIDOS generaría falsos positivos. Cancelado.
+
+**B069 — detectar_fin_real Pista 1 trunca por tokens comunes.**
+Diagnóstico a partir de los 7 sin_firma del tomo 346-2: 6/7 tenían
+bloques truncados centenares de líneas antes de la firma. Análisis
+del CSV mostró tokens causantes: "Fisco" (cortó 411 líneas),
+"Fundación" (399), "Banco" (92). Cuantificación vía PoC v2:
+201/422 sin_firma (47.6%) tienen motivo `sin_firma_post_fallo`.
+**Causa raíz principal de sin_firma.**
+
+**A001 — Firma depende de dispositivo.** El flujo `dispositivo →
+firma` hace que si el dispositivo no se detecta, la firma nunca se
+busca. El parser YA usa `linea_es_firma_de_juez()` como validación
+de candidatos de dispositivo pero no como señal independiente.
+
+### Fase 3 — PoC firma independiente
+
+**v1:** 79 recuperados — incluía falsos positivos de sumarios
+(parentéticas como "(Voto de la Dra. Argibay)") y bloques cortos
+(firmas de casos adyacentes). Detectado por: "unánime 1 juez" es
+incoherente.
+
+**v2 (con guardas):** 43 recuperados, 0 falsos positivos.
+Guardas: span mínimo 20 líneas + zona de fallo obligatoria
+(requiere apertura, fecha, considerando o "Vistos los autos"
+en el bloque).
+
+Desglose de 422 sin_firma:
+- 201 sin_firma_post_fallo (B069, truncados)
+- 119 sin_zona_fallo
+- 59 span < 20
+- **43 recuperables** (A001)
+
+### Entregables
+
+1. `scripts/explorador/explorador.py` — visor Streamlit.
+2. `scripts/auditoria/poc_firma_independiente_v2.py` — PoC validado.
+3. `output/auditoria/poc_firma_independiente.csv` — 43 casos recuperables.
+4. DEUDA_TECNICA.md actualizado (B068 cancelado, B069, A001, matriz).
+
+### Camino a seguir
+
+1. **H046: fix B069** — reforzar Pista 1 de detectar_fin_real.
+   Impacto potencial: 201 casos. Después re-correr parser y PoC.
+2. **H047: A001** — implementar firma independiente sobre lo que
+   quede después de B069.
+3. Visor Vistas 2-3 (estadísticas, comparador) — cuando haya
+   estabilidad en el pipeline.
+
+---
+
