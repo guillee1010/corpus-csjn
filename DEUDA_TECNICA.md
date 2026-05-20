@@ -7,13 +7,16 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-20 (sesiones H046 + H047 + H048: B069 cerrado
-— eliminada búsqueda atrás Pista 1, 277 mejoras, sin_firma 406→148.
+**Última actualización:** 2026-05-20 (sesiones H046 + H047 + H048 + H049:
+B069 cerrado — eliminada búsqueda atrás Pista 1, 277 mejoras, sin_firma 406→148.
 A001 cerrado — fallback firma inversa, 34 mejoras, sin_firma 148→114.
 A001b — _encontrar_zona_fallo primera apertura, 1 mejora, sin_firma 114→113.
 B070+B071 cerrados — Pista 1 forward: validación texto corriente +
 normalización tildes, 37 mejoras, sin_firma 113→76, votos 27103→27303.
-Cobertura firma: 97.4% → 98.0% → 98.7%. Votos: 26959 → 27103 → 27303).
+B072 cerrado — 15 conjueces en JUECES_CONOCIDOS, 21 mejoras, sin_firma 76→74,
+votos 27303→27325. B073 cerrado sin fix (verificado sin problemas).
+B074 abierto — guarda posicional en firma_actual, investigada, no committeada.
+Cobertura firma: 97.4% → 98.0% → 98.7%. Votos: 26959 → 27103 → 27303 → 27325).
 
 ---
 
@@ -53,13 +56,18 @@ a las hipótesis de la tesis (H1-H5).
   (incluye 160 `sumario_con_link`; 5702 fallos procesables).
 - **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV;
   cobertura de firma = 98,7%).
-- **Sin firma:** 76 casos (post-H048). Desglose residual estimado:
-  - ~20 sin_firma_post_fallo (firma no matchea o juez no listado).
-  - 33 sin_zona_fallo (sin apertura/considerando/fecha en bloque).
-  - 23 bloques cortos (span < 20 líneas).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76.
-- **Votos:** 27303 filas (post-H048).
-- **Jueces conocidos:** 38 entradas en JUECES_CONOCIDOS (28 + 10 conjueces B063).
+- **Sin firma:** 74 casos (post-H049). Desglose por clasificación H049:
+  - 35 firma_no_detectada (tienen apertura + fecha pero firma no encontrada).
+  - 24 sin_zona_fallo (sin apertura/considerando/fecha en bloque).
+  - 13 bloques cortos (span < 20 líneas).
+  - 4 bloques vacíos (span ≤ 4).
+  Piso estimado de irrecuperables: ~27. Listado completo en
+  `output/auditoria/H049/sin_firma_76_clasificados.md` y
+  `output/auditoria/H049/sin_firma_texto_completo.md`.
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74.
+- **Votos:** 27325 filas (post-H049).
+- **Jueces conocidos:** 56 entradas en JUECES_CONOCIDOS (28 titulares/previos +
+  13 conjueces B063 + 15 conjueces B072).
 - **Fixes aplicados:**
   - Sprint 2026-05-09: §3.6.a `pg_fin+1`, §3.6.e Fase 1, §4.6.j
     `RE_APERTURA` doble espacio, Fix 1 (V1 → `case_name_cuerpo`).
@@ -78,6 +86,10 @@ a las hipótesis de la tesis (H1-H5).
     A001b — _encontrar_zona_fallo primera apertura (1 mejora, sin_firma 114→113).
   - H048: B070+B071 cerrados — Pista 1 forward: validación texto corriente +
     normalización tildes (37 mejoras, sin_firma 113→76, votos 27103→27303).
+  - H049: B072 cerrado — 15 conjueces en JUECES_CONOCIDOS + _RE_FIRMA_COMPLETA
+    (21 mejoras, 1 regresión aceptada 346_p610, sin_firma 76→74, votos 27303→27325).
+    B073 cerrado sin fix (451 lfr_cambio verificados, 0 problemas).
+    B074 investigado, no committeado (7 regresiones inexplicadas en PoC).
 
 ---
 
@@ -2829,44 +2841,70 @@ carátula real nunca matchea.
 
 **Componente:** parser (JUECES_CONOCIDOS).
 **Origen:** H048, inspección de sin_firma_post_fallo y auditoría v6.
-**Conjueces identificados:**
-  - García Lema, Alberto Manuel
-  - Bertuzzi, Pablo Daniel
-  - Rabbi-Baldi Cabanillas, Luis Renato
-  - Botana, Diego
-  - Rivera, Julio César
-  - Torres, Verónica Nidia
-  - Caballero, María Rosa
-  - Méndez, Héctor Oscar
-  - Montesi, Graciela Susana
-  - Cossio, Marina
-  - Pérez Petit, Arturo
-  - Romano, Otilio Roque
-  - Petra Fernández, Julio Demetrio
-**Impacto estimado:** 5+ casos sin_firma directos (344_p2752,
-344_p3070, 347_p1084, 348_p708, 330_p1642). Probablemente más
-en el corpus.
-**Estado:** Abierto. Prioridad media. Fix trivial (agregar regex a
-JUECES_CONOCIDOS, estilo B063/H043).
+**Fix aplicado (H049):** 15 conjueces agregados a JUECES_CONOCIDOS y
+`_RE_FIRMA_COMPLETA`:
+  - García Lema, Rabbi-Baldi Cabanillas, Méndez, Montesi, Cossio,
+    Pérez Petit, Romano, Petra Fernández (del listado original H048).
+  - Chausovsky, Schiffrin, Aguilar, Pérez Tognola, Corcuera,
+    Andalaf Casiello, Fernández Gómez (descubiertos en H049).
+  - 5 del listado original no aparecen en firma_raw del corpus:
+    Bertuzzi, Botana, Rivera, Torres, Caballero (no agregados).
+**Resultado:** 21 mejoras, 1 regresión aceptada (346_p610 — firma del
+caso anterior capturada por superposición de bloques, caso ya deficiente
+en baseline). sin_firma 76→74. Votos 27303→27325.
+**Validación:** PoC `poc_b072_diff.py` contra corpus completo.
+**Estado:** **CERRADO H049** (commit `bfad045`).
 
 ---
 ### B073 — Interacción detectar_fin_real ↔ refinar_inicio_por_titulo
 
 **Componente:** parser (flujo procesar_archivo).
 **Origen:** H048, auditoría de mejoras B070 v6.
-**Casos testigo:** 345_p599 (lfr 22983→22948, li=22956),
-348_p259 (lfr 9979→9953, li=9959).
-**Síntoma:** `lfr_new < linea_inicio` refinado. El bloque resultante
-tiene span negativo o se reconstruye con contenido inesperado.
-Ambos casos pasaron de sin_firma a unanime con jueces=2 — resultado
-cuestionable.
-**Causa raíz (hipótesis):** `detectar_fin_real` se ejecuta con el
-`linea_inicio` original (pre-refinamiento). `refinar_inicio_por_titulo`
-después avanza `linea_inicio`. Si el nuevo `lfr` del fix B070 es menor
-que el `linea_inicio` refinado, el bloque resultante es inconsistente.
-**Población de riesgo:** 37 casos con span (lf - li) < 10 líneas,
-de los cuales 34 usan `pista=caratula_siguiente`.
-**Estado:** Abierto. Prioridad media. Investigar en H049.
+**Investigación H049:** análisis de los 451 lfr_cambio de B070 v6.
+  - 0 casos con lfr_new < linea_inicio.
+  - 0 casos que perdieron firma o cambiaron voting_pattern.
+  - 398 acortaron lfr (corrección B070), 53 extendieron.
+  - Mediana delta: -2 líneas, media: -5.5.
+  - Los 18 casos con span < 10 son bloques cortos legítimos.
+  La inconsistencia lfr < li_refinado es interna al parser (el
+  linea_inicio refinado no se exporta al CSV). No afecta el output.
+**Estado:** **CERRADO H049** sin fix (verificado, sin problemas).
+
+---
+### B074 — Guarda posicional en búsqueda de firma (superposición de bloques)
+
+**Componente:** parser (`detectar_fin_real`, fallback firma_actual).
+**Origen:** H049, análisis de regresión 346_p610 de B072 y clasificación
+de los 74 sin_firma.
+**Problema:** cuando el bloque catálogo incluye residuo del caso anterior
+(firma, tribunal de origen), `linea_es_firma_de_juez` detecta esa firma
+como `firma_actual` del caso corriente, cortando el bloque prematuramente.
+Afecta ~5 casos directamente (Grupo 3: 342_p1483, 345_p378, 345_p582,
+345_p1417, 346_p1068). También previene regresiones futuras al agregar
+conjueces a JUECES_CONOCIDOS.
+**Fix propuesto:** no aceptar firma encontrada por `buscar_atras` si
+está antes del marcador "FALLO/SENTENCIA DE LA CORTE SUPREMA" del bloque.
+**PoC H049:** dos versiones probadas.
+  - v1 (RE_APERTURA + RE_FECHA_LINEA): 13 mejoras, 7 regresiones.
+    RE_FECHA_LINEA ("Buenos Aires, [fecha]") matchea en dictámenes,
+    causando false positives.
+  - v2 (solo RE_APERTURA): mismas 7 regresiones. Las regresiones
+    ocurren en casos sin apertura formal (apertura_tipo vacío) donde
+    la guarda no debería activarse (primera_apertura=None → firma
+    pasa). Causa de las regresiones no identificada — posiblemente
+    un efecto colateral de la reescritura del flujo de control en
+    el fallback (el `if` anidado cambia el branching cuando `k is
+    not None` pero la condición falla, permitiendo caer al
+    `buscar_adelante` que antes no se alcanzaba).
+**Estado:** Abierto. Prioridad alta. No committeado.
+**Población afectada sin fix:** ~5 casos sin_firma directos + riesgo
+de regresiones en cada ronda de JUECES_CONOCIDOS.
+**PoCs:** `output/auditoria/H049/poc_b074_diff.csv`.
+**Próximo paso:** investigar por qué las regresiones ocurren en casos
+donde la guarda no debería activarse. Posible causa: el `buscar_adelante`
+de firma (línea 1615-1617) ahora se alcanza cuando `buscar_atras`
+encuentra firma pero la condición posicional la rechaza, y encuentra
+una firma del caso *siguiente* más adelante.
 
 ---
 
@@ -2923,17 +2961,23 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
 - H048: B070+B071 cerrados — Pista 1 forward: validación texto corriente +
   normalización tildes (37 mejoras, 0 regresiones, sf 113→76, votos 27103→27303).
   Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76.
+- H049: B072 cerrado — 15 conjueces en JUECES_CONOCIDOS (21 mejoras, 1 regresión
+  aceptada, sf 76→74, votos 27303→27325). B073 cerrado sin fix (451 lfr_cambio
+  verificados). Clasificación de 74 sin_firma en 4 categorías. B074 investigado,
+  no committeado (guarda posicional con 7 regresiones inexplicadas).
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74.
 
 ### Matriz pendiente post-H048
 
 | # | Línea de trabajo | Casos | Riesgo | Dificultad | Estado |
 |---|-----------------|------:|--------|------------|--------|
 | 1 | ~~B070 Pista 1 forward texto corriente~~ | ~~43~~ | — | — | **Cerrado H048** (37 mejoras, sf 113→76) |
-| 2 | B072 Conjueces faltantes | ~5+ | bajo | baja | Pendiente — H049 |
-| 3 | B073 lfr < li refinado | 2+ | medio | media | Pendiente — H049 |
-| 4 | Sin zona de fallo (sin apertura) | 33 | medio | alta | Postergado |
-| 5 | Bloques cortos (span<20) | 23 | — | — | Sin fix posible |
-| 6 | sin_firma_post_fallo residuales | ~20 | medio | alta | Post-B072 |
+| 2 | ~~B072 Conjueces faltantes~~ | ~~5+~~ | — | — | **Cerrado H049** (21 mejoras, sf 76→74) |
+| 3 | ~~B073 lfr < li refinado~~ | ~~2+~~ | — | — | **Cerrado H049** sin fix (verificado OK) |
+| 4 | B074 Guarda posicional firma_actual | ~5 | medio | media | Abierto — PoC con 7 regresiones |
+| 5 | Sin zona de fallo (sin apertura) | 24 | medio | alta | Postergado |
+| 6 | Bloques cortos (span<20) | 13 | — | — | Sin fix posible |
+| 7 | Firma no detectada (con apertura) | 35 | medio | alta | Investigar post-B074 |
 
 M08 resolvería B1b + B2 de raíz (~337 casos).
 
@@ -2954,8 +2998,9 @@ M08 resolvería B1b + B2 de raíz (~337 casos).
 - ~~A001 (firma independiente de dispositivo)~~ — **CERRADO H047** (35 mejoras, sf 148→113).
 - ~~B070 (Pista 1 forward texto corriente)~~ — **CERRADO H048** (37 mejoras, sf 113→76).
 - ~~B071 (tildes en Pista 1)~~ — **CERRADO H048** (incluido en B070).
-- B072 (conjueces faltantes: ~13 nombres) — abierto, prioridad media, fix trivial.
-- B073 (interacción detectar_fin_real ↔ refinar_inicio_por_titulo) — abierto, prioridad media.
+- ~~B072 (conjueces faltantes: ~13 nombres)~~ — **CERRADO H049** (15 conjueces, 21 mejoras, sf 76→74).
+- ~~B073 (interacción detectar_fin_real ↔ refinar_inicio_por_titulo)~~ — **CERRADO H049** sin fix (verificado OK).
+- B074 (guarda posicional en firma_actual) — abierto, prioridad alta, PoC con regresiones.
 - Variantes descartadas H039 (`en_las_condiciones`, `por_lo_tanto`, `en_atencion`,
   `que_de_conformidad`): Tier 2 implementado en H041 pero estas variantes siguen
   excluidas (argumentales incluso con firma validada + guarda de contexto).

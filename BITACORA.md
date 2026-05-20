@@ -4789,3 +4789,111 @@ Rivera, Torres, Caballero, Méndez, Montesi, Cossio. → B072.
   detectar_fin_real ↔ refinar_inicio_por_titulo.
 - Inspección de los 76 sin_firma restantes (33 sin_zona_fallo +
   23 span_corto + 20 sin_firma_post_fallo residuales).
+
+### H049-01 — B072: 15 conjueces en JUECES_CONOCIDOS
+
+**Método:** grep de los 13 conjueces listados en H048 contra `firma_raw`
+del CSV. 8 de 13 aparecen en firma_raw. 5 no aparecen (Bertuzzi, Botana,
+Rivera, Torres, Caballero — no agregados). Descubiertos 7 bonus en
+firma_raw: Chausovsky, Schiffrin, Aguilar, Pérez Tognola, Corcuera,
+Andalaf Casiello, Fernández Gómez. Total: 15 conjueces agregados.
+
+**Hallazgo lateral:** "Roberto Enrique Hornos" en 347_p1673 no matchea
+el regex existente (`gustavo\s+m\.?\s*hornos`). Puede ser homónimo o
+error OCR. No resuelto.
+
+**Validación:** PoC `poc_b072_diff.py` contra corpus completo.
+21 mejoras, 1 regresión aceptada (346_p610 — superposición de bloques
+preexistente, firma de caso anterior capturada). sf 76→74, votos
+27303→27325.
+
+**Commit:** `bfad045`.
+
+---
+
+### H049-02 — B073: verificación lfr < li (cerrado sin fix)
+
+**Método:** análisis de los 451 `lfr_cambio` de B070 v6 contra
+`linea_inicio` del CSV baseline.
+
+**Resultado:**
+- 0 casos con lfr_new < linea_inicio.
+- 0 cambios de voting_pattern.
+- 398 acortaron lfr, 53 extendieron. Mediana -2, media -5.5.
+- 18 casos con span < 10 son bloques cortos legítimos.
+
+**Conclusión:** B073 no requiere fix. La inconsistencia lfr < li_refinado
+es interna al parser (li refinado no se exporta). Cerrado.
+
+---
+
+### H049-03 — Clasificación de los 74 sin_firma
+
+**Método:** clasificación automática por estructura del bloque +
+extracción de texto del corpus para inspección visual.
+
+**Categorías (74 sin_firma post-B072):**
+- firma_no_detectada: 35 (tienen apertura + fecha, firma no encontrada).
+- sin_zona_fallo: 24 (sin apertura ni fecha).
+- bloque_corto: 13 (span < 20).
+- bloque_vacío: 4 (span ≤ 4).
+
+**Análisis de residuos (diff catálogo vs parser):**
+- 55 sin residuo (lfr == lf, parser usa todo el bloque).
+- 19 con residuo, clasificados en 3 grupos:
+  - Grupo 1 (3): span=0, parser corta inmediatamente en sumario.
+  - Grupo 2 (12): parser corta en sumario_siguiente antes del fallo.
+  - Grupo 3 (5): firma del caso anterior confunde al parser.
+
+**Piso estimado de irrecuperables:** ~27 (4 vacíos + 13 cortos + ~10
+sin_zona_fallo chicos).
+
+**Artefactos generados:**
+- `output/auditoria/H049/sin_firma_76_clasificados.csv`
+- `output/auditoria/H049/sin_firma_76_clasificados.md`
+- `output/auditoria/H049/sin_firma_texto_completo.md`
+- `output/auditoria/H049/sin_firma_bloque_catalogo.md`
+- `output/auditoria/H049/sin_firma_bloque_parser.md`
+
+---
+
+### H049-04 — B074: guarda posicional en firma_actual (no committeado)
+
+**Problema:** `detectar_fin_real` fallback `firma_actual` captura firmas
+del caso anterior que están en el bloque por superposición de páginas.
+
+**Fix propuesto:** no aceptar firma antes de `RE_APERTURA` del bloque.
+
+**PoC v1 (RE_APERTURA + RE_FECHA_LINEA):** 13 mejoras, 7 regresiones.
+RE_FECHA_LINEA matchea "Buenos Aires, [fecha]" en dictámenes.
+
+**PoC v2 (solo RE_APERTURA):** mismas 7 regresiones. Las regresiones
+ocurren en casos sin apertura formal donde `primera_apertura=None` y
+la guarda no debería activarse. Causa no identificada — posiblemente
+el `if` anidado cambia el branching cuando `buscar_atras` encuentra
+firma pero la condición falla, permitiendo caer al `buscar_adelante`
+que encuentra firma del caso siguiente.
+
+**Decisión:** no commitear. Investigar en H050.
+
+---
+
+### H049-05 — Resultado final
+
+**Committeado:**
+- B072: 15 conjueces. sf 76→74, votos 27303→27325.
+
+**Cerrado sin fix:**
+- B073: verificado, sin problemas.
+
+**Abierto:**
+- B074: guarda posicional, 7 regresiones inexplicadas. Prioridad alta.
+
+**Trayectoria sin_firma:** ...→113→76→74.
+**Cobertura firma:** 98.7%.
+**Votos:** 27325.
+
+**Pendientes para H050:**
+- B074: investigar regresiones (branching del `if` anidado).
+- Inspección manual de los 74 sin_firma con el texto extraído.
+- Hallazgo Hornos ("Roberto Enrique" vs "Gustavo M.").

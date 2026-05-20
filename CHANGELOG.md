@@ -2,6 +2,31 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+
+### B072: 15 conjueces en JUECES_CONOCIDOS (commit `bfad045`)
+
+- 15 entradas nuevas en JUECES_CONOCIDOS y `_RE_FIRMA_COMPLETA`:
+  García Lema, Rabbi-Baldi Cabanillas, Méndez, Montesi, Cossio,
+  Pérez Petit, Romano, Petra Fernández, Chausovsky, Schiffrin,
+  Aguilar, Pérez Tognola, Corcuera, Andalaf Casiello, Fernández Gómez.
+- 21 mejoras, 1 regresión aceptada (346_p610).
+- sin_firma: 76 → 74. Votos: 27303 → 27325.
+
+### B073: cerrado sin fix
+
+- 451 lfr_cambio de B070 verificados: 0 problemas.
+
+### Clasificación sin_firma
+
+- 74 sin_firma clasificados en 4 categorías.
+- Texto del corpus extraído para inspección manual.
+
+### B074: investigado, no committeado
+
+- Guarda posicional en firma_actual: 13 mejoras pero 7 regresiones.
+- Causa de regresiones no identificada. Queda abierto.
+
+
 ### H047 (2026-05-20)
 
 - **fix(A001):** fallback `buscar_firma_inversa()` en `procesar_archivo`.

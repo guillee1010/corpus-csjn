@@ -1,0 +1,98 @@
+caso_id,tipo,campo,base,nuevo
+331_p1468,REGRESION,voting_pattern,unanime,sin_firma
+331_p1468,REGRESION,n_jueces,1,0
+331_p1468,CAMBIO,jueces,Lorenzetti,
+331_p1468,CAMBIO,jueces_conocidos,Lorenzetti,
+331_p1468,LFR_CAMBIO,linea_fin_real,17746,18122
+331_p1468,CAMBIO,firma_raw,Ricardo Luis Lorenzetti.,
+331_p1468,PISTA_CAMBIO,pista_fin,firma_actual,fallback_catalogo
+337_p822,CAMBIO,jueces,Petracchi | Argibay,Lorenzetti | Highton de Nolasco
+337_p822,CAMBIO,jueces_conocidos,Petracchi | Argibay,Lorenzetti | Highton de Nolasco
+337_p822,LFR_CAMBIO,linea_fin_real,32798,33300
+337_p822,CAMBIO,firma_raw,"de los Ministros Dres. Enrique S. Petracchi y Carmen M. Argibay, y",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos
+339_p127,LFR_CAMBIO,linea_fin_real,4545,5166
+341_p424,MEJORA_JUECES,n_jueces,1,2
+341_p424,CAMBIO,jueces,Rosatti,Lorenzetti | Highton de Nolasco
+341_p424,CAMBIO,jueces_conocidos,Rosatti,Lorenzetti | Highton de Nolasco
+341_p424,LFR_CAMBIO,linea_fin_real,16201,16310
+341_p424,CAMBIO,firma_raw,Horacio Rosatti.,Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan
+341_p605,LFR_CAMBIO,linea_fin_real,22855,23079
+342_p1483,MEJORA,voting_pattern,sin_firma,unanime
+342_p1483,MEJORA,n_jueces,0,2
+342_p1483,CAMBIO,jueces,,Rosenkrantz | Highton de Nolasco
+342_p1483,CAMBIO,jueces_conocidos,,Rosenkrantz | Highton de Nolasco
+342_p1483,LFR_CAMBIO,linea_fin_real,6936,6977
+342_p1483,CAMBIO,firma_raw,,Carlos Fernando Rosenkrantz — Elena I. Highton de Nolasco —
+342_p54,MEJORA_JUECES,n_jueces,1,2
+342_p54,CAMBIO,jueces,Rosatti,Rosenkrantz | Highton de Nolasco
+342_p54,CAMBIO,jueces_conocidos,Rosatti,Rosenkrantz | Highton de Nolasco
+342_p54,LFR_CAMBIO,linea_fin_real,2298,2431
+342_p54,CAMBIO,firma_raw,Horacio Rosatti.,Carlos Fernando Rosenkrantz — Elena I. Highton de Nolasco —
+343_p1031,MEJORA_JUECES,n_jueces,1,2
+343_p1031,CAMBIO,jueces,Rosenkrantz,Rosenkrantz | Highton de Nolasco
+343_p1031,CAMBIO,jueces_conocidos,Rosenkrantz,Rosenkrantz | Highton de Nolasco
+343_p1031,LFR_CAMBIO,linea_fin_real,13490,13739
+343_p1031,CAMBIO,firma_raw,Carlos Fernando Rosenkrantz.,Carlos Fernando Rosenkrantz — Elena I. Highton de Nolasco —
+343_p1388,REGRESION,n_jueces,5,3
+343_p1388,CAMBIO,jueces,Rosenkrantz | Highton de Nolasco | Maqueda | Lorenzetti | Rosatti,Maqueda | Lorenzetti | Rosatti
+343_p1388,CAMBIO,jueces_conocidos,Rosenkrantz | Highton de Nolasco | Maqueda | Lorenzetti | Rosatti,Maqueda | Lorenzetti | Rosatti
+343_p1388,LFR_CAMBIO,linea_fin_real,27301,27339
+343_p1388,CAMBIO,firma_raw,Carlos Fernando Rosenkrantz — Elena I. Highton de Nolasco — Juan Carlos Maqueda — Ricardo Luis Lorenzetti — Horacio Rosatti.,Juan Carlos Maqueda — Ricardo Luis Lorenzetti — Horacio Rosatti.
+343_p1758,CAMBIO,jueces,Rosenkrantz | Rosatti,Highton de Nolasco | Maqueda
+343_p1758,CAMBIO,jueces_conocidos,Rosenkrantz | Rosatti,Highton de Nolasco | Maqueda
+343_p1758,LFR_CAMBIO,linea_fin_real,11765,11910
+343_p1758,CAMBIO,firma_raw,Carlos Fernando Rosenkrantz — Horacio Rosatti.,Elena I. Highton de Nolasco — Juan Carlos Maqueda — Horacio
+343_p2243,REGRESION,n_jueces,4,2
+343_p2243,CAMBIO,jueces,Rosenkrantz | Maqueda | Lorenzetti | Rosatti,Rosenkrantz | Highton de Nolasco
+343_p2243,CAMBIO,jueces_conocidos,Rosenkrantz | Maqueda | Lorenzetti | Rosatti,Rosenkrantz | Highton de Nolasco
+343_p2243,LFR_CAMBIO,linea_fin_real,30542,31041
+343_p2243,CAMBIO,firma_raw,Carlos Fernando Rosenkrantz — Juan Carlos Maqueda — Ricardo Luis Lorenzetti — Horacio Rosatti.,Carlos Fernando Rosenkrantz — Elena I. Highton de Nolasco —
+344_p220,REGRESION,n_jueces,4,2
+344_p220,CAMBIO,jueces,Highton de Nolasco | Maqueda | Lorenzetti | Rosatti,Highton de Nolasco | Maqueda
+344_p220,CAMBIO,jueces_conocidos,Highton de Nolasco | Maqueda | Lorenzetti | Rosatti,Highton de Nolasco | Maqueda
+344_p220,LFR_CAMBIO,linea_fin_real,8682,8792
+344_p220,CAMBIO,firma_raw,Elena I. Highton de Nolasco – Juan Carlos Maqueda – Ricardo Luis Lorenzetti – Horacio Rosatti.,Elena I. Highton de Nolasco – Juan Carlos Maqueda – Ricardo Luis
+344_p2500,LFR_CAMBIO,linea_fin_real,48505,48778
+344_p2835,REGRESION,n_jueces,4,2
+344_p2835,CAMBIO,jueces,Rosenkrantz | Maqueda | Highton de Nolasco | Lorenzetti,Rosatti | Rosenkrantz
+344_p2835,CAMBIO,jueces_conocidos,Rosenkrantz | Maqueda | Highton de Nolasco | Lorenzetti,Rosatti | Rosenkrantz
+344_p2835,LFR_CAMBIO,linea_fin_real,8129,8689
+344_p2835,CAMBIO,firma_raw,Carlos Fernando Rosenkrantz – Juan Carlos Maqueda – Elena I. Highton de Nolasco – Ricardo Luis Lorenzetti.,Horacio Rosatti – Carlos Fernando Rosenkrantz – Juan Carlos
+344_p545,MEJORA_JUECES,n_jueces,1,2
+344_p545,CAMBIO,jueces,Rosatti,Rosenkrantz | Highton de Nolasco
+344_p545,CAMBIO,jueces_conocidos,Rosatti,Rosenkrantz | Highton de Nolasco
+344_p545,LFR_CAMBIO,linea_fin_real,21287,21522
+344_p545,CAMBIO,firma_raw,Horacio Rosatti.,Carlos Fernando Rosenkrantz – Elena I. Highton de Nolasco – Juan
+345_p1417,MEJORA,voting_pattern,sin_firma,unanime
+345_p1417,MEJORA,n_jueces,0,2
+345_p1417,CAMBIO,jueces,,Rosatti | Rosenkrantz
+345_p1417,CAMBIO,jueces_conocidos,,Rosatti | Rosenkrantz
+345_p1417,LFR_CAMBIO,linea_fin_real,20608,20756
+345_p1417,CAMBIO,firma_raw,,Horacio Rosatti — Carlos Fernando Rosenkrantz — Juan Carlos
+346_p1068,MEJORA,voting_pattern,sin_firma,unanime
+346_p1068,MEJORA,n_jueces,0,2
+346_p1068,CAMBIO,jueces,,Rosatti | Rosenkrantz
+346_p1068,CAMBIO,jueces_conocidos,,Rosatti | Rosenkrantz
+346_p1068,LFR_CAMBIO,linea_fin_real,11728,11801
+346_p1068,CAMBIO,firma_raw,,Horacio Rosatti — Carlos Fernando Rosenkrantz — Juan Carlos
+346_p610,MEJORA_JUECES,n_jueces,1,2
+346_p610,CAMBIO,jueces,Rabbi-Baldi Cabanillas (conjuez),Rosatti | Rosenkrantz
+346_p610,CAMBIO,jueces_conocidos,Rabbi-Baldi Cabanillas (conjuez),Rosatti | Rosenkrantz
+346_p610,LFR_CAMBIO,linea_fin_real,23701,23809
+346_p610,CAMBIO,firma_raw,Luis Renato Rabbi—Baldi Cabanillas.,Horacio Rosatti — Carlos Fernando Rosenkrantz — Juan Carlos
+347_p1353,MEJORA_JUECES,n_jueces,1,2
+347_p1353,CAMBIO,jueces,Rosenkrantz,Rosatti | Rosenkrantz
+347_p1353,CAMBIO,jueces_conocidos,Rosenkrantz,Rosatti | Rosenkrantz
+347_p1353,LFR_CAMBIO,linea_fin_real,6910,7181
+347_p1353,CAMBIO,firma_raw,Carlos Fernando Rosenkrantz.,Horacio Rosatti — Carlos Fernando Rosenkrantz — Juan Carlos
+347_p729,MEJORA_JUECES,n_jueces,1,2
+347_p729,CAMBIO,jueces,Rosenkrantz,Rosatti | Rosenkrantz
+347_p729,CAMBIO,jueces_conocidos,Rosenkrantz,Rosatti | Rosenkrantz
+347_p729,LFR_CAMBIO,linea_fin_real,28133,28438
+347_p729,CAMBIO,firma_raw,Carlos Fernando Rosenkrantz.,Horacio Rosatti — Carlos Fernando Rosenkrantz — Juan Carlos
+347_p818,REGRESION,n_jueces,4,2
+347_p818,CAMBIO,jueces,Rosatti | Rosenkrantz | Maqueda | Lorenzetti,Rosatti | Rosenkrantz
+347_p818,CAMBIO,jueces_conocidos,Rosatti | Rosenkrantz | Maqueda | Lorenzetti,Rosatti | Rosenkrantz
+347_p818,LFR_CAMBIO,linea_fin_real,31537,31721
+347_p818,CAMBIO,firma_raw,Horacio Rosatti — Carlos Fernando Rosenkrantz — Juan Carlos Maqueda — Ricardo Luis Lorenzetti.,Horacio Rosatti — Carlos Fernando Rosenkrantz — Juan Carlos
+348_p659,LFR_CAMBIO,linea_fin_real,25402,25507

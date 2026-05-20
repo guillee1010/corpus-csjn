@@ -1,0 +1,76 @@
+caso_id,tipo,campo,base,nuevo
+329_p1092,MEJORA_JUECES,n_jueces,5,9
+329_p1092,CAMBIO,jueces,Argibay | Pereyra González (conjuez) | Poclava Lafuente (conjuez) | Ferro (conjuez) | Rosatti,Argibay | Chausovsky (conjuez) | Pereyra González (conjuez) | Poclava Lafuente (conjuez) | Ferro (conjuez) | Schiffrin (conjuez) | García Lema (conjuez) | Rosatti | Méndez (conjuez)
+329_p1092,CAMBIO,jueces_conocidos,Argibay | Pereyra González (conjuez) | Poclava Lafuente (conjuez) | Ferro (conjuez) | Rosatti,Argibay | Chausovsky (conjuez) | Pereyra González (conjuez) | Poclava Lafuente (conjuez) | Ferro (conjuez) | Schiffrin (conjuez) | García Lema (conjuez) | Rosatti | Méndez (conjuez)
+329_p1092,LFR_CAMBIO,linea_fin_real,44789,44799
+329_p2037,REGRESION,n_jueces,14,9
+329_p2037,CAMBIO,jueces,Petracchi | Highton de Nolasco | Fayt | Maqueda | Zaffaroni | Lorenzetti | Argibay | Rodríguez Basavilbaso (conjuez) | Maqueda | Lorenzetti | Argibay | Maqueda | Lorenzetti | Argibay,Petracchi | Highton de Nolasco | Fayt | Maqueda | Zaffaroni | Lorenzetti | Argibay | Rodríguez Basavilbaso (conjuez) | Aguilar (conjuez)
+329_p2037,CAMBIO,jueces_conocidos,Petracchi | Highton de Nolasco | Fayt | Maqueda | Zaffaroni | Lorenzetti | Argibay | Rodríguez Basavilbaso (conjuez) | Maqueda | Lorenzetti | Argibay | Maqueda | Lorenzetti | Argibay,Petracchi | Highton de Nolasco | Fayt | Maqueda | Zaffaroni | Lorenzetti | Argibay | Rodríguez Basavilbaso (conjuez) | Aguilar (conjuez)
+329_p2037,CAMBIO,firma_raw,ENRIQUE SANTIAGO PETRACCHI — ELENA I. HIGHTON DE NOLASCO — CARLOS S. FAYT — JUAN CARLOS MAQUEDA (en disidencia) — E. RAÚL ZAFFARONI — RICARDO LUIS LORENZETTI (en disidencia) — CARMEN M. ARGIBAY (en di,ENRIQUE SANTIAGO PETRACCHI — ELENA I. HIGHTON DE NOLASCO — CARLOS S. FAYT — JUAN CARLOS MAQUEDA (en disidencia) — E. RAÚL ZAFFARONI — RICARDO LUIS LORENZETTI (en disidencia) — CARMEN M. ARGIBAY (en di
+329_p3388,MEJORA_JUECES,n_jueces,7,8
+329_p3388,CAMBIO,jueces,Petracchi | Highton de Nolasco | Fayt | Maqueda | Zaffaroni | Argibay | Pereyra González (conjuez),Petracchi | Highton de Nolasco | Fayt | Maqueda | Zaffaroni | Argibay | Pereyra González (conjuez) | Aguilar (conjuez)
+329_p3388,CAMBIO,jueces_conocidos,Petracchi | Highton de Nolasco | Fayt | Maqueda | Zaffaroni | Argibay | Pereyra González (conjuez),Petracchi | Highton de Nolasco | Fayt | Maqueda | Zaffaroni | Argibay | Pereyra González (conjuez) | Aguilar (conjuez)
+329_p5261,MEJORA_JUECES,n_jueces,6,7
+329_p5261,CAMBIO,jueces,Highton de Nolasco | Lorenzetti | Argibay | Pacilio (conjuez) | Argañaraz (conjuez) | Otero (conjuez),Highton de Nolasco | Lorenzetti | Argibay | Pacilio (conjuez) | Argañaraz (conjuez) | Otero (conjuez) | Chausovsky (conjuez)
+329_p5261,CAMBIO,jueces_conocidos,Highton de Nolasco | Lorenzetti | Argibay | Pacilio (conjuez) | Argañaraz (conjuez) | Otero (conjuez),Highton de Nolasco | Lorenzetti | Argibay | Pacilio (conjuez) | Argañaraz (conjuez) | Otero (conjuez) | Chausovsky (conjuez)
+330_p1642,MEJORA_JUECES,n_jueces,4,7
+330_p1642,CAMBIO,jueces,Lorenzetti | Maqueda | Zaffaroni | Tyden de Skanata (conjuez),Lorenzetti | Maqueda | Zaffaroni | Pérez Petit (conjuez) | Romano (conjuez) | Tyden de Skanata (conjuez) | Petra Fernández (conjuez)
+330_p1642,CAMBIO,jueces_conocidos,Lorenzetti | Maqueda | Zaffaroni | Tyden de Skanata (conjuez),Lorenzetti | Maqueda | Zaffaroni | Pérez Petit (conjuez) | Romano (conjuez) | Tyden de Skanata (conjuez) | Petra Fernández (conjuez)
+330_p2799,MEJORA_JUECES,n_jueces,3,5
+330_p2799,CAMBIO,jueces,Lorenzetti | Zaffaroni | Tyden de Skanata (conjuez),Lorenzetti | Zaffaroni | Tyden de Skanata (conjuez) | Petra Fernández (conjuez) | Romano (conjuez)
+330_p2799,CAMBIO,jueces_conocidos,Lorenzetti | Zaffaroni | Tyden de Skanata (conjuez),Lorenzetti | Zaffaroni | Tyden de Skanata (conjuez) | Petra Fernández (conjuez) | Romano (conjuez)
+337_p1052,MEJORA_JUECES,n_jueces,3,4
+337_p1052,CAMBIO,jueces,Fayt | Maqueda | Morán (conjuez),Fayt | Maqueda | Morán (conjuez) | Fernández Gómez (conjuez)
+337_p1052,CAMBIO,jueces_conocidos,Fayt | Maqueda | Morán (conjuez),Fayt | Maqueda | Morán (conjuez) | Fernández Gómez (conjuez)
+337_p1052,CAMBIO,firma_raw,Carlos S. Fayt - Juan Carlos Maqueda – Jorge Eduardo Moran – José Luis Alberto Aguilar – Cintia Fernández Gómez. Recursos extraordinarios interpuestos por los Dres. Pablo Jacoby y Patricio Carba- llés,Carlos S. Fayt - Juan Carlos Maqueda – Jorge Eduardo Moran – José Luis Alberto Aguilar – Cintia Fernández Gómez.
+344_p3070,MEJORA,voting_pattern,sin_firma,unanime
+344_p3070,MEJORA,n_jueces,0,1
+344_p3070,CAMBIO,jueces,,Cossio (conjuez)
+344_p3070,CAMBIO,jueces_conocidos,,Cossio (conjuez)
+344_p3070,CAMBIO,firma_raw,,"Graciela Susana – Leal de Ibarra Javier M. – Cossio Marina. Parte actora: Provincia del Neuquén, representada por sus apoderados, doctores Ho­ racio D. Díaz Sieiro y Silvana M. Garrido Santos, con el "
+346_p1355,MEJORA_JUECES,n_jueces,4,5
+346_p1355,CAMBIO,jueces,Rosatti | Rosenkrantz | Maqueda | Lorenzetti,Rosatti | Rosenkrantz | Maqueda | Lorenzetti | Montesi (conjuez)
+346_p1355,CAMBIO,jueces_conocidos,Rosatti | Rosenkrantz | Maqueda | Lorenzetti,Rosatti | Rosenkrantz | Maqueda | Lorenzetti | Montesi (conjuez)
+346_p580,MEJORA_JUECES,n_jueces,4,5
+346_p580,CAMBIO,jueces,Rosatti | Rosenkrantz | Maqueda | Lorenzetti,Rosatti | Rosenkrantz | Maqueda | Lorenzetti | Rabbi-Baldi Cabanillas (conjuez)
+346_p580,CAMBIO,jueces_conocidos,Rosatti | Rosenkrantz | Maqueda | Lorenzetti,Rosatti | Rosenkrantz | Maqueda | Lorenzetti | Rabbi-Baldi Cabanillas (conjuez)
+346_p610,REGRESION,n_jueces,2,1
+346_p610,CAMBIO,jueces,Rosatti | Rosenkrantz,Rabbi-Baldi Cabanillas (conjuez)
+346_p610,CAMBIO,jueces_conocidos,Rosatti | Rosenkrantz,Rabbi-Baldi Cabanillas (conjuez)
+346_p610,LFR_CAMBIO,linea_fin_real,23809,23701
+346_p610,CAMBIO,firma_raw,Horacio Rosatti — Carlos Fernando Rosenkrantz — Juan Carlos,Luis Renato Rabbi—Baldi Cabanillas.
+347_p1166,MEJORA_JUECES,n_jueces,2,3
+347_p1166,CAMBIO,jueces,Maqueda | Lorenzetti,Maqueda | Lorenzetti | Rabbi-Baldi Cabanillas (conjuez)
+347_p1166,CAMBIO,jueces_conocidos,Maqueda | Lorenzetti,Maqueda | Lorenzetti | Rabbi-Baldi Cabanillas (conjuez)
+347_p1166,LFR_CAMBIO,linea_fin_real,45309,45310
+347_p1166,CAMBIO,firma_raw,Juan Carlos Maqueda — Ricardo Luis Lorenzetti — Beatriz Estela,Juan Carlos Maqueda — Ricardo Luis Lorenzetti — Beatriz Estela Aranguren — Luis Renato Rabbi Baldi Cabanillas.
+347_p1673,CAMBIO_VP,voting_pattern,segun_su_voto,mixed
+347_p1673,MEJORA_JUECES,n_jueces,1,4
+347_p1673,CAMBIO,jueces,Morán (conjuez),Pérez Tognola (conjuez) | Morán (conjuez) | Corcuera (conjuez) | Rabbi-Baldi Cabanillas (conjuez)
+347_p1673,CAMBIO,jueces_conocidos,Morán (conjuez),Pérez Tognola (conjuez) | Morán (conjuez) | Corcuera (conjuez) | Rabbi-Baldi Cabanillas (conjuez)
+347_p843,MEJORA_JUECES,n_jueces,4,5
+347_p843,CAMBIO,jueces,Rosatti | Rosenkrantz | Maqueda | Lorenzetti,Rosatti | Rosenkrantz | Maqueda | Lorenzetti | Cossio (conjuez)
+347_p843,CAMBIO,jueces_conocidos,Rosatti | Rosenkrantz | Maqueda | Lorenzetti,Rosatti | Rosenkrantz | Maqueda | Lorenzetti | Cossio (conjuez)
+347_p863,MEJORA_JUECES,n_jueces,3,4
+347_p863,CAMBIO,jueces,Rosatti | Rosenkrantz | Lorenzetti,Rosatti | Rosenkrantz | Lorenzetti | Cossio (conjuez)
+347_p863,CAMBIO,jueces_conocidos,Rosatti | Rosenkrantz | Lorenzetti,Rosatti | Rosenkrantz | Lorenzetti | Cossio (conjuez)
+348_p1383,MEJORA_JUECES,n_jueces,3,4
+348_p1383,CAMBIO,jueces,Rosatti | Rosenkrantz | Tyden de Skanata (conjuez),Rosatti | Rosenkrantz | Corcuera (conjuez) | Tyden de Skanata (conjuez)
+348_p1383,CAMBIO,jueces_conocidos,Rosatti | Rosenkrantz | Tyden de Skanata (conjuez),Rosatti | Rosenkrantz | Corcuera (conjuez) | Tyden de Skanata (conjuez)
+348_p1675,MEJORA_JUECES,n_jueces,3,4
+348_p1675,CAMBIO,jueces,Rosatti | Rosenkrantz | Lorenzetti,Rosatti | Rosenkrantz | Lorenzetti | Andalaf Casiello (conjuez)
+348_p1675,CAMBIO,jueces_conocidos,Rosatti | Rosenkrantz | Lorenzetti,Rosatti | Rosenkrantz | Lorenzetti | Andalaf Casiello (conjuez)
+348_p1733,MEJORA_JUECES,n_jueces,2,4
+348_p1733,CAMBIO,jueces,Rosatti | Alcalá (conjuez),Rosatti | Rabbi-Baldi Cabanillas (conjuez) | Alcalá (conjuez) | Andalaf Casiello (conjuez)
+348_p1733,CAMBIO,jueces_conocidos,Rosatti | Alcalá (conjuez),Rosatti | Rabbi-Baldi Cabanillas (conjuez) | Alcalá (conjuez) | Andalaf Casiello (conjuez)
+348_p61,MEJORA_JUECES,n_jueces,2,3
+348_p61,CAMBIO,jueces,Rosenkrantz | Lorenzetti,Rosenkrantz | Andalaf Casiello (conjuez) | Lorenzetti
+348_p61,CAMBIO,jueces_conocidos,Rosenkrantz | Lorenzetti,Rosenkrantz | Andalaf Casiello (conjuez) | Lorenzetti
+348_p708,MEJORA,voting_pattern,sin_firma,unanime
+348_p708,MEJORA,n_jueces,0,1
+348_p708,CAMBIO,jueces,,Rabbi-Baldi Cabanillas (conjuez)
+348_p708,CAMBIO,jueces_conocidos,,Rabbi-Baldi Cabanillas (conjuez)
+348_p708,CAMBIO,firma_raw,,Luis Renato Rabbi—Baldi Cabanillas.
+348_p943,MEJORA_JUECES,n_jueces,4,5
+348_p943,CAMBIO,jueces,Rosatti | Rosenkrantz | Lorenzetti | Alcalá (conjuez),Rosatti | Rosenkrantz | Lorenzetti | Alcalá (conjuez) | Andalaf Casiello (conjuez)
+348_p943,CAMBIO,jueces_conocidos,Rosatti | Rosenkrantz | Lorenzetti | Alcalá (conjuez),Rosatti | Rosenkrantz | Lorenzetti | Alcalá (conjuez) | Andalaf Casiello (conjuez)
