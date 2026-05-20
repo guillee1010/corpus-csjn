@@ -1,0 +1,35 @@
+caso_id,tomo,outcome_actual,vp_antes,vp_despues,n_jueces,jueces,firma_raw_corta,firma_idx_rel,linea_abs,motivo,span
+329_p991,329,sin_dispositivo,sin_firma,unanime,5,"Highton de Nolasco, Maqueda, Zaffaroni, Lorenzetti, Argibay",ELENA I. HIGHTON DE NOLASCO — JUAN CARLOS MAQUEDA — E. RAÚL ZAFFARONI — RICARDO LUIS LORENZETTI — CARMEN M. ARGIBAY.,30,37464,ok,40
+329_p3444,329,sin_dispositivo,sin_firma,unanime,2,"Petracchi, Highton de Nolasco",ENRIQUE SANTIAGO PETRACCHI — ELENA I. HIGHTON DE NOLASCO — JUAN,45,18922,ok,46
+329_p4590,329,sin_dispositivo,sin_firma,unanime,2,"Petracchi, Highton de Nolasco",ENRIQUE SANTIAGO PETRACCHI — ELENA I. HIGHTON DE NOLASCO — JUAN,86,62582,ok,87
+330_p22,330,sin_dispositivo,sin_firma,unanime,7,"Lorenzetti, Highton de Nolasco, Fayt, Petracchi, Maqueda, Zaffaroni, Argibay",RICARDO LUIS LORENZETTI — ELENA I. HIGHTON DE NOLASCO — CARLOS S. FAYT — ENRIQUE SANTIAGO PETRACCHI — JUAN CARLOS MAQUED,42,762,ok,48
+330_p1172,330,sin_dispositivo,sin_firma,unanime,2,"Highton de Nolasco, Petracchi",ELENA I. HIGHTON DE NOLASCO — ENRIQUE SANTIAGO PETRACCHI — JUAN,85,44935,ok,86
+330_p1971,330,sin_dispositivo,sin_firma,unanime,6,"Lorenzetti, Highton de Nolasco, Fayt, Petracchi, Maqueda, Argibay",RICARDO LUIS LORENZETTI — ELENA I. HIGHTON DE NOLASCO — CARLOS S. FAYT — ENRIQUE SANTIAGO PETRACCHI — JUAN CARLOS MAQUED,168,24824,ok,173
+330_p2794,330,sin_dispositivo,sin_firma,unanime,4,"Nazareno, Belluscio, Petracchi, Vázquez",JULIO S. NAZARENO — EDUARDO MOLINÉ O’CONNOR — AUGUSTO CÉSAR BELLUSCIO — ENRIQUE SANTIAGO PETRACCHI — GUSTAVO A. BOSSERT ,16,56340,ok,21
+330_p4590,330,sin_dispositivo,sin_firma,unanime,4,"Lorenzetti, Fayt, Petracchi, Maqueda",RICARDO LUIS LORENZETTI — CARLOS S. FAYT — ENRIQUE SANTIAGO PETRACCHI — JUAN CARLOS MAQUEDA.,79,10456,ok,83
+331_p548,331,sin_dispositivo,sin_firma,unanime,5,"Lorenzetti, Highton de Nolasco, Fayt, Petracchi, Maqueda",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos S. Fayt — Enrique Santiago Petracchi — Juan Carlos Maqued,26,20499,ok,28
+331_p1013,331,sin_dispositivo,sin_firma,unanime,5,"Lorenzetti, Highton de Nolasco, Fayt, Petracchi, Maqueda",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos S. Fayt — Enrique Santiago Petracchi — Juan Carlos Maqued,205,512,ok,207
+331_p2363,331,sin_dispositivo,sin_firma,unanime,7,"Lorenzetti, Highton de Nolasco, Fayt, Petracchi, Maqueda, Zaffaroni, Argibay",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos S. Fayt — Enrique Santiago Petracchi — Juan Carlos Maqued,88,14630,ok,97
+332_p2418,332,sin_dispositivo,sin_firma,unanime,1,Argibay,Carmen M. Argibay.,255,15550,ok,266
+333_p1140,333,sin_dispositivo,sin_firma,unanime,4,"Highton de Nolasco, Petracchi, Maqueda, Argibay",Elena I. Highton de Nolasco — Enrique Santiago Petracchi — Juan Carlos Maqueda — Carmen M. Argibay.,85,14548,ok,93
+333_p1784,333,sin_dispositivo,sin_firma,unanime,2,"Maqueda, Zaffaroni",tencia de parte de su defensor (Disidencia de los Dres. Juan Carlos Maqueda y E. Raúl Zaffaroni). Dictamen de la Procura,207,39950,ok,215
+334_p109,334,sin_dispositivo,sin_firma,unanime,1,Maqueda,Juan Carlos Maqueda.,416,4681,ok,429
+334_p362,334,sin_dispositivo,sin_firma,unanime,6,"Lorenzetti, Highton de Nolasco, Fayt, Petracchi, Maqueda, Argibay",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos S. Fayt — Enrique Santiago Petracchi — Juan Carlos Maqued,93,14223,ok,147
+334_p1033,334,sin_dispositivo,sin_firma,unanime,5,"Lorenzetti, Highton de Nolasco, Maqueda, Zaffaroni, Argibay",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan Carlos Maqueda — E. Raúl Zaffaroni — Carmen M. Argibay.,53,12373,ok,70
+337_p166,337,sin_dispositivo,sin_firma,unanime,1,Argibay,Carmen M. Argibay.,522,6912,ok,534
+337_p1006,337,sin_dispositivo,sin_firma,unanime,5,"Lorenzetti, Highton de Nolasco, Fayt, Maqueda, Zaffaroni",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos S. Fayt — Juan Carlos Maqueda — E. Raúl Zaffaroni.,277,4649,ok,284
+339_p662,339,sin_dispositivo,sin_firma,unanime,3,"Lorenzetti, Highton de Nolasco, Maqueda",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan Carlos Maqueda.,539,25293,ok,549
+339_p676,339,sin_dispositivo,sin_firma,unanime,3,"Lorenzetti, Highton de Nolasco, Maqueda",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan Carlos Maqueda.,136,25439,ok,146
+340_p812,340,sin_dispositivo,sin_firma,unanime,2,"Lorenzetti, Highton de Nolasco",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan,105,30603,ok,106
+340_p1392,340,sin_dispositivo,sin_firma,unanime,5,"Lorenzetti, Highton de Nolasco, Maqueda, Rosatti, Rosenkrantz",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan Carlos Maqueda — Horacio Rosatti — Carlos Fernando Rosenkra,104,16007,ok,116
+341_p739,341,sin_dispositivo,sin_firma,unanime,5,"Lorenzetti, Highton de Nolasco, Maqueda, Rosatti, Rosenkrantz",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan Carlos Maqueda — Horacio Rosatti — Carlos Fernando Rosenkra,222,28067,ok,234
+342_p98,342,sin_dispositivo,sin_firma,unanime,5,"Rosenkrantz, Highton de Nolasco, Maqueda, Lorenzetti, Rosatti",Carlos Fernando Rosenkrantz — Elena I. Highton de Nolasco — Juan Carlos Maqueda — Ricardo Luis Lorenzetti — Horacio Rosa,24,3965,ok,29
+343_p473,343,sin_dispositivo,sin_firma,unanime,2,"Highton de Nolasco, Maqueda",Elena I. Highton de Nolasco — Juan Carlos Maqueda — Ricardo,125,18095,ok,126
+343_p720,343,sin_dispositivo,sin_firma,unanime,4,"Rosenkrantz, Highton de Nolasco, Maqueda, Lorenzetti",Carlos Fernando Rosenkrantz — Elena I. Highton de Nolasco — Juan Carlos Maqueda — Ricardo Luis Lorenzetti.,103,1659,ok,113
+344_p776,344,sin_dispositivo,sin_firma,unanime,4,"Rosenkrantz, Maqueda, Lorenzetti, Rosatti",Carlos Fernando Rosenkrantz – Juan Carlos Maqueda – Ricardo Luis Lorenzetti – Horacio Rosatti.,215,30319,ok,220
+344_p997,344,sin_dispositivo,sin_firma,unanime,5,"Rosenkrantz, Highton de Nolasco, Maqueda, Lorenzetti, Rosatti",Carlos Fernando Rosenkrantz – Elena I. Highton de Nolasco – Juan Carlos Maqueda – Ricardo Luis Lorenzetti – Horacio Rosa,183,38905,ok,194
+344_p1952,344,sin_dispositivo,sin_firma,unanime,1,Lorenzetti,Ricardo Luis Lorenzetti.,1950,28986,ok,1962
+344_p2123,344,sin_dispositivo,sin_firma,unanime,1,Lorenzetti,Ricardo Luis Lorenzetti.,1877,35534,ok,1884
+344_p2779,344,sin_dispositivo,sin_firma,unanime,1,Maqueda,"Juan Carlos Maqueda. Recurso extraordinario interpuesto por el Estado Nacional – Ministerio de Justicia, representado po",435,6374,ok,446
+348_p443,348,sin_dispositivo,sin_firma,unanime,3,"Rosatti, Rosenkrantz, Lorenzetti",Horacio Rosatti — Carlos Fernando Rosenkrantz — Ricardo Luis Lorenzetti.,327,17211,ok,336
+348_p532,348,sin_dispositivo,sin_firma,unanime,2,"Rosatti, Rosenkrantz",Horacio Rosatti — Carlos Fernando Rosenkrantz — Ricardo Luis,43,20410,ok,44

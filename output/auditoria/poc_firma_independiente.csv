@@ -1,19 +1,15 @@
 caso_id,tomo,n_jueces,voting_pattern,jueces,firma_raw_corta,firma_idx_rel,linea_abs
 329_p991,329,5,unanime,"Highton de Nolasco, Maqueda, Zaffaroni, Lorenzetti, Argibay",ELENA I. HIGHTON DE NOLASCO — JUAN CARLOS MAQUEDA — E. RAÚL ZAFFARONI — RICARDO LUIS LORENZETTI — CA,30,37464
-329_p1303,329,1,unanime,Pacilio (conjuez),"de la Cámara Federal de Apelaciones de La Plata, doctor Antonio Pacilio (fs. 98/99).",54,49638
 329_p3444,329,2,unanime,"Petracchi, Highton de Nolasco",ENRIQUE SANTIAGO PETRACCHI — ELENA I. HIGHTON DE NOLASCO — JUAN,45,18922
 329_p4590,329,2,unanime,"Petracchi, Highton de Nolasco",ENRIQUE SANTIAGO PETRACCHI — ELENA I. HIGHTON DE NOLASCO — JUAN,86,62582
 330_p22,330,7,unanime,"Lorenzetti, Highton de Nolasco, Fayt, Petracchi, Maqueda, Zaffaroni, Argibay",RICARDO LUIS LORENZETTI — ELENA I. HIGHTON DE NOLASCO — CARLOS S. FAYT — ENRIQUE SANTIAGO PETRACCHI ,42,762
 330_p1172,330,2,unanime,"Highton de Nolasco, Petracchi",ELENA I. HIGHTON DE NOLASCO — ENRIQUE SANTIAGO PETRACCHI — JUAN,85,44935
 330_p1971,330,6,unanime,"Lorenzetti, Highton de Nolasco, Fayt, Petracchi, Maqueda, Argibay",RICARDO LUIS LORENZETTI — ELENA I. HIGHTON DE NOLASCO — CARLOS S. FAYT — ENRIQUE SANTIAGO PETRACCHI ,168,24824
 330_p2794,330,4,unanime,"Nazareno, Belluscio, Petracchi, Vázquez",JULIO S. NAZARENO — EDUARDO MOLINÉ O’CONNOR — AUGUSTO CÉSAR BELLUSCIO — ENRIQUE SANTIAGO PETRACCHI —,16,56340
-330_p3141,330,2,unanime,"Lorenzetti, Maqueda",DOCTOR DON RICARDO LUIS LORENZETTI Y DEL SEÑOR MINISTRO DOCTOR DON JUAN CARLOS MAQUEDA Considerando:,76,10390
-330_p3801,330,1,unanime,Petracchi,ENRIQUE SANTIAGO PETRACCHI.,1386,37841
 330_p4590,330,4,unanime,"Lorenzetti, Fayt, Petracchi, Maqueda",RICARDO LUIS LORENZETTI — CARLOS S. FAYT — ENRIQUE SANTIAGO PETRACCHI — JUAN CARLOS MAQUEDA.,79,10456
+331_p548,331,5,unanime,"Lorenzetti, Highton de Nolasco, Fayt, Petracchi, Maqueda",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos S. Fayt — Enrique Santiago Petracchi ,26,20499
 331_p1013,331,5,unanime,"Lorenzetti, Highton de Nolasco, Fayt, Petracchi, Maqueda",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos S. Fayt — Enrique Santiago Petracchi ,205,512
 331_p2363,331,7,unanime,"Lorenzetti, Highton de Nolasco, Fayt, Petracchi, Maqueda, Zaffaroni, Argibay",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos S. Fayt — Enrique Santiago Petracchi ,88,14630
-332_p5,332,2,unanime,"Lorenzetti, Highton de Nolasco",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco.,190,318
-332_p2237,332,1,unanime,Highton de Nolasco,Elena I. Highton de Nolasco.,505,8541
 332_p2418,332,1,unanime,Argibay,Carmen M. Argibay.,255,15550
 333_p1140,333,4,unanime,"Highton de Nolasco, Petracchi, Maqueda, Argibay",Elena I. Highton de Nolasco — Enrique Santiago Petracchi — Juan Carlos Maqueda — Carmen M. Argibay.,85,14548
 333_p1784,333,2,unanime,"Maqueda, Zaffaroni",tencia de parte de su defensor (Disidencia de los Dres. Juan Carlos Maqueda y E. Raúl Zaffaroni). Di,207,39950
@@ -22,23 +18,18 @@ caso_id,tomo,n_jueces,voting_pattern,jueces,firma_raw_corta,firma_idx_rel,linea_
 334_p1033,334,5,unanime,"Lorenzetti, Highton de Nolasco, Maqueda, Zaffaroni, Argibay",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan Carlos Maqueda — E. Raúl Zaffaroni — Ca,53,12373
 337_p166,337,1,unanime,Argibay,Carmen M. Argibay.,522,6912
 337_p1006,337,5,unanime,"Lorenzetti, Highton de Nolasco, Fayt, Maqueda, Zaffaroni",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos S. Fayt — Juan Carlos Maqueda — E. Ra,277,4649
+339_p662,339,3,unanime,"Lorenzetti, Highton de Nolasco, Maqueda",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan Carlos Maqueda.,539,25293
 339_p676,339,3,unanime,"Lorenzetti, Highton de Nolasco, Maqueda",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan Carlos Maqueda.,136,25439
-340_p204,340,1,unanime,Rosatti,sionales intervinientes. (Voto del Dr. Horacio Rosatti). HONORARIOS DE ABOGADOS Y PROCURADORES En lo,143,7546
 340_p812,340,2,unanime,"Lorenzetti, Highton de Nolasco",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan,105,30603
 340_p1392,340,5,unanime,"Lorenzetti, Highton de Nolasco, Maqueda, Rosatti, Rosenkrantz",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan Carlos Maqueda — Horacio Rosatti — Carl,104,16007
 341_p739,341,5,unanime,"Lorenzetti, Highton de Nolasco, Maqueda, Rosatti, Rosenkrantz",Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan Carlos Maqueda — Horacio Rosatti — Carl,222,28067
 342_p98,342,5,unanime,"Rosenkrantz, Highton de Nolasco, Maqueda, Lorenzetti, Rosatti",Carlos Fernando Rosenkrantz — Elena I. Highton de Nolasco — Juan Carlos Maqueda — Ricardo Luis Loren,24,3965
-343_p300,343,1,unanime,Rosenkrantz,Carlos Fernando Rosenkrantz.,177,11590
 343_p473,343,2,unanime,"Highton de Nolasco, Maqueda",Elena I. Highton de Nolasco — Juan Carlos Maqueda — Ricardo,125,18095
 343_p720,343,4,unanime,"Rosenkrantz, Highton de Nolasco, Maqueda, Lorenzetti",Carlos Fernando Rosenkrantz — Elena I. Highton de Nolasco — Juan Carlos Maqueda — Ricardo Luis Loren,103,1659
-343_p1024,343,1,unanime,Rosenkrantz,Carlos Fernando Rosenkrantz.,257,13491
-344_p575,344,1,unanime,Rosatti,Horacio Rosatti.,1043,23469
-344_p757,344,3,segun_su_voto,"Rosenkrantz, Highton de Nolasco, Lorenzetti",Carlos Fernando Rosenkrantz – Elena I. Highton de Nolasco (según su voto)– Ricardo Luis Lorenzetti.,39,29401
 344_p776,344,4,unanime,"Rosenkrantz, Maqueda, Lorenzetti, Rosatti",Carlos Fernando Rosenkrantz – Juan Carlos Maqueda – Ricardo Luis Lorenzetti – Horacio Rosatti.,215,30319
+344_p997,344,5,unanime,"Rosenkrantz, Highton de Nolasco, Maqueda, Lorenzetti, Rosatti",Carlos Fernando Rosenkrantz – Elena I. Highton de Nolasco – Juan Carlos Maqueda – Ricardo Luis Loren,183,38905
 344_p1952,344,1,unanime,Lorenzetti,Ricardo Luis Lorenzetti.,1950,28986
 344_p2123,344,1,unanime,Lorenzetti,Ricardo Luis Lorenzetti.,1877,35534
 344_p2779,344,1,unanime,Maqueda,Juan Carlos Maqueda. Recurso extraordinario interpuesto por el Estado Nacional – Ministerio de Justi,435,6374
-347_p2160,347,1,unanime,Rosatti,Horacio Rosatti.,669,38983
 348_p443,348,3,unanime,"Rosatti, Rosenkrantz, Lorenzetti",Horacio Rosatti — Carlos Fernando Rosenkrantz — Ricardo Luis Lorenzetti.,327,17211
 348_p532,348,2,unanime,"Rosatti, Rosenkrantz",Horacio Rosatti — Carlos Fernando Rosenkrantz — Ricardo Luis,43,20410
-348_p728,348,2,unanime,"Rosenkrantz, Lorenzetti",Carlos Fernando Rosenkrantz — Ricardo Luis Lorenzetti.,747,28747
