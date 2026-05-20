@@ -1214,36 +1214,61 @@ def _encontrar_zona_fallo(bloque):
     Encuentra el inicio de la zona del fallo propiamente dicho,
     excluyendo sumarios y dictamen del Procurador.
 
-    Busca la ÚLTIMA ocurrencia de (en orden de prioridad):
-    1. Apertura: "FALLO DE LA CORTE SUPREMA"
-    2. Fecha: "Buenos Aires, ..."
-    3. Considerando: "Considerando:"
-    4. Vistos: "Vistos los autos:"
+    Busca la PRIMERA ocurrencia de (en orden de prioridad):
+    1. Apertura: "FALLO DE LA CORTE SUPREMA" — PRIMERA siempre
+       (dictámenes no usan RE_APERTURA, así que la primera es del fallo).
+    2. Fecha: "Buenos Aires, ..." — primera en la primera mitad
+    3. Considerando: "Considerando:" — primera en la primera mitad
+    4. Vistos: "Vistos los autos:" — primera en la primera mitad
+
+    La restricción a primera mitad para fecha/considerando/vistos evita
+    envenenamiento por marcadores del caso siguiente cuando el bloque
+    arrastra residuo post-fin. Fallback sin restricción para bloques
+    cortos donde el marcador cae en la segunda mitad.
 
     Retorna el índice relativo al bloque, o None.
     """
-    ultima_apertura = None
-    ultima_fecha = None
-    ultimo_cons = None
-    ultimo_vistos = None
-    for k in range(len(bloque)):
+    n = len(bloque)
+    mitad = n // 2
+
+    # 1. Primera apertura (señal más fuerte, no ambigua)
+    for k in range(n):
         s = bloque[k].strip()
         if RE_APERTURA.match(s):
-            ultima_apertura = k
+            return k
+
+    # 2. Primera fecha en primera mitad
+    for k in range(mitad):
+        s = bloque[k].strip()
         if RE_FECHA_LINEA.match(s):
-            ultima_fecha = k
+            return k
+
+    # 3. Primer considerando en primera mitad
+    for k in range(mitad):
+        s = bloque[k].strip()
         if RE_CONSIDERANDO.match(s):
-            ultimo_cons = k
+            return k
+
+    # 4. Primer vistos en primera mitad
+    for k in range(mitad):
+        s = bloque[k].strip()
         if s.lower().startswith("vistos los autos"):
-            ultimo_vistos = k
-    if ultima_apertura is not None:
-        return ultima_apertura
-    if ultima_fecha is not None:
-        return ultima_fecha
-    if ultimo_cons is not None:
-        return ultimo_cons
-    if ultimo_vistos is not None:
-        return ultimo_vistos
+            return k
+
+    # 5. Fallback: sin restricción de mitad (bloques cortos)
+    for k in range(n):
+        s = bloque[k].strip()
+        if RE_FECHA_LINEA.match(s):
+            return k
+    for k in range(n):
+        s = bloque[k].strip()
+        if RE_CONSIDERANDO.match(s):
+            return k
+    for k in range(n):
+        s = bloque[k].strip()
+        if s.lower().startswith("vistos los autos"):
+            return k
+
     return None
 
 
