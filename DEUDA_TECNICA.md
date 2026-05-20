@@ -7,11 +7,13 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-20 (sesiones H046 + H047: B069 cerrado
+**Última actualización:** 2026-05-20 (sesiones H046 + H047 + H048: B069 cerrado
 — eliminada búsqueda atrás Pista 1, 277 mejoras, sin_firma 406→148.
 A001 cerrado — fallback firma inversa, 34 mejoras, sin_firma 148→114.
 A001b — _encontrar_zona_fallo primera apertura, 1 mejora, sin_firma 114→113.
-Cobertura firma: 97.4% → 98.0%. Votos: 26959 → 27103).
+B070+B071 cerrados — Pista 1 forward: validación texto corriente +
+normalización tildes, 37 mejoras, sin_firma 113→76, votos 27103→27303.
+Cobertura firma: 97.4% → 98.0% → 98.7%. Votos: 26959 → 27103 → 27303).
 
 ---
 
@@ -50,15 +52,13 @@ a las hipótesis de la tesis (H1-H5).
 - **Output parser productivo:** 5862 casos en `output/parser/csjn_casos.csv`
   (incluye 160 `sumario_con_link`; 5702 fallos procesables).
 - **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV;
-  cobertura de firma = 92,6%).
-- **Sin firma:** 113 casos (post-H047). Desglose residual (PoC A001 v1):
-  - 57 sin_firma_post_fallo (zona de fallo encontrada pero
-    `linea_es_firma_de_juez` no matchea — firma partida entre líneas,
-    ALL CAPS, OCR).
+  cobertura de firma = 98,7%).
+- **Sin firma:** 76 casos (post-H048). Desglose residual estimado:
+  - ~20 sin_firma_post_fallo (firma no matchea o juez no listado).
   - 33 sin_zona_fallo (sin apertura/considerando/fecha en bloque).
   - 23 bloques cortos (span < 20 líneas).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113.
-- **Votos:** 27103 filas (post-H047).
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76.
+- **Votos:** 27303 filas (post-H048).
 - **Jueces conocidos:** 38 entradas en JUECES_CONOCIDOS (28 + 10 conjueces B063).
 - **Fixes aplicados:**
   - Sprint 2026-05-09: §3.6.a `pg_fin+1`, §3.6.e Fase 1, §4.6.j
@@ -76,6 +76,8 @@ a las hipótesis de la tesis (H1-H5).
   - H046: B069 cerrado — eliminada búsqueda atrás Pista 1 (277 mejoras, sin_firma 406→148).
   - H047: A001 cerrado — fallback firma inversa (34 mejoras, sin_firma 148→114).
     A001b — _encontrar_zona_fallo primera apertura (1 mejora, sin_firma 114→113).
+  - H048: B070+B071 cerrados — Pista 1 forward: validación texto corriente +
+    normalización tildes (37 mejoras, sin_firma 113→76, votos 27103→27303).
 
 ---
 
@@ -2773,6 +2775,100 @@ sin_firma 148→114→113. Votos 26959→27103.
 **Referencias:** H045, H047. PoC: `scripts/auditoria/A001/poc_a001_v1.py`.
 
 ---
+### B070 — Pista 1 forward matchea en texto corriente del caso actual
+
+**Componente:** parser (`detectar_fin_real`, Pista 1 forward).
+**Origen:** H048, inspección de 57 sin_firma_post_fallo.
+**Casos testigo:** 329_p551 (token "Nación" matchea en dispositivo),
+329_p1554 (token "Nación" matchea en "Código Procesal Civil y Comercial
+de la Nación."), 329_p2829 (token "ANSeS" matchea en "ANSeS dedujo
+recurso ordinario de apelación").
+**Síntoma:** `status_fin=fin_extendido_pag_compartida` +
+`pista_fin=caratula_siguiente`. Bloque truncado antes de la firma
+porque Pista 1 forward encuentra el token del caso siguiente en el
+texto corriente del caso actual.
+**Causa raíz:** Pista 1 forward busca `primer_token_siguiente` desde
+`lfc+1` hacia adelante. Tokens comunes en derecho ("Nación", "Provincia",
+"Estado", "ANSeS", "Banco") matchean en dispositivos, considerandos y
+citas de jurisprudencia del caso actual → corte antes de la firma.
+Variante forward del mismo problema que B069 (que era backward).
+**Impacto cuantificado:** 43 de 57 sin_firma_post_fallo (75.4%) tienen
+la firma dentro de 20 líneas post-corte.
+**Fix aplicado (H048):** `_es_texto_corriente()` valida que el match
+de Pista 1 forward NO sea texto corriente. Condiciones (OR):
+  (a) Línea empieza con minúscula (excepto "c/" y "s/").
+  (b) Línea anterior significativa termina con word-split genuino
+      (letra + guión, no puntuación + guión).
+Si es texto corriente, skip y seguir buscando el próximo match.
+6 versiones de PoC (v1 contra-señal firma → v6 texto corriente + tildes).
+**Estado:** **CERRADO H048.** 37 mejoras, 0 regresiones.
+sin_firma 113→76. Votos 27103→27303.
+**Referencias:** H048. PoC: `scripts/auditoria/H048/poc_b070_v6.py`.
+
+---
+### B071 — Pista 1 no matchea carátulas ALL CAPS sin tildes
+
+**Componente:** parser (`detectar_fin_real`, Pista 1).
+**Origen:** H048, investigación de regresiones de B070 v4/v5.
+**Causa raíz:** `primer_token_siguiente` proviene del catálogo con
+tildes modernas ("Administración", "Martínez", "González") pero las
+carátulas en el .md son ALL CAPS sin tildes ("ADMINISTRACION",
+"MARTINEZ", "GONZALEZ"). El regex con `re.I` es case-insensitive
+pero NO tilde-insensitive → no matchea.
+**Impacto:** 19.4% de los tokens (1126/5819) tienen tilde. Antes de
+B070 funcionaban por accidente (el token matcheaba en texto corriente
+donde sí hay tildes). Con B070 los matches falsos se rechazan y la
+carátula real nunca matchea.
+**Fix aplicado (H048):** `_strip_accents()` normaliza tildes (á→a,
+é→e, etc.) en el token y en cada línea antes del regex.
+**Estado:** **CERRADO H048** (incluido en fix B070).
+**Referencias:** H048. Integrado en `poc_b070_v6.py`.
+
+---
+### B072 — Conjueces faltantes en JUECES_CONOCIDOS
+
+**Componente:** parser (JUECES_CONOCIDOS).
+**Origen:** H048, inspección de sin_firma_post_fallo y auditoría v6.
+**Conjueces identificados:**
+  - García Lema, Alberto Manuel
+  - Bertuzzi, Pablo Daniel
+  - Rabbi-Baldi Cabanillas, Luis Renato
+  - Botana, Diego
+  - Rivera, Julio César
+  - Torres, Verónica Nidia
+  - Caballero, María Rosa
+  - Méndez, Héctor Oscar
+  - Montesi, Graciela Susana
+  - Cossio, Marina
+  - Pérez Petit, Arturo
+  - Romano, Otilio Roque
+  - Petra Fernández, Julio Demetrio
+**Impacto estimado:** 5+ casos sin_firma directos (344_p2752,
+344_p3070, 347_p1084, 348_p708, 330_p1642). Probablemente más
+en el corpus.
+**Estado:** Abierto. Prioridad media. Fix trivial (agregar regex a
+JUECES_CONOCIDOS, estilo B063/H043).
+
+---
+### B073 — Interacción detectar_fin_real ↔ refinar_inicio_por_titulo
+
+**Componente:** parser (flujo procesar_archivo).
+**Origen:** H048, auditoría de mejoras B070 v6.
+**Casos testigo:** 345_p599 (lfr 22983→22948, li=22956),
+348_p259 (lfr 9979→9953, li=9959).
+**Síntoma:** `lfr_new < linea_inicio` refinado. El bloque resultante
+tiene span negativo o se reconstruye con contenido inesperado.
+Ambos casos pasaron de sin_firma a unanime con jueces=2 — resultado
+cuestionable.
+**Causa raíz (hipótesis):** `detectar_fin_real` se ejecuta con el
+`linea_inicio` original (pre-refinamiento). `refinar_inicio_por_titulo`
+después avanza `linea_inicio`. Si el nuevo `lfr` del fix B070 es menor
+que el `linea_inicio` refinado, el bloque resultante es inconsistente.
+**Población de riesgo:** 37 casos con span (lf - li) < 10 líneas,
+de los cuales 34 usan `pista=caratula_siguiente`.
+**Estado:** Abierto. Prioridad media. Investigar en H049.
+
+---
 
 ## NOTAS PARA LA SESIÓN SIGUIENTE
 
@@ -2782,6 +2878,7 @@ Bugs documentados en H032 pendientes de fix:
 - B057 (dictamen consume FALLO DE LA CORTE) — parcialmente resuelto por backstop H036
 - B058 (pérdida de °) — prioridad baja, verificar primero
 - ~~B063 y B064 cerrados H043.~~ B066 invalidado H044. B067 cerrado H044.
+- ~~B070+B071 cerrados H048.~~ B072 (conjueces) y B073 (lfr<li) abiertos.
 
 Metodología acordada: auditar antes de fijar (M04).
 Casos testigo disponibles en output/auditoria/auditar_fallo/.
@@ -2823,18 +2920,20 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
 - H047: A001 cerrado — fallback firma inversa (34 mejoras, 0 regresiones, sf 148→114).
   A001b — _encontrar_zona_fallo primera apertura (1 mejora, sf 114→113).
   Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113.
+- H048: B070+B071 cerrados — Pista 1 forward: validación texto corriente +
+  normalización tildes (37 mejoras, 0 regresiones, sf 113→76, votos 27103→27303).
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76.
 
-### Matriz pendiente post-H040
+### Matriz pendiente post-H048
 
-| # | Línea de trabajo | Casos | Riesgo | Dificultad | Dependencia | Estado |
-|---|-----------------|------:|--------|------------|-------------|--------|
-| 1 | ~~Formato no reconocido (B1a)~~ | ~~65~~ | — | — | — | **Parcial H039+H041** (22+11 fijos, ~42 mid-line) |
-| 2 | ~~B059 falso positivo (A1+A3)~~ | ~~329~~ | — | — | — | **Cerrado H038** |
-| 3 | ~~B069 Pista 1 tokens comunes~~ | ~~201~~ | — | — | — | **Cerrado H046** (277 mejoras, sf 406→148) |
-| 4 | Sin zona de fallo (sin apertura) | 33 | medio | alta | — | Postergado (era 119, reducido post-B069) |
-| 5 | ~~A001 Firma independiente~~ | ~~43~~ | — | — | — | **Cerrado H047** (35 mejoras, sf 148→113) |
-| 6 | Bloques cortos (span<20) | 23 | — | — | — | Sin fix posible (data insuficiente) |
-| 7 | sin_firma_post_fallo (firma no matchea) | 57 | medio | alta | — | Pendiente — H048 |
+| # | Línea de trabajo | Casos | Riesgo | Dificultad | Estado |
+|---|-----------------|------:|--------|------------|--------|
+| 1 | ~~B070 Pista 1 forward texto corriente~~ | ~~43~~ | — | — | **Cerrado H048** (37 mejoras, sf 113→76) |
+| 2 | B072 Conjueces faltantes | ~5+ | bajo | baja | Pendiente — H049 |
+| 3 | B073 lfr < li refinado | 2+ | medio | media | Pendiente — H049 |
+| 4 | Sin zona de fallo (sin apertura) | 33 | medio | alta | Postergado |
+| 5 | Bloques cortos (span<20) | 23 | — | — | Sin fix posible |
+| 6 | sin_firma_post_fallo residuales | ~20 | medio | alta | Post-B072 |
 
 M08 resolvería B1b + B2 de raíz (~337 casos).
 
@@ -2853,6 +2952,10 @@ M08 resolvería B1b + B2 de raíz (~337 casos).
 - B068 (Moliné O'Connor) — **CANCELADO H045** (es parte en 2 juicios post-remoción).
 - ~~B069 (detectar_fin_real Pista 1)~~ — **CERRADO H046** (277 mejoras, sf 406→148).
 - ~~A001 (firma independiente de dispositivo)~~ — **CERRADO H047** (35 mejoras, sf 148→113).
+- ~~B070 (Pista 1 forward texto corriente)~~ — **CERRADO H048** (37 mejoras, sf 113→76).
+- ~~B071 (tildes en Pista 1)~~ — **CERRADO H048** (incluido en B070).
+- B072 (conjueces faltantes: ~13 nombres) — abierto, prioridad media, fix trivial.
+- B073 (interacción detectar_fin_real ↔ refinar_inicio_por_titulo) — abierto, prioridad media.
 - Variantes descartadas H039 (`en_las_condiciones`, `por_lo_tanto`, `en_atencion`,
   `que_de_conformidad`): Tier 2 implementado en H041 pero estas variantes siguen
   excluidas (argumentales incluso con firma validada + guarda de contexto).

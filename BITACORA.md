@@ -4683,3 +4683,109 @@ auditor-parser. Residuo total: 4.67%.
 - sin_firma: 113 / 5702 fallos (2.0%). Cobertura firma: 98.0%.
 - Votos: 27103.
 - Trayectoria: 813→782→503→481→449→438→425→422→406→148→114→113.
+
+### H048-01 — Inspección de los 113 sin_firma residuales
+
+**Método:** script `inspeccion_113.py` que clasifica los 113 en tres grupos:
+- 57 sin_firma_post_fallo (zona de fallo encontrada, firma no matchea)
+- 33 sin_zona_fallo (sin apertura/fecha/considerando)
+- 23 span_corto (bloques < 20 líneas)
+
+**Hallazgo clave:** clasificador automático de patrones de firma solo
+detectó 5/57 (2 firma_partida, 3 juez_no_listado). Los 52 restantes
+quedaron como "indeterminado".
+
+---
+
+### H048-02 — Diagnóstico: firma post-corte
+
+**Método:** script `contexto_corte_57.py` que muestra las 20 líneas
+posteriores a `linea_fin_real` para cada caso sin_firma_post_fallo.
+
+**Resultado:** 43/57 tienen la firma detectada DESPUÉS del corte.
+La firma está en el bloque del caso siguiente, no en el bloque actual.
+
+**Causa raíz confirmada:** `detectar_fin_real` Pista 1 forward encuentra
+`primer_token_siguiente` en el texto corriente del caso actual (zona
+post-lfc). Tokens comunes como "Nación", "Provincia", "ANSeS" matchean
+en el dispositivo o considerando del caso actual, truncando el bloque
+antes de la firma.
+
+Ejemplo: 329_p551, token "Nación" matchea en "mercial de la Nación).
+Notifíquese." (L20818) — texto del dispositivo — en vez de en la
+carátula real "KARINA VERONICA RODRIGUEZ V. NACION ARGENTINA" (L20825).
+
+Los 14 restantes:
+- 7 texto continúa (firma > 20 líneas después del corte)
+- 5 jueces no listados en JUECES_CONOCIDOS (conjueces)
+- 1 remisión a fallo embebido con (*)
+- 1 índice (334_p1920, no es fallo real)
+
+---
+
+### H048-03 — B070: validación texto corriente en Pista 1 forward
+
+**Evolución del fix (6 versiones de PoC):**
+
+| Versión | Estrategia | Mejoras | Regresiones | Problema |
+|---------|-----------|--------:|------------:|----------|
+| v1 | Contra-señal firma | 1 | 195 | Firma siempre entre lfc y carátula |
+| v2 | Uppercase ratio > 50% | 51 | 60 | Tomos nuevos usan Title Case |
+| v3 | Texto corriente: a+b+c | 43 | 13 | Condición c demasiado agresiva |
+| v4 | Solo a+b (sin c) | 30 | 5 | 3 tildes + 1 "c/" + 1 guión editorial |
+| v5 | a+b refinados | 29 | 3 | Solo tildes (pre-existente) |
+| **v6** | **a+b + strip_accents** | **37** | **0** | **—** |
+
+**Condiciones finales de `_es_texto_corriente()`:**
+- (a) Línea empieza con minúscula → texto corriente (excepto "c/" y "s/")
+- (b) Línea anterior significativa termina con word-split genuino
+  (letra + guión, no puntuación + guión)
+
+**B071 (incluido en v6):** `_strip_accents()` normaliza tildes en el
+token y en cada línea antes del regex. "Administración" matchea
+"ADMINISTRACION". Resuelve desacople catálogo (con tildes) vs .md
+(ALL CAPS sin tildes). 19.4% de los tokens tienen tilde (1126/5819).
+
+---
+
+### H048-04 — Auditoría de las 37 mejoras
+
+**Método:** script `auditar_b070v6.py` — últimas 25 líneas del bloque
+extendido con marcadores de firma para cada mejora.
+
+**Resultado:** 33/37 OK (firma con jueces conocidos verificados).
+4 warnings: 2 mejoras cuestionables (345_p599, 348_p259: lfr_new <
+linea_inicio refinado), 2 reclasificaciones inofensivas (346_p253,
+348_p53: jueces=0, sumarios editoriales).
+
+**Observación (329_p2174):** Argibay contada doble — header de voto
+"MINISTRA DOCTORA DOÑA CARMEN M. ARGIBAY" detectado como firma.
+Pre-existente, no del fix.
+
+**Conjueces faltantes detectados:** Pérez Petit, Romano, Petra
+Fernández, García Lema, Bertuzzi, Rabbi-Baldi Cabanillas, Botana,
+Rivera, Torres, Caballero, Méndez, Montesi, Cossio. → B072.
+
+---
+
+### H048-05 — Resultado final
+
+**Fix aplicado:** `parser.py` — 3 cambios:
+1. `import unicodedata`
+2. Funciones helper `_strip_accents()` y `_es_texto_corriente()`
+3. Pista 1 forward reescrita con loop + validación + normalización
+
+**Resultado:**
+- sin_firma: 113 → 76 (trayectoria: ...→113→76).
+- Cobertura firma: 98.0% → 98.7%.
+- Votos: 27103 → 27303.
+- Mejoras: 37. Regresiones: 0.
+- Cambios solo lfr: 451 (bloques extendidos/recortados sin cambio de vp).
+
+**Pendientes para próxima sesión:**
+- B072: agregar ~13 conjueces a JUECES_CONOCIDOS.
+- B073: investigar 345_p599 y 348_p259 (lfr < li refinado).
+  37 casos con span < 10 potencialmente afectados por interacción
+  detectar_fin_real ↔ refinar_inicio_por_titulo.
+- Inspección de los 76 sin_firma restantes (33 sin_zona_fallo +
+  23 span_corto + 20 sin_firma_post_fallo residuales).
