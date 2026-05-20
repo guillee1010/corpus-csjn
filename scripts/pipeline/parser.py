@@ -1323,9 +1323,9 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
         pat = re.compile(r"\b" + re.escape(primer_token_siguiente) + r"\b", re.I)
         def es_caratula(linea):
             return bool(pat.search(linea))
-        # Atrás dentro del bloque (excluir las primeras 5 líneas para no
-        # matchear la propia carátula del fallo X)
-        k = buscar_atras(es_caratula, lfc, li + 5)
+        # Atrás dentro del bloque — acotado a 20 líneas de lfc (B069: evitar
+        # falsos matches de token en cuerpo argumentativo/sumario del caso actual)
+        k = buscar_atras(es_caratula, lfc, max(lfc - 20, li + 5))
         if k is not None:
             return (k - 1, "fin_dentro_bloque", "caratula_siguiente")
         # Adelante hasta limite_adelante
