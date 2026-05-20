@@ -7,11 +7,11 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-20 (sesión H045: visor explorador +
-diagnóstico sin_firma vía exploración visual. B069 detectar_fin_real
-Pista 1 trunca por tokens comunes — causa raíz del 47.6% de sin_firma.
-PoC firma independiente v2: 43 casos recuperables desacoplando firma
-de dispositivo. B068 Moliné O'Connor cancelado. sin_firma sigue en 406).
+**Última actualización:** 2026-05-20 (sesiones H046 + H047: B069 cerrado
+— eliminada búsqueda atrás Pista 1, 277 mejoras, sin_firma 406→148.
+A001 cerrado — fallback firma inversa, 34 mejoras, sin_firma 148→114.
+A001b — _encontrar_zona_fallo primera apertura, 1 mejora, sin_firma 114→113.
+Cobertura firma: 97.4% → 98.0%. Votos: 26959 → 27103).
 
 ---
 
@@ -51,15 +51,14 @@ a las hipótesis de la tesis (H1-H5).
   (incluye 160 `sumario_con_link`; 5702 fallos procesables).
 - **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV;
   cobertura de firma = 92,6%).
-- **Sin firma:** 406 casos (post-H044). Desglose revisado (H045 PoC v2):
-  - 201 truncamiento por `detectar_fin_real` Pista 1 (B069, firma no
-    está en el bloque — tokens comunes de carátula siguiente).
-  - 119 sin zona de fallo (sin apertura/considerando/fecha en bloque).
-  - 59 bloques cortos (span < 20 líneas).
-  - **43 recuperables** desacoplando firma de dispositivo (A001, PoC v2).
-  Nota: 3 casos ganaron firma por reconocimiento de conjueces B063;
-  16 por Tier 3 retry sin techo B067.
-- **Votos:** 25603 filas (post-H043, +55 por conjueces B063).
+- **Sin firma:** 113 casos (post-H047). Desglose residual (PoC A001 v1):
+  - 57 sin_firma_post_fallo (zona de fallo encontrada pero
+    `linea_es_firma_de_juez` no matchea — firma partida entre líneas,
+    ALL CAPS, OCR).
+  - 33 sin_zona_fallo (sin apertura/considerando/fecha en bloque).
+  - 23 bloques cortos (span < 20 líneas).
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113.
+- **Votos:** 27103 filas (post-H047).
 - **Jueces conocidos:** 38 entradas en JUECES_CONOCIDOS (28 + 10 conjueces B063).
 - **Fixes aplicados:**
   - Sprint 2026-05-09: §3.6.a `pg_fin+1`, §3.6.e Fase 1, §4.6.j
@@ -74,6 +73,9 @@ a las hipótesis de la tesis (H1-H5).
   - H043: B063 conjueces + fix cosmético desconocidos (40 mejoras, +55 votos).
   - H044: B067 Tier 3 dispositivo retry sin techo (17 mejoras, sin_firma 422→406).
   - H045: visor explorador + PoC firma independiente v2 (diagnóstico, sin fix aplicado).
+  - H046: B069 cerrado — eliminada búsqueda atrás Pista 1 (277 mejoras, sin_firma 406→148).
+  - H047: A001 cerrado — fallback firma inversa (34 mejoras, sin_firma 148→114).
+    A001b — _encontrar_zona_fallo primera apertura (1 mejora, sin_firma 114→113).
 
 ---
 
@@ -2733,8 +2735,11 @@ porque Pista 1 lo truncó antes. **Causa raíz principal de sin_firma.**
   (d) Combinar con firma como contra-señal: si hay firma detectada
       DESPUÉS del punto de corte candidato, el corte es falso.
 **Prioridad:** ALTA — mayor impacto potencial que cualquier otro fix.
-**Estado:** pendiente — diseñar en H046.
-**Referencias:** H045.
+**Estado:** **CERRADO H046.** Eliminada búsqueda atrás de Pista 1 en
+`detectar_fin_real()`. 277 mejoras, 4 regresiones aceptadas (330_p747,
+330_p4071, 331_p548, 348_p1519). sin_firma 406→148. Cobertura firma
+92.9%→97.4%. Votos 25603→26959.
+**Referencias:** H045, H046. PoC: `scripts/auditoria/B069/poc_b069_v3.py`.
 
 ---
 ### A001 — Firma depende de dispositivo (hallazgo arquitectónico)
@@ -2755,13 +2760,17 @@ son recuperables buscando firma inversamente con guardas
 **PoC:** `scripts/auditoria/poc_firma_independiente_v2.py`.
 42 unánime + 1 según_su_voto. Tasa cero de falsos positivos con
 guardas v2 (zona de fallo obligatoria + span mínimo).
-**Fix propuesto:** Agregar fallback post-dispositivo: si `firma_raw`
-vacía, `buscar_firma_inversa()` desde fin de bloque hacia atrás,
-restringido a zona post-apertura/considerando.
-**Prioridad:** Media — 43 casos. Aplicar DESPUÉS de B069 (que
-recuperaría muchos por extensión de bloques).
-**Estado:** pendiente.
-**Referencias:** H045.
+**Fix aplicado (H047):** Fallback post-dispositivo en `procesar_archivo`:
+si `firma_parsed["voting_pattern"] == "sin_firma"`, ejecuta
+`buscar_firma_inversa()` desde fin de bloque hacia atrás. Guardas:
+zona de fallo obligatoria (primera apertura/fecha/considerando),
+span mínimo 20 líneas, filtro zona post-firma, retroceso máximo 80.
+A001b: `_encontrar_zona_fallo` cambiada de ÚLTIMA a PRIMERA apertura
+para evitar envenenamiento por marcadores del caso siguiente.
+**Estado:** **CERRADO H047.** 34+1 mejoras, 0 regresiones.
+sin_firma 148→114→113. Votos 26959→27103.
+331_p548 (regresión B069) recuperada por A001.
+**Referencias:** H045, H047. PoC: `scripts/auditoria/A001/poc_a001_v1.py`.
 
 ---
 
@@ -2809,6 +2818,11 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
   Hallazgos: B069 (Pista 1 tokens comunes = causa raíz 47.6% sin_firma),
   A001 (firma→dispositivo, 43 recuperables), B068 cancelado (Moliné O'Connor).
   Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406.
+- H046: B069 cerrado — eliminada búsqueda atrás Pista 1 (277 mejoras, 4 regresiones).
+  sin_firma 406→148. Cobertura firma 92.9%→97.4%. Votos 25603→26959.
+- H047: A001 cerrado — fallback firma inversa (34 mejoras, 0 regresiones, sf 148→114).
+  A001b — _encontrar_zona_fallo primera apertura (1 mejora, sf 114→113).
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113.
 
 ### Matriz pendiente post-H040
 
@@ -2816,10 +2830,11 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
 |---|-----------------|------:|--------|------------|-------------|--------|
 | 1 | ~~Formato no reconocido (B1a)~~ | ~~65~~ | — | — | — | **Parcial H039+H041** (22+11 fijos, ~42 mid-line) |
 | 2 | ~~B059 falso positivo (A1+A3)~~ | ~~329~~ | — | — | — | **Cerrado H038** |
-| 3 | **B069 Pista 1 tokens comunes** | **201** | alto | media | — | **Prioridad 1 — H046** |
-| 4 | Sin zona de fallo (sin apertura) | 119 | medio | alta | parcial B069 | Postergado |
-| 5 | **A001 Firma independiente** | **43** | bajo | baja | post-B069 | PoC v2 validado |
-| 6 | Bloques cortos (span<20) | 59 | — | — | — | Sin fix posible (data insuficiente) |
+| 3 | ~~B069 Pista 1 tokens comunes~~ | ~~201~~ | — | — | — | **Cerrado H046** (277 mejoras, sf 406→148) |
+| 4 | Sin zona de fallo (sin apertura) | 33 | medio | alta | — | Postergado (era 119, reducido post-B069) |
+| 5 | ~~A001 Firma independiente~~ | ~~43~~ | — | — | — | **Cerrado H047** (35 mejoras, sf 148→113) |
+| 6 | Bloques cortos (span<20) | 23 | — | — | — | Sin fix posible (data insuficiente) |
+| 7 | sin_firma_post_fallo (firma no matchea) | 57 | medio | alta | — | Pendiente — H048 |
 
 M08 resolvería B1b + B2 de raíz (~337 casos).
 
@@ -2836,8 +2851,8 @@ M08 resolvería B1b + B2 de raíz (~337 casos).
 - B066 (juez/jueza en headers) — **INVALIDADO H044** (42/42 eran citas).
 - ~~B067 (Tier 3 dispositivo sin techo)~~ — **cerrado H044** (17 mejoras, 422→406).
 - B068 (Moliné O'Connor) — **CANCELADO H045** (es parte en 2 juicios post-remoción).
-- B069 (detectar_fin_real Pista 1) — **PRIORIDAD ALTA H046** (201 casos, 47.6% sin_firma).
-- A001 (firma independiente de dispositivo) — PoC v2 validado H045 (43 casos). Post-B069.
+- ~~B069 (detectar_fin_real Pista 1)~~ — **CERRADO H046** (277 mejoras, sf 406→148).
+- ~~A001 (firma independiente de dispositivo)~~ — **CERRADO H047** (35 mejoras, sf 148→113).
 - Variantes descartadas H039 (`en_las_condiciones`, `por_lo_tanto`, `en_atencion`,
   `que_de_conformidad`): Tier 2 implementado en H041 pero estas variantes siguen
   excluidas (argumentales incluso con firma validada + guarda de contexto).
