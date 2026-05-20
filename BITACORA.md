@@ -4507,3 +4507,55 @@ Desglose de 422 sin_firma:
 
 ---
 
+
+### H046 — Fix B069: detectar_fin_real Pista 1 (2026-05-20)
+
+**Objetivo:** resolver los 406 sin_firma, de los cuales 309 eran
+causados por falsos matches de Pista 1 hacia atrás.
+
+**Diagnóstico:**
+1. Inventario de los 309 sin_firma con `pista_fin=caratula_siguiente`
+   + `status_fin=fin_dentro_bloque`. Extraídos tokens del caso
+   siguiente: 36% genéricos (ANSES, Estado, Provincia), 4% nombres
+   de orgs (Federación, Partido), 60% apellidos reales que matchean
+   en citas y firmas.
+2. Inspección visual en `.md` reales (tomos 329-330):
+   - 329_p2523: "Carmen" del siguiente matcheó "CARMEN M. ARGIBAY"
+     en firma de jueza.
+   - 329_p1762: "Banco" matcheó en "Vistos los autos: ...c/ Banco
+     Central..." — el nombre del propio caso.
+   - 329_p1350: `lfc` en el índice del volumen (último caso del
+     archivo), Pista 1 barrió 6512 líneas hacia atrás.
+3. Censo completo (censo_b069.py): 169/309 (55%) tenían firma
+   detectable entre lfr y lf (contenido perdido). 183/309 (59%)
+   perdieron el dispositivo.
+
+**Decisión de fix:**
+- Evaluadas 5 opciones: (a) multi-token, (b) largo mínimo mayor,
+  (c) validación zona sumario, (d) contra-señal firma, (e) c+d.
+- Descartadas tras análisis: el problema no es el token sino la
+  dirección de búsqueda. La carátula del siguiente está DESPUÉS de
+  lfc, no antes. La búsqueda atrás es inherentemente frágil.
+- Fix adoptado: eliminar `buscar_atras` de Pista 1, mantener solo
+  `buscar_adelante`. Evaluada variante intermedia (MAX_RETROCESO=20)
+  que daba 209 mejoras / 1 regresión / sin_firma=214, pero
+  178 sin_firma remanentes vs 4 regresiones no justificaba
+  mantener la búsqueda atrás.
+
+**Validación:**
+- PoC con pasada completa del parser (poc_b069_v3.py).
+- Variante MAX_RETROCESO=20: 209 mejoras, 1 regresión, sf=214.
+- Variante sin búsqueda atrás: 277 mejoras, 4 regresiones, sf=148.
+- Adoptada variante sin búsqueda atrás por ratio 277:4.
+- 4 regresiones aceptadas: 330_p747, 330_p4071, 331_p548, 348_p1519.
+
+**Resultado:**
+- sin_firma: 406 → 148 (trayectoria: 813→782→503→481→449→438→425→422→406→148).
+- Cobertura firma: 92.9% → 97.4%.
+- Votos: 25603 → 26959.
+
+**Pendientes para H047:**
+- Investigar las 4 regresiones (330_p747, 330_p4071, 331_p548, 348_p1519).
+- A001: firma independiente de dispositivo (43 casos originales, verificar cuántos quedan en los 148).
+- Pista 0: marcador INDICE como hard cutoff para últimos casos de cada archivo.
+- Commit de H045 (snapshot ya hecho).

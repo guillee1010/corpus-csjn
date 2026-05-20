@@ -2,6 +2,23 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+### H046 (2026-05-20)
+
+- **fix(B069):** eliminada búsqueda hacia atrás de Pista 1 en
+  `detectar_fin_real()`. Pista 1 buscaba `primer_token_siguiente`
+  desde `lfc` hasta `li+5` (bloque entero). Tokens genéricos
+  (ANSES, Banco, Fisco, Provincia) y apellidos comunes (Oyarbide,
+  Carmen, González) matcheaban en cuerpo argumentativo, Vistos los
+  autos y firmas de jueces, truncando centenares de líneas y
+  perdiendo firma + dispositivo. Fix: mantener solo búsqueda hacia
+  adelante (`lfc+1` → `limite_adelante`). 277 mejoras, 4 regresiones
+  aceptadas. sin_firma: 406 → 148. Cobertura firma: 92.9% → 97.4%.
+  Votos: 25603 → 26959.
+
+- **bat:** agregado `correr_parser.bat` para ejecución rápida del
+  pipeline.
+
+
 
 ## H044 (2026-05-19)
 
