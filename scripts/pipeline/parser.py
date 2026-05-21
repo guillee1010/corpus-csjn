@@ -1830,11 +1830,64 @@ def zonificar_bloque(bloque):
     return zonas, anclas
 
 
+def extraer_segmentos(zonas, bloque):
+    """
+    Extrae segmentos contiguos de zonas con sus fronteras y word count.
+
+    Retorna lista de dicts:
+      zona, segmento (1-indexed por zona), linea_ini, linea_fin, n_lineas, wc
+    """
+    if not zonas:
+        return []
+
+    segmentos = []
+    conteo_zona = Counter()  # para numerar segmentos por zona
+
+    zona_actual = zonas[0]
+    ini_actual = 0
+
+    for k in range(1, len(zonas)):
+        if zonas[k] != zona_actual:
+            # Cerrar segmento anterior
+            conteo_zona[zona_actual] += 1
+            wc = sum(
+                len(re.findall(r'\b\w+\b', bloque[j]))
+                for j in range(ini_actual, k)
+            )
+            segmentos.append({
+                "zona": zona_actual,
+                "segmento": conteo_zona[zona_actual],
+                "linea_ini": ini_actual,
+                "linea_fin": k - 1,
+                "n_lineas": k - ini_actual,
+                "wc": wc,
+            })
+            zona_actual = zonas[k]
+            ini_actual = k
+
+    # Último segmento
+    conteo_zona[zona_actual] += 1
+    wc = sum(
+        len(re.findall(r'\b\w+\b', bloque[j]))
+        for j in range(ini_actual, len(zonas))
+    )
+    segmentos.append({
+        "zona": zona_actual,
+        "segmento": conteo_zona[zona_actual],
+        "linea_ini": ini_actual,
+        "linea_fin": len(zonas) - 1,
+        "n_lineas": len(zonas) - ini_actual,
+        "wc": wc,
+    })
+
+    return segmentos
+
+
 # ── Procesamiento de un archivo ───────────────────────────────────────────────
 
 def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token_por_caso, siguiente_caso):
     """
-    v15: procesa un archivo .md y devuelve dos listas (casos, votos).
+    v15: procesa un archivo .md y devuelve tres listas (casos, votos, zonas).
 
     fallos_del_archivo: lista de dicts con las filas de fallos_localizados.csv
     correspondientes a este archivo. Cada fila tiene al menos:
@@ -1860,6 +1913,7 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
 
     casos_out  = []
     votos_out  = []
+    zonas_out  = []
     desconocidos_global = Counter()
 
     for fallo_meta in fallos_del_archivo:
@@ -2405,6 +2459,13 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         }
         casos_out.append(caso)
 
+        # ── H053: extraer segmentos de zonas para CSV zona-centered ───────
+        segmentos = extraer_segmentos(_zonas_linea, bloque)
+        for seg in segmentos:
+            seg["caso_id_canonico"] = caso_id_canonico
+            seg["tomo"] = tomo
+            zonas_out.append(seg)
+
         for j in firma_parsed["jueces"]:
             if not j["conocido"]:
                 continue
@@ -2446,7 +2507,7 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             }
             votos_out.append(voto)
 
-    return casos_out, votos_out, desconocidos_global
+    return casos_out, votos_out, zonas_out, desconocidos_global
 
 # ── Orquestación ──────────────────────────────────────────────────────────────
 
@@ -2563,6 +2624,8 @@ def main():
                     help="CSV de salida (case-centered)")
     ap.add_argument("--output-votos", default=None,
                     help="CSV de salida (vote-centered). Default: <output>_votos.csv")
+    ap.add_argument("--output-zonas", default=None,
+                    help="CSV de salida (zone-centered). Default: <output>_zonas.csv")
     args = ap.parse_args()
 
     # Cargar fallos del catálogo + cruce
@@ -2603,6 +2666,7 @@ def main():
 
     all_casos = []
     all_votos = []
+    all_zonas = []
     desconocidos_global = Counter()
 
     for filepath in sorted(grupos.keys(), key=lambda p: p.name):
@@ -2628,7 +2692,7 @@ def main():
 
         print(f"  {filepath.name}... {len(fallos_arch)} fallos →", end=" ", flush=True)
         try:
-            casos, votos, descon = procesar_archivo(
+            casos, votos, zonas, descon = procesar_archivo(
                 filepath, fallos_arch, headers_archivo,
                 primer_token_por_caso, siguiente_caso
             )
@@ -2639,6 +2703,7 @@ def main():
             continue
         all_casos.extend(casos)
         all_votos.extend(votos)
+        all_zonas.extend(zonas)
         desconocidos_global.update(descon)
         print(f"{len(casos)} procesados, {len(votos)} votos")
 
@@ -2689,6 +2754,22 @@ def main():
             for v in all_votos:
                 writer.writerow(v)
         print(f"[OK] {output_votos_path}: {len(all_votos)} filas (votos)")
+
+    # ── Output: zone-centered (H053) ──────────────────────────────────────────
+    output_zonas_path = (Path(args.output_zonas) if args.output_zonas
+                         else output_path.parent /
+                              (output_path.stem + "_zonas" + output_path.suffix))
+    if all_zonas:
+        fieldnames_z = [
+            "caso_id_canonico", "tomo", "zona", "segmento",
+            "linea_ini", "linea_fin", "n_lineas", "wc",
+        ]
+        with output_zonas_path.open("w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames_z)
+            writer.writeheader()
+            for z in all_zonas:
+                writer.writerow({k: z[k] for k in fieldnames_z})
+        print(f"[OK] {output_zonas_path}: {len(all_zonas)} segmentos (zonas)")
 
     # ── Diagnóstico ───────────────────────────────────────────────────────────
     if all_casos:
