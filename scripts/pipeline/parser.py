@@ -142,6 +142,15 @@ RE_SUMARIO_LINK  = re.compile(
     re.I
 )
 
+# H052: anclas adicionales para el zonificador.
+# "Vistos los autos" — apertura alternativa del cuerpo del fallo.
+RE_VISTOS = re.compile(r"^\s*Vistos? los autos", re.I)
+# Remisión a precedente/dictamen — señal fuerte de sumario editorial.
+RE_REMISION = re.compile(
+    r"^[–—-]\s*Del\s+(dictamen|precedente|voto|fallo)",
+    re.I
+)
+
 # Votos y disidencias — regex mejorado cubre todas las variantes:
 # v10: agregar 'Vicepresidente', 'Presidente', tolerar OCR con
 # capitalización mezclada (ej: 'caRLos FERnando RosEnkRantz' por OCR de
@@ -1709,10 +1718,19 @@ def construir_caso_sumario_link(caso_id_canonico, tomo, nombres_indice,
 
 def zonificar_bloque(bloque):
     """
-    Retorna set de zonas presentes en el bloque.
+    H052: asigna una zona a cada línea del bloque.
+
+    Retorna:
+      zonas:  list[str]    — etiqueta de zona para cada línea (len == len(bloque))
+      anclas: list[tuple]  — (linea, tipo_marcador) detectadas en pasada 1
 
     Zonas posibles: header_pagina, sumario, dictamen, apertura, cuerpo,
     dispositivo, firma, voto_separado, epilogo, intersticio.
+
+    Guarda dictamen (H052): dentro de zona dictamen, solo apertura y
+    fecha (sin apertura futura) cierran la zona. Los demás marcadores
+    (dispositivo, firma, etc.) se suprimen — son falsos positivos del
+    vocabulario compartido entre el dictamen del Procurador y el fallo.
     """
     n = len(bloque)
     zonas = ["intersticio"] * n
@@ -1740,6 +1758,8 @@ def zonificar_bloque(bloque):
             anclas.append((k, "fecha")); continue
         if RE_CONSIDERANDO.match(s):
             anclas.append((k, "considerando")); continue
+        if RE_VISTOS.match(s):
+            anclas.append((k, "vistos")); continue
         if RE_VOTO_HDR.match(s) or RE_DISID_HDR.match(s):
             anclas.append((k, "voto_header")); continue
 
@@ -1752,6 +1772,10 @@ def zonificar_bloque(bloque):
 
         # Sumario antes de epilogo (prioridad)
         if linea_es_header_sumario(bloque[k]):
+            anclas.append((k, "sumario_header")); continue
+
+        # Remisión a precedente/dictamen — señal de sumario editorial
+        if RE_REMISION.match(s):
             anclas.append((k, "sumario_header")); continue
 
         # Epilogo solo después de firma/voto/dispositivo
@@ -1769,7 +1793,14 @@ def zonificar_bloque(bloque):
             continue
         if k in ancla_en:
             tipo = ancla_en[k]
-            if tipo == "sumario_header":
+
+            # Guarda dictamen: dentro de dictamen, solo apertura y fecha
+            # (sin apertura futura) cierran la zona.
+            if zona_activa == "dictamen" and tipo not in (
+                "apertura", "fecha", "dictamen_inicio"
+            ):
+                pass  # mantener zona_activa = "dictamen"
+            elif tipo == "sumario_header":
                 zona_activa = "sumario"
             elif tipo == "dictamen_inicio":
                 zona_activa = "dictamen"
@@ -1783,6 +1814,9 @@ def zonificar_bloque(bloque):
                         zona_activa = "cuerpo"
             elif tipo == "considerando":
                 zona_activa = "cuerpo"
+            elif tipo == "vistos":
+                if zona_activa not in ("dictamen",):
+                    zona_activa = "cuerpo"
             elif tipo == "dispositivo":
                 zona_activa = "dispositivo"
             elif tipo == "firma_linea":
@@ -1793,7 +1827,7 @@ def zonificar_bloque(bloque):
                 zona_activa = "epilogo"
         zonas[k] = zona_activa if zonas[k] != "header_pagina" else "header_pagina"
 
-    return set(zonas)
+    return zonas, anclas
 
 
 # ── Procesamiento de un archivo ───────────────────────────────────────────────
@@ -1956,18 +1990,17 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             ))
             continue
 
-        # ── H051: detector de sumario_editorial ────────────────────────────
+        # ── H051/H052: detector de sumario_editorial ─────────────────────
         # Usa el zonificador para clasificar el bloque. Si no tiene zonas
-        # de cuerpo, dispositivo ni firma, es contenido editorial puro
-        # (sumarios temáticos, dictámenes sueltos, remisiones a precedentes).
-        # Diferencia con sumario_con_link: estos NO tienen el patrón
-        # "(*) Sentencia del...Ver..." sino que son entradas del índice
-        # sin fallo reproducido en el tomo.
-        _zonas_bloque = zonificar_bloque(bloque)
+        # de cuerpo, dispositivo ni firma, es contenido editorial puro.
+        # H052: zonificar_bloque ahora devuelve (list, anclas). La lista
+        # por línea se reutiliza después para derivar lineas_dictamen.
+        _zonas_linea, _anclas = zonificar_bloque(bloque)
+        _zonas_set = set(_zonas_linea)
         _es_sumario_editorial = (
-            "cuerpo" not in _zonas_bloque
-            and "dispositivo" not in _zonas_bloque
-            and "firma" not in _zonas_bloque
+            "cuerpo" not in _zonas_set
+            and "dispositivo" not in _zonas_set
+            and "firma" not in _zonas_set
         )
         if _es_sumario_editorial:
             casos_out.append(construir_caso_sumario_link(
@@ -1992,10 +2025,9 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         # fallo está cerca del marcador FALLO DE LA CORTE SUPREMA o, si no
         # hay marcador detectado, es la última fecha "Buenos Aires" del
         # bloque (la del dictamen suele estar antes).
-        # NOTA: lineas_dictamen aún no está calculado a esta altura, así
-        # que la heurística (b) sin marcador puede capturar la fecha del
-        # dictamen como fallback. Es lo mejor que podemos hacer sin
-        # reordenar el código entero.
+        # NOTA: lineas_dictamen se calcula más abajo, pero _zonas_linea
+        # ya está disponible. Mejora futura: excluir líneas con zona
+        # "dictamen" de la búsqueda de fecha del fallo.
         fecha_str = ""
         if apertura_rel is not None:
             # Caso (a): hay marcador clásico. Buscar fecha en las 10 líneas
@@ -2048,10 +2080,16 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         # Tribunal de origen
         tribunal_str = find_tribunal_origen(lines, apertura_idx, apertura_idx + len(bloque))
 
-        # Procesar bloque línea por línea (lógica idéntica a v12)
-        en_dictamen        = False
-        dictamen_presente  = False
-        lineas_dictamen    = set()
+        # ── H052: derivar lineas_dictamen del zonificador ─────────────
+        # Reemplaza el loop en_dictamen (v12-v17) que tenía un bug: el
+        # `continue` dentro de en_dictamen saltaba la detección de votos
+        # y dispositivo, haciendo que si el dictamen no cerraba bien,
+        # todo el bloque quedara como dictamen. El zonificador usa anclas
+        # y no tiene este problema.
+        lineas_dictamen = {k for k, z in enumerate(_zonas_linea)
+                          if z == "dictamen"}
+        dictamen_presente = bool(lineas_dictamen)
+
         por_ello_idx       = None
         por_ello_text      = ""
         n_votos_svoto      = 0
@@ -2064,26 +2102,10 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             if not stripped:
                 continue
 
-            if RE_DICT_HDR.match(stripped):
-                en_dictamen       = True
-                dictamen_presente = True
-                lineas_dictamen.add(k)
+            # Saltar líneas de dictamen — la detección de votos y
+            # dispositivo solo aplica al fallo, no al dictamen.
+            if k in lineas_dictamen:
                 continue
-            elif en_dictamen:
-                # Backstop: "FALLO/SENTENCIA DE LA CORTE SUPREMA" cierra
-                # el dictamen sin consumir la línea. Resuelve dictámenes
-                # largos donde len(prev) >= 80 impide el cierre por fecha.
-                if RE_APERTURA.match(stripped):
-                    en_dictamen = False
-                    # No agregar a lineas_dictamen, no continue:
-                    # la línea es la apertura del fallo, no del dictamen.
-                else:
-                    lineas_dictamen.add(k)
-                    if RE_FECHA_LINEA.match(stripped) and k > 5:
-                        prev = bloque[k - 1].strip() if k > 0 else ""
-                        if prev and len(prev) < 80:
-                            en_dictamen = False
-                    continue
 
             if RE_VOTO_HDR.match(stripped) or RE_DISID_HDR.match(stripped):
                 tipo = "voto" if RE_VOTO_HDR.match(stripped) else "disidencia"
@@ -2329,10 +2351,11 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
 
         textos_votos = extraer_textos_votos(bloque, marcadores_votos)
 
-        # v17: word count del dictamen del Procurador.
-        # Reutiliza lineas_dictamen (set de índices ya detectados por la
-        # lógica heredada de v16). Aproximación: la detección no fue
-        # validada exhaustivamente, tratar como dato auxiliar.
+        # H052: word count del dictamen, derivado del zonificador.
+        # lineas_dictamen viene de las zonas (más preciso que el loop
+        # en_dictamen de v12-v17: no incluye headers de página, y la
+        # guarda de dictamen evita falsos positivos del dispositivo del
+        # Procurador).
         wc_dictamen = sum(
             len(re.findall(r'\b\w+\b', bloque[k]))
             for k in lineas_dictamen
