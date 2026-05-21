@@ -1,0 +1,2 @@
+caso_id,tomo,span,parser_firma,parser_outcome,parser_dictamen,zonif_clasif,zonif_firma,zonif_disp,zonif_cuerpo,zonif_dictamen,concuerda_firma,concuerda_disp,concuerda_dictamen,n_sumario,n_dictamen,n_cuerpo,n_dispositivo,n_firma,n_voto,n_epilogo,n_header,n_intersticio
+329_p573,329,106,sin_firma,sin_dispositivo,False,fallo_sin_dispositivo,False,False,True,False,True,True,True,21,0,74,0,0,0,0,9,1
