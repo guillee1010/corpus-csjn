@@ -5664,15 +5664,52 @@ el residuo y la zona semántica.
 **Trayectoria sin_firma (sin cambio):**
 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
 
+### H055-B — Fix Causa en RE_DATOS_PARTES (falsos epilogos)
+
+Diagnóstico de marcadores de epílogo reveló que `^Causa\b` en
+`RE_DATOS_PARTES` generaba falsos positivos masivos: la palabra
+"causa" al inicio de línea en texto argumentativo disparaba zona
+`epilogo` dentro de votos separados y cuerpo del fallo. Caso
+extremo: 332_p2559 tenía 5,999 wc de epilogo que eran considerandos
+completos sobre "real malicia".
+
+**Fix:** `Causa` → `Causa\s*:` (requiere dos puntos). El patrón
+editorial legítimo es "Causa: Smith c/ Jones" o "Causa N°...".
+
+**Resultados:**
+
+| Métrica               |       Pre |      Post |     Delta |
+|-----------------------|----------:|----------:|----------:|
+| Segmentos zonas       |    149512 |    147952 |    −1560  |
+| Epilogo total (wc)    | 1,826,369 | 1,213,887 | −612,482  |
+| Casos con epilogo     |      4476 |      4375 |     −101  |
+| Casos afectados       |         — |       871 |         — |
+
+0 regresiones. Conteos de casos, votos, sin_firma idénticos.
+
+**Hallazgo secundario (Ministerio):** 89 segmentos con falso
+epilogo por `^Ministerio\b` que matchea "Ministerio de Economía"
+en texto argumentativo. No fixeado: requiere análisis más fino
+(algunos son carátulas legítimas en epilogo). Candidato H056.
+
 ### H055 — Estado final
 
 - **Corpus:** 5862 casos (5668 fallos + 34 sumario_editorial + 160
   sumario_con_link). Sin cambios en conteos.
 - **Sin firma:** 35/5668 (0.6%). Sin cambios.
 - **Votos:** 27335. Sin cambios.
-- **Zonas:** 149512 segmentos. Nueva zona `residuo_caso_anterior`
-  (7677 segmentos, 1,055,756 wc).
+- **Zonas:** 147952 segmentos (era 149512 pre-fix Causa). Nueva zona
+  `residuo_caso_anterior` (7677 segmentos, 1,055,756 wc).
 - **word_count:** corregido, excluye residuo del caso anterior.
   Total corpus fallos baja de 12,327,080 a 11,271,324 (−8.6%).
-- **Commits:** 1 (parser.py con Pasada 3 + exclusión word_count).
-- **PoC:** `scripts/auditoria/H055/poc_h055_residuo.py`.
+- **Epilogo:** fix `Causa` → `Causa\s*:` en `RE_DATOS_PARTES` elimina
+  612,482 wc de falsos epilogos en 871 casos (33% del epilogo total
+  era body text mal clasificado). Epilogo: 1,826K → 1,214K wc.
+- **Commits:** 3 (residuo_caso_anterior, fix Causa, PoCs+docs).
+- **PoCs:** `poc_h055_residuo.py`, `diagnostico_epilogo.py`,
+  `poc_causa_fix.py`, `extraer_epilogos_muestra.py`.
+- **Explorador v4:** `scripts/explorador/exploradorv4.py` con zonas
+  del parser, toggles por zona, colores diferenciados.
+
+**Trayectoria sin_firma (sin cambio):**
+813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.

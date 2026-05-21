@@ -38,6 +38,8 @@ Pasada 3 en zonificador reclasifica intersticio pre-semántico.
 word_count/wc_mayoria excluyen residuo: −1,055,756 wc (8.6% del corpus).
 5152 fallos afectados, 7677 segmentos reclasificados. 0 regresiones.
 B045 manifestación B mitigada a nivel de datos (Camino C Paso 1 completado).
+Fix `Causa` → `Causa\s*:` en RE_DATOS_PARTES: elimina 612K wc de falsos
+epilogos en 871 casos. Segmentos: 149512 → 147952. Epilogo: 1826K → 1214K wc.
 Cobertura firma: 97.4% → 98.0% → 98.7% → 98.8% → 99.3% → 99.4%.
 Votos: 26959 → 27103 → 27303 → 27325 → 27335).
 
