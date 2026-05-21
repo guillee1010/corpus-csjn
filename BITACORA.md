@@ -5090,3 +5090,110 @@ fallos. Nunca tuvieron firma.
 Concentración remanente: tomos 329-330 (formato antiguo, 2006).
 
 Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38.
+
+### H052-01 — Fix type mismatch en concordancia dictamen (41.4% → 100%)
+
+**Hallazgo:** la concordancia de dictamen reportada en H051 (41.4%, 2361/5699)
+era un artefacto de comparación de tipos. El PoC H051 comparaba
+`caso.get("dictamen_presente","") == "1"`, pero parser.py escribe Python
+`bool` → el CSV tiene `"True"`/`"False"`, nunca `"1"`. La comparación
+siempre daba `False`, y el 41.4% medía simplemente la fracción de casos
+sin dictamen.
+
+**Fix:** `str(caso.get("dictamen_presente","")).lower() in ("1","true")`.
+
+**Resultado post-fix:** concordancia dictamen 5671/5671 (100%).
+3330 casos con dictamen, 2341 sin dictamen. Cero discrepancias reales
+entre zonificador y parser en detección de presencia.
+
+**Estado:** validado. Fase 1 y Fase 2 del Paso 3 eliminadas.
+
+---
+
+### H052-02 — CSV zona-centered: PoC de integración
+
+**Diseño:** `extraer_segmentos()` convierte la lista por-línea del
+zonificador en segmentos contiguos con fronteras (linea_ini, linea_fin,
+n_lineas, wc). Output: `csjn_casos_zonas_h052.csv`, 152430 segmentos.
+
+**Concordancia wc_dictamen v1 (zonas vs parser):** exacta en 2394/5671.
+Los top 5 deltas eran enormes (parser=23118 vs zonas=8). Causa: el bug
+del `continue` en el loop `en_dictamen` del parser — cuando el dictamen
+no cerraba, todo el bloque quedaba como dictamen.
+
+**Hallazgo en secuencias de zonas:** 486 casos con patrón
+`dictamen→dispositivo→apertura`. El primer "dispositivo" era la
+conclusión del Procurador ("Por los fundamentos y conclusiones..."),
+detectada por `detectar_apertura_dispositivo()` dentro del dictamen.
+Falso positivo por vocabulario compartido.
+
+**Estado:** validado, motivó la guarda dictamen (H052-03).
+
+---
+
+### H052-03 — Guarda dictamen en zonificador
+
+**Regla:** dentro de zona dictamen, solo `apertura` ("FALLO DE LA CORTE
+SUPREMA") y `fecha` (sin apertura futura) cierran la zona. Los demás
+marcadores (dispositivo, firma, epilogo, etc.) se suprimen — son falsos
+positivos del vocabulario compartido entre el dictamen del Procurador
+y el fallo.
+
+**Jerarquía de marcadores:**
+- Fuertes (delimitan macro-zonas): RE_DICT_HDR, RE_APERTURA, RE_VOTO_HDR
+- Débiles (solo válidos dentro de su macro-zona): detectar_apertura_dispositivo,
+  linea_es_firma_de_juez, RE_CONSIDERANDO, RE_DATOS_PARTES
+
+**Resultado v2:** concordancia wc_dictamen mejoró drásticamente.
+Top delta bajó de -23110 a -966. Dictamen wc total: 3.97M → 5.38M
+(+1.4M palabras recuperadas de falsos dispositivo/firma). Deltas
+remanentes son sistemáticos: headers de página dentro de dictamen
+que el parser cuenta y el zonificador excluye correctamente.
+
+**Estado:** validado, integrado en H052-04.
+
+---
+
+### H052-04 — Integración en parser.py (Refacción C Paso 3)
+
+**Cambios en parser.py:**
+
+1. `RE_VISTOS` y `RE_REMISION`: anclas nuevas para el zonificador.
+2. `zonificar_bloque()`: retorna `(list[str], list[tuple])` en vez de
+   `set(zonas)`. Incluye guarda dictamen y anclas vistos/remisión.
+3. Caller de sumario_editorial: usa `set(_zonas_linea)` para el check.
+4. `lineas_dictamen`: derivado de `_zonas_linea` con set comprehension.
+   Reemplaza el loop `en_dictamen` (18 líneas eliminadas, 3 nuevas).
+5. `wc_dictamen`: misma fórmula pero sobre lineas_dictamen corregido.
+
+**Validación (diff pre/post):**
+- `n_jueces`: 0 cambios ✓
+- `dictamen_presente`: 3 cambios (los 3 nuevos sumario_editorial → 0)
+- `wc_dictamen`: 3254 cambios (corrección del bug del continue)
+- `wc_mayoria`: 3214 cambios (cascada)
+- `wc_considerando`: 895 cambios (cascada)
+- `outcome`: 3 cambios (sin_dispositivo → "" por reclasificación)
+- `voting_pattern`: 3 cambios (sin_firma → "" por reclasificación)
+- `tipo_entrada`: 3 cambios (fallo → sumario_editorial)
+
+**3 nuevos sumario_editorial:** 340_p232, 340_p538, 344_p325. Detectados
+por las anclas RE_VISTOS/RE_REMISION que enriquecen el check del
+zonificador. Eran falsos fallos sin dispositivo ni firma.
+
+**sin_firma: 38 → 35.**
+
+**Trayectoria sin_firma:**
+813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
+
+**Estado:** aplicado, committeado.
+
+---
+
+### H052-05 — Pendientes
+
+- Generar `csjn_casos_zonas.csv` como tercer artefacto canónico del parser
+  (CSV zona-centered con fronteras y wc por segmento).
+- Paso 4 (firma zonificada): usar zona firma del zonificador para los 15
+  casos donde el zonificador ve firma y el parser no.
+- Mejora futura: excluir líneas con zona "dictamen" de la búsqueda de
+  fecha del fallo (NOTA en parser.py, _zonas_linea ya disponible).

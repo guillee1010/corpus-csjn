@@ -7,7 +7,7 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-21 (sesiones H046–H051:
+**Última actualización:** 2026-05-22 (sesiones H046–H052:
 B069 cerrado — eliminada búsqueda atrás Pista 1, 277 mejoras, sin_firma 406→148.
 A001 cerrado — fallback firma inversa, 34 mejoras, sin_firma 148→114.
 A001b — _encontrar_zona_fallo primera apertura, 1 mejora, sin_firma 114→113.
@@ -21,7 +21,12 @@ B075 abierto — Hornos "Roberto Enrique" (1 caso, prioridad baja).
 H051 — Refacción C Paso 1+2: zonificador integrado en parser.py,
 31 sumarios editoriales reclasificados, sin_firma 69→38, 0 regresiones.
 Catálogo validado contra corpus (0 fallos no catalogados).
-Cobertura firma: 97.4% → 98.0% → 98.7% → 98.8% → 99.3%.
+H052 — Refacción C Paso 3: dictamen zonificado integrado en parser.py.
+Fix bug `continue` en loop `en_dictamen` (inflaba wc_dictamen en 3254 casos).
+Guarda dictamen en zonificador (suprime ~486 falsos dispositivo del Procurador).
+3 sumarios editoriales nuevos (anclas RE_VISTOS + RE_REMISION), sin_firma 38→35.
+Concordancia dictamen 41.4% era artefacto de type mismatch → 100% real.
+Cobertura firma: 97.4% → 98.0% → 98.7% → 98.8% → 99.3% → 99.4%.
 Votos: 26959 → 27103 → 27303 → 27325 → 27335).
 
 ---
@@ -59,23 +64,24 @@ a las hipótesis de la tesis (H1-H5).
 - **Catálogo:** 5862 entradas (v15).
 - **Universo procesable:** 19 tomos (329-349, exclusión metodológica de 335-336).
 - **Output parser productivo:** 5862 casos en `output/parser/csjn_casos.csv`.
-  Desglose por tipo_entrada: 5671 `fallo` + 31 `sumario_editorial` +
+  Desglose por tipo_entrada: 5668 `fallo` + 34 `sumario_editorial` +
   160 `sumario_con_link`.
 - **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV).
   Catálogo validado contra corpus: 0 fallos no catalogados (H051).
-  Cobertura de firma sobre fallos: 5633/5671 = **99,3%**.
-- **Sin firma:** 38 casos (post-H051). Desglose:
-  - ~21 firma_no_detectada (fallos reales con bloque correcto).
+  Cobertura de firma sobre fallos: 5633/5668 = **99,4%**.
+- **Sin firma:** 35 casos (post-H052). Desglose:
+  - ~18 firma_no_detectada (fallos reales con bloque correcto).
   - 11 bloques cortos (span < 20 líneas).
   - 3 bloques vacíos (span ≤ 4).
   - ~3 sin_zona_fallo / formato atípico.
   Piso estimado de irrecuperables: ~17. Concentración remanente en
   tomos 329-330 (formato antiguo, 2006).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38.
-- **Votos:** 27335 filas (post-H050, sin cambio en H051).
-- **Arquitectura:** `zonificar_bloque()` integrado en parser.py (H051,
-  Refacción C). Uso actual: clasificación sumario_editorial. Uso futuro:
-  detección de dictamen, firma, dispositivo por zonas.
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
+- **Votos:** 27335 filas (sin cambio desde H050).
+- **Arquitectura:** `zonificar_bloque()` integrado en parser.py (H051-H052,
+  Refacción C). Retorna `(list[str], list[tuple])` con zonas por línea y
+  anclas. Uso actual: clasificación sumario_editorial + lineas_dictamen.
+  Uso futuro: firma zonificada (Paso 4), CSV zona-centered canónico.
 - **Jueces conocidos:** 56 entradas en JUECES_CONOCIDOS (28 titulares/previos +
   13 conjueces B063 + 15 conjueces B072).
 - **Fixes aplicados:**
@@ -106,6 +112,12 @@ a las hipótesis de la tesis (H1-H5).
     (3 pasadas: headers, anclas, propagación). 31 sumarios editoriales
     reclasificados, sin_firma 69→38, 0 regresiones. Catálogo validado
     contra corpus (5855 aperturas, 0 huérfanos genuinos).
+  - H052: Refacción C Paso 3 — dictamen zonificado. zonificar_bloque()
+    retorna (list, anclas). Guarda dictamen: solo apertura/fecha cierran
+    zona dictamen (~486 falsos dispositivo suprimidos). lineas_dictamen
+    derivado de zonas, eliminado loop en_dictamen (fix bug continue que
+    inflaba wc_dictamen en 3254 casos). Anclas RE_VISTOS + RE_REMISION:
+    3 sumarios editoriales nuevos. sin_firma 38→35, 0 regresiones.
 
 ---
 
@@ -2995,8 +3007,22 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
   B075 anotado (Hornos "Roberto Enrique", 1 caso).
   Reclasificación sin_firma: 52 firma_no_detectada, 3 sin_zona, 11 cortos, 3 vacíos.
   Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69.
+- H051: Refacción C Paso 1+2 — zonificador integrado (3 pasadas: headers, anclas,
+  propagación). 31 sumarios editoriales reclasificados, sf 69→38.
+  Catálogo validado contra corpus (5855 aperturas, 0 huérfanos genuinos).
+  Concordancia zonificador: firma 99.7%, dispositivo 99.6%, dictamen 41.4% (artefacto).
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38.
+- H052: Refacción C Paso 3 — dictamen zonificado.
+  Fix type mismatch concordancia dictamen (41.4% → 100%): PoC comparaba "1", CSV tenía "True".
+  CSV zona-centered PoC: 152K segmentos, descubrió bug continue en loop en_dictamen
+  (inflaba wc_dictamen en 3254 casos) + ~486 falsos dispositivo del Procurador.
+  Guarda dictamen en zonificador: dentro de dictamen, solo apertura/fecha cierran zona.
+  Integración: zonificar_bloque() retorna (list, anclas), lineas_dictamen derivado de zonas,
+  loop en_dictamen eliminado. Anclas RE_VISTOS + RE_REMISION: 3 sumarios editoriales nuevos.
+  sin_firma 38→35, wc_dictamen corregido en 3254 casos, 0 regresiones.
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
 
-### Matriz pendiente post-H051
+### Matriz pendiente post-H052
 
 | # | Línea de trabajo | Casos | Riesgo | Dificultad | Estado |
 |---|-----------------|------:|--------|------------|--------|
@@ -3004,22 +3030,25 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
 | 2 | ~~B072 Conjueces faltantes~~ | ~~5+~~ | — | — | **Cerrado H049** (21 mejoras, sf 76→74) |
 | 3 | ~~B073 lfr < li refinado~~ | ~~2+~~ | — | — | **Cerrado H049** sin fix (verificado OK) |
 | 4 | ~~B074 Guarda posicional firma_actual~~ | ~~5~~ | — | — | **Cerrado H050** (5 mejoras, sf 74→69) |
-| 5 | ~~Sumarios editoriales sin firma~~ | ~~31~~ | — | — | **Cerrado H051** (reclasificados, sf 69→38) |
-| 6 | Firma no detectada (fallos reales) | ~21 | medio | alta | Refacción C Pasos 3-4 (dictamen + firma zonificada) |
-| 7 | Bloques cortos (span<20) | 11 | — | — | Sin fix posible |
-| 8 | Sin zona de fallo + vacíos | 6 | — | — | Irrecuperables |
-| 9 | B075 Hornos "Roberto Enrique" | 1 | bajo | baja | Pendiente |
+| 5 | ~~Sumarios editoriales sin firma~~ | ~~31+3~~ | — | — | **Cerrado H051+H052** (34 reclasificados, sf 69→38→35) |
+| 6 | ~~Dictamen zonificado (Refacción C Paso 3)~~ | ~~3254~~ | — | — | **Cerrado H052** (wc_dictamen corregido, guarda dictamen) |
+| 7 | Firma zonificada (Refacción C Paso 4) | ~15 | medio | media | Pendiente — 15 casos donde zonif ve firma y parser no |
+| 8 | Firma no detectada (fallos reales) | ~18 | medio | alta | Target para Paso 4 |
+| 9 | Bloques cortos (span<20) | 11 | — | — | Sin fix posible |
+| 10 | Sin zona de fallo + vacíos | 6 | — | — | Irrecuperables |
+| 11 | B075 Hornos "Roberto Enrique" | 1 | bajo | baja | Pendiente |
+| 12 | CSV zona-centered canónico | — | bajo | baja | Pendiente (PoC validado H052) |
 
 Piso irrecuperables: ~17 (6 sin_zona/vacíos + ~11 bloques cortos).
-Los ~21 firma_no_detectada (fila 6) son el target para H052+:
-Refacción C Pasos 3 (dictamen zonificado) y 4 (firma zonificada).
-Concordancia actual del zonificador: dictamen 41.4% (investigar),
-firma 99.7%, dispositivo 99.6%.
+Los ~18 firma_no_detectada (fila 8) son el target para Paso 4 (firma zonificada).
+Concordancia actual del zonificador: dictamen 100%, firma 99.7%, dispositivo 99.6%.
 
 ### Pendientes menores
 - ~~B055 (firma partida)~~ — **cerrado H042** (commit `e258f66`).
 - B056 (apertura mayoría perdida) — solo auditor.
-- B057 (dictamen consume FALLO DE LA CORTE) — parcialmente resuelto por backstop H036.
+- B057 (dictamen consume FALLO DE LA CORTE) — parcialmente resuelto por backstop H036,
+  sustancialmente resuelto por H052 (guarda dictamen en zonificador + lineas_dictamen
+  derivado de zonas elimina el bug del continue).
 - B058 (pérdida de °, regex visor) — prioridad baja.
 - B061 (RE_DISID_HDR/RE_VOTO_HDR multi-línea) — 26 casos. Subsumido en B066 (requiere M08).
 - B062 (juez en texto dispositivo activa started) — 1 caso. Prioridad baja.

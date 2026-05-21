@@ -2,6 +2,36 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H052 — 2026-05-22
+
+### Integración dictamen zonificado (Refacción C Paso 3)
+
+**`zonificar_bloque()` enriquecido:**
+- Retorna `(list[str], list[tuple])` en vez de `set(zonas)`.
+  La lista por línea es la fuente canónica de fronteras de zona.
+- Guarda dictamen: dentro de zona dictamen, solo `apertura` y `fecha`
+  (sin apertura futura) cierran la zona. Suprime ~486 falsos positivos
+  de dispositivo/firma del Procurador.
+- Anclas nuevas: `RE_VISTOS` ("Vistos los autos"), `RE_REMISION`
+  ("–Del dictamen/precedente...").
+
+**`lineas_dictamen` derivado de zonas:**
+- Reemplaza el loop `en_dictamen` (v12-v17) que tenía un bug: el
+  `continue` dentro de `en_dictamen` saltaba la detección de votos y
+  dispositivo. Si el dictamen no cerraba bien, todo el bloque quedaba
+  como dictamen, inflando `wc_dictamen` y deflactando `wc_mayoria`.
+- Afectaba ~3254 casos. Corregido.
+
+**3 nuevos `sumario_editorial`:** 340_p232, 340_p538, 344_p325.
+Detectados por las anclas RE_VISTOS/RE_REMISION.
+
+**Métricas post-H052:**
+- Corpus: 5862 casos (5668 fallos + 34 sumario_editorial + 160 sumario_con_link).
+- sin_firma: 35 (era 38). Trayectoria: ...→69→38→35.
+- Votos: 27335 (sin cambio).
+- wc_dictamen: corregido en 3254 casos.
+
+
 
 ## H051 — 2026-05-21
 
