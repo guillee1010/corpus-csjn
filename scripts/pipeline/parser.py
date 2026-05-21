@@ -1852,6 +1852,17 @@ def zonificar_bloque(bloque):
             if zonas[k] == "intersticio":
                 zonas[k] = "residuo_caso_anterior"
 
+    # ── Pasada 3b: revertir residuo falso positivo ──────────────────
+    # Si el bloque no tiene ninguna zona de contenido sustantivo
+    # (apertura/cuerpo/dictamen/sumario), el "residuo" es en realidad
+    # el cuerpo del fallo — típicamente per curiam sin apertura formal.
+    # 37 casos afectados, 24582 wc recuperados (H056-L0).
+    _ZONAS_CUERPO = {"apertura", "cuerpo", "dictamen", "sumario"}
+    if not any(zonas[k] in _ZONAS_CUERPO for k in range(n)):
+        for k in range(n):
+            if zonas[k] == "residuo_caso_anterior":
+                zonas[k] = "cuerpo"
+
     return zonas, anclas
 
 
