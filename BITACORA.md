@@ -5600,3 +5600,79 @@ detector de regresión. Solo si el ROI lo justifica post-tesis.
 
 **Trayectoria sin_firma (sin cambio):**
 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
+
+---
+
+## Sesión 2026-05-21 (H055)
+
+### H055-A — Zona residuo_caso_anterior en parser.py
+
+Implementación del Camino C, Paso 1 (planificado en H054-D): nueva
+zona `residuo_caso_anterior` en el zonificador del parser.
+
+**Cambio 1 — Pasada 3 en `zonificar_bloque()`:** post-pass después
+de la propagación de zonas (Pasada 2). Recorre las líneas desde el
+inicio del bloque y reclasifica todo `intersticio` que aparezca antes
+de la primera zona semántica (`sumario`, `dictamen`, `apertura`,
+`cuerpo`, `dispositivo`, `firma`, `voto_separado`) como
+`residuo_caso_anterior`. Los `header_pagina` intercalados no se
+tocan. Lógica equivalente al `catch_all_inicio` del visor
+(líneas 313-325), portada al parser como dato estructural.
+
+**Cambio 2 — Exclusión del word_count:** en `procesar_archivo()`,
+se deriva `lineas_residuo` de `_zonas_linea` (misma lógica que
+`lineas_dictamen`) y se excluye de `lineas_mayoria`. Impacto:
+`word_count` y `wc_mayoria` bajan; `wc_votos` y `wc_dictamen` no
+cambian.
+
+**Resultados:**
+
+| Métrica                        |     Pre |      Post |     Delta |
+|--------------------------------|--------:|----------:|----------:|
+| Casos totales                  |   5862  |     5862  |         0 |
+| Fallos                         |   5668  |     5668  |         0 |
+| Votos                          |  27335  |    27335  |         0 |
+| Segmentos zonas                | 149512  |   149512  |         0 |
+| sin_firma                      |     35  |       35  |         0 |
+| WC total corpus (fallos)       | 12327080| 11271324  | −1055756  |
+| Fallos con residuo reclasif.   |      —  |     5152  |     (91%) |
+| Segmentos residuo_caso_ant.    |      —  |     7677  |         — |
+
+El PoC (`poc_h055_residuo.py`) predecía 446,981 wc de impacto porque
+solo contaba el primer segmento de intersticio por caso. El impacto
+real es 1,055,756 porque el parser reclasifica **todos** los
+segmentos de intersticio antes de la primera zona semántica,
+incluyendo los separados por `header_pagina` (promedio 1.49 segmentos
+por caso). Esto coincide con el total de intersticio pre-semántico
+reportado en H054-D: "El intersticio total (incluyendo mid-fallo)
+suma 1055756 wc. El primer segmento explica el 40% del total."
+
+Sanity checks: 0 casos con WC negativo post-reclasificación. 0
+regresiones en conteos de casos, votos, segmentos, sin_firma.
+
+**Observación sobre los edge cases (de la PoC):**
+
+310 casos (171 → dispositivo, 139 → firma) tienen el residuo
+seguido directamente por dispositivo o firma sin zonas intermedias.
+Son bugs puntuales del zonificador (detección faltante de
+apertura/considerando) documentados como S2 en el prompt H055.
+La reclasificación como residuo es correcta: el material antes del
+dispositivo/firma sigue siendo del caso anterior. Los 1246 casos
+residuo → intersticio tienen un segundo gap (blancos/headers) entre
+el residuo y la zona semántica.
+
+**Trayectoria sin_firma (sin cambio):**
+813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
+
+### H055 — Estado final
+
+- **Corpus:** 5862 casos (5668 fallos + 34 sumario_editorial + 160
+  sumario_con_link). Sin cambios en conteos.
+- **Sin firma:** 35/5668 (0.6%). Sin cambios.
+- **Votos:** 27335. Sin cambios.
+- **Zonas:** 149512 segmentos. Nueva zona `residuo_caso_anterior`
+  (7677 segmentos, 1,055,756 wc).
+- **word_count:** corregido, excluye residuo del caso anterior.
+  Total corpus fallos baja de 12,327,080 a 11,271,324 (−8.6%).
+- **Commits:** 1 (parser.py con Pasada 3 + exclusión word_count).
+- **PoC:** `scripts/auditoria/H055/poc_h055_residuo.py`.

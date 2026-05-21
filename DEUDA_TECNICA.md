@@ -33,6 +33,11 @@ piso irrecuperable ~17 confirmado.
 H054 — análisis y diagnóstico. B065 parcialmente validado
 (n_jueces↔n_votos: 0 discrepancias). B061 desvinculado de B066.
 Zona residuo_caso_anterior planificada para H055.
+H055 — zona `residuo_caso_anterior` implementada en parser.py.
+Pasada 3 en zonificador reclasifica intersticio pre-semántico.
+word_count/wc_mayoria excluyen residuo: −1,055,756 wc (8.6% del corpus).
+5152 fallos afectados, 7677 segmentos reclasificados. 0 regresiones.
+B045 manifestación B mitigada a nivel de datos (Camino C Paso 1 completado).
 Cobertura firma: 97.4% → 98.0% → 98.7% → 98.8% → 99.3% → 99.4%.
 Votos: 26959 → 27103 → 27303 → 27325 → 27335).
 
@@ -409,10 +414,15 @@ catálogo o cruzador) pendiente de diagnóstico — no se inspeccionó
    N+1 está dentro del rango natural del caso N (e.g., antes de un
    nuevo `RE_APERTURA` + carátula). Plan.
 
-**Estado del fix:** no diseñado. Diagnóstico a nivel código pendiente.
-Hipótesis fuerte sobre la lógica que decide fronteras: asignación
-de página entera al caso N+1 cuando una página contiene cierre del
-N + inicio del N+1. Verificar en `scripts/pipeline/construir_catalogo.py`.
+**Estado del fix:** mitigado a nivel de datos (H055, Camino C Paso 1).
+La zona `residuo_caso_anterior` en el zonificador reclasifica el
+intersticio pre-semántico (arrastre del caso N al inicio del N+1) y
+lo excluye del word_count. 5152/5668 fallos afectados, 1,055,756 wc
+excluidos. La causa raíz arquitectónica (frontera catalográfica)
+sigue sin fix: el bloque del caso N+1 todavía contiene el arrastre
+en el texto, pero queda etiquetado y excluido del análisis
+cuantitativo. Fix raíz (Camino C Paso 2, revert del −1 en
+catalogador/cruzador) evaluable en H056+.
 
 **Severidad:** alta. B045 es **causa raíz arquitectónica común** de:
 - **B022** (arrastre al inicio): se elimina por construcción si se
