@@ -5409,3 +5409,194 @@ Se cierra B como diagnóstico sin patch.
 - **Zonas:** 149512 segmentos en `csjn_casos_zonas.csv` (nuevo).
 - **Outputs canónicos:** 3 (casos, votos, zonas).
 - **Commits:** 3 (H053-A, H053-C, H053-C/fechas_pre).
+
+## Sesión H054 — 2026-05-21
+
+**Objetivo:** análisis exploratorio del corpus con zonas (línea A),
+estadísticas descriptivas del corpus (línea B), validación cruzada
+votos↔firma (línea C), y diagnóstico de tratamiento de catch_all
+para planificación de H055.
+
+---
+
+### H054-B — Estadísticas descriptivas del corpus
+
+Tabla resumen del corpus para Capítulo 4 de la tesis, generada con
+PoC `poc_h054_ab.py`. Datos sobre 5668 fallos (excluidos 194 sumarios).
+
+**Hallazgos principales:**
+
+1. **Tres períodos institucionales visibles en los datos.**
+   - *Corte post-renovación (tomos 329–334, 2006–2011):* 5–6 firmantes
+     promedio, unanimidad 51–64%, dictamen presente en 63–78%.
+   - *Transición (tomos 337–339, 2014–2016):* firmantes caen a 3.3,
+     unanimidad se dispara a 93% en tomo 339, mediana word_count baja
+     a 631 (mínimo histórico).
+   - *Estabilización (tomos 340+, 2017+):* ~4 firmantes, unanimidad
+     55–62%, con excepciones tardías (tomo 348: 77%, solo 3 firmantes).
+
+2. **Tendencia secular descendente del dictamen:** de ~70% con dictamen
+   (tomos 329–337) a ~35% (tomos 345–349). Pero cuando hay dictamen
+   en tomos recientes, ocupa mayor proporción del fallo — mediana del
+   ratio dictamen/total sube de ~55% (329–334) a ~68–70% (345–349).
+
+3. **Outcomes:** `otro` domina (33.7%), seguido de `hace_lugar` (19%),
+   `desestima` (11.5%), `procedente` (10.6%), `competencia` (9.9%).
+
+4. **Voting patterns:** unánime 61.9%, disidencia 19.4%,
+   según_su_voto 12.9%, mixed 5.2%, sin_firma 0.6%.
+
+5. **Jueces firmantes por tomo:** visible el quiebre entre el período
+   de Corte completa (5.6–5.9 firmantes, tomos 329–334) y la Corte
+   reducida post-2015 (3.0–4.4 firmantes, tomos 338+). Tomo 349
+   (2026): mediana 3 firmantes.
+
+**Gráficos generados (7):**
+g01_unanimidad_por_tomo.png, g02_dictamen_por_tomo.png,
+g03_voting_pattern_tomo.png, g04_wc_por_zona_boxplot.png,
+g05_wc_mediana_tomo.png, g06_ratio_dictamen_tomo.png,
+g07_njueces_tomo.png.
+
+---
+
+### H054-A — Análisis exploratorio con zonas
+
+Primer análisis cuantitativo usando `csjn_casos_zonas.csv` (149512
+segmentos, H053).
+
+**A1 — Distribución de largo por zona (agregado por caso):**
+
+| Zona            | Casos | Mediana wc | Media wc |
+|-----------------|------:|-----------:|---------:|
+| dictamen        | 3327  |      1213  |    1615  |
+| cuerpo          | 5599  |       405  |     925  |
+| epilogo         | 4476  |        66  |     408  |
+| sumario         | 3789  |       233  |     443  |
+| dispositivo     | 5609  |        75  |     256  |
+| intersticio     | 5152  |        71  |     205  |
+| firma           | 5641  |        20  |      93  |
+| voto_separado   | 2146  |         9  |      74  |
+| apertura        | 5537  |         5  |      13  |
+
+El dictamen es la zona más pesada (mediana 1213 wc). Los votos
+separados tienen mediana 9 wc — la mayoría son líneas formales
+de cierre, no textos sustantivos.
+
+**A2 — Proporción dictamen/fallo:**
+En los 3327 fallos con dictamen (58.7% del total): media 53.2%
+del texto total es dictamen, mediana 58.2%. Por tomo, la proporción
+sube en los tomos recientes (345–349: mediana 67–70%).
+
+**A3 — Fragmentación:**
+Media 26.4 segmentos por caso, mediana 20. Los fallos `mixed` son
+los más fragmentados (media 62.3, mediana 48) vs unánimes (media
+18.6, mediana 14). Correlación clara entre complejidad del voting
+pattern y fragmentación.
+
+**A4 — Votos separados:**
+37.9% de los fallos tiene algún segmento `voto_separado`. Proporción
+wc_votos/total: media 1.9%, mediana 0.5%.
+
+**A5 — Largo ↔ voting pattern:**
+Los fallos `mixed` son los más largos (mediana 3604 wc), seguidos
+de `segun_su_voto` (2128), `disidencia` (1448), `unanime` (752).
+Correlación clara entre división del tribunal y extensión del fallo.
+
+---
+
+### H054-C — Validación cruzada votos↔firma
+
+Cruce de `n_jueces` (de `csjn_casos.csv`) con `count(*)` por caso
+(de `csjn_casos_votos.csv`).
+
+**Resultado: 0 discrepancias** sobre 5668 fallos. El pipeline es
+internamente consistente entre los dos CSV canónicos.
+
+B065 (validación firma↔votos) queda parcialmente cubierto por este
+resultado: la dimensión n_jueces↔n_votos está validada. La dimensión
+calificador↔bloque_voto (si un juez firmó "en disidencia" pero no
+hay bloque de disidencia) sigue pendiente.
+
+---
+
+### H054-D — Diagnóstico de catch_all e intersticio
+
+Análisis cruzado del intersticio inicial (zonificador) con la lógica
+de `catch_all_inicio` (auditor/visor) para planificar H055.
+
+**Hallazgo cuantitativo (zonas):**
+
+- 4830 / 5668 fallos (85.2%) arrancan con un segmento `intersticio`
+  como primera zona no-header_pagina.
+- Mediana del intersticio inicial: 63 palabras. Media: 88. Max: 420.
+- Total acumulado: 425429 palabras (2.41% del corpus total).
+- El intersticio total (incluyendo mid-fallo) suma 1055756 wc. El
+  primer segmento explica el 40% del total.
+
+**Transición después del intersticio inicial:**
+
+| Siguiente zona   | Casos |     % |
+|------------------|------:|------:|
+| sumario          | 2865  | 59.3% |
+| apertura         | 1159  | 24.0% |
+| dictamen         |  478  |  9.9% |
+| dispositivo      |  165  |  3.4% |
+| firma            |  125  |  2.6% |
+| cuerpo           |   38  |  0.8% |
+
+El 93.2% de los intersticios iniciales transicionan a sumario,
+apertura o dictamen — material del caso actual. El intersticio previo
+es residuo del caso anterior (B045 manifestación B).
+
+Los 165 intersticio→dispositivo y 125 intersticio→firma son
+sospechosos: posible detección faltante de apertura/considerando.
+Candidatos a auditoría puntual en sesiones futuras.
+
+**Hallazgo del auditor/visor:**
+
+El visor (`visor_auditoria.py`, líneas 313–325) ya implementa la
+exclusión de `catch_all_inicio`: identifica el catch_all con la
+`linea_ini` más baja que termina antes del primer span semántico, y
+lo excluye del render por default (`EXCLUIDOS_DEFAULT`). El auditor
+(`auditar_fallo.py`, líneas 112–416) complementa con el
+`borde_inferior`: clasifica cada línea del gap entre `linea_fin_real`
+y `linea_inicio` del próximo caso como `firma_arrastrada`,
+`apertura_proximo_caso`, `voto_disidencia_individual`,
+`no_clasificable`, etc.
+
+**Conclusión:** la lógica de exclusión de residuo ya está probada
+visualmente. Lo que falta es portarla al parser como dato
+estructural (nueva zona `residuo_caso_anterior` que se excluye del
+cálculo de `word_count`).
+
+**Matriz de decisión (3 caminos):**
+
+| Criterio             | A (fix raíz -1)  | B (zona residuo)  | C (B luego A)    |
+|----------------------|-------------------|-------------------|------------------|
+| Impacto en wc        | alto              | alto              | máximo           |
+| Riesgo de regresión  | alto              | mínimo            | medio            |
+| Complejidad          | media             | baja (~20 líneas) | media (2 pasos)  |
+| Elegancia            | máxima            | buena             | máxima           |
+| Escalabilidad        | alta              | buena             | alta             |
+| Precedente validado  | no                | sí (visor)        | sí               |
+| Tiempo estimado      | 1–2 sesiones      | ½ sesión          | 2–3 sesiones     |
+
+**Decisión:** Camino C (secuencial). H055 aplica B (zona residuo,
+seguro y rápido). H056+ evalúa A (fix raíz) usando zonas como
+detector de regresión. Solo si el ROI lo justifica post-tesis.
+
+---
+
+### H054 — Estado final
+
+- **Corpus:** sin cambios (5862 casos, 5668 fallos, 35 sin_firma).
+- **Outputs canónicos:** sin cambios (3 CSV).
+- **Commits:** 0 (sesión de análisis y diagnóstico, sin cambios al pipeline).
+- **Gráficos:** 7 generados para evaluación de inclusión en Capítulo 4.
+- **PoC:** `poc_h054_ab.py` (estadísticas descriptivas + zonas).
+- **Deuda técnica:** B065 parcialmente validado (n_jueces↔n_votos: 0
+  discrepancias). B061 desvinculado de B066 (ya invalidado).
+- **Planificación H055:** camino C definido (zona residuo → fix raíz).
+
+**Trayectoria sin_firma (sin cambio):**
+813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.

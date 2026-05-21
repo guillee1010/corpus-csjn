@@ -30,6 +30,9 @@ H053 — CSV zona-centered canónico (149512 segmentos) integrado como tercer
 output del parser. Guarda defensiva fecha/dictamen (0 impacto). Diagnóstico
 firma zonificada: 15 discrepantes analizados, ROI insuficiente (35→33 máximo),
 piso irrecuperable ~17 confirmado.
+H054 — análisis y diagnóstico. B065 parcialmente validado
+(n_jueces↔n_votos: 0 discrepancias). B061 desvinculado de B066.
+Zona residuo_caso_anterior planificada para H055.
 Cobertura firma: 97.4% → 98.0% → 98.7% → 98.8% → 99.3% → 99.4%.
 Votos: 26959 → 27103 → 27303 → 27325 → 27335).
 
@@ -2697,7 +2700,11 @@ de disidencia tomada como firma de mayoría).
 **Fix propuesto:** agregar validación post-parseo que cruce calificadores
 en firma con votos detectados. Loguear warnings.
 **Estado del fix:** no diseñado.
-**Referencias:** H042.
+**Validación parcial H054:** cruce de `n_jueces` (csjn_casos.csv) vs
+`count(*)` por caso (csjn_casos_votos.csv): 0 discrepancias sobre
+5668 fallos. La dimensión n_jueces↔n_votos está validada. La dimensión
+calificador↔bloque_voto sigue pendiente.
+**Referencias:** H042, H054.
 
 (ya incluido en la primera parte de H032 — no agregar nueva entrada)
 
@@ -3043,6 +3050,14 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
   3 falsos positivos del zonificador (headers sumario), 2 genuinamente complejos (ROI
   insuficiente: 35→33 máximo). Piso irrecuperable ~17 confirmado. sin_firma sin cambio.
   Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
+- H054: análisis exploratorio y diagnóstico. Estadísticas descriptivas corpus
+  (B) + análisis zonas (A) + validación n_jueces↔n_votos (C, 0 discrepancias).
+  Diagnóstico catch_all: 4830/5668 fallos con intersticio inicial (85%),
+  425K palabras residuo (2.4% corpus). Lógica catch_all_inicio del visor
+  (líneas 313–325) validada como precedente para H055.
+  B061 desvinculado de B066 (invalidado). B065 parcialmente validado.
+  sin_firma sin cambio (35). Planificación H055: zona residuo_caso_anterior.
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
 
 ### Matriz pendiente post-H053
 
@@ -3073,11 +3088,11 @@ Concordancia actual del zonificador: dictamen 100%, firma 99.7%, dispositivo 99.
 - ~~B057 (dictamen consume FALLO DE LA CORTE)~~ — **cerrado H052** (guarda dictamen
   en zonificador + lineas_dictamen derivado de zonas elimina el bug del continue).
 - B058 (pérdida de °, regex visor) — prioridad baja.
-- B061 (RE_DISID_HDR/RE_VOTO_HDR multi-línea) — 26 casos. Subsumido en B066 (requiere M08).
+- B061 (RE_DISID_HDR/RE_VOTO_HDR multi-línea) — 26 casos. Independiente (B066 invalidado H044). Requiere M08.
 - B062 (juez en texto dispositivo activa started) — 1 caso. Prioridad baja.
 - ~~B063 (conjueces faltantes)~~ — **cerrado H043** (commit `8a2558e`).
 - ~~B064 (Otero encoding)~~ — **cerrado H043** (era bug cosmético, no encoding).
-- B065 (validación firma↔votos) — diagnóstico. Prioridad baja.
+- B065 (validación firma↔votos) — n_jueces↔n_votos validado H054 (0 discrepancias). Pendiente: calificador↔bloque_voto.
 - B066 (juez/jueza en headers) — **INVALIDADO H044** (42/42 eran citas).
 - ~~B067 (Tier 3 dispositivo sin techo)~~ — **cerrado H044** (17 mejoras, 422→406).
 - B068 (Moliné O'Connor) — **CANCELADO H045** (es parte en 2 juicios post-remoción).
