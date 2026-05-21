@@ -1741,6 +1741,20 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         if not bloque:
             continue  # bloque vacío (linea_inicio inválida); saltear
 
+        # ── B074: pre-computar posición del título como lower-bound ─────────
+        # Si el título del caso actual aparece en las primeras 15 líneas del
+        # bloque, usarlo como li para detectar_fin_real. Así buscar_atras no
+        # captura firma del caso anterior incluida en el residuo del bloque.
+        # Si no se encuentra en 15 líneas → li original → baseline idéntico.
+        _li_for_dfr = int(linea_inicio)
+        _token_titulo = primer_token_de_caratula(nombres_indice)
+        if _token_titulo and len(_token_titulo) >= 4:
+            _pat_titulo = re.compile(r'\b' + re.escape(_token_titulo) + r'\b', re.I)
+            for _k, _ln in enumerate(bloque[:15]):
+                if _pat_titulo.search(_ln):
+                    _li_for_dfr = int(linea_inicio) + _k
+                    break
+
         # ── NUEVO v15: detectar fin real del fallo ──────────────────────────
         # Buscar la frontera con el fallo siguiente (carátula/sumario/marcador)
         # para detectar dónde termina realmente el contenido decisorio.
@@ -1749,7 +1763,7 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         prox_header = proximo_header_despues_de(headers_archivo, int(linea_fin) if linea_fin not in ("", None) else len(lines) - 1)
         linea_fin_real, status_fin, pista_fin = detectar_fin_real(
             lines,
-            int(linea_inicio),
+            _li_for_dfr,
             int(linea_fin) if linea_fin not in ("", None) else len(lines) - 1,
             prox_header,
             primer_token_siguiente
