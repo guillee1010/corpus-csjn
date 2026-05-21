@@ -1228,7 +1228,7 @@ def linea_es_firma_de_juez(linea):
 
 RE_DATOS_PARTES = re.compile(
     r"^(Recurso|Nombre del|Tribunal de origen|Tribunal que intervino|"
-    r"Causa\s*:|Profesionales|Ministerio|Parte actora|Parte demandada)",
+    r"Causa\s*:|Profesionales|Parte actora|Parte demandada)",
     re.I,
 )
 
