@@ -1718,19 +1718,25 @@ def construir_caso_sumario_link(caso_id_canonico, tomo, nombres_indice,
 
 def zonificar_bloque(bloque):
     """
-    H052: asigna una zona a cada línea del bloque.
+    H052/H055: asigna una zona a cada línea del bloque.
 
     Retorna:
       zonas:  list[str]    — etiqueta de zona para cada línea (len == len(bloque))
       anclas: list[tuple]  — (linea, tipo_marcador) detectadas en pasada 1
 
     Zonas posibles: header_pagina, sumario, dictamen, apertura, cuerpo,
-    dispositivo, firma, voto_separado, epilogo, intersticio.
+    dispositivo, firma, voto_separado, epilogo, intersticio,
+    residuo_caso_anterior.
 
     Guarda dictamen (H052): dentro de zona dictamen, solo apertura y
     fecha (sin apertura futura) cierran la zona. Los demás marcadores
     (dispositivo, firma, etc.) se suprimen — son falsos positivos del
     vocabulario compartido entre el dictamen del Procurador y el fallo.
+
+    Residuo caso anterior (H055): el intersticio inicial (antes de la
+    primera zona semántica) se reclasifica como residuo_caso_anterior.
+    Es material del fallo previo incluido por solapamiento de páginas
+    (B045 manifestación B). Se excluye del word_count en procesar_archivo.
     """
     n = len(bloque)
     zonas = ["intersticio"] * n
@@ -1826,6 +1832,25 @@ def zonificar_bloque(bloque):
             elif tipo == "epilogo_marker":
                 zona_activa = "epilogo"
         zonas[k] = zona_activa if zonas[k] != "header_pagina" else "header_pagina"
+
+    # ── Pasada 3: reclasificar intersticio inicial como residuo_caso_anterior ──
+    # El bloque de intersticio antes de la primera zona semántica es
+    # material del caso anterior incluido por solapamiento de páginas
+    # (B045 manifestación B). Se reclasifica para excluirlo del word_count.
+    # Lógica equivalente al catch_all_inicio del visor (líneas 313-325).
+    _ZONAS_SEM = {"sumario", "dictamen", "apertura", "cuerpo",
+                  "dispositivo", "firma", "voto_separado"}
+    _primer_sem_k = None
+    for k in range(n):
+        if zonas[k] in _ZONAS_SEM:
+            _primer_sem_k = k
+            break
+    if _primer_sem_k is not None:
+        for k in range(n):
+            if k >= _primer_sem_k:
+                break
+            if zonas[k] == "intersticio":
+                zonas[k] = "residuo_caso_anterior"
 
     return zonas, anclas
 
@@ -2144,6 +2169,10 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                           if z == "dictamen"}
         dictamen_presente = bool(lineas_dictamen)
 
+        # H055: líneas de residuo del caso anterior (excluir del word_count)
+        lineas_residuo = {k for k, z in enumerate(_zonas_linea)
+                         if z == "residuo_caso_anterior"}
+
         por_ello_idx       = None
         por_ello_text      = ""
         n_votos_svoto      = 0
@@ -2364,11 +2393,14 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
 
         if inicio_votos_indiv is not None:
             lineas_mayoria = [bloque[k] for k in range(len(bloque))
-                              if k not in lineas_dictamen and k < inicio_votos_indiv]
+                              if k not in lineas_dictamen
+                              and k not in lineas_residuo
+                              and k < inicio_votos_indiv]
             lineas_votos   = [bloque[k] for k in range(inicio_votos_indiv, len(bloque))]
         else:
             lineas_mayoria = [bloque[k] for k in range(len(bloque))
-                              if k not in lineas_dictamen]
+                              if k not in lineas_dictamen
+                              and k not in lineas_residuo]
             lineas_votos   = []
 
         wc_mayoria = len(re.findall(r'\b\w+\b', " ".join(lineas_mayoria)))
