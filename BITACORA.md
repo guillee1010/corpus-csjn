@@ -4897,3 +4897,84 @@ que encuentra firma del caso siguiente.
 - B074: investigar regresiones (branching del `if` anidado).
 - Inspección manual de los 74 sin_firma con el texto extraído.
 - Hallazgo Hornos ("Roberto Enrique" vs "Gustavo M.").
+
+### H050-01 — B074: diagnóstico del bug de la PoC H049
+
+**Hallazgo:** la PoC H049 tenía un bug de implementación que desactivaba
+`buscar_atras` en TODOS los casos (no solo los que la guarda debía filtrar).
+Los 22 casos afectados SIEMPRE extendían lfr. Resultado real de la PoC H049:
+3 mejoras genuinas, 6 regresiones explícitas, ~7 regresiones ocultas
+(etiquetadas MEJORA_JUECES pero con jueces completamente distintos).
+
+**Mecanismo:** en los 22 bloques afectados, la estructura es idéntica:
+residuo del caso anterior (dispositivo + firma + metadata) seguido del
+caso actual. `buscar_atras(lfc→li)` pesca firma del caso anterior.
+
+**Estado:** válido. Diagnóstico confirmado con extracción del corpus.
+
+---
+
+### H050-02 — B074v3: guarda RE_APERTURA con límite 40 líneas
+
+**Versión:** guarda posicional por RE_APERTURA en las primeras 40 líneas.
+**Resultado:** 10 mejoras, 6 regresiones.
+**Problema:** en bloques de 100-500+ líneas, la búsqueda sin límite
+encuentra RE_APERTURA del caso SIGUIENTE (contenido en el mismo bloque
+por páginas compartidas). Con límite de 40, pierde apertura legítima
+cuando hay sumarios largos o dictamen antes.
+**Estado:** descartado.
+
+---
+
+### H050-03 — B074v4: reordenar refinar_inicio antes de detectar_fin_real
+
+**Versión:** mover refinar_inicio_por_titulo ANTES de detectar_fin_real.
+**Resultado:** 13 mejoras, 15 regresiones (9 nuevas).
+**Problema:** refinar_inicio sobre el bloque largo [li, lf] (vs [li, lfr])
+produce false matches del token del título en sumarios/citas en las
+primeras 50 líneas, moviendo li más allá de la firma correcta.
+**Estado:** descartado como fix directo, pero confirmó el concepto.
+
+---
+
+### H050-04 — B074v5: pre-cómputo del título como lower-bound (15 líneas)
+
+**Versión:** pre-computar la posición del token del título en las primeras
+15 líneas del bloque. Pasar esa posición como li a detectar_fin_real.
+No mover refinar_inicio de lugar.
+
+**Resultado:** 5 mejoras, 2 "regresiones" (ambas correcciones), 3 MEJORA_JUECES.
+sin_firma 74→69, votos 27325→27335.
+
+**Análisis de las 2 "regresiones":**
+- 343_p1388 (5→3 jueces): los 5 eran del caso anterior. 3 jueces es correcto.
+- 347_p1378 (4→0): era un sumario_con_link mal clasificado como fallo.
+  El baseline capturaba firma del caso anterior. Ahora el bloque se extiende,
+  el detector de sumario_con_link ve la línea "(*) Sentencia... Ver fallo",
+  y lo clasifica correctamente con campos analíticos vacíos.
+
+**Commit:** `47f2059`.
+**Estado:** cerrado, aplicado y validado.
+
+---
+
+### H050-05 — Hallazgo Hornos
+
+"Roberto Enrique Hornos" en 347_p1673 no matchea el regex existente
+(`gustavo\s+m\.?\s*hornos`). Es un conjuez distinto de Gustavo M. Hornos.
+Agravado por guión pegado en OCR: `(según su voto)—` sin espacio fusiona
+el chunk con Rabbi-Baldi en parse_firma. Impacto: 1 caso, n_jueces 4→5.
+**Estado:** anotado en DEUDA_TECNICA, no fixeado.
+
+---
+
+### H050-06 — Reclasificación sin_firma post-B074v5
+
+**69 sin_firma** (vs 74 pre-H050):
+- firma_no_detectada: 52 (era 35) — población target para refacción C
+- sin_zona_fallo: 3 (era 24) — B074 reclasificó la mayoría
+- bloque_corto: 11 (era 13)
+- bloque_vacío: 3 (era 4)
+- Piso irrecuperables: ~17 (era ~27)
+
+Concentración: 29/52 firma_no_detectada en tomos 329-330 (formato antiguo).

@@ -7,7 +7,7 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-20 (sesiones H046 + H047 + H048 + H049:
+**Última actualización:** 2026-05-20 (sesiones H046–H050:
 B069 cerrado — eliminada búsqueda atrás Pista 1, 277 mejoras, sin_firma 406→148.
 A001 cerrado — fallback firma inversa, 34 mejoras, sin_firma 148→114.
 A001b — _encontrar_zona_fallo primera apertura, 1 mejora, sin_firma 114→113.
@@ -15,8 +15,11 @@ B070+B071 cerrados — Pista 1 forward: validación texto corriente +
 normalización tildes, 37 mejoras, sin_firma 113→76, votos 27103→27303.
 B072 cerrado — 15 conjueces en JUECES_CONOCIDOS, 21 mejoras, sin_firma 76→74,
 votos 27303→27325. B073 cerrado sin fix (verificado sin problemas).
-B074 abierto — guarda posicional en firma_actual, investigada, no committeada.
-Cobertura firma: 97.4% → 98.0% → 98.7%. Votos: 26959 → 27103 → 27303 → 27325).
+B074 cerrado — guard posicional título en detectar_fin_real, 5 mejoras +
+2 correcciones, sin_firma 74→69, votos 27325→27335.
+B075 abierto — Hornos "Roberto Enrique" (1 caso, prioridad baja).
+Cobertura firma: 97.4% → 98.0% → 98.7% → 98.8%.
+Votos: 26959 → 27103 → 27303 → 27325 → 27335).
 
 ---
 
@@ -55,17 +58,16 @@ a las hipótesis de la tesis (H1-H5).
 - **Output parser productivo:** 5862 casos en `output/parser/csjn_casos.csv`
   (incluye 160 `sumario_con_link`; 5702 fallos procesables).
 - **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV;
-  cobertura de firma = 98,7%).
-- **Sin firma:** 74 casos (post-H049). Desglose por clasificación H049:
-  - 35 firma_no_detectada (tienen apertura + fecha pero firma no encontrada).
-  - 24 sin_zona_fallo (sin apertura/considerando/fecha en bloque).
-  - 13 bloques cortos (span < 20 líneas).
-  - 4 bloques vacíos (span ≤ 4).
-  Piso estimado de irrecuperables: ~27. Listado completo en
-  `output/auditoria/H049/sin_firma_76_clasificados.md` y
-  `output/auditoria/H049/sin_firma_texto_completo.md`.
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74.
-- **Votos:** 27325 filas (post-H049).
+  cobertura de firma = 98,8%).
+- **Sin firma:** 69 casos (post-H050). Desglose por clasificación H050:
+  - 52 firma_no_detectada (tienen zona de fallo pero firma no encontrada).
+  - 3 sin_zona_fallo (sin apertura/considerando/fecha en bloque).
+  - 11 bloques cortos (span < 20 líneas).
+  - 3 bloques vacíos (span ≤ 4).
+  Piso estimado de irrecuperables: ~17. Concentración: 29/52
+  firma_no_detectada en tomos 329-330 (formato antiguo).
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69.
+- **Votos:** 27335 filas (post-H050).
 - **Jueces conocidos:** 56 entradas en JUECES_CONOCIDOS (28 titulares/previos +
   13 conjueces B063 + 15 conjueces B072).
 - **Fixes aplicados:**
@@ -89,7 +91,9 @@ a las hipótesis de la tesis (H1-H5).
   - H049: B072 cerrado — 15 conjueces en JUECES_CONOCIDOS + _RE_FIRMA_COMPLETA
     (21 mejoras, 1 regresión aceptada 346_p610, sin_firma 76→74, votos 27303→27325).
     B073 cerrado sin fix (451 lfr_cambio verificados, 0 problemas).
-    B074 investigado, no committeado (7 regresiones inexplicadas en PoC).
+  - H050: B074 cerrado — guard posicional título en detectar_fin_real
+    (5 mejoras + 2 correcciones, sin_firma 74→69, votos 27325→27335).
+    B075 anotado (Hornos "Roberto Enrique", 1 caso, no fixeado).
 
 ---
 
@@ -2879,32 +2883,38 @@ de los 74 sin_firma.
 **Problema:** cuando el bloque catálogo incluye residuo del caso anterior
 (firma, tribunal de origen), `linea_es_firma_de_juez` detecta esa firma
 como `firma_actual` del caso corriente, cortando el bloque prematuramente.
-Afecta ~5 casos directamente (Grupo 3: 342_p1483, 345_p378, 345_p582,
-345_p1417, 346_p1068). También previene regresiones futuras al agregar
-conjueces a JUECES_CONOCIDOS.
-**Fix propuesto:** no aceptar firma encontrada por `buscar_atras` si
-está antes del marcador "FALLO/SENTENCIA DE LA CORTE SUPREMA" del bloque.
-**PoC H049:** dos versiones probadas.
-  - v1 (RE_APERTURA + RE_FECHA_LINEA): 13 mejoras, 7 regresiones.
-    RE_FECHA_LINEA ("Buenos Aires, [fecha]") matchea en dictámenes,
-    causando false positives.
-  - v2 (solo RE_APERTURA): mismas 7 regresiones. Las regresiones
-    ocurren en casos sin apertura formal (apertura_tipo vacío) donde
-    la guarda no debería activarse (primera_apertura=None → firma
-    pasa). Causa de las regresiones no identificada — posiblemente
-    un efecto colateral de la reescritura del flujo de control en
-    el fallback (el `if` anidado cambia el branching cuando `k is
-    not None` pero la condición falla, permitiendo caer al
-    `buscar_adelante` que antes no se alcanzaba).
-**Estado:** Abierto. Prioridad alta. No committeado.
-**Población afectada sin fix:** ~5 casos sin_firma directos + riesgo
-de regresiones en cada ronda de JUECES_CONOCIDOS.
-**PoCs:** `output/auditoria/H049/poc_b074_diff.csv`.
-**Próximo paso:** investigar por qué las regresiones ocurren en casos
-donde la guarda no debería activarse. Posible causa: el `buscar_adelante`
-de firma (línea 1615-1617) ahora se alcanza cuando `buscar_atras`
-encuentra firma pero la condición posicional la rechaza, y encuentra
-una firma del caso *siguiente* más adelante.
+**Fix aplicado (H050, commit `47f2059`):** pre-computar la posición del
+token del título (`primer_token_de_caratula`) en las primeras 15 líneas
+del bloque. Pasar esa posición como `li` a `detectar_fin_real`, de modo
+que `buscar_atras` no alcance la firma del caso anterior.
+Si el título no se encuentra en 15 líneas → li original → baseline idéntico.
+**Iteraciones H050:** 5 versiones de PoC (v1-v5).
+  - v1/v2 H049 (RE_APERTURA guard): bug de implementación desactivaba
+    buscar_atras siempre. 13 mejoras, 7 regresiones (causa: bug de flujo).
+  - v3 (RE_APERTURA guard, rango limitado li+40): 10 mejoras, 6 regresiones
+    (causa: apertura del caso siguiente dentro del bloque grande).
+  - v4 (reordenar refinar_inicio antes de detectar_fin_real): 13 mejoras,
+    15 regresiones (causa: false matches del título en sumarios/citas).
+  - v5 (pre-cómputo título 15 líneas como lower-bound): 5 mejoras,
+    2 "regresiones" (ambas correcciones), 0 regresiones reales. Aplicado.
+**Resultado:** sf 74→69, votos 27325→27335. 5 mejoras + 2 correcciones
+(343_p1388: firma del caso anterior 5→3 jueces correctos; 347_p1378:
+sumario_con_link correctamente reclasificado). 3 MEJORA_JUECES.
+**Estado:** **CERRADO H050** (commit `47f2059`).
+
+---
+### B075 — Hornos "Roberto Enrique" (conjuez no reconocido)
+
+**Componente:** parser (JUECES_CONOCIDOS, _RE_FIRMA_COMPLETA).
+**Origen:** H049 hallazgo lateral, documentado H050.
+**Problema:** "Roberto Enrique Hornos" en 347_p1673 no matchea el regex
+existente (`gustavo\s+m\.?\s*hornos`). Es un conjuez distinto de
+Gustavo M. Hornos. Agravado por guión pegado en OCR: `(según su voto)—`
+sin espacio fusiona el chunk con Rabbi-Baldi en parse_firma.
+**Impacto:** 1 caso, n_jueces 4→5.
+**Fix propuesto:** agregar regex `roberto\s+enrique\s+hornos` a
+JUECES_CONOCIDOS y `roberto` a _RE_FIRMA_COMPLETA.
+**Estado:** Abierto. Prioridad baja.
 
 ---
 
@@ -2966,20 +2976,31 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
   verificados). Clasificación de 74 sin_firma en 4 categorías. B074 investigado,
   no committeado (guarda posicional con 7 regresiones inexplicadas).
   Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74.
+- H050: B074 cerrado — guard posicional título en detectar_fin_real
+  (5 mejoras + 2 correcciones, 0 regresiones, sf 74→69, votos 27325→27335).
+  5 versiones de PoC iteradas (v1-v5). Fix final: pre-cómputo del token
+  del título en primeras 15 líneas como lower-bound de li para detectar_fin_real.
+  B075 anotado (Hornos "Roberto Enrique", 1 caso).
+  Reclasificación sin_firma: 52 firma_no_detectada, 3 sin_zona, 11 cortos, 3 vacíos.
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69.
 
-### Matriz pendiente post-H048
+### Matriz pendiente post-H050
 
 | # | Línea de trabajo | Casos | Riesgo | Dificultad | Estado |
 |---|-----------------|------:|--------|------------|--------|
 | 1 | ~~B070 Pista 1 forward texto corriente~~ | ~~43~~ | — | — | **Cerrado H048** (37 mejoras, sf 113→76) |
 | 2 | ~~B072 Conjueces faltantes~~ | ~~5+~~ | — | — | **Cerrado H049** (21 mejoras, sf 76→74) |
 | 3 | ~~B073 lfr < li refinado~~ | ~~2+~~ | — | — | **Cerrado H049** sin fix (verificado OK) |
-| 4 | B074 Guarda posicional firma_actual | ~5 | medio | media | Abierto — PoC con 7 regresiones |
-| 5 | Sin zona de fallo (sin apertura) | 24 | medio | alta | Postergado |
-| 6 | Bloques cortos (span<20) | 13 | — | — | Sin fix posible |
-| 7 | Firma no detectada (con apertura) | 35 | medio | alta | Investigar post-B074 |
+| 4 | ~~B074 Guarda posicional firma_actual~~ | ~~5~~ | — | — | **Cerrado H050** (5 mejoras, sf 74→69) |
+| 5 | Firma no detectada (con zona) | 52 | medio | alta | **Target principal** — investigar modos de falla |
+| 6 | Bloques cortos (span<20) | 11 | — | — | Sin fix posible |
+| 7 | Sin zona de fallo + vacíos | 6 | — | — | Irrecuperables |
+| 8 | B075 Hornos "Roberto Enrique" | 1 | bajo | baja | Pendiente |
 
-M08 resolvería B1b + B2 de raíz (~337 casos).
+Piso irrecuperables: ~17 (6 sin_zona/vacíos + ~11 bloques cortos).
+Los 52 firma_no_detectada (fila 5) son el target para H051: diagnóstico
+de modos de falla → decisión entre fixes puntuales o refacción C
+(detección de zonas estructurales).
 
 ### Pendientes menores
 - ~~B055 (firma partida)~~ — **cerrado H042** (commit `e258f66`).
@@ -3000,7 +3021,8 @@ M08 resolvería B1b + B2 de raíz (~337 casos).
 - ~~B071 (tildes en Pista 1)~~ — **CERRADO H048** (incluido en B070).
 - ~~B072 (conjueces faltantes: ~13 nombres)~~ — **CERRADO H049** (15 conjueces, 21 mejoras, sf 76→74).
 - ~~B073 (interacción detectar_fin_real ↔ refinar_inicio_por_titulo)~~ — **CERRADO H049** sin fix (verificado OK).
-- B074 (guarda posicional en firma_actual) — abierto, prioridad alta, PoC con regresiones.
+- ~~B074 (guarda posicional en firma_actual)~~ — **CERRADO H050** (commit `47f2059`, 5 mejoras, sf 74→69).
+- B075 (Hornos "Roberto Enrique") — abierto, prioridad baja, 1 caso.
 - Variantes descartadas H039 (`en_las_condiciones`, `por_lo_tanto`, `en_atencion`,
   `que_de_conformidad`): Tier 2 implementado en H041 pero estas variantes siguen
   excluidas (argumentales incluso con firma validada + guarda de contexto).
