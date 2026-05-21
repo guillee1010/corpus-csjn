@@ -7,7 +7,7 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-20 (sesiones H046–H050:
+**Última actualización:** 2026-05-21 (sesiones H046–H051:
 B069 cerrado — eliminada búsqueda atrás Pista 1, 277 mejoras, sin_firma 406→148.
 A001 cerrado — fallback firma inversa, 34 mejoras, sin_firma 148→114.
 A001b — _encontrar_zona_fallo primera apertura, 1 mejora, sin_firma 114→113.
@@ -18,7 +18,10 @@ votos 27303→27325. B073 cerrado sin fix (verificado sin problemas).
 B074 cerrado — guard posicional título en detectar_fin_real, 5 mejoras +
 2 correcciones, sin_firma 74→69, votos 27325→27335.
 B075 abierto — Hornos "Roberto Enrique" (1 caso, prioridad baja).
-Cobertura firma: 97.4% → 98.0% → 98.7% → 98.8%.
+H051 — Refacción C Paso 1+2: zonificador integrado en parser.py,
+31 sumarios editoriales reclasificados, sin_firma 69→38, 0 regresiones.
+Catálogo validado contra corpus (0 fallos no catalogados).
+Cobertura firma: 97.4% → 98.0% → 98.7% → 98.8% → 99.3%.
 Votos: 26959 → 27103 → 27303 → 27325 → 27335).
 
 ---
@@ -55,19 +58,24 @@ a las hipótesis de la tesis (H1-H5).
 
 - **Catálogo:** 5862 entradas (v15).
 - **Universo procesable:** 19 tomos (329-349, exclusión metodológica de 335-336).
-- **Output parser productivo:** 5862 casos en `output/parser/csjn_casos.csv`
-  (incluye 160 `sumario_con_link`; 5702 fallos procesables).
-- **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV;
-  cobertura de firma = 98,8%).
-- **Sin firma:** 69 casos (post-H050). Desglose por clasificación H050:
-  - 52 firma_no_detectada (tienen zona de fallo pero firma no encontrada).
-  - 3 sin_zona_fallo (sin apertura/considerando/fecha en bloque).
+- **Output parser productivo:** 5862 casos en `output/parser/csjn_casos.csv`.
+  Desglose por tipo_entrada: 5671 `fallo` + 31 `sumario_editorial` +
+  160 `sumario_con_link`.
+- **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV).
+  Catálogo validado contra corpus: 0 fallos no catalogados (H051).
+  Cobertura de firma sobre fallos: 5633/5671 = **99,3%**.
+- **Sin firma:** 38 casos (post-H051). Desglose:
+  - ~21 firma_no_detectada (fallos reales con bloque correcto).
   - 11 bloques cortos (span < 20 líneas).
   - 3 bloques vacíos (span ≤ 4).
-  Piso estimado de irrecuperables: ~17. Concentración: 29/52
-  firma_no_detectada en tomos 329-330 (formato antiguo).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69.
-- **Votos:** 27335 filas (post-H050).
+  - ~3 sin_zona_fallo / formato atípico.
+  Piso estimado de irrecuperables: ~17. Concentración remanente en
+  tomos 329-330 (formato antiguo, 2006).
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38.
+- **Votos:** 27335 filas (post-H050, sin cambio en H051).
+- **Arquitectura:** `zonificar_bloque()` integrado en parser.py (H051,
+  Refacción C). Uso actual: clasificación sumario_editorial. Uso futuro:
+  detección de dictamen, firma, dispositivo por zonas.
 - **Jueces conocidos:** 56 entradas en JUECES_CONOCIDOS (28 titulares/previos +
   13 conjueces B063 + 15 conjueces B072).
 - **Fixes aplicados:**
@@ -94,6 +102,10 @@ a las hipótesis de la tesis (H1-H5).
   - H050: B074 cerrado — guard posicional título en detectar_fin_real
     (5 mejoras + 2 correcciones, sin_firma 74→69, votos 27325→27335).
     B075 anotado (Hornos "Roberto Enrique", 1 caso, no fixeado).
+  - H051: Refacción C Paso 1+2 — zonificador integrado en parser.py
+    (3 pasadas: headers, anclas, propagación). 31 sumarios editoriales
+    reclasificados, sin_firma 69→38, 0 regresiones. Catálogo validado
+    contra corpus (5855 aperturas, 0 huérfanos genuinos).
 
 ---
 
@@ -2984,7 +2996,7 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
   Reclasificación sin_firma: 52 firma_no_detectada, 3 sin_zona, 11 cortos, 3 vacíos.
   Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69.
 
-### Matriz pendiente post-H050
+### Matriz pendiente post-H051
 
 | # | Línea de trabajo | Casos | Riesgo | Dificultad | Estado |
 |---|-----------------|------:|--------|------------|--------|
@@ -2992,15 +3004,17 @@ Casos testigo disponibles en output/auditoria/auditar_fallo/.
 | 2 | ~~B072 Conjueces faltantes~~ | ~~5+~~ | — | — | **Cerrado H049** (21 mejoras, sf 76→74) |
 | 3 | ~~B073 lfr < li refinado~~ | ~~2+~~ | — | — | **Cerrado H049** sin fix (verificado OK) |
 | 4 | ~~B074 Guarda posicional firma_actual~~ | ~~5~~ | — | — | **Cerrado H050** (5 mejoras, sf 74→69) |
-| 5 | Firma no detectada (con zona) | 52 | medio | alta | **Target principal** — investigar modos de falla |
-| 6 | Bloques cortos (span<20) | 11 | — | — | Sin fix posible |
-| 7 | Sin zona de fallo + vacíos | 6 | — | — | Irrecuperables |
-| 8 | B075 Hornos "Roberto Enrique" | 1 | bajo | baja | Pendiente |
+| 5 | ~~Sumarios editoriales sin firma~~ | ~~31~~ | — | — | **Cerrado H051** (reclasificados, sf 69→38) |
+| 6 | Firma no detectada (fallos reales) | ~21 | medio | alta | Refacción C Pasos 3-4 (dictamen + firma zonificada) |
+| 7 | Bloques cortos (span<20) | 11 | — | — | Sin fix posible |
+| 8 | Sin zona de fallo + vacíos | 6 | — | — | Irrecuperables |
+| 9 | B075 Hornos "Roberto Enrique" | 1 | bajo | baja | Pendiente |
 
 Piso irrecuperables: ~17 (6 sin_zona/vacíos + ~11 bloques cortos).
-Los 52 firma_no_detectada (fila 5) son el target para H051: diagnóstico
-de modos de falla → decisión entre fixes puntuales o refacción C
-(detección de zonas estructurales).
+Los ~21 firma_no_detectada (fila 6) son el target para H052+:
+Refacción C Pasos 3 (dictamen zonificado) y 4 (firma zonificada).
+Concordancia actual del zonificador: dictamen 41.4% (investigar),
+firma 99.7%, dispositivo 99.6%.
 
 ### Pendientes menores
 - ~~B055 (firma partida)~~ — **cerrado H042** (commit `e258f66`).

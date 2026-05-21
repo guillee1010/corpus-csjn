@@ -4978,3 +4978,115 @@ el chunk con Rabbi-Baldi en parse_firma. Impacto: 1 caso, n_jueces 4→5.
 - Piso irrecuperables: ~17 (era ~27)
 
 Concentración: 29/52 firma_no_detectada en tomos 329-330 (formato antiguo).
+
+## Sesión 2026-05-21 (H051)
+
+### H051-01 — Diagnóstico de los 55 firma_no_detectada
+
+**Hipótesis:** los 55 casos sin_firma con span≥20 tienen modos de falla
+heterogéneos que determinan si corresponde fixes puntuales o refacción
+estructural.
+
+**Diagnóstico (poc_diagnostico_firma_h051.py):**
+- A_juez_no_en_lista: 26 (candidatas heurísticas, mayormente ruido)
+- B_sin_dispositivo_sin_firma: 21 (sin marcadores de fallo)
+- D_sin_pistas_firma: 6 (dispositivo ok, firma no alcanzada)
+- B_disp_faltante_juez_presente: 2 (juez en bloque, sin dispositivo)
+
+**Hallazgo clave:** la mayoría de los "A" no son firmas reales sino líneas
+de sumario editorial con mayúsculas que el scanner confundió. La distribución
+real es ~40 bloques editoriales + ~6 fallos reales largos + ~2 de flujo.
+
+**Estado:** válido. Confirmado empíricamente que el problema es clasificación
+de bloques, no detección de firma.
+
+---
+
+### H051-02 — Zonificador PoC (Refacción C Paso 1)
+
+**Diseño:** función `zonificar_bloque()` con 3 pasadas:
+  - Pasada 0: headers de página (ruido transversal)
+  - Pasada 1: anclas estructurales (dictamen, apertura, fecha, considerando,
+    vistos, dispositivo, firma, voto/disidencia, epilogo, sumario)
+  - Pasada 2: propagación de zonas entre anclas
+
+**Resultados sobre corpus completo (5699 fallos):**
+- Concordancia firma: 99.7% (5684/5699)
+- Concordancia dispositivo: 99.6% (5677/5699)
+- Concordancia dictamen: 41.4% (2361/5699) — esperado, el zonificador
+  es más agresivo que el parser en detección de dictamen
+- Clasificación: 5613 fallo_completo, 34 sumario_editorial, 15 fallo_sin_firma
+
+**Bugs encontrados y corregidos en PoC:**
+- RE_DATOS_PARTES (`^Recurso|...`) capturaba sumarios como epilogo →
+  fix: prioridad sumario sobre epilogo + guarda contextual
+- KeyError en reporte → fix: mapa de campos a keys del dict
+
+**Estado:** validado. Concordancia suficiente para integración.
+
+---
+
+### H051-03 — Validación catálogo vs corpus (0 fallos perdidos)
+
+**Pregunta:** ¿el catálogo de 5862 entradas es exhaustivo respecto del corpus?
+
+**Método:**
+1. Conteo de RE_APERTURA en cada .md vs entradas del catálogo por archivo
+2. Clasificación de aperturas: propias (±3 líneas de linea_inicio), citas
+   dentro de caso, huérfanas (fuera de todo rango catalogado)
+
+**Resultados:**
+- 5855 aperturas totales en corpus
+- 235 propias de catálogo
+- 5571 citas dentro de caso (sentencias reproducidas textualmente)
+- 49 huérfanas → clasificadas como:
+  - ~30 gaps de borde (apertura entre linea_fin del anterior y linea_inicio
+    del siguiente — el fallo SÍ está catalogado)
+  - ~19 índices al final del tomo (falso positivo: "FALLO DE LA CORTE SUPREMA"
+    como encabezado en el índice temático)
+- **0 fallos genuinamente no catalogados**
+
+**Estado:** válido. Catálogo es exhaustivo. Defendible en metodología de tesis.
+
+---
+
+### H051-04 — Integración zonificador + sumario_editorial (Paso 2)
+
+**Cambio:** `zonificar_bloque()` integrado en `parser.py` como paso previo.
+Bloques sin zona cuerpo/dispositivo/firma → `tipo_entrada="sumario_editorial"`.
+
+**Validación PoC (poc_sumario_editorial_h051.py):**
+- Check de 6 marcadores (apertura, fecha, considerando, vistos, dispositivo,
+  firma): 30 candidatos, 0 regresiones
+- Check de 4 marcadores (sin fecha/vistos): 40 candidatos, 40 regresiones →
+  descartado (fallos reales sin apertura por page sharing)
+
+**Resultado en producción:**
+- 31 casos reclasificados fallo → sumario_editorial (1 extra: 333_p1442)
+- 0 regresiones en campos analíticos de los 5831 casos restantes
+- sin_firma: 69 → 38
+- Votos: 27335 (sin cambio)
+
+**Observación sobre la arquitectura:** el zonificador está integrado pero
+solo se usa para la decisión sumario_editorial. El loop monolítico de
+procesar_caso sigue intacto para dictamen, dispositivo, firma. La Refacción C
+completa requiere que el downstream lea de las zonas (Pasos 3-4, H052+).
+
+**Estado:** aplicado y validado.
+
+---
+
+### H051-05 — Reclasificación sin_firma post-H051
+
+**38 sin_firma** (vs 69 pre-H051). Nuevo desglose:
+- firma_no_detectada: ~21 (fallos reales con bloque correcto pero firma no capturada)
+- bloque_corto: 11 (span < 20 líneas)
+- bloque_vacío: 3 (span ≤ 4)
+- otros (sin_zona_fallo, formato atípico): ~3
+
+Los 31 que salieron eran sumarios editoriales que el parser trataba como
+fallos. Nunca tuvieron firma.
+
+Concentración remanente: tomos 329-330 (formato antiguo, 2006).
+
+Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38.

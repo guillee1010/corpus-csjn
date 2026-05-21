@@ -3,6 +3,47 @@
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
 
+## H051 — 2026-05-21
+
+### Refacción C: Zonificador de bloques (Paso 1 + Paso 2)
+
+**Nuevo:** función `zonificar_bloque()` integrada en `parser.py`.
+  Clasifica cada línea del bloque en zonas: sumario, dictamen, apertura,
+  cuerpo, dispositivo, firma, voto_separado, epilogo, header_pagina.
+  Algoritmo de 3 pasadas (headers → anclas → propagación).
+  Concordancia con parser actual: firma 99.7%, dispositivo 99.6%.
+
+**Nuevo:** `tipo_entrada="sumario_editorial"` para bloques sin zona de
+  cuerpo, dispositivo ni firma. 31 casos reclasificados, 0 regresiones.
+
+**Validación:** catálogo exhaustivo confirmado (0 fallos no catalogados
+  en corpus, validado contra 5855 aperturas).
+
+### Métricas
+
+| Métrica | Pre-H051 | Post-H051 |
+|---|---|---|
+| sin_firma | 69 | 38 |
+| tipo_entrada=fallo | 5702 | 5671 |
+| tipo_entrada=sumario_editorial | 0 | 31 |
+| tipo_entrada=sumario_con_link | 160 | 160 |
+| Votos | 27335 | 27335 |
+| Cobertura firma (fallos) | 98.8% | 99.3% |
+| Regresiones | — | 0 |
+
+Trayectoria sin_firma: ...→76→74→69→**38**.
+
+### Scripts de auditoría (scripts/auditoria/H051/)
+
+- `poc_diagnostico_firma_h051.py` — diagnóstico modos de falla
+- `poc_zonificador_h051.py` — zonificador standalone con reportes
+- `poc_sumario_editorial_h051.py` — validación pre-patch
+- `conteo_aperturas_h051.py` — conteo RE_APERTURA vs catálogo
+- `aperturas_huerfanas_h051.py` — clasificación de aperturas huérfanas
+- `patch_zonificador_h051.py` — script de integración del patch
+
+
+
 ### B072: 15 conjueces en JUECES_CONOCIDOS (commit `bfad045`)
 
 - 15 entradas nuevas en JUECES_CONOCIDOS y `_RE_FIRMA_COMPLETA`:
