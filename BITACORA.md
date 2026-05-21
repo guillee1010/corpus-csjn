@@ -5197,3 +5197,215 @@ zonificador. Eran falsos fallos sin dispositivo ni firma.
   casos donde el zonificador ve firma y el parser no.
 - Mejora futura: excluir líneas con zona "dictamen" de la búsqueda de
   fecha del fallo (NOTA en parser.py, _zonas_linea ya disponible).
+
+## Sesión H053 — 2026-05-21
+
+**Objetivo:** integrar CSV zona-centered como tercer output canónico,
+mejora defensiva de fecha, diagnóstico de firma zonificada.
+
+**Archivos modificados:** `scripts/pipeline/parser.py`.
+**Archivos creados:** `output/parser/csjn_casos_zonas.csv`,
+`scripts/auditoria/H053/diag_firma_15.py`,
+`scripts/auditoria/H053_fechas_pre.csv`.
+
+---
+
+### H053-A — CSV zona-centered canónico
+
+Integración de `csjn_casos_zonas.csv` como tercer output del parser,
+junto a `csjn_casos.csv` y `csjn_casos_votos.csv`.
+
+**Cambios en parser.py:**
+
+1. `extraer_segmentos(zonas, bloque)`: función nueva, movida del PoC
+   H052 v2. Extrae segmentos contiguos de zonas con fronteras y wc.
+2. `procesar_archivo()`: retorna 4-tupla `(casos, votos, zonas,
+   desconocidos)`. Después de `casos_out.append(caso)`, extrae
+   segmentos y los acumula en `zonas_out`. Solo para fallos (sumarios
+   se saltean).
+3. `main()`: acumula `all_zonas`, escribe `csjn_casos_zonas.csv` con
+   argumento `--output-zonas` (default: `<output>_zonas.csv`).
+
+**Schema:** `caso_id_canonico, tomo, zona, segmento, linea_ini,
+linea_fin, n_lineas, wc`.
+
+**Validación contra PoC H052 v2:**
+- Nuevo: 149512 segmentos. PoC: 149536. Delta: -24.
+- 3 casos en PoC pero no en nuevo: `340_p232`, `340_p538`, `344_p325`
+  — reclasificados como `sumario_editorial` en H052-04. El PoC los
+  incluía porque leía un CSV anterior. Correctamente excluidos.
+- 1 caso con +3 segmentos (`334_p1033`): diferencia menor en
+  reconstrucción de bloque (parser en runtime vs PoC desde CSV).
+- 0 regresiones en casos, votos, sin_firma.
+
+**Estado:** integrado, committeado.
+
+---
+
+### H053-C — Mejora fecha del fallo (guarda defensiva)
+
+En el Caso (b) de detección de fecha (sin marcador de apertura), se
+excluyen líneas con `_zonas_linea[k] == "dictamen"` de la búsqueda
+inversa. Eliminada la NOTA de mejora futura en parser.py.
+
+**Impacto empírico:** 0 fechas cambiadas. La búsqueda inversa (desde
+el final del bloque) ya saltaba el dictamen naturalmente porque este
+aparece al principio del bloque. La guarda es defensiva contra casos
+atípicos donde el dictamen pudiera estar al final.
+
+**Estado:** aplicado, committeado.
+
+---
+
+### H053-B — Diagnóstico firma zonificada (15 discrepantes)
+
+Análisis de los 15 casos donde el zonificador detecta firma pero el
+parser reporta `sin_firma`.
+
+**Clasificación:**
+
+- **10 `firma_ok_pero_sin_dispositivo`:** el zonificador detecta
+  nombres de jueces en sumarios, epílogos o headers de sumario (e.g.
+  "Disidencia de la Dra. Carmen M. Argibay"). No son firmas reales.
+  Sin dispositivo, el parser no tiene dónde anclar la detección.
+  Irrecuperables con la arquitectura actual.
+
+- **3 falsos positivos del zonificador** (329_p1568, 329_p5151,
+  330_p4071): la "firma" está en las primeras 15 líneas del bloque.
+  Son headers de sumario tipo "PETRACCHI — HIGHTON DE NOLASCO —
+  MAQUEDA" que listan los jueces del fallo. `linea_es_firma_de_juez`
+  matchea por formato (mayúsculas + guiones), pero son parte del
+  sumario, no firmas del fallo.
+
+- **2 genuinamente complejos** (344_p1102, 347_p1084): fallos largos
+  (span 1391 y 1730) con múltiples votos separados. La firma principal
+  está mid-fallo (antes del último dispositivo). El parser busca firma
+  después del dispositivo. Teóricamente recuperables con un fallback
+  por zona firma, pero el ROI es 2 casos sobre 5668.
+
+**Conclusión:** el piso irrecuperable (~17 estimado en el prompt) se
+confirma. Un fallback por zona firma rendiría como mucho 35→33.
+Se cierra B como diagnóstico sin patch.
+
+**sin_firma remanentes: 35 (sin cambio).**
+
+**Trayectoria sin_firma:**
+813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
+
+---
+
+### H053 — Estado final
+
+- **Corpus:** 5862 casos (5668 fallos + 34 sumario_editorial +
+  160 sumario_con_link).
+- **Sin firma:** 35 / 5668 fallos (0.6%). Cobertura: 99.4%.
+- **Votos:** 27335 filas.
+- **Zonas:** 149512 segmentos en `csjn_casos_zonas.csv` (nuevo).
+- **Outputs canónicos:** 3 (casos, votos, zonas).
+- **Commits:** 3 (H053-A, H053-C, H053-C/fechas_pre).
+
+## Sesión H053 — 2026-05-21
+
+**Objetivo:** integrar CSV zona-centered como tercer output canónico,
+mejora defensiva de fecha, diagnóstico de firma zonificada.
+
+**Archivos modificados:** `scripts/pipeline/parser.py`.
+**Archivos creados:** `output/parser/csjn_casos_zonas.csv`,
+`scripts/auditoria/H053/diag_firma_15.py`,
+`scripts/auditoria/H053_fechas_pre.csv`.
+
+---
+
+### H053-A — CSV zona-centered canónico
+
+Integración de `csjn_casos_zonas.csv` como tercer output del parser,
+junto a `csjn_casos.csv` y `csjn_casos_votos.csv`.
+
+**Cambios en parser.py:**
+
+1. `extraer_segmentos(zonas, bloque)`: función nueva, movida del PoC
+   H052 v2. Extrae segmentos contiguos de zonas con fronteras y wc.
+2. `procesar_archivo()`: retorna 4-tupla `(casos, votos, zonas,
+   desconocidos)`. Después de `casos_out.append(caso)`, extrae
+   segmentos y los acumula en `zonas_out`. Solo para fallos (sumarios
+   se saltean).
+3. `main()`: acumula `all_zonas`, escribe `csjn_casos_zonas.csv` con
+   argumento `--output-zonas` (default: `<output>_zonas.csv`).
+
+**Schema:** `caso_id_canonico, tomo, zona, segmento, linea_ini,
+linea_fin, n_lineas, wc`.
+
+**Validación contra PoC H052 v2:**
+- Nuevo: 149512 segmentos. PoC: 149536. Delta: -24.
+- 3 casos en PoC pero no en nuevo: `340_p232`, `340_p538`, `344_p325`
+  — reclasificados como `sumario_editorial` en H052-04. El PoC los
+  incluía porque leía un CSV anterior. Correctamente excluidos.
+- 1 caso con +3 segmentos (`334_p1033`): diferencia menor en
+  reconstrucción de bloque (parser en runtime vs PoC desde CSV).
+- 0 regresiones en casos, votos, sin_firma.
+
+**Estado:** integrado, committeado.
+
+---
+
+### H053-C — Mejora fecha del fallo (guarda defensiva)
+
+En el Caso (b) de detección de fecha (sin marcador de apertura), se
+excluyen líneas con `_zonas_linea[k] == "dictamen"` de la búsqueda
+inversa. Eliminada la NOTA de mejora futura en parser.py.
+
+**Impacto empírico:** 0 fechas cambiadas. La búsqueda inversa (desde
+el final del bloque) ya saltaba el dictamen naturalmente porque este
+aparece al principio del bloque. La guarda es defensiva contra casos
+atípicos donde el dictamen pudiera estar al final.
+
+**Estado:** aplicado, committeado.
+
+---
+
+### H053-B — Diagnóstico firma zonificada (15 discrepantes)
+
+Análisis de los 15 casos donde el zonificador detecta firma pero el
+parser reporta `sin_firma`.
+
+**Clasificación:**
+
+- **10 `firma_ok_pero_sin_dispositivo`:** el zonificador detecta
+  nombres de jueces en sumarios, epílogos o headers de sumario (e.g.
+  "Disidencia de la Dra. Carmen M. Argibay"). No son firmas reales.
+  Sin dispositivo, el parser no tiene dónde anclar la detección.
+  Irrecuperables con la arquitectura actual.
+
+- **3 falsos positivos del zonificador** (329_p1568, 329_p5151,
+  330_p4071): la "firma" está en las primeras 15 líneas del bloque.
+  Son headers de sumario tipo "PETRACCHI — HIGHTON DE NOLASCO —
+  MAQUEDA" que listan los jueces del fallo. `linea_es_firma_de_juez`
+  matchea por formato (mayúsculas + guiones), pero son parte del
+  sumario, no firmas del fallo.
+
+- **2 genuinamente complejos** (344_p1102, 347_p1084): fallos largos
+  (span 1391 y 1730) con múltiples votos separados. La firma principal
+  está mid-fallo (antes del último dispositivo). El parser busca firma
+  después del dispositivo. Teóricamente recuperables con un fallback
+  por zona firma, pero el ROI es 2 casos sobre 5668.
+
+**Conclusión:** el piso irrecuperable (~17 estimado en el prompt) se
+confirma. Un fallback por zona firma rendiría como mucho 35→33.
+Se cierra B como diagnóstico sin patch.
+
+**sin_firma remanentes: 35 (sin cambio).**
+
+**Trayectoria sin_firma:**
+813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
+
+---
+
+### H053 — Estado final
+
+- **Corpus:** 5862 casos (5668 fallos + 34 sumario_editorial +
+  160 sumario_con_link).
+- **Sin firma:** 35 / 5668 fallos (0.6%). Cobertura: 99.4%.
+- **Votos:** 27335 filas.
+- **Zonas:** 149512 segmentos en `csjn_casos_zonas.csv` (nuevo).
+- **Outputs canónicos:** 3 (casos, votos, zonas).
+- **Commits:** 3 (H053-A, H053-C, H053-C/fechas_pre).

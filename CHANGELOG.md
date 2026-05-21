@@ -2,6 +2,30 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H053 — 2026-05-21
+
+### Agregado
+- `extraer_segmentos()` en parser.py: extrae segmentos contiguos de
+  zonas con fronteras y word count.
+- `csjn_casos_zonas.csv`: tercer output canónico del parser
+  (149512 segmentos, schema: caso_id_canonico, tomo, zona, segmento,
+  linea_ini, linea_fin, n_lineas, wc).
+- Argumento `--output-zonas` en parser.py.
+- `procesar_archivo()` retorna 4-tupla (casos, votos, zonas,
+  desconocidos).
+
+### Cambiado
+- Búsqueda de fecha Caso (b): excluye líneas con zona "dictamen"
+  (guarda defensiva, 0 impacto empírico).
+- Eliminada NOTA de mejora futura en parser.py (implementada).
+
+### Diagnóstico (sin patch)
+- Firma zonificada: 15 discrepantes analizados. 10 irrecuperables
+  (sin_dispositivo), 3 falsos positivos del zonificador (headers de
+  sumario), 2 genuinamente complejos (ROI insuficiente: 35→33).
+  Piso sin_firma ~17 confirmado.
+
+
 ## H052 — 2026-05-22
 
 ### Integración dictamen zonificado (Refacción C Paso 3)
@@ -415,3 +439,26 @@ Dos fixes con impacto en corpus productivo:
 ## Versiones anteriores del parser (v10-v16)
 
 Ver `docs/changelog_parser.md` y historial de git (`git log --oneline`).
+
+## H053 — 2026-05-21
+
+### Agregado
+- `extraer_segmentos()` en parser.py: extrae segmentos contiguos de
+  zonas con fronteras y word count.
+- `csjn_casos_zonas.csv`: tercer output canónico del parser
+  (149512 segmentos, schema: caso_id_canonico, tomo, zona, segmento,
+  linea_ini, linea_fin, n_lineas, wc).
+- Argumento `--output-zonas` en parser.py.
+- `procesar_archivo()` retorna 4-tupla (casos, votos, zonas,
+  desconocidos).
+
+### Cambiado
+- Búsqueda de fecha Caso (b): excluye líneas con zona "dictamen"
+  (guarda defensiva, 0 impacto empírico).
+- Eliminada NOTA de mejora futura en parser.py (implementada).
+
+### Diagnóstico (sin patch)
+- Firma zonificada: 15 discrepantes analizados. 10 irrecuperables
+  (sin_dispositivo), 3 falsos positivos del zonificador (headers de
+  sumario), 2 genuinamente complejos (ROI insuficiente: 35→33).
+  Piso sin_firma ~17 confirmado.
