@@ -3154,3 +3154,21 @@ Concordancia actual del zonificador: dictamen 100%, firma 99.7%, dispositivo 99.
   excluidas (argumentales incluso con firma validada + guarda de contexto).
   Recuperables solo con M08 o filtro argumental más sofisticado.
 - ~~Investigar n_jueces=11 y n_jueces=14~~ — resuelto: eran firma contaminada (B055).
+## B077 — Fronteras de caso absorben acordadas/discursos/índice
+
+**Severidad:** media. **Detectado:** H057.
+
+Casos ubicados al final de la sección de fallos de un tomo absorben las
+secciones posteriores (acordadas de la Corte, discursos, índice alfabético
+por materias, índice por nombres de partes). `detectar_fin_real` no corta
+antes de estas secciones editoriales.
+
+Casos testigo: `330_p4263`, `329_p4877`, `330_p2849`.
+
+El texto absorbido se clasifica como sumario/cuerpo, inflando wc.
+No afecta cobertura ni votos. Cosmético pero distorsiona wc_mayoria.
+
+Posible fix: detectar marcadores de sección editorial (e.g.
+"ACUERDOS DE LA CORTE SUPREMA", "INDICE ALFABETICO POR MATERIAS",
+"INDICE POR LOS NOMBRES DE LAS PARTES", "DISCURSOS") como señal de
+corte en detectar_fin_real o como zona excluida post-zonificación.

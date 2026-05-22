@@ -2,6 +2,20 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+
+## H057 (2026-05-21)
+
+### Fixed
+- **B076:** Firma espuria en sumarios. Flag `_en_sumario` en Pasada 1
+  de `zonificar_bloque()` suprime `firma_linea` dentro de zonas sumario.
+  -256887 wc firma, +226902 wc sumario, +32192 wc cuerpo.
+  Segmentos: 147781 → 142615 (-5166). sin_firma: 35 → 34.
+  520 casos afectados (tomos 329-342).
+
+### Added
+- **B077:** Registrado en DEUDA_TECNICA. Fronteras de caso absorben
+  secciones editoriales (acordadas, discursos, índices) al final de tomos.
+
 ## H056 (2026-05-21)
 
 ### parser.py
@@ -31,6 +45,55 @@ Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y docume
 | Segmentos zonas  |   147952  |   147781  |   -171  |
 | sin_firma        |       35  |       35  |       0 |
 
+
+## H055 — 2026-05-21
+
+### Agregado
+- Zona `residuo_caso_anterior` en `zonificar_bloque()`: Pasada 3
+  post-propagación reclasifica todo intersticio antes de la primera
+  zona semántica. Lógica equivalente al `catch_all_inicio` del visor
+  (líneas 313-325), portada al parser como dato estructural.
+- `lineas_residuo` en `procesar_archivo()`: derivado de `_zonas_linea`,
+  excluido de `lineas_mayoria` (ambas ramas: con/sin votos
+  individuales). Impacto: `word_count` y `wc_mayoria` excluyen
+  residuo; `wc_votos` y `wc_dictamen` sin cambio.
+- `scripts/explorador/exploradorv4.py`: explorador Streamlit con
+  zonas reales del parser (colores por zona, toggles
+  mostrar/ocultar, resumen de zonas por caso, presets "Todas"/"Solo
+  fallo").
+- `scripts/auditoria/H055/poc_h055_residuo.py`: PoC diagnóstico
+  de residuo inicial.
+- `scripts/auditoria/H055/diagnostico_epilogo.py`: frecuencia de
+  marcadores de epílogo en el corpus.
+- `scripts/auditoria/H055/poc_causa_fix.py`: PoC impacto de
+  restringir `^Causa` en `RE_DATOS_PARTES`.
+- `scripts/auditoria/H055/extraer_epilogos_muestra.py`: extractor
+  de epilogos + residuos para inspección visual.
+
+### Cambiado
+- `RE_DATOS_PARTES`: `Causa` → `Causa\s*:` (requiere dos puntos).
+  Elimina falsos epilogos donde "causa" al inicio de línea
+  argumentativa disparaba zona epilogo dentro de votos y cuerpo.
+- Docstring de `zonificar_bloque()` actualizado: lista
+  `residuo_caso_anterior` entre zonas posibles, documenta Pasada 3
+  y la exclusión del word_count.
+
+### Métricas
+
+| Métrica                    |       Pre |      Post |      Delta |
+|----------------------------|----------:|----------:|-----------:|
+| Casos                      |      5862 |      5862 |          0 |
+| Votos                      |     27335 |     27335 |          0 |
+| sin_firma                  |        35 |        35 |          0 |
+| Segmentos zonas            |    149512 |    147952 |      −1560 |
+| WC total corpus (fallos)   | 12327080  | 11271324  | −1055756   |
+| Epilogo total (wc)         |  1826369  |  1213887  |  −612482   |
+| Fallos con residuo reclas. |         — |      5152 |      (91%) |
+| Segmentos residuo          |         — |      7677 |          — |
+| Casos con epilogo reducido |         — |       871 |          — |
+
+Trayectoria sin_firma (sin cambio):
+813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
 
 ## H053 — 2026-05-21
 
