@@ -1749,12 +1749,11 @@ def zonificar_bloque(bloque):
 
     # ── Pasada 1: detectar anclas ────────────────────────────────────
     anclas = []
-    # B076: flag para suprimir firma/epilogo dentro de sumarios pre-fallo.
-    # Se activa con sumario_header. Se desactiva permanentemente cuando
-    # aparece cualquier ancla de contenido del fallo (apertura, dictamen,
-    # considerando, vistos, dispositivo, voto_header).
-    _en_sumario_pre = False
-    _fallo_iniciado = False
+    # B076: dentro de zona sumario, firma_linea es siempre espuria
+    # (líneas de atribución como "Carlos S. Fayt." en sumarios editoriales).
+    # Un flag _en_sumario se activa con sumario_header/RE_REMISION y se
+    # desactiva con cualquier ancla semántica fuerte.
+    _en_sumario = False
     for k in range(n):
         if zonas[k] == "header_pagina":
             continue
@@ -1763,45 +1762,43 @@ def zonificar_bloque(bloque):
             continue
 
         if RE_DICT_HDR.match(s):
-            _fallo_iniciado = True; _en_sumario_pre = False
+            _en_sumario = False
             anclas.append((k, "dictamen_inicio")); continue
         if RE_APERTURA.match(s):
-            _fallo_iniciado = True; _en_sumario_pre = False
+            _en_sumario = False
             anclas.append((k, "apertura")); continue
         if RE_FECHA_LINEA.match(s):
             anclas.append((k, "fecha")); continue
         if RE_CONSIDERANDO.match(s):
-            _fallo_iniciado = True; _en_sumario_pre = False
+            _en_sumario = False
             anclas.append((k, "considerando")); continue
         if RE_VISTOS.match(s):
-            _fallo_iniciado = True; _en_sumario_pre = False
+            _en_sumario = False
             anclas.append((k, "vistos")); continue
         if RE_VOTO_HDR.match(s) or RE_DISID_HDR.match(s):
-            _fallo_iniciado = True; _en_sumario_pre = False
+            _en_sumario = False
             anclas.append((k, "voto_header")); continue
 
         es_disp, _ = detectar_apertura_dispositivo(s)
         if es_disp:
-            _fallo_iniciado = True; _en_sumario_pre = False
+            _en_sumario = False
             anclas.append((k, "dispositivo")); continue
 
-        # B076: suprimir firma dentro de sumario pre-fallo
+        # B076: suprimir firma dentro de sumario
         if linea_es_firma_de_juez(bloque[k]):
-            if not _en_sumario_pre:
+            if not _en_sumario:
                 anclas.append((k, "firma_linea")); continue
             else:
                 continue  # firma espuria en sumario — saltar
 
         # Sumario antes de epilogo (prioridad)
         if linea_es_header_sumario(bloque[k]):
-            if not _fallo_iniciado:
-                _en_sumario_pre = True
+            _en_sumario = True
             anclas.append((k, "sumario_header")); continue
 
         # Remisión a precedente/dictamen — señal de sumario editorial
         if RE_REMISION.match(s):
-            if not _fallo_iniciado:
-                _en_sumario_pre = True
+            _en_sumario = True
             anclas.append((k, "sumario_header")); continue
 
         # Epilogo solo después de firma/voto/dispositivo
