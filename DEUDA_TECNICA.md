@@ -2976,6 +2976,38 @@ JUECES_CONOCIDOS y `roberto` a _RE_FIRMA_COMPLETA.
 
 ---
 
+### B076 — Firma espuria en sumarios: Pasada 1 no sectoriza heurísticas
+
+**Componente:** parser.py / `zonificar_bloque()`.
+**Origen:** H056, inspección visual de `329_p94` en explorador v4.1.
+**Causa raíz:** Pasada 1 detecta anclas (`firma_linea`,
+`epilogo_marker`, `sumario_header`) de forma global sobre todo el
+bloque. Las heurísticas de firma (`linea_es_firma_de_juez`) matchean
+dentro de sumarios editoriales: líneas como
+`(Voto del Dr. Juan Carlos Maqueda).` o `Carlos S. Fayt.` al cierre
+de un párrafo de sumario disparan `firma_linea`. Esto fragmenta la
+zona sumario en decenas de segmentos intercalados con firma espuria.
+**Diagnóstico / evidencia:** `329_p94` tiene 17 segmentos de sumario
+y 12 segmentos de firma en la zona pre-apertura. Las firmas son
+líneas de atribución de votos dentro de los sumarios, no firmas
+reales del fallo. Probablemente afecta a cientos de casos (todo fallo
+con sumarios de votos disidentes o según-su-voto).
+**Impacto:** fragmentación de la zona sumario, inflado del conteo
+de segmentos firma, potencial distorsión de métricas basadas en firma.
+No afecta `sin_firma` ni `word_count` porque las firmas espurias
+están en zona pre-apertura. Contamina el análisis de zonas.
+**Fix propuesto:** sectorizar Pasada 1. Primero detectar límites de
+sumario (anclas `sumario_header` son confiables: ALL CAPS con `:` o
+`.`). Después correr `firma_linea` y `epilogo_marker` SOLO fuera de
+regiones de sumario detectadas. Alternativa: post-pass que re-absorba
+firmas dentro de sumarios.
+**Severidad:** media-alta. Afecta calidad de zonificación de muchos
+casos pero no rompe métricas analíticas principales.
+**Estado:** diagnosticado, no fixeado. Candidato H057.
+**Referencias:** H056.
+
+---
+
 ## NOTAS PARA LA SESIÓN SIGUIENTE
 
 Bugs documentados en H032 pendientes de fix:
@@ -3116,6 +3148,7 @@ Concordancia actual del zonificador: dictamen 100%, firma 99.7%, dispositivo 99.
 - ~~B073 (interacción detectar_fin_real ↔ refinar_inicio_por_titulo)~~ — **CERRADO H049** sin fix (verificado OK).
 - ~~B074 (guarda posicional en firma_actual)~~ — **CERRADO H050** (commit `47f2059`, 5 mejoras, sf 74→69).
 - B075 (Hornos "Roberto Enrique") — abierto, prioridad baja, 1 caso.
+- B076 (firma espuria en sumarios) — abierto H056, prioridad alta. Pasada 1 no sectoriza. Candidato H057.
 - Variantes descartadas H039 (`en_las_condiciones`, `por_lo_tanto`, `en_atencion`,
   `que_de_conformidad`): Tier 2 implementado en H041 pero estas variantes siguen
   excluidas (argumentales incluso con firma validada + guarda de contexto).

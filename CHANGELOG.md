@@ -2,6 +2,36 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H056 (2026-05-21)
+
+### parser.py
+- **Pasada 3b** (`zonificar_bloque()`): nuevo post-pass que revierte
+  `residuo_caso_anterior` → `cuerpo` cuando el bloque no tiene
+  ninguna zona en `{apertura, cuerpo, dictamen, sumario}`. Fix para
+  37 fallos per curiam cuyo cuerpo argumentativo quedaba enterrado en
+  residuo. +24,582 wc recuperados.
+- **RE_DATOS_PARTES**: removido `Ministerio` del patrón regex.
+  Eliminaba falsos epilogos en texto argumentativo ("Ministerio de
+  Economía...", "ministerio legis..."). -171 segmentos. Los epilogos
+  legítimos ("Ministerio Público: Dra. Monti") se mantienen porque
+  otros marcadores previos (Recurso, Profesionales) ya abren la zona.
+
+### exploradorv4.py → exploradorv5.py
+- Columnas `Epi` (wc epilogo) y `Res` (wc residuo) en tabla, con
+  flag `⚠` para outliers (E >500 wc, R >300 wc).
+- Checkboxes de filtro `⚠ Epilogo > 500 wc` y `⚠ Residuo > 300 wc`.
+- Presets de zona: `📎 Epilogo`, `🗑️ Residuo`, `✒️ Firma`.
+- Función `compute_zona_wc()` para agregar wc por zona por caso.
+
+### Métricas post-H056
+| Métrica          | H055      | H056      | Delta   |
+|------------------|----------:|----------:|--------:|
+| Casos            |     5862  |     5862  |       0 |
+| Votos            |    27335  |    27335  |       0 |
+| Segmentos zonas  |   147952  |   147781  |   -171  |
+| sin_firma        |       35  |       35  |       0 |
+
+
 ## H053 — 2026-05-21
 
 ### Agregado

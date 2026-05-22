@@ -5713,3 +5713,110 @@ en texto argumentativo. No fixeado: requiere análisis más fino
 
 **Trayectoria sin_firma (sin cambio):**
 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
+
+## H056 — Auditoría de regresiones + fixes de zonificación
+
+Sesión del 21/05/2026. Foco: auditoría post-H055, fixes de
+zonificación (residuo falso positivo, Ministerio falso positivo),
+explorador v4.1.
+
+### H056-L0 — Auditoría de regresiones silenciosas (H051-H055)
+
+Script `auditoria_l0_regresiones.py` cruzó `csjn_casos.csv` pre-H055
+(commit `141f1a7`) vs post-H055 en 5 secciones:
+
+| Sección | Hallazgo | Acción |
+|---------|----------|--------|
+| S1 (112 delta WC >50%) | 37 son FP de residuo, resto genuino | Fix Pasada 3b |
+| S2 (218 WC<100) | ~194 sumario_con_link (0→0), resto subconjunto S1 | Cubierto por 3b |
+| S3 (101 epilogo perdido) | Fix Causa correcto, epilogos falsos → cuerpo | Ninguna |
+| S4 (sin_firma) | 0 regresiones | Ninguna |
+| S5 (tomos) | Deltas negativos uniformes, esperables | Ninguna |
+
+### H056-P3b — Pasada 3b: revertir residuo falso positivo
+
+**Problema:** Pasada 3 (H055-A) reclasificaba TODO intersticio
+pre-semántico como `residuo_caso_anterior`. En 37 fallos per curiam
+sin apertura detectada, esto enterraba el cuerpo argumentativo entero
+en residuo. Estructura típica: `residuo → dispositivo → firma`.
+
+**Fix:** Pasada 3b en `zonificar_bloque()`, inmediatamente después de
+Pasada 3. Si el bloque no tiene ninguna zona en
+`{apertura, cuerpo, dictamen, sumario}`, revierte
+`residuo_caso_anterior` → `cuerpo`.
+
+**Validación:** 5/5 top cases verificados en explorador (T337 p822,
+T331 p1679, T333 p2261, T333 p311, T334 p53). word_count restaurado
+al valor original en los 37 casos. 0 regresiones. 24,582 wc
+recuperados. 5115 casos con residuo genuino intactos.
+
+### H056-L1 — Explorador v4.1
+
+Mejoras al explorador para revisión masiva de zonas:
+
+- **Indicadores de outliers en tabla:** columnas `Epi` (wc epilogo),
+  `Res` (wc residuo), flag `⚠` con `E` (epilogo >500 wc) y `R`
+  (residuo >300 wc).
+- **Filtros de outliers en sidebar:** checkboxes
+  `⚠ Epilogo > 500 wc` y `⚠ Residuo > 300 wc`.
+- **Presets de zona:** botones `📎 Epilogo`, `🗑️ Residuo`,
+  `✒️ Firma` que setean toggles de un golpe para inspección rápida.
+
+### H056-L2 — Remover Ministerio de RE_DATOS_PARTES
+
+**Problema:** `^Ministerio\b` en `RE_DATOS_PARTES` matcheaba tanto
+marcadores editoriales legítimos ("Ministerio Público: Dra. Monti")
+como texto argumentativo ("Ministerio de Economía y Producción
+afecten...").
+
+**Diagnóstico:** `diagnostico_ministerio.py` encontró 293 hits de
+`^Ministerio` en zonas epilogo. ~100 editoriales (siempre precedidos
+por otros marcadores como `Recurso`, `Profesionales`, `Nombre del`),
+~80 índices de tomo, ~110 body text falso positivo.
+
+**Fix:** remover `Ministerio` de `RE_DATOS_PARTES`. Los epilogos
+legítimos no se pierden porque ya están abiertos por marcadores
+previos. Resultado: -171 segmentos (147952→147781). 0 regresiones.
+
+### H056-L3 — Diagnóstico arrastre caso siguiente (NO FIXEADO)
+
+`diagnostico_arrastre.py` detectó 270 casos con carátula ALL CAPS del
+caso siguiente al final del epilogo. Impacto total: 1,312 wc. Máximo
+por caso: 23 wc (3 líneas). Decisión: no fixear, es cosmético y el
+epilogo ya está excluido de `wc_mayoria`. Además, B076 (refactor de
+Pasada 1) podría alterar los límites de zona.
+
+### H056 — Hallazgo: B076 (firma espuria en sumarios)
+
+Al inspeccionar `329_p94` en el explorador, se detectó que la
+detección de firma corre globalmente sobre todo el bloque sin
+respetar zonas de sumario. Líneas tipo `(Voto del Dr. Juan Carlos
+Maqueda).` dentro de sumarios editoriales disparan `firma_linea` y
+fragmentan el sumario en 17 segmentos intercalados con 12 segmentos
+de firma espuria.
+
+**Causa raíz:** Pasada 1 detecta todas las anclas (firma, epilogo,
+sumario) globalmente. La zonificación debería sectorizar: primero
+sumarios, después firma/epilogo solo fuera de sumarios.
+
+Registrado como B076. Prioridad alta para H057.
+
+### H056 — Estado final
+
+- **Corpus:** 5862 casos. Sin cambios en conteos.
+- **Sin firma:** 35/5668 (0.6%). Sin cambios.
+- **Votos:** 27335. Sin cambios.
+- **Zonas:** 147781 segmentos (era 147952 post-H055, -171 por fix
+  Ministerio).
+- **word_count:** 37 per curiam recuperados (+24,582 wc) por
+  Pasada 3b.
+- **Epilogo:** fix Ministerio elimina 171 segmentos de epilogo falso.
+- **Explorador:** v4.1 con outliers, filtros y presets de zona.
+- **Commits:** 4 (pre-patch snapshot, Pasada 3b, explorador v4.1,
+  fix Ministerio).
+- **PoCs/diagnósticos:** `auditoria_l0_regresiones.py`,
+  `muestreo_l0.py`, `poc_falso_positivo_residuo.py`,
+  `diagnostico_ministerio.py`, `diagnostico_arrastre.py`.
+
+**Trayectoria sin_firma (sin cambio):**
+813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
