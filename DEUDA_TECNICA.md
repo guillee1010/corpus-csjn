@@ -3003,7 +3003,7 @@ regiones de sumario detectadas. Alternativa: post-pass que re-absorba
 firmas dentro de sumarios.
 **Severidad:** media-alta. Afecta calidad de zonificación de muchos
 casos pero no rompe métricas analíticas principales.
-**Estado:** diagnosticado, no fixeado. Candidato H057.
+**Estado:** **CERRADO H057.** Flag `_en_sumario` en Pasada 1. -256887 wc firma, +226902 wc sumario. 520 casos, 142615 segmentos (-5166). sin_firma 35→34.
 **Referencias:** H056.
 
 ---
@@ -3148,7 +3148,8 @@ Concordancia actual del zonificador: dictamen 100%, firma 99.7%, dispositivo 99.
 - ~~B073 (interacción detectar_fin_real ↔ refinar_inicio_por_titulo)~~ — **CERRADO H049** sin fix (verificado OK).
 - ~~B074 (guarda posicional en firma_actual)~~ — **CERRADO H050** (commit `47f2059`, 5 mejoras, sf 74→69).
 - B075 (Hornos "Roberto Enrique") — abierto, prioridad baja, 1 caso.
-- B076 (firma espuria en sumarios) — abierto H056, prioridad alta. Pasada 1 no sectoriza. Candidato H057.
+- ~~B076 (firma espuria en sumarios)~~ — **CERRADO H057** (flag `_en_sumario`, 520 casos, sf 35→34).
+- B077 (fronteras absorben acordadas/índice) — abierto H057, prioridad media.
 - Variantes descartadas H039 (`en_las_condiciones`, `por_lo_tanto`, `en_atencion`,
   `que_de_conformidad`): Tier 2 implementado en H041 pero estas variantes siguen
   excluidas (argumentales incluso con firma validada + guarda de contexto).
@@ -3172,3 +3173,4 @@ Posible fix: detectar marcadores de sección editorial (e.g.
 "ACUERDOS DE LA CORTE SUPREMA", "INDICE ALFABETICO POR MATERIAS",
 "INDICE POR LOS NOMBRES DE LAS PARTES", "DISCURSOS") como señal de
 corte en detectar_fin_real o como zona excluida post-zonificación.
+**Estado:** abierto. Prioridad media.
