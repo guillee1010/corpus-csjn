@@ -3251,7 +3251,7 @@ por la pista.
 ## B079 — Arquitectura editorial: subtipos de índice y parser separado
 
 **Severidad:** cosmética→media (escalabilidad). **Detectado:** H058.
-**Ampliado:** H059.
+**Ampliado:** H059. **PoC validada:** H060.
 
 El CSV editorial clasifica todos los índices como zona genérica
 `indice`. Falta distinguir subtipos:
@@ -3259,6 +3259,8 @@ El CSV editorial clasifica todos los índices como zona genérica
 - `indice_materias` (INDICE ALFABETICO POR MATERIAS)
 - `indice_legislacion` (INDICE DE LEGISLACION)
 - `indice_general` (INDICE GENERAL / tabla de contenidos)
+- `acordadas` (ACORDADAS DE LA CSJN / A C O R D A D A S Y R E S O L U C I O N E S)
+- `discurso` (DISCURSOS)
 
 **Problema arquitectural (H059):** los regex de clasificación
 editorial (`ACORDADAS`, `INDICE`, `POR MATERIAS`) matchean texto
@@ -3275,6 +3277,24 @@ estructura interna de los índices (case_name, descriptores
 temáticos, legislación citada), acordadas (número, fecha, texto),
 y discursos. Escalable para el doctorado (tomos nuevos).
 
-**Evaluación planificada:** H060 (prompt preparado).
+**PoC H060 — Resultados:**
+- 135 secciones detectadas (de 53 genéricas): 45 indice_partes,
+  18 indice_materias, 20 indice_legislacion, 46 indice_general,
+  5 acordadas, 1 discurso. 0 desconocido.
+- Detección por títulos-mojón (primera aparición de cada título
+  conocido) + openers para subtipo inicial del bloque.
+- Opener espaciado por OCR: `A C O R D A D A S  Y  R E S O L U C I O N E S`
+  resuelve 2 secciones que eran `desconocido`.
+- Truncado de INDICE GENERAL: última línea con `\.{4,}\s*$`
+  (puntos trailing = entry TOC) + su página de inicio = fin del TOC.
+  Sin puntos (Era 2, TOC degradado) → no trunca.
+  Descarta boilerplate post-TOC y acumulativo de 330.4 (12.078 líneas).
+- 329.4 conserva entry legítima de 6 puntos (Jurado de Enjuiciamiento).
+- Anomalía 330.4 documentada: único archivo con índice acumulativo
+  post-TOC. Se descarta por consistencia con procesamiento per-archivo.
+- HOJA COMPLEMENTARIA descartada como marcador (aparece en cuerpo).
+
+**Pendiente (H061):** Integrar en `parser_editorial.py`, migrar
+desde `parser.py`, actualizar CSV con columna subtipo, commit.
 
 **Estado:** abierto (diferido, evaluación H060).

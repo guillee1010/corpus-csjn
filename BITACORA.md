@@ -6039,3 +6039,28 @@ Prompt H060 preparado con análisis completo y decisiones a tomar.
 - `output/parser/csjn_casos_votos.csv` — 27336 filas.
 - `output/parser/csjn_casos_zonas.csv` — 141970 segmentos.
 - `output/parser/csjn_casos_editorial.csv` — 53 secciones.
+
+## H060 — Parser editorial: PoC de subtipos (2026-05-23)
+
+**Objetivo:** Evaluar separación de detección editorial en módulo propio con clasificación por subtipos.
+
+**Inspección de datos:**
+- Inventario de títulos editoriales: separación título/header nítida por frecuencia.
+- Mapa estructural por archivo: Era 1 (329–334) con editorial completa (partes, materias, legislación, general); Era 2 (337–349) simplificada (partes + general).
+- INDICE GENERAL presente en los 46 archivos. Era 1 con TOC estructurado (entries con puntos); Era 2 con TOC degradado (solo números).
+- 330.4 anomalía: único archivo con índice acumulativo post-TOC (12K líneas).
+
+**PoC validada (`poc_subtipos_editorial.py`):**
+- 135 secciones (de 53 genéricas): 45 indice_partes, 18 indice_materias, 20 indice_legislacion, 46 indice_general, 5 acordadas, 1 discurso. 0 desconocido.
+- Detección por títulos-mojón + openers (incluye `A C O R D A D A S` espaciado por OCR).
+- Truncado de INDICE GENERAL por puntos trailing (`\.{4,}\s*$`): última entry TOC + su página = fin. Sin puntos (Era 2) → no trunca. Descarta boilerplate (HOJA COMPLEMENTARIA, notas de imprenta) y acumulativo de 330.4.
+- 329.4 conserva entry de 6 puntos (Jurado de Enjuiciamiento). Artefactos OCR de 330.4 (4–5 puntos en medio de texto) excluidos por el anclaje `\s*$`.
+
+**Decisiones:**
+- HOJA COMPLEMENTARIA descartada como marcador (aparece en el cuerpo de fallos).
+- Procesamiento per-archivo: índices acumulativos cross-volumen se descartan por consistencia.
+- Regla REE fijada en memoria: Robusto, Escalable, Elegante. Verificar con datos, no asumir.
+
+**Scripts creados:** `scripts/auditoria/H060/` — poc_subtipos_editorial.py, inventario_titulos_editorial.py, mapa_estructura_editorial.py, ver_final_indice_general.py, ver_dots_indice_general.py, check_ruido.py, check_330_4_transicion.py, check_paginas_editorial.py, check_duplicados_editorial.py, inspeccionar_editorial.py.
+
+**Pendiente (H061):** Integrar en `parser_editorial.py`, migrar desde `parser.py`, actualizar CSV con columna subtipo, commit.
