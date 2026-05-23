@@ -174,8 +174,7 @@ RE_DISID_HDR = re.compile(
 
 RE_EDITORIAL_ACORDADA = re.compile(
     r"^(?:A\s+C\s+O\s+R\s+D\s+A\s+D\s+A\s+S"
-    r"|ACORDADAS\s+Y\s+RESOLUCIONES\s*$"
-    r"|ACORDADAS\s*$)", re.I
+    r"|ACORDADAS\s+Y\s+RESOLUCIONES\s*$)", re.I
 )
 RE_EDITORIAL_DISCURSO = re.compile(r"^DISCURSOS\b", re.I)
 RE_EDITORIAL_INDICE = re.compile(
@@ -218,8 +217,10 @@ def _tipo_zona_editorial(linea):
     s = linea.strip()
     if not s:
         return None
+    # H059: acordada eliminada — todos los hits eran subsecciones del índice
+    # que listaban acordadas, no acordadas reales. Se absorben en "indice".
     if RE_EDITORIAL_ACORDADA.match(s):
-        return "acordada"
+        return "indice"
     if RE_EDITORIAL_DISCURSO.match(s):
         return "discurso"
     if RE_EDITORIAL_INDICE.match(s):
