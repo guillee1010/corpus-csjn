@@ -2,6 +2,36 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H058 — 2026-05-22
+
+### B077 cerrado: secciones editoriales detectadas y extraídas
+
+- **Nueva Pista `editorial_siguiente`** en `detectar_fin_real`:
+  corta el último caso de cada archivo antes de acordadas/índices/
+  discursos. Regex `RE_EDITORIAL_ANY` (excluye `ACORDADAS` standalone
+  por FP en sumarios temáticos, caso testigo 339_p933).
+- **Nuevo output canónico:** `csjn_casos_editorial.csv` — 182
+  secciones editoriales en 46 archivos. Función
+  `extraer_secciones_editoriales()` independiente del parser.
+- **Regex nuevos:** `RE_EDITORIAL_ACORDADA`, `RE_EDITORIAL_DISCURSO`,
+  `RE_EDITORIAL_INDICE`, `RE_EDITORIAL_ANY` + helpers
+  `_es_marcador_editorial()`, `_tipo_zona_editorial()`.
+- **Explorador editorial:** `patch_explorador_editorial.py`
+  (standalone Streamlit, visualiza secciones editoriales por tomo).
+- **Revertido:** zonas editoriales en zonificador (B078, regresión
+  sin_firma 34→74 por `ACORDADAS` en sumarios temáticos).
+
+### Métricas
+
+| Métrica | H057 | H058 | Delta |
+|---|---|---|---|
+| casos | 5862 | 5862 | = |
+| votos | 27335 | 27336 | +1 |
+| segmentos | 142615 | 141970 | -645 |
+| editorial | — | 182 | nuevo |
+| sin_firma | 34 | 34 | = |
+| sin_dispositivo | 97 | 57 | -40 |
+
 
 ## H057 (2026-05-21)
 

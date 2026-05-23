@@ -5820,3 +5820,132 @@ Registrado como B076. Prioridad alta para H057.
 
 **Trayectoria sin_firma (sin cambio):**
 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
+
+## Sesión 2026-05-22 (H058)
+
+### H058-01 — B077: las secciones editoriales son la estructura más regular del corpus
+
+**Hipótesis:** los marcadores de secciones editoriales (acordadas,
+índices por partes, índices por materias, discursos) al final de
+cada archivo .md son suficientemente consistentes para detectarlos
+con regex y usarlos como señal de corte en `detectar_fin_real`.
+
+**Diagnóstico:** PoC contra 3 archivos individuales (330.4, 342-1,
+342-2) + corpus completo (46 archivos). Tres variantes de header
+de acordadas detectadas:
+- `A C O R D A D A S  Y  R E S O L U C I O N E S` (tomo 330, espaciado)
+- `ACORDADAS Y RESOLUCIONES` (tomo 342, normal)
+- `ACORDADAS` / `Acordadas` (standalone, en TOCs e índices)
+
+0 falsos positivos de la regex compuesta (`RE_EDITORIAL_ANY`) contra
+zona de fallos en los 46 archivos — con una excepción crítica
+descubierta en producción (ver H058-02).
+
+**Estado:** válido. Las secciones editoriales son detectables con
+alta confianza.
+
+---
+
+### H058-02 — `ACORDADAS` standalone es FP en sumarios temáticos
+
+**Hallazgo en producción:** el primer run del patch generó regresión
+en sin_firma (34→74). Diagnóstico: no era el Bloque 3 (zonificador)
+como primera hipótesis — era el Bloque 2 (`detectar_fin_real`).
+`ACORDADAS\s*$` matcheaba en sumarios de fallos que tratan sobre
+acordadas (e.g. 339_p933, cuyo sumario abre con "ACORDADAS /
+Corresponde declarar inadmisible..."). El corte eliminaba todo el
+contenido del caso (wc=0).
+
+**Fix:** sacar `ACORDADAS\s*$` de `RE_EDITORIAL_ANY` (usada en
+`detectar_fin_real`). Mantenerla en `RE_EDITORIAL_ACORDADA` (usada
+solo en `extraer_secciones_editoriales`, que corre post-último-caso
+donde no hay FP).
+
+**Estado:** válido y corregido. Lección: los keywords temáticos del
+sumario reproducen exactamente los marcadores editoriales. Testear
+siempre con corpus completo antes de patchear, no solo con archivos
+individuales.
+
+---
+
+### H058-03 — Bloque 3 (zonas editoriales en zonificador) causa regresión masiva
+
+**Hipótesis:** agregar detección de zonas editoriales en Pasada 1
+del zonificador (`_en_editorial` irreversible, suprime todos los
+anclas no-editoriales) sería un safety net por si contenido
+editorial queda dentro de un bloque de caso.
+
+**Resultado:** regresión sin_firma 34→74 (+40 casos). La causa:
+`_en_editorial` se activaba dentro de casos normales cuando una
+línea matcheaba un marcador editorial (e.g. "ACORDADAS" en sumario),
+suprimiendo toda detección posterior (firma, dispositivo, votos).
+
+**Fix:** revertir Bloque 3 completo. No es necesario como safety
+net porque el corte en `detectar_fin_real` (Bloque 2) ya evita que
+el contenido editorial entre en bloques de caso.
+
+**Estado:** invalidado. Si algún día se reimplementa, requiere guard
+posicional: solo activar `_en_editorial` después de la última firma
+detectada del bloque.
+
+---
+
+### H058-04 — Impacto colateral: -40 sin_dispositivo
+
+**Observación:** sin_dispositivo bajó de 97 a 57. Blank
+voting_pattern subió de 158 a 195.
+
+**Causa:** casos que absorbían contenido editorial tenían señales
+falsas de dispositivo ("Por ello" en texto de acordadas/índices
+dentro del bloque inflado). Al cortar el bloque antes del contenido
+editorial, esas señales falsas desaparecen. Los casos pasan de
+sin_dispositivo a blank (sin contenido procesable o
+`fallo_cruza_archivos`).
+
+**Estado:** efecto colateral positivo, no investigado caso por caso.
+
+---
+
+### H058-05 — Diseño del 4to CSV canónico
+
+**Decisión:** crear `csjn_casos_editorial.csv` como 4to output
+canónico. Estructura nivel-tomo (no nivel-caso): cada fila es una
+sección editorial con columnas `tomo, source_file, seccion,
+linea_ini, linea_fin, n_lineas, wc`.
+
+Tres tipos de sección: `acordada`, `indice`, `discurso`.
+
+Implementado en `extraer_secciones_editoriales()`, función
+independiente que no usa ninguna lógica del parser de fallos (no
+llama RE_APERTURA, no busca firma, no usa zonificador). Solo
+escanea marcadores editoriales en el tail post-último-caso de cada
+archivo.
+
+**Resultado:** 182 secciones editoriales en 46 archivos.
+
+---
+
+### H058 — Estado final
+
+- **Corpus:** 5862 casos. Sin cambios en conteos.
+- **Sin firma:** 34/5668 (0.6%). Sin cambios.
+- **Votos:** 27336 (+1 vs H057). Caso recupera voto al cortarse
+  correctamente.
+- **Zonas:** 141970 segmentos (era 142615 post-H057, -645 por
+  contenido editorial removido de bloques de caso).
+- **Editorial:** 182 secciones en 46 archivos. Nuevo output
+  canónico `csjn_casos_editorial.csv`.
+- **sin_dispositivo:** 97→57 (-40, FP eliminados).
+- **Commits:** 1 (snapshot pre-H058) + 1 pendiente (fix final).
+- **PoCs/diagnósticos:** `poc_b077_completo.py`,
+  `poc_b077.py` (corpus), `patch_explorador_editorial.py`,
+  `diag_b077.py`, `diag_b077b.py`.
+
+**Trayectoria sin_firma (sin cambio):**
+813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35→34.
+
+**Outputs canónicos (4):**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27336 filas.
+- `output/parser/csjn_casos_zonas.csv` — 141970 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 182 secciones.

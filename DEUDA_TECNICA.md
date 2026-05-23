@@ -3149,7 +3149,9 @@ Concordancia actual del zonificador: dictamen 100%, firma 99.7%, dispositivo 99.
 - ~~B074 (guarda posicional en firma_actual)~~ — **CERRADO H050** (commit `47f2059`, 5 mejoras, sf 74→69).
 - B075 (Hornos "Roberto Enrique") — abierto, prioridad baja, 1 caso.
 - ~~B076 (firma espuria en sumarios)~~ — **CERRADO H057** (flag `_en_sumario`, 520 casos, sf 35→34).
-- B077 (fronteras absorben acordadas/índice) — abierto H057, prioridad media.
+- ~~B077 (fronteras absorben acordadas/índice) — cerrado H058.~~
+- B078 (zonas editoriales en zonificador, revertido) — abierto H058, prioridad baja.
+- B079 (explorador editorial: subtipos de índice) — abierto H058, cosmético.
 - Variantes descartadas H039 (`en_las_condiciones`, `por_lo_tanto`, `en_atencion`,
   `que_de_conformidad`): Tier 2 implementado en H041 pero estas variantes siguen
   excluidas (argumentales incluso con firma validada + guarda de contexto).
@@ -3157,20 +3159,68 @@ Concordancia actual del zonificador: dictamen 100%, firma 99.7%, dispositivo 99.
 - ~~Investigar n_jueces=11 y n_jueces=14~~ — resuelto: eran firma contaminada (B055).
 ## B077 — Fronteras de caso absorben acordadas/discursos/índice
 
-**Severidad:** media. **Detectado:** H057.
+**Severidad:** media. **Detectado:** H057. **Cerrado:** H058.
 
-Casos ubicados al final de la sección de fallos de un tomo absorben las
-secciones posteriores (acordadas de la Corte, discursos, índice alfabético
-por materias, índice por nombres de partes). `detectar_fin_real` no corta
-antes de estas secciones editoriales.
+Casos ubicados al final de la sección de fallos de un tomo absorbían
+las secciones posteriores (acordadas de la Corte, discursos, índice
+alfabético por materias, índice por nombres de partes).
+`detectar_fin_real` no cortaba antes de estas secciones editoriales.
 
-Casos testigo: `330_p4263`, `329_p4877`, `330_p2849`.
+**Fix aplicado (H058):**
+- Nueva Pista `editorial_siguiente` en `detectar_fin_real`: busca
+  marcadores editoriales (regex `RE_EDITORIAL_ANY`) desde
+  `linea_inicio` hacia adelante. Si encuentra uno, corta en `k - 1`.
+- `RE_EDITORIAL_ANY` excluye `ACORDADAS\s*$` standalone (FP en
+  sumarios temáticos, caso testigo 339_p933). Solo matchea formas
+  no ambiguas: `A C O R D A D A S` (espaciado),
+  `ACORDADAS Y RESOLUCIONES`, `INDICE POR LOS NOMBRES`,
+  `INDICE GENERAL`, `INDICE ALFABETICO POR MATERIAS`, etc.
+- Nuevo output canónico: `csjn_casos_editorial.csv` (182 secciones
+  en 46 archivos). Función `extraer_secciones_editoriales()`,
+  independiente del parser de fallos.
+- Zonas editoriales en `zonificar_bloque` (Bloque 3) revertidas
+  por regresión (ver B078).
 
-El texto absorbido se clasifica como sumario/cuerpo, inflando wc.
-No afecta cobertura ni votos. Cosmético pero distorsiona wc_mayoria.
+**Impacto:** -645 segmentos, sin_dispositivo 97→57 (FP eliminados),
++1 voto recuperado. sin_firma estable en 34.
 
-Posible fix: detectar marcadores de sección editorial (e.g.
-"ACUERDOS DE LA CORTE SUPREMA", "INDICE ALFABETICO POR MATERIAS",
-"INDICE POR LOS NOMBRES DE LAS PARTES", "DISCURSOS") como señal de
-corte en detectar_fin_real o como zona excluida post-zonificación.
-**Estado:** abierto. Prioridad media.
+**Estado:** cerrado.
+
+## B078 — Zonas editoriales en zonificador (revertido)
+
+**Severidad:** baja. **Detectado:** H058.
+
+Intento de agregar zonas `acordada`/`indice`/`discurso` en Pasada 1
+de `zonificar_bloque` como safety net para contenido editorial
+residual dentro de bloques de caso. Revertido por regresión:
+`_en_editorial` (flag irreversible) se activaba con `ACORDADAS`
+standalone en sumarios temáticos, suprimiendo firma y todos los
+anclas posteriores. sin_firma subió de 34 a 74.
+
+**Fix requerido (si se reimplementa):** guard posicional — solo
+activar `_en_editorial` después de la última firma detectada en el
+bloque. Alternativa: restringir la activación al último caso del
+archivo (flag pasado como parámetro a `zonificar_bloque`).
+
+**Prioridad:** baja. Con el corte en `detectar_fin_real` funcionando,
+el contenido editorial no entra en bloques de caso. El zonificador
+solo sería necesario como safety net para edge cases no cubiertos
+por la pista.
+
+**Estado:** abierto (diferido).
+
+## B079 — Explorador editorial: subtipos de índice
+
+**Severidad:** cosmética. **Detectado:** H058.
+
+El explorador editorial (`patch_explorador_editorial.py`) clasifica
+todos los índices como zona genérica `indice`. Falta distinguir:
+- `indice_partes` (INDICE POR LOS NOMBRES DE LAS PARTES)
+- `indice_materias` (INDICE ALFABETICO POR MATERIAS)
+- `indice_legislacion` (INDICE DE LEGISLACION)
+- `indice_general` (INDICE GENERAL / tabla de contenidos)
+
+No afecta el parser ni los CSVs. Solo mejora la visualización
+en el explorador.
+
+**Estado:** abierto (diferido, cosmético).
