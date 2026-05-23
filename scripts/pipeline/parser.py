@@ -194,7 +194,6 @@ RE_EDITORIAL_ANY = re.compile(
     r"^(?:"
     r"A\s+C\s+O\s+R\s+D\s+A\s+D\s+A\s+S"
     r"|ACORDADAS\s+Y\s+RESOLUCIONES\s*$"
-    r"|ACORDADAS\s*$"
     r"|DISCURSOS\b"
     r"|INDICE\s+POR\s+LOS\s+NOMBRES"
     r"|NOMBRES\s+DE\s+LAS\s+PARTES\s*$"
