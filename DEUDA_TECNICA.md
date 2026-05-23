@@ -7,7 +7,7 @@ técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
 apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
 completo acá.
 
-**Última actualización:** 2026-05-21 (sesiones H046–H053:
+**Última actualización:** 2026-05-23 (sesiones H046–H059:
 B069 cerrado — eliminada búsqueda atrás Pista 1, 277 mejoras, sin_firma 406→148.
 A001 cerrado — fallback firma inversa, 34 mejoras, sin_firma 148→114.
 A001b — _encontrar_zona_fallo primera apertura, 1 mejora, sin_firma 114→113.
@@ -40,8 +40,19 @@ word_count/wc_mayoria excluyen residuo: −1,055,756 wc (8.6% del corpus).
 B045 manifestación B mitigada a nivel de datos (Camino C Paso 1 completado).
 Fix `Causa` → `Causa\s*:` en RE_DATOS_PARTES: elimina 612K wc de falsos
 epilogos en 871 casos. Segmentos: 149512 → 147952. Epilogo: 1826K → 1214K wc.
+H056 — explorador v4.1 (outlier indicators/presets). Pasada 3b: revert
+residuo FP en 37 per curiam sin apertura. L2 Ministerio en RE_DATOS_PARTES.
+B076: flag `_en_sumario` suprime firma espuria en sumarios. sin_firma 35→34.
+H057 — documentación (BITACORA, CHANGELOG, DEUDA_TECNICA).
+H058 — B077 cerrado: editorial detection (acordadas/índices/discursos). Nueva
+pista `editorial_siguiente` en `detectar_fin_real`. 4to CSV canónico:
+`csjn_casos_editorial.csv` (182 secciones). −645 segmentos, +1 voto.
+H059 — Fix editorial: `acordada` eliminada como tipo — 67 hits eran FP
+(subsecciones del índice). `_tipo_zona_editorial` remapea a `"indice"`.
+Editorial 182→53 (49 indice, 4 discurso). Auditoría sin_dispositivo: 56/57
+legítimos, 1 recuperable (331_p1013, mid-line). 0 regresiones.
 Cobertura firma: 97.4% → 98.0% → 98.7% → 98.8% → 99.3% → 99.4%.
-Votos: 26959 → 27103 → 27303 → 27325 → 27335).
+Votos: 26959 → 27103 → 27303 → 27325 → 27335 → 27336).
 
 ---
 
@@ -82,25 +93,29 @@ a las hipótesis de la tesis (H1-H5).
   160 `sumario_con_link`.
 - **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV).
   Catálogo validado contra corpus: 0 fallos no catalogados (H051).
-  Cobertura de firma sobre fallos: 5633/5668 = **99,4%**.
-- **Sin firma:** 35 casos (post-H052). Desglose:
+  Cobertura de firma sobre fallos: 5634/5668 = **99,4%**.
+- **Sin firma:** 34 casos (post-H056). Desglose:
   - ~18 firma_no_detectada (fallos reales con bloque correcto).
   - 11 bloques cortos (span < 20 líneas).
   - 3 bloques vacíos (span ≤ 4).
   - ~3 sin_zona_fallo / formato atípico.
   Piso estimado de irrecuperables: ~17. Concentración remanente en
   tomos 329-330 (formato antiguo, 2006).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
-- **Votos:** 27335 filas (sin cambio desde H050).
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35→34.
+- **Votos:** 27336 filas (post-H058, +1 voto recuperado por corte editorial).
 - **Arquitectura:** `zonificar_bloque()` integrado en parser.py (H051-H052,
   Refacción C). Retorna `(list[str], list[tuple])` con zonas por línea y
   anclas. `extraer_segmentos()` genera CSV zona-centered (H053).
   Uso actual: clasificación sumario_editorial + lineas_dictamen +
   CSV zona-centered canónico. Uso futuro: firma zonificada (descartado
   por ROI insuficiente, ver diagnóstico H053-B).
-- **Zonas:** 149512 segmentos en `output/parser/csjn_casos_zonas.csv` (H053).
+- **Zonas:** 141970 segmentos en `output/parser/csjn_casos_zonas.csv` (post-H058,
+  −645 por contenido editorial removido de bloques de caso).
   Schema: caso_id_canonico, tomo, zona, segmento, linea_ini, linea_fin,
   n_lineas, wc.
+- **Editorial:** 53 secciones en `output/parser/csjn_casos_editorial.csv`
+  (49 indice, 4 discurso). 4to output canónico (H058). Clasificación
+  `acordada` eliminada en H059 (67 FP — subsecciones del índice).
 - **Jueces conocidos:** 56 entradas en JUECES_CONOCIDOS (28 titulares/previos +
   13 conjueces B063 + 15 conjueces B072).
 - **Fixes aplicados:**
@@ -143,6 +158,24 @@ a las hipótesis de la tesis (H1-H5).
     Diagnóstico firma zonificada: 15 discrepantes (10 sin_dispositivo
     irrecuperables, 3 falsos positivos zonificador, 2 complejos).
     Piso irrecuperable ~17 confirmado. sin_firma sin cambio (35).
+  - H054: B065 parcialmente validado (n_jueces↔n_votos: 0 discrepancias).
+    B061 desvinculado de B066. Diagnóstico, sin fix aplicado.
+  - H055: zona `residuo_caso_anterior` (Pasada 3 en zonificador).
+    word_count/wc_mayoria excluyen residuo (−1,055,756 wc, 8.6% del corpus).
+    5152 fallos afectados. Fix Causa→Causa\s*: en RE_DATOS_PARTES (−612K wc
+    de falsos epilogos). Segmentos 149512→147952. 0 regresiones.
+  - H056: explorador v4.1. Pasada 3b revert residuo FP (37 per curiam).
+    L2 Ministerio en RE_DATOS_PARTES (−171 epilogos falsos). B076: flag
+    `_en_sumario` suprime firma espuria en sumarios. sin_firma 35→34.
+    Segmentos 147952→142615.
+  - H057: documentación (BITACORA, CHANGELOG, DEUDA_TECNICA).
+  - H058: B077 cerrado — nueva pista `editorial_siguiente` en
+    `detectar_fin_real`. 4to CSV canónico `csjn_casos_editorial.csv`
+    (182 secciones). −645 segmentos (142615→141970), +1 voto (27335→27336).
+  - H059: fix editorial — `acordada` eliminada como tipo en
+    `_tipo_zona_editorial` (67 FP remapeados a `"indice"`).
+    Editorial 182→53 (49 indice, 4 discurso). Auditoría sin_dispositivo:
+    56/57 legítimos, 1 recuperable (`331_p1013`, mid-line). 0 regresiones.
 
 ---
 
@@ -3159,7 +3192,7 @@ Concordancia actual del zonificador: dictamen 100%, firma 99.7%, dispositivo 99.
 - ~~Investigar n_jueces=11 y n_jueces=14~~ — resuelto: eran firma contaminada (B055).
 ## B077 — Fronteras de caso absorben acordadas/discursos/índice
 
-**Severidad:** media. **Detectado:** H057. **Cerrado:** H058.
+**Severidad:** media. **Detectado:** H057. **Cerrado:** H058+H059.
 
 Casos ubicados al final de la sección de fallos de un tomo absorbían
 las secciones posteriores (acordadas de la Corte, discursos, índice
@@ -3175,14 +3208,20 @@ alfabético por materias, índice por nombres de partes).
   no ambiguas: `A C O R D A D A S` (espaciado),
   `ACORDADAS Y RESOLUCIONES`, `INDICE POR LOS NOMBRES`,
   `INDICE GENERAL`, `INDICE ALFABETICO POR MATERIAS`, etc.
-- Nuevo output canónico: `csjn_casos_editorial.csv` (182 secciones
-  en 46 archivos). Función `extraer_secciones_editoriales()`,
-  independiente del parser de fallos.
+- Nuevo output canónico: `csjn_casos_editorial.csv`. Función
+  `extraer_secciones_editoriales()`, independiente del parser.
 - Zonas editoriales en `zonificar_bloque` (Bloque 3) revertidas
   por regresión (ver B078).
 
-**Impacto:** -645 segmentos, sin_dispositivo 97→57 (FP eliminados),
-+1 voto recuperado. sin_firma estable en 34.
+**Fix adicional (H059):**
+- Clasificación `acordada` eliminada en `_tipo_zona_editorial()`:
+  los 67 hits eran todos FP — subsecciones del índice que listaban
+  acordadas bajo headers "ACORDADAS", "A C O R D A D A S". Ahora
+  `RE_EDITORIAL_ACORDADA.match()` devuelve `"indice"`. Las secciones
+  se fusionan con los índices adyacentes.
+- Editorial: 182→53 secciones (49 indice, 4 discurso, 0 acordada).
+
+**Impacto acumulado:** −645 segmentos, +1 voto. 0 regresiones.
 
 **Estado:** cerrado.
 
@@ -3209,18 +3248,33 @@ por la pista.
 
 **Estado:** abierto (diferido).
 
-## B079 — Explorador editorial: subtipos de índice
+## B079 — Arquitectura editorial: subtipos de índice y parser separado
 
-**Severidad:** cosmética. **Detectado:** H058.
+**Severidad:** cosmética→media (escalabilidad). **Detectado:** H058.
+**Ampliado:** H059.
 
-El explorador editorial (`patch_explorador_editorial.py`) clasifica
-todos los índices como zona genérica `indice`. Falta distinguir:
+El CSV editorial clasifica todos los índices como zona genérica
+`indice`. Falta distinguir subtipos:
 - `indice_partes` (INDICE POR LOS NOMBRES DE LAS PARTES)
 - `indice_materias` (INDICE ALFABETICO POR MATERIAS)
 - `indice_legislacion` (INDICE DE LEGISLACION)
 - `indice_general` (INDICE GENERAL / tabla de contenidos)
 
-No afecta el parser ni los CSVs. Solo mejora la visualización
-en el explorador.
+**Problema arquitectural (H059):** los regex de clasificación
+editorial (`ACORDADAS`, `INDICE`, `POR MATERIAS`) matchean texto
+dentro de fallos. La detección de corte (Capa 1, `detectar_fin_real`)
+no genera FP porque busca en rango acotado, pero la clasificación
+(Capa 2, `_tipo_zona_editorial`) es frágil — demostrado por los
+67 FP de `acordada` corregidos en H059. Agregar regex nuevos para
+subtipos o para parsear estructura interna amplifica el riesgo.
 
-**Estado:** abierto (diferido, cosmético).
+**Propuesta:** `parser_editorial.py` como módulo separado. La
+separación de dominio (caso vs. editorial) antes de parsear
+elimina la necesidad de guards anti-FP. Permite parsear la
+estructura interna de los índices (case_name, descriptores
+temáticos, legislación citada), acordadas (número, fecha, texto),
+y discursos. Escalable para el doctorado (tomos nuevos).
+
+**Evaluación planificada:** H060 (prompt preparado).
+
+**Estado:** abierto (diferido, evaluación H060).

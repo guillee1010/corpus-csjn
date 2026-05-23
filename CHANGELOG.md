@@ -2,6 +2,13 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+### H059 — 2026-05-23
+- Fix editorial: `acordada` eliminada como tipo en `_tipo_zona_editorial()`.
+  67 FP (subsecciones del índice) remapeados a `"indice"`.
+  Editorial: 182→53 secciones (49 indice, 4 discurso).
+- Auditoría sin_dispositivo: 56/57 legítimos, 1 recuperable (331_p1013).
+- 0 regresiones en casos/votos/zonas/sin_firma.
+
 ## H058 — 2026-05-22
 
 ### B077 cerrado: secciones editoriales detectadas y extraídas

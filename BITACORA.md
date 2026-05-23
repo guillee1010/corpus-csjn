@@ -5949,3 +5949,93 @@ archivo.
 - `output/parser/csjn_casos_votos.csv` — 27336 filas.
 - `output/parser/csjn_casos_zonas.csv` — 141970 segmentos.
 - `output/parser/csjn_casos_editorial.csv` — 182 secciones.
+
+---
+
+## Sesión 2026-05-23 (H059)
+
+### H059-01 — Auditoría sin_dispositivo
+
+**Objetivo:** verificar que los 57 `sin_dispositivo` actuales son
+legítimos. El prompt planteaba diff 97→57, pero el baseline de 97
+no se encontró en ningún CSV del historial de git (todos los commits
+desde H051 muestran 57-58). El 97 fue probablemente un run
+intermedio de H058 no commiteado.
+
+**Método:** auditoría directa de los 57 sin_dispositivo.
+
+**Resultado:**
+- **31 headnote/sumario:** no arrancan con "Considerando:". Son
+  secciones de sumario temático o fragmentos sueltos. Legítimos.
+- **26 fallo real:** arrancan con "Considerando:" pero se cortan
+  antes del dispositivo. Todos con
+  `status_fin=fin_extendido_pag_compartida` +
+  `pista_fin=caratula_siguiente`. Genuinamente truncados.
+- **1 caso recuperable:** `331_p1013` (wc=397). Tiene "Por ello,
+  se declara admisible" inline (mid-paragraph), no capturado por
+  `detectar_apertura_dispositivo` que usa `.match()` (inicio de
+  línea). No prioritario — fix posible como fallback mid-line
+  para casos sin_dispositivo.
+
+**Conclusión:** 56/57 legítimos. No requiere acción.
+
+### H059-02 — Fix editorial: acordada eliminada como tipo
+
+**Problema:** `csjn_casos_editorial.csv` tenía 67 secciones
+clasificadas como `acordada` que eran todas FP — subsecciones
+del índice que listaban acordadas del tomo bajo headers
+"ACORDADAS", "A C O R D A D A S", "ACORDADAS Y RESOLUCIONES".
+
+**Fix aplicado en dos pasos:**
+
+1. Sacar rama `ACORDADAS\s*$` de `RE_EDITORIAL_ACORDADA` (la más
+   agresiva, standalone). Resultado: 67→24 acordadas.
+
+2. Remap completo: `_tipo_zona_editorial()` ahora devuelve
+   `"indice"` cuando matchea `RE_EDITORIAL_ACORDADA` en vez de
+   `"acordada"`. Las secciones se fusionan con los índices
+   adyacentes porque `nueva_zona == zona_activa` no dispara
+   cambio. Resultado: 24→0 acordadas.
+
+**Impacto:** editorial 182→53 secciones (49 indice, 4 discurso,
+0 acordada). 0 regresiones en casos, votos, zonas, sin_firma.
+
+### H059-03 — Diagnóstico: ¿parser editorial separado?
+
+**Observación:** los regex de clasificación editorial
+(`ACORDADAS`, `INDICE`, `POR MATERIAS`) matchean texto legítimo
+dentro de fallos. La Capa 1 (corte del último caso) no genera FP
+porque busca en rango acotado, pero la Capa 2 (inventario editorial)
+es frágil. El fix de H059 fue un parche de remap, no una solución
+arquitectural.
+
+**Propuesta para H060:** evaluar `parser_editorial.py` como módulo
+separado. La separación de dominio (caso vs. editorial) antes de
+parsear elimina la necesidad de guards anti-FP. Permite parsear
+la estructura interna de los índices (case_name, descriptores
+temáticos, legislación citada), acordadas (número, fecha, texto),
+y discursos. Escalable para el doctorado (tomos nuevos).
+
+**Decisiones pendientes:** módulo separado vs. refactorización
+interna; subtipos de índice ahora vs. después; outputs (1 CSV
+expandido vs. múltiples CSVs); manejo de regex compartidos con
+`detectar_fin_real`.
+
+Prompt H060 preparado con análisis completo y decisiones a tomar.
+
+### H059 — Estado final
+
+- **Corpus:** 5862 casos. Sin cambios en conteos.
+- **Sin firma:** 34/5668 (0.6%). Sin cambios.
+- **Votos:** 27336. Sin cambios.
+- **Zonas:** 141970 segmentos. Sin cambios.
+- **Editorial:** 53 secciones (49 indice, 4 discurso, 0 acordada).
+  Era 182 (111 indice, 67 acordada, 4 discurso).
+- **sin_dispositivo:** 57. Sin cambios (56 legítimos + 1 recuperable).
+- **Commits:** 1 snapshot pre-H059 + 1 fix editorial + 1 docs.
+
+**Outputs canónicos (4):**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27336 filas.
+- `output/parser/csjn_casos_zonas.csv` — 141970 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 53 secciones.
