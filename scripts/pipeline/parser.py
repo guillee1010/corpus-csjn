@@ -52,6 +52,7 @@ import unicodedata
 from pathlib import Path
 from collections import Counter
 from itertools import combinations
+from parser_editorial import clasificar_editorial
 
 # ── Marcadores estructurales ──────────────────────────────────────────────────
 
@@ -166,29 +167,10 @@ RE_DISID_HDR = re.compile(
     re.I
 )
 
-# B077: marcadores de secciones editoriales al final de cada tomo.
-# Acordadas, índices (partes, materias, legislación, general), discursos.
-# Uso dual: (a) señal de corte en detectar_fin_real (Pista editorial),
-#            (b) zonas en zonificador (acordada/indice/discurso).
+# B077: marcador editorial para señal de corte en detectar_fin_real (Pista 4).
+# La clasificación detallada por subtipos vive en parser_editorial.py (H061).
 # Validado H058: 0 falsos positivos en zona de fallos contra tomos 330, 342.
 
-RE_EDITORIAL_ACORDADA = re.compile(
-    r"^(?:A\s+C\s+O\s+R\s+D\s+A\s+D\s+A\s+S"
-    r"|ACORDADAS\s+Y\s+RESOLUCIONES\s*$)", re.I
-)
-RE_EDITORIAL_DISCURSO = re.compile(r"^DISCURSOS\b", re.I)
-RE_EDITORIAL_INDICE = re.compile(
-    r"^(?:"
-    r"INDICE\s+POR\s+LOS\s+NOMBRES"
-    r"|NOMBRES\s+DE\s+LAS\s+PARTES\s*$"
-    r"|INDICE\s+GENERAL\s*$"
-    r"|INDICE\s+ALFAB[EÉ]TICO\s+POR\s+MATERIAS"
-    r"|INDICE\s+DE\s+LEGISLACI[OÓ]N"
-    r"|INDICE\s+SUMARIO\s*$"
-    r"|LEGISLACI[OÓ]N\s+NACIONAL\s*$"
-    r"|POR\s+MATERIAS\s*$"
-    r")", re.I
-)
 RE_EDITORIAL_ANY = re.compile(
     r"^(?:"
     r"A\s+C\s+O\s+R\s+D\s+A\s+D\s+A\s+S"
@@ -210,22 +192,6 @@ def _es_marcador_editorial(linea):
     """B077: ¿la línea inicia una sección editorial (acordadas/índice/discurso)?"""
     s = linea.strip()
     return bool(s and RE_EDITORIAL_ANY.match(s))
-
-
-def _tipo_zona_editorial(linea):
-    """B077: devuelve la zona editorial de una línea, o None."""
-    s = linea.strip()
-    if not s:
-        return None
-    # H059: acordada eliminada — todos los hits eran subsecciones del índice
-    # que listaban acordadas, no acordadas reales. Se absorben en "indice".
-    if RE_EDITORIAL_ACORDADA.match(s):
-        return "indice"
-    if RE_EDITORIAL_DISCURSO.match(s):
-        return "discurso"
-    if RE_EDITORIAL_INDICE.match(s):
-        return "indice"
-    return None
 
 # Page headers a ignorar en búsqueda de case_name
 RE_PAGE_HEADER   = re.compile(
@@ -2007,75 +1973,6 @@ def extraer_segmentos(zonas, bloque):
     return segmentos
 
 
-# ── B077: extracción de secciones editoriales ────────────────────────────────
-
-def extraer_secciones_editoriales(lines, tomo, source_file, linea_inicio_editorial):
-    """
-    B077 Fase 2: extrae secciones editoriales (acordadas, índices, discursos)
-    del final de un archivo .md de tomo.
-
-    Parámetros:
-        lines: list[str] — todas las líneas del archivo.
-        tomo: int — número de tomo.
-        source_file: str — nombre del archivo (ej: LibroVol330.4.md).
-        linea_inicio_editorial: int — primera línea a escanear
-            (= linea_fin_real + 1 del último caso procesado).
-
-    Retorna:
-        list[dict] con columnas:
-            tomo, source_file, seccion, linea_ini, linea_fin, n_lineas, wc
-    """
-    n = len(lines)
-    if linea_inicio_editorial >= n:
-        return []
-
-    # Buscar primer marcador editorial
-    primer_editorial = None
-    for k in range(linea_inicio_editorial, n):
-        if _es_marcador_editorial(lines[k]):
-            primer_editorial = k
-            break
-
-    if primer_editorial is None:
-        return []
-
-    secciones = []
-    zona_activa = None
-    ini_actual = primer_editorial
-
-    for k in range(primer_editorial, n):
-        nueva_zona = _tipo_zona_editorial(lines[k])
-        if nueva_zona and nueva_zona != zona_activa:
-            if zona_activa is not None:
-                wc = sum(len(lines[j].split()) for j in range(ini_actual, k))
-                secciones.append({
-                    "tomo": tomo,
-                    "source_file": source_file,
-                    "seccion": zona_activa,
-                    "linea_ini": ini_actual,
-                    "linea_fin": k - 1,
-                    "n_lineas": k - ini_actual,
-                    "wc": wc,
-                })
-            zona_activa = nueva_zona
-            ini_actual = k
-
-    # Cerrar última sección
-    if zona_activa is not None:
-        wc = sum(len(lines[j].split()) for j in range(ini_actual, n))
-        secciones.append({
-            "tomo": tomo,
-            "source_file": source_file,
-            "seccion": zona_activa,
-            "linea_ini": ini_actual,
-            "linea_fin": n - 1,
-            "n_lineas": n - ini_actual,
-            "wc": wc,
-        })
-
-    return secciones
-
-
 # ── Procesamiento de un archivo ───────────────────────────────────────────────
 
 def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token_por_caso, siguiente_caso):
@@ -2341,10 +2238,6 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         lineas_residuo = {k for k, z in enumerate(_zonas_linea)
                          if z == "residuo_caso_anterior"}
 
-        # B077: líneas editoriales (acordadas/índices/discursos del tomo)
-        lineas_editorial = {k for k, z in enumerate(_zonas_linea)
-                           if z in ("acordada", "indice", "discurso")}
-
         por_ello_idx       = None
         por_ello_text      = ""
         n_votos_svoto      = 0
@@ -2567,15 +2460,12 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             lineas_mayoria = [bloque[k] for k in range(len(bloque))
                               if k not in lineas_dictamen
                               and k not in lineas_residuo
-                              and k not in lineas_editorial
                               and k < inicio_votos_indiv]
-            lineas_votos   = [bloque[k] for k in range(inicio_votos_indiv, len(bloque))
-                              if k not in lineas_editorial]
+            lineas_votos   = [bloque[k] for k in range(inicio_votos_indiv, len(bloque))]
         else:
             lineas_mayoria = [bloque[k] for k in range(len(bloque))
                               if k not in lineas_dictamen
-                              and k not in lineas_residuo
-                              and k not in lineas_editorial]
+                              and k not in lineas_residuo]
             lineas_votos   = []
 
         wc_mayoria = len(re.findall(r'\b\w+\b', " ".join(lineas_mayoria)))
@@ -2714,12 +2604,12 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             }
             votos_out.append(voto)
 
-    # B077 Fase 2: extraer secciones editoriales post-último-caso
+    # H061: clasificación editorial con subtipos (parser_editorial.py)
     editorial_out = []
     if casos_out:
         ultimo_lfr = max(int(c["linea_fin_real"]) for c in casos_out
                          if c["linea_fin_real"] not in ("", None))
-        editorial_out = extraer_secciones_editoriales(
+        editorial_out = clasificar_editorial(
             lines, tomo, filepath.name, ultimo_lfr + 1
         )
 
@@ -2991,12 +2881,12 @@ def main():
                 writer.writerow({k: z[k] for k in fieldnames_z})
         print(f"[OK] {output_zonas_path}: {len(all_zonas)} segmentos (zonas)")
 
-    # ── Output: editorial (B077) ──────────────────────────────────────────────
+    # ── Output: editorial (H061: subtipos via parser_editorial.py) ───────────
     output_editorial_path = (output_path.parent /
                              (output_path.stem + "_editorial" + output_path.suffix))
     if all_editorial:
         fieldnames_e = [
-            "tomo", "source_file", "seccion",
+            "tomo", "source_file", "subtipo",
             "linea_ini", "linea_fin", "n_lineas", "wc",
         ]
         with output_editorial_path.open("w", encoding="utf-8", newline="") as f:
