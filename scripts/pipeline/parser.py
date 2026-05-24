@@ -260,20 +260,32 @@ RE_TOMO          = re.compile(r"LibroVol(\d+)")
 RE_280_CONSIDERANDO = re.compile(
     r"recurso\s+extraordinario.{0,150}?"
     r"(es|resulta|se\s+declara)\s+inadmisible"
-    r".{0,150}?art[íi]?culo?\s*280\s+del\s+C[óo]digo\s+Procesal",
+    r".{0,150}?(?:art\.?|art[íi]culo)\s*280\s+del\s+C[óo]digo\s+Procesal",
     re.I | re.DOTALL
 )
 
-# Variante alternativa: sólo busca "art. 280 CPCCN" en el considerando,
-# sin requerir el contexto previo. Útil para captar variaciones que el
-# patrón anterior no detecta.
+# Variante alternativa: busca "art. 280 del Código Procesal Civil y Comercial"
+# en el considerando, con o sin paréntesis de apertura. H065: fix regex
+# art[íi]?culo? → (?:art\.?|art[íi]culo) para matchear "art." abreviado.
 RE_280_LIBRE = re.compile(
-    r"\(\s*art[íi]?culo?\s*280\s+del\s+C[óo]digo\s+Procesal\s+Civil\s+y\s+Comercial",
+    r"\(?\s*(?:art\.?|art[íi]culo)\s*280\s+del\s+C[óo]digo\s+Procesal\s+Civil\s+y\s+Comercial",
     re.I
 )
 
+# H065: reescrito. El regex original exigía "artículo 1 del reglamento"
+# pero la Corte cita arts. 2, 4, 5, 7, etc. Además tenía el bug de
+# art[íi]?culo? que no matcheaba "art.".
+# Dos variantes complementarias:
+#   (a) art. N del reglamento ... acordada 4/2007
+#   (b) reglamento ... acordada 4/2007 (sin artículo explícito)
 RE_ACORDADA_4_CONSIDERANDO = re.compile(
-    r"art[íi]?culo?\s*1\s*°?\s*del\s+reglamento.{0,80}?acordada\s*4(/|\s+de\s+)2007",
+    r"(?:art\.?|art[íi]culo)\s*\d+\s*[°º]?\s*"
+    r"(?:,\s*inc[s.]?.{0,30}?)?\s*del\s+reglamento"
+    r".{0,80}?acordada\s*(?:n[°º]?\s*)?4\s*/?\s*(?:del?\s+)?2007",
+    re.I | re.DOTALL
+)
+RE_ACORDADA_4_REGLAMENTO = re.compile(
+    r"reglamento.{0,60}?acordada\s*(?:n[°º]?\s*)?4\s*/?\s*(?:del?\s+)?2007",
     re.I | re.DOTALL
 )
 
@@ -301,27 +313,39 @@ OUTCOME_PATTERNS_DISPOSITIVO = [
 
 def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     """
-    v10: prioridad de outcomes:
-      1. inadmisible_280 si está en considerando (regex estricto + libre)
-      2. inadmisible_acordada_4 si está en considerando
-      3. patrones de dispositivo (lo de v9)
+    v11 (H065): prioridad de outcomes con guarda de merit outcome.
 
-    Esto es importante porque en CSJN el patrón institucional real del 280
-    está en el considerando, no en el dispositivo. Sin esto, los 280 quedan
-    clasificados como 'desestima' genérico.
+      1. Determinar outcome del dispositivo (por_ello_text)
+      2. Si el dispositivo da merit outcome (hace_lugar, procedente, revoca,
+         confirma, nulidad), NO sobreescribir con 280/ac4 del considerando.
+         Motivo: en fallos mixtos la Corte rechaza un agravio por 280 pero
+         concede otro — el outcome relevante es la concesión.
+      3. Si el dispositivo NO da merit outcome, buscar 280/ac4 en considerando.
     """
+    MERIT_OUTCOMES = {"hace_lugar", "procedente", "revoca", "confirma", "nulidad"}
+
+    # Paso 1: outcome del dispositivo
+    outcome_disp = "otro"
+    for label, pat in OUTCOME_PATTERNS_DISPOSITIVO:
+        if pat.search(por_ello_text):
+            outcome_disp = label
+            break
+
+    # Paso 2: si es merit, no sobreescribir
+    if outcome_disp in MERIT_OUTCOMES:
+        return outcome_disp
+
+    # Paso 3: buscar 280 / acordada 4 en considerando
     if considerando_text:
-        # Intentar primero el patrón estricto, después el libre como fallback
         if RE_280_CONSIDERANDO.search(considerando_text):
             return "inadmisible_280"
         if RE_280_LIBRE.search(considerando_text):
             return "inadmisible_280"
-        if RE_ACORDADA_4_CONSIDERANDO.search(considerando_text):
+        if (RE_ACORDADA_4_CONSIDERANDO.search(considerando_text)
+                or RE_ACORDADA_4_REGLAMENTO.search(considerando_text)):
             return "inadmisible_acordada_4"
-    for label, pat in OUTCOME_PATTERNS_DISPOSITIVO:
-        if pat.search(por_ello_text):
-            return label
-    return "otro"
+
+    return outcome_disp
 
 # ── Jueces conocidos ──────────────────────────────────────────────────────────
 # (idéntico a v9, copiado tal cual)
@@ -713,7 +737,7 @@ RE_COMPETENCIA_ORIGINARIA = re.compile(
     re.I,
 )
 RE_ART_117_CN = re.compile(
-    r"art[íi]?culo?s?\s*117\s+(de\s+la\s+)?Constituci[óo]n\s+Nacional",
+    r"(?:art\.?|art[íi]culos?)\s*117\s+(de\s+la\s+)?Constituci[óo]n\s+Nacional",
     re.I,
 )
 # "en forma originaria", "instancia originaria", "originariamente"
@@ -2444,7 +2468,8 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         if outcome == "sin_dispositivo" and considerando_text:
             if RE_280_CONSIDERANDO.search(considerando_text) or RE_280_LIBRE.search(considerando_text):
                 outcome = "inadmisible_280"
-            elif RE_ACORDADA_4_CONSIDERANDO.search(considerando_text):
+            elif (RE_ACORDADA_4_CONSIDERANDO.search(considerando_text)
+                  or RE_ACORDADA_4_REGLAMENTO.search(considerando_text)):
                 outcome = "inadmisible_acordada_4"
 
         firma_raw    = ""
