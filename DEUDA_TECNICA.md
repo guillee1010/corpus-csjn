@@ -6,7 +6,11 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-23 (H062: auditoría de deuda técnica y
+**Última actualización:** 2026-05-24 (H064: M09 aplicado — constraint de zona
+en loop de votos (0 regresiones, ~500K líneas protegidas). B010 aplicado —
+RE_CONSIDERANDO permisivo con guarda dispositivo (1188 wc mejorados, 36
+is_originaria corregidos, 0 regresiones). B032 confirmado cerrado (H063).
+H062: auditoría de deuda técnica y
 limpieza documental. B013, B029, B030, B039, B046, B060 cerrados. B009
 actualizado (Fase F). B052/B053/B054 deduplicados. Resumen ejecutivo
 reescrito. PIPELINE.md y PIPELINE_HALLAZGOS.md deprecados a `archivo/docs/`.
@@ -385,32 +389,20 @@ Residual: la localización estimada puede no ser exacta. La causa raíz
 **Referencias cruzadas:** PIPELINE §3.6.c. XXI-d. BITACORA H001, H002,
 H029, H030. ID histórico: era **Bug A** del documento del 2/5.
 
-### B010 — `RE_CONSIDERANDO` restrictivo + `.match()` con anclaje `^...$`
+### B010 — `RE_CONSIDERANDO` restrictivo + `.match()` con anclaje `^...$` — CERRADO H064
 
 **Componente:** parser.
-**Origen / fuente del diagnóstico:** PIPELINE §4.6.b. Rediagnóstico
-2026-05-09 (continuación) y recalibración 2026-05-14 sobre CSV vivo
-(BITACORA H019).
-**Causa raíz:** `RE_CONSIDERANDO` (parser.py línea 121) anclado con `^...$`
-e invocado con `.match()` solo detecta `Considerando:` como línea aislada.
-Las variantes con prefijo (`Vistos los autos; Considerando:`) caen al
-fallback `inicio_cons = 0` que arrastra todo el bloque desde la primera línea.
-**Diagnóstico / evidencia:** cluster recontado 14/5: 320 casos con
-`wc_cons ≥ 0.9 × wc` (vs 480 estimados originalmente). Apertura `fallo`: 229.
-Apertura `sentencia`: 3. Sin apertura: 88. Vacíos: 1.672. **El cluster
-§4.6.b puro (con apertura detectada) no cambió: 232 casos.**
-Hallazgo lateral: existe `RE_CONSIDERANDO_NUMERADO_1` separado, usado en
-detección de "estructura autónoma" en votos largos. El diseño del fix debe
-considerar si unificar criterios con el numerado.
-**Estado de verificación:** `confirmado_cuantificado`.
-**Validador propuesto:** diagnóstico fino del cluster de 232 con
-`auditar_fallo.py` (catch-all sobre cluster). Sample dirigido de ~5 casos
-con seed reproducible. Pendiente para próxima sesión (acordado 14/5).
-**Estado del fix:** rediagnosticado, no diseñado todavía. El fix con guard
-espacial es la dirección probable (`RE_CONSIDERANDO` permisivo + `.search()`
-dentro de ventana `(apertura, por_ello)` excluyendo span del dictamen),
-pero F013 enseñó que permisivo + .search() sin guard rompe fallos.
-**Referencias cruzadas:** PIPELINE §4.6.b. BITACORA H019. Sin ID histórico.
+**Fix aplicado (H064):** regex cambiado de `^Considerando\s*[:.]?\s*$` a
+`Considerando\s*[:.]\s*$` (sin anchor `^`, colon/punto obligatorio).
+`.match()` → `.search()` en 5 ubicaciones (L657, L1305, L1321, L1812, L2287).
+Guarda en `extraer_considerando`: solo acepta matches antes de `por_ello_idx`
+para evitar matchear "Considerando:" de votos individuales o del caso siguiente.
+**Validación:** 1188 cambios en `wc_considerando` (911 reducciones, 277 aumentos,
+0 a cero). Cascada: 62 `is_originaria` (36 mejoras legítimas 1→0 por exclusión
+de texto editorial, 26 nuevas 0→1, 0 bugs — auditados con audit_originaria_1a0.py).
+2 `outcome` (otro→inadmisible_280). Firma, voting_pattern, n_votos, n_disidencias
+sin cambios.
+**Referencias cruzadas:** PIPELINE §4.6.b. BITACORA H019, H063, H064.
 
 ---
 
@@ -1248,29 +1240,15 @@ sumario en capitalización mixta. Verificar si esos casos tienen
 `re.IGNORECASE` o detectar mayúsculas en porción mayor del header.
 **Referencias cruzadas:** XXI-n. Sin §X.Y en PIPELINE. Sin ID histórico.
 
-### B032 — `RE_VOTO_HDR` requiere "Señor[es]" / "Vicepresidente" / etc.
+### B032 — `RE_VOTO_HDR` requiere "Señor[es]" / "Vicepresidente" / etc. — CERRADO H063
 
 **Componente:** parser.
-**Origen / fuente del diagnóstico:** XXI-ñ del forense. Equivalente a F001
-(BITACORA sesión H014). XXI-ñ y F001 son el mismo bug.
-**Causa raíz:** `RE_VOTO_HDR` (parser.py línea 142) requiere palabras
-específicas en el header del voto. No matchea `Voto la señora`
-(sin "de" antes del artículo). Caso paradigmático: voto de Argibay no se
-detecta en algunos formatos.
-**Diagnóstico / evidencia:** medición empírica de F001 (BITACORA línea 305):
-script `medir_voto_hdr.py` sobre 2 archivos (`LibroVol331.2.md`,
-`LibroVol349-1.md`). Regex viejo: 32 matches. Regex nuevo: 34. Dos votos
-perdidos (ambos "Voto la señora ministra doctora doña Carmen M. Argibay"
-en tomo 331.2, líneas 957 y 11724). Verificados manualmente como votos
-reales, no falsos positivos.
-**Estado de verificación:** `confirmado_caso_testigo` con muestra parcial
-(2 archivos). Cuantificación sobre corpus completo pendiente.
-**Validador propuesto:** correr `medir_voto_hdr.py` sobre corpus completo
-en Windows (pendiente desde 2026-05-08 según BITACORA línea 312). Plan.
-**Estado del fix:** diseñado (fix de 1 línea identificado en BITACORA).
-Aplicar coordinado con regeneración.
-**Referencias cruzadas:** XXI-ñ. F001. Sin §X.Y en PIPELINE. Sin ID
-histórico.
+**Fix aplicado (H063):** agregado `|l[ao]s?` al grupo de artículos en
+`RE_VOTO_HDR` (L160) y `RE_DISID_HDR` (L165). Validación corpus completo:
++13 votos, +3 disidencias, 0 regresiones. Todos Argibay, tomos 329–332.
+Impacto: corrección de `n_votos_svoto`/`n_disidencias` en 16 casos y
+mejor delimitación de `texto_voto`. Filas de votos sin cambio (generadas
+por `parse_firma`, no por RE_VOTO_HDR).
 
 ### B033 — `cargar_localizados` no filtra `ultimo_del_tomo_sin_fin`
 
@@ -2091,6 +2069,28 @@ construcción de `segmentar_bloque` y no necesitan check en runtime.
 
 ---
 
+### M09 — Detección sin constraint de zona (deuda arquitectónica) — APLICADO H064
+
+**Componente:** parser (loop principal de votos).
+**Origen / fuente del diagnóstico:** H063 (diagnóstico B010).
+**Descripción:** el zonificador crea zonas (dictamen, mayoria, voto,
+disidencia, editorial) pero el loop principal de detección de votos (L2256-2289)
+solo excluía `lineas_dictamen`. Zonas como `residuo_caso_anterior`, `sumario`,
+`epilogo` y `header_pagina` no se filtraban.
+**Fix aplicado (H064):** nuevo set `lineas_excluir` derivado de `_zonas_linea`
+(todo lo que no esté en `{apertura, cuerpo, dispositivo, firma, voto_separado}`).
+Reemplaza `lineas_dictamen` en el skip del loop.
+**Validación:** 0 regresiones sobre 5667 fallos (poc_m09.py). ~500K líneas
+ahora protegidas (155K sumario, 137K header_pagina, 107K residuo, 100K epílogo).
+**Impacto directo:** ninguno (los regex actuales no matcheaban en esas zonas).
+**Impacto preventivo:** protege B010 y futuros regex más permisivos contra
+FP en zonas no-fallo.
+**Pendiente:** extender constraint a otros detectores (apertura, dispositivo,
+considerando) cuando se justifique. `_encontrar_zona_fallo` no puede usar
+zonas (corre antes del zonificador).
+
+---
+
 ## Mapeo histórico
 
 Trazabilidad de IDs viejos del documento del 2026-05-02 a los IDs
@@ -2158,16 +2158,16 @@ canónicos actuales B0NN.
 
 ## Resumen ejecutivo
 
-*Actualizado H062 (2026-05-23).*
+*Actualizado H063 (2026-05-24).*
 
-- **Bugs cerrados:** ~30 (B001-B008, B013, B029, B030, B039, B046, B055,
-  B060, B063-B064, B066-B074, B076-B077, B079, A001).
+- **Bugs cerrados:** ~31 (B001-B008, B013, B029, B030, B032, B039, B046,
+  B055, B060, B063-B064, B066-B074, B076-B077, B079, A001).
 - **Bugs en validación:** 2 (B009 parcialmente resuelto por Fase F, B010
-  rediagnosticado pendiente fix).
-- **Bugs activos del pipeline (catálogo + cruzador + parser):** ~25.
+  diagnóstico completo, fix diseñado pendiente aplicar).
+- **Bugs activos del pipeline (catálogo + cruzador + parser):** ~24.
   Catálogo: B011, B045.
   Cruzador: B012.
-  Parser: B014-B022, B023-B028, B031-B038, B043-B044, B048, B053-B054.
+  Parser: B014-B022, B023-B028, B031, B033-B038, B043-B044, B048, B053-B054.
   De ellos:
   - B025 (falsos unánime): cardinalidad 414 obsoleta, re-medir.
   - B018, B024: sustancialmente mitigados por fixes colaterales (H046-H055).
@@ -2175,28 +2175,27 @@ canónicos actuales B0NN.
   - ~5 hipotesis_no_verificada: B015, B026, B027, B031, B034.
 - **Bugs activos del auditor:** ~10 (B040-B042, B047, B049-B051, B052,
   B056-B058, B061-B062, B065, VIS001-VIS004).
-- **Pendientes metodológicos:** 7 (M01 cerrado por deprecación de PIPELINE.md,
-  M02-M04, M05 cerrado como no-resoluble, M06-M08).
+- **Pendientes metodológicos:** 8 (M01 cerrado por deprecación de PIPELINE.md,
+  M02-M04, M05 cerrado como no-resoluble, M06-M09).
 
-**Próximo trabajo priorizado (orden sugerido, H062):**
+**Próximo trabajo priorizado (orden sugerido, H064):**
 
-1. **B010 — RE_CONSIDERANDO restrictivo** (prioridad alta, 232 casos).
-   Fix diseñado pero no aplicado. Diagnóstico fino con `auditar_fallo.py`
-   pendiente desde H019. Mayor fuente de imprecisión en `wc_considerando`.
-2. **B032 — RE_VOTO_HDR sin "de la"** (fix de 1 línea, diseñado).
-   2 votos de Argibay perdidos por tomo. Bajo costo, impacto positivo.
-3. **B025 — re-medición falsos unánime post-fixes.** 414 era pre-fix.
+1. **Recalibrar is_originaria / inadmisible_280 / art. 4** post-B010.
+   `considerando_text` es más preciso (excluye editorial); los detectores
+   que dependían del texto inflado necesitan revisión. 62 is_originaria
+   cambiaron (36 mejoras, 26 nuevas), 2 outcomes cambiaron.
+2. **B025 — re-medición falsos unánime post-fixes.** 414 era pre-fix.
    Re-medir contra CSV actual para dimensionar residual.
-4. **B018 residual — re-medición post-H046/H048/H050.** Medir para decidir
+3. **B018 residual — re-medición post-H046/H048/H050.** Medir para decidir
    si opción D (validación cruzada con proximo_header_pagina) vale la
    inversión.
-5. **B045 manifestación B — evaluación de fix raíz.** Mitigación por
+4. **B045 manifestación B — evaluación de fix raíz.** Mitigación por
    residuo_caso_anterior (H055) cubre impacto cuantitativo. Evaluar si
    fix raíz (revert −1 en catalogador/cruzador) aporta para la tesis.
-6. **B054/M06 — epílogo.** Verificar persistencia editorial de gramática
+5. **B054/M06 — epílogo.** Verificar persistencia editorial de gramática
    sobre corpus completo (M06). Dato valioso para tesis (tribunal de
    origen, litigantes).
-7. **M02 — bloque snapshots Fase 2.** Limpieza de repo.
+6. **M02 — bloque snapshots Fase 2.** Limpieza de repo.
 
 
 ### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula
