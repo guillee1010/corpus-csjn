@@ -6,10 +6,13 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-24 (H064: M09 aplicado — constraint de zona
-en loop de votos (0 regresiones, ~500K líneas protegidas). B010 aplicado —
-RE_CONSIDERANDO permisivo con guarda dispositivo (1188 wc mejorados, 36
-is_originaria corregidos, 0 regresiones). B032 confirmado cerrado (H063).
+**Última actualización:** 2026-05-24 (H065: recalibración detectores
+post-B010. Fix regex `art[íi]?culo?` → `(?:art\.?|art[íi]culo)` en 4
+constantes (RE_280_CONSIDERANDO, RE_280_LIBRE, RE_ACORDADA_4, RE_ART_117_CN).
+RE_ACORDADA_4 reescrito (cualquier artículo del reglamento, no solo art. 1).
+classify_outcome v11 con merit guard. inadmisible_280: 41→278. acordada_4:
+0→40. is_originaria: 462→478. 3 FP ac4 documentados. H064: M09 aplicado,
+B010 aplicado.
 H062: auditoría de deuda técnica y
 limpieza documental. B013, B029, B030, B039, B046, B060 cerrados. B009
 actualizado (Fase F). B052/B053/B054 deduplicados. Resumen ejecutivo
@@ -2158,12 +2161,12 @@ canónicos actuales B0NN.
 
 ## Resumen ejecutivo
 
-*Actualizado H063 (2026-05-24).*
+*Actualizado H065 (2026-05-24).*
 
 - **Bugs cerrados:** ~31 (B001-B008, B013, B029, B030, B032, B039, B046,
   B055, B060, B063-B064, B066-B074, B076-B077, B079, A001).
-- **Bugs en validación:** 2 (B009 parcialmente resuelto por Fase F, B010
-  diagnóstico completo, fix diseñado pendiente aplicar).
+- **Bugs en validación:** 1 (B009 parcialmente resuelto por Fase F).
+  B010 cerrado (H064).
 - **Bugs activos del pipeline (catálogo + cruzador + parser):** ~24.
   Catálogo: B011, B045.
   Cruzador: B012.
@@ -2175,26 +2178,32 @@ canónicos actuales B0NN.
   - ~5 hipotesis_no_verificada: B015, B026, B027, B031, B034.
 - **Bugs activos del auditor:** ~10 (B040-B042, B047, B049-B051, B052,
   B056-B058, B061-B062, B065, VIS001-VIS004).
-- **Pendientes metodológicos:** 8 (M01 cerrado por deprecación de PIPELINE.md,
-  M02-M04, M05 cerrado como no-resoluble, M06-M09).
+- **Pendientes metodológicos:** 8 (M01 cerrado, M02-M04, M05 cerrado,
+  M06-M09).
+- **Detectores recalibrados (H065):**
+  - inadmisible_280: 41 → 278. Causa: regex `art[íi]?culo?` no matcheaba
+    "art." (abreviatura dominante del corpus). 44 fantasmas y 16 arrastre
+    (B045) pendientes de investigación.
+  - inadmisible_acordada_4: 0 → 40. Causa: regex exigía "art. 1" pero la
+    Corte cita arts. 2, 4, 5, 7. 3 FP documentados (limitación conocida).
+  - is_originaria: 462 → 478. Causa: mismo fix de regex en RE_ART_117_CN.
+  - classify_outcome v11: merit guard impide que 280/ac4 sobreescriba
+    hace_lugar/procedente/revoca/confirma/nulidad. 49 merit outcomes
+    protegidos.
 
-**Próximo trabajo priorizado (orden sugerido, H064):**
+**Próximo trabajo priorizado (orden sugerido, H066):**
 
-1. **Recalibrar is_originaria / inadmisible_280 / art. 4** post-B010.
-   `considerando_text` es más preciso (excluye editorial); los detectores
-   que dependían del texto inflado necesitan revisión. 62 is_originaria
-   cambiaron (36 mejoras, 26 nuevas), 2 outcomes cambiaron.
+1. **Revisión de inadmisible_280** — auditar los 44 fantasmas (outcome=
+   inadmisible_280 sin match de regex), los 16 arrastre (280 del caso
+   anterior en considerando_text por B045), y muestra de los 168 per
+   curiam para validar.
 2. **B025 — re-medición falsos unánime post-fixes.** 414 era pre-fix.
    Re-medir contra CSV actual para dimensionar residual.
-3. **B018 residual — re-medición post-H046/H048/H050.** Medir para decidir
-   si opción D (validación cruzada con proximo_header_pagina) vale la
-   inversión.
-4. **B045 manifestación B — evaluación de fix raíz.** Mitigación por
-   residuo_caso_anterior (H055) cubre impacto cuantitativo. Evaluar si
-   fix raíz (revert −1 en catalogador/cruzador) aporta para la tesis.
-5. **B054/M06 — epílogo.** Verificar persistencia editorial de gramática
-   sobre corpus completo (M06). Dato valioso para tesis (tribunal de
-   origen, litigantes).
+3. **B018 residual — re-medición post-H046/H048/H050.**
+4. **B054/M06 — epílogo.**
+5. **Bugs estructurales de H065** — 340_p2001 (caso roto), 332_p1085
+   (dos dispositivos), 333_p1464 y 334_p256 (votos conjuntos no
+   detectados).
 6. **M02 — bloque snapshots Fase 2.** Limpieza de repo.
 
 

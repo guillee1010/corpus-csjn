@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H065 (2026-05-24)
+
+- `parser.py`: fix regex `art[íi]?culo?` → `(?:art\.?|art[íi]culo)` en
+  RE_280_CONSIDERANDO, RE_280_LIBRE, RE_ART_117_CN. RE_ACORDADA_4 reescrito
+  (cualquier art. del reglamento). Nuevo RE_ACORDADA_4_REGLAMENTO.
+  classify_outcome v11 con merit guard. inadmisible_280: 41→278.
+  inadmisible_acordada_4: 0→40. is_originaria: 462→478.
+- `output/parser/csjn_casos.csv`: 5862 filas (outcomes cambiados, conteos estables).
+- `output/parser/csjn_casos_votos.csv`: 27336 filas (sin cambio estructural).
+
 ## H064 (2026-05-24)
 
 - `parser.py` (M09): constraint de zona en loop de votos — `lineas_excluir`

@@ -6358,3 +6358,81 @@ verificar_considerando_dictamen.py, diagnostico_fin_fallo_v1.py,
 tabular_senales_lote.py.
 
 **Commits:** 1 (M09+B010 parser + CSVs).
+
+## H065 — Recalibración detectores 280/ac4/art.117 (2026-05-24)
+
+**Objetivo:** recalibrar los detectores de outcome post-B010 — inadmisible_280,
+inadmisible_acordada_4 e is_originaria.
+
+### H065-01 — Diagnóstico
+
+Exploración sobre csjn_casos.csv pre-fix. Hallazgo principal: el patrón
+`art[íi]?culo?` en 4 regexes (RE_280_CONSIDERANDO, RE_280_LIBRE,
+RE_ACORDADA_4_CONSIDERANDO, RE_ART_117_CN) no matcheaba la abreviatura
+"art." — forma dominante en el corpus. Solo matcheaba "artículo" completo.
+RE_ACORDADA_4 además exigía "artículo 1" pero la Corte cita arts. 2, 4, 5, 7.
+285 menciones de "art. 280 del Código Procesal" en considerando, solo 17
+matcheaban. 60 menciones de "acordada 4/2007", 0 matcheaban.
+
+Diagnóstico de fallos mixtos (280 parcial + merit outcome en dispositivo):
+49 casos tienen 280 en considerando pero el dispositivo concede el recurso.
+Diseño de merit guard en classify_outcome para no sobreescribir
+hace_lugar/procedente/revoca/confirma/nulidad.
+
+### H065-02 — Fix aplicado
+
+6 ediciones en parser.py:
+1. RE_280_CONSIDERANDO: `art[íi]?culo?` → `(?:art\.?|art[íi]culo)`
+2. RE_280_LIBRE: mismo fix + paréntesis opcional `\(?`
+3. RE_ACORDADA_4_CONSIDERANDO: reescrito — `\d+` en vez de `1`, incisos opcionales
+4. Nuevo RE_ACORDADA_4_REGLAMENTO: variante libre "reglamento...acordada 4/2007"
+5. classify_outcome v10 → v11: merit guard (evalúa dispositivo primero)
+6. RE_ART_117_CN: mismo fix para is_originaria
+7. Fallback sin_dispositivo: agrega RE_ACORDADA_4_REGLAMENTO
+
+Validación pipeline completo: 5862 casos, 27336 votos, 142030 zonas, 135 editorial.
+0 cambios en sin_firma, votos, zonas.
+
+### H065-03 — Validación manual de ac4
+
+Revisión caso por caso (40 casos) en explorador v5 por Guillermo.
+37 genuinos, 3 FP documentados (339_p185, 345_p1421, 348_p811 — ac4
+mencionada como antecedente del tribunal inferior, no aplicación de la Corte).
+Se evaluaron filtros (revocatoria en dispositivo, revocatoria cerca de ac4 en
+considerando, señal de aplicación directa). Ninguno limpia FP sin matar
+genuinos. FP residual aceptado como limitación técnica (7.5%).
+
+Bugs estructurales encontrados en revisión: 340_p2001 (caso roto),
+332_p1085 (dos dispositivos), 333_p1464 (voto conjunto no detectado),
+334_p256 (firma de voto conjunto rota).
+
+### H065-04 — Diagnóstico de inadmisible_280 (pendiente H066)
+
+Preclasificación de los 278 inadmisible_280:
+168 per curiam genuino (wc ≤ 60), 24 corto probable ok (wc 61-200),
+14 parcial (280 al final), 12 largo (revisar), 16 arrastre probable
+(280 del caso anterior en primer 10% del texto, B045), 44 fantasma
+(sin match de regex — dato inconsistente, investigar).
+
+Scripts de diagnóstico creados: poc_280_ac4.py, diag_280_corpus.py.
+
+### H065 — Estado final
+
+- **Corpus:** 5862 casos (5667 fallos + 195 sumario_editorial/sumario_con_link).
+- **Sin firma:** 34 / 5667 fallos (0.6%). Cobertura firma: 99.4%.
+- **Votos:** 27336 filas.
+- **Outcomes:** inadmisible_280: 278, inadmisible_acordada_4: 40,
+  desestima: 475, otro: 1791, hace_lugar: 1084.
+- **is_originaria:** 478.
+- **Trayectoria sin_firma:** sin cambio (34).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27336 filas.
+- `output/parser/csjn_casos_zonas.csv` — 142030 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 135 secciones.
+
+**Scripts creados:** `scripts/auditoria/H065/` — poc_280_ac4.py,
+diag_280_corpus.py.
+
+**Commits:** 2 (snapshot pre-fix, fix aplicado).
