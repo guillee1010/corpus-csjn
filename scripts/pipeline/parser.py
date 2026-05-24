@@ -126,7 +126,10 @@ def detectar_apertura_dispositivo(stripped_line):
     return (False, None)
 
 # Considerando — apertura del cuerpo argumental
-RE_CONSIDERANDO  = re.compile(r"^Considerando\s*[:.]?\s*$", re.I)
+# B010: sin anchor ^ para detectar "Vistos los autos; Considerando:".
+# Colon/punto obligatorio (no opcional) evita FP en body text.
+# Usar .search() en todas las call sites (no .match()).
+RE_CONSIDERANDO  = re.compile(r"Considerando\s*[:.]\s*$", re.I)
 
 # Dictamen del Procurador (a excluir del wc principal)
 RE_DICT_HDR      = re.compile(
@@ -651,7 +654,11 @@ def extraer_considerando(bloque, por_ello_idx, lineas_dictamen):
     for k, ln in enumerate(bloque):
         if k in lineas_dictamen:
             continue
-        if RE_CONSIDERANDO.match(ln.strip()):
+        # B010 guard: match después del dispositivo no es el considerando
+        # del fallo — es de un voto individual o del caso siguiente.
+        if por_ello_idx is not None and k >= por_ello_idx:
+            break
+        if RE_CONSIDERANDO.search(ln.strip()):
             inicio_cons = k
             break
     if inicio_cons is None:
@@ -1299,7 +1306,7 @@ def _encontrar_zona_fallo(bloque):
     # 3. Primer considerando en primera mitad
     for k in range(mitad):
         s = bloque[k].strip()
-        if RE_CONSIDERANDO.match(s):
+        if RE_CONSIDERANDO.search(s):
             return k
 
     # 4. Primer vistos en primera mitad
@@ -1315,7 +1322,7 @@ def _encontrar_zona_fallo(bloque):
             return k
     for k in range(n):
         s = bloque[k].strip()
-        if RE_CONSIDERANDO.match(s):
+        if RE_CONSIDERANDO.search(s):
             return k
     for k in range(n):
         s = bloque[k].strip()
@@ -1806,7 +1813,7 @@ def zonificar_bloque(bloque):
             anclas.append((k, "apertura")); continue
         if RE_FECHA_LINEA.match(s):
             anclas.append((k, "fecha")); continue
-        if RE_CONSIDERANDO.match(s):
+        if RE_CONSIDERANDO.search(s):
             _en_sumario = False
             anclas.append((k, "considerando")); continue
         if RE_VISTOS.match(s):
@@ -2238,6 +2245,14 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         lineas_residuo = {k for k, z in enumerate(_zonas_linea)
                          if z == "residuo_caso_anterior"}
 
+        # M09: constraint de zona — excluir líneas fuera de zona de fallo
+        # para detección de votos/disidencias. Protege contra FP en sumarios,
+        # residuo del caso anterior, epílogo y headers de página.
+        # Validado: 0 regresiones sobre 5667 fallos (poc_m09.py).
+        _ZONAS_FALLO = {"apertura", "cuerpo", "dispositivo", "firma", "voto_separado"}
+        lineas_excluir = {k for k, z in enumerate(_zonas_linea)
+                         if z not in _ZONAS_FALLO}
+
         por_ello_idx       = None
         por_ello_text      = ""
         n_votos_svoto      = 0
@@ -2250,9 +2265,9 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             if not stripped:
                 continue
 
-            # Saltar líneas de dictamen — la detección de votos y
-            # dispositivo solo aplica al fallo, no al dictamen.
-            if k in lineas_dictamen:
+            # M09: saltar líneas fuera de zona de fallo (dictamen,
+            # residuo_caso_anterior, sumario, epilogo, header_pagina).
+            if k in lineas_excluir:
                 continue
 
             if RE_VOTO_HDR.match(stripped) or RE_DISID_HDR.match(stripped):
@@ -2273,7 +2288,7 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                         sig = bloque[k + offset].strip()
                         if not sig:
                             continue
-                        if RE_CONSIDERANDO.match(sig):
+                        if RE_CONSIDERANDO.search(sig):
                             break
                         header_completo += " " + sig
                 continue
