@@ -1,13 +1,16 @@
 # Deuda Técnica
 
 Lista canónica de bugs del pipeline corpus-csjn y de la herramienta auditora
-(`scripts/auditoria/auditar_fallo.py`). Una entrada por bug. El diagnóstico
-técnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`
-(secciones §X.Y); las entradas de esta lista que tienen referencia §X.Y
-apuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico
-completo acá.
+(`scripts/auditoria/auditar_fallo.py`). Una entrada por bug. Las entradas con
+referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
+contexto histórico del diagnóstico original; el estado vivo de cada bug está
+en este archivo.
 
-**Última actualización:** 2026-05-23 (sesiones H046–H059:
+**Última actualización:** 2026-05-23 (H062: auditoría de deuda técnica y
+limpieza documental. B013, B029, B030, B039, B046, B060 cerrados. B009
+actualizado (Fase F). B052/B053/B054 deduplicados. Resumen ejecutivo
+reescrito. PIPELINE.md y PIPELINE_HALLAZGOS.md deprecados a `archivo/docs/`.
+Sesiones anteriores H046–H059:
 B069 cerrado — eliminada búsqueda atrás Pista 1, 277 mejoras, sin_firma 406→148.
 A001 cerrado — fallback firma inversa, 34 mejoras, sin_firma 148→114.
 A001b — _encontrar_zona_fallo primera apertura, 1 mejora, sin_firma 114→113.
@@ -268,6 +271,55 @@ corpus donde V1 acierta. El 33% restante cae al fallback de `find_case_name`
 **Referencias:** PIPELINE §4.4.i. XXI-a del forense (XXI decía "no aplicado"
 porque XXI fue del 3-4/5 y el commit posterior).
 
+### B013 — Bug XII: cascada del dispositivo por falso positivo
+
+**Componente:** parser.
+**Fix aplicado:** en dos fases:
+  - **H035:** búsqueda anclada con cascada apertura_rel → dictamen_end+1 → 0
+    (302 prematuros). 0 regresiones.
+  - **H038:** forward con validación de firma (279 post-apertura). 0 regresiones.
+**Referencias:** XXI-c. BITACORA H035, H036, H038.
+
+### B029 — `collect_firma_lines` con `max_lines=40` (resuelto por B055)
+
+**Componente:** parser.
+**Cerrado:** H062 (auditoría). El fix B055 (H042, commit `e258f66`) eliminó
+`max_lines=40`. Firma actual: `def collect_firma_lines(bloque, idx_start,
+max_lines=None)` (parser.py línea 499). Con `max_lines=None`, el techo es
+`len(bloque)`. El mecanismo descrito ya no opera.
+**Referencias:** XXI-l.
+
+### B030 — `detectar_fin_real` excluye solo primeras 5 líneas (= B018)
+
+**Componente:** parser.
+**Cerrado:** H062 (auditoría). Redundante con B018 (ya anotado en el propio
+texto). La búsqueda atrás de Pista 1 fue eliminada en H046 (B069). El
+mecanismo de B030 ya no existe.
+**Referencias:** XXI-m. F013. B018.
+
+### B039 — Tomos antiguos sin `marcador_apertura_siguiente` (descriptivo)
+
+**Componente:** parser (descriptivo).
+**Cerrado:** H062. No era bug, era información descriptiva sobre el corpus.
+**Referencias:** PIPELINE §4.6.i.
+
+### B046 — Casos desaparecidos por bloque vacío en cruzador (no manifestado)
+
+**Componente:** cruzador.
+**Cerrado:** H062 (auditoría). La hipótesis de bloque vacío por páginas
+compartidas nunca tuvo testigo empírico. Los 43 faltantes catálogo-parser
+se explicaban por B009, y Fase F los resolvió. Deduplicación del catalogador
+previene el mecanismo en la práctica. Queda como nota arquitectónica.
+**Referencias:** H025, H026, H029.
+
+### B060 — Pista 2 de `detectar_fin_real` matchea firmas como sumarios
+
+**Componente:** parser.
+**Fix aplicado:** 2026-05-18 (H040). `linea_es_header_sumario_guardado` con
+exclusión de firmas, calificadores, headers de página, marcadores de apertura.
+32 mejoras, 0 regresiones.
+**Referencias:** H040.
+
 ---
 
 ## Deuda EN VALIDACIÓN
@@ -322,9 +374,16 @@ Requiere muestras representativas de tomos viejos antes de implementar
 
 **Estado de verificación:** `confirmado_cuantificado` (43 casos
 identificados, causa raíz verificada empíricamente en H029).
-**Estado del fix:** no diseñado. Dirección: Fase F (título como ancla).
+**Estado del fix:** **parcialmente resuelto (Fase F, H030).** `cargar_localizados`
+(parser.py) ahora infiere archivo y linea_inicio estimados para los 43 casos
+`pagina_no_en_mapa` usando vecinos del mismo tomo (docstring: "v18 Fase F: los
+fallos con status='pagina_no_en_mapa' ya no se descartan automáticamente"). Los 43
+casos se procesan con localización estimada. El diferencial catálogo-parser
+(5862 vs 5819 = 43) ya no existe: el pipeline produce 5862 casos.
+Residual: la localización estimada puede no ser exacta. La causa raíz
+(marcador de página ausente del .md) sigue sin resolver a nivel de Etapa 1.
 **Referencias cruzadas:** PIPELINE §3.6.c. XXI-d. BITACORA H001, H002,
-H029. ID histórico: era **Bug A** del documento del 2/5.
+H029, H030. ID histórico: era **Bug A** del documento del 2/5.
 
 ### B010 — `RE_CONSIDERANDO` restrictivo + `.match()` con anclaje `^...$`
 
@@ -352,28 +411,6 @@ espacial es la dirección probable (`RE_CONSIDERANDO` permisivo + `.search()`
 dentro de ventana `(apertura, por_ello)` excluyendo span del dictamen),
 pero F013 enseñó que permisivo + .search() sin guard rompe fallos.
 **Referencias cruzadas:** PIPELINE §4.6.b. BITACORA H019. Sin ID histórico.
-
----
-
-### B060 — Pista 2 de `detectar_fin_real` matchea firmas como sumarios
-
-**Componente:** parser.
-**Origen:** sesión H040. Diagnóstico comparativo parser vs auditor.
-**Causa raíz:** `detectar_fin_real` Pista 2 usaba `linea_es_header_sumario`
-sin guardas. Líneas de firma como "ARGIBAY (en disidencia)." matcheaban
-porque empiezan con ≥5 mayúsculas y terminan en punto. Al matchear,
-Pista 2 truncaba el bloque antes de la firma real del caso.
-**Diagnóstico / evidencia:** 124 falsos positivos en zona Pista 2 (38
-firma-related: 34 calificadores + 4 firma de juez). Comparación sobre
-1.239.055 líneas con `diagnostico_pista2_sumario.py`.
-**Fix aplicado:** 2026-05-18. Nueva función `linea_es_header_sumario_guardado`
-que excluye `linea_es_firma_de_juez`, `RE_CALIFICADOR`, `RE_PAGE_HEADER`,
-`RE_APERTURA`, `RE_DICT_HDR`, "DICTAMEN", `RE_HEADER_VOTO_DISIDENCIA`.
-32 mejoras, 0 regresiones. sin_firma 481 → 449. 169 n_jueces corregidos,
-55 voting_pattern enriquecidos.
-**Estado de verificación:** confirmado_cuantificado.
-**Estado del fix:** aplicado y validado (H040).
-**Referencias:** H040, B055 (JUECES_CONOCIDOS no matchea apellido solo).
 
 ---
 
@@ -649,151 +686,9 @@ Cuantificar magnitud antes de diseñar fix. Plan.
 **Referencias cruzadas:** F011. Sin §X.Y en PIPELINE. Sin ID histórico.
 Probable relación con la dinámica de §3.6.a residual.
 
-### B046 — Casos desaparecidos por bloque vacío en cruzador (hipótesis, mecanismo bajo revisión)
-
-**Componente:** cruzador (etapa 3) con captura silenciosa en parser
-(etapa 4).
-**Origen / fuente del diagnóstico:** H025 (inspección directa de
-`cruzar_catalogo_y_mapa.py` líneas 173-283 y de `procesar_archivo`
-parser.py líneas 1365-1367). Separado de B045 manifestación A para
-trazamiento independiente.
-
-**Causa raíz hipotética (lectura del código, pendiente de verificación):**
-si el cruzador recibiera dos casos con la misma `pagina_inicio` en
-el mismo tomo, el header de `pagina_inicio` y el header de
-`pagina_fin` resolverían a la misma línea X y la operación produciría
-`linea_fin = X − 1` y `linea_inicio = X`, es decir, bloque de
-longitud negativa. El parser saltearía silenciosamente esa fila en
-línea 1367 (`if not bloque: continue`). El caso desaparecería del
-corpus sin warning.
-
-**Refutación parcial del mecanismo escrito (verificado al cierre de H025):**
-consulta sobre `catalogo.csv` con `csv.DictReader` agrupando por
-`tomo`: hay cero pares de filas con el mismo `pagina_inicio` en el
-mismo tomo. El catalogador deduplica por `(tomo, pagina_inicio)` en
-`construir_filas_catalogo` (`construir_catalogo.py` líneas 388-397),
-consolidando carátulas distintas bajo un solo `caso_id_canonico` con
-`nombres_indice` separado por `" | "`. **El mecanismo descrito arriba
-no se manifiesta en el catálogo real porque la deduplicación lo
-impide aguas arriba.**
-
-**Estado de la hipótesis:** abierta. El intento de verificación
-empírica al cierre de H025 con caso testigo `346_p1205` (commit
-`890714a`, revertido en `52d0bc6`) fue inválido: la consulta
-`Select-String "346,1205,"` que devolvió vacío era una consulta mal
-formada (el orden de columnas del CSV es
-`caso_id_canonico,tomo,archivo,pagina_inicio,...`, no
-`tomo,pagina_inicio,...`). La verificación correcta con DictReader
-muestra que `346_p1205` está en `fallos_localizados.csv` con líneas
-16883-16988 y status `ok`, y en `csjn_casos.csv` línea 5236
-procesado correctamente. **B046 no tiene testigo empírico
-confirmado.**
-
-**Hipótesis alternativa para H026:** si B046 existe como bug
-arquitectónico, su mecanismo de manifestación no es "dos filas del
-catálogo con misma `pagina_inicio`" sino algo más sutil. Posibles
-caminos: filas con `n_nombres > 1` donde las carátulas son
-claramente casos distintos consolidados por error de la
-deduplicación; algún filtro intermedio del cruzador que descarte
-filas; alguna combinación específica de páginas en el mapa que
-produzca el escenario degenerado por otra ruta. Investigación
-dirigida pendiente.
-
-**Validador propuesto:** dado que el mecanismo escrito está
-refutado, el validador previo (contar filas con
-`pagina_fin == pagina_inicio_siguiente`) tampoco aplica. Nuevo
-validador: comparar el conteo de filas únicas en `catalogo.csv`
-contra el conteo de filas únicas en `csjn_casos.csv`. Si ambos
-coinciden (5862 vs ~5819), B046 puede no estar afectando filas. Si
-hay diferencia, identificar qué `caso_id_canonico` falta entre
-catálogo y producción. Plan para H026.
-
-**Estado del fix:** no diseñado. La hipótesis de fix anotada en
-B045 (revertir uno de los dos `-1`) sigue siendo válida como
-exploración para B045 manifestación B, independientemente del
-estado de B046.
-
-**Severidad:** desconocida. Si el conteo cataloga-vs-producción
-no muestra discrepancia, B046 puede ser un bug que la deduplicación
-del catalogador previene en la práctica y queda como nota
-arquitectónica sin manifestación real. Si hay discrepancia,
-severidad por cuantificar.
-
-**Interacciones con otros bugs:** comparte familia con B045
-manifestación B (ambas surgen de leer el código del cruzador con
-foco en páginas compartidas), pero los mecanismos de manifestación
-real son distintos.
-
-**Referencias cruzadas:** BITACORA H025 (hallazgo H025-F2-01 y
-sección de cierre con el revert documentado). B045 (familia
-arquitectónica común, hipótesis de fix +1/-1). Sin §X.Y en PIPELINE.
-
-**Evidencia empírica adicional (H026, corrida `--random 80`):**
-La corrida del auditor `--random 80` el 2026-05-16 selecciona casos
-de `fallos_localizados.csv`. Los 80 casos seleccionados están todos
-presentes en `csjn_casos.csv` (verificación implícita: el auditor los
-procesa y emite spans para todos). **No hay testigos empíricos de
-B046 en la muestra.**
-
-La verificación dirigida sobre el corpus completo (Fase E pendiente
-de H026) compara cardinales:
-
-- `output/parser/csjn_casos.csv`: 5.819 filas.
-- `output/localizacion/fallos_localizados.csv`: 5.862 filas.
-- Diferencia: 43 filas.
-
-Esa diferencia de 43 filas es **el espacio donde podría manifestarse
-B046**: casos presentes en localización pero ausentes en parser. Si
-la inspección identifica casos con bloque vacío o longitud negativa,
-B046 quedaría confirmado con mecanismo concreto. Si la diferencia se
-explica por otras causas (filtrado intencional, errores de
-localización, etc.), B046 queda refutado.
-
-**Resultado de Fase E (H029):** verificación ejecutada con `csv.DictReader`
-y comparación de sets. Los 43 `caso_id_canonico` faltantes fueron
-identificados y todos tienen `status: pagina_no_en_mapa` en
-`fallos_localizados.csv` — con `archivo` y `linea_inicio` vacíos.
-El mecanismo de B046 (casos desaparecidos por bloque vacío en el cruzador)
-**no se manifiesta en estos 43 casos**. La causa real es la documentada
-en B009: el localizador no pudo anclarlos porque el marcador numérico de
-página está ausente del `.md` (consumido por hojas complementarias o inicio
-de volumen). El parser nunca los recibió como entrada porque el localizador
-los dejó sin coordenadas — no porque el cruzador produjera bloques vacíos.
-
-**Conclusión sobre B046:** la hipótesis de bloque vacío por páginas
-compartidas sigue sin testigo empírico confirmado. Los 43 faltantes se
-explican íntegramente por B009. B046 queda como nota arquitectónica: el
-mecanismo descrito en el código es real, pero la deduplicación del
-catalogador lo previene en la práctica. Severidad: baja. Sin fix requerido
-salvo que aparezca un testigo empírico en otra inspección.
-
 ---
 
 ## Deuda ACTIVA — Parser (Etapa 4)
-
-### B013 — Bug XII: cascada del dispositivo por falso positivo
-
-**Componente:** parser.
-**Origen / fuente del diagnóstico:** XXI-c del forense. Sesión XII
-(3/5/2026) con caso Benedetti como arquetipo.
-**Causa raíz:** `detectar_apertura_dispositivo` (parser.py líneas 92-118) +
-loop principal "primera ocurrencia gana" (líneas 1554-1563). Variantes
-alternativas del dispositivo (`En consecuencia`, `Por los fundamentos`,
-etc.) matchean en cuerpo argumental antes del verdadero dispositivo.
-Cascadea a firma capturada de lugar incorrecto.
-**Diagnóstico / evidencia:** 234 casos originales → 302 prematuros
-(dispositivo antes de apertura) + 329 post-apertura (B059, dispositivo
-en texto argumental después de apertura).
-**Estado de verificación:** `confirmado_cuantificado`.
-**Estado del fix:** aplicado y validado en dos fases:
-  - **H035:** búsqueda anclada con cascada apertura_rel → dictamen_end+1 → 0.
-    Resuelve 302 prematuros. 0 regresiones.
-  - **H038:** forward con validación de firma (`linea_es_firma_de_juez` en
-    40 líneas). Primer match con firma gana; fallback al primero si ninguno
-    tiene firma. Resuelve 279 post-apertura (B059). 0 regresiones.
-    Estrategias descartadas: reversa pura (86 regresiones), reversa desde
-    votos (8), reversa+firma (7).
-**Referencias cruzadas:** XXI-c. BITACORA H035, H036, H038.
 
 ### B014 — `find_case_name` retrocede y captura citas del dictamen previo (fallback Fix 1)
 
@@ -992,6 +887,16 @@ actual (variante V2). El defecto de `primer_token_de_caratula`
 no uno. Sin testigos nuevos en H025: la nota es por completitud del
 mapa arquitectónico, no por verificación empírica adicional.
 
+**Nota H062 (auditoría).** Dos de los tres componentes de causa raíz están
+sustancialmente mitigados por fixes posteriores:
+- Componente 1 (búsqueda atrás): **eliminado por B069 (H046).**
+- Componente 2 (test `es_caratula` sin estructura): la búsqueda forward
+  ahora usa `_es_texto_corriente()` (B070, H048) + normalización tildes
+  (B071) + guard posicional título (B074, H050).
+- Componente 3 (orden de operaciones): sigue vigente pero impacto reducido.
+La estimación de "~570 casos proyectados" (H022) es obsoleta. Re-medir
+prevalencia residual antes de diseñar fix adicional (opción D pendiente).
+
 ### B019 — `detectar_fin_real` off-by-one en firmas multilínea
 
 **Componente:** parser.
@@ -1177,10 +1082,15 @@ no cuantificada.
 PIPELINE) cubre 164 casos con link. Falta detector para sumarios sin link
 (formato editorial más viejo). Diseñar detector de "sumario sin link"
 análogo. Plan.
-**Estado del fix:** no diseñado. Es rediseño del parser, no fix puntual
-(motivo original de H013 que generó la construcción del auditor).
-**Referencias cruzadas:** F006. H013. PIPELINE §4.4.g (cubre solo
-sumarios con link). Sin ID histórico.
+**Estado del fix:** parcialmente mitigado. H051 implementó el zonificador
+que clasifica sumarios editoriales como zona propia (34 `sumario_editorial`
+reclasificados). H055 implementó `residuo_caso_anterior` que excluye
+arrastre del word_count (−1,055,756 wc). El impacto cuantitativo en
+`wc_mayoria` está sustancialmente reducido. Residual: sumarios dentro del
+bloque entre carátula y apertura del fallo que no son residuo del caso
+anterior.
+**Referencias cruzadas:** F006. H013. H051, H055. PIPELINE §4.4.g (cubre
+solo sumarios con link). Sin ID histórico.
 
 ### B025 — 414 falsos `unanime` (mecanismo confirmado)
 
@@ -1260,6 +1170,12 @@ del caso estaría dentro del bloque).
 (causa raíz). B022 (mecanismo intermedio). Sin §X.Y en PIPELINE.
 Sin ID histórico.
 
+**Nota H062:** la cardinalidad 414 es dato pre-fix (sesión XXI, 3-4/5).
+Desde entonces se aplicaron B001 (cruzador), B069 (Pista 1 atrás
+eliminada), B074 (guard posicional), A001 (firma inversa), B055 (firma
+truncada), H055 (residuo_caso_anterior). El número real post-fixes es
+desconocido y probablemente mucho menor. Re-medición prioritaria.
+
 ### B026 — `V.` mayúsculas en tomos 329-330 (subtítulos editoriales viejos)
 
 **Componente:** parser.
@@ -1315,37 +1231,6 @@ Prioridad baja (cosmético post §3.6.a). Aplicar como higiene del código.
 ~0); B028 está acá como recordatorio de que el fix de higiene sigue
 pendiente. Si se aplica el fix, ambos pasan a CERRADO. Si se decide no
 aplicar, B028 puede mergearse con B006 en una próxima pasada del documento.
-
-### B029 — `collect_firma_lines` con `max_lines=40` puede ser insuficiente
-
-**Componente:** parser.
-**Origen / fuente del diagnóstico:** XXI-l del forense.
-**Causa raíz:** constante hardcodeada `max_lines=40` en
-`parser.py` línea 423. Casos con firma fuera de ese rango (Brizuela y
-Colegio de Escribanos mencionados en sesión XV) no capturan firma.
-**Diagnóstico / evidencia:** mencionado en XXI sin medición. Brizuela y
-Colegio de Escribanos como casos paradigmáticos, no auditados directamente
-sobre este mecanismo.
-**Estado de verificación:** `hipotesis_no_verificada`.
-**Validador propuesto:** identificar casos en CSV con `voting_pattern=
-sin_firma` que sean fallos largos (`word_count > P75`). Auditar 5-10
-contra `.md` para verificar si la firma existe pero está fuera del rango
-de 40 líneas. Plan.
-**Estado del fix:** no diseñado. Salida natural: aumentar `max_lines` o
-hacer dinámico según largo del bloque.
-**Referencias cruzadas:** XXI-l. Sin §X.Y en PIPELINE. Sin ID histórico.
-
-### B030 — `detectar_fin_real` excluye solo las primeras 5 líneas del bloque
-
-**Componente:** parser.
-**Origen / fuente del diagnóstico:** XXI-m del forense. Equivalente a F013
-(= B018). Está documentado como bug separado en XXI pero el mecanismo es
-el mismo que B018.
-**Estado:** **redundante con B018**. Probablemente se fusionan en próxima
-pasada del documento. Mantenido como entrada propia hasta confirmar que
-"buscar_atras 5 líneas" (XXI-m) y "primer_token matchea dentro del
-dictamen" (F013) son el mismo bug.
-**Referencias cruzadas:** XXI-m. F013. B018.
 
 ### B031 — `linea_es_header_sumario` requiere MAYÚSCULAS en primeros 5 caracteres
 
@@ -1407,6 +1292,10 @@ específicos no están listados.
 `word_count`. Comparar contra distribución del corpus. Plan.
 **Estado del fix:** no diseñado. Salida natural análoga a la mitigación
 de §4.6.g: filtrar este status antes de procesar.
+**Nota H062:** en producción normal, `--corpus` siempre se pasa al cruzador,
+por lo que `ultimo_del_tomo_sin_fin` nunca se asigna (se usa
+`ok_cortado_en_indice` o `ultimo_del_tomo` con linea_fin válido). El riesgo
+real es ~0. Degradado a nota/cosmético.
 **Referencias cruzadas:** XXI-o. PIPELINE §4.6.g (dominio relacionado).
 Sin ID histórico.
 
@@ -1493,15 +1382,6 @@ temporal: filtrar `status_localizacion in ('fallo_cruza_archivos',
 `linea_fin` para cruza_archivos). No aplicado.
 **Referencias cruzadas:** PIPELINE §4.6.g. Sin equivalente en XXI ni en
 BITACORA con ese nombre. Sin ID histórico.
-
-### B039 — Tomos antiguos sin `marcador_apertura_siguiente` (descriptivo)
-
-**Componente:** parser (descriptivo).
-**Origen / fuente del diagnóstico:** PIPELINE §4.6.i.
-**Estado:** no es bug, es información descriptiva sobre el corpus. Útil
-para entender por qué la cascada tiene cuatro pistas distintas. No
-requiere fix.
-**Referencias cruzadas:** PIPELINE §4.6.i.
 
 ### B043 — `primer_token_de_caratula` no excluye sustantivos institucionales genéricos
 
@@ -2031,36 +1911,18 @@ continuación (hallazgo 8). Sin ID histórico.
 Pendientes que no son bugs concretos sino mejoras de proceso o
 arquitectura. No usan ID `B0NN`.
 
-### M01 — Re-recorrer parser y actualizar PIPELINE.md
+### M01 — Re-recorrer parser y actualizar PIPELINE.md — CERRADO H062
 
-PIPELINE.md fue construido leyendo el parser en muchas sesiones del 1-9/5.
-Desde entonces se aplicaron Fix 1 (`2adda06`), fix §3.6.a (B001) y fix
-§4.6.j doble espacio (B005), todos sobre `parser.py` y/o
-`cruzar_catalogo_y_mapa.py`. PIPELINE.md ya tiene incorporados esos fixes
-como cuadros "RESUELTO". Pero la línea 2834 reconoce explícitamente:
-"incorporación de bugs F001–F011 reorganizados, actualización del diagrama
-global". F012, F013 y F-AUDITOR-01 son aún más recientes.
+**Cerrado H062 (auditoría).** PIPELINE.md deprecado a `archivo/docs/PIPELINE_v1.md`.
+El documento tenía valor como mapa de las cuatro etapas, pero las secciones de
+bugs (§X.Y) quedaron obsoletas tras ~30 sesiones de desarrollo (H035-H061). El
+conocimiento vivo de bugs migró íntegramente a DEUDA_TECNICA.md. Actualizar las
+secciones de bugs requeriría trabajo de varias sesiones sin beneficio claro: la
+fuente única de verdad ya es este archivo.
 
-**Acción pendiente:** sesión dedicada a re-recorrer `parser.py` vivo,
-`construir_catalogo.py` vivo y `cruzar_catalogo_y_mapa.py` vivo contra
-PIPELINE.md, agregando §X.Y nuevos para los bugs B017, B018, B019,
-B020, B021, B022, B023, B024, B025 que hoy no están como §X.Y en
-PIPELINE. Incorporar adicionalmente (H025): B045 manifestaciones A/B
-con la causa raíz a nivel código identificada (catalogador 410 +
-cruzador 245), B046 (hipótesis de casos desaparecidos por bloque
-vacío, mecanismo bajo revisión), nota de acoplamiento B018 →
-`detectar_fin_real` pista 1, y referencia a
-`docs/GRAMATICA_DEL_FALLO.md` como insumo conceptual sobre arquitectura
-deseada del parser. Cuatro fricciones nuevas o ampliadas a agregar en
-PIPELINE: §2.5.a (consecuencia aguas abajo del `pagina_fin` sin restar),
-§3.5 (escenario degenerado del bloque vacío), §3.9.d nuevo (caso
-desaparecido silenciado por guarda en parser), §4 (asimetría de
-`detectar_fin_real` y acoplamiento con B018). Conservar la versión
-actual de PIPELINE.md como referencia (trabajo de muchas sesiones,
-no se descarta).
-
-**Precondición:** ninguna. Trabajo en sesión limpia con backup de
-PIPELINE.md previo.
+PIPELINE_HALLAZGOS.md también deprecado a `archivo/docs/` (el propio archivo
+declaraba "cuando PIPELINE.md cubra las cuatro etapas, este archivo debería
+archivarse").
 
 ### M02 — Reorganización del repo (continuación)
 
@@ -2101,24 +1963,12 @@ explícito.
 **Convención adoptada:** antes de modificar archivo X, copiar X al
 snapshot del día sin asumir que el snapshot inicial cubre todo.
 
-> **⚠ FLAGUEADO 15/5/2026 PARA RECONSIDERAR.** La redacción de esta entrada está cuestionada en dos planos:
-> 1. Confunde XXI-v con XXI-f: nombra "Bloque B", que en realidad se menciona en XXI-f (= B025), no en XXI-v.
-> 2. La premisa "probablemente son los mismos 32 casos" no se sostiene tras releer Hallazgo 7 del forense (= XXI-v). Los 32 de XXI-v pasaron de `pagina_fin_no_en_mapa` a `ok` por un cambio aguas arriba sin git log. Los 32 de §3.6.a pasaron de `ok` a `pagina_fin_no_en_mapa` post-fix B001. Direcciones opuestas; probablemente grupos distintos.
-> 3. La identificación caso-a-caso de los 32 originales de XXI-v es imposible sin git log de ese período.
->
-> Decisión: pendiente. Esta entrada se reconsidera en sesión futura — opciones: cerrarla como no-resoluble, reformularla como cierre indirecto, o eliminarla.
+### M05 — Verificación caso-a-caso de identidad de los 32 oks de XXI-v — CERRADO H062
 
-### M05 — Verificación caso-a-caso de identidad de los 32 oks de XXI-v
-
-**Pendiente derivado de la sesión del 14/5.** XXI-v ("32 oks falsos")
-quedó como "estado desconocido". Post §3.6.a (B001) hay 32 fallos que
-pasaron de `ok` a `pagina_fin_no_en_mapa` (PIPELINE §3.6.a). El número
-coincide. Probablemente son los mismos 32 casos, pero la identidad
-caso-a-caso no se verificó.
-
-**Acción pendiente:** comparar lista de los 32 documentados en §3.6.a
-contra el "Bloque B" mencionado en XXI-v (si la lista existe en algún
-output histórico). Trabajo estimado 10 minutos.
+**Cerrado H062 (auditoría).** Ya flagueado 15/5 para reconsiderar: la premisa
+"probablemente son los mismos 32 casos" no se sostiene (direcciones opuestas),
+y la identificación caso-a-caso es imposible sin git log de ese período. Cerrado
+como no-resoluble. No tiene impacto operativo.
 
 ---
 
@@ -2271,8 +2121,8 @@ canónicos actuales B0NN.
 | XXI-i | B027 | Autos y Vistos |
 | XXI-j | B011 | `344_p344` |
 | XXI-k | B006 (cerrado conceptual) + B028 (fix de higiene pendiente) | Aritmética `apertura_idx + len(bloque)` |
-| XXI-l | B029 | `collect_firma_lines max_lines=40` |
-| XXI-m | B030 (= B018) | Redundante con F013, mismo mecanismo |
+| XXI-l | B029 (cerrado H062) | `collect_firma_lines max_lines=40`, resuelto por B055 |
+| XXI-m | B030 (cerrado H062, = B018) | Redundante con B018, búsqueda atrás eliminada B069 |
 | XXI-n | B031 | `linea_es_header_sumario` mayúsculas |
 | XXI-ñ | B032 (= F001) | `RE_VOTO_HDR` |
 | XXI-o | B033 | `ultimo_del_tomo_sin_fin` |
@@ -2282,7 +2132,7 @@ canónicos actuales B0NN.
 | XXI-s | (no entra) | `jueces_desconocidos` vacío, intencional |
 | XXI-t | B003 parcial | Hojas complementarias Fase 1 ✅, Fase 2 = B009 |
 | XXI-u | (no entra) | Cubierto implícito por §2.5.e PIPELINE |
-| XXI-v | M05 | Verificación caso-a-caso pendiente |
+| XXI-v | M05 (cerrado H062) | No-resoluble, sin impacto operativo |
 
 **IDs F-numerados de BITACORA mapeados a B0NN:**
 
@@ -2308,133 +2158,45 @@ canónicos actuales B0NN.
 
 ## Resumen ejecutivo
 
-- **Bugs cerrados:** 10 (B001-B008, B013, B060).
-- **Bugs en validación:** 2 (B009 cuantificado pendiente fix, B010
+*Actualizado H062 (2026-05-23).*
+
+- **Bugs cerrados:** ~30 (B001-B008, B013, B029, B030, B039, B046, B055,
+  B060, B063-B064, B066-B074, B076-B077, B079, A001).
+- **Bugs en validación:** 2 (B009 parcialmente resuelto por Fase F, B010
   rediagnosticado pendiente fix).
-- **Bugs activos del pipeline (catálogo + cruzador + parser):** 30
-  (B011, B012, B014-B039, B048). De ellos:
-  - 1 confirmado_cuantificado pendiente de aplicar fix de higiene (B028)
-  - ~13 confirmado_caso_testigo o confirmado_cuantificado (B011, B012,
-    B014, B016, B017, B018, B019, B020, B021, B022, B023,
-    B035-B039, B048)
-  - 1 sospecha_cardinal (B025)
-  - 7 hipotesis_no_verificada — identificados leyendo código en XXI sin
-    medir (B015, B026, B027, B029, B031, B033, B034)
-- **Bugs activos del auditor:** 7 (B040-B042, B047, B049, B050, B051).
-- **Pendientes metodológicos:** 8 (M01-M08).
+- **Bugs activos del pipeline (catálogo + cruzador + parser):** ~25.
+  Catálogo: B011, B045.
+  Cruzador: B012.
+  Parser: B014-B022, B023-B028, B031-B038, B043-B044, B048, B053-B054.
+  De ellos:
+  - B025 (falsos unánime): cardinalidad 414 obsoleta, re-medir.
+  - B018, B024: sustancialmente mitigados por fixes colaterales (H046-H055).
+  - B028 (cosmético), B033 (cosmético), B036 (cosmético), B037 (cosmético).
+  - ~5 hipotesis_no_verificada: B015, B026, B027, B031, B034.
+- **Bugs activos del auditor:** ~10 (B040-B042, B047, B049-B051, B052,
+  B056-B058, B061-B062, B065, VIS001-VIS004).
+- **Pendientes metodológicos:** 7 (M01 cerrado por deprecación de PIPELINE.md,
+  M02-M04, M05 cerrado como no-resoluble, M06-M08).
 
-**Próximo trabajo priorizado (orden sugerido):**
+**Próximo trabajo priorizado (orden sugerido, H062):**
 
-1. Cerrar el bloque docs de la Fase 2 (commit de este archivo + decisión
-   sobre destino del forense + decisión sobre PIPELINE.md M01).
-2. Diagnóstico fino de B010 con `auditar_fallo.py` (acordado para
-   próxima sesión, BITACORA H019).
-3. M05: verificar identidad de los 32 oks de XXI-v contra los 32 de B001.
-4. Cuantificar los `hipotesis_no_verificada` antes de fixearlos. Prioridad
-   especial: B025 (414 unanime) re-medir post §3.6.a.
-5. Bloque snapshots Fase 2 (M02).
-6. **Fase F (H030, prioritaria):** portar `detectar_caratula` del auditor
-   al parser como ancla de inicio de caso. Tomar muestras representativas
-   de tomos viejos y nuevos antes de implementar. Snapshot pre-fix +
-   auditoría antes y después. Ver hallazgo estructural en B009 y nota
-   H028 al pie.
-7. B049 Var-B (H030): diagnóstico fino de `340_p1551`.
-8. Cuantificaciones B050-quant, B051-quant, HN3'-quant (H030).
-9. M06 antes de implementar detector de epílogo: verificar persistencia
-   editorial de la gramática sobre el corpus completo.
-
-
-**Nota H028 — argumento de diseño para Fase F:** la fuente canónica para
-`case_name_cuerpo` es el índice editorial (líneas antes del primer sumario),
-no el cuerpo del fallo. Buscar en `Vistos los autos: "X"` introduce ruido
-por remisiones a otras causas y carátulas de recursos de hecho.
-`detectar_caratula` del auditor ya implementa esta estrategia correctamente
-y es el candidato natural a portar al parser como fuente primaria.
-
-
-### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula
-
-**Componente:** auditor (cosmético — no afecta CSV).
-**Origen:** sesión H030, inspección auditoría postfix_fase_f_v2, caso `346_p885`.
-**Causa raíz (corregida en H031):** el refinador `refinar_inicio_por_titulo()`
-ancló correctamente en la primera línea de la carátula de Wang. El problema
-real es que `detectar_caratula()` del auditor toma solo la segunda mitad de
-la carátula como carátula porque la primera quedó en el catch_all inicial
-(zona de residuo del caso anterior). Cuando la carátula está partida en dos
-o más líneas por salto de página, `prev_no_header` se pisa en cada iteración
-y devuelve solo la línea más cercana al primer sumario.
-**Diagnóstico / evidencia:** `346_p885` (Wang, Dingjian): catch_all inicial
-contiene epílogo de Schenone + `WANG, DINGJIAN c/ EN - M INTERIOR OP y V – DNM`.
-El auditor detecta como carátula solo `s/ Recurso directo DNM`. Mismo patrón
-en `329_p9` (carátula en 3 líneas) y `329_p5` (carátula con `V.`).
-**Severidad:** cosmético. El dato correcto ya está en `nombres_indice` por
-definición del índice editorial. No afecta `case_name_indice` del CSV ni
-ningún campo analítico.
-**Fix propuesto:** usar el primer token de `nombres_indice` como límite
-dentro del catch_all anterior para identificar el inicio real de la carátula.
-Dependiente de B054 (separar catch_all anterior del posterior por posición).
-POC disponible en `scripts/auditoria/poc_b052v3.py` — 1 mejora, 0 regresiones
-sobre 11 casos testigo.
-**Estado del fix:** poc_validado. Pendiente integración con B054.
-**Referencias:** H030, H031, commit `27bf3d5`.
-
----
-
-### B053 — Parser reimplementa lógica de segmentación del auditor
-
-**Componente:** parser / auditor.
-**Origen:** sesión H030, observación durante auditoría postfix.
-**Causa raíz:** `segmentar_bloque()` del auditor (carátula, sumarios,
-dictamen, cuerpo_mayoria, firma, votos, disidencias) fue construida
-iterativamente con inspección humana y produce segmentación más
-confiable que la lógica paralela del parser productivo. El parser
-reimplementa las mismas heurísticas de forma más cruda, sin el
-refinamiento acumulado del auditor.
-**Diagnóstico / evidencia:** comparación visual en auditorías H030 —
-el auditor detecta correctamente secciones que el parser procesa
-como ruido (epílogo en catch_all, carátulas partidas, dictamenes
-embebidos).
-**Impacto:** todos los campos analíticos del CSV (`wc_mayoria`,
-`wc_votos`, `wc_considerando`, `firma_raw`, `dictamen_presente`)
-son menos confiables de lo que serían si el parser consumiera
-`segmentar_bloque()`.
-**Estado de verificación:** confirmado_caso_testigo.
-**Fix propuesto:** refactorizar `procesar_archivo` para que llame a
-`segmentar_bloque()` del auditor como fuente de segmentación, en lugar
-de reimplementar. Requiere mover `segmentar_bloque()` a un módulo
-compartido (`scripts/pipeline/segmentador.py`) e importarlo desde
-ambos. Cambio arquitectónico — requiere planificación cuidadosa y
-validación exhaustiva.
-**Estado del fix:** no diseñado.
-**Referencias:** H030.
-
----
-
-### B054 — Epílogo post-firma no tipificado (catch_all)
-
-**Componente:** parser / auditor.
-**Origen:** sesión H030, observación durante auditoría postfix.
-**Causa raíz:** el bloque post-firma de cada fallo contiene información
-analíticamente valiosa (representación letrada de cada parte, tribunal
-de origen, tribunales intervinientes) que hoy cae en `catch_all` porque
-ni el parser ni el auditor lo tipifican como span propio.
-**Diagnóstico / evidencia:** casos Buttice (329_p5368) y Andreani
-(329_p1301) auditados en H030 — el catch_all final tiene estructura
-consistente y delimitable.
-**Señal de inicio:** primera línea post-firma que matchea
-`Recurso .* interpuesto por` | `Traslado contestado por` |
-`Nombre de la actora` | `Nombre del actor`.
-**Señal de fin:** carátula del caso siguiente o fin de bloque.
-**Impacto:** tribunal de origen hoy se extrae desde el cuerpo del fallo
-(menos confiable); desde el epílogo sería más preciso. Representación
-letrada no se extrae en absoluto — datos para análisis de litigantes
-frecuentes.
-**Estado de verificación:** confirmado_caso_testigo.
-**Validador propuesto:** M06 (verificar persistencia editorial de la
-gramática del epílogo sobre corpus completo) antes de implementar.
-**Estado del fix:** no diseñado.
-**Referencias:** H030, M06.
-
+1. **B010 — RE_CONSIDERANDO restrictivo** (prioridad alta, 232 casos).
+   Fix diseñado pero no aplicado. Diagnóstico fino con `auditar_fallo.py`
+   pendiente desde H019. Mayor fuente de imprecisión en `wc_considerando`.
+2. **B032 — RE_VOTO_HDR sin "de la"** (fix de 1 línea, diseñado).
+   2 votos de Argibay perdidos por tomo. Bajo costo, impacto positivo.
+3. **B025 — re-medición falsos unánime post-fixes.** 414 era pre-fix.
+   Re-medir contra CSV actual para dimensionar residual.
+4. **B018 residual — re-medición post-H046/H048/H050.** Medir para decidir
+   si opción D (validación cruzada con proximo_header_pagina) vale la
+   inversión.
+5. **B045 manifestación B — evaluación de fix raíz.** Mitigación por
+   residuo_caso_anterior (H055) cubre impacto cuantitativo. Evaluar si
+   fix raíz (revert −1 en catalogador/cruzador) aporta para la tesis.
+6. **B054/M06 — epílogo.** Verificar persistencia editorial de gramática
+   sobre corpus completo (M06). Dato valioso para tesis (tribunal de
+   origen, litigantes).
+7. **M02 — bloque snapshots Fase 2.** Limpieza de repo.
 
 
 ### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula
@@ -2521,6 +2283,7 @@ gramática del epílogo sobre corpus completo) antes de implementar.
 **Referencias:** H030, M06.
 
 ---
+
 ### VIS001 — Clasificación robusta de catch_all_inicio en auditar_fallo
 **Componente:** auditor (`auditar_fallo.py`).
 **Origen:** sesión H032.
@@ -3047,155 +2810,6 @@ casos pero no rompe métricas analíticas principales.
 
 ---
 
-## NOTAS PARA LA SESIÓN SIGUIENTE
-
-Bugs documentados en H032 pendientes de fix:
-- ~~B055 (firma multilinea con paréntesis)~~ — **cerrado H042** (commit `e258f66`)
-- B056 (apertura mayoría perdida) — solo auditor por ahora, prioridad media
-- B057 (dictamen consume FALLO DE LA CORTE) — parcialmente resuelto por backstop H036
-- B058 (pérdida de °) — prioridad baja, verificar primero
-- ~~B063 y B064 cerrados H043.~~ B066 invalidado H044. B067 cerrado H044.
-- ~~B070+B071 cerrados H048.~~ B072 (conjueces) y B073 (lfr<li) abiertos.
-
-Metodología acordada: auditar antes de fijar (M04).
-Casos testigo disponibles en output/auditoria/auditar_fallo/.
-
----
-
-## NOTAS PARA LA SESIÓN SIGUIENTE
-
-### Fixes commiteados H036 + H038 + H039
-- H036: backstop dictamen con RE_APERTURA (31 casos, 813 → 782 sin_firma).
-- H038: forward con validación de firma (279 casos, 782 → 503 sin_firma).
-- H039: 5 variantes dispositivo (22 casos, 503 → 481 sin_firma).
-  Variantes: `por_lo_expresado`, `por_las_razones`, `por_las_consideraciones`,
-  `oido_el`, `que_por_ello`.
-- H040: guardas exclusión Pista 2 (32 casos, 481 → 449 sin_firma).
-  B060: `linea_es_header_sumario_guardado` excluye firmas, calificadores,
-  headers de página, marcadores de apertura, headers de voto.
-- H041: Tier 2 mid-line dispositivo (11 casos, 449 → 438 sin_firma).
-  Patrones seguros con .search(): por_ello, por_lo_expuesto, por_las_razones,
-  por_lo_expresado, por_las_consideraciones, que_por_ello, oido_el.
-  Triple guarda: fin de oración + argumental + firma validada.
-- H042: fix B055 firma truncada/contaminada (1262 mejoras, 0 regresiones).
-  Commit `e258f66`. sin_firma 425 (sin cambio — fix de calidad, no cobertura).
-- H043: B063 conjueces + fix cosmético desconocidos (40 mejoras, +55 votos).
-  Commit `8a2558e`. sin_firma 425→422. Inventario headers: B066 nuevo.
-- H044: B067 Tier 3 dispositivo retry sin techo (17 mejoras, 422→406).
-  sin_firma 422→406. B066 invalidado (42/42 matches eran citas, no headers).
-  Hallazgo empírico: 12% del corpus tiene votos-antes-de-dispositivo.
-  Análisis arquitectónico: Opción D (reordenamiento) invalidada por estructura
-  del corpus; firma_end funciona (92.6% cobertura, p50=7 líneas).
-- H045: visor explorador (`scripts/explorador/explorador.py`) +
-  PoC firma independiente v2 (`scripts/auditoria/poc_firma_independiente_v2.py`).
-  sin_firma sigue en 406 (sesión de diagnóstico, sin fix aplicado).
-  Hallazgos: B069 (Pista 1 tokens comunes = causa raíz 47.6% sin_firma),
-  A001 (firma→dispositivo, 43 recuperables), B068 cancelado (Moliné O'Connor).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406.
-- H046: B069 cerrado — eliminada búsqueda atrás Pista 1 (277 mejoras, 4 regresiones).
-  sin_firma 406→148. Cobertura firma 92.9%→97.4%. Votos 25603→26959.
-- H047: A001 cerrado — fallback firma inversa (34 mejoras, 0 regresiones, sf 148→114).
-  A001b — _encontrar_zona_fallo primera apertura (1 mejora, sf 114→113).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113.
-- H048: B070+B071 cerrados — Pista 1 forward: validación texto corriente +
-  normalización tildes (37 mejoras, 0 regresiones, sf 113→76, votos 27103→27303).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76.
-- H049: B072 cerrado — 15 conjueces en JUECES_CONOCIDOS (21 mejoras, 1 regresión
-  aceptada, sf 76→74, votos 27303→27325). B073 cerrado sin fix (451 lfr_cambio
-  verificados). Clasificación de 74 sin_firma en 4 categorías. B074 investigado,
-  no committeado (guarda posicional con 7 regresiones inexplicadas).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74.
-- H050: B074 cerrado — guard posicional título en detectar_fin_real
-  (5 mejoras + 2 correcciones, 0 regresiones, sf 74→69, votos 27325→27335).
-  5 versiones de PoC iteradas (v1-v5). Fix final: pre-cómputo del token
-  del título en primeras 15 líneas como lower-bound de li para detectar_fin_real.
-  B075 anotado (Hornos "Roberto Enrique", 1 caso).
-  Reclasificación sin_firma: 52 firma_no_detectada, 3 sin_zona, 11 cortos, 3 vacíos.
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69.
-- H051: Refacción C Paso 1+2 — zonificador integrado (3 pasadas: headers, anclas,
-  propagación). 31 sumarios editoriales reclasificados, sf 69→38.
-  Catálogo validado contra corpus (5855 aperturas, 0 huérfanos genuinos).
-  Concordancia zonificador: firma 99.7%, dispositivo 99.6%, dictamen 41.4% (artefacto).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38.
-- H052: Refacción C Paso 3 — dictamen zonificado.
-  Fix type mismatch concordancia dictamen (41.4% → 100%): PoC comparaba "1", CSV tenía "True".
-  CSV zona-centered PoC: 152K segmentos, descubrió bug continue en loop en_dictamen
-  (inflaba wc_dictamen en 3254 casos) + ~486 falsos dispositivo del Procurador.
-  Guarda dictamen en zonificador: dentro de dictamen, solo apertura/fecha cierran zona.
-  Integración: zonificar_bloque() retorna (list, anclas), lineas_dictamen derivado de zonas,
-  loop en_dictamen eliminado. Anclas RE_VISTOS + RE_REMISION: 3 sumarios editoriales nuevos.
-  sin_firma 38→35, wc_dictamen corregido en 3254 casos, 0 regresiones.
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
-- H053: CSV zona-centered canónico + diagnóstico firma.
-  extraer_segmentos() integrada en parser.py, csjn_casos_zonas.csv como tercer output
-  canónico (149512 segmentos). Guarda defensiva fecha/dictamen en Caso (b) (0 impacto).
-  Diagnóstico firma zonificada: 15 discrepantes → 10 sin_dispositivo (irrecuperables),
-  3 falsos positivos del zonificador (headers sumario), 2 genuinamente complejos (ROI
-  insuficiente: 35→33 máximo). Piso irrecuperable ~17 confirmado. sin_firma sin cambio.
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
-- H054: análisis exploratorio y diagnóstico. Estadísticas descriptivas corpus
-  (B) + análisis zonas (A) + validación n_jueces↔n_votos (C, 0 discrepancias).
-  Diagnóstico catch_all: 4830/5668 fallos con intersticio inicial (85%),
-  425K palabras residuo (2.4% corpus). Lógica catch_all_inicio del visor
-  (líneas 313–325) validada como precedente para H055.
-  B061 desvinculado de B066 (invalidado). B065 parcialmente validado.
-  sin_firma sin cambio (35). Planificación H055: zona residuo_caso_anterior.
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35.
-
-### Matriz pendiente post-H053
-
-| # | Línea de trabajo | Casos | Riesgo | Dificultad | Estado |
-|---|-----------------|------:|--------|------------|--------|
-| 1 | ~~B070 Pista 1 forward texto corriente~~ | ~~43~~ | — | — | **Cerrado H048** (37 mejoras, sf 113→76) |
-| 2 | ~~B072 Conjueces faltantes~~ | ~~5+~~ | — | — | **Cerrado H049** (21 mejoras, sf 76→74) |
-| 3 | ~~B073 lfr < li refinado~~ | ~~2+~~ | — | — | **Cerrado H049** sin fix (verificado OK) |
-| 4 | ~~B074 Guarda posicional firma_actual~~ | ~~5~~ | — | — | **Cerrado H050** (5 mejoras, sf 74→69) |
-| 5 | ~~Sumarios editoriales sin firma~~ | ~~31+3~~ | — | — | **Cerrado H051+H052** (34 reclasificados, sf 69→38→35) |
-| 6 | ~~Dictamen zonificado (Refacción C Paso 3)~~ | ~~3254~~ | — | — | **Cerrado H052** (wc_dictamen corregido, guarda dictamen) |
-| 7 | ~~Firma zonificada (Refacción C Paso 4)~~ | ~~15~~ | — | — | **Cerrado H053** diagnóstico (ROI insuficiente: 10 irrecup, 3 FP, 2 complejos) |
-| 8 | Firma no detectada (fallos reales) | ~18 | medio | alta | Piso ~17 confirmado (H053). Sin target viable |
-| 9 | Bloques cortos (span<20) | 11 | — | — | Sin fix posible |
-| 10 | Sin zona de fallo + vacíos | 6 | — | — | Irrecuperables |
-| 11 | B075 Hornos "Roberto Enrique" | 1 | bajo | baja | Pendiente |
-| 12 | ~~CSV zona-centered canónico~~ | — | — | — | **Cerrado H053** (149512 segmentos, tercer output) |
-
-Piso irrecuperables: ~17 (6 sin_zona/vacíos + ~11 bloques cortos). Confirmado H053.
-Los ~18 firma_no_detectada (fila 8) fueron analizados en H053-B: los 15
-discrepantes del zonificador no aportan mejoras viables. Sin target viable
-sin cambio arquitectónico mayor.
-Concordancia actual del zonificador: dictamen 100%, firma 99.7%, dispositivo 99.6%.
-
-### Pendientes menores
-- ~~B055 (firma partida)~~ — **cerrado H042** (commit `e258f66`).
-- B056 (apertura mayoría perdida) — solo auditor.
-- ~~B057 (dictamen consume FALLO DE LA CORTE)~~ — **cerrado H052** (guarda dictamen
-  en zonificador + lineas_dictamen derivado de zonas elimina el bug del continue).
-- B058 (pérdida de °, regex visor) — prioridad baja.
-- B061 (RE_DISID_HDR/RE_VOTO_HDR multi-línea) — 26 casos. Independiente (B066 invalidado H044). Requiere M08.
-- B062 (juez en texto dispositivo activa started) — 1 caso. Prioridad baja.
-- ~~B063 (conjueces faltantes)~~ — **cerrado H043** (commit `8a2558e`).
-- ~~B064 (Otero encoding)~~ — **cerrado H043** (era bug cosmético, no encoding).
-- B065 (validación firma↔votos) — n_jueces↔n_votos validado H054 (0 discrepancias). Pendiente: calificador↔bloque_voto.
-- B066 (juez/jueza en headers) — **INVALIDADO H044** (42/42 eran citas).
-- ~~B067 (Tier 3 dispositivo sin techo)~~ — **cerrado H044** (17 mejoras, 422→406).
-- B068 (Moliné O'Connor) — **CANCELADO H045** (es parte en 2 juicios post-remoción).
-- ~~B069 (detectar_fin_real Pista 1)~~ — **CERRADO H046** (277 mejoras, sf 406→148).
-- ~~A001 (firma independiente de dispositivo)~~ — **CERRADO H047** (35 mejoras, sf 148→113).
-- ~~B070 (Pista 1 forward texto corriente)~~ — **CERRADO H048** (37 mejoras, sf 113→76).
-- ~~B071 (tildes en Pista 1)~~ — **CERRADO H048** (incluido en B070).
-- ~~B072 (conjueces faltantes: ~13 nombres)~~ — **CERRADO H049** (15 conjueces, 21 mejoras, sf 76→74).
-- ~~B073 (interacción detectar_fin_real ↔ refinar_inicio_por_titulo)~~ — **CERRADO H049** sin fix (verificado OK).
-- ~~B074 (guarda posicional en firma_actual)~~ — **CERRADO H050** (commit `47f2059`, 5 mejoras, sf 74→69).
-- B075 (Hornos "Roberto Enrique") — abierto, prioridad baja, 1 caso.
-- ~~B076 (firma espuria en sumarios)~~ — **CERRADO H057** (flag `_en_sumario`, 520 casos, sf 35→34).
-- ~~B077 (fronteras absorben acordadas/índice) — cerrado H058.~~
-- B078 (zonas editoriales en zonificador, revertido) — abierto H058, prioridad baja.
-- ~~B079 (explorador editorial: subtipos de índice) — cerrado H061.~~
-- Variantes descartadas H039 (`en_las_condiciones`, `por_lo_tanto`, `en_atencion`,
-  `que_de_conformidad`): Tier 2 implementado en H041 pero estas variantes siguen
-  excluidas (argumentales incluso con firma validada + guarda de contexto).
-  Recuperables solo con M08 o filtro argumental más sofisticado.
-- ~~Investigar n_jueces=11 y n_jueces=14~~ — resuelto: eran firma contaminada (B055).
 ## B077 — Fronteras de caso absorben acordadas/discursos/índice
 
 **Severidad:** media. **Detectado:** H057. **Cerrado:** H058+H059.

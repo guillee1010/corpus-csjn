@@ -6160,3 +6160,63 @@ eliminada).
 
 **Commits:** 3 (snapshot pre-H061, integración subtipos, limpieza +
 catálogo regenerado).
+
+## H062 — Auditoría de deuda técnica y limpieza documental (2026-05-24)
+
+**Objetivo:** releer DEUDA_TECNICA.md completa contra el estado actual del
+código. Marcar cerrados bugs resueltos implícitamente, descartar obsoletos,
+reescribir sección de prioridades.
+
+### H062-01 — Auditoría contra código
+
+Lectura línea por línea de DEUDA_TECNICA.md (3320 líneas) cruzada contra
+parser.py (2941), cruzar_catalogo_y_mapa.py (436), construir_catalogo.py,
+detectar_paginas.py, parser_editorial.py. Contexto de BITACORA H046-H061
+y PIPELINE.md.
+
+**Bugs cerrados (6):**
+- B013: ya decía "aplicado y validado H035+H038" pero seguía en ACTIVA.
+- B029: `max_lines=40` eliminado por B055 (H042). `collect_firma_lines`
+  ahora usa `max_lines=None` (techo = `len(bloque)`).
+- B030: redundante con B018, búsqueda atrás eliminada por B069.
+- B039: descriptivo, no bug.
+- B046: sin manifestación empírica. Deduplicación del catalogador previene
+  el mecanismo. Los 43 faltantes explicados por B009 (y resueltos por Fase F).
+- B060: ya aplicado H040, estaba en EN VALIDACIÓN.
+
+**Bugs actualizados (5):**
+- B009: Fase F aplicada. `cargar_localizados` infiere ubicación para los
+  43 `pagina_no_en_mapa`. Diferencial catálogo-parser = 0.
+- B018: 2/3 componentes de causa raíz mitigados (B069 eliminó backward,
+  B070 validación texto corriente, B074 guard posicional). Estimación
+  ~570 obsoleta.
+- B024: parcialmente mitigado por zonificador (H051) + residuo (H055).
+- B025: cardinalidad 414 obsoleta post-fixes. Re-medición pendiente.
+- B033: degradado a cosmético (`ultimo_del_tomo_sin_fin` no se manifiesta
+  en producción).
+
+### H062-02 — Limpieza estructural
+
+- Duplicados B052/B053/B054 eliminados (aparecían dos veces).
+- Dos secciones "NOTAS PARA LA SESIÓN SIGUIENTE" eliminadas (contenido
+  histórico tachado).
+- Matriz pendiente post-H053 eliminada (obsoleta).
+- Resumen ejecutivo reescrito con conteo actual (~30 cerrados, ~25 activos
+  pipeline, ~10 auditor).
+- Próximo trabajo priorizado reescrito (B010, B032, B025, B018, B045,
+  B054/M06, M02).
+
+### H062-03 — Decisiones documentales
+
+- M01 cerrado: PIPELINE.md deprecado a `archivo/docs/PIPELINE_v1.md`.
+- M05 cerrado: no-resoluble (sin git log del período, sin impacto operativo).
+- PIPELINE_HALLAZGOS.md → `archivo/docs/` (el propio archivo declaraba
+  archivarse cuando PIPELINE.md cubriera las 4 etapas).
+- Flag de M04 limpiado (contenido correspondía a M05).
+- Mapeo histórico XXI-l, XXI-m, XXI-v actualizado a cerrado.
+
+### H062 — Estado final
+
+- DEUDA_TECNICA.md: 3320 → 2934 líneas (−386).
+- Corpus sin cambios: 5862 casos, 27336 votos, 141970 zonas, 135 editorial.
+- Código sin cambios (sesión de documentación pura).
