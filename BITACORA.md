@@ -6064,3 +6064,99 @@ Prompt H060 preparado con análisis completo y decisiones a tomar.
 **Scripts creados:** `scripts/auditoria/H060/` — poc_subtipos_editorial.py, inventario_titulos_editorial.py, mapa_estructura_editorial.py, ver_final_indice_general.py, ver_dots_indice_general.py, check_ruido.py, check_330_4_transicion.py, check_paginas_editorial.py, check_duplicados_editorial.py, inspeccionar_editorial.py.
 
 **Pendiente (H061):** Integrar en `parser_editorial.py`, migrar desde `parser.py`, actualizar CSV con columna subtipo, commit.
+
+## H061 — Integración de parser_editorial.py + regeneración del catálogo (2026-05-23)
+
+**Objetivo:** Integrar la PoC de subtipos editoriales (H060) en el pipeline productivo, explorar parseo de entries del índice de partes para crosscheck y búsqueda futura.
+
+### H061-01 — Módulo parser_editorial.py
+
+Nuevo módulo `scripts/pipeline/parser_editorial.py` con función
+`clasificar_editorial()`. Reemplaza `extraer_secciones_editoriales()`
+de parser.py.
+
+**Cambios en parser.py (3051 → 2940 líneas, −111):**
+- Import: `from parser_editorial import clasificar_editorial`
+- Eliminados: `RE_EDITORIAL_ACORDADA`, `RE_EDITORIAL_DISCURSO`,
+  `RE_EDITORIAL_INDICE`, `_tipo_zona_editorial()`,
+  `extraer_secciones_editoriales()`
+- Retenidos: `RE_EDITORIAL_ANY`, `_es_marcador_editorial()` (Pista 4
+  de `detectar_fin_real` — intocable)
+- Limpieza: `lineas_editorial` (dead code, siempre set vacío) eliminado
+  de 4 ubicaciones. El zonificador nunca produce zonas "acordada"/
+  "indice"/"discurso" — Pista 4 corta el bloque antes del editorial.
+- CSV editorial: columna `seccion` → `subtipo`.
+
+**Validación:** 0 cambios en casos (5862), votos (27336), zonas
+(141970). Editorial 53 → 135 secciones con subtipos. 0 desconocido.
+
+### H061-02 — Exploración: parseo de entries de indice_partes
+
+Se escribió `parsear_indice_partes()` para extraer entries
+individuales del índice de nombres (case_name + páginas) y cruzar
+contra `csjn_casos.csv`.
+
+**Resultados del crosscheck:**
+- 11,408 entries parseadas con página (45 secciones).
+- 0 MISS (todo lo que el índice lista, el parser lo tiene).
+- 450 EXTRA (casos en parser no listados en el índice).
+- 37 incompletas (basura de frontera: HOJA COMPLEMENTARIA, entries
+  de INDICE GENERAL, contenido de la sección siguiente).
+- 4,245 entries duplicadas cross-archivo (índices tomo-level repetidos
+  en cada archivo del mismo tomo).
+
+**Hallazgo clave:** `parsear_indice_partes` es redundante con
+`construir_catalogo.py`, que tiene un parser más robusto:
+- Join-then-split por anclas (`RE_ANCLA.finditer`) vs acumulación
+  línea por línea.
+- Maneja NBSP (`\xa0`), separador "y" (`ps. 1316 y 1334`), entries
+  concatenadas mid-line, extensión de inicio para tomos modernos.
+- Fuente canónica: `output/catalogo/catalogo.csv`.
+
+**Decisión:** eliminar `parsear_indice_partes` del módulo. No duplicar
+lógica que ya existe y está más madura.
+
+### H061-03 — Regeneración del catálogo
+
+Se regeneró la cadena completa desde cero:
+- `construir_catalogo.py` → `catalogo.csv` (5862 filas)
+- `cruzar_catalogo_y_mapa.py` → `fallos_localizados.csv` (5862 filas)
+- Diff contra localizados anteriores: **0** — pipeline reproducible.
+
+**Hallazgo:** el catálogo archivado (`archivo/data/catalogo_v14.csv`)
+era idéntico al regenerado. No había fantasmas.
+
+Renombrado de outputs: sin sufijos de versión en nombres de archivo.
+Git versiona, no el nombre del archivo.
+
+**Observación:** LibroVol330.2.md no tiene sección `indice_partes`
+según el clasificador editorial (solo tiene `indice_legislacion` +
+`indice_general`). `construir_catalogo.py` la encuentra con
+`extender_inicio_indice_nombres()` — lógica de lookback que el
+clasificador no tiene. 45 indice_partes de 46 archivos.
+
+### H061 — Estado final
+
+- **Corpus:** 5862 casos. Sin cambios.
+- **Votos:** 27336. Sin cambios.
+- **Zonas:** 141970 segmentos. Sin cambios.
+- **Editorial:** 135 secciones (46 indice_general, 45 indice_partes,
+  20 indice_legislacion, 18 indice_materias, 5 acordadas, 1 discurso).
+  Era 53 genéricas (49 indice, 4 discurso).
+- **Catálogo:** regenerado en `output/catalogo/catalogo.csv` (5862).
+  Idéntico al archivado.
+
+**Outputs canónicos (4 parser + 2 catálogo):**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27336 filas.
+- `output/parser/csjn_casos_zonas.csv` — 141970 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 135 secciones.
+- `output/catalogo/catalogo.csv` — 5862 filas.
+- `output/catalogo/secciones_indices.csv`.
+
+**Scripts creados:** `scripts/auditoria/H061/` — validar_h061.py,
+crosscheck_indice_partes.py (histórico, no corre — importaba función
+eliminada).
+
+**Commits:** 3 (snapshot pre-H061, integración subtipos, limpieza +
+catálogo regenerado).

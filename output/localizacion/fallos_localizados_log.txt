@@ -1,7 +1,7 @@
-Catálogo: ..\..\output\catalogo\catalogo.csv
-Mapa:     ..\..\output\mapa\mapa_paginas.csv
-Corpus:   ..\..\corpus
-Secciones índices: ..\..\output\catalogo\secciones_indices.csv
+Catálogo: output\catalogo\catalogo_v15.csv
+Mapa:     output\mapa\mapa_paginas.csv
+Corpus:   corpus
+Secciones índices: output\catalogo\secciones_indices_v15.csv
 
 Filas en catálogo: 5862
 Páginas únicas en mapa: 46933
@@ -44,6 +44,6 @@ Por tomo:
     349      45      44          0          0           0            0
 ======================================================================
 
-CSV principal: ..\..\output\localizacion\fallos_localizados.csv  (5862 filas)
-Resumen por tomo: ..\..\output\localizacion\fallos_localizados_resumen.csv  (19 filas)
-Huérfanos (status != ok): ..\..\output\localizacion\fallos_localizados_huerfanos.csv  (95 filas)
+CSV principal: output\localizacion\fallos_localizados_v15.csv  (5862 filas)
+Resumen por tomo: output\localizacion\fallos_localizados_v15_resumen.csv  (19 filas)
+Huérfanos (status != ok): output\localizacion\fallos_localizados_v15_huerfanos.csv  (95 filas)

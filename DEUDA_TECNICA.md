@@ -53,6 +53,10 @@ Editorial 182→53 (49 indice, 4 discurso). Auditoría sin_dispositivo: 56/57
 legítimos, 1 recuperable (331_p1013, mid-line). 0 regresiones.
 Cobertura firma: 97.4% → 98.0% → 98.7% → 98.8% → 99.3% → 99.4%.
 Votos: 26959 → 27103 → 27303 → 27325 → 27335 → 27336).
+H061 — B079 cerrado: `parser_editorial.py` con subtipos (135 secciones:
+46 ig, 45 ip, 20 il, 18 im, 5 ac, 1 di). Refactoring parser.py (−111
+líneas). Catálogo regenerado (5862, diff 0). Parseo entries descartado
+(redundante con `construir_catalogo.py`).
 
 ---
 
@@ -113,9 +117,11 @@ a las hipótesis de la tesis (H1-H5).
   −645 por contenido editorial removido de bloques de caso).
   Schema: caso_id_canonico, tomo, zona, segmento, linea_ini, linea_fin,
   n_lineas, wc.
-- **Editorial:** 53 secciones en `output/parser/csjn_casos_editorial.csv`
-  (49 indice, 4 discurso). 4to output canónico (H058). Clasificación
-  `acordada` eliminada en H059 (67 FP — subsecciones del índice).
+- **Editorial:** 135 secciones en `output/parser/csjn_casos_editorial.csv`
+  (46 indice_general, 45 indice_partes, 20 indice_legislacion,
+  18 indice_materias, 5 acordadas, 1 discurso). Columna `subtipo`
+  (H061, reemplaza `seccion` genérica). Clasificador en
+  `parser_editorial.py`. Parseo de entries: `catalogo.csv` (canónico).
 - **Jueces conocidos:** 56 entradas en JUECES_CONOCIDOS (28 titulares/previos +
   13 conjueces B063 + 15 conjueces B072).
 - **Fixes aplicados:**
@@ -3184,7 +3190,7 @@ Concordancia actual del zonificador: dictamen 100%, firma 99.7%, dispositivo 99.
 - ~~B076 (firma espuria en sumarios)~~ — **CERRADO H057** (flag `_en_sumario`, 520 casos, sf 35→34).
 - ~~B077 (fronteras absorben acordadas/índice) — cerrado H058.~~
 - B078 (zonas editoriales en zonificador, revertido) — abierto H058, prioridad baja.
-- B079 (explorador editorial: subtipos de índice) — abierto H058, cosmético.
+- ~~B079 (explorador editorial: subtipos de índice) — cerrado H061.~~
 - Variantes descartadas H039 (`en_las_condiciones`, `por_lo_tanto`, `en_atencion`,
   `que_de_conformidad`): Tier 2 implementado en H041 pero estas variantes siguen
   excluidas (argumentales incluso con firma validada + guarda de contexto).
@@ -3297,4 +3303,19 @@ y discursos. Escalable para el doctorado (tomos nuevos).
 **Pendiente (H061):** Integrar en `parser_editorial.py`, migrar
 desde `parser.py`, actualizar CSV con columna subtipo, commit.
 
-**Estado:** abierto (diferido, evaluación H060).
+**Resolución H061:**
+- `parser_editorial.py` creado con `clasificar_editorial()` (254 líneas).
+- parser.py refactorizado: eliminados `extraer_secciones_editoriales`,
+  `_tipo_zona_editorial`, `RE_EDITORIAL_ACORDADA/DISCURSO/INDICE`,
+  `lineas_editorial` (dead code). Retenidos `RE_EDITORIAL_ANY` +
+  `_es_marcador_editorial` (Pista 4).
+- Parseo de entries del índice de partes explorado y descartado —
+  redundante con `construir_catalogo.py` (`parsear_indice_nombres`),
+  que es más robusto (NBSP, separador "y", mid-line, extensión de
+  inicio). Fuente canónica: `output/catalogo/catalogo.csv`.
+- Crosscheck catálogo vs parser: 0 MISS, 450 EXTRA (casos en parser
+  no listados en índice — legítimos). Pipeline reproducible (diff 0).
+- LibroVol330.2.md: no tiene indice_partes en clasificador (45/46).
+  `construir_catalogo.py` la cubre con `extender_inicio_indice_nombres`.
+
+**Estado:** cerrado (H061).

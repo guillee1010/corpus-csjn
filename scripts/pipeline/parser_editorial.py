@@ -12,10 +12,9 @@ Reemplaza `extraer_secciones_editoriales()` de parser.py.
 Uso desde parser.py:
     from parser_editorial import clasificar_editorial
 
-Uso standalone (diagnóstico):
-    python scripts/pipeline/parser_editorial.py \
-        --editorial output/parser/csjn_casos_editorial.csv \
-        --corpus corpus/
+NOTA: el parseo de entries individuales del índice de partes lo hace
+`construir_catalogo.py` (fuente canónica: output/catalogo/catalogo.csv).
+Este módulo solo clasifica secciones por subtipo, no parsea entries.
 
 Subtipos detectados:
     indice_partes       INDICE POR LOS NOMBRES DE LAS PARTES
@@ -251,3 +250,4 @@ def clasificar_editorial(lines, tomo, source_file, linea_inicio_editorial):
         })
 
     return secciones
+
