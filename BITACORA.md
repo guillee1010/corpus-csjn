@@ -6220,3 +6220,141 @@ y PIPELINE.md.
 - DEUDA_TECNICA.md: 3320 → 2934 líneas (−386).
 - Corpus sin cambios: 5862 casos, 27336 votos, 141970 zonas, 135 editorial.
 - Código sin cambios (sesión de documentación pura).
+
+## H063 — Fix B032 (RE_VOTO_HDR) + diagnóstico B010 (RE_CONSIDERANDO) (2026-05-24)
+
+### H063-01 — B032: fix RE_VOTO_HDR y RE_DISID_HDR
+
+**Problema:** regex `RE_VOTO_HDR` exigía `del?|de\s+l[ao]s?` antes del
+título, descartando "Voto la señora ministra..." (sin "de"). Idem
+`RE_DISID_HDR`.
+
+**Fix:** agregar `|l[ao]s?` al grupo de artículos en ambas regex (L160,
+L165). Comentario inline `# B032`.
+
+**Validación:**
+- `medir_voto_hdr.py` sobre 46 archivos: +13 votos, +3 disidencias,
+  0 regresiones. Todos Argibay, concentrados en tomos 329–332.
+- Regeneración full corpus: 27336 votos (sin cambio en filas — los
+  votos ya se detectaban por firma/`parse_firma`).
+- Diff `n_votos_svoto` pre/post: +13 casos con delta +1.
+- Diff `n_disidencias` pre/post: +3 casos con delta +1.
+- Impacto real: corrección de contadores `n_votos_svoto`/`n_disidencias`
+  en `csjn_casos.csv` y mejor delimitación de `texto_voto` en
+  `csjn_casos_votos.csv` para esos 16 casos.
+
+**Hallazgo:** RE_VOTO_HDR no genera filas de votos — esas vienen de
+`parse_firma` (L2566). RE_VOTO_HDR alimenta `marcadores_votos` →
+`extraer_textos_votos` (texto del voto individual) y contadores
+`n_votos_svoto`/`n_disidencias`.
+
+### H063-02 — B010: diagnóstico de RE_CONSIDERANDO
+
+**Patrón identificado:** "Autos y Vistos; Considerando:" — header
+combinado que no matchea `RE_CONSIDERANDO` (`^Considerando\s*[:.]?\s*$`
+con `.match()`). 24 ocurrencias solo en 331.2, ~1238 en todo el corpus.
+
+**Fix propuesto:** `Considerando\s*[:.]\s*$` con `.search()`. Cambios:
+remover ancla `^`, hacer `[:.] ` obligatorio (no opcional), usar
+`.search()` en 5 ubicaciones (L654, L1302, L1318, L1809, L2276).
+
+**Validación pre-fix:**
+- `verificar_considerando_dictamen.py` sobre 46 archivos: +1238
+  nuevos en fallo, 8 FP en zona de dictamen.
+- Los 8 FP son filtrados por `lineas_dictamen` en `extraer_considerando`.
+- Riesgo residual: apertura detection (L1302/L1318) y zonificador
+  (L1809) no filtran por zona de dictamen. Documentar como sub-item.
+
+**Hallazgo arquitectónico:** el zonificador crea zonas pero no todos
+los loops de detección las usan como constraint. `extraer_considerando`
+filtra por `lineas_dictamen`; apertura detection, marcadores_votos y
+dispositivo escanean el bloque entero. Documentar como M-item.
+
+**Estado:** diagnóstico completo, fix diseñado, validación de seguridad
+hecha. Pendiente aplicar en próxima sesión.
+
+### H063 — Estado final
+
+- **B032:** cerrado. parser.py + medir_voto_hdr.py commiteados.
+- **B010:** diagnóstico completo, fix listo para aplicar.
+- **Nuevo M-item:** detección sin constraint de zona (arquitectónico).
+- Scripts de auditoría nuevos: `scripts/auditoria/medir_voto_hdr.py`,
+  `scripts/auditoria/verificar_considerando_dictamen.py`.
+s
+## H064 — M09 + B010: constraint de zona y RE_CONSIDERANDO (2026-05-24)
+
+**Objetivo:** aplicar constraint de zona en detección de votos (M09) y
+relajar RE_CONSIDERANDO (B010) para capturar variantes con prefijo.
+
+### H064-01 — Housekeeping H062
+
+Verificación de pendientes H062: PIPELINE.md y PIPELINE_HALLAZGOS.md
+ya movidos a `docs/` (commit `3b55b85`). DEUDA_TECNICA.md con cambios
+sin commitear, CSVs pendientes. Scripts duplicados identificados para
+limpieza posterior.
+
+### H064-02 — M09: constraint de zona en loop de votos
+
+Diagnóstico: el loop principal de detección de votos/disidencias
+(L2248-2281) solo excluía `lineas_dictamen`. ~500K líneas de sumario,
+header_pagina, residuo_caso_anterior y epílogo se escaneaban sin
+constraint.
+
+Implementación: set `lineas_excluir` derivado de `_zonas_linea`
+(zonas fuera de `{apertura, cuerpo, dispositivo, firma, voto_separado}`).
+Reemplaza `if k in lineas_dictamen` por `if k in lineas_excluir`.
+
+Validación (poc_m09.py): 0 diffs sobre 5667 fallos. 500K líneas
+protegidas (155K sumario, 137K header_pagina, 107K residuo, 100K epílogo).
+Impacto directo: ninguno. Impacto preventivo: protege B010 y futuros
+regex más permisivos.
+
+### H064-03 — B010: RE_CONSIDERANDO permisivo + guarda dispositivo
+
+Fix: regex `^Considerando\s*[:.]?\s*$` → `Considerando\s*[:.]\s*$`
+(sin anchor `^`, colon/punto obligatorio). `.match()` → `.search()`
+en 5 ubicaciones. Guarda en `extraer_considerando`: solo acepta matches
+antes de `por_ello_idx`.
+
+Primera corrida sin guarda: 2 regresiones a wc=0 (339_p444 y 341_p929).
+Causa: "Considerando:" del caso siguiente o de voto individual matcheaba
+después del dispositivo. Guarda `por_ello_idx` resolvió ambas.
+
+Validación final (audit_b010_full.py):
+- wc_considerando: 1188 cambios (911 reducciones, 277 aumentos, 0 a cero).
+- is_originaria: 62 cambios. Auditoría con audit_originaria_1a0.py:
+  36/36 mejoras legítimas (1→0 por exclusión de texto editorial),
+  26 nuevas (0→1), 0 bugs.
+- outcome: 2 cambios (otro → inadmisible_280).
+- firma_raw, voting_pattern, n_votos, n_disidencias: sin cambios.
+- n_jueces, tipo_entrada, apertura_tipo, wc_dictamen: sin cambios.
+
+### H064-04 — Housekeeping
+
+Limpieza de scripts:
+- Raíz: 3 PoCs eliminados/movidos a `scripts/auditoria/H064/`.
+- `scripts/pipeline/`: `medir_voto_hdr.py` y `parser_fix.py` movidos.
+- `scripts/auditoria/`: duplicados eliminados, scripts organizados en
+  H057/, H058/, H064/.
+
+Skill `cierre-sesion-corpus` creado para protocolo de cierre de sesión.
+
+### H064 — Estado final
+
+- **Corpus:** 5862 casos (5667 fallos + 195 sumario_editorial/sumario_con_link).
+- **Sin firma:** 34 / 5667 fallos (0.6%). Cobertura firma: 99.4%.
+- **Votos:** 27336 filas.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27336 filas.
+- `output/parser/csjn_casos_zonas.csv` — 142030 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 135 secciones.
+
+**Scripts creados:** `scripts/auditoria/H064/` — poc_m09.py,
+audit_b010.py, audit_b010_full.py, audit_originaria_1a0.py,
+diff_b010.py, medir_voto_hdr.py, parser_fix.py,
+verificar_considerando_dictamen.py, diagnostico_fin_fallo_v1.py,
+tabular_senales_lote.py.
+
+**Commits:** 1 (M09+B010 parser + CSVs).
