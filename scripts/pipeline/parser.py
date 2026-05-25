@@ -320,6 +320,11 @@ OUTCOME_PATTERNS_DISPOSITIVO = [
     ("nulidad",         re.compile(r"\bse declara la nulidad\b", re.I)),
     ("desistimiento",   re.compile(r"\bse tiene por desistid[ao]\b", re.I)),
     ("mal_concedido",   re.compile(r"\bse (lo )?declara mal concedid[ao]\b", re.I)),
+    # B091 (H073): fallback infinitivo — captura "el Tribunal resuelve: Revocar",
+    # "corresponde revocar", "se impone revocar", etc. Posición final (antes de
+    # catch-all) para que originaria, abstracto y otros merit outcomes tengan
+    # prioridad sobre la mención de revocar en dispositivos mixtos.
+    ("revoca",          re.compile(r"\brevocar\b", re.I)),
     # catch-all
     ("otro",            re.compile(r".*")),
 ]
@@ -339,6 +344,9 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     v12b (H067/B079): amplía MERIT_OUTCOMES con competencia, abstracto,
     originaria, desistimiento.  mal_concedido NO se protege: puede
     coexistir legítimamente con 280/ac4 como razón del rechazo.
+    v13 (H073/B091): agrega fallback "revocar" (infinitivo) al final del
+    cascade, antes de catch-all "otro". Captura 144 dispositivos con forma
+    "el Tribunal resuelve: Revocar...", "corresponde revocar", etc.
 
       0. Normalizar textos: _unhyphenate para unir quiebres tipográficos.
       1. Determinar outcome del dispositivo (por_ello_text)
