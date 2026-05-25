@@ -65,7 +65,8 @@ RE_FECHA_EXTRACT = re.compile(r"Buenos Aires[,]?\s+(\d{1,2}\s+(?:de\s+)?\w+\s+(?
 RE_POR_ELLO          = re.compile(r"^Por ello[,.]?\s*", re.I)
 POR_ELLO_ARGUMENTAL  = {"concluyó", "concluyo", "estimo", "estimó", "considera",
                        "considero", "consideró", "entiende", "entendió",
-                       "afirma", "afirmó", "sostiene", "sostuvo"}
+                       "afirma", "afirmó", "sostiene", "sostuvo",
+                       "opino", "opinó"}
 
 # v11: detector AMPLIADO del dispositivo. En tomos viejos (329-340) un ~25% de
 # los fallos no usan "Por ello" sino una de estas aperturas alternativas.
@@ -2509,6 +2510,51 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             if por_ello_idx is None and _t3_fb_idx is not None:
                 por_ello_idx = _t3_fb_idx
                 por_ello_text = _t3_fb_text
+
+        # ── B085 Tier 3b: retry sin exclusión de dictamen ni rango ────
+        # Si Tier 1+2+3 no encontraron NADA, repetir búsqueda forward
+        # desde línea 0, sin excluir lineas_dictamen, sin restricción de
+        # rango (inicio_busqueda/fin_busqueda).
+        # Motivación: 7 casos donde el dictamen embebido desborda y el
+        # zonificador clasifica el dispositivo real como "dictamen"
+        # (5 casos), o el rango queda vacío/desplazado por residuo del
+        # caso siguiente (2 casos). Firma validada obligatoria, SIN
+        # fallback — zona no protegida, solo aceptar hits con firma.
+        # Validado: 7/7 mejoras, 0 FP del dictamen (el Procurador usa
+        # "Opino"/"mantengo" y no tiene firma de juez en 40 líneas).
+        if por_ello_idx is None:
+            _t3b_arg_re = re.compile(
+                r"^(?:Por\s+(?:ello|lo\s+expuesto|todo\s+lo\s+expuesto|"
+                r"todo\s+ello|lo\s+expresado|las\s+razones|las\s+consideraciones|"
+                r"estos?\s+razones|los\s+fundamentos)[,.]?\s*)",
+                re.I,
+            )
+            for k in range(len(bloque)):
+                stripped = bloque[k].strip()
+                if not stripped:
+                    continue
+                es_disp, tipo_disp = detectar_apertura_dispositivo(stripped)
+                if es_disp:
+                    # Guarda argumental (extendida a variantes):
+                    # si la primera palabra después del patrón es
+                    # argumental (opino, sostiene, etc.), es conclusión
+                    # del Procurador, no dispositivo del Tribunal.
+                    _t3b_rest = _t3b_arg_re.sub("", stripped).strip()
+                    _t3b_fw = (_t3b_rest.split()[0].lower().rstrip(",;")
+                               if _t3b_rest.split() else "")
+                    if _t3b_fw in POR_ELLO_ARGUMENTAL:
+                        continue
+                    chunk = []
+                    for m2 in range(k, min(k + 6, len(bloque))):
+                        chunk.append(bloque[m2])
+                        if bloque[m2].strip().endswith("."):
+                            break
+                    candidate_text = " ".join(chunk).strip()
+                    if any(linea_es_firma_de_juez(bloque[j])
+                           for j in range(k + 1, min(k + 41, len(bloque)))):
+                        por_ello_idx = k
+                        por_ello_text = candidate_text
+                        break
 
         # ── B084 Tier 4: cierre dispositivo "así se resuelve" ────────
         # Último recurso: solo si Tier 1+2+3 no encontraron nada.
