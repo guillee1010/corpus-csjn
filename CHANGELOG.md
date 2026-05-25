@@ -2,6 +2,15 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H069 (2026-05-25)
+
+- `parser.py`: fallback firma_actual en `detectar_fin_real` cambia de
+  backward-first a bidireccional closest-to-lfc (strict less-than).
+  33 casos cambian, 0 regresiones. votos +5, sin_firma -1, unanime -3.
+- `output/parser/csjn_casos.csv`: 5862 filas (sin cambio en count).
+- `output/parser/csjn_casos_votos.csv`: 27341 filas (+5).
+- `output/parser/csjn_casos_zonas.csv`: 142505 segmentos (+535).
+
 ## H067 (2026-05-24)
 
 - `parser.py`: B077+B078 (H066) validados post re-run. otro -123 redistribuido. ac4 40→52, 280 278→296.

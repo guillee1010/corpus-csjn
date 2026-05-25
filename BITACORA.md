@@ -6693,3 +6693,73 @@ re-ejecutado).
 
 **Commits:** 0.
 
+## H069 — B045 bidireccional closest-to-lfc en fallback firma_actual (2026-05-25)
+
+**Objetivo:** corregir falsos unanime (B025) y votos truncados causados por
+el fallback backward-first en `detectar_fin_real`.
+
+### H069-01 — Diagnóstico y evaluación de opciones
+
+Análisis de los 112 casos `firma_actual`. Hallazgo clave: backward search
+encuentra firma arrastrada del caso anterior (lejos de lfc) y retorna
+inmediatamente — el forward search nunca corre. La firma real está en la
+zona de extensión (gap entre lfc y next case, mediana 15 líneas, 99% ≤ 30).
+
+Matriz de opciones evaluadas:
+- **A (bidireccional closest-to-lfc):** parser only, ~10 líneas, auto-ajustable.
+- **B (cruzador +30):** 1 línea, magic number, efectos cascada en pistas 1-4.
+- **C (A+B combinado):** máxima cobertura, riesgo medio.
+Decisión: opción A (más REE).
+
+### H069-02 — POC bidireccional
+
+Script `poc_b045_bidireccional.py` simuló bidireccional sobre los 112 firma_actual.
+Resultado: 16 MEJORA_SEGURA (unanime), 19 CAMBIO_REVISAR (non-unanime, votos
+truncados), 0 REGRESION, 77 SIN_CAMBIO. Guarda `fwd >= prox_header` descartada
+(bloqueaba mejoras y cambios por igual; discriminador real es `fwd_en_next`
+que dio False en los 112 casos).
+
+### H069-03 — Spot-check de CAMBIO_REVISAR
+
+Script `poc_b045_inspeccion.py` inspeccionó 3 casos representativos:
+- 342_p1426 (disidencia, Δ=6): FP cosmético de `linea_es_firma_de_juez` en
+  header de disidencia partido en varias líneas. Sin daño.
+- 341_p878 (según_su_voto, Δ=146): voto separado de Rosenkrantz (146 lín)
+  recuperado íntegramente. Mejora genuina.
+- 344_p603 (mixed, Δ=701): disidencia completa de Maqueda (~700 lín)
+  recuperada. Mejora masiva.
+Conclusión: los 19 CAMBIO_REVISAR son votos/disidencias truncados, no regresiones.
+
+### H069-04 — Patch y validación
+
+Patch: `detectar_fin_real` L1709-1731, fallback firma_actual cambia de
+backward-first a bidireccional closest-to-lfc con strict less-than
+(empate → backward). Re-run reproducible.
+
+Validación (`poc_b045_validacion.py`) comparando CSV pre/post via git:
+- 33 cambios (todos firma_actual→firma_actual, todos Δlfr > 0).
+- 2 empates correctamente bloqueados (342_p1426 dist=3, 345_p1205 dist=6).
+- 0 cambios fuera de firma_actual, 0 nuevos sin_firma, 0 retracciones.
+- 33/33 word_count suben, 0 bajan.
+- 5 transiciones de voting_pattern: unanime→svoto (3), unanime→disidencia (1),
+  sin_firma→unanime (1).
+- 9 outcomes redistribuidos, 3 a "otro" (B082: classify_outcome sobre bloque
+  completo incluyendo disidencia).
+
+### H069 — Estado final
+
+- **Corpus:** 5862 casos (5668 fallos + 34 sumario_editorial + 160 sumario_con_link).
+- **Sin firma:** 33 / 5668 fallos (0.6%). Cobertura firma: 99.4%.
+- **Votos:** 27341 filas.
+- **Trayectoria sin_firma:** 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35→34→33.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27341 filas.
+- `output/parser/csjn_casos_zonas.csv` — 142505 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 135 secciones.
+
+**Scripts creados:** `poc_b045_bidireccional.py`, `poc_b045_inspeccion.py`,
+`poc_b045_validacion.py` (raíz del repo).
+
+**Commits:** 3 (snapshot pre-H069, snapshot post re-run, B045 fix parser.py).

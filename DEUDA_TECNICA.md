@@ -6,7 +6,13 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-24 (H068: re-medición B025 (414→72),
+**Última actualización:** 2026-05-25 (H069: B045 fix parcial aplicado —
+bidireccional closest-to-lfc en fallback firma_actual de detectar_fin_real.
+33 casos cambian, 2 empates bloqueados por strict less-than, 0 regresiones.
+votos +5 (27341), sin_firma -1 (33), unanime -3 (3505), segun_su_voto +3 (735),
+disidencia +1 (1102), zonas +535 (142505). B025 parcialmente corregido (3 falsos
+unanime eliminados). B082 nuevo: classify_outcome sobre bloque completo.
+H068: re-medición B025 (414→72),
 diagnóstico arrastre 280 (15 FP, POC B081 no aplicado por REE),
 inspección causa raíz B045 (catalogador+cruzador), re-medición B018.
 B079 aplicado — MERIT_OUTCOMES ampliado con competencia, abstracto, originaria,
@@ -120,23 +126,23 @@ a las hipótesis de la tesis (H1-H5).
   160 `sumario_con_link`.
 - **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV).
   Catálogo validado contra corpus: 0 fallos no catalogados (H051).
-  Cobertura de firma sobre fallos: 5634/5668 = **99,4%**.
-- **Sin firma:** 34 casos (post-H056). Desglose:
-  - ~18 firma_no_detectada (fallos reales con bloque correcto).
+  Cobertura de firma sobre fallos: 5635/5668 = **99,4%**.
+- **Sin firma:** 33 casos (post-H069). Desglose:
+  - ~17 firma_no_detectada (fallos reales con bloque correcto).
   - 11 bloques cortos (span < 20 líneas).
   - 3 bloques vacíos (span ≤ 4).
-  - ~3 sin_zona_fallo / formato atípico.
+  - ~2 sin_zona_fallo / formato atípico.
   Piso estimado de irrecuperables: ~17. Concentración remanente en
   tomos 329-330 (formato antiguo, 2006).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35→34.
-- **Votos:** 27336 filas (post-H058, +1 voto recuperado por corte editorial).
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35→34→33.
+- **Votos:** 27341 filas (post-H069, +5 votos recuperados por extensión bidireccional).
 - **Arquitectura:** `zonificar_bloque()` integrado en parser.py (H051-H052,
   Refacción C). Retorna `(list[str], list[tuple])` con zonas por línea y
   anclas. `extraer_segmentos()` genera CSV zona-centered (H053).
   Uso actual: clasificación sumario_editorial + lineas_dictamen +
   CSV zona-centered canónico. Uso futuro: firma zonificada (descartado
   por ROI insuficiente, ver diagnóstico H053-B).
-- **Zonas:** 141970 segmentos en `output/parser/csjn_casos_zonas.csv` (post-H058,
+- **Zonas:** 142505 segmentos en `output/parser/csjn_casos_zonas.csv` (post-H069,
   −645 por contenido editorial removido de bloques de caso).
   Schema: caso_id_canonico, tomo, zona, segmento, linea_ini, linea_fin,
   n_lineas, wc.
@@ -633,6 +639,26 @@ preexistentes en OUTCOME_PATTERNS_DISPOSITIVO).
 Decisión H068: evaluar opciones con tests en sesión dedicada. El `-1` del
 cruzador podría estar compensando en otras partes del parser (memoria de
 intento previo revertido).
+
+**Fix parcial aplicado H069 — bidireccional closest-to-lfc.**
+Nuevo enfoque descartó Caminos A/B/C. El fallback `firma_actual` en
+`detectar_fin_real` (L1709-1731) ahora busca en ambas direcciones y elige
+la firma más cercana a `lfc`. Strict less-than: empate → backward gana.
+Motivación: backward-first encontraba firma arrastrada del caso anterior
+(lejos de lfc) e ignoraba la firma real en la zona de extensión (cerca de
+lfc). POC sobre 112 firma_actual: 35 mejoras predichas (16 unanime +
+19 votos truncados), 0 regresiones. Spot-check de 3 CAMBIO_REVISAR:
+342_p1426 (FP cosmético de header), 341_p878 (voto Rosenkrantz recuperado),
+344_p603 (disidencia Maqueda 701 lín recuperada). Re-run validado:
+33 cambios (2 empates bloqueados), 0 fuera de firma_actual, 0 nuevos
+sin_firma, 0 retracciones, 33/33 wc suben. Commit en parser.py.
+Efecto colateral: 9 outcomes redistribuidos (3→otro) porque
+classify_outcome corre sobre bloque completo incluyendo disidencia
+extendida → ver B082.
+**Estado del fix:** causa raíz arquitectónica (frontera catalográfica)
+sigue sin fix. Fix parcial cubre el fallback firma_actual (110→77 casos
+siguen en firma_actual, los 33 ahora con firma correcta). Los Caminos
+A/B/C del cruzador/catalogador siguen disponibles para fix raíz futuro.
 
 **Propuesta arquitectónica alternativa:** ver `docs/GRAMATICA_DEL_FALLO.md`.
 Documento conceptual que propone un parser por gramática del fallo
@@ -1255,6 +1281,13 @@ corregir). Δ = 0.2-0.4pp.
 
 Cardinalidad actualizada: **14-20 falsos** (piso cat A, techo A+B),
 down from 414.
+
+**Corrección parcial H069:** fix bidireccional en fallback firma_actual
+(B045 H069) corrige 3 falsos unanime en el re-run: unanime→disidencia (1),
+unanime→segun_su_voto (2). + 1 sin_firma→unanime. unanime: 3508→3505.
+Cardinalidad residual estimada: **11-17 falsos** (los restantes cat A
+que no cambiaron de vp porque el caso era genuinamente unanime con firma
+arrastrada — firma diferente pero mismo patrón de votación).
 
 ### B026 — `V.` mayúsculas en tomos 329-330 (subtítulos editoriales viejos)
 
@@ -3134,3 +3167,28 @@ desestima→280, usa "art. 280 del CPCCN"). Re-run parser: 280 291→292 (+1).
 **Decisión (H067):** revertido. 1 caso no justifica regex extra (REE).
 **Estado del fix:** revertido.
 **Referencias cruzadas:** H067.
+
+
+### B082 — classify_outcome corre sobre bloque completo incluyendo disidencias
+
+**Componente:** parser (classify_outcome).
+**Origen / fuente del diagnóstico:** H069, efecto colateral del fix
+bidireccional B045. Al extender bloques para incluir votos/disidencias
+truncados, `classify_outcome` puede capturar el "Por ello" de la
+disidencia en vez del de la mayoría.
+**Causa raíz:** `classify_outcome` usa `por_ello_text` extraído del
+bloque completo (todas las zonas). Cuando el bloque incluye una
+disidencia con su propio "Por ello" (e.g., "se desestima la queja"),
+ese texto puede sobreescribir el outcome de la mayoría. El problema
+es preexistente pero se hizo más visible con la extensión H069.
+**Diagnóstico / evidencia:** 9 outcomes cambiaron post-H069, de los
+cuales 3 fueron a "otro" (sospechosos: 344_p220, 347_p818, 348_p659).
+Los otros 6 son probables mejoras (dispositivo previamente truncado).
+**Estado de verificación:** `confirmado_cuantificado` (9 cambios medidos,
+3 sospechosos identificados).
+**Validador propuesto:** `classify_outcome` debería correr solo sobre
+el texto de la zona `mayoria` (disponible desde el zonificador H051-H052),
+no sobre el bloque completo. Requiere refactoring de la interfaz entre
+zonificador y classify_outcome.
+**Estado del fix:** no diseñado.
+**Referencias cruzadas:** H069. B045.
