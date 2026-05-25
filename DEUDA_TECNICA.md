@@ -6,7 +6,13 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-24 (H066: B077 _unhyphenate aplicado —
+**Última actualización:** 2026-05-24 (H067: validación B077+B078 post re-run.
+B079 aplicado — MERIT_OUTCOMES ampliado con competencia, abstracto, originaria,
+desistimiento; 5 casos movidos de 280 a outcomes correctos.
+B080 POC (RE_280_ABREVIADO para CPCCN/C.P.C.C.N.) testeado y revertido:
+1 caso recuperado no justifica código extra.
+Conteos validados: 280=291, ac4=52, desestima=476, otro=1668.
+H066: B077 _unhyphenate aplicado —
 85 dispositivos corregidos, 229 outcomes afectados. B078 RE_ACORDADA_4_DIRECTA
 + fix año corto + (?!\d) guard. classify_outcome v12.
 Diagnóstico: 6 FP ac4 fantasma, 43 FP 280 fantasma (inconsistencia
@@ -2166,10 +2172,11 @@ canónicos actuales B0NN.
 
 ## Resumen ejecutivo
 
-*Actualizado H065 (2026-05-24).*
+*Actualizado H067 (2026-05-24).*
 
-- **Bugs cerrados:** ~31 (B001-B008, B013, B029, B030, B032, B039, B046,
-  B055, B060, B063-B064, B066-B074, B076-B077, B079, A001).
+- **Bugs cerrados:** ~33 (B001-B008, B013, B029, B030, B032, B039, B046,
+  B055, B060, B063-B064, B066-B074, B076-B077, B079, A001,
+  B077-nuevo, B078, B079-nuevo).
 - **Bugs en validación:** 1 (B009 parcialmente resuelto por Fase F).
   B010 cerrado (H064).
 - **Bugs activos del pipeline (catálogo + cruzador + parser):** ~24.
@@ -2177,7 +2184,7 @@ canónicos actuales B0NN.
   Cruzador: B012.
   Parser: B014-B022, B023-B028, B031, B033-B038, B043-B044, B048, B053-B054.
   De ellos:
-  - B025 (falsos unánime): cardinalidad 414 obsoleta, re-medir.
+  - B025 (falsos unánime): cardinalidad 414 obsoleta, re-medir post-B077.
   - B018, B024: sustancialmente mitigados por fixes colaterales (H046-H055).
   - B028 (cosmético), B033 (cosmético), B036 (cosmético), B037 (cosmético).
   - ~5 hipotesis_no_verificada: B015, B026, B027, B031, B034.
@@ -2185,35 +2192,30 @@ canónicos actuales B0NN.
   B056-B058, B061-B062, B065, VIS001-VIS004).
 - **Pendientes metodológicos:** 8 (M01 cerrado, M02-M04, M05 cerrado,
   M06-M09).
-- **Detectores recalibrados (H065):**
-  - inadmisible_280: 41 → 278. Causa: regex `art[íi]?culo?` no matcheaba
-    "art." (abreviatura dominante del corpus). 44 fantasmas y 16 arrastre
-    (B045) pendientes de investigación.
-  - inadmisible_acordada_4: 0 → 40. Causa: regex exigía "art. 1" pero la
-    Corte cita arts. 2, 4, 5, 7. 3 FP documentados (limitación conocida).
-  - is_originaria: 462 → 478. Causa: mismo fix de regex en RE_ART_117_CN.
-  - classify_outcome v11: merit guard impide que 280/ac4 sobreescriba
-    hace_lugar/procedente/revoca/confirma/nulidad. 49 merit outcomes
-    protegidos.
+- **Detectores (H067, post B077+B078+B079):**
+  - inadmisible_280: 291. Limpios (0 fantasmas). B080 (CPCCN abreviado)
+    testeado: +1 caso, revertido por REE.
+  - inadmisible_acordada_4: 52. Limpios (0 fantasmas, 4 borderline
+    pendientes de revisión manual).
+  - is_originaria: 478.
+  - classify_outcome v12b: merit guard ampliado (B079). Protege
+    hace_lugar, procedente, revoca, confirma, nulidad, competencia,
+    abstracto, originaria, desistimiento. mal_concedido NO protegido
+    (coexiste con 280/ac4).
 
-**Próximo trabajo priorizado (orden sugerido, H067):**
+**Próximo trabajo priorizado (orden sugerido, H068):**
 
-1. **Re-run del parser** con B077+B078 aplicados. Validar conteos
-   post-run: ac4 estimado ~35, 280 estimado ~219 genuinos + nuevos
-   detectados por unhyphenate. Revisar 4 borderline ac4 (339_p597,
-   342_p122, 344_p1783, 348_p1502) y 18 FN 280 que debieron aparecer.
-2. **B025 — re-medición falsos unánime post-B077.** Unhyphenate
+1. **B025 — re-medición falsos unánime post-B077.** Unhyphenate
    cambia 85 dispositivos; el pool de falsos unánime se mueve.
-3. **Bugs estructurales de H065** — 340_p2001 (solapamiento de spans),
+2. **Bugs estructurales de H065** — 340_p2001 (solapamiento de spans),
    340_p188 (dos casos pegados, wc_may=6547), 332_p1085 (dos
-   dispositivos), 333_p1464 (voto conjunto Highton), 334_p256
-   (mal_concedido roto por guión). Requieren corpus .md.
-4. **B045 manifestación B — arrastre.** 16 casos 280 son B045
+   dispositivos), 333_p1464 (voto conjunto Highton). Requieren corpus .md.
+3. **B045 manifestación B — arrastre.** 16 casos 280 son B045
    (residuo per curiam del caso anterior en considerando_text).
-5. **sin_firma (34 casos)** — 21 sin_dispositivo + 13 con por_ello
+4. **sin_firma (34 casos)** — 21 sin_dispositivo + 13 con por_ello
    truncado. Concentrados en tomos 329-330.
-6. **B054/M06 — epílogo.**
-7. **M02 — bloque snapshots Fase 2.**
+5. **B054/M06 — epílogo.**
+6. **M02 — bloque snapshots Fase 2.**
 
 
 ### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula
@@ -2973,11 +2975,12 @@ sin tocar guiones legítimos (Buenos Aires-La Plata no tiene whitespace
 después del guión). Aplicada en `classify_outcome` v12 (paso 0, antes de
 regex matching) y en el fallback sin_dispositivo. No modifica el texto
 almacenado en CSV, solo el usado para clasificación.
-**Validación pendiente:** re-run del parser y comparación de conteos.
-Principales transiciones esperadas: otro→desestima (31), otro→procedente (29),
-otro→confirma (24), revoca→procedente (20), inadmisible_280→otro (33,
-por merit guard corregida).
-**Referencias cruzadas:** H066. Afecta B025 (falsos unánime), 280/ac4
+**Validación (H067):** re-run confirmado. otro: 1791→1668 (-123),
+redistribuidos a outcomes correctos: procedente +51, confirma +17,
+competencia +15, hace_lugar +11, 280 +18, ac4 +12, abstracto +3,
+mal_concedido +1, originaria +1. Diverge de la simulación H066 porque
+el re-run re-extrae texto desde .md fuente (más preciso que el CSV viejo).
+**Referencias cruzadas:** H066, H067. Afecta B025 (falsos unánime), 280/ac4
 (merit guard), sin_firma (indirectamente via outcomes).
 
 
@@ -3005,5 +3008,52 @@ Agregada en classify_outcome (paso 3) y fallback sin_dispositivo.
 **Validación:** 8/8 strings de prueba correctos. 34/40 actuales preservados.
 6 FP fantasma (sin mención de ac4 en texto) quedan fuera. FN 333_p1235
 recuperado.
-**Validación pendiente:** re-run del parser. Revisar 4 borderline.
-**Referencias cruzadas:** H066. Subsume el fix de regex parcial de H065.
+**Validación (H067):** re-run confirmado. ac4: 40→52. 0 fantasmas
+detectables (los 12 sin match en CSV truncado son textos donde la
+mención aparece después de los 2000 chars — el parser clasifica con
+texto completo). Los 6 fantasmas del CSV viejo desaparecieron (guard
+`4(?!\d)` funciona). 4 borderline siguen como ac4.
+**Referencias cruzadas:** H066, H067. Subsume el fix de regex parcial de H065.
+
+
+### B079 — MERIT_OUTCOMES incompleto en classify_outcome — CERRADO H067
+
+**Componente:** parser (classify_outcome).
+**Origen / fuente del diagnóstico:** H067, auditoría post re-run B077+B078.
+**Causa raíz:** MERIT_OUTCOMES en classify_outcome solo contenía
+{hace_lugar, procedente, revoca, confirma, nulidad}. Faltaban competencia,
+abstracto, originaria, desistimiento. Estos outcomes de dispositivo eran
+sobreescritos por 280/ac4 en paso 3 cuando el considerando mencionaba
+art. 280 o acordada 4, aunque la mención fuera tangencial.
+mal_concedido NO se agrega: puede coexistir legítimamente con 280/ac4
+(la Corte declara "mal concedido" porque "es inadmisible art. 280").
+**Diagnóstico / evidencia:** 5 casos afectados:
+331_p1854 (280→competencia), 331_p2309 (280→abstracto),
+330_p5158 y 338_p724 (280→originaria), 340_p251 (280→desistimiento).
+Verificación: 3 mal_concedido+280 confirmados como genuinos (329_p292,
+329_p437, 330_p88: el considerando dice "es inadmisible art. 280").
+**Estado de verificación:** `confirmado_cuantificado`.
+**Fix aplicado (H067):** MERIT_OUTCOMES ampliado a {hace_lugar, procedente,
+revoca, confirma, nulidad, competencia, abstracto, originaria, desistimiento}.
+Docstring de classify_outcome actualizado (v12b).
+**Validación (H067):** re-run confirmado. 280: 296→291 (-5). competencia
+577→578 (+1), originaria 158→160 (+2), abstracto 86→87 (+1),
+desistimiento 9→10 (+1). mal_concedido 38→38 (sin cambio, correcto).
+**Referencias cruzadas:** H067.
+
+
+### B080 — RE_280_ABREVIADO (CPCCN, C.P.C.C.N.) — POC REVERTIDO H067
+
+**Componente:** parser (classify_outcome, regex 280).
+**Origen / fuente del diagnóstico:** H067, análisis del corpus de 280
+(corpus_inadmisible_280.md, 291 casos). Inventario de formas de cita:
+535 "del Código Procesal Civil y Comercial", 219 "CPCCN", 222 "C.P.C.C.N.",
+21 "del CPCCN", 24 "del C.P.C.C.N.", ~3 "del CPCC".
+**Causa raíz:** RE_280_LIBRE exige "del Código Procesal Civil y Comercial".
+Si un caso solo usa la forma abreviada (CPCCN, C.P.C.C.N.), no matchea.
+**Diagnóstico / evidencia:** POC sobre CSV: 1 FN recuperado (344_p3095,
+desestima→280, usa "art. 280 del CPCCN"). Re-run parser: 280 291→292 (+1).
+0 FP. La forma abreviada casi siempre coexiste con la forma larga.
+**Decisión (H067):** revertido. 1 caso no justifica regex extra (REE).
+**Estado del fix:** revertido.
+**Referencias cruzadas:** H067.

@@ -6526,3 +6526,77 @@ zona de firma. Requiere investigación con corpus .md.
 - `parser.py`: classify_outcome v11→v12, `_unhyphenate()`, RE_ACORDADA_4_DIRECTA.
 
 **Commits pendientes:** 1 (parser.py con B077+B078).
+
+### H067-01 — Validación B077+B078 post re-run
+
+Re-run del parser con B077 (unhyphenate) y B078 (ac4 regex ampliado)
+aplicados en H066 pero no validados. Totales estables: 5862 casos,
+27336 votos.
+
+Outcome principal: `otro` baja 123 (1791→1668), redistribuido a
+outcomes correctos: procedente +51, confirma +17, competencia +15,
+hace_lugar +11, 280 +18, ac4 +12, abstracto +3, mal_concedido +1,
+originaria +1, desestima +1. revoca -6, desistimiento -1.
+
+Divergencia con simulación H066 (que corría sobre texto CSV viejo):
+ac4 sube a 52 (esperado ~35), 280 sube a 296 (esperado ~253).
+Causa: el re-run re-extrae texto desde .md fuente, la unhyphenación
+recupera FN que la simulación no podía prever.
+
+Auditoría ac4 (52): 0 fantasmas detectables. Los 12 sin match en
+CSV truncado tienen considerando_text de ~2000 chars (el parser
+clasifica con texto completo, el CSV trunca a 2000). Los 6 fantasmas
+del CSV viejo desaparecieron (guard `4(?!\d)` funciona).
+
+Auditoría 280 (296): 0 fantasmas. Los 54 sin match visible están
+todos truncados. Todos los 291 (post-B079) mencionan "de la Nación".
+
+### H067-02 — B079: MERIT_OUTCOMES ampliado
+
+Descubierto que MERIT_OUTCOMES en classify_outcome solo protegía
+{hace_lugar, procedente, revoca, confirma, nulidad}. Faltaban
+competencia, abstracto, originaria, desistimiento.
+
+Decisión de diseño: mal_concedido NO se agrega. Verificación empírica:
+3 casos mal_concedido+280 (329_p292, 329_p437, 330_p88) son genuinos —
+el considerando dice "es inadmisible (art. 280)". El dispositivo
+"mal concedido" y la razón "280" coexisten legítimamente, como
+"desestima" + "280".
+
+Fix: una línea. 5 casos movidos: 280→competencia (1), 280→abstracto (1),
+280→originaria (2), 280→desistimiento (1). Validado con re-run.
+
+### H067-03 — B080: RE_280_ABREVIADO (POC, revertido)
+
+Análisis del corpus de 280 (corpus_inadmisible_280.md, 291 casos,
+6.2MB). Inventario de formas de cita: "del Código Procesal Civil y
+Comercial" (535), "CPCCN" (219), "C.P.C.C.N." (222), "del CPCCN" (21).
+
+POC de regex para formas abreviadas: 1 FN recuperado (344_p3095,
+desestima→280, usa "art. 280 del CPCCN"). Re-run: 280 291→292.
+Decisión: revertido por REE (1 caso no justifica regex extra).
+
+Discusión conceptual: outcome vs razón son dimensiones ortogonales.
+desestima = resolución, 280 = fundamento. No son excluyentes.
+El sistema actual colapsa en una columna, prioriza la razón como
+más informativa. Tema abierto para posible reingeniería futura.
+
+### H067 — Estado final
+
+- **Corpus:** 5862 casos (5667 fallos + 195 sumario_editorial/sumario_con_link).
+- **Sin firma:** 34 / 5667 (0.6%). Cobertura firma: 99.4%.
+- **Votos:** 27336 filas.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27336 filas.
+- `output/parser/csjn_casos_zonas.csv` — 142030 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 135 secciones.
+
+**Outcomes (post B079, B080 revertido):**
+otro 1668, hace_lugar 1095, procedente 651, competencia 578,
+desestima 476, inadmisible_280 291, confirma 237, revoca 208,
+originaria 160, abstracto 87, nulidad 59, sin_dispositivo 57,
+inadmisible_acordada_4 52, mal_concedido 38, desistimiento 10.
+
+**Commits:** 2 (snapshot pre-B079, B079 validado + B080 revertido).

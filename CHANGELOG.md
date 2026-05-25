@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H067 (2026-05-24)
+
+- `parser.py`: B077+B078 (H066) validados post re-run. otro -123 redistribuido. ac4 40→52, 280 278→296.
+- `parser.py`: B079 — MERIT_OUTCOMES ampliado con competencia, abstracto, originaria, desistimiento. 5 casos movidos de 280. classify_outcome v12b.
+- `parser.py`: B080 (RE_280_ABREVIADO) testeado (+1 caso) y revertido por REE.
+- `output/parser/csjn_casos.csv`: 5862 filas (sin cambio). Outcomes actualizados.
+- `output/parser/csjn_casos_votos.csv`: 27336 filas (sin cambio).
+- `output/diag/corpus_inadmisible_280.md`: 291 bloques extraídos.
+- `output/diag/corpus_inadmisible_acordada_4.md`: 52 bloques extraídos.
+
+
 ## H066 (2026-05-24)
 
 - `parser.py`: B077 — `_unhyphenate()` normaliza quiebres tipográficos en
