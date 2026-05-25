@@ -272,20 +272,32 @@ RE_280_LIBRE = re.compile(
     re.I
 )
 
-# H065: reescrito. El regex original exigía "artículo 1 del reglamento"
-# pero la Corte cita arts. 2, 4, 5, 7, etc. Además tenía el bug de
-# art[íi]?culo? que no matcheaba "art.".
-# Dos variantes complementarias:
+# H066: tres variantes complementarias para detectar acordada 4/2007.
+# Fixes H066:
+#   - "arts." plural (arts.\xa04º → arts con s opcional)
+#   - año corto: "4/07" además de "4/2007" → (?:20)?07
+#   - (?!\d) después de 4 para no matchear "acordada 47/91" etc.
+#   - (c) nueva: "art. N de la acordada 4/2007" (referencia directa,
+#     sin pasar por "del reglamento"). Captura FN 333_p1235.
+#
+# Variantes:
 #   (a) art. N del reglamento ... acordada 4/2007
 #   (b) reglamento ... acordada 4/2007 (sin artículo explícito)
+#   (c) art. N de la acordada 4/2007 (referencia directa al articulado)
 RE_ACORDADA_4_CONSIDERANDO = re.compile(
-    r"(?:art\.?|art[íi]culo)\s*\d+\s*[°º]?\s*"
+    r"(?:art[s]?\.?\s*|art[íi]culo\s*)\d+\s*[°º]?\s*"
     r"(?:,\s*inc[s.]?.{0,30}?)?\s*del\s+reglamento"
-    r".{0,80}?acordada\s*(?:n[°º]?\s*)?4\s*/?\s*(?:del?\s+)?2007",
+    r".{0,80}?acordada\s*(?:n[°º]?\s*)?4(?!\d)\s*/?\s*(?:(?:del?\s+)?(?:20)?07)?",
     re.I | re.DOTALL
 )
 RE_ACORDADA_4_REGLAMENTO = re.compile(
-    r"reglamento.{0,60}?acordada\s*(?:n[°º]?\s*)?4\s*/?\s*(?:del?\s+)?2007",
+    r"reglamento.{0,60}?acordada\s*(?:n[°º]?\s*)?4(?!\d)\s*/?\s*(?:(?:del?\s+)?(?:20)?07)?",
+    re.I | re.DOTALL
+)
+RE_ACORDADA_4_DIRECTA = re.compile(
+    r"(?:art[s]?\.?\s*|art[íi]culo\s*)\d+\s*[°º]?\s*"
+    r"(?:,\s*inc[s.]?.{0,30}?)?\s*de\s+la\s+"
+    r"acordada\s*(?:n[°º]?\s*)?4(?!\d)\s*/?\s*(?:(?:del?\s+)?(?:20)?07)?",
     re.I | re.DOTALL
 )
 
@@ -311,10 +323,20 @@ OUTCOME_PATTERNS_DISPOSITIVO = [
     ("otro",            re.compile(r".*")),
 ]
 
+def _unhyphenate(text: str) -> str:
+    """B056 (H066): une quiebres de línea con guión en texto digitalizado.
+    'se deses- tima' → 'se desestima', 'mal con- cedido' → 'mal concedido'.
+    Solo une cuando hay \\w-\\s+\\w (guión de corte tipográfico).
+    No toca guiones legítimos (Buenos Aires-La Plata) porque esos no
+    tienen whitespace después del guión."""
+    return re.sub(r"(\w)[­\u00ad-]\s+(\w)", r"\1\2", text)
+
+
 def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     """
-    v11 (H065): prioridad de outcomes con guarda de merit outcome.
+    v12 (H066): agrega _unhyphenate antes de clasificar (B056).
 
+      0. Normalizar textos: _unhyphenate para unir quiebres tipográficos.
       1. Determinar outcome del dispositivo (por_ello_text)
       2. Si el dispositivo da merit outcome (hace_lugar, procedente, revoca,
          confirma, nulidad), NO sobreescribir con 280/ac4 del considerando.
@@ -323,6 +345,10 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
       3. Si el dispositivo NO da merit outcome, buscar 280/ac4 en considerando.
     """
     MERIT_OUTCOMES = {"hace_lugar", "procedente", "revoca", "confirma", "nulidad"}
+
+    # Paso 0 (H066): normalizar quiebres tipográficos
+    por_ello_text = _unhyphenate(por_ello_text)
+    considerando_text = _unhyphenate(considerando_text)
 
     # Paso 1: outcome del dispositivo
     outcome_disp = "otro"
@@ -342,7 +368,8 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
         if RE_280_LIBRE.search(considerando_text):
             return "inadmisible_280"
         if (RE_ACORDADA_4_CONSIDERANDO.search(considerando_text)
-                or RE_ACORDADA_4_REGLAMENTO.search(considerando_text)):
+                or RE_ACORDADA_4_REGLAMENTO.search(considerando_text)
+                or RE_ACORDADA_4_DIRECTA.search(considerando_text)):
             return "inadmisible_acordada_4"
 
     return outcome_disp
@@ -2466,10 +2493,12 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
 
         outcome = classify_outcome(por_ello_text, considerando_text) if por_ello_text else "sin_dispositivo"
         if outcome == "sin_dispositivo" and considerando_text:
-            if RE_280_CONSIDERANDO.search(considerando_text) or RE_280_LIBRE.search(considerando_text):
+            _ct = _unhyphenate(considerando_text)
+            if RE_280_CONSIDERANDO.search(_ct) or RE_280_LIBRE.search(_ct):
                 outcome = "inadmisible_280"
-            elif (RE_ACORDADA_4_CONSIDERANDO.search(considerando_text)
-                  or RE_ACORDADA_4_REGLAMENTO.search(considerando_text)):
+            elif (RE_ACORDADA_4_CONSIDERANDO.search(_ct)
+                  or RE_ACORDADA_4_REGLAMENTO.search(_ct)
+                  or RE_ACORDADA_4_DIRECTA.search(_ct)):
                 outcome = "inadmisible_acordada_4"
 
         firma_raw    = ""

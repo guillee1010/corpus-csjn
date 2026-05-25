@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H066 (2026-05-24)
+
+- `parser.py`: B077 — `_unhyphenate()` normaliza quiebres tipográficos en
+  por_ello_text y considerando_text antes de classify_outcome. 85
+  dispositivos corregidos, 229 outcomes finales afectados (simulación).
+- `parser.py`: B078 — RE_ACORDADA_4_DIRECTA + año corto + `(?!\d)` guard +
+  plural `arts.`. classify_outcome v11→v12. 1 FN recuperado (333_p1235).
+- Outputs no regenerados (pendiente re-run).
+
+
 ## H065 (2026-05-24)
 
 - `parser.py`: fix regex `art[íi]?culo?` → `(?:art\.?|art[íi]culo)` en

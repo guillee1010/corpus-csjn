@@ -6436,3 +6436,93 @@ Scripts de diagnóstico creados: poc_280_ac4.py, diag_280_corpus.py.
 diag_280_corpus.py.
 
 **Commits:** 2 (snapshot pre-fix, fix aplicado).
+
+## H066 — Auditoría ac4 + 280 + unhyphenate (2026-05-24)
+
+**Objetivo:** auditar la cobertura de inadmisible_acordada_4 (40 casos),
+diagnosticar inadmisible_280 (278 casos), e investigar bugs estructurales
+de H065. Se descubrió B077 (quiebres de línea con guión rompen outcomes)
+y se aplicó junto con B078 (regex ac4 ampliada).
+
+### H066-01 — Auditoría de ac4 (40 casos)
+
+Diagnóstico sobre CSV H065. De los 40 clasificados:
+- 34 genuinos: tienen "acordada 4/2007" en considerando_text y la regex
+  original los captura.
+- 6 fantasmas: no contienen "acordada 4" en su texto. Son inconsistencia
+  CSV/parser (versión intermedia de H065). IDs: 332_p1085, 333_p1254,
+  339_p1463, 340_p2001, 341_p512, 345_p1421.
+
+FN: 12 candidatos se reducen a 1 genuino (333_p1235: "artículo 4º de la
+acordada 4/2007, por lo que corresponde declarar inadmisible"). Escapaba
+porque la regex exigía "del reglamento... acordada" pero el texto dice
+"de la acordada" (referencia directa al articulado).
+
+4 borderline capturados por la regex ampliada: menciones contextuales
+(reposiciones, devoluciones a inferior) que no son rechazos genuinos por ac4.
+
+### H066-02 — B078: RE_ACORDADA_4_DIRECTA + fixes regex
+
+Tres cambios en las regex de ac4:
+1. Nueva RE_ACORDADA_4_DIRECTA: "art N de la acordada 4/2007".
+2. Año: `2007` → `(?:20)?07` (acepta "4/07").
+3. Guard: `4(?!\d)` (no matchea "acordada 47/91").
+4. Plural: `art[s]?\.?` (matchea "arts.").
+
+Validación: 8/8 strings de prueba, 34/40 preservados, FN 333_p1235
+recuperado.
+
+### H066-03 — B077: _unhyphenate (descubrimiento + fix)
+
+Al investigar 334_p256 ("mal con- cedido" no matcheaba `mal concedid[ao]`),
+se descubrió que 37.3% de los fallos (2112/5667) tienen guión de quiebre
+en por_ello_text, y 150 rompen un outcome keyword.
+
+Función `_unhyphenate()` aplicada en classify_outcome v12 (paso 0) y en
+fallback sin_dispositivo. Simulación sobre CSV: 85 dispositivos cambian,
+229 outcomes finales cambian. Principales: otro→desestima (31),
+otro→procedente (29), otro→confirma (24), inadmisible_280→otro (33 por
+merit guard corregida).
+
+### H066-04 — Diagnóstico de 280
+
+278 clasificados, desglose:
+- 168 per curiam (wc_cons ≤ 60) — genuinos.
+- 43 fantasmas (sin "280" en texto) — inconsistencia CSV/parser.
+- 20 arrastre (280 en primer 10% del considerando, 16 con "Por ello"
+  inmediato → B045 residuo del caso anterior).
+- 39 normal + 8 largo — genuinos.
+- 18 FN: mencionan art. 280, outcome no-merit, pero no clasificados
+  como 280 (capturables post re-run).
+
+### H066-05 — Investigación bugs estructurales H065
+
+Desde el CSV (sin corpus .md):
+- 340_p2001: solapamiento de spans con vecinos (L39521 empieza dentro de
+  340_p2000 que termina en L39542). Por_ello dice "hacer lugar" (merit).
+- 340_p188: wc_may=6547 con wc_cons=164 — dos casos pegados.
+- 332_p1085: FP ac4, dos dispositivos, sin mención de acordada.
+- 333_p1464: GENUINO ac4 (tiene "art. 7º... acordada 4/2007" en
+  considerando). Bug es el voto conjunto de Highton no detectado.
+- 334_p256: GENUINO ac4 pero por_ello dice "mal con- cedido" — roto
+  por guión (B077 lo arregla).
+
+### H066-06 — sin_firma (34 casos)
+
+21 sin_dispositivo + 13 con por_ello truncado (status_fin=
+fin_extendido_pag_compartida). Concentrados en tomos 329 (15) y 330 (6).
+Los 13 con por_ello no tienen firma detectable — el parser no llegó a la
+zona de firma. Requiere investigación con corpus .md.
+
+### H066 — Estado final
+
+- **Corpus:** 5862 casos (5667 fallos + 195 sumario_editorial/sumario_con_link).
+- **Sin firma:** 34 / 5667 (0.6%). Cobertura firma: 99.4%.
+- **Votos:** 27336 filas.
+
+**Outputs canónicos:** sin cambio (parser no re-ejecutado).
+
+**Parser modificado (no re-run):**
+- `parser.py`: classify_outcome v11→v12, `_unhyphenate()`, RE_ACORDADA_4_DIRECTA.
+
+**Commits pendientes:** 1 (parser.py con B077+B078).

@@ -6,7 +6,12 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-24 (H065: recalibración detectores
+**Última actualización:** 2026-05-24 (H066: B077 _unhyphenate aplicado —
+85 dispositivos corregidos, 229 outcomes afectados. B078 RE_ACORDADA_4_DIRECTA
++ fix año corto + (?!\d) guard. classify_outcome v12.
+Diagnóstico: 6 FP ac4 fantasma, 43 FP 280 fantasma (inconsistencia
+CSV/parser), 16 arrastre B045 en 280, 18 FN 280 pendientes.
+H065: recalibración detectores
 post-B010. Fix regex `art[íi]?culo?` → `(?:art\.?|art[íi]culo)` en 4
 constantes (RE_280_CONSIDERANDO, RE_280_LIBRE, RE_ACORDADA_4, RE_ART_117_CN).
 RE_ACORDADA_4 reescrito (cualquier artículo del reglamento, no solo art. 1).
@@ -2191,20 +2196,24 @@ canónicos actuales B0NN.
     hace_lugar/procedente/revoca/confirma/nulidad. 49 merit outcomes
     protegidos.
 
-**Próximo trabajo priorizado (orden sugerido, H066):**
+**Próximo trabajo priorizado (orden sugerido, H067):**
 
-1. **Revisión de inadmisible_280** — auditar los 44 fantasmas (outcome=
-   inadmisible_280 sin match de regex), los 16 arrastre (280 del caso
-   anterior en considerando_text por B045), y muestra de los 168 per
-   curiam para validar.
-2. **B025 — re-medición falsos unánime post-fixes.** 414 era pre-fix.
-   Re-medir contra CSV actual para dimensionar residual.
-3. **B018 residual — re-medición post-H046/H048/H050.**
-4. **B054/M06 — epílogo.**
-5. **Bugs estructurales de H065** — 340_p2001 (caso roto), 332_p1085
-   (dos dispositivos), 333_p1464 y 334_p256 (votos conjuntos no
-   detectados).
-6. **M02 — bloque snapshots Fase 2.** Limpieza de repo.
+1. **Re-run del parser** con B077+B078 aplicados. Validar conteos
+   post-run: ac4 estimado ~35, 280 estimado ~219 genuinos + nuevos
+   detectados por unhyphenate. Revisar 4 borderline ac4 (339_p597,
+   342_p122, 344_p1783, 348_p1502) y 18 FN 280 que debieron aparecer.
+2. **B025 — re-medición falsos unánime post-B077.** Unhyphenate
+   cambia 85 dispositivos; el pool de falsos unánime se mueve.
+3. **Bugs estructurales de H065** — 340_p2001 (solapamiento de spans),
+   340_p188 (dos casos pegados, wc_may=6547), 332_p1085 (dos
+   dispositivos), 333_p1464 (voto conjunto Highton), 334_p256
+   (mal_concedido roto por guión). Requieren corpus .md.
+4. **B045 manifestación B — arrastre.** 16 casos 280 son B045
+   (residuo per curiam del caso anterior en considerando_text).
+5. **sin_firma (34 casos)** — 21 sin_dispositivo + 13 con por_ello
+   truncado. Concentrados en tomos 329-330.
+6. **B054/M06 — epílogo.**
+7. **M02 — bloque snapshots Fase 2.**
 
 
 ### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula
@@ -2941,3 +2950,60 @@ desde `parser.py`, actualizar CSV con columna subtipo, commit.
   `construir_catalogo.py` la cubre con `extender_inicio_indice_nombres`.
 
 **Estado:** cerrado (H061).
+
+### B077 — Quiebres de línea con guión rompen detección de outcomes — APLICADO H066
+
+**Componente:** parser (classify_outcome).
+**Origen / fuente del diagnóstico:** H066, análisis de 334_p256 ("mal con- cedido"
+no matchea `mal concedid[ao]`).
+**Causa raíz:** el texto digitalizado corta palabras con guión al final de
+línea ("se deses- tima", "se revo- ca", "proce- dente", "mal con- cedido").
+Los regex de OUTCOME_PATTERNS_DISPOSITIVO esperan palabras continuas y no
+matchean las variantes rotas. El dispositivo cae en catch-all "otro", lo que
+deshabilita la merit guard y permite que paso 3 (280/ac4) sobreescriba con
+un outcome incorrecto.
+**Diagnóstico / evidencia:** 37.3% de los fallos (2112/5667) tienen guión de
+quiebre en por_ello_text. 150 rompen un outcome keyword. 85 cambiarían de
+outcome de dispositivo con la normalización. 229 outcomes finales cambian
+(simulación sobre CSV H065).
+**Estado de verificación:** `confirmado_cuantificado`.
+**Fix aplicado (H066):** función `_unhyphenate(text)` que aplica
+`re.sub(r"(\w)[-\u00ad]\s+(\w)", r"\1\2", text)` — une quiebres tipográficos
+sin tocar guiones legítimos (Buenos Aires-La Plata no tiene whitespace
+después del guión). Aplicada en `classify_outcome` v12 (paso 0, antes de
+regex matching) y en el fallback sin_dispositivo. No modifica el texto
+almacenado en CSV, solo el usado para clasificación.
+**Validación pendiente:** re-run del parser y comparación de conteos.
+Principales transiciones esperadas: otro→desestima (31), otro→procedente (29),
+otro→confirma (24), revoca→procedente (20), inadmisible_280→otro (33,
+por merit guard corregida).
+**Referencias cruzadas:** H066. Afecta B025 (falsos unánime), 280/ac4
+(merit guard), sin_firma (indirectamente via outcomes).
+
+
+### B078 — RE_ACORDADA_4 no captura "art. N de la acordada 4/2007" — APLICADO H066
+
+**Componente:** parser (classify_outcome, regex ac4).
+**Origen / fuente del diagnóstico:** H066, auditoría de 40 ac4.
+**Causa raíz:** las dos regex originales (RE_ACORDADA_4_CONSIDERANDO y
+RE_ACORDADA_4_REGLAMENTO) exigen la secuencia "del reglamento ... acordada
+4/2007". La Corte también usa la variante directa "art. N de la acordada
+4/2007" (sin mencionar "reglamento"). Además, el año solo aceptaba "2007"
+(4 dígitos), no la variante corta "4/07". Y "art." no matcheaba "arts."
+(plural).
+**Diagnóstico / evidencia:** 1 FN confirmado (333_p1235: "artículo 4º de la
+acordada 4/2007, por lo que corresponde declarar inadmisible"). 4 borderline
+(menciones contextuales que la regex captura: 339_p597, 342_p122, 344_p1783,
+348_p1502) — revisar post re-run.
+**Estado de verificación:** `confirmado_cuantificado`.
+**Fix aplicado (H066):** tres cambios:
+1. Nueva regex `RE_ACORDADA_4_DIRECTA`: captura "art. N de la acordada 4".
+2. Año: `2007` → `(?:20)?07` en las 3 regex.
+3. Guard: `4` → `4(?!\d)` para no matchear "acordada 47/91" etc.
+4. Plural: `art\.?` → `art[s]?\.?` para matchear "arts.".
+Agregada en classify_outcome (paso 3) y fallback sin_dispositivo.
+**Validación:** 8/8 strings de prueba correctos. 34/40 actuales preservados.
+6 FP fantasma (sin mención de ac4 en texto) quedan fuera. FN 333_p1235
+recuperado.
+**Validación pendiente:** re-run del parser. Revisar 4 borderline.
+**Referencias cruzadas:** H066. Subsume el fix de regex parcial de H065.
