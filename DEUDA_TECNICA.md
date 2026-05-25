@@ -6,7 +6,13 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-25 (H069: B045 fix parcial aplicado —
+**Última actualización:** 2026-05-25 (H070: B082 fix parcial aplicado —
+excluir líneas >= inicio_votos_indiv del considerando. 19 outcomes
+corregidos (inadmisible_280 contaminado → outcome correcto del
+dispositivo), 66 wc_considerando limpiados (Δ promedio -1155), 0
+regresiones. M10 nuevo: zonificador debería distinguir zonas de
+mayoría vs votos individuales.
+H069: B045 fix parcial aplicado —
 bidireccional closest-to-lfc en fallback firma_actual de detectar_fin_real.
 33 casos cambian, 2 empates bloqueados por strict less-than, 0 regresiones.
 votos +5 (27341), sin_firma -1 (33), unanime -3 (3505), segun_su_voto +3 (735),
@@ -2212,6 +2218,30 @@ zonas (corre antes del zonificador).
 
 ---
 
+### M10 — Zonificador: distinguir zonas de mayoría vs votos individuales
+
+**Componente:** parser (zonificar_bloque).
+**Origen / fuente del diagnóstico:** H070 (diagnóstico B082).
+**Descripción:** el zonificador asigna las mismas etiquetas de zona
+(`cuerpo`, `dispositivo`, `firma`) tanto a la mayoría como a los votos
+individuales. Solo `voto_separado` (post voto_header) es específico.
+El visor ya distingue mayoría/disidencia/concurrencia, pero lo hace
+por posición (antes/después de inicio_votos_indiv), no por zona.
+**Impacto:** B082 requirió un fix posicional (excluir >= inicio_votos_indiv)
+en vez de usar zonas, porque las zonas no capturan la frontera.
+Otros consumidores del zonificador (wc_mayoria, lineas_mayoria) también
+usan posición y no zonas.
+**Propuesta:** prefixar zonas post-inicio_votos_indiv como `voto_cuerpo`,
+`voto_dispositivo`, `voto_firma`. O agregar una segunda capa (zona +
+scope mayoría/individual).
+**Precondición:** validar que inicio_votos_indiv es confiable en todos
+los casos. En 64 casos, inicio_votos_indiv cae antes del dispositivo
+de la mayoría — requiere diagnóstico.
+**Estado:** no diseñado.
+**Referencias cruzadas:** H070. B082. M09.
+
+---
+
 ## Mapeo histórico
 
 Trazabilidad de IDs viejos del documento del 2026-05-02 a los IDs
@@ -3169,26 +3199,28 @@ desestima→280, usa "art. 280 del CPCCN"). Re-run parser: 280 291→292 (+1).
 **Referencias cruzadas:** H067.
 
 
-### B082 — classify_outcome corre sobre bloque completo incluyendo disidencias
+### B082 — classify_outcome corre sobre bloque completo incluyendo disidencias — FIX PARCIAL H070
 
-**Componente:** parser (classify_outcome).
+**Componente:** parser (extraer_considerando / classify_outcome).
 **Origen / fuente del diagnóstico:** H069, efecto colateral del fix
-bidireccional B045. Al extender bloques para incluir votos/disidencias
-truncados, `classify_outcome` puede capturar el "Por ello" de la
-disidencia en vez del de la mayoría.
-**Causa raíz:** `classify_outcome` usa `por_ello_text` extraído del
-bloque completo (todas las zonas). Cuando el bloque incluye una
-disidencia con su propio "Por ello" (e.g., "se desestima la queja"),
-ese texto puede sobreescribir el outcome de la mayoría. El problema
-es preexistente pero se hizo más visible con la extensión H069.
-**Diagnóstico / evidencia:** 9 outcomes cambiaron post-H069, de los
-cuales 3 fueron a "otro" (sospechosos: 344_p220, 347_p818, 348_p659).
-Los otros 6 son probables mejoras (dispositivo previamente truncado).
-**Estado de verificación:** `confirmado_cuantificado` (9 cambios medidos,
-3 sospechosos identificados).
-**Validador propuesto:** `classify_outcome` debería correr solo sobre
-el texto de la zona `mayoria` (disponible desde el zonificador H051-H052),
-no sobre el bloque completo. Requiere refactoring de la interfaz entre
-zonificador y classify_outcome.
-**Estado del fix:** no diseñado.
-**Referencias cruzadas:** H069. B045.
+bidireccional B045.
+**Causa raíz (corregida H070):** `extraer_considerando` no excluía
+líneas de votos individuales (>= inicio_votos_indiv). El texto de
+disidencias, votos según su voto, y sumarios editoriales filtraba al
+considerando_text. En 19 casos, la detección de art. 280 en texto de
+disidencia contaminaba el outcome (inadmisible_280 incorrecto).
+Diagnóstico H069 parcialmente incorrecto: los 3 sospechosos originales
+(344_p220, 347_p818, 348_p659) son unánimes sin disidencias — outcomes
+"otro" legítimos, no B082.
+**Fix aplicado (H070):** excluir del considerando todas las líneas
+>= inicio_votos_indiv (fix posicional). 3 líneas de código.
+Validación: 19 outcomes corregidos (todos inadmisible_280 → outcome
+correcto del dispositivo: 10 desestima, 8 otro, 1 mal_concedido),
+66 wc_considerando limpiados (Δ promedio -1155 palabras), 0 regresiones,
+0 cambios voting_pattern, 3 is_originaria corregidos.
+**Residual:** `por_ello_text` sigue extrayéndose del bloque completo.
+En 64 casos, por_ello_idx >= inicio_votos_indiv (el dispositivo de
+la mayoría está después de headers de votos). El fix v3 limpia el
+considerando pero no aborda este camino — requiere que el zonificador
+distinga zonas de mayoría vs votos individuales (ver M10).
+**Referencias cruzadas:** H069. H070. B045. M10.

@@ -6763,3 +6763,72 @@ Validación (`poc_b045_validacion.py`) comparando CSV pre/post via git:
 `poc_b045_validacion.py` (raíz del repo).
 
 **Commits:** 3 (snapshot pre-H069, snapshot post re-run, B045 fix parser.py).
+
+## H070 — B082 fix: considerando limpio de votos individuales (2026-05-25)
+
+**Objetivo:** corregir la contaminación de `considerando_text` con texto de disidencias/votos individuales que afectaba `classify_outcome`.
+
+### H070-01 — Diagnóstico
+
+Análisis del CSV confirmó 62 casos con `wc_considerando > wc_mayoria` en
+fallos con disidencias (señal de leakage). Los 3 sospechosos originales
+de H069 (344_p220, 347_p818, 348_p659) descartados: son unánimes sin
+disidencias, outcomes "otro" legítimos.
+
+Caso testigo 329_p437: `wc_mayoria=26`, `wc_considerando=833`.
+El considerando incluía texto de disidencia con firma y sumarios
+editoriales. Caso 332_p5: el art. 280 estaba explícitamente dentro
+de un "Voto del señor presidente", no en la mayoría.
+
+### H070-02 — PoC v1 (descartado)
+
+Fix: buscar dispositivo alternativo en zona mayoría cuando
+`por_ello_idx >= inicio_votos_indiv`. Resultado: 63 regresiones
+(todos a sin_dispositivo). Causa: en 64 casos, el dispositivo legítimo
+de la mayoría está DESPUÉS de inicio_votos_indiv (headers de votos
+antes del dispositivo). El patch descartaba un dispositivo correcto
+sin encontrar reemplazo.
+
+### H070-03 — PoC v2 (insuficiente)
+
+Fix: excluir líneas con zona `voto_separado` del considerando.
+Resultado: 11 wc_considerando cambios mínimos (Δ promedio -60),
+0 outcomes. Insuficiente porque el zonificador asigna `dispositivo`,
+`firma`, `cuerpo` dentro de votos individuales — solo `voto_separado`
+(body post-header) es específico.
+
+### H070-04 — PoC v3 (aplicado)
+
+Fix: excluir del considerando todas las líneas >= `inicio_votos_indiv`.
+3 líneas de código. Resultado:
+- 19 outcomes corregidos (todos inadmisible_280 → outcome correcto:
+  10 desestima, 8 otro, 1 mal_concedido)
+- 66 wc_considerando limpiados (Δ promedio -1155 palabras)
+- 0 regresiones, 0 cambios voting_pattern, 3 is_originaria corregidos
+- Verificación caso a caso: en los 19, el art. 280 estaba en texto de
+  disidencia/voto individual, no en la mayoría
+
+Deuda residual: `por_ello_text` sigue extrayéndose del bloque completo.
+Deuda nueva M10: zonificador debería distinguir zonas mayoría vs votos.
+
+### H070 — Estado final
+
+- **Corpus:** 5862 casos (5667 fallos + 195 sumario_editorial/sumario_con_link).
+- **Sin firma:** 33 / 5667 (0.6%). Cobertura firma: 99.4%.
+- **Votos:** 27341 filas.
+- **Outcomes:** otro 1679, hace_lugar 1097, procedente 651,
+  competencia 578, desestima 483, inadmisible_280 272, confirma 236,
+  revoca 206, originaria 160, abstracto 88, nulidad 60,
+  sin_dispositivo 57, inadmisible_acordada_4 52, mal_concedido 38,
+  desistimiento 10.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27341 filas.
+- `output/parser/csjn_casos_zonas.csv` — 142505 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 135 secciones.
+
+**Scripts creados:** `scripts/auditoria/069/poc_b082_compare.py`,
+`scripts/auditoria/069/poc_b082_verificar.py` (verificación H070, ubicación provisional).
+
+**Commits:** snapshot pre-B082, B082 fix v3 aplicado.

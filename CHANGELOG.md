@@ -2,6 +2,14 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H070 (2026-05-25)
+
+- `parser.py`: B082 fix — excluir líneas >= inicio_votos_indiv del
+  considerando (3 líneas). 19 outcomes corregidos (inadmisible_280
+  contaminado → outcome correcto), 66 wc_considerando limpiados.
+- `output/parser/csjn_casos.csv`: 5862 filas (sin cambio de conteo;
+  19 outcomes y 66 wc_considerando actualizados).
+
 ## H069 (2026-05-25)
 
 - `parser.py`: fallback firma_actual en `detectar_fin_real` cambia de

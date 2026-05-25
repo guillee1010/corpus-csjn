@@ -2510,7 +2510,11 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                 por_ello_idx = _t3_fb_idx
                 por_ello_text = _t3_fb_text
 
-        considerando_text = extraer_considerando(bloque, por_ello_idx, lineas_dictamen)
+        # B082: excluir líneas de votos individuales del considerando
+        _lineas_no_cons = set(lineas_dictamen)
+        if inicio_votos_indiv is not None:
+            _lineas_no_cons |= set(range(inicio_votos_indiv, len(bloque)))
+        considerando_text = extraer_considerando(bloque, por_ello_idx, _lineas_no_cons)
 
         outcome = classify_outcome(por_ello_text, considerando_text) if por_ello_text else "sin_dispositivo"
         if outcome == "sin_dispositivo" and considerando_text:
