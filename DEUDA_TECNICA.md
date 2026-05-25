@@ -3425,5 +3425,6 @@ votos por carátulas mixed-case en tomos 337+); stoplist sola (v2,
 votos 27382→27455 (+73), blanks 194→193 (−1). 0 regresiones masivas.
 **Residuo (17 sin_firma):** ~5 citas in extenso (token específico
 aparece en texto transcrito), ~4 bloques cortos, ~3 firma atípica
-o token en firma, ~5 otros.
+o token en firma, ~5 otros. 1 regresión nueva: 329_p1881
+(Tortorelli, no era sin_firma antes de B093, investigar causa).
 **Referencias cruzadas:** H073. B070, B071.
