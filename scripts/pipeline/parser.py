@@ -1624,6 +1624,11 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
     pista: 'caratula_siguiente' / 'sumario_siguiente' /
            'marcador_apertura_siguiente' / 'editorial_siguiente' /
            'firma_actual' / 'fallback_catalogo'
+
+    H069: fallback firma_actual cambia de backward-first a bidireccional
+    closest-to-lfc (B045). Busca en ambas direcciones y elige la firma más
+    cercana a linea_fin_catalogo. Corrige 16 falsos unanime (firma arrastrada
+    del caso anterior) y recupera 19 votos truncados.
     """
     n = len(lines)
     li = max(0, int(linea_inicio))
@@ -1706,13 +1711,24 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
     if k is not None:
         return (k - 1, "fin_por_editorial", "editorial_siguiente")
 
-    # Fallback: firma del fallo actual
-    k = buscar_atras(linea_es_firma_de_juez, lfc, li)
-    if k is not None:
-        return (k, "fin_por_firma_actual", "firma_actual")
-    k = buscar_adelante(linea_es_firma_de_juez, lfc + 1, limite_adelante)
-    if k is not None:
-        return (k, "fin_por_firma_actual", "firma_actual")
+    # Fallback: firma del fallo actual — bidireccional closest-to-lfc (B045 H069)
+    # Busca en ambas direcciones y elige la firma más cercana a lfc.
+    # Motivación: cuando hay arrastre del caso anterior (B045), backward
+    # encontraba la firma arrastrada (lejos de lfc) e ignoraba la firma real
+    # del caso actual en la zona de extensión (cerca de lfc). Bidireccional
+    # elige la correcta por proximidad. Strict less-than: empate → backward.
+    # POC validado: 35 mejoras (16 unanime + 19 votos truncados), 0 regresiones.
+    k_back = buscar_atras(linea_es_firma_de_juez, lfc, li)
+    k_fwd = buscar_adelante(linea_es_firma_de_juez, lfc + 1, limite_adelante)
+    if k_back is not None and k_fwd is not None:
+        if (k_fwd - lfc) < (lfc - k_back):
+            return (k_fwd, "fin_por_firma_actual", "firma_actual")
+        else:
+            return (k_back, "fin_por_firma_actual", "firma_actual")
+    elif k_back is not None:
+        return (k_back, "fin_por_firma_actual", "firma_actual")
+    elif k_fwd is not None:
+        return (k_fwd, "fin_por_firma_actual", "firma_actual")
 
     # Sin detectar: usar el catálogo como está
     return (lfc, "fin_no_detectado", "fallback_catalogo")
