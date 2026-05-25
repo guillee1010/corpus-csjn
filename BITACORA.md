@@ -6600,3 +6600,96 @@ originaria 160, abstracto 87, nulidad 59, sin_dispositivo 57,
 inadmisible_acordada_4 52, mal_concedido 38, desistimiento 10.
 
 **Commits:** 2 (snapshot pre-B079, B079 validado + B080 revertido).
+
+## H068 — Diagnóstico B025 + B045 + B018 (2026-05-24)
+
+**Objetivo:** re-medición de bugs pendientes (B025, B045 arrastre 280,
+B018 residual) y análisis de causa raíz B045 con scripts de catálogo y
+cruzador.
+
+### H068-01 — Re-medición B025 (falsos unánime)
+
+Pool unanime: 3508 fallos. Filtrado por `pista_fin = firma_actual`
+(mecanismo B025): 72 casos (2.1%, era 414 = ~11.8%).
+
+Distribución de wc en los 72: rango 55-7017, sin gap natural limpio.
+Análisis por dos señales cruzadas:
+
+- `status_localizacion` contiene `ancla_catalogo`: 65.5% en los 72
+  vs 8.3% en corpus (8x sobrerrepresentado).
+- `considerando_text` empieza con header de tomo (patrón `3XX ...`):
+  señal directa de arrastre.
+
+Tres poblaciones (wc ≤ 300, 29 casos):
+- Cat A: ancla + tomo_header → 14 falsos seguros.
+- Cat B: ancla + Considerando → 6 ambiguos.
+- Cat C: ok + Considerando → 9 prob. legítimos.
+
+Caso testigo `343_p2243` sigue en pool (wc=64, cat A).
+Tasa unanime corregida: 61.5-61.7% (vs 61.9%). Δ = 0.2-0.4pp.
+
+### H068-02 — Diagnóstico arrastre 280 (B045 manifestación B)
+
+291 casos `inadmisible_280`. Búsqueda de 280 en primer 10% del
+considerando + "Por ello" en primer 15%: 15 hits (era 16 en H066,
+B079 sacó 1 vía merit guard).
+
+Verificación textual: los 15 tienen `considerando_text` que empieza con
+per curiam 280 del caso anterior ("art. 280... Por ello, se desestima"
++ firma), seguido del contenido real del caso. Word counts altos
+(936-18477) confirman que el 280 es arrastre.
+
+Discriminador probado con regex real del parser: RE_280 match antes de
+"Por ello" en `considerando_text` → 15/15 arrastre, 0 FP sobre 276
+genuinos. POC B081 (guard en `classify_outcome`): 15 cambios
+(6 desestima, 1 mal_concedido, 8 otro), 0 regresiones. Pool 280:
+291→276. **No aplicado** (REE: 15 casos no justifican guard extra;
+8 van a `otro` por gaps preexistentes en OUTCOME_PATTERNS_DISPOSITIVO).
+
+### H068-03 — Inspección causa raíz B045
+
+Con `construir_catalogo.py` y `cruzar_catalogo_y_mapa.py` en mano:
+
+- `construir_catalogo.py:410`: `pagina_fin = pagina_inicio_next` (sin -1).
+- `cruzar_catalogo_y_mapa.py:245`: `linea_fin = linea_header - 1`.
+- Resultado: bloque termina una línea antes del header de página del
+  caso siguiente.
+
+Cuantificación sobre CSV:
+- 97.0% (5499/5667) con `linea_fin_real > linea_fin` (parser extiende).
+- Extensión mediana: 11 líneas. p95: 27. Max: 199.
+- 0 casos con coincidencia exacta.
+- 110 en fallback `firma_actual` (72 unanime, 15 ssv, 15 dis, 6 mixed, 2 sf).
+
+Tres opciones de fix discutidas:
+- Camino A: bump cruzador +30 líneas (cubre 98.4%). Riesgo cascada.
+- Camino B: invertir fallback firma (adelante primero). Riesgo en fallos
+  cortos.
+- Camino C: semántica inter-caso (pasar linea_fin_real al siguiente).
+  Riesgo cascada de errores.
+
+Decisión: evaluar con tests en sesión dedicada. El -1 del cruzador
+podría estar compensando en otras partes del parser.
+
+### H068-04 — Re-medición B018 residual
+
+554 casos con `primer_token` genérico no excluido (Banco 88,
+Provincia 81, Asociación 78, Estado 57, Ministerio 41). 185 cerrados
+por Pista 1 con token genérico del siguiente. B069 (búsqueda atrás
+eliminada) + B070 (`_es_texto_corriente`) absorben la mayoría. Solo 3
+casos `caratula_siguiente` con wc ≤ 100, todos legítimos. Sin señal
+medible de FP residual desde CSV. Requiere .md o logging para confirmar.
+
+### H068 — Estado final
+
+- **Corpus:** 5862 casos (5667 fallos + 195 sumario_editorial/sumario_con_link).
+- **Sin firma:** 34 / 5667 (0.6%). Cobertura firma: 99.4%.
+- **Votos:** 27336 filas.
+
+**Outputs canónicos:** sin cambio (sesión de diagnóstico, parser no
+re-ejecutado).
+
+**Scripts creados:** ninguno (POC B081 descartado).
+
+**Commits:** 0.
+

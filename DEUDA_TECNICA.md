@@ -6,7 +6,9 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-24 (H067: validación B077+B078 post re-run.
+**Última actualización:** 2026-05-24 (H068: re-medición B025 (414→72),
+diagnóstico arrastre 280 (15 FP, POC B081 no aplicado por REE),
+inspección causa raíz B045 (catalogador+cruzador), re-medición B018.
 B079 aplicado — MERIT_OUTCOMES ampliado con competencia, abstracto, originaria,
 desistimiento; 5 casos movidos de 280 a outcomes correctos.
 B080 POC (RE_280_ABREVIADO para CPCCN/C.P.C.C.N.) testeado y revertido:
@@ -511,7 +513,7 @@ catalogador/cruzador) evaluable en H056+.
 **Severidad:** alta. B045 es **causa raíz arquitectónica común** de:
 - **B022** (arrastre al inicio): se elimina por construcción si se
   fixea B045.
-- **B025** (414 falsos `unanime`): fallback de `detectar_fin_real`
+- **B025** (14-20 falsos `unanime`, re-medido H068): fallback de `detectar_fin_real`
   captura firma del previo arrastrado cuando la firma real fue
   truncada. Se elimina por construcción si se fixea B045.
 - **B044** (span voto espurio): cuando B045 + B022 V2b arrastra un
@@ -592,6 +594,45 @@ dedicada).
 + cruzador 245). El estado "Causa raíz a nivel código (etapa catálogo
 o cruzador) pendiente de diagnóstico" anotado en H024 queda
 **superado** por esta inspección.
+
+**Cuantificación H068 (2026-05-24).** Medición sobre CSV vivo:
+
+- 97.0% de fallos (5499/5667) tienen `linea_fin_real > linea_fin`:
+  el parser extiende más allá del catálogo en casi todos los casos.
+  Extensión mediana: 11 líneas. p95: 27. Máximo: 199.
+- 0 casos con `linea_fin_real == linea_fin` (coincidencia exacta nunca).
+- 168 casos con `linea_fin_real < linea_fin` (parser cortó dentro del
+  bloque: 90 firma_actual, 61 sumario_siguiente, 17 editorial_siguiente).
+- 110 casos en fallback `firma_actual` (pistas 1-4 fallaron):
+  72 unanime (→ B025), 15 segun_su_voto, 15 disidencia, 6 mixed, 2 sin_firma.
+
+**Arrastre 280 (H068).** 15 casos clasificados `inadmisible_280` por
+arrastre B045: el `considerando_text` empieza con el per curiam 280
+del caso anterior (art. 280 + "Por ello, se desestima" + firma).
+Discriminador limpio: RE_280 match antes de "Por ello" en
+`considerando_text` → 15/15 arrastre, 0 FP sobre 276 genuinos 280.
+POC B081 (guard posicional en `classify_outcome`) testeado: 15 cambios,
+0 regresiones. **No aplicado** (REE: 15 casos no justifican guard extra).
+Transiciones: 6 → desestima, 1 → mal_concedido, 8 → otro (por gaps
+preexistentes en OUTCOME_PATTERNS_DISPOSITIVO).
+
+**Opciones de fix discutidas (H068):**
+
+- **Camino A (cruzador):** aumentar `linea_fin` en cruzador (+30 líneas
+  cubriría 98.4%). Los bloques pasan a incluir arrastre del caso
+  siguiente (manejable por `refinar_inicio_por_titulo`). Riesgo:
+  efectos cascada no previstos aguas abajo.
+- **Camino B (parser fallback):** invertir orden del fallback firma_actual
+  (L1710-1715): buscar adelante primero, atrás después. Encuentra firma
+  real en zona de extensión antes de tropezar con arrastrada. Riesgo:
+  rompe fallos cortos cuya firma está en la misma página de inicio.
+- **Camino C (semántica inter-caso):** que cada caso pase su `linea_fin_real`
+  al siguiente como indicio. Riesgo: cascada de errores si un caso cierra
+  mal.
+
+Decisión H068: evaluar opciones con tests en sesión dedicada. El `-1` del
+cruzador podría estar compensando en otras partes del parser (memoria de
+intento previo revertido).
 
 **Propuesta arquitectónica alternativa:** ver `docs/GRAMATICA_DEL_FALLO.md`.
 Documento conceptual que propone un parser por gramática del fallo
@@ -903,6 +944,18 @@ sustancialmente mitigados por fixes posteriores:
 La estimación de "~570 casos proyectados" (H022) es obsoleta. Re-medir
 prevalencia residual antes de diseñar fix adicional (opción D pendiente).
 
+**Re-medición H068 (2026-05-24).** 554 casos tienen `primer_token`
+genérico no excluido (Banco 88, Provincia 81, Asociación 78, Estado 57,
+Ministerio 41, etc.). De estos, 185 casos previos fueron cerrados por
+Pista 1 con token genérico del caso siguiente. Sin embargo, no hay
+señal medible de FP residual desde el CSV: solo 3 casos
+`caratula_siguiente` tienen wc ≤ 100, y son legítimos (competencias).
+B069 (eliminó búsqueda atrás) + B070 (`_es_texto_corriente`) absorben
+la gran mayoría. Medición de FP concretos requiere .md o re-run con
+logging. Ampliar la exclusion list en `primer_token_de_caratula` es una
+línea de código pero necesita validación para no romper Pista 1 en casos
+donde el token genérico es realmente el primer token legítimo.
+
 ### B019 — `detectar_fin_real` off-by-one en firmas multilínea
 
 **Componente:** parser.
@@ -1098,7 +1151,7 @@ anterior.
 **Referencias cruzadas:** F006. H013. H051, H055. PIPELINE §4.4.g (cubre
 solo sumarios con link). Sin ID histórico.
 
-### B025 — 414 falsos `unanime` (mecanismo confirmado)
+### B025 — Falsos `unanime` — re-medido H068 (414→72)
 
 **Componente:** parser (síntoma); causa raíz a nivel catálogo (B045)
 + fallback de `detectar_fin_real` (parser.py 1225-1231).
@@ -1181,6 +1234,27 @@ Desde entonces se aplicaron B001 (cruzador), B069 (Pista 1 atrás
 eliminada), B074 (guard posicional), A001 (firma inversa), B055 (firma
 truncada), H055 (residuo_caso_anterior). El número real post-fixes es
 desconocido y probablemente mucho menor. Re-medición prioritaria.
+
+**Re-medición H068 (2026-05-24).** Pool unanime = 3508.
+`pista_fin = firma_actual` (mecanismo B025): **72 casos** (2.1% del pool,
+era ~11.8%). Análisis por dos señales cruzadas:
+
+- **Cat A (14, falsos seguros):** `status_localizacion` contiene
+  `ancla_catalogo` + `considerando_text` empieza con header de tomo
+  (arrastre puro, sin apertura ni considerando propio). Caso testigo
+  `343_p2243` acá.
+- **Cat B (6, ambiguos):** `ancla_catalogo` pero con "Considerando:"
+  legítimo. Podrían ser per curiam cortos con firma_actual correcta.
+  2 tienen `wc_mayoria = 7` (sospechoso pero texto coherente).
+- **Cat C (9, prob. legítimos):** localización `ok`, considerando normal.
+  Firma_actual fue fallback correcto.
+
+Discriminadores: `ancla_catalogo` sobrerrepresentado 8x (65.5% en B025
+vs 8.3% corpus). Tasa unanime corregida: 61.5-61.7% (vs 61.9% sin
+corregir). Δ = 0.2-0.4pp.
+
+Cardinalidad actualizada: **14-20 falsos** (piso cat A, techo A+B),
+down from 414.
 
 ### B026 — `V.` mayúsculas en tomos 329-330 (subtítulos editoriales viejos)
 
@@ -2184,7 +2258,7 @@ canónicos actuales B0NN.
   Cruzador: B012.
   Parser: B014-B022, B023-B028, B031, B033-B038, B043-B044, B048, B053-B054.
   De ellos:
-  - B025 (falsos unánime): cardinalidad 414 obsoleta, re-medir post-B077.
+  - B025 (falsos unánime): re-medido H068. 414→72 (14-20 falsos reales).
   - B018, B024: sustancialmente mitigados por fixes colaterales (H046-H055).
   - B028 (cosmético), B033 (cosmético), B036 (cosmético), B037 (cosmético).
   - ~5 hipotesis_no_verificada: B015, B026, B027, B031, B034.
@@ -2203,17 +2277,20 @@ canónicos actuales B0NN.
     abstracto, originaria, desistimiento. mal_concedido NO protegido
     (coexiste con 280/ac4).
 
-**Próximo trabajo priorizado (orden sugerido, H068):**
+**Próximo trabajo priorizado (orden sugerido, H069):**
 
-1. **B025 — re-medición falsos unánime post-B077.** Unhyphenate
-   cambia 85 dispositivos; el pool de falsos unánime se mueve.
+1. **B045 — sesión dedicada de fix.** Tres caminos evaluados en H068
+   (cruzador +30, fallback forward-first, semántica inter-caso). Requiere
+   tests con datos reales. Subir `construir_catalogo.py`,
+   `cruzar_catalogo_y_mapa.py`, `parser.py`, corpus .md de tomos afectados.
 2. **Bugs estructurales de H065** — 340_p2001 (solapamiento de spans),
    340_p188 (dos casos pegados, wc_may=6547), 332_p1085 (dos
    dispositivos), 333_p1464 (voto conjunto Highton). Requieren corpus .md.
-3. **B045 manifestación B — arrastre.** 16 casos 280 son B045
-   (residuo per curiam del caso anterior en considerando_text).
-4. **sin_firma (34 casos)** — 21 sin_dispositivo + 13 con por_ello
-   truncado. Concentrados en tomos 329-330.
+3. **sin_firma (34 casos)** — 21 sin_dispositivo + 13 con por_ello
+   truncado. Concentrados en tomos 329-330. Requiere corpus .md.
+4. **B018 — ampliar exclusion list** de `primer_token_de_caratula`
+   (Banco, Provincia, Asociación, Estado, Ministerio). Una línea, pero
+   validar con Pista 1 que no rompe cierre de casos legítimos.
 5. **B054/M06 — epílogo.**
 6. **M02 — bloque snapshots Fase 2.**
 
