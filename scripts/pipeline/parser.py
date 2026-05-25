@@ -2556,12 +2556,17 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                         por_ello_text = candidate_text
                         break
 
-        # ── B084 Tier 4: cierre dispositivo "así se resuelve" ────────
+        # ── B084+B086 Tier 4: cierres dispositivos alternativos ────────
         # Último recurso: solo si Tier 1+2+3 no encontraron nada.
-        # "Así se resuelve" es un CIERRE (no apertura), pero es inequívoco
-        # y siempre precede a la firma. Requiere firma validada.
+        # Fórmulas que no son "Por ello" pero son inequívocamente
+        # dispositivas: "así se resuelve" (B084), "el tribunal resuelve"
+        # (B086). Requieren firma validada.
         if por_ello_idx is None:
-            _re_asi = re.compile(r"[Aa]sí se resuelve", re.I)
+            _re_asi = re.compile(
+                r"[Aa]sí se resuelve"
+                r"|[Ee]l\s+[Tt]ribunal\s+resuelve",
+                re.I,
+            )
             for k in range(inicio_busqueda, len(bloque)):
                 if k in lineas_dictamen:
                     continue
