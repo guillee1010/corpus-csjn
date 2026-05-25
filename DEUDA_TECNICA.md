@@ -6,7 +6,13 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-25 (H070: B082 fix parcial aplicado —
+**Última actualización:** 2026-05-25 (H071: barrido diagnóstico de
+monstruos. B083 aplicado — excluir lineas_residuo de considerando_text,
+617 wcC limpiados, 2 is_originaria FP corregidos, wcC>wcM 161→0,
+0 regresiones. B084 aplicado — Tier 4 dispositivo "así se resuelve",
+7 sin_dispositivo→otro, 0 regresiones. 4 bugs nuevos diagnosticados:
+B085-B088.
+H070: B082 fix parcial aplicado —
 excluir líneas >= inicio_votos_indiv del considerando. 19 outcomes
 corregidos (inadmisible_280 contaminado → outcome correcto del
 dispositivo), 66 wc_considerando limpiados (Δ promedio -1155), 0
@@ -2309,53 +2315,54 @@ canónicos actuales B0NN.
 
 ## Resumen ejecutivo
 
-*Actualizado H067 (2026-05-24).*
+*Actualizado H071 (2026-05-25).*
 
-- **Bugs cerrados:** ~33 (B001-B008, B013, B029, B030, B032, B039, B046,
+- **Bugs cerrados:** ~35 (B001-B008, B013, B029, B030, B032, B039, B046,
   B055, B060, B063-B064, B066-B074, B076-B077, B079, A001,
-  B077-nuevo, B078, B079-nuevo).
+  B077-nuevo, B078, B079-nuevo, B083, B084).
 - **Bugs en validación:** 1 (B009 parcialmente resuelto por Fase F).
   B010 cerrado (H064).
-- **Bugs activos del pipeline (catálogo + cruzador + parser):** ~24.
+- **Bugs activos del pipeline (catálogo + cruzador + parser):** ~28.
   Catálogo: B011, B045.
   Cruzador: B012.
-  Parser: B014-B022, B023-B028, B031, B033-B038, B043-B044, B048, B053-B054.
+  Parser: B014-B022, B023-B028, B031, B033-B038, B043-B044, B048,
+  B053-B054, B082 (residual), B085-B088.
   De ellos:
   - B025 (falsos unánime): re-medido H068. 414→72 (14-20 falsos reales).
+    B087 nuevo: 4 unanime→segun_su_voto (wcM≤4).
   - B018, B024: sustancialmente mitigados por fixes colaterales (H046-H055).
   - B028 (cosmético), B033 (cosmético), B036 (cosmético), B037 (cosmético).
   - ~5 hipotesis_no_verificada: B015, B026, B027, B031, B034.
+  - B085 (7 "Por ello" perdidos): cirugía menor, requiere debug.
+  - B086 (8 fórmulas alternativas): ambulatorio.
+  - B088 (330_p2849 monstruo): observación.
 - **Bugs activos del auditor:** ~10 (B040-B042, B047, B049-B051, B052,
   B056-B058, B061-B062, B065, VIS001-VIS004).
 - **Pendientes metodológicos:** 8 (M01 cerrado, M02-M04, M05 cerrado,
-  M06-M09).
-- **Detectores (H067, post B077+B078+B079):**
-  - inadmisible_280: 291. Limpios (0 fantasmas). B080 (CPCCN abreviado)
-    testeado: +1 caso, revertido por REE.
-  - inadmisible_acordada_4: 52. Limpios (0 fantasmas, 4 borderline
-    pendientes de revisión manual).
-  - is_originaria: 478.
-  - classify_outcome v12b: merit guard ampliado (B079). Protege
-    hace_lugar, procedente, revoca, confirma, nulidad, competencia,
-    abstracto, originaria, desistimiento. mal_concedido NO protegido
-    (coexiste con 280/ac4).
+  M06-M09, M10).
+- **Detectores (H071, post B083):**
+  - inadmisible_280: 272. Limpios.
+  - inadmisible_acordada_4: 52. Limpios.
+  - is_originaria: 474 (2 FP corregidos por B083).
+  - sin_dispositivo: 57→50 (7 recuperados por B084).
+  - classify_outcome v12b: considerando_text limpio (B083).
+  - wc_considerando: wcC > wcM eliminado (161→0 por B083).
 
-**Próximo trabajo priorizado (orden sugerido, H069):**
+**Próximo trabajo priorizado (orden sugerido, H071):**
 
-1. **B045 — sesión dedicada de fix.** Tres caminos evaluados en H068
-   (cruzador +30, fallback forward-first, semántica inter-caso). Requiere
-   tests con datos reales. Subir `construir_catalogo.py`,
-   `cruzar_catalogo_y_mapa.py`, `parser.py`, corpus .md de tomos afectados.
-2. **Bugs estructurales de H065** — 340_p2001 (solapamiento de spans),
-   340_p188 (dos casos pegados, wc_may=6547), 332_p1085 (dos
-   dispositivos), 333_p1464 (voto conjunto Highton). Requieren corpus .md.
-3. **sin_firma (34 casos)** — 21 sin_dispositivo + 13 con por_ello
-   truncado. Concentrados en tomos 329-330. Requiere corpus .md.
-4. **B018 — ampliar exclusion list** de `primer_token_de_caratula`
-   (Banco, Provincia, Asociación, Estado, Ministerio). Una línea, pero
-   validar con Pista 1 que no rompe cierre de casos legítimos.
-5. **B054/M06 — epílogo.**
-6. **M02 — bloque snapshots Fase 2.**
+1. **B085 — 7 "Por ello" genuinos perdidos.** Debug de por qué Tier 1/2/3
+   no detectan. Casos testigo: 331_p1013, 334_p109, 337_p166. Puede
+   revelar bug sistémico en M09/B082. Cirugía menor.
+2. **B086 — fórmulas alternativas.** "Tribunal resuelve" (4 casos),
+   "hágase saber" (4 casos). Mismo patrón que B084 Tier 4.
+3. **B087 — 4 unanime→segun_su_voto.** Guard en voting_pattern cuando
+   wcM≤4 y wc_votos >> wc_mayoria.
+4. **B045 — sesión dedicada de fix.** Tres caminos evaluados en H068.
+5. **Bugs estructurales de H065** — 340_p2001, 340_p188, 332_p1085,
+   333_p1464. Requieren corpus .md.
+6. **sin_firma (33 casos)** — post-H069, piso ~17 irrecuperable.
+7. **B018 — ampliar exclusion list.**
+8. **B054/M06 — epílogo.**
 
 
 ### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula
@@ -3224,3 +3231,99 @@ la mayoría está después de headers de votos). El fix v3 limpia el
 considerando pero no aborda este camino — requiere que el zonificador
 distinga zonas de mayoría vs votos individuales (ver M10).
 **Referencias cruzadas:** H069. H070. B045. M10.
+
+
+### B083 — considerando_text incluye residuo_caso_anterior — CERRADO H071
+
+**Componente:** parser (extraer_considerando).
+**Origen / fuente del diagnóstico:** H071, barrido diagnóstico de monstruos.
+**Causa raíz:** `extraer_considerando()` (L703) excluía `lineas_dictamen`
+pero NO `lineas_residuo`. `wc_mayoria` (L2554) sí excluía ambos.
+Resultado: considerando_text capturaba sumarios, dictámenes PGN y headers
+editoriales del caso anterior. En 161 casos wcC > wcM (72 sin dictamen).
+Concentrado en competencia (26 casos) y otro (15).
+**Fix aplicado (H071):** L2514: `_lineas_no_cons = set(lineas_dictamen) | lineas_residuo`.
+1 línea. Validación: 0 outcomes cambiados, 617 wcC limpiados (todos Δ
+negativos, min=-4640, mean=-116), 2 is_originaria FP corregidos
+(329_p2469, 330_p1599: residuo mencionaba art. 117 / cónsul del caso anterior),
+wcC > wcM: 161→0. 0 regresiones.
+**Referencias cruzadas:** H071. B082.
+
+
+### B084 — Tier 4 dispositivo "así se resuelve" — CERRADO H071
+
+**Componente:** parser (detección de dispositivo).
+**Origen / fuente del diagnóstico:** H071, clasificación de 37 sin_dispositivo+firma.
+**Causa raíz:** 7 fallos usan "Lo que así se resuelve" / "Así se resuelve"
+como cierre dispositivo en vez de "Por ello". El parser no tenía esta variante.
+Es un CIERRE (no apertura), aparece mid-line, siempre precede a firma.
+**Fix aplicado (H071):** Tier 4 — último recurso, solo si Tier 1/2/3 no
+encontraron nada. `.search()` mid-line con firma validada obligatoria.
+20 líneas. Validación: 7 sin_dispositivo→otro, 0 regresiones.
+Casos: 329_p317, 330_p22, 330_p4590, 331_p548, 333_p1784, 340_p1392, 348_p532.
+**Referencias cruzadas:** H071. B085 (Por ello perdido). B086 (otras fórmulas).
+
+
+### B085 — 7 "Por ello" genuinos no detectados por Tier 1/2/3
+
+**Componente:** parser (detección de dispositivo).
+**Origen / fuente del diagnóstico:** H071, inspección .md de 37 sin_dispositivo+firma.
+**Causa raíz:** 7 fallos tienen "Por ello" como dispositivo real seguido de
+firma, pero `por_ello_idx` queda None. Causa probable: zona excluida por
+M09/B082 (lineas_excluir), o `collect_firma_lines` no encuentra firma en
+las 40 líneas posteriores (votos concurrentes interfieren).
+**Diagnóstico / evidencia:**
+- 331_p1013: "Por ello, habiendo dictaminado... se declara procedente"
+- 332_p2418: "Por ello, se desestima la presentación directa"
+- 334_p1033: "Por ello, se declara mal concedido"
+- 334_p109: "Por ello y de conformidad... se resuelve:"
+- 337_p166: "Por ello... se declara improcedente" (+ votos concurrentes Zaffaroni/Argibay)
+- 339_p662: "Por ello... se hace lugar a la queja"
+- 344_p1952: Múltiples "Por ello" dispositivos (Lorenzetti solo)
+**Estado de verificación:** `confirmado_caso_testigo`.
+**Estado del fix:** no diseñado. Requiere debug con parser en modo paso a paso.
+**Referencias cruzadas:** H071. B084.
+
+
+### B086 — Fórmulas dispositivas "tribunal resuelve" / "hágase saber"
+
+**Componente:** parser (detección de dispositivo).
+**Origen / fuente del diagnóstico:** H071, clasificación de 37 sin_dispositivo+firma.
+**Causa raíz:** 8 fallos usan fórmulas dispositivas no detectadas:
+"el Tribunal resuelve:" (4 casos: 330_p1971, 331_p2363, 334_p362, 339_p676),
+"Hágase saber" (4 casos: 330_p1172, 330_p2794, 343_p473, 344_p776).
+**Estado de verificación:** `confirmado_caso_testigo`.
+**Validador propuesto:** mismo patrón que B084 (Tier 4 o Tier 1 con
+`.match()` para "tribunal resuelve", `.search()` con cuidado para "hágase
+saber" que puede aparecer mid-text).
+**Estado del fix:** no diseñado.
+**Referencias cruzadas:** H071. B084.
+
+
+### B087 — 4 unanime que deberían ser segun_su_voto (wcM≤4)
+
+**Componente:** parser (voting_pattern).
+**Origen / fuente del diagnóstico:** H071, barrido de wcM≤4 (26 casos).
+**Causa raíz:** Fallos donde todos los jueces votan individualmente (header
+"VOTO DE" / "DISIDENCIA DE" en primeras líneas). El parser manda todo a
+wc_votos, wcM=1. 22/26 tienen vp correcto (disidencia/svoto/mixed).
+4 clasificados unanime: 329_p2218, 329_p2433, 329_p2680, 329_p6032.
+**Estado de verificación:** `confirmado_cuantificado`.
+**Validador propuesto:** guard en voting_pattern: si wcM ≤ 4 y
+wc_votos >> wc_mayoria, reclasificar. Definir condición exacta.
+**Estado del fix:** no diseñado.
+**Referencias cruzadas:** H071. B025.
+
+
+### B088 — 330_p2849 linea_fin_real desbordada al índice editorial (110k wc)
+
+**Componente:** parser / cruzador.
+**Origen / fuente del diagnóstico:** H071, barrido de monstruos.
+**Causa raíz:** El caso 330_p2849 (Estado Nacional c/ Buenos Aires,
+donación modal) tiene wc=110236 y 13228 líneas. linea_fin_real se
+extiende hasta el índice editorial del tomo (INDICE DE LEGISLACION,
+DICTAMENES, etc.) porque el parser no encontró el siguiente caso.
+**Estado de verificación:** `confirmado_caso_testigo`.
+**Estado del fix:** no diseñado. Riesgo alto de efectos cascada si se
+toca la lógica del cruzador. Beneficio marginal (1 caso).
+**Referencias cruzadas:** H071. B004.

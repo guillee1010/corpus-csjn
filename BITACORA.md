@@ -6832,3 +6832,60 @@ Deuda nueva M10: zonificador debería distinguir zonas mayoría vs votos.
 `scripts/auditoria/069/poc_b082_verificar.py` (verificación H070, ubicación provisional).
 
 **Commits:** snapshot pre-B082, B082 fix v3 aplicado.
+
+## H071 — Barrido diagnóstico de monstruos + B083 + B084 (2026-05-25)
+
+**Objetivo:** barrer el corpus buscando casos patológicos (rotos, cortos, largos, inconsistentes) sin perseguir bugs conocidos — diagnóstico bottom-up.
+
+### H071-01 — Barrido sistemático por CSV
+
+Queries incrementales sobre csjn_casos.csv (5667 fallos):
+- wc ultracortos (0-200): 1 fallo con wc=37 (345_p378), 7 con wc 51-100, 233 con wc 101-200.
+- wcM=0: 0 casos. wcM≤4: 26 casos (tomos 329-334).
+- wcM=1 + unanime: 4 mal clasificados (deberían ser segun_su_voto).
+- sin_dispositivo + firma: 37 casos.
+- wc_votos=0 + vp no unánime: 37 casos.
+- wcC > wcM: 161 casos (72 sin dictamen). Anomalía estructural.
+- n_jueces=1: 30 casos.
+- Monstruos: 330_p2849 (110k wc), 333_p1474 (wcD=56k), 342_p1827 (wcD=7k).
+- Ratios extremos wcD/wcM > 20: 17 casos (overlap con wcM≤4).
+
+### H071-02 — Inspección .md de 101 casos
+
+Tres extracts generados con scripts:
+- monstruos_h071.md (v1: 16 casos, v2: 74 casos)
+- sin_disp_h071.md (27 sin_dispositivo + firma restantes)
+
+Patrones identificados:
+1. **wcC incluye residuo** (161 casos): extraer_considerando no excluye lineas_residuo. Confirmado 25/25 en .md.
+2. **wcM≤4** (26 casos): todos empiezan con "VOTO DE" / "DISIDENCIA DE". Confirmado 26/26.
+3. **Monstruos** (3): 330_p2849 fin desbordado, 333_p1474 dictamen legítimamente enorme (Rachid), 342_p1827 dictamen largo.
+4. **sin_dispositivo + firma** (37): clasificados en 5 sub-mecanismos: 7 "Por ello" perdido (B085), 7 "así se resuelve" (B084), 4 "tribunal resuelve" (B086), 4 "hágase saber" (B086), 15 sin fórmula (crónico).
+
+### H071-03 — B083: excluir residuo de considerando_text
+
+Fix: parser.py L2514, `_lineas_no_cons = set(lineas_dictamen) | lineas_residuo`.
+Validación: 0 outcomes cambiados, 617 wcC limpiados (Δ mean=-116, todos negativos), 2 is_originaria FP corregidos (329_p2469, 330_p1599), wcC>wcM 161→0, 0 regresiones.
+
+### H071-04 — B084: Tier 4 dispositivo "así se resuelve"
+
+Fix: Tier 4 último recurso, solo si Tier 1/2/3 no encontraron nada. Regex `[Aa]sí se resuelve` con `.search()` y firma validada.
+Validación: 7 sin_dispositivo→otro (329_p317, 330_p22, 330_p4590, 331_p548, 333_p1784, 340_p1392, 348_p532), 0 regresiones.
+
+### H071 — Estado final
+
+- **Corpus:** 5862 casos (5667 fallos + 35 sumario_editorial + 160 sumario_con_link).
+- **Sin firma:** 33 / 5667 (0.6%). Cobertura: 99.4%.
+- **Votos:** 27341 filas.
+- **sin_dispositivo:** 57→50 (B084).
+- **Trayectoria sin_firma:** 813→…→33 (sin cambio).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27341 filas.
+- `output/parser/csjn_casos_zonas.csv` — 142505 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 135 secciones.
+
+**Scripts creados:** `scripts/auditoria/H071/` — extraer_monstruos.py, extraer_sin_disp.py.
+
+**Outputs diagnósticos:** `output/diagnostico/` — monstruos_h071.md (v1+v2), sin_disp_h071.md, diagnostico_h071.md, problematic

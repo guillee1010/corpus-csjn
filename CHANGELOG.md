@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H071 (2026-05-25)
+
+### Cambiado
+- `parser.py` B083: `extraer_considerando` excluye `lineas_residuo` de `_lineas_no_cons`. 617 wcC limpiados, 2 is_originaria FP corregidos, wcC>wcM 161→0.
+- `parser.py` B084: Tier 4 dispositivo "así se resuelve" (último recurso). 7 sin_dispositivo→otro.
+- `output/parser/csjn_casos.csv`: 5862 filas (sin_dispositivo 57→50).
+
+### Diagnóstico (sin patch)
+- Barrido bottom-up: 685 casos problemáticos catalogados en problematicos_h071.csv.
+- 4 bugs nuevos: B085 (7 "Por ello" perdidos), B086 (8 fórmulas alternativas), B087 (4 unanime→svoto), B088 (330_p2849 monstruo).
+
 ## H070 (2026-05-25)
 
 - `parser.py`: B082 fix — excluir líneas >= inicio_votos_indiv del
