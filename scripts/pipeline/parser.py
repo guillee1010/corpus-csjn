@@ -1622,6 +1622,26 @@ def _es_texto_corriente(lines, k):
     return False
 
 
+def _es_linea_caratula(linea):
+    """
+    B093 (H073): True si la línea parece una carátula de sumario editorial
+    (predominantemente mayúscula). Las carátulas reales en los sumarios de
+    Fallos son ALL CAPS: "MARTA ELENA TARDITTI V. ANSES". Las citas en el
+    cuerpo del fallo son mixtas: "Tarditti, Marta Elena c/ ANSeS". Las firmas
+    son mixtas: "Ricardo Luis Lorenzetti — Elena I. Highton".
+
+    Umbral: ≥60% de caracteres alfabéticos en mayúscula.
+    """
+    s = linea.strip()
+    if not s:
+        return False
+    alphas = [c for c in s if c.isalpha()]
+    if len(alphas) < 4:
+        return False
+    upper_ratio = sum(1 for c in alphas if c.isupper()) / len(alphas)
+    return upper_ratio >= 0.6
+
+
 def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
                       proximo_header_pagina, primer_token_siguiente):
     """
@@ -1638,6 +1658,9 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
     closest-to-lfc (B045). Busca en ambas direcciones y elige la firma más
     cercana a linea_fin_catalogo. Corrige 16 falsos unanime (firma arrastrada
     del caso anterior) y recupera 19 votos truncados.
+    H073/B093: guarda de mayúsculas en Pista 1. Las carátulas reales de los
+    sumarios son ALL CAPS; las citas jurisprudenciales en el cuerpo y las
+    firmas son mixtas. Si la línea matcheada tiene <60% uppercase, skip.
     """
     n = len(lines)
     li = max(0, int(linea_inicio))
@@ -1667,6 +1690,10 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
     # Pista 1: carátula del fallo siguiente
     # B070: loop con validación de texto corriente.
     # B071: matching tilde-insensitive con _strip_accents.
+    # B093 (H073): guarda de mayúsculas — las carátulas de los sumarios son
+    # ALL CAPS ("MARTA ELENA TARDITTI V. ANSES"), las citas jurisprudenciales
+    # en el cuerpo son mixtas ("Tarditti, Marta Elena c/ ANSeS"). Si la línea
+    # no es predominantemente mayúscula, es prosa o firma → skip.
     if primer_token_siguiente and len(primer_token_siguiente) >= 5:
         token_norm = _strip_accents(primer_token_siguiente)
         pat = re.compile(r"\b" + re.escape(token_norm) + r"\b", re.I)
@@ -1684,6 +1711,10 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
             if k is None:
                 break
             if _es_texto_corriente(lines, k):
+                desde = k + 1
+                continue
+            # B093: guarda de mayúsculas — carátula real es ALL CAPS
+            if not _es_linea_caratula(lines[k]):
                 desde = k + 1
                 continue
             return (k - 1, "fin_extendido_pag_compartida", "caratula_siguiente")
