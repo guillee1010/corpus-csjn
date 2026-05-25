@@ -6,7 +6,12 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-25 (H072: B085 aplicado — Tier 3b sin
+**Última actualización:** 2026-05-25 (H073: B091 aplicado — fallback
+"revocar" en classify_outcome v13, revoca 208→359. B093 aplicado —
+primer_token_de_caratula con búsqueda profunda de tokens no-genéricos
++ stoplist sincronizada; sin_firma 31→17, sin_dispositivo 35→24,
+votos +73.
+H072: B085 aplicado — Tier 3b sin
 exclusión dictamen ni rango, sin_dispositivo 50→40, 71 mejoras 0 regresiones.
 B086 parcial — Tier 4 "tribunal resuelve", 40→35, "hágase saber" descartado.
 B087 aplicado — guard unanime wcM≤4→svoto, 5 casos. B088 aplicado — reorden
@@ -138,16 +143,16 @@ a las hipótesis de la tesis (H1-H5).
   160 `sumario_con_link`.
 - **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV).
   Catálogo validado contra corpus: 0 fallos no catalogados (H051).
-  Cobertura de firma sobre fallos: 5635/5668 = **99,4%**.
-- **Sin firma:** 33 casos (post-H069). Desglose:
-  - ~17 firma_no_detectada (fallos reales con bloque correcto).
-  - 11 bloques cortos (span < 20 líneas).
-  - 3 bloques vacíos (span ≤ 4).
-  - ~2 sin_zona_fallo / formato atípico.
-  Piso estimado de irrecuperables: ~17. Concentración remanente en
-  tomos 329-330 (formato antiguo, 2006).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35→34→33.
-- **Votos:** 27341 filas (post-H069, +5 votos recuperados por extensión bidireccional).
+  Cobertura de firma sobre fallos: 5651/5668 = **99,7%**.
+- **Sin firma:** 17 casos (post-H073). Desglose residual:
+  - Citas in extenso ("Dicha sentencia dice así:") donde el token del
+    caso siguiente aparece en el texto citado (~5 casos).
+  - Bloques cortos (wc < 200) por delimitación errónea (~4 casos).
+  - Firma en formato atípico o token en línea de firma (~3 casos).
+  - Otros (sumario truncado, estructura atípica) (~5 casos).
+  Concentración: tomos 329-330 (10/17).
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35→34→33→31→17.
+- **Votos:** 27455 filas (post-H073, +73 vs H072).
 - **Arquitectura:** `zonificar_bloque()` integrado en parser.py (H051-H052,
   Refacción C). Retorna `(list[str], list[tuple])` con zonas por línea y
   anclas. `extraer_segmentos()` genera CSV zona-centered (H053).
@@ -3357,16 +3362,17 @@ desplazar). Guarda opcional de wc bajo.
 **Referencias cruzadas:** H072. B086.
 
 
-### B091 — classify_outcome no detecta "revoca" en textos con "tribunal resuelve"
+### B091 — classify_outcome no detecta "revoca" en textos con "tribunal resuelve" — CERRADO H073
 
 **Componente:** parser (classify_outcome).
-**Origen / fuente del diagnóstico:** H072, revisión post-B086.
-**Causa raíz:** 331_p2363 y 334_p362 tienen dispositivo "el Tribunal
-resuelve: Revocar..." pero classify_outcome da "otro" en vez de "revoca".
-La regex de revoca no cubre estos textos.
-**Estado de verificación:** `confirmado_caso_testigo`.
-**Estado del fix:** no diseñado.
-**Referencias cruzadas:** H072. B086.
+**Fix aplicado (H073):** fallback `("revoca", re.compile(r"\brevocar\b", re.I))`
+insertado justo antes del catch-all "otro" en OUTCOME_PATTERNS_DISPOSITIVO.
+Posición final para que originaria, abstracto y otros merit outcomes
+mantengan prioridad. classify_outcome v13. Validación corpus completo:
+151 outcomes cambiados (otro→revoca ~140, inadmisible_280→revoca ~10
+por merit guard), 1 FP marginal (347_p109, editorial). revoca 208→359.
+0 regresiones en sin_dispositivo, sin_firma, votos.
+**Referencias cruzadas:** H073. B086.
 
 
 ### B092 — Dictamen embebido sin header: zonificador no detecta, infla dispositivo
@@ -3389,3 +3395,35 @@ desconocida.
 **Estado del fix:** no diseñado. B089 (trimming pre-carátula)
 mitigaría parcialmente.
 **Referencias cruzadas:** H072. B089.
+
+
+### B093 — Pista 1 falsa carátula por token genérico en citas del cuerpo — CERRADO H073
+
+**Componente:** parser (detectar_fin_real, primer_token_de_caratula).
+**Origen / fuente del diagnóstico:** H073, análisis de 31 sin_firma.
+**Causa raíz:** `primer_token_de_caratula` devolvía el primer token
+significativo (ej: "Provincia", "ANSeS") sin verificar si era genérico.
+Pista 1 encontraba estos tokens en citas jurisprudenciales del cuerpo
+("Fallos: 329:573", "Halper, Cristina María c/ ANSeS"), firmas de
+jueces ("Ricardo Luis Lorenzetti"), o transcripciones in extenso
+("Dicha sentencia dice así:"), truncando el bloque antes de la firma.
+**Fix aplicado (H073):** dos capas:
+1. `primer_token_de_caratula` reescrita con búsqueda profunda: recorre
+   TODOS los tokens de TODAS las variantes (separadas por "|"), saltea
+   tokens en `_GENERICOS` (provincia, anses, nación, estado, afip,
+   buenos, nacional, administracion, federal, direccion, instituto),
+   devuelve el primer token específico. Ej: "D.G.I. c/ Provincia de
+   Mendoza" → "Mendoza"; "ANSeS (Benaben c/) | Benaben c/ ANSeS" →
+   "Benaben".
+2. `_STOPLIST_PISTA1` sincronizada con `_GENERICOS` como red de
+   seguridad: si ambas variantes son entidades genéricas, Pista 1
+   se saltea y el fallo cae a Pista 2/3/4/fallback-firma.
+**Iteraciones descartadas:** guarda de mayúsculas ≥60% (v1, −297
+votos por carátulas mixed-case en tomos 337+); stoplist sola (v2,
++0 votos, +6 blanks).
+**Validación:** sin_firma 31→17 (−14), sin_dispositivo 35→24 (−11),
+votos 27382→27455 (+73), blanks 194→193 (−1). 0 regresiones masivas.
+**Residuo (17 sin_firma):** ~5 citas in extenso (token específico
+aparece en texto transcrito), ~4 bloques cortos, ~3 firma atípica
+o token en firma, ~5 otros.
+**Referencias cruzadas:** H073. B070, B071.

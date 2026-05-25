@@ -6936,3 +6936,42 @@ Diagnóstico: 330_p2849 (110k wc) desbordaba porque Pista 2 (sumario backward) e
 **Scripts creados:** `scripts/auditoria/poc_b085.py`.
 
 **Commits:** 3 (B085 Tier 3b, B086 tribunal resuelve, B087+B088 guard svoto + reorden Pistas).
+
+## H073 — B091 revocar fallback + B093 token inteligente (2026-05-25)
+
+**Objetivo:** mejorar classify_outcome para formas infinitivas de "revocar" y reducir sin_firma por tokens genéricos en Pista 1.
+
+### H073-01 — B091: fallback "revocar" en classify_outcome
+
+classify_outcome v13. Agregado entry `("revoca", re.compile(r"\brevocar\b", re.I))` justo antes del catch-all "otro" en OUTCOME_PATTERNS_DISPOSITIVO. Posición final para que originaria, abstracto y otros merit outcomes mantengan prioridad sobre menciones de "revocar" en dispositivos mixtos.
+
+Impacto: 151 outcomes cambiados. revoca 208→359. otro 1692→~1559. 10 inadmisible_280→revoca por merit guard (fallos mixtos donde Corte rechaza un agravio por 280 pero revoca otro). 1 FP marginal (347_p109, sección editorial). 0 regresiones en sin_dispositivo, sin_firma, votos.
+
+### H073-02 — B093: diagnóstico sin_firma y primer_token_de_caratula inteligente
+
+Diagnóstico de 31 sin_firma con script `extraer_sin_firma.py`: en todos los casos, Pista 1 de `detectar_fin_real` encontraba el token del caso siguiente en una cita jurisprudencial del cuerpo (ej: "Halper, Cristina María c/ ANSeS"), en la firma de jueces (ej: "Ricardo Luis Lorenzetti"), o en transcripciones in extenso ("Dicha sentencia dice así:"). La guarda `_es_texto_corriente` no alcanzaba porque las citas empiezan con mayúscula sin word-split previo.
+
+Tres iteraciones:
+- **v1 (descartada):** guarda de mayúsculas ≥60% en línea matcheada. sin_firma 31→21 pero −297 votos por carátulas mixed-case en tomos 337+.
+- **v2 (descartada):** stoplist de tokens genéricos ("Provincia", "ANSeS", etc.) que saltea Pista 1 enteramente. sin_firma 31→18, votos +0, blanks +6.
+- **v3 (aplicada):** `primer_token_de_caratula` reescrita con búsqueda profunda + stoplist sincronizada. Recorre TODOS los tokens de TODAS las variantes (separadas por "|"), saltea genéricos, devuelve primer token específico. Ej: "ANSeS (Benaben c/) | Benaben c/ ANSeS" → "Benaben"; "D.G.I. c/ Provincia de Mendoza" → "Mendoza". Stoplist como red de seguridad para casos donde ambas variantes son genéricas.
+
+Decisión de diseño: `_GENERICOS` = {provincia, anses, nacion, nación, estado, afip, buenos, nacional, administracion, federal, direccion, instituto}. Extensible sin riesgo — el mecanismo prueba tokens más profundos antes de rendirse.
+
+### H073 — Estado final
+
+- **Corpus:** 5862 casos (5668 fallos + 34 sumario_editorial + 160 sumario_con_link).
+- **Sin firma:** 17 / 5668 fallos (0.3%). Cobertura firma: 99.7%.
+- **Votos:** 27455 filas.
+- **Sin dispositivo:** 24.
+- **Trayectoria sin_firma:** ...33→31→17.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27455 filas.
+- `output/parser/csjn_casos_zonas.csv` — 141859 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+
+**Scripts creados:** `scripts/auditoria/extraer_sin_firma.py`.
+
+**Commits:** 2 (snapshot pre-H073, H073: B091+B093).

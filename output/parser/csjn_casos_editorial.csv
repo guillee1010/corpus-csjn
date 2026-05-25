@@ -33,7 +33,7 @@ tomo,source_file,subtipo,linea_ini,linea_fin,n_lineas,wc
 330,LibroVol330.4.md,indice_legislacion,46668,48112,1445,1917
 330,LibroVol330.4.md,acordadas,48113,48495,383,552
 330,LibroVol330.4.md,indice_general,48496,48580,85,209
-331,LibroVol331.1.md,indice_partes,38467,38561,95,436
+331,LibroVol331.1.md,indice_partes,38423,38561,139,644
 331,LibroVol331.1.md,indice_materias,38562,44892,6331,59720
 331,LibroVol331.1.md,indice_legislacion,44893,45623,731,1075
 331,LibroVol331.1.md,indice_general,45624,45646,23,54
@@ -77,7 +77,8 @@ tomo,source_file,subtipo,linea_ini,linea_fin,n_lineas,wc
 333,LibroVol333.3.md,indice_materias,23276,25069,1794,15504
 333,LibroVol333.3.md,indice_legislacion,25070,25171,102,164
 333,LibroVol333.3.md,indice_general,25172,25238,67,164
-334,LibroVol334.1.md,indice_partes,27893,28042,150,703
+334,LibroVol334.1.md,acordadas,27792,27861,70,466
+334,LibroVol334.1.md,indice_partes,27862,28042,181,842
 334,LibroVol334.1.md,indice_materias,28043,30579,2537,22771
 334,LibroVol334.1.md,indice_legislacion,30580,30635,56,113
 334,LibroVol334.1.md,indice_general,30636,30660,25,56

@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H073 (2026-05-25)
+
+- `parser.py`: B091 — fallback `\brevocar\b` en OUTCOME_PATTERNS_DISPOSITIVO (posición pre-catch-all). classify_outcome v13. revoca +151.
+- `parser.py`: B093 — `primer_token_de_caratula` reescrita con búsqueda profunda de tokens no-genéricos + `_STOPLIST_PISTA1` sincronizada en Pista 1. sin_firma −14, sin_dispositivo −11, votos +73.
+- `output/parser/csjn_casos.csv`: 5862 filas (sin cambio). revoca 208→359, sin_firma 31→17, sin_dispositivo 35→24.
+- `output/parser/csjn_casos_votos.csv`: 27382→27455 (+73).
+- `output/parser/csjn_casos_zonas.csv`: 141938→141859 (−79).
+- `output/parser/csjn_casos_editorial.csv`: 150→151 (+1).
+- Nuevo: `scripts/auditoria/extraer_sin_firma.py`.
+
+
 ## H072 (2026-05-25)
 
 - `parser.py`: B085 Tier 3b — búsqueda sin exclusión dictamen ni rango. sin_dispositivo 50→40.

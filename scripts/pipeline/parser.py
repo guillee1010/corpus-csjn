@@ -340,12 +340,8 @@ def _unhyphenate(text: str) -> str:
 
 def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     """
-    v12 (H066): agrega _unhyphenate antes de clasificar (B056).
-    v12b (H067/B079): amplía MERIT_OUTCOMES con competencia, abstracto,
-    originaria, desistimiento.  mal_concedido NO se protege: puede
-    coexistir legítimamente con 280/ac4 como razón del rechazo.
     v13 (H073/B091): agrega fallback "revocar" (infinitivo) al final del
-    cascade, antes de catch-all "otro". Captura 144 dispositivos con forma
+    cascade, antes de catch-all "otro". Captura 144+ dispositivos con forma
     "el Tribunal resuelve: Revocar...", "corresponde revocar", etc.
 
       0. Normalizar textos: _unhyphenate para unir quiebres tipográficos.
@@ -1483,16 +1479,41 @@ def linea_es_header_sumario_guardado(linea):
 
 
 def primer_token_de_caratula(nombres_indice):
-    """Extrae el primer apellido/nombre principal de nombres_indice."""
+    """Extrae el mejor token identificatorio de nombres_indice.
+
+    B093 (H073): busca el primer token NO genérico recorriendo todos los
+    tokens de todas las variantes (separadas por "|"). Ej:
+      "D.G.I. c/ Provincia de Mendoza" → skip D,G,I (cortos),
+        skip Provincia (genérico) → devuelve "Mendoza".
+      "ANSeS (Benaben c/) | Benaben c/ ANSeS" → skip ANSeS (genérico)
+        en var 1 → var 2 devuelve "Benaben".
+    Solo si TODOS los tokens de TODAS las variantes son genéricos,
+    devuelve el primer token usable como fallback.
+    """
     if not nombres_indice:
         return ""
-    primera = nombres_indice.split("|")[0].strip()
-    tokens = re.findall(r"[A-ZÁÉÍÓÚÑa-záéíóúñ]+", primera)
+
+    _SKIP = {"otro", "otros", "sociedad", "sucesion", "sucesión",
+             "empresa", "compania", "compañia", "compañía"}
+    _GENERICOS = {"provincia", "anses", "nacion", "nación", "estado",
+                  "afip", "buenos", "nacional", "administracion",
+                  "federal", "direccion", "instituto"}
+
+    variantes = nombres_indice.split("|")
+
+    # Pasada 1: buscar primer token no-genérico en cualquier variante
+    for v in variantes:
+        tokens = re.findall(r"[A-ZÁÉÍÓÚÑa-záéíóúñ]+", v.strip())
+        for t in tokens:
+            if (len(t) >= 4
+                    and t.lower() not in _SKIP
+                    and t.lower() not in _GENERICOS):
+                return t
+
+    # Pasada 2: todos genéricos — devolver el primer token usable
+    tokens = re.findall(r"[A-ZÁÉÍÓÚÑa-záéíóúñ]+", variantes[0].strip())
     for t in tokens:
-        if len(t) >= 4 and t.lower() not in (
-            "otro", "otros", "sociedad", "sucesion", "sucesión",
-            "empresa", "compania", "compañia", "compañía"
-        ):
+        if len(t) >= 4 and t.lower() not in _SKIP:
             return t
     return tokens[0] if tokens else ""
 
@@ -1622,26 +1643,6 @@ def _es_texto_corriente(lines, k):
     return False
 
 
-def _es_linea_caratula(linea):
-    """
-    B093 (H073): True si la línea parece una carátula de sumario editorial
-    (predominantemente mayúscula). Las carátulas reales en los sumarios de
-    Fallos son ALL CAPS: "MARTA ELENA TARDITTI V. ANSES". Las citas en el
-    cuerpo del fallo son mixtas: "Tarditti, Marta Elena c/ ANSeS". Las firmas
-    son mixtas: "Ricardo Luis Lorenzetti — Elena I. Highton".
-
-    Umbral: ≥60% de caracteres alfabéticos en mayúscula.
-    """
-    s = linea.strip()
-    if not s:
-        return False
-    alphas = [c for c in s if c.isalpha()]
-    if len(alphas) < 4:
-        return False
-    upper_ratio = sum(1 for c in alphas if c.isupper()) / len(alphas)
-    return upper_ratio >= 0.6
-
-
 def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
                       proximo_header_pagina, primer_token_siguiente):
     """
@@ -1658,9 +1659,6 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
     closest-to-lfc (B045). Busca en ambas direcciones y elige la firma más
     cercana a linea_fin_catalogo. Corrige 16 falsos unanime (firma arrastrada
     del caso anterior) y recupera 19 votos truncados.
-    H073/B093: guarda de mayúsculas en Pista 1. Las carátulas reales de los
-    sumarios son ALL CAPS; las citas jurisprudenciales en el cuerpo y las
-    firmas son mixtas. Si la línea matcheada tiene <60% uppercase, skip.
     """
     n = len(lines)
     li = max(0, int(linea_inicio))
@@ -1690,11 +1688,24 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
     # Pista 1: carátula del fallo siguiente
     # B070: loop con validación de texto corriente.
     # B071: matching tilde-insensitive con _strip_accents.
-    # B093 (H073): guarda de mayúsculas — las carátulas de los sumarios son
-    # ALL CAPS ("MARTA ELENA TARDITTI V. ANSES"), las citas jurisprudenciales
-    # en el cuerpo son mixtas ("Tarditti, Marta Elena c/ ANSeS"). Si la línea
-    # no es predominantemente mayúscula, es prosa o firma → skip.
-    if primer_token_siguiente and len(primer_token_siguiente) >= 5:
+    # B093 (H073): stoplist de tokens genéricos. "Provincia", "ANSeS",
+    # "Nación" aparecen en el cuerpo de casi todos los fallos (citas
+    # jurisprudenciales, menciones de partes). Cuando el siguiente caso
+    # tiene uno de estos como primer token, Pista 1 genera falsos cortes
+    # que truncan el bloque antes de la firma (31→21 sin_firma pero con
+    # regresiones si se usa guarda de mayúsculas). Solución: skip Pista 1
+    # y dejar que Pista 2/3/4/fallback-firma encuentre el fin real.
+    # B093 (H073): stoplist de tokens genéricos — red de seguridad para
+    # los casos donde primer_token_de_caratula no encuentra ningún token
+    # específico (ambas partes son entidades genéricas). Sincronizada con
+    # _GENERICOS de primer_token_de_caratula. Post _strip_accents.
+    _STOPLIST_PISTA1 = {"provincia", "anses", "nacion", "estado",
+                        "afip", "buenos", "nacional", "administracion",
+                        "federal", "direccion", "instituto"}
+    token_bloqueado = (primer_token_siguiente
+                       and _strip_accents(primer_token_siguiente).lower() in _STOPLIST_PISTA1)
+    if (primer_token_siguiente and len(primer_token_siguiente) >= 5
+            and not token_bloqueado):
         token_norm = _strip_accents(primer_token_siguiente)
         pat = re.compile(r"\b" + re.escape(token_norm) + r"\b", re.I)
         # B069: búsqueda atrás de Pista 1 ELIMINADA.
@@ -1711,10 +1722,6 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
             if k is None:
                 break
             if _es_texto_corriente(lines, k):
-                desde = k + 1
-                continue
-            # B093: guarda de mayúsculas — carátula real es ALL CAPS
-            if not _es_linea_caratula(lines[k]):
                 desde = k + 1
                 continue
             return (k - 1, "fin_extendido_pag_compartida", "caratula_siguiente")
