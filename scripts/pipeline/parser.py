@@ -1550,11 +1550,20 @@ def refinar_inicio_por_titulo(bloque, nombres_indice):
         bloque = bloque[offset_recorte:]
     """
     # ── Señal primaria: token del título ──────────────────────────────────────
+    # B089 (H074): normalizar tildes con _strip_accents (mismo fix que B071
+    # en Pista 1). El catálogo tiene tildes ("Juárez") pero el .md es ALL
+    # CAPS sin tildes ("JUAREZ"). Sin normalización, 318 casos caían a
+    # ancla_catalogo con residuo del caso anterior no recortado.
     token = primer_token_de_caratula(nombres_indice)
     if token and len(token) >= 4:
-        pat = re.compile(r'\b' + re.escape(token) + r'\b', re.I)
+        token_norm = _strip_accents(token)
+        pat = re.compile(r'\b' + re.escape(token_norm) + r'\b', re.I)
         for k, ln in enumerate(bloque[:MAX_LINEAS_BUSQUEDA_TITULO]):
-            if pat.search(ln):
+            if pat.search(_strip_accents(ln)):
+                # B089: si el match cae en las últimas 5 líneas del bloque,
+                # es la carátula del caso siguiente, no del actual. Saltear.
+                if k >= len(bloque) - 5:
+                    continue
                 return (k, 'titulo')
 
     # ── Señal secundaria: "Vistos los autos" ─────────────────────────────────
@@ -2159,12 +2168,14 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         # bloque, usarlo como li para detectar_fin_real. Así buscar_atras no
         # captura firma del caso anterior incluida en el residuo del bloque.
         # Si no se encuentra en 15 líneas → li original → baseline idéntico.
+        # B089 (H074): normalizar tildes (consistencia con refinar_inicio_por_titulo).
         _li_for_dfr = int(linea_inicio)
         _token_titulo = primer_token_de_caratula(nombres_indice)
         if _token_titulo and len(_token_titulo) >= 4:
-            _pat_titulo = re.compile(r'\b' + re.escape(_token_titulo) + r'\b', re.I)
+            _tok_norm = _strip_accents(_token_titulo)
+            _pat_titulo = re.compile(r'\b' + re.escape(_tok_norm) + r'\b', re.I)
             for _k, _ln in enumerate(bloque[:15]):
-                if _pat_titulo.search(_ln):
+                if _pat_titulo.search(_strip_accents(_ln)):
                     _li_for_dfr = int(linea_inicio) + _k
                     break
 
