@@ -2511,7 +2511,8 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                 por_ello_text = _t3_fb_text
 
         # B082: excluir líneas de votos individuales del considerando
-        _lineas_no_cons = set(lineas_dictamen)
+        # B083: excluir también residuo_caso_anterior (consistencia con wc_mayoria)
+        _lineas_no_cons = set(lineas_dictamen) | lineas_residuo
         if inicio_votos_indiv is not None:
             _lineas_no_cons |= set(range(inicio_votos_indiv, len(bloque)))
         considerando_text = extraer_considerando(bloque, por_ello_idx, _lineas_no_cons)
