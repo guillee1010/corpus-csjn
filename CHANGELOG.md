@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H072 (2026-05-25)
+
+- `parser.py`: B085 Tier 3b — búsqueda sin exclusión dictamen ni rango. sin_dispositivo 50→40.
+- `parser.py`: B086 Tier 4 "tribunal resuelve" agregado. sin_dispositivo 40→35.
+- `parser.py`: B087 guard unanime wcM≤4 → segun_su_voto. 5 casos.
+- `parser.py`: B088 reorden Pistas detectar_fin_real — editorial antes de sumario. 330_p2849 110k→7448 wc.
+- `output/parser/csjn_casos.csv`: 5862 casos, 35 sin_dispositivo, 150 editorial.
+- `output/parser/csjn_casos_votos.csv`: 27382 filas.
+- `output/parser/csjn_casos_zonas.csv`: 141938 segmentos.
+
 ## H071 (2026-05-25)
 
 ### Cambiado

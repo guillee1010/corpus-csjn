@@ -6889,3 +6889,50 @@ Validación: 7 sin_dispositivo→otro (329_p317, 330_p22, 330_p4590, 331_p548, 3
 **Scripts creados:** `scripts/auditoria/H071/` — extraer_monstruos.py, extraer_sin_disp.py.
 
 **Outputs diagnósticos:** `output/diagnostico/` — monstruos_h071.md (v1+v2), sin_disp_h071.md, diagnostico_h071.md, problematic
+
+## H072 — B085-B088: dispositivo, voting_pattern, editorial (2026-05-25)
+
+**Objetivo:** validar y aplicar fixes B085-B088 diagnosticados en H071. Reducir sin_dispositivo y corregir voting_pattern y desborde editorial.
+
+### H072-01 — B085 Tier 3b: validación PoC y aplicación
+
+PoC poc_b085.py sobre corpus completo (5667 fallos). Bug en PoC: columna `type_entrada` → `tipo_entrada` corregido. Resultado: 71 mejoras (5/7 targets B085 + 66 extras concentrados en tomos 329-334), 0 regresiones. Los 2 targets no contados (331_p1013, 334_p1033) ya resueltos por el baseline del PoC (diferencia entre reimplementación simplificada y parser real). Parser corrido: sin_dispositivo 50→40. Commit: `B085: Tier 3b — sin_dispositivo 50 -> 40, 0 regresiones`.
+
+### H072-02 — B086 "tribunal resuelve" + revisión manual
+
+Diagnóstico de 8 casos B086. Regex `[Ee]l\s+[Tt]ribunal\s+resuelve` agregada a Tier 4. "Hágase saber" descartado tras revisión manual: es providencia de mero trámite, no dispositivo. Caso 330_p2794 (caducidad de instancia) confirmó que el dispositivo real ("declárase operada la perención") está embebido en el considerando. 4 rescatados: 330_p1971→otro, 331_p2363→otro, 334_p362→otro, 339_p676→abstracto. 4 residuales sin fórmula estándar. sin_dispositivo 40→35. Commit: `B086: Tier 4 tribunal resuelve — sin_dispositivo 40 -> 35`.
+
+Hallazgo: 331_p2363 y 334_p362 dan "otro" en vez de "revoca" → B091 nuevo.
+
+### H072-03 — B087 guard unanime wcM≤4
+
+Guard post-firma: si unanime y wcM≤4 y wc_votos>wc_mayoria → segun_su_voto. 5 casos corregidos (4 originales + 331_p793). unanime 3501→3496, svoto 740→745.
+
+### H072-04 — B088 reorden Pistas detectar_fin_real
+
+Diagnóstico: 330_p2849 (110k wc) desbordaba porque Pista 2 (sumario backward) encontraba header de sumario dentro del índice editorial, cortocircuitando Pista 4 (editorial). Fix: mover Pista editorial de posición 4 a posición 2. Resultado: 330_p2849 wc 110236→7448, status_fin fin_por_editorial. Efecto colateral: editorial sections 135→150, zonas 142489→141938, votos 27377→27382. Commit: `B087+B088: guard wcM<=4 svoto + reorden Pistas editorial primero`.
+
+### H072-05 — Hallazgos nuevos
+
+- **B089 (residuo pre-carátula):** 96% de bloques (5646/5862) incluyen cola del caso anterior. Campos de texto y wc contaminados. Prioridad pre-publicación.
+- **B090 (Tier 5):** diseño para sin_dispositivo con dispositivo embebido sin fórmula. Solo corre cuando Tiers 1-4 fallan. PoC pendiente.
+- **B091 (classify_outcome):** regex revoca no cubre "Tribunal resuelve: Revocar".
+- Dataverse account creada con ORCID. Codebook (inglés) y README publicable pendientes.
+
+### H072 — Estado final
+
+- **Corpus:** 5862 casos.
+- **Sin dispositivo:** 35 (trayectoria: 57→50 H071 → 40 B085 → 35 B086).
+- **Sin firma:** 31.
+- **Votos:** 27382 filas.
+- **Editorial:** 150 secciones.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27382 filas.
+- `output/parser/csjn_casos_zonas.csv` — 141938 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 150 secciones.
+
+**Scripts creados:** `scripts/auditoria/poc_b085.py`.
+
+**Commits:** 3 (B085 Tier 3b, B086 tribunal resuelve, B087+B088 guard svoto + reorden Pistas).
