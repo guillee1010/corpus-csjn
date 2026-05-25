@@ -2681,6 +2681,14 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             if 0 <= k < len(bloque)
         )
 
+        # ── B087: guard unanime con wcM≤4 → segun_su_voto ───────────
+        # Si la firma dice "unanime" pero wc_mayoria ≤ 4 y todo el
+        # contenido está en votos individuales, los jueces votaron
+        # "según su voto" aunque la firma no lo marque.
+        if (firma_parsed["voting_pattern"] == "unanime"
+                and wc_mayoria <= 4 and wc_votos > wc_mayoria):
+            firma_parsed["voting_pattern"] = "segun_su_voto"
+
         caso = {
             "caso_id_canonico":       caso_id_canonico,
             "tomo":                   tomo,
