@@ -1724,6 +1724,14 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
             if _es_texto_corriente(lines, k):
                 desde = k + 1
                 continue
+            # B094: skip firma de juez — token del caso siguiente puede
+            # coincidir con nombre de juez (ej: "Santiago" en "ENRIQUE
+            # SANTIAGO PETRACCHI —"). Guarda: raya obligatoria para no
+            # filtrar carátulas de jueces-parte (Boggiano, Moliné).
+            if (linea_es_firma_de_juez(lines[k])
+                    and ("—" in lines[k] or "–" in lines[k])):
+                desde = k + 1
+                continue
             return (k - 1, "fin_extendido_pag_compartida", "caratula_siguiente")
 
     # Pista 2: marcador editorial (B077, B088)
