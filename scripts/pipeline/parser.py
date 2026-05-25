@@ -2510,6 +2510,28 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                 por_ello_idx = _t3_fb_idx
                 por_ello_text = _t3_fb_text
 
+        # ── B084 Tier 4: cierre dispositivo "así se resuelve" ────────
+        # Último recurso: solo si Tier 1+2+3 no encontraron nada.
+        # "Así se resuelve" es un CIERRE (no apertura), pero es inequívoco
+        # y siempre precede a la firma. Requiere firma validada.
+        if por_ello_idx is None:
+            _re_asi = re.compile(r"[Aa]sí se resuelve", re.I)
+            for k in range(inicio_busqueda, len(bloque)):
+                if k in lineas_dictamen:
+                    continue
+                stripped = bloque[k].strip()
+                if _re_asi.search(stripped):
+                    if any(linea_es_firma_de_juez(bloque[j])
+                           for j in range(k + 1, min(k + 41, len(bloque)))):
+                        chunk = []
+                        for m2 in range(k, min(k + 6, len(bloque))):
+                            chunk.append(bloque[m2])
+                            if bloque[m2].strip().endswith("."):
+                                break
+                        por_ello_idx = k
+                        por_ello_text = " ".join(chunk).strip()
+                        break
+
         # B082: excluir líneas de votos individuales del considerando
         # B083: excluir también residuo_caso_anterior (consistencia con wc_mayoria)
         _lineas_no_cons = set(lineas_dictamen) | lineas_residuo
