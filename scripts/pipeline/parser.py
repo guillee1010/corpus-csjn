@@ -335,16 +335,21 @@ def _unhyphenate(text: str) -> str:
 def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     """
     v12 (H066): agrega _unhyphenate antes de clasificar (B056).
+    v12b (H067/B079): amplía MERIT_OUTCOMES con competencia, abstracto,
+    originaria, desistimiento.  mal_concedido NO se protege: puede
+    coexistir legítimamente con 280/ac4 como razón del rechazo.
 
       0. Normalizar textos: _unhyphenate para unir quiebres tipográficos.
       1. Determinar outcome del dispositivo (por_ello_text)
       2. Si el dispositivo da merit outcome (hace_lugar, procedente, revoca,
-         confirma, nulidad), NO sobreescribir con 280/ac4 del considerando.
+         confirma, nulidad, competencia, abstracto, originaria, desistimiento),
+         NO sobreescribir con 280/ac4 del considerando.
          Motivo: en fallos mixtos la Corte rechaza un agravio por 280 pero
          concede otro — el outcome relevante es la concesión.
       3. Si el dispositivo NO da merit outcome, buscar 280/ac4 en considerando.
     """
-    MERIT_OUTCOMES = {"hace_lugar", "procedente", "revoca", "confirma", "nulidad"}
+    MERIT_OUTCOMES = {"hace_lugar", "procedente", "revoca", "confirma", "nulidad",
+                      "competencia", "abstracto", "originaria", "desistimiento"}
 
     # Paso 0 (H066): normalizar quiebres tipográficos
     por_ello_text = _unhyphenate(por_ello_text)

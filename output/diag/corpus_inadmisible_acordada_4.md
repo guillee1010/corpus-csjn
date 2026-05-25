@@ -1,4 +1,4 @@
-# Corpus — inadmisible_acordada_4 (40 casos)
+# Corpus — inadmisible_acordada_4 (52 casos)
 
 Extraído de los .md fuente. Para revisar en el explorador,
 buscar por tomo + página.
@@ -366,6 +366,54 @@ gistrados y Funcionarios de la Provincia de Misiones.
 
 ---
 
+## 332_p1670
+
+- **Tomo:** 332 | **wc_cons:** 99 | **pattern:** unanime
+- **Carátula:** (2) García Mira, José Francisco | (4) Municipalidad de la Ciudad de Salta | García Mira, José Francisco | Municipalidad de la Ciudad de Salta
+
+```
+332
+mercial de la Nación). Vuelvan los autos al tribunal de origen para que, 
+por quien corresponda, se dicte un nuevo fallo con arreglo al presente. 
+Notifíquese y, oportunamente, remítase.
+Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos 
+S. Fayt — Enrique Santiago Petracchi — Juan Carlos Maqueda — 
+Carmen M. Argibay.
+JOSE FRANCISCO GARCIA MIRA y Otro
+c/ MUNICIPALIDAD de la CIUDAD de SALTA
+HONORARIOS: Regulación.
+Dado que los principios contenidos en el art. 61 de la ley 21.839 –modificada por 
+la ley 24.432–, excluyen la posibilidad de retribuir las tareas cuando la actua-
+ción cumplida resulte inoficiosa, es decir carente de toda utilidad para lograr el 
+efecto perseguido con su presentación, al no haberse cumplido con los recaudos 
+previstos en los arts. 4º y 7º del reglamento aprobado por la acordada 4/2007 
+–reglas para la interposición de la queja–, no cabe hacer lugar a la regulación 
+de honorarios solicitada.
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 4 de agosto de 2009.
+Autos y Vistos; Considerando:
+Que los principios contenidos en el art. 6º de la ley 21.839 –modi-
+ficada por la ley 24.432–, excluyen la posibilidad de retribuir las ta-
+reas cuando la actuación cumplida resulte inoficiosa, es decir carente 
+de toda utilidad para lograr el efecto perseguido con su presentación 
+(Fallos: 312:1816; 316:1671).
+Que tal extremo se verifica en el sub examine, toda vez que no se 
+dio cumplimiento a los recaudos previstos en los arts. 4º y 7º del regla-
+mento aprobado por la acordada 4/2007.
+
+1671
+DE JUSTICIA DE LA NACION
+332
+Por ello, no ha lugar a la regulación de honorarios solicitada a fs. 55. 
+Notifíquese y, oportunamente, archívese.
+Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos 
+S. Fayt — Enrique Santiago Petracchi — Juan Carlos Maqueda — E. 
+Raúl Zaffaroni — Carmen M. Argibay.
+E.G.3. S.A. c/ HUGO BONOMI
+```
+
+---
+
 ## 332_p2141
 
 - **Tomo:** 332 | **wc_cons:** 165 | **pattern:** unanime
@@ -421,6 +469,346 @@ Tribunal de origen: Cámara Nacional de Apelaciones en lo Civil, Sala I.
 Tribunales que intervinieron con anterioridad: Juzgado Nacional de Primera Ins-
 tancia en lo Civil Nº 36.
 ERKE S.R.L.
+```
+
+---
+
+## 333_p1235
+
+- **Tomo:** 333 | **wc_cons:** 29 | **pattern:** disidencia
+- **Carátula:** Munch, Gustavo Alejandro
+
+```
+GUSTAVO ALEJANDRO MUNCH
+DETENCION DE PERSONAS.
+Si el procedimiento se basó en una supuesta “actitud sospechosa” atribuida al 
+imputado, sin expresar en absoluto las circunstancias o la existencia de elemen-
+tos objetivos que fundamentaran esa atribución, ya que entre otras omisiones 
+del relato ni siquiera se describe saber cuál fue el comportamiento que se consi-
+deró sospechoso y qué es lo que cabía sospechar, no resulta posible determinar 
+si la detención obedeció a “circunstancias que la justifiquen”, conforme lo exige 
+el art. 13, inc. b, de la ley 688 de la Provincia de Santa Cruz y de acuerdo a los 
+conceptos análogos de “causa probable” y “sospecha razonable”, ya que toda me-
+dida de coerción en el proceso penal, en tanto supone una injerencia estatal en 
+derechos de rango constitucional, se encuentra sometida a restricciones legales 
+destinadas a establecer las formas y requisitos que aseguren que esa intromisión 
+no sea realizada arbitrariamente y que en última instancia pueda ser sometida al 
+escrutinio imparcial de los jueces (Disidencia de los Dres. Juan Carlos Maqueda 
+y E. Raúl Zaffaroni).
+–Del dictamen de la Procuración General, al que remitió la disidencia–.
+–La mayoría del Tribunal desestimó la queja por no haberse cumplido con el 
+recaudo establecido en el art. 4º de la acordada 4/2007–.
+
+1236
+FALLOS DE LA CORTE SUPREMA
+333
+Dictámenes de la Procuración General
+Suprema Corte:
+Para mejor dictaminar en la presente queja, solicito a V.E. que 
+ordene la elevación de los autos principales y, luego de recibidos, me 
+confiera una nueva vista. Buenos Aires, 20 de agosto de 2009. Eduardo 
+Ezequiel Casal.
+Suprema Corte:
+– I –
+La Sala III de la Cámara Nacional de Casación Penal rechazó, por 
+mayoría, el recurso interpuesto por la defensa de Gustavo Alejandro 
+Munch contra la sentencia que lo condenó a la pena de cinco años de 
+prisión, mil pesos de multa, accesorias y costas, como autor penalmen-
+te responsable del delito de tenencia de estupefacientes con fines de 
+comercialización.
+Contra esa decisión dedujo recurso extraordinario (fs. 12/25), cuya 
+denegación motivó la presente queja.
+– II –
+La causa se inició con una nota del subcomisario a cargo de la sec-
+ción leyes especiales de la Policía de Santa Cruz remitida al Juzgado 
+Federal de Río Gallegos, por la que se informaba que personal de la 
+brigada de investigaciones había conducido a Gustavo Alejandro Munch 
+a una dependencia policial en ejercicio de las facultades conferidas por 
+la ley provincial Nº 688 (averiguación de antecedentes y medios de 
+vida) y que como resultado de la requisa personal a que fue entonces 
+sometido habían sido incautados dos envoltorios que contenían cloro-
+hidrato de cocaína.
+En la misma nota se solicitó al juez que, basado en ese hallazgo, 
+expidiese una orden para allanar la habitación del hotel en que se 
+hospedaba Munch, que no residía en forma permanente en la ciudad 
+y se encontraba allí “de paseo”. (fs. 1 del expte. principal).
+
+1237
+DE JUSTICIA DE LA NACION
+333
+El magistrado a cargo de la investigación autorizó la medida solici-
+tada (fs. 2) y la diligencia culminó con el secuestro de estupefacientes 
+y demás elementos relacionados con el delito (fs. 29/35).
+A partir de esa comprobación, la causa siguió su curso y Munch 
+fue enjuiciado y declarado culpable de tener estupefacientes con fines 
+de comercialización (fs. 543/557).
+La defensa impugnó la condena por considerar que la evidencia 
+había sido adquirida en violación a las garantías procesales del im-
+putado, pues su detención y posterior requisa personal no había sido 
+autorizada por el juez y no respondía a circunstancias de urgencia y 
+sospecha razonable que pudieran haber justificado la actuación de la 
+policía sin orden judicial. Sostuvo, asimismo, que la irregularidad del 
+referido procedimiento invalidaba, por carácter transitivo, la orden 
+de allanamiento que se emitió exclusivamente con esa base (fs. 564 
+vta./565).
+El voto mayoritario de la cámara de casación encontró legítimo 
+el registro de la habitación del hotel donde se alojaba Munch, pues 
+consideró que la orden de allanamiento expedida por el juez compe-
+tente estaba justificada por los antecedentes del caso, es decir, por la 
+circunstancia de que la policía sorprendió al acusado con drogas pro-
+hibidas entre sus pertenencias. Y en cuanto a la legitimidad de esa in-
+tervención anterior de los oficiales, sostuvo que “obedeció a una actitud 
+sospechosa advertida por el personal policial, quien en el marco de la 
+(...) normativa provincial y ante la circunstancia de que el nombrado 
+se encontraba de paso por aquélla localidad, procedió a conducirlo a 
+la dependencia policial para así averiguar sus antecedentes, medios 
+de vida y efectuar la requisa pertinente en presencia de los testigos 
+convocados al efecto” (fs. 596 vta.).
+En su apelación federal, la defensa señaló que el defecto de la 
+sentencia residía en que el tribunal consideró que el planteo central 
+estaba referido a la legitimidad del allanamiento, cuando lo que se 
+cuestionaba en primer lugar era la validez de la requisa personal a 
+que fue sometido Munch y que inició el curso de prueba que culminó 
+con su condena.
+A ese respecto, insistió en que esa diligencia vulneró las garantías 
+constitucionales del imputado y no se ajustó a las normas del Código 
+Procesal Penal, en la medida en que éstas sólo autorizan la requisa
+
+1238
+FALLOS DE LA CORTE SUPREMA
+333
+personal por parte de las fuerzas de seguridad sin orden judicial siem-
+pre que existan motivos suficientes para sospechar que un sujeto lleva 
+sobre su persona cosas que puedan ser útiles para la averiguación de 
+un delito y cuando razones de urgencia justifiquen la actuación in-
+mediata, extremos que no se verifican en el caso, pues se desconocen 
+los motivos por los cuales la policía afirmó que había en Munch una 
+“actitud sospechosa”.
+– III –
+El recurso en examen suscita cuestión federal, toda vez que condu-
+ce sustancialmente a la determinación del alcance de la garantía del 
+debido proceso y la que establece que nadie puede ser arrestado sino 
+en virtud de orden escrita emanada de autoridad competente (Fallos: 
+317:1985; 321:2947; 325:2485).
+En efecto, el tema a resolver es si a tenor de esas cláusulas cons-
+titucionales y las leyes dictadas en su consecuencia, los funcionarios 
+policiales se encontraban habilitados para detener y requisar al im-
+putado teniendo en cuenta las circunstancias presentes al momento 
+del hecho.
+En particular, no puede obviarse la consideración de la ley pro-
+vincial Nº 688, pues ésta se invocó para dar validez al procedimiento 
+al amparo de lo que establece en su artículo 13, inciso “b”, es decir, la 
+facultad policial de detener por el plazo mínimo indispensable y no 
+mayor a 24 horas, a toda persona cuyos antecedentes y medios de vida 
+sea necesario conocer en circunstancias que lo justifiquen.
+La discusión no es novedosa y ya ha sido abordada en repetidas 
+ocasiones por V.E., en las que se destacó invariablemente que las nor-
+mas de procedimiento penal e inclusive las leyes orgánicas de la policía, 
+reglamentan la garantía del artículo 18 de la Constitución Nacional 
+y prevén los casos y las condiciones bajo los cuales los agentes de las 
+fuerzas de seguridad pueden arrestar a un individuo o practicar me-
+didas que supongan una injerencia en su ámbito privado, sin contar 
+con una autorización judicial.
+En este sentido, se afirmó el deber policial de detener a las per-
+sonas sorprendidas en flagrante delito y a aquéllas contra las que 
+haya indicios vehementes o semiplena prueba de culpabilidad (conf.
+
+1239
+DE JUSTICIA DE LA NACION
+333
+Fallos: 321:2947, con referencia al artículo 4 del anterior Código de 
+Procedimientos en Materia Penal, similar al actual artículo 284 del 
+Código Procesal Penal vigente); la potestad de demorar individuos 
+por el tiempo mínimo necesario para establecer su identidad cuando 
+existan circunstancias debidamente fundadas que hagan presumir que 
+hubiesen cometido o pudieren cometer algún delito o contravención 
+(Fallos: 325:2485); así como a la facultad de requisar a las personas 
+e inspeccionar sus efectos personales en concurrencia de circunstan-
+cias previas o concomitantes que razonable y objetivamente permitan 
+justificar dicha medida (conf. “Peralta Cano”, letra “P”, Nº 1666, libro 
+XLI, del 3 de mayo de 2007).
+Para precisar mejor el alcance y sentido de esas normas, V.E. esti-
+mó ilustrativo acudir a los conceptos de “causa probable” y “sospecha 
+razonable” elaborados por la Suprema Corte de los Estados Unidos 
+para admitir la facultad policial de arresto y registro personal (“stop 
+and frisk”), dando ocasión a una interesante casuística que presenta 
+como nota común el deber de examinar “la totalidad de la circunstan-
+cias” en que tuvo lugar medida de coerción a los fines de evaluar su 
+adecuación constitucional.
+Así, por ejemplo, en Fallos: 317:1985 se consideró que “la necesidad 
+de efectuar una mayor verificación de la documentación del vehículo” 
+alegada por la policía no resultaba una razón legítima para detener 
+a su conductor. Por el contrario, en Fallos: 321:2947 se encontró jus-
+tificada la requisa de un automóvil realizada por una partida policial 
+específicamente comisionada para recorrer la zona en que se verificó 
+el procedimiento en la función de prevención del delito, al advertir 
+que quienes se encontraban en el interior del rodado se hallaban en 
+“actitud sospechosa”. En ese caso se hizo referencia a la necesidad 
+de actuar en forma inmediata cuando se trata de vehículos en movi-
+miento que pueden rápidamente salir de la jurisdicción y a la menor 
+expectativa de privacidad que existe dentro de un auto que circula por 
+la vía pública.
+En el precedente publicado en Fallos: 325:2485 la Corte convalidó 
+la demora de un ciudadano en la vía pública con el fin de averiguar 
+su identidad –lapso durante el cual fueron hallados a simple vista 
+estupefacientes entre sus pertenencias– motivada en “un conjunto de 
+actitudes tales como el nerviosismo puesto de manifiesto (...) ante la 
+presencia del móvil policial y el hecho de que se trataba de una persona 
+que por su comportamiento y vestimenta no parecía de la zona, el cual
+
+1240
+FALLOS DE LA CORTE SUPREMA
+333
+al ser consultado por la razón de su presencia en el lugar, hizo referen-
+cia a la búsqueda de un material electrónico de repuesto totalmente 
+extraño a lo que podía obtenerse en los comercios aledaños, pues se 
+trataba de una zona de gente humilde, en su mayoría habitantes de 
+una villa en el bajo Flores”.
+Un “gran nerviosismo” o “cierto estado de nerviosismo” manifestado 
+ante la presencia de un oficial de policía que se identifica como tal en el 
+contexto de su específica tarea de patrullar en prevención del delito, ha 
+sido considerado una razón valedera para proceder al registro personal 
+cuando a la luz de la experiencia del funcionario interviniente genera 
+una razonable sospecha de que el individuo posee cosas relacionadas 
+con un delito (Fallos: 325:3322 y 326:41).
+En un caso más reciente, V.E. compartió la opinión sostenida por 
+esta Procuración General al dictaminar en los autos “Peralta Cano”, 
+letra “P”, Nº 1666, libro XLI, y declaró inválida la detención y la re-
+quisa personal del acusado basada en la solitaria versión del policía 
+que realizó el procedimiento, quien refirió que había recibido un lla-
+mado anónimo que alertaba acerca de la presencia de un sujeto que se 
+comportaba en forma sospechosa. Allí se valoró que el agente “no dio 
+cuenta de las circunstancias objetivas del procedimiento, atestando 
+las comprobaciones y relatando los hechos a medida que ocurren, sino 
+que transformó (las actuaciones) en una transcripción a posteriori de 
+la versión brindada (por él mismo)”.
+He creído pertinente consignar en forma breve estos antecedentes, 
+en la medida en que pueden suministrar criterios útiles para evaluar si 
+la situación que se presenta en el sub lite se adecuó al estándar fijado 
+por la Constitución y sus leyes reglamentarias.
+Para ello también resulta necesario acudir a las constancias del 
+sumario relacionadas con la detención de Gustavo Alejandro Munch, 
+que permiten conocer que éste fue “demorado” por personal de una 
+brigada de investigaciones “con el objeto de darle ingreso por la ley 688 
+(provincial)” y se lo sometió a una requisa personal con el resultado 
+ya anticipado (fs. 1).
+A fojas 6 obra un informe suscripto por el oficial inspector Jorge 
+Ortiz que detalla que Munch estaba demorado por “averiguación de 
+antecedentes y medios de vida, para ser alojado luego en la Comisaría 
+Seccional Segunda”, y ya sin utilizar el término “requisa”, señala que “al
+
+1241
+DE JUSTICIA DE LA NACION
+333
+momento de efectuar el recibo de (sus) pertenencias” (...) se constata en 
+sus efectos, entre otras cosas, la suma de unos quinientos pesos y dos 
+papeles envueltos, conteniendo éstos una sustancia gris y blanca”.
+A fojas 7 el oficial Poblete brindó alguna precisión respecto del 
+momento mismo en que detuvo al imputado. El funcionario policial 
+expresó que en circunstancias en que se hallaba apostado en el hotel 
+“Liporace”, en procura de establecer el paradero de una persona que 
+debía declarar en otra causa, observó “el movimiento de una persona 
+de sexo masculino, en actitud sospechosa” y que “ante tal situación se 
+procedió a conducirlo a (la) Brigada (...) en atención a lo previsto en la 
+ley provincial Nº 688/71 en su artículo 13, inciso ‘b’”.
+Como puede apreciarse, el procedimiento se basó en una supuesta 
+“actitud sospechosa” atribuida al imputado, sin expresar en absoluto 
+las circunstancias o la existencia de elementos objetivos que fundamen-
+taran esa atribución. Entre otras omisiones del relato, ni siquiera se 
+describe saber cuál fue el comportamiento que se consideró sospechoso 
+y qué es lo que cabía sospechar.
+Entiendo que en tales condiciones no resulta posible determinar si 
+la detención obedeció a “circunstancias que la justifiquen”, conforme lo 
+exige el citado artículo 13, inc. “b” de la ley Nº 688 y de acuerdo a las 
+pautas elaboradas por V.E. en torno a los conceptos análogos de “causa 
+probable” y “sospecha razonable”.
+Es que toda medida de coerción en el proceso penal, en tanto su-
+pone una injerencia estatal en derechos de rango constitucional, se 
+encuentra sometida a restricciones legales destinadas a establecer las 
+formas y requisitos que aseguren que esa intromisión no sea realiza-
+da arbitrariamente y que en última instancia pueda ser sometida al 
+escrutinio imparcial de los jueces.
+Como ha sido destacado en el voto en disidencia del doctor Petracchi 
+en Fallos: 321:2947, “el control judicial es la vía que ha de garantizar 
+al ciudadano frente a toda actuación estatal injustificada. Los jueces 
+están obligados a examinar las razones y antecedentes que motivan el 
+pedido de las autoridades administrativas y no se encuentran faculta-
+dos para ordenar medidas coercitivas sin expresar sus fundamentos. 
+Como correlato, ello supone que los funcionarios que han de ser contro-
+lados especifiquen su actuación de tal forma que dicho control pueda 
+ser efectivamente ejercido” (considerando 6º).
+
+1242
+FALLOS DE LA CORTE SUPREMA
+333
+En definitiva, y como también se concluye en la opinión citada, 
+“todas las protecciones que el art. 18 de la Constitución Nacional ase-
+gura frente a las intromisiones estatales en los derechos del individuo 
+tienen como común denominador la proscripción de la arbitrariedad.”. 
+“Ello implica que los funcionarios que intervengan en hechos que com-
+prometan tales garantías carguen con el deber mínimo de fundar sus 
+actos de modo tal que no se frustre la necesaria revisión de su razona-
+bilidad” (considerando 12).
+La fundamentación que se exige no consiste sino en asentar “la tota-
+lidad de las circunstancias” particulares del caso que llevan a la aplica-
+ción de una determinada consecuencia jurídica, y su opuesto simétrico 
+es la mera invocación de “un concepto que, sin cambio alguno, podría 
+servir de comodín para ser utilizado en cualquier otro supuesto”.
+Esta última falencia es la que a mi criterio se presenta en el sub 
+lite, pues para justificar la detención de Munch se acudió a la caracte-
+rización abstracta de su comportamiento como “actitud sospechosa”, 
+sin que tal caracterización haya sido dotada de contenido material 
+mediante la referencia a la multiplicidad de elementos fácticos que, es 
+de suponer, se encontraban presentes al momento de hecho, a partir de 
+los cuales hubiera sido posible controlar la razonabilidad del conjun-
+to de inferencias que cabe considerar realizó el policía actuante para 
+concluir que, a la luz de su experiencia, se enfrentaba con uno de los 
+supuestos que autorizan su intervención.
+En consecuencia, conforme la regla de exclusión de la prueba in-
+válida establecida por V.E. en Fallos: 308:733 y concordantes, opino 
+que corresponde hacer lugar a la queja, declarar procedente el recur-
+so extraordinario y revocar la sentencia apelada. Buenos Aires, 9 de 
+noviembre de 2009. Eduardo Ezequiel Casal.
+FALLO DE LA CORTE SUPREMA
+Año del Bicentenario
+Buenos Aires, 3 de agosto de 2010.
+Vistos los autos: “Recurso de hecho deducido por la Defensora Oficial 
+de Gustavo Alejandro Munch en la causa Munch, Gustavo Alejandro 
+s/ causa Nº 9283”, para decidir sobre su procedencia.
+
+1243
+DE JUSTICIA DE LA NACION
+333
+Considerando:
+Que el apelante no ha dado cumplimiento al recaudo establecido 
+por el artículo 4º de la acordada 4/2007, por lo que corresponde declarar 
+inadmisible esta presentación directa.
+Por ello, habiendo dictaminado el señor Procurador Fiscal, se 
+desestima la queja. Notifíquese y archívese, previa devolución de los 
+autos principales.
+Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Enrique 
+Santiago Petracchi — Juan Carlos Maqueda (en disidencia) — E. Raúl 
+Zaffaroni (en disidencia) — Carmen M. Argibay.
+Disidencia de los señores ministros doctores
+don Juan Carlos Maqueda y don E. Raúl Zaffaroni
+Considerando:
+Que esta Corte comparte lo expuesto por el señor Procurador Fiscal 
+en su dictamen, a cuyos términos se remite por razones de brevedad.
+Por ello, se hace lugar a la queja, se declara procedente el recurso 
+extraordinario y se deja sin efecto la sentencia apelada. Hágase sa-
+ber, agréguese la queja al principal y vuelvan los autos al tribunal de 
+origen a fin de que se dicte un nuevo pronunciamiento con arreglo a 
+lo expuesto.
+Juan Carlos Maqueda — E. Raúl Zaffaroni.
+Recurso de hecho interpuesto por Gustavo Alejandro Munch, representado por la 
+Defensora Oficial, Laura Beatriz Pollastri.
+Tribunal de origen: Sala III de la Cámara Nacional de Casación Penal.
+Tribunales que intervinieron con anterioridad: Tribunal Oral en lo Criminal Fe-
+deral de Comodoro Rivadavia, Provincia del Chubut.
+
+1244
+FALLOS DE LA CORTE SUPREMA
+333
 ```
 
 ---
@@ -881,6 +1269,410 @@ Recurso de reposición interpuesto por Henry de Jesús López Londoño, asistido
 los Dres. Juan José Ribelli y Natalia X. Broitman.
 Tribunal de origen: Sala II de la Cámara Federal de Casación Penal.
 Tribunal que intervino con anterioridad: Juzgado Criminal y Corrección Federal n° 2.
+```
+
+---
+
+## 339_p1048
+
+- **Tomo:** 339 | **wc_cons:** 3351 | **pattern:** unanime
+- **Carátula:** Fiscal de Estado Guillermo H. de Sanctis y otro c/ titular del Juzgado en lo Civil y Comercial de Mineria de la Sta. Nom. de San Juan s/ Denuncia
+
+```
+Fiscal de Estado GUILLERMO H. de SANCTIS y otro c/
+titular del Juzgado en lo Civil y Comercial de Mineria de la
+Sta. Nom. de San Juan s/ Denuncia
+JUICIO POLITICO
+En materia de los llamados juicios políticos o enjuiciamiento de magis­
+trados en la esfera provincial, cuyo trámite se efectuó ante órganos aje­
+nos a los poderes judiciales locales, la revisión en la instancia del art. 
+14 de la ley 48, constituye un ámbito en el que solo es posible la inter­
+vención judicial en la medida en que el interesado aduzca y demuestre 
+inequívocamente la violación de alguno de los derechos o garantías es­
+tablecidos en el art. 18 de la Constitución Nacional.
+GARANTIA DE IMPARCIALIDAD
+Los planteos referidos a la violación de la garantía del juez imparcial 
+-fundados en que dos jueces que formaron parte del Superior Tribunal 
+local que convalidó la destitución, habían actuado en una de las cau­
+sas que sirvieron de base para la acusación y posterior destitución-, no 
+promueven el examen de cuestiones constitucionales aptas para susci­
+tar la competencia revisora, ya que no puede aplicarse al juicio político 
+el mismo estándar de imparcialidad que el que se desarrolla en sede 
+judicial, pues admitir múltiples recusaciones llevaría a desintegrar el 
+órgano establecido para efectuar el control entre poderes, bloqueando 
+el apropiado funcionamiento del sistema al sustraer el conocimiento de 
+la causa al poder controlante previsto en el ordenamiento vigente.
+JURISDICCION
+No se habilita la jurisdicción extraordinaria del Tribunal si en los pro­
+cedimientos en que se ventila la responsabilidad política de los magis­
+trados, el apelante no demostró, ni tampoco se observa, sobre la base 
+del restringido alcance asignado al control judicial, una cuestión federal 
+que la habilite.
+
+1049
+DE JUSTICIA DE LA NACIÓN
+339
+ENJUICIAMIENTO DE MAGISTRADOS PROVINCIALES
+No concurre una cuestión federal apta para ser examinada por la 
+Corte si el planteo es manifiestamente insustancial y no se presta a 
+controversia, ya que no hay lugar alguno en el recurso extraordinario 
+para la revisión judicial sobre la subsunción de los hechos en las cau­
+sales de destitución ni el aspecto valorativo de la decisión destitutoria, 
+dado que se trata de que el órgano judicial, convertido en un tribunal 
+de alzada, sustituya el criterio de quienes por imperio de la ley están 
+encargados en forma excluyente del juicio de responsabilidad política 
+de un magistrado.
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 9 de agosto de 2016.
+Vistos los autos: “Recurso de hecho deducido por Carlos Macchi 
+en la causa Fiscal de Estado Guillermo H. de Sanctis y otro c/ titular 
+del Juzgado en lo Civil y Comercial de Minería de la 5ta. Nom. de San 
+Juan s/ denuncia”, para decidir sobre su procedencia.
+Considerando:
+1°) Que la Corte de Justicia de San Juan, al declarar inadmisible 
+el recurso de inconstitucionalidad local, dejó firme la sentencia del Ju­
+rado de Enjuiciamiento que había destituido al doctor Carlos Augusto 
+Macchi del cargo de juez del Quinto Juzgado en lo Civil, Comercial y de 
+Minería de la Provincia de San Juan (fs. 3/35).
+Contra dicho pronunciamiento el afectado interpuso recurso ex­
+traordinario federal (fs. 38/57), cuyo rechazo (fs. 79/82) dio lugar a la 
+presente queja (fs. 84/89).
+2º) Que el magistrado destituido interpone el remedio federal in­
+vocando la afectación de la garantía de ser juzgado por un tribunal 
+independiente e imparcial (arts. 8.1 de la Convención Americana 
+sobre Derechos Humanos y 18 de la Constitución Nacional), ya que, 
+según expresa, la intervención que tomaron dos jueces formando 
+parte del superior tribunal local que convalidó la destitución, cuan­
+
+339
+1050
+FALLOS DE LA CORTE SUPREMA
+do dichos magistrados habían actuado –también como miembros 
+de la corte de justicia– en una de las causas que sirvió de base a la 
+acusación y posterior destitución, configura una flagrante violación 
+a la garantía mencionada.
+En este sentido, sostiene que la sentencia de la corte local que dejó 
+firme la remoción se fundó en la supuesta actuación irregular del doc­
+tor Macchi como juez de primera instancia en diversos procesos, en 
+uno de los cuales tomaron intervención dos de los ministros de la sala 
+actuante, doctores Adolfo Caballero y Juan Carlos Caballero Vidal, al 
+resolver un recurso extraordinario doméstico en el marco del expe­
+diente n° 5181 “Yanzón de Graffigna, Mónica y otros c/ Provincia de 
+San Juan –expropiación irregular–”, cuya presunta tramitación irre­
+gular conformó –con otra causa– la base de la imputación por la causal 
+de mal desempeño que admitió la sentencia destitutoria.
+Por otro lado, también considera afectada la garantía de indepen­
+dencia del propio magistrado en el ejercicio de sus funciones, al ser 
+destituido por el contenido de sus sentencias.
+Por último, sostiene que la sentencia apelada es arbitraria, puesto 
+que omitió tratar las cuestiones convencionales oportunamente plan­
+teadas por la defensa. Al respecto, indica que en la sentencia apelada 
+se alude a que el doctor Macchi objetó la resolución destitutoria por 
+afectar el derecho a ser juzgado por jueces imparciales dentro de un 
+proceso adjetivo regular, por desconocer los principios de aplicación 
+de la ley penal más benigna y de irretroactividad de la ley, y por haber 
+desconocido la prohibición de prejuzgamiento y la operatividad del ins­
+tituto de la prescripción de la acción, contenidos en la Constitución de 
+San Juan, la Constitución Nacional y la Convención Americana sobre 
+Derechos Humanos; pero, sin embargo, entiende que deliberadamen­
+te el máximo tribunal provincial prescindió de realizar siquiera una 
+referencia tangencial a la CADH y a los precedentes de la Corte Inte­
+ramericana de Derechos Humanos citados.
+3º) Que cabe precisar, en primer lugar, que el alcance de la revi­
+sión en la instancia del art. 14 de la ley 48 en asuntos de esta naturale­
+za, se encuentra delineado a partir del estándar fijado en el conocido 
+precedente “Graffigna Latino” (Fallos: 308:961), según el cual las de­
+cisiones en materia de los llamados juicios políticos o enjuiciamiento 
+de magistrados en la esfera provincial, cuyo trámite se efectuó ante
+
+1051
+DE JUSTICIA DE LA NACIÓN
+339
+órganos ajenos a los poderes judiciales locales, constituyen un ámbi­
+to en el que solo es posible la intervención judicial en la medida que 
+se aduzca y demuestre inequívocamente por el interesado, la viola­
+ción de alguno de los derechos o garantías establecidos en el art. 18 
+de la Constitución Nacional.
+4º) Que por ser el objetivo del instituto del juicio político, antes que 
+sancionar al magistrado, el de determinar si este ha perdido los requisi­
+tos que la ley y la Constitución exigen para el desempeño de una función 
+de tan alta responsabilidad, el sentido de un proceso de esta naturaleza 
+es muy diverso al de las causas de naturaleza judicial, por lo que sus 
+exigencias revisten una mayor laxitud. De ahí, pues, que como concor­
+demente lo ha subrayado este Tribunal desde su tradicional precedente 
+sentado en la causa “Nicosia, Alberto Oscar” (Fallos: 316:2940), con res­
+pecto a las decisiones del Senado de la Nación en esta materia; lo reiteró 
+con posterioridad a la reforma de 1994 frente al nuevo texto del art. 115 
+de la Ley Suprema en el caso “Brusa, Víctor Hermes” (Fallos: 326:4816) 
+con relación a los fallos del Jurado de Enjuiciamiento de la Nación; y 
+lo viene extendiendo al ámbito de los enjuiciamientos de magistrados 
+provinciales hasta sus pronunciamientos más recientes (causas “Pare­
+des, Eduardo y Pessoa, Nelson”, Fallos: 329:3027; “Acuña, Ramón Porfi­
+rio”, Fallos: 328:3148; “De la Cruz, Eduardo Matías (Procurador General 
+de la Suprema Corte de Justicia)”, Fallos: 331:810; “Rodríguez, Ade­
+mar Jorge”, Fallos: 331:2156; “Rojas, Ricardo Fabián”, Fallos: 331:2195; 
+“Trova, Facundo Martín”, Fallos: 332:2504; “Parrilli, Rosa Elsa”, Fallos: 
+335:1779; CSJ 936/2009 (45-A)/CS1 “Agente Fiscal s/ solicita instrucción 
+de sumario” y CSJ 1070/2012 (48-B)/CS1 “Bordón, Miguel Ángel s/ causa 
+n° 69.115/10”, sentencias del 1° de junio de 2010 y del 27 de agosto de 2013, 
+respectivamente), quien pretenda el ejercicio de aquel escrutinio debe­
+rá demostrar en forma nítida, inequívoca y concluyente, con flagrancia, 
+un grave menoscabo a las reglas del debido proceso y a la garantía de 
+defensa en juicio que, asimismo, exhiba relevancia bastante para variar 
+la suerte de la causa en función de la directa e inmediata relación que 
+debe tener la cuestión federal invocada con la materia del juicio (art. 18 
+de la Constitución Nacional; arts. 8 y 25 de la Convención Americana 
+sobre Derechos Humanos; art. 15 de la ley 48).
+5º) Que, desde tal perspectiva, corresponde señalar en primer lu­
+gar, que en cuanto concierne a la queja, no puede tenerse por satisfe­
+cha la exigencia de fundamentación concreta y razonada que impone 
+el art. 6° de la acordada 4/2007.
+
+339
+1052
+FALLOS DE LA CORTE SUPREMA
+En efecto, más allá del desatino de la corte local para rechazar el 
+recurso por la primera cuestión enunciada (desconociendo reiterados 
+precedentes de esta Corte en esta clase de asuntos que exigen ree­
+ditar contra la decisión destitutoria los agravios federales causados 
+por resoluciones anteriores; causa “Benítez, Omar Danilo” de Fallos: 
+332:2307) lo decisivo es que la recurrente no solo no se ocupa de elu­
+cidar este extremo, indicando el cumplimiento de dicho recaudo, sino 
+que, además, en punto al resto de los motivos de agravios, se limita a 
+reiterar su postura desde una visión subjetiva y parcializada, sin des­
+virtuar fundadamente los argumentos de la resolución denegatoria.
+Análoga observación merece el escrito de interposición del recur­
+so extraordinario, pues carece de un relato claro y preciso de todas 
+las circunstancias relevantes del caso que estén relacionadas con las 
+cuestiones que se invocan como de índole federal, de cuándo introdujo 
+ese planteo y cómo lo mantuvo con posterioridad; tampoco refuta to­
+dos y cada uno de los fundamentos independientes que dan sustento a 
+la decisión apelada, en relación con las cuestiones federales plantea­
+das (art. 3° incs. b y d, de la acordada 4/2007). Esta deficiencia conspira, 
+ciertamente, contra la demostración de la lesión a las reglas estructu­
+rales del debido proceso que, con singular precisión, exige la doctrina 
+del Tribunal para intervenir por medio de la vía intentada en este tipo 
+de proceso.
+6º) Que más allá de que, con arreglo a un criterio arraigado en la 
+trascendencia de los derechos comprometidos y de los intereses en 
+juego, los defectos formales señalados son susceptibles de ser sortea­
+dos en esta clase de enjuiciamientos (causas “Parrilli” antes citada, 
+considerandos 5°, 6° y 7°; y causa “Bordón”, antes citada, consideran­
+dos 7°, 8° y 9°), los planteos del recurrente no promueven el examen de 
+cuestiones constitucionales aptas para suscitar la competencia reviso­
+ra, federal y extraordinaria puesta en cabeza de este Tribunal.
+En efecto, con referencia a la invocada violación a la garantía del 
+juez imparcial, introducida por el apelante con sustento en que los 
+doctores Adolfo Caballero y Juan Carlos Caballero Vidal, como inte­
+grantes de la Sala II de la corte local, habían intervenido con ante­
+rioridad en uno de los expedientes que sustentó la destitución del ex 
+magistrado Macchi (n° 5181 “Yanzón de Graffigna, Mónica y otros c/ 
+Provincia de San Juan – expropiación irregular), el recurso no se hace 
+cargo de la doctrina de los precedentes de esta Corte que, ante cues­
+
+1053
+DE JUSTICIA DE LA NACIÓN
+339
+tionamientos substancialmente análogos a los que se concretan en el 
+sub examine, ha dejado establecido que no puede aplicarse al juicio 
+político el mismo estándar de imparcialidad que el que se desarrolla 
+en sede judicial. Ello es así, pues la circunstancia de admitir múlti­
+ples recusaciones por prejuzgamiento o presunto interés en la destitu­
+ción del funcionario llevaría a desintegrar el órgano establecido por la 
+Constitución para efectuar el control entre los poderes, bloqueando el 
+apropiado funcionamiento del sistema al sustraer el conocimiento de 
+la causa al poder controlante previsto en el ordenamiento vigente, sea 
+porque cualquier modo alternativo de reemplazo que se hubiera ele­
+gido podría ser tachado de inconstitucional, o fuera por impedir dere­
+chamente la constitución del órgano (caso “Del Val”, Fallos: 314:1723, 
+considerando 9° del voto de la mayoría; causas CSJ 346/2008 (44-M)/
+CS1 “Molina de Alcázar, Graciela s/ amparo”, sentencia del 20 de octu­
+bre de 2009, “Trova, Facundo Martín”, Fallos: 332:2504; y CSJ 935/2009 
+(45-A)/CS1 “Agente Fiscal s/ solicita instrucción de sumario”, senten­
+cia del 1º de junio de 2010).
+7°) Que si bien es cierto que en el presente caso la recusación no 
+está dirigida contra los miembros del Jurado de Enjuiciamiento, sino 
+contra los magistrados de la corte local que intervinieron en el ejerci­
+cio de su función revisora, la naturaleza del régimen del juicio político 
+desde una comprensión integral de todas sus etapas no pierde sus ca­
+racteres propios en esta instancia de control judicial, pues sabido es 
+el restringido marco jurisdiccional que enmarca la actuación de los 
+órganos judiciales en este tipo de procesos.
+8°) Que de ello no debe seguirse –cabe aclararlo– que, por limitado, 
+el control judicial quede eximido de la observancia del resguardo del 
+abanico de garantías reconocido en cabeza del afectado, pues como se 
+subrayó en la sentencia “Frois, Mauricio” (Fallos: 337:1081), aquella 
+revisión tiene que ser llevada a cabo por un tribunal que asegure el de­
+bido respeto a los contenidos estructurales de la garantía de defensa 
+en juicio que reconocen a los justiciables la Constitución Nacional y los 
+Tratados Internacionales de Derechos Humanos, y que cumpla con las 
+formalidades sustanciales del procedimiento judicial y de la sentencia 
+que permitan una suficiente y efectiva revisión judicial (causa “Acu­
+ña, Ramón Porfirio”, Fallos: 328:3148; ”Rojas, Ricardo Fabián”, Fallos: 
+331:2195; CSJ 361/2011 (47-F)/CS1 “Fleitas, Pablo Andrés s/ acusación 
+– causa n° 14/09”, de fecha 20 de noviembre de 2012, voto de la mayoría 
+y voto de la jueza Argibay).
+
+339
+1054
+FALLOS DE LA CORTE SUPREMA
+9°) Que, empero, en este asunto, el planteo introducido por el 
+apelante es insuficiente para hacer excepción a la regla aludida, 
+puesto que no se demuestra –ni se advierte– que las circunstancias 
+concretas de este caso importen el desconocimiento de la garantía 
+que invoca, ni los estándares de la Corte Interamericana de Dere­
+chos Humanos que trae en aval de su prédica, desde los cuales el 
+ex magistrado proyecta sus agravios, pues en rigor la discusión que 
+propone el recurrente remite al examen de cuestiones de hecho y 
+de derecho procesal respecto de una decisión que no se identifica 
+dentro del estándar de arbitrariedad fijado desde el precedente del 
+caso “Estrada, Eugenio”, Fallos: 247:713; “Córdoba – Convocatoria 
+a elecciones de gobernador, vicegobernador, legisladores y Tribunal 
+de Cuentas provincial para el día 2 de septiembre de 2007”, Fallos: 
+330:4797; causas “Trova” y “Parrilli”, antes citadas), con arreglo al 
+cual se debe demostrar que la equivocación del pronunciamiento im­
+pugnado es tan grosera que aparece como algo inconcebible dentro 
+de una racional administración de justicia.
+10) Que ello es así, ya que la disputa se centra en determinar si 
+la actuación de dos de los jueces que conforman la Sala de la corte 
+local, que tomaron intervención en un recurso resuelto en uno de los 
+expedientes que conformó la base fáctica sobre la cual se efectuó la 
+acusación y destitución del ex magistrado, constituye la causal de re­
+cusación que prevé el art. 16, inciso 7°, del Código Procesal Civil y Co­
+mercial de San Juan, que invoca el apelante.
+En este sentido, mientras el tribunal a quo argumentó que aquella 
+intervención se ciñó a examinar el fallo de segunda instancia, y no la 
+actuación del magistrado de grado, y menos aún la valoración de su 
+conducta, el apelante sostiene lo contrario; y todo ello sin hacerse car­
+go de la cuestión atinente a la restringida intervención jurisdiccional 
+del órgano judicial en el marco de revisión de las decisiones adoptadas 
+en los enjuiciamientos de magistrados; aspecto de singular relevancia, 
+si se repara en que la inspección judicial tiene vedado el ingreso en las 
+cuestiones de hecho consideradas por el Jurado de Enjuiciamiento.
+11) Que para confirmar que no se ha configurado en este punto la 
+cuestión constitucional que se postula, corresponde subrayar que una 
+de las circunstancias ponderadas para sostener en la regla estableci­
+da en el conocido caso “Llerena”, Fallos: 328:1491 (consistente en que 
+resulta incompatible con la garantía de imparcialidad la circunstan­
+
+1055
+DE JUSTICIA DE LA NACIÓN
+339
+cia de que sea el mismo juez el que intervenga en la instrucción del 
+proceso y el que actúe en la etapa de juicio) hizo pie en el “Proyecto 
+de Reglas Mínimas de las Naciones Unidas para el Procedimiento en 
+Materia Penal”, denominado “Reglas de Mallorca”, que en el segun­
+do inciso de su regla cuarta establece que “…Los Tribunales deberán 
+ser imparciales…Especialmente, no podrá formar parte del tribunal 
+quien haya intervenido anteriormente, de cualquier modo, o en otra 
+función o en otra instancia en la misma causa…”. Desde tal premisa, 
+se advierte que la intervención vedada en cualquiera de sus alternati­
+vas está constreñida a que suceda en la misma causa; extremo que no 
+se verifica en el caso sub examine.
+De tal modo, puede concluirse que el apelante no demuestra, 
+ni tampoco se observa, sobre la base del restringido alcance asig­
+nado al control judicial en los procedimientos en que se ventila la 
+responsabilidad política de los magistrados, que en este asunto se 
+verifique una cuestión federal que habilite la jurisdicción extraordi­
+naria del Tribunal.
+12) Que, por otro lado, el recurrente se agravia de que la destitu­
+ción haga pie en el contenido de sus sentencias, aseverando que tal 
+proceder se encuentra vedado por la doctrina de la Corte Suprema y 
+que, además, afecta el correcto funcionamiento de administración de 
+justicia de la Provincia de San Juan.
+13) Que este motivo de agravio carece de fundamentación, pues 
+la defensa se aferra a su lacónica prédica acerca de que los jueces no 
+pueden ser juzgados por sus sentencias, pero no se hace cargo de la 
+postura contraria sustentada por el tribunal a quo, que señala con cita 
+de autores de doctrina que, sin bien excepcionalmente, el contenido de 
+las sentencias puede ser tenido en cuenta a la hora de considerar el 
+mal desempeño de un magistrado.
+Tampoco confronta el ex magistrado lo expuesto por el tribunal a 
+quo que, tras reseñar las irregularidades descriptas por el Jurado de 
+Enjuiciamiento, indica –entre otros argumentos– que el recurrente no 
+se hizo cargo de refutar que se le reprochó haber omitido aplicar leyes 
+nacionales de orden público, jerárquicamente superiores (art. 31 de la 
+Constitución Nacional) a la ley provincial 4119, y que no fundamentó su 
+cambio de criterio en relación con otros fallos dictados en fecha con­
+comitante a los cuestionados. Al respecto, cabe recordar que la corte
+
+339
+1056
+FALLOS DE LA CORTE SUPREMA
+local había destacado que “…En este punto los jurados enfatizan que 
+el magistrado incurrió en grave contradicción al aplicar el criterio 
+correcto en tres juicios en los que no intervino el Dr. Santiago Gra­
+ffigna…, lo que implicó faltar a su deber de imparcialidad, al favore­
+cer a una de las partes. Por otra parte, el recurrente omite rebatir el 
+fundamento por el cual el Jurado le enrostró haber prescindido de las 
+consecuencias económicas que la aplicación de los índices conlleva­
+ba”, y esto tampoco fue replicado por el apelante.
+14) Que, en definitiva y más allá del déficit de argumentación se­
+ñalado, no concurre en el sub lite una cuestión federal apta para ser 
+examinada por esta Corte, pues el planteo es manifiestamente insus­
+tancial y no se presta a controversia (Fallos: 316:2747; 323:732 y 736) 
+frente a la enfática y reiterada doctrina del Tribunal con respecto a 
+que no hay lugar alguno en el recurso extraordinario para la revisión 
+judicial sobre la subsunción de los hechos en las causales de destitu­
+ción ni el aspecto valorativo de la decisión destitutoria, dado que no se 
+trata de que el órgano judicial convertido en un tribunal de alzada sus­
+tituya el criterio de quienes por imperio de la ley están encargados en 
+forma excluyente del juicio de responsabilidad política del magistrado 
+(Fallos: 314:1723; 317:1098; 318:2266; 327:4635; 330:725; 332:2504; “De la 
+Cruz, Eduardo Matías (Procurador General de la Suprema Corte de 
+Justicia)” y “Rodríguez, Ademar Jorge” Fallos: 331:810 y 2156, respec­
+tivamente), sellan la suerte de su reclamo.
+15) Que, por último, el recurrente se agravia de que la corte local si 
+bien reconoció que la defensa había alegado que la resolución destitu­
+toria violaba en forma flagrante normas y principios consagrados en la 
+Constitución de San Juan, la Constitución Nacional y la CADH, entre 
+los que destacan el derecho a ser juzgado por jueces imparciales y 
+dentro de un proceso regular, la aplicación de la ley penal más benigna 
+y el principio de irretroactividad de la ley, la prohibición de prejuzga­
+miento y la operatividad del instituto de la prescripción de la acción 
+penal, según su juicio omitió deliberadamente y en forma absoluta rea­
+lizar siquiera una referencia tangencial a la CADH y a los precedentes 
+de la Corte Interamericana de Derechos Humanos.
+Según su parecer, tal omisión no solo afecta los derechos funda­
+mentales del ex magistrado sino que, además, genera la responsabili­
+dad internacional del Estado argentino (fs. 54 vta./55 vta.).
+
+1057
+DE JUSTICIA DE LA NACIÓN
+339
+16) Que, el recurso en cuanto concierne a este motivo de agravio 
+luce también ostensiblemente infundado, al punto que hasta resulta 
+dificultoso colegir cuál es el objeto de su propósito. Ello es así, puesto 
+que el planteo carece de una descripción y vinculación adecuada con 
+los hechos de la causa, de modo que no se advierte la relación directa 
+e inmediata de las numerosas afectaciones constitucionales que alega 
+con las cuestiones ventiladas en el sub lite y con el modo en que pre­
+tende que sean resueltas.
+17) Que en estas condiciones y ausente la demostración en forma 
+nítida, inequívoca y concluyente de la lesión a las reglas estructurales 
+del debido proceso, no hay materia federal que habilite la intervención 
+de esta Corte en el marco de los rigurosos límites de su competencia 
+que, para asuntos de esta naturaleza, le imponen los arts. 31, 116 y 117 
+de la Constitución Nacional, y el art. 14 de la ley 48 (causas CSJ 32/2011 
+(47-B)/CS1 “Badano, Eduardo José s/ juicio político”, sentencia del 14 
+de febrero de 2012, y sus citas; CSJ 425/2013 (49-R)/CS1 “Reuter, Javier 
+Enrique s/ legajo de evaluación n° 10/09 CM.”, sentencia del 15 de mayo 
+de 2014; CSJ 156/2014 (50-R)/CS1 “Rossi, Graciela Beatriz s/ jurado de 
+enjuiciamiento”, sentencia del 2 de septiembre de 2014).
+Por ello, se desestima la queja. Reintégrese el depósito de fs. 2 por 
+no corresponder. Notifíquese y, oportunamente, archívese.
+Elena I. Highton de Nolasco – Juan Carlos Maqueda – Horacio 
+Rosatti.
+Recurso de queja interpuesto por Carlos Macchi, representado por el Dr. Guillermo 
+Sergio Toranzo Constantini, con el patrocinio letrado del Dr. Eduardo David Oteiza.
+Tribunal de origen: Corte de Justicia de San Juan, Sala 2°.
+Tribunales que intervinieron con anterioridad: Jurado de Enjuiciamiento de Magis­
+trados de San Juan.
+No ha tomado intervención en esta instancia el Ministerio Público Fiscal.
+
+339
+1058
+FALLOS DE LA CORTE SUPREMA
 ```
 
 ---
@@ -1860,6 +2652,66 @@ Tribunal de origen: Cámara Nacional de Apelaciones en lo Civil y Comercial Fede
 – Sala III.
 Tribunal que intervino con anterioridad: Juzgado Nacional de Primera Instancia en lo 
 Civil y Comercial Federal n° 9.
+```
+
+---
+
+## 339_p597
+
+- **Tomo:** 339 | **wc_cons:** 241 | **pattern:** unanime
+- **Carátula:** Instituto Concepcionista Colegio San Cayetano c/ Administración Federal de Ingresos Públicos - Dirección General Impositiva s/ Impugnación de deuda
+
+```
+INSTITUTO CONCEPCIONISTA COLEGIO SAN CAYETANO
+c/ ADMINISTRACIÓN FEDERAL de INGRESOS PÚBLICOS -
+DIRECCIÓN GENERAL IMPOSITIVA s/ Impugnación de deuda
+RECURSO DE QUEJA
+Corresponde desestimar la queja que no cumple con el recaudo previsto 
+en el art. 7 del reglamento aprobado por la Acordada 4/2007, por cuanto 
+la copia del escrito del recurso extraordinario ha sido acompañada en 
+forma incompleta; ya que el pronunciamiento se integró con los funda­
+mentos dados en el dictamen elaborado por la Fiscalía General de la 
+Cámara –a los que el tribunal remitió– y la apelante no ha acompañado 
+copia de esa pieza, ni ha reproducido sus términos.
+RECURSO DE REPOSICION O REVOCATORIA
+Las sentencias de la Corte Suprema no son susceptibles de reposición, 
+salvo algún supuesto de excepción que autorice apartarse de tal criterio.
+
+339
+598
+FALLOS DE LA CORTE SUPREMA
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 3 de mayo de 2016.
+Autos y Vistos; Considerando:
+Que a fs. 56/57 la recurrente pretende la rectificación de la re­
+solución de fs. 55, que desestimó la queja por no haberse cumplido 
+con todos los requisitos exigidos por el artículo 7º del reglamento 
+aprobado por acordada 4/07. Afirma que dicha exigencia se encon­
+traba cumplida, pues oportunamente había acompañado copia de la 
+sentencia apelada.
+Cabe señalar que si bien a fs. 25 obra copia del fallo recurrido, con 
+ella no puede tenerse por satisfecho el recaudo reglamentario referido 
+pues de su texto se desprende que el pronunciamiento se integró con 
+los fundamentos dados en el dictamen elaborado por la Fiscalía Ge­
+neral de Cámara –a los que el tribunal se remitió– y la apelante no ha 
+acompañado copia de esa pieza, ni ha reproducido sus términos en el 
+marco del recurso extraordinario deducido (conf. sentencia de fecha 
+23 de febrero de 2016, en la causa CCF 5711/2013/1/RH1 “Gallardo, Luis 
+Ángel y otros c/ Telecom S.A. y otro s/ proceso de conocimiento”).
+En tales condiciones, corresponde estar a la doctrina que estable­
+ce que las decisiones de esta Corte, por las que rechaza los recursos 
+de queja por apelación denegada no son, como principio, susceptibles 
+de reposición (Fallos: 302:1319; 316:1706 y sus citas; 317:1688 y 318:2106, 
+entre muchos otros), sin que en el caso se configure algún supuesto 
+excepcional que autorice a apartarse de tal criterio.
+Por ello, se desestima el recurso de reposición. Notifíquese y esté­
+se a lo resuelto a fs. 55.
+Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan 
+Carlos Maqueda.
+
+599
+DE JUSTICIA DE LA NACIÓN
+339
 ```
 
 ---
@@ -4470,6 +5322,156 @@ Tribunal que intervino con anterioridad: Jurado de Enjuiciamiento de Corrientes.
 
 ---
 
+## 342_p122
+
+- **Tomo:** 342 | **wc_cons:** 1197 | **pattern:** unanime
+- **Carátula:** Iñigo, David Gustavo y Otros s/ Privación ilegítima de la libertad
+
+```
+IÑIGO, DAVID GUSTAVO y Otros s/ Privación ilegítima de la
+libertad
+JUICIO CRIMINAL
+En materia criminal, en la que se encuentran en juego los derechos 
+esenciales de la libertad y el honor, deben extremarse los recaudos que 
+garanticen plenamente el ejercicio del derecho de defensa.
+
+123
+DE JUSTICIA DE LA NACIÓN
+342
+DEFENSA EN JUICIO
+El ejercicio de la defensa debe ser cierto, de modo tal que quien sufre un 
+proceso penal ha de ser provisto de un adecuado asesoramiento legal, al 
+extremo de suplir su negligencia en la provisión de defensor aseguran­
+do, de este modo, la realidad sustancial de la defensa en juicio.
+DEBIDO PROCESO
+No basta para cumplir con las exigencias básicas del debido proceso 
+que el acusado haya tenido patrocinio letrado de manera formal, sino 
+que es menester además que aquel haya recibido una efectiva y sustan­
+cial asistencia de parte de su defensor.
+DEFENSA EN JUICIO
+Si el defensor oficial se ha limitado a acompañar un escrito que, por 
+vía de principio, estaría destinado a ser descalificado ante la instancia 
+extraordinaria no solo por incumplimientos extrínsecos, vinculados con 
+la desatención de los requisitos establecidos por el art. 7° de la acordada 
+4/2007, sino, además, con la ausencia casi completa de referencias a la 
+concreta situación procesal de su pupila y a los motivos alegados para 
+la habilitación de la instancia federal en su favor, el tribunal superior 
+debió haber asumido con mayor prudencia la misión que le compete, 
+en orden a tomar a su cargo el aseguramiento de la efectiva tutela de 
+la inviolabilidad de la defensa pues, de otro modo, quedaría completa­
+mente desvirtuado el sentido de la doctrina del Tribunal según la cual 
+los recursos procesales constituyen una facultad del imputado y no una 
+potestad técnica del defensor.
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 26 de febrero de 2019.
+Vistos los autos: “Recurso de hecho deducido por María Azucena 
+Márquez en la causa Iñigo, David Gustavo y otros s/ privación ilegíti­
+ma de la libertad”, para decidir sobre su procedencia.
+
+342
+124
+FALLOS DE LA CORTE SUPREMA
+1°) Que estas actuaciones se inician con la presentación de Ma­
+ría Azucena Márquez, quien manifestó ante el Tribunal su voluntad 
+de impugnar la decisión de la Suprema Corte de Tucumán por la que 
+se habría rechazado su recurso extraordinario –también incoado in 
+pauperis forma– contra la condena recaída a su respecto en la causa 
+“Iñigo, David Gustavo y otros s/ privación ilegítima de la libertad”.
+Según alegó, la peticionaria se encontraría bajo arresto domicilia­
+rio en la Provincia de La Rioja y sin posibilidad material de acceder a 
+las oficinas de la Defensoría Oficial de Tucumán. En cuanto al rechazo 
+del remedio federal que había intentado, no habría sido notificada en 
+forma personal, sino que luego de enterarse por los medios de dicha 
+desestimación, se habría comunicado con la defensa pública oficial 
+que le habría remitido copia de la cédula de notificación respectiva.
+2°) Que con la finalidad de garantizar debidamente el derecho de 
+defensa en juicio de Márquez, el legajo fue remitido a la corte tucu­
+mana a fin de que arbitrara los medios necesarios para que en dicha 
+jurisdicción se fundamentara técnicamente la voluntad recursiva ex­
+presada, de conformidad con el criterio del Tribunal en el caso CSJ 
+746/2011 (47-G)/CS1 “Godoy, Matías Rafael s/ homicidio simple –causa 
+n° 4364-”, del 25 de febrero de 2014.
+3°) Que a pesar de lo ordenado por esta Corte, la presentación en 
+cuestión fue devuelta a esta instancia luego de que en sede provincial 
+se hubiera notificado a un letrado que, según el sistema “Lex doctor”, 
+aparecería como el defensor técnico de la nombrada, pero sin que se 
+hubiera satisfecho la fundamentación reclamada, ni aportado ninguna 
+aclaración o justificación para adoptar este temperamento.
+4°) Que ante el incumplimiento de lo ordenado, se volvió a disponer 
+la remisión de las actuaciones al tribunal superior provincial. Esta vez, 
+el legajo volvió a esta Corte con el escrito suscripto por el Defensor 
+Oficial Penal de Va. Nominación del Centro Judicial Capital de la Pro­
+vincia de Tucumán que obra a fs. 12/15, pero sin que se hubiera dado 
+cumplimiento, siquiera mínimamente, a los recaudos de procedencia 
+para la fundamentación del recurso de queja por denegación de la vía 
+del art. 14 de la ley 48 (cf. acordadas 4/2007 y 38/2011).
+5°) Que esta Corte tiene dicho que en materia criminal, en la que se 
+encuentran en juego los derechos esenciales de la libertad y el honor,
+
+125
+DE JUSTICIA DE LA NACIÓN
+342
+deben extremarse los recaudos que garanticen plenamente el ejerci­
+cio del derecho de defensa (Fallos: 311:2502; 320:854; 321:1424; 325:157; 
+327:3087, 5095; 329:1794).
+La tutela de dicha garantía ha sido preocupación del Tribunal des­
+de sus orígenes, en los que señaló que el ejercicio de la defensa debe 
+ser cierto, de modo tal que quien sufre un proceso penal ha de ser pro­
+visto de un adecuado asesoramiento legal, al extremo de suplir su ne­
+gligencia en la provisión de defensor asegurando, de este modo, la rea­
+lidad sustancial de la defensa en juicio (Fallos: 5:459; 192:152; 237:158; 
+255:91; 311:2502).
+6°) Que, asimismo, corresponde recordar la seriedad con que ha de 
+atenderse a los reclamos de quienes se encuentran privados de su li­
+bertad, los cuales “más allá de los reparos formales que pudieran me­
+recer, deben ser considerados como una manifestación de voluntad de 
+interponer los recursos de ley” (Fallos: 314:1909, entre muchos otros).
+Al respecto, no basta para cumplir con las exigencias básicas del 
+debido proceso que el acusado haya tenido patrocinio letrado de ma­
+nera formal, sino que es menester además que aquel haya recibido 
+una efectiva y sustancial asistencia de parte de su defensor (Fallos: 
+310:1934; 327:103; 331:2520).
+7°) Que tal como se señaló en Fallos: 310:1797 en una materia tan 
+delicada como es la que concierne a la defensa en sede penal los juzga­
+dores están legalmente obligados a proveer lo necesario para que no 
+se produzcan situaciones de indefensión.
+8°) Que en el sub lite el defensor oficial se ha limitado a acom­
+pañar un escrito que, por vía de principio, estaría destinado a ser 
+descalificado ante esta instancia extraordinaria no solo por incumpli­
+mientos extrínsecos, vinculados con la desatención de los requisitos 
+establecidos por el art. 7° de la acordada 4/2007, sino, además, con la 
+ausencia casi completa de referencias a la concreta situación pro­
+cesal de su pupila y a los motivos alegados para la habilitación de la 
+instancia federal en su favor.
+En esas condiciones, el tribunal superior debió haber asumido con 
+mayor prudencia la misión que le compete, en orden a tomar a su cargo
+
+342
+126
+FALLOS DE LA CORTE SUPREMA
+el aseguramiento de la efectiva tutela de la inviolabilidad de la defensa. 
+Pues, de otro modo, quedaría completamente desvirtuado el sentido 
+de la doctrina de este Tribunal según la cual los recursos procesales 
+constituyen una facultad del imputado y no una potestad técnica del 
+defensor (cf. doctrina de Fallos: 327:3802 y sus citas; 329:149; 330:4920).
+Por ello, se resuelve devolver las actuaciones a la Corte Suprema 
+de Justicia de Tucumán a fin de que a la mayor brevedad posible, dé 
+debido cumplimiento a lo ordenado a fs. 4. Remítase copia del legajo 
+al Ministerio Público de la Defensa de la Provincia de Tucumán, a 
+sus efectos.
+Elena I. Highton de Nolasco — Juan Carlos Maqueda — Ricardo 
+Luis Lorenzetti — Horacio Rosatti.
+Recurso de queja deducido por María Azucena Márquez, asistida por el Dr. Hernán E. 
+Molina, Defensor Oficial Penal de 5ª Nominación del Centro Judicial Capital de la 
+Provincia de Tucumán.
+Tribunal de origen: Corte Suprema de Justicia de la Provincia de Tucumán.
+Tribunales que intervinieron con anterioridad: Juzgado de Instrucción Penal de IVa. 
+Nominación; Cámara de Apelaciones en lo Penal de Instrucción; Sala II de la Cá­
+mara Penal, Centro Judicial Capital.
+```
+
+---
+
 ## 342_p1508
 
 - **Tomo:** 342 | **wc_cons:** 124 | **pattern:** unanime
@@ -4512,6 +5514,1306 @@ Pablo Néstor Ibalo.
 Tribunal de origen: Sala VII de la Cámara Nacional de Apelaciones del Trabajo.
 Tribunal que intervino con anterioridad: Juzgado Nacional de Primera Instancia del 
 Trabajo nº 22.
+```
+
+---
+
+## 343_p1181
+
+- **Tomo:** 343 | **wc_cons:** 7268 | **pattern:** unanime
+- **Carátula:** González, Jorge Enrique s/ Recurso extraordinario de inaplicabilidad de ley en causa n° 43.787 y 43.793
+
+```
+GONZÁLEZ, JORGE ENRIQUE s/ Recurso extraordinario
+de inaplicabilidad de ley en causa n° 43.787 y 43.793
+RECURSO EXTRAORDINARIO
+Si bien los pronunciamientos por los cuales los más altos tribunales pro­
+vinciales deciden acerca de los recursos locales que le son llevados a su 
+conocimiento, no son susceptibles de revisión por la vía del recurso ex­
+traordinario, ni tampoco lo son las cuestiones que se suscitan en torno a 
+los hechos y las pruebas aportadas al juicio, ello no es óbice para que la 
+Corte pueda conocer en casos, con base en la doctrina de la arbitrarie­
+dad de sentencias y en resguardo de las garantías constitucionales de 
+debido proceso, defensa en juicio y presunción de inocencia.
+RECURSO EXTRAORDINARIO
+La apelación extraordinaria interpuesta resulta formalmente proceden­
+te si la sentencia impugnada reviste el carácter de definitiva, proviene 
+del tribunal superior de la causa y suscita cuestión federal suficiente en 
+la medida en que se cuestiona que, al fallar en los términos en que lo 
+hizo, el a quo convalidó que el tribunal de casación confirmara una sen­
+tencia condenatoria dictada en violación a derechos constitucionales, 
+en tanto -además- existe relación directa e inmediata entre los agravios 
+constitucionales incoados y el pronunciamiento impugnado, y la deci­
+sión es contraria al derecho federal que invoca el recurrente.
+RECURSO EXTRAORDINARIO
+El incumplimiento del requisito de extensión máxima de la apela­
+ción extraordinaria, previsto en el artículo 1° de la acordada 4/2007, 
+por las singulares condiciones de la causa, carece de entidad para 
+obstar la admisibilidad de la pretensión recursiva (artículo 11 de la 
+acordada citada).
+PROCEDIMIENTO PENAL
+Es objetable que se valore como prueba dirimente de cargo un recono­
+cimiento impropio realizado en inobservancia a la ley procesal, pese a
+
+343
+1182
+FALLOS DE LA CORTE SUPREMA
+estar reunidos los extremos que permitían la localización del imputado 
+para la producción de una rueda de reconocimiento de personas.
+SENTENCIA CONDENATORIA
+Las exigencias incumplidas – en el reconocimiento fotográfico - no re­
+visten el carácter de meras formalidades sino que, desde la perspectiva 
+del derecho de defensa, configuran requisitos estrechamente ligados a 
+la seguridad de la prueba de reconocimiento, toda vez que tanto la rue­
+da de personas como el interrogatorio previo a los testigos que han de 
+practicarlo constituyen verdaderas válvulas de garantía que operan en 
+favor de la exactitud, seriedad y fidelidad del acto en la medida en que 
+tienden a disminuir las posibilidades de error a fin de resguardar la sin­
+ceridad de la identificación.
+DERECHO DE DEFENSA
+El incumplimiento de las exigencias formales dirigidas a resguardar 
+el derecho de defensa del imputado adquieren sustancial relevancia 
+cuando el cuestionado reconocimiento impropio se erige en la prueba 
+por excelencia -o prácticamente exclusiva-para fundar la atribución 
+de culpabilidad respecto del acusado, en especial ante la existencia de 
+indicios concordantes que apuntan en dirección opuesta.
+SENTENCIA ARBITRARIA
+Es arbitraria la sentencia que para afirmar la suficiencia del recono­
+cimiento fotográfico, destacó que el acta policial correspondiente ha­
+bía sido ratificada por el testigo en el juicio, si omitió completamente 
+mencionar que, al hacerlo, el testigo negó haber aportado ciertos de­
+talles relativos a la descripción física del atacante que se encontra­
+ban asentados en el acta; en lo que se revela como una valoración 
+sesgada del testimonio que convalidó una afirmación tendiente a co­
+rroborar la hipótesis de cargo y desatendió a aquella que la ponía en 
+entredicho.
+
+1183
+DE JUSTICIA DE LA NACIÓN
+343
+SENTENCIA ARBITRARIA
+Es arbitraria la sentencia que otorgó suficiencia al reconocimiento fo­
+tográfico si omitió analizar otra aclaración del testigo cuando, en refe­
+rencia al citado reconocimiento fotográfico, destacó que las fotos que le 
+exhibieron fueron tres, de fisonomías muy distintas, pues esta circuns­
+tancia no podía ser obviada por el juzgador al momento de sopesar el 
+valor convictivo del reconocimiento por fotografías realizado, y exigía 
+-cuanto menos- algún desarrollo adicional del tribunal que justificara el 
+peso probatorio que se le terminó asignando a este elemento de cargo.
+SENTENCIA ARBITRARIA
+Es arbitraria la sentencia condenatoria que excluyó todo análisis res­
+pecto al hecho de que ninguno de los testigos presenciales identificara 
+al imputado en los reconocimientos en rueda de personas que se prac­
+ticaron durante la instrucción del caso, ni tampoco en la sala de audien­
+cias en la que se llevó a cabo el juicio oral y público, circunstancia que 
+cobra especial importancia por encontrarse incluido entre ellos, justa­
+mente, el testigo que efectuó el reconocimiento fotográfico impugnado.
+SENTENCIA CONDENATORIA
+Corresponde descalificar la sentencia condenatoria cuya única medida 
+de prueba que culminó con un señalamiento al imputado resultó ser 
+aquella realizada sin contradictorio ni control de las partes, respecto de 
+la cual el propio testigo efectuó ciertos señalamientos que la compro­
+metían y cuando se reprodujo, en rueda de personas y en el debate, su 
+resultado fue negativo, pues es claro que este temperamento no puede 
+ser admitido por la Corte, dado que se funda en razonamientos arbitra­
+rios y, sustantivamente, en una concepción difícilmente compatible con 
+la presunción constitucional de inocencia.
+PRUEBA
+La reconstrucción de los hechos que lleva a cabo el juez penal en sus 
+sentencias presupone -entre otros aspectos- la comparación de las dife­
+rentes pruebas, la evaluación de las condiciones de cada proveedor de 
+prueba respecto de su posibilidad de conocer, su interés en la causa y su 
+compromiso con el acusado o el ofendido.
+
+343
+1184
+FALLOS DE LA CORTE SUPREMA
+SENTENCIA CONDENATORIA
+Tachar los testimonios de “interesados” por la sola razón de haber sido 
+ofrecidos por la defensa, no puede en modo alguno constituir un elemen­
+to fundante válido en el marco del paradigma constitucional vigente; en 
+efecto, semejante preconcepto implica, ni más ni menos, privar de razón 
+de ser y de toda eficacia a la garantía de defensa en juicio reconocida por 
+el artículo 18 de la Constitución Nacional en cuanto establece que es in­
+violable la defensa en juicio de la persona y de los derechos, además de 
+convertir en letra muerta las previsiones específicas del artículo 8.2.f de 
+la Convención Americana sobre Derechos Humanos y del artículo 14.3.e 
+del Pacto Internacional de Derechos Civiles y Políticos.
+DEFENSA EN JUICIO
+Juicio e inviolabilidad de la defensa en juicio se encuentran eslabo­
+nados tan inescindiblemente que resulta indiscutible que las formas 
+sustanciales de la garantía constitucional de la defensa incluyen la de 
+asegurar al imputado la posibilidad de ofrecer prueba de su inocencia 
+o de su derecho, hacer valer sus medios de defensa y producir prueba, 
+proscribiendo los procedimientos que conducen necesariamente a la 
+condena del imputado, porque no le permiten sino la apariencia formal 
+de su defensa.
+SENTENCIA CONDENATORIA
+Constituye un despropósito lógico y nunca puede ser un argumento vá­
+lido para atribuir culpabilidad, que el juez considere mendaz los dichos 
+de un imputado que se limita a negar toda participación en los hechos 
+atribuidos, alegando su inocencia, no se trata de premiar la mentira de 
+un encartado sino de asumir que la tacha de mendacidad exige la exis­
+tencia de una decisión apriorística de culpabilidad basada en pruebas, 
+impidiendo que la misma aseveración del encausado opere como premi­
+sa y conclusión de un mismo razonamiento.
+SENTENCIA CONDENATORIA
+En la medida que se valoró como elemento de cargo el ejercicio en sí 
+mismo del acto más fundamental de la defensa que puede realizar un 
+imputado para resistir la imputación en su contra, como es el predicar
+
+1185
+DE JUSTICIA DE LA NACIÓN
+343
+su inocencia, se debe concluir que tales fundamentos del fallo resultan 
+per se difícilmente compatibles con un ejercicio amplio del derecho de 
+defensa como el que tradicionalmente ha reconocido la Corte.
+PRESUNCION DE INOCENCIA
+Resulta decisivo que el juez, aún frente a un descargo que pudiera esti­
+marse poco verosímil, mantenga una disposición neutral y contemple la 
+alternativa de inocencia seriamente, esto es, que examine la posibilidad 
+de que la hipótesis alegada por el imputado pueda ser cierta; desde esta 
+perspectiva, la presunción de inocencia consagrada en el artículo 18 de 
+la Constitución Nacional puede ser vista, en sustancia, como el reverso 
+de la garantía de imparcialidad del tribunal.
+DEBIDO PROCESO
+El ejercicio del poder punitivo del Estado exige la observancia del de­
+bido proceso legal que, entre otras cuestiones, supone la obtención de 
+prueba en observancia de los derechos fundamentales de los individuos.
+PROCEDIMIENTO PENAL
+Uno de los principales deberes que pesan sobre quienes ejercen la ma­
+gistratura en el fuero penal, no es otro que velar por la legalidad de los 
+procesos judiciales, garantizando que las sentencias no sean el produc­
+to de procedimientos irregulares o directamente ilegales, siempre en 
+resguardo de los derechos fundamentales de los ciudadanos.
+PROCEDIMIENTO PENAL
+A los efectos de impedir la vulneración de la garantía contenida en 
+el artículo 25.1 de la CADH, es preciso que el juzgador, cuando se en­
+frenta a la sospecha fundada de algún vicio sustancial en el origen o 
+producción (fuente) de un elemento probatorio (medio) -y, en espe­
+cial, cuando en el vicio sospechado se vislumbra una posible o alega­
+da violación de los derechos fundamentales- no se limite a analizar el 
+cumplimiento de los aspectos formales establecidos en la normativa 
+procesal aplicable, sino que procure descartar la posible existencia de
+
+343
+1186
+FALLOS DE LA CORTE SUPREMA
+tal vicio a efectos de que tal elemento pueda tener validez y eficacia 
+probatoria en el proceso penal.
+SENTENCIA CONDENATORIA
+Es menester que los tribunales encargados de llevar a cabo la revisión 
+integral de las sentencias cumplan acabada y rigurosamente con su 
+tarea, lo que importa abordar cabalmente las defensas, en correspon­
+dencia con la seriedad y densidad de los indicios o evidencias en que se 
+sustenten, en cumplimiento del derecho al doble conforme, a la doble 
+defensa o revisabilidad de sentencias, consagrado en los artículos 8.2.h 
+de la Convención Americana sobre Derechos Humanos y 14.5 del Pac­
+to Internacional de Derechos Civiles y Políticos, en consonancia con el 
+amplio alcance que ha reconocido la jurisprudencia de la Corte, el que 
+-a su vez- supone un recurso ordinario, accesible y eficaz y constituye 
+un imperativo constitucional en virtud del inciso 22 del artículo 75 de la 
+Constitución Nacional.
+SENTENCIA ARBITRARIA
+Es arbitraria la sentencia del superior tribunal provincial que hizo pro­
+pias las ostensibles deficiencias argumentativas de los decisorios del 
+tribunal de mérito y de casación y, al amparo de un excesivo rigor formal 
+y con base en expresiones dogmáticas y sin contenido, desatendió los 
+antecedentes que hacen a la cuestión fáctica sustancial de la causa y 
+el adecuado estudio de elementos conducentes obrantes en la misma.
+SENTENCIA CONDENATORIA
+La opción en favor de la condena al imputado sobre la base de funda­
+mentos que no aseguraron el debido respeto a la garantía de defensa 
+en juicio y de extremos que carecen de apoyatura en otros elementos 
+de convicción, afecta el principio del in dubio pro reo que deriva de la 
+presunción de inocencia (art. 18 Constitución Nacional y arts. 11.1 de 
+la Declaración Universal de Derechos Humanos y 8.2 de la Convención 
+Americana sobre Derechos Humanos en virtud del art. 75 inc. 22 de la 
+Constitución Nacional), y su no aplicación al caso descalifica al pronun­
+ciamiento como acto jurisdiccional válido.
+
+1187
+DE JUSTICIA DE LA NACIÓN
+343
+SENTENCIA CONDENATORIA
+Dado que la condena se ha basado fundamentalmente en el reconoci­
+miento fotográfico cuestionado, la privación de su calidad de prueba 
+dirimente trae aparejada la imposibilidad de cerrar un juicio de imputa­
+ción penal afianzado en la certeza acerca de la intervención delictiva del 
+recurrente, motivo por el cual el tribunal a quo, al conferir a esos actos 
+procesales tan categórico carácter para confirmar el fallo condenatorio, 
+afectó no sólo el principio de inocencia sino también las garantías cons­
+titucionales de defensa en juicio y del debido proceso.
+Dictamen de la Procuración General
+Suprema Corte:
+-I-
+La Suprema Corte de Justicia de la provincia de Buenos Aires 
+desestimó el recurso con el que la defensa de Jorge Enrique G había 
+impugnado la decisión de la Sala II del Tribunal de Casación Penal 
+bonaerense que confirmó la sentencia que lo condenó como coautor 
+del delito de robo con homicidio resultante y autor de los de amenazas 
+calificadas por el empleo de un arma y portación de arma de guerra y 
+le impuso la pena de veinticinco años de prisión, accesorias legales y 
+costas del proceso.
+Contra ese pronunciamiento, G interpuso recurso extraordinario 
+federal que fue declarado inadmisible por el a quo en virtud del in­
+cumplimiento del requisito de extensión máxima establecido por la 
+acordada no 4/2007 de V.E. (cf. copia del escrito de interposición y del 
+auto denegatorio, fs. 15/59 y 64/vta. respectivamente). Ello motivó la 
+presentación de esta queja que, tras la revocación de la que da cuenta 
+el acta de fs. 2, fue articulada por el Defensor Oficial de Casación de la 
+provincia de Buenos Aires (fs. 70/74 vta.).
+-II-
+El recurso extraordinario objeta el pronunciamiento del a quo en 
+cuanto no atendió los agravios que la defensa alegó respecto del modo 
+en que los magistrados de la cámara de juicio en su sentencia con­
+denatoria, y después los del tribunal de casación al revisar ese fallo, 
+entendieron acreditado que G fue uno de los miembros del grupo que
+
+343
+1188
+FALLOS DE LA CORTE SUPREMA
+cometió el robo que afectó a Mónica L , Josías R C y Analía A en las 
+localidades de Morón y Merlo el 24 de mayo de 2006 y, en particular, 
+quien efectuó el disparo que provocó la muerte de A .Asimismo, im­
+pugna la determinación de la pena, la que -según postula-carecería de 
+fundamentación suficiente.
+La prueba decisiva en la que el tribunal de juicio fundó la conde­
+na por los hechos de robo y homicidio fue el reconocimiento fotográ­
+fico que un testigo del suceso, Enrique Orlando B , realizó en depen­
+dencias policiales a pedido del personal de esa fuerza encargado de 
+la investigación del caso, en el que identificó en una de las imágenes 
+fotográficas que se le exhibieron, a G como aquel que disparó contra 
+A (cf. copia de la sentencia del Tribunal en lo Criminal nº 1 de Morón, 
+fs. 98/231, en particular la quinta cuestión, tratada en fs. 139/165, del 
+expediente nº 43787 del registro de la Sala II del Tribunal de Casación 
+Penal, agregado al legajo de la queja).
+La defensa objetó, por un lado, que el acto en el que B reconoció en 
+la fotografía de G a quien vio disparar contra A sería inválido en razón 
+de que no habría sido notificado debidamente a la defensa.
+Por otra parte, sostuvo que, si fuera tenido por válido, ese recono­
+cimiento fotográfico sería insuficiente para fundar la convicción nece­
+saria para condenar a G , toda vez que, además de la ausencia de con­
+trol por parte de la defensa durante ese acto, debía tomarse en cuenta 
+que B nunca fue capaz de identificar personalmente a G cuando éste 
+fue detenido en virtud de aquel reconocimiento fotográfico; y que la 
+identidad del imputado, al igual que su fotografía, fueron incorporadas 
+al procedimiento, con una explicación no respaldada por pruebas, por 
+los funcionarios policiales encargados de la investigación, quienes al 
+tiempo del debate estaban procesados y en prisión preventiva, acusa­
+dos por delitos vinculados a la manipulación de investigaciones judi­
+ciales cometidos incluso en la instrucción de este mismo proceso.
+El tribunal de casación, al revisar la sentencia condenatoria como 
+consecuencia de la impugnación de -entre otras-la defensa de G , consi­
+deró y respondió esos agravios, en línea con lo que antes había resuelto 
+a ese respecto la cámara de juicio (cf.sentencia de casación, fs. 332/376 
+vta. del ya citado expediente no 43787; en especial, fs. 366/373 vta.).
+En particular, la sala entendió, en primer término, que el acto de 
+reconocimiento fotográfico no era nulo pues, si bien habría existido 
+cierto incumplimiento de una forma procesal local -”la omisión de 
+notificar con la antelación debida”- no constaba que eso le hubiera 
+ocasionado a la parte un perjuicio específico, en el sentido de que “su
+
+1189
+DE JUSTICIA DE LA NACIÓN
+343
+hipotética intervención hubiera provocado alguna modificación en el 
+desarrollo y resultado de la medida en cuestión” (ibídem, fs. 366/367).
+En segundo lugar, consideró que la certeza que el tribunal de juicio 
+afirmó haber logrado en relación con la intervención de G en los he­
+chos que afectaron a L, R C y A, estaba debidamente fundada. Según 
+lo destacó la sala de casación, el tribunal de juicio apoyó su convenci­
+miento no sólo en el reconocimiento fotográfico registrado durante la 
+instrucción, sino en que éste habría sido terminante o categórico, que 
+B habría confirmado durante el juicio lo que figuraba registrado en el 
+acta correspondiente de la instrucción, y que la descripción que ofre­
+ció al prestar su testimonio en el debate coincidía con los rasgos que 
+los magistrados observaron en G. Asimismo, valoró como indicios en 
+favor de la tesis acusatoria la mendacidad que advirtió en el acusado, 
+su actitud evasiva, su intento de fuga cuando las fuerzas de seguridad 
+concurrieron a su domicilio en su búsqueda y, por último, la debilidad 
+de los testimonios que la defensa aportó para intentar acreditar su aje­
+nidad a los hechos.
+A su vez, en relación con la conducta del personal policial que llevó 
+a cabo la investigación preliminar, la sala observó que la sentencia de 
+mérito no había extraído de sus testimonios “ninguna conclusión incri­
+minante”, pues “la condena del nombrado [G] se basó en la identifica­
+ción del testigo B y en los dos indicios antes referidos”.
+Con base en esa valoración, concluyó que “[l]a fuerza convictiva 
+del material probatorio utilizado fue extraída por el juzgador no sólo 
+de su contenido sino del modo en que los testigos respondieron el inte­
+rrogatorio y de las demás circunstancias que pudieron ser apreciadas 
+en el debate, por lo que en la valoración de la prueba no se ha hecho 
+otra cosa que ejercer legítimamente la facultad que la ley otorga a los 
+jueces del juicio para establecer el mérito de las pruebas con la única 
+limitación de la razonabilidad en que funden su decisión” (ibídem, fs. 
+366/373 vta.; los pasajes transcriptos corresponden a fs. 369 y 369 vta.).
+Finalmente, en lo relacionado con el agravio dirigido contra la de­
+terminación de la sanción de prisión, el tribunal de casación obser­
+vó que la cámara de juicio había “individualizado la pena dentro de 
+lo que legítimamente incumbe a sus facultades, y valorado las pautas 
+atenuantes y agravantes propiciadas por las partes así como las que 
+encontró pertinentes, seleccionando luego el monto de pena que juzgó 
+apropiado a la gravedad de los delitos que juzgara”. Y así resolvió que 
+no había error atendible en ese punto (cf. fs. 371 vta./373 vta.; el texto 
+citado corresponde a fs. 373).
+
+343
+1190
+FALLOS DE LA CORTE SUPREMA
+La corte suprema provincial, en la decisión contra la que se diri­
+ge el recurso extraordinario sobre cuya denegación versa la presente 
+queja, desestimó la impugnación que la defensa dedujo contra la sen­
+tencia de casación al entender, con apoyo en una descripción detallada 
+de cómo fueron tratados los agravios planteados en las instancias an­
+teriores, que no existió arbitrariedad en la forma en que las objeciones 
+de la defensa habían sido refutadas (cf. sentencia del tribunal supre­
+mo, ibídem, fs. 527/538, es especial fs.530/534).
+-III-
+Con independencia del incumplimiento del requisito de extensión 
+máxima de la acordada no 4/2007 de la Corte que motivó la denegación 
+de la apelación extraordinaria, y del mérito de los argumentos que al 
+respecto aduce el señor Defensor Oficial en su presentación directa 
+(cf. fs. 70/74), entiendo que -sin perjuicio de la mejor inteligencia que 
+V.E. pueda formular de esa reglamentación-en las singulares condi­
+ciones del sub judice la queja debe ser tratada y, por las razones que 
+indicaré, desestimada.
+Por una parte, por resolución de fecha 3 de agosto de 2017, el Tribu­
+nal en lo Criminal no 1 de Morón declaró extinguida por prescripción 
+la acción penal correspondiente al delito de amenazas agravadas por 
+el uso de arma cometido el 28 de diciembre de 2005 en perjuicio de 
+Matías Javier R , por el que G había sido condenado en este proceso, 
+mediante la sentencia en recurso, junto con los delitos de robo con ho­
+micidio resultante del que fueron víctimas L , R C y A , y portación de 
+arma de guerra (cf. fs. 284/285 vta.). El sobreseimiento parcial dictado 
+con fundamento en esa declaración habría de reflejarse en una modi­
+ficación de la pena de veinticinco años de prisión, accesorias legales y 
+costas que se impuso oportunamente en virtud de la condena recaída 
+en estas actuaciones respecto de G en razón de los tres delitos, tal 
+como lo ha solicitado ante esos estrados la defensa y lo ha hecho saber 
+el tribunal a V.E. (cf. fs. 374/382).
+En tales condiciones, advierto que el agravio que el recurrente 
+esgrime contra la determinación de la pena -no firme-que se le ha 
+impuesto ha perdido actualidad y corresponde, en esa medida y sin 
+menoscabo de cuanto consideraré en la sección IV infra, desestimar 
+la queja de conformidad con el criterio de Fallos: 324:1096 y 325:1440.
+Por lo demás, los plantees del recurrente suscitan el examen de 
+cuestiones sólo vinculadas con la interpretación de normas del dere­
+cho procesal provincial y la valoración de la prueba, que han sido re­
+
+1191
+DE JUSTICIA DE LA NACIÓN
+343
+sueltas con base en fundamentos que, más allá de su acierto o error, 
+son suficientes para asegurar al pronunciamiento el carácter de acto 
+jurisdiccional válido, máxime cuando la parte ha tenido la oportunidad 
+de que sea revisado ampliamente lo decidido en una segunda instancia 
+ordinaria y de someterlo al control ejercido por el tribunal superior de 
+la provincia.
+Debe recordarse que, tal como lo ha sostenido reiteradamente 
+V.E., el recurso extraordinario por arbitrariedad de sentencia es de 
+naturaleza excepcional, pues no le corresponde a la Corte sustituir a 
+los jueces de la causa en temas de prueba y de derecho común que 
+son propios de éstos, salvo que hubieran incurrido en desaciertos u 
+omisiones de gravedad extrema (cf. Fallos: 315:449; 332:2815, entre mu­
+chos otros).
+En tal sentido, es criterio de V.E. que la doctrina de la arbitrariedad 
+no puede ser invocada a fin de provocar un nuevo examen de cuestio­
+nes no federales cuya solución es del resorte exclusivo de los tribu­
+nales de provincia, salvo que se demuestre su notorio desvío de las 
+leyes aplicables o una total ausencia de fundamento, pues esa doctri­
+na no pretende convertir a la Corte en un tribunal de tercera o cuar­
+ta instancia, ni tiene por objeto corregir fallos equivocados, sino que 
+sólo pretende suplir defectos realmente graves de fundamentación 
+o razonamiento que impidan considerar a la sentencia como el acto 
+jurisdiccional al que toda parte en un proceso tiene un derecho cons­
+titucionalmente garantizado (cf. Fallos: 304:106; 312:608; 334:541, entre 
+muchísimos).
+Lo hasta aquí expuesto determina la improcedencia de la queja.
+-IV-
+Ahora bien, durante el dilatado procedimiento del recurso de he­
+cho ante el Tribunal, G y su defensa técnica (cf. fs. 179/180 vta., 254/258 
+y 366/371) y finalmente la fundación Innocence Project Argentina en 
+carácter de amicus curiae (cf. fs. 347/348 y 385/vta.) aportaron al legajo 
+de la queja lo que presentaron como nuevos hechos o elementos de 
+prueba que o bien demostrarían que el condenado no habría cometido 
+el hecho, o bien, al menos, socavarían gravemente las bases de la con­
+vicción de culpabilidad en la que la cámara de juicio fundó la condena.
+En particular, fueron agregadas dos sentencias de tribunales pro­
+vinciales, mediante las que se condenó -entre otras personas- a los 
+funcionarios policiales Carlos Guido G (cf. fs. 76/119 vta.) y Alberto 
+Oscar C (cf. fs. 123/178), a cuyo cargo estuvo la instrucción del pro­
+
+343
+1192
+FALLOS DE LA CORTE SUPREMA
+cedimiento en el que G resultó imputado, quienes fueron hallados 
+culpables de la comisión de delitos vinculados con la tergiversación 
+de investigaciones penales. En especial, dentro de los hechos por los 
+cuales C fue sancionado, se incluyen crímenes realizados junto con 
+otros dos condenados --el también funcionario policial Carlos Alfredo 
+M y Silvio Hipólito C, quien simulaba ser abogado- en la construcción 
+del sumario del proceso al que fue sometido G y respecto de acciones 
+estrechamente vinculadas con su incorporación como sospechoso a la 
+investigación y que revelarían una misma forma de aparente manipu­
+lación de la información.
+También fue aportada la nota del Subprocurador General de la 
+provincia, Juan Ángel de Oliveira, que da cuenta del pedido de inicio 
+del procedimiento de remoción del agente fiscal Alejandro J , respon­
+sable de la investigación preliminar en este proceso, a quien se le atri­
+buyen, entre otros, delitos cometidos en la instrucción de esta causa 
+vinculados con la afectación al caso de algunos de los imputados --en 
+especial, los finalmente también condenados Walter Osvaldo B y Nora 
+Laura C en connivencia con los ya mencionados C y C (cf. fs. 270/280).
+Por último, también fueron arrimados los registros de declaracio­
+nes del testigo Enrique Orlando B, del 6 de septiembre de 2016 en de­
+pendencias de Innocence Project Argentina, y de la condenada como 
+coautora del robo, Nora C, recibida el 26 de octubre de ese mismo año 
+ante la Defensoría de Casación bonaerense y después ante la mencio­
+nada fundación (cf. fs. 347/348, 349,366/371 y 385/vta.).
+B habría sostenido allí que las actas policiales que dan cuenta del 
+reconocimiento fotográfico que él suscribió en sede policial, y que 
+constituyó la evidencia decisiva la que se cimentó la condena de G, no 
+reflejaría la verdad de los hechos, pues él no habría identificado en las 
+fotografías que se le exhibieron a quien vio en la escena del crimen, y 
+que si bien puede reconocer la firma que insertó al pie del acta, no es 
+realmente capaz de leer el texto que ella contiene.
+C, a su tumo, habría afirmado que le consta que G no ha participa­
+do en el hecho por el que fue condenado, que no ha formado parte de la 
+banda que ella lideraba, que realizó el ataque del que fueron víctimas 
+L, R C y A, y que conoce a la persona -que no es G- que disparó contra 
+esta última (cf. fs. 385 vta.).
+El recurrente solicita a V.E. que tome conocimiento de toda esa 
+nueva evidencia y la valore al resolver sobre la admisibilidad de la im­
+pugnación extraordinaria que ha sido llevada a sus estrados (cf. pre­
+sentación de fs. 366/371).
+
+1193
+DE JUSTICIA DE LA NACIÓN
+343
+Si bien siempre es atendible el reclamo de quien sostiene haber 
+sido injustamente condenado por un crimen que dice no haber cometi­
+do, lo cierto es que, sin embargo, corresponde que los magistrados de 
+la provincia en la que el hecho sucedió, produzcan y valoren la eviden­
+cia aducida y -luego- juzguen con base en ella, y de conformidad con el 
+procedimiento que a ese efecto regula la provincia, acerca de la alega­
+da inocencia de G por los delitos comunes por los que ha sido acusado 
+y condenado. Pues sólo una vez fenecida una causa en la jurisdicción 
+provincial puede la Corte tomar conocimiento de ella y únicamente 
+en razón del planteo de una cuestión federal de las enumeradas en el 
+artículo 14 de la ley 48 o, excepcionalmente, en los supuestos extremos 
+de arbitrariedad.
+Es pertinente destacar al respecto que durante el largo trámite de 
+esta queja, el apelante inició una acción de revisión, en los términos de 
+los artículos 467 a 478 del Código Procesal Penal bonaerense, ante la 
+Sala ll del Tribunal de Casación Penal provincial, dirigida a demostrar 
+con base en los nuevos elementos de prueba recolectados, que G no 
+cometió el suceso por el que fue condenado y obtener, de ese modo, 
+su absolución. La petición fue declarada inadmisible, con fecha 11 de 
+julio de 2017, en atención a que se hallaba pendiente de decisión ante 
+V.E. el recurso de hecho sub examine. Los magistrados de casación 
+entendieron que no correspondía hacer excepción -como lo solicita­
+ba el recurrente-al requisito que establece el artículo 467 de la ley de 
+procedimientos local, que establece que la acción de revisión procede 
+“contra las sentencias firmes” (cf. copia de la resolución agregada a la 
+nota que acompaña este dictamen).
+En atención al criterio adoptado por el tribunal provincial de ca­
+sación al interpretar las normas que regulan el procedimiento local 
+-sobre cuyo acierto o error no corresponde abrir juicio aquí-una pronta 
+resolución de esta presentación directa en el sentido que propicio en 
+este dictamen, dejaría expedita la vía procesal que, según lo he dicho, 
+resulta ser la apropiada, de acuerdo con el derecho aplicable, para 
+ventilar la pretensión del recurrente.
+-V-
+En conclusión, y sin perjuicio de lo destacado en la sección IV de 
+este dictamen, entiendo que corresponde desestimar la queja. Buenos 
+Aires, 27 de mayo de 2019. Eduardo Ezequiel Casal.
+
+343
+1194
+FALLOS DE LA CORTE SUPREMA
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 8 de octubre de 2020.
+Vistos los autos: “Recurso de hecho deducido por la defensa de 
+Jorge Enrique González Nieva en la causa González, Jorge Enrique 
+s/ recurso extraordinario de inaplicabilidad de ley en causa n° 43.787 y 
+43.793”, para decidir sobre su procedencia.
+Considerando:
+1°) Que en lo que aquí resulta de interés, la Suprema Corte de Jus­
+ticia de la Provincia de Buenos Aires desestimó el recurso de inaplica­
+bilidad de ley mediante el cual la defensa de Jorge Enrique González 
+Nieva había impugnado la decisión de la Sala II del Tribunal de Casa­
+ción Penal bonaerense, confirmatoria de la sentencia que lo condenó 
+como coautor del delito de robo con homicidio resultante y autor de las 
+amenazas calificadas por el empleo de un arma y portación de arma 
+de guerra, imponiéndole la pena de veinticinco años de prisión, acce­
+sorias legales y costas del proceso.
+Contra el pronunciamiento de la Suprema Corte provincial, la de­
+fensa dedujo recurso extraordinario federal, cuya declaración de inad­
+misibilidad motivó el presente recurso de queja.
+Cabe aclarar que, con posterioridad a ello, el tribunal de juicio de­
+claró extinguida la acción penal correspondiente al delito de amena­
+zas agravadas por el uso de arma y sobreseyó a González Nieva por 
+uno de los hechos por los que se había dictado condena (cfr. resolución 
+fechada el 3 de agosto de 2017, ver fs. 284/287 y 373 del legajo de queja).
+2°) Que en el recurso extraordinario federal interpuesto por la 
+defensa de Jorge Enrique González Nieva se planteó que el a quo 
+habría descartado en forma arbitraria los agravios articulados con­
+tra los fundamentos de las sentencias de la cámara de juicio y del 
+tribunal de casación, en base a los cuales se entendió acreditado que 
+Jorge Enrique González Nieva había participado del robo cometido 
+el 24 de mayo de 2006 en la vía pública por un grupo de individuos, 
+en perjuicio de Mónica Landeiro, Josías Rodríguez Cardoso y Analía 
+Aguerre, en el curso del cual -se concluyó- González Nieva había dis­
+
+1195
+DE JUSTICIA DE LA NACIÓN
+343
+parado a Aguerre, ocasionando su muerte. También se impugnó la 
+determinación de la pena por insuficiente fundamentación (fs. 15/59 
+del presente legajo de queja).
+3°) Que si bien los pronunciamientos por los cuales los más altos 
+tribunales provinciales deciden acerca de los recursos locales que le 
+son llevados a su conocimiento, no son susceptibles de revisión por la 
+vía del recurso extraordinario, ni tampoco lo son las cuestiones que se 
+suscitan en torno a los hechos y las pruebas aportadas al juicio, ello no 
+es óbice para que esta Corte pueda conocer en casos, con base en la 
+doctrina de la arbitrariedad de sentencias y en resguardo de las garan­
+tías constitucionales de debido proceso, defensa en juicio y presunción 
+de inocencia (Fallos: 329:3673; 329:5628; 331:1090; 342:1203; 340:1283).
+En consonancia con ello, la apelación extraordinaria aquí inter­
+puesta resulta formalmente procedente por cuanto la sentencia im­
+pugnada reviste el carácter de definitiva, proviene del tribunal supe­
+rior de la causa y suscita cuestión federal suficiente en la medida en 
+que se cuestiona que, al fallar en los términos en que lo hizo, el a quo 
+convalidó que el tribunal de casación confirmara una sentencia con­
+denatoria dictada en violación de los referidos derechos constitucio­
+nales, en tanto -además- existe relación directa e inmediata entre los 
+agravios constitucionales incoados y el pronunciamiento impugnado, 
+y la decisión es contraria al derecho federal que invoca el recurrente.
+Por lo demás, este Tribunal entiende que el incumplimiento del re­
+quisito de extensión máxima de la apelación extraordinaria, previsto 
+en el artículo 1° de la acordada 4/2007, por las singulares condiciones 
+del sub judice, carece de entidad para obstar la admisibilidad de la 
+pretensión recursiva (artículo 11 de la acordada citada).
+4°) Que tal como se alega en el remedio federal, y se comprueba 
+del examen de las piezas procesales pertinentes, tanto para rechazar 
+los distintos planteos realizados en el marco de la defensa material y 
+técnica de Jorge Enrique González Nieva, como para tener por acredi­
+tada su participación en estos sucesos, dictar sentencia condenatoria 
+y convalidarla, los tribunales intervinientes en las distintas instancias 
+esgrimieron una serie de argumentos que -por los motivos que se de­
+sarrollarán a continuación- resultan incompatibles con el debido pro­
+ceso, la defensa en juicio y, en definitiva, el in dubio pro reo.
+
+343
+1196
+FALLOS DE LA CORTE SUPREMA
+Ello así porque “…respecto de la valoración de la prueba reali­
+za una construcción argumental apartándose de las constancias 
+de la causa; […] desatiende prueba producida al no ponderarla ni 
+confrontarla desde la perspectiva del principio de culpabilidad y de 
+la garantía de presunción de inocencia y…convalida un doble es­
+tándar de valoración probatoria en desmedro de dichos principios 
+cuando efectúa un análisis parcial y sesgado del cúmulo probatorio 
+oportunamente valorado por el tribunal de grado” (Fallos: 342:2319, 
+considerando 9°).
+5°) Que del examen de las actas de debate y de los fundamentos de 
+la sentencia condenatoria surge que, a los fines de la intervención de 
+González Nieva en los hechos, el tribunal oral tuvo especialmente en 
+cuenta que el acusado había sido identificado “categóricamente” en 
+un reconocimiento fotográfico realizado, en sede policial, por el testigo 
+presencial Enrique Orlando Bravo, a menos de dos meses del episodio, 
+y ratificado en el juicio oral. Según el tribunal, Bravo fue “terminante” 
+al sindicar a González Nieva como uno de los miembros de la banda 
+que había perpetrado el robo y como el autor del disparo que ocasionó 
+la muerte de Analía Aguerre (cfr. copia de los acuerdos de fecha 31 de 
+mayo de 2010 del Tribunal Oral en lo Criminal n° 1 de Morón, obrantes 
+a fs. 98/231 y 232/255 del expediente n° 43.787 del registro de la Sala II 
+del Tribunal de Casación Penal, agregado al legajo de la queja, en es­
+pecial los fundamentos detallados a fs. 139/165).
+La defensa cuestionó la validez de esta importante prueba de 
+cargo, señalando que el acto había sido realizado en la dependencia 
+policial y en horario nocturno, sin haberse cumplido con las normas 
+procesales destinadas a garantizar su contralor directo tanto por el 
+imputado, que no fue anoticiado del acto, como por el de la defensa 
+oficial que fue notificada de su realización sin cumplir con la antelación 
+requerida.
+Tanto el tribunal de mérito como el revisor, en criterio convalidado 
+por el a quo, rechazaron estos reproches, aduciendo que no se trataba 
+de un acto irreproducible y que no se había demostrado el perjuicio 
+que la omisión de la adecuada notificación hubiera ocasionado al im­
+putado y a su defensa.
+Estos criterios, en una prueba de cargo decisiva -casi única- y en 
+el contexto de las cuestiones que se desarrollarán en los siguientes
+
+1197
+DE JUSTICIA DE LA NACIÓN
+343
+considerandos, no pueden ser admitidos por esta Corte, por entender 
+que se fundan en una concepción que vacía de contenido el derecho 
+constitucional de defensa en juicio.
+Por un lado, resulta pertinente invocar las consideraciones efec­
+tuadas en Fallos: 329:5556 (“Benítez”) en cuanto a que, en este caso, 
+a riesgo de desnaturalizar el derecho de defensa “no es posible par­
+tir del presupuesto –implícito en el razonamiento del a quo-… [en 
+cuanto a que] dicho contralor resulta ´ex ante inidóneo para lograr, 
+al menos, echar alguna sombra de duda sobre un cuadro probatorio 
+suficiente´”.
+Por otro lado y en particular, lo resuelto desatiende distintos es­
+tándares recogidos en Fallos: 329:5628 (“Miguel”) donde, por un lado, 
+se entendió objetable que se valorara como prueba dirimente de cargo 
+un reconocimiento impropio realizado en inobservancia a la ley proce­
+sal, pese a estar reunidos los extremos que permitían la localización 
+del imputado para la producción de una rueda de reconocimiento de 
+personas, supuesto que esta Corte advierte que también se verifica en 
+este caso, en tanto González Nieva ya había sido sindicado en el legajo 
+por la policía con anterioridad al reconocimiento fotográfico.
+Por su especial correspondencia con el sub judice, cabe también 
+recordar la doctrina del citado precedente, en el que se efectuó una 
+importante consideración vinculada a la directa relación entre el cum­
+plimiento de la reglamentación procesal que prescribe el modo en que 
+deben llevarse a cabo esta clase de medidas y el derecho de defensa, al 
+afirmarse que “…las exigencias incumplidas no revisten el carácter 
+de meras formalidades sino que, desde la perspectiva del derecho de 
+defensa, configuran requisitos estrechamente ligados a la seguridad 
+de la prueba de reconocimiento, toda vez que tanto la rueda de perso­
+nas como el interrogatorio previo a los testigos que han de practicar­
+lo constituyen verdaderas válvulas de garantía que operan en favor 
+de la exactitud, seriedad y fidelidad del acto en la medida en que 
+tienden a disminuir las posibilidades de error a fin de resguardar la 
+sinceridad de la identificación” (considerando 9°).
+En el mismo fallo, esta Corte Suprema destacó que el incumpli­
+miento de las exigencias formales dirigidas a resguardar el derecho 
+de defensa del imputado adquieren “sustancial relevancia” cuando el 
+cuestionado reconocimiento impropio se erige en la prueba por exce­
+
+343
+1198
+FALLOS DE LA CORTE SUPREMA
+lencia -o prácticamente exclusiva- para fundar la atribución de cul­
+pabilidad respecto del acusado (considerando 8°), en especial ante la 
+existencia de indicios concordantes que apuntan en dirección opues­
+ta (considerando 10), aspectos que, como se verá a continuación, re­
+sultan plenamente aplicables a la situación de González Nieva en el 
+sub examine.
+6°) Que más allá del reproche a los argumentos con que se pre­
+tendió dotar de validez al mentado reconocimiento fotográfico, corres­
+ponde revisar aquellos en los que se fundó su suficiencia probatoria a 
+los fines de derribar el estado de inocencia y erigirse como prueba de 
+cargo decisiva de la sentencia condenatoria, tasación convalidada por 
+las decisiones adoptadas en la vía recursiva.
+Para afirmar la suficiencia del reconocimiento fotográfico, el tribu­
+nal oral destacó que el acta policial correspondiente había sido ratifi­
+cada por el testigo Bravo en el juicio, no obstante lo cual omitió com­
+pletamente mencionar que, al hacerlo, el testigo negó haber aportado 
+ciertos detalles relativos a la descripción física del atacante que se 
+encontraban asentados en el acta; en lo que se revela como una valo­
+ración sesgada del testimonio que convalidó una afirmación tendiente 
+a corroborar la hipótesis de cargo y desatendió a aquella que la ponía 
+en entredicho.
+Asimismo, se omitió analizar otra aclaración del testigo cuando, 
+en referencia al reconocimiento fotográfico, destacó “que las fotos que 
+le exhibieron fueron tres, de fisonomías muy distintas” (fs. 130/131 
+ibídem). Esta circunstancia no podía ser obviada por el juzgador al 
+momento de sopesar el valor convictivo del reconocimiento por foto­
+grafías realizado por Bravo, y exigía -cuanto menos- algún desarrollo 
+adicional del tribunal que justificara el peso probatorio que se le termi­
+nó asignando a este elemento de cargo.
+Del mismo modo, se excluyó todo análisis respecto al hecho de que 
+ninguno de los testigos presenciales identificara a Jorge González Nie­
+va en los reconocimientos en rueda de personas que se practicaron 
+durante la instrucción del caso, ni tampoco en la sala de audiencias en 
+la que se llevó a cabo el juicio oral y público (fs. 116/123 y 125/131 ibí­
+dem), circunstancia que cobra especial importancia por encontrarse 
+incluido entre ellos, justamente, el testigo Enrique Bravo.
+
+1199
+DE JUSTICIA DE LA NACIÓN
+343
+Al respecto, el tribunal oral consideró resguardado el derecho de 
+defensa por la sola circunstancia de haberse ordenado y realizado 
+nuevos reconocimientos respecto de González Nieva, y no estimó rele­
+vantes sus resultados negativos, desestimando el hecho que el testigo 
+Bravo no hubiera reconocido al encausado al verlo personalmente ni 
+en el reconocimiento formal en rueda de personas, ni en la sala de 
+audiencias durante el juicio. Se aseveró que esas circunstancias no 
+invalidaban el primer reconocimiento fotográfico. Así, la única medida 
+de prueba que culminó con un señalamiento a González Nieva resultó 
+ser aquella realizada sin contradictorio ni control de las partes, res­
+pecto de la cual el propio testigo efectuó ciertos señalamientos que 
+la comprometían y cuando se reprodujo, en rueda de personas y en el 
+debate, su resultado fue negativo.
+Resulta claro que este temperamento no puede ser admitido por 
+esta Corte, dado que se funda en razonamientos arbitrarios y, sustan­
+tivamente, en una concepción difícilmente compatible con la presun­
+ción constitucional de inocencia. En este punto, se verifican en el sub 
+examine circunstancias análogas a las ponderadas por este Tribunal 
+en Fallos: 339:1493 (“Carrera”) al acoger las quejas de la parte por las 
+que se agraviaba de que se convalidara una condena cuando, frente 
+a las lagunas que presentaba la reconstrucción de los hechos, o bien, 
+ante elementos de prueba ambivalentes, en todos los casos, decidió las 
+dudas en contra de la hipótesis de descargo.
+En efecto, en este caso como en aquel, se cuestiona el valor asig­
+nado a la identificación por fotografías del imputado por parte de un 
+testigo que luego no pudo reconocerlo personalmente, prescindiendo 
+del resultado negativo del reconocimiento en rueda de personas. Cabe 
+destacar, sin embargo, que mientras que en ese precedente la preva­
+lencia del reconocimiento fotográfico se justificó en su mayor cerca­
+nía temporal con los hechos, en el presente caso, en que ese extremo 
+no se verificaba, la pretensa justificación se apoyó someramente en 
+extremos que, en el particular cuadro de autos, no eran dirimentes. 
+Aquí, los resultados contrarios a la hipótesis de cargo han sido deses­
+timados con argumentos inadmisibles y, además, se ha prescindido de 
+analizar las razones que fundaron la necesidad de realizar el segundo 
+reconocimiento (en rueda de personas) o el tercero (en sala de juicio), 
+cuyo análisis era necesario incluso en el supuesto en que se le hubie­
+ra querido asignar mayor fuerza convictiva al primer reconocimiento 
+(por fotografía).
+
+343
+1200
+FALLOS DE LA CORTE SUPREMA
+Por todo ello, cabe concluir que “se está dejando de considerar 
+que, por buenas razones, se estimó necesario realizar por segunda 
+vez una medida similar, cuyo resultado, en principio, no podría ser 
+descartado como se lo hizo. Pues, de otro modo, el segundo reconoci­
+miento, o bien era totalmente superfluo, o bien, cualquiera fuera su 
+resultado, siempre sería valorado en contra del imputado” (Fallos: 
+339:1493, considerando 20).
+7°) Que el tribunal de mérito, a los fines de validar la identificación 
+derivada del reconocimiento fotográfico, también aseveró que las ca­
+racterísticas fisonómicas del homicida referidas por el testigo Bravo 
+(“contextura física delgada, rostro ´chupado´, de 1.70 metros de es­
+tatura aproximadamente”) coincidían, años después, “con González 
+Nieva, a quién pudimos observar personalmente a lo largo de varias 
+jornadas que duró el juicio” (fs. 164 ibídem).
+Si bien esta conclusión quedaba exenta de toda revisión posterior 
+por encontrarse estrechamente vinculada a la inmediación propia de 
+los procedimientos orales, no debió ser invocada, ni convalidada en 
+decisiones posteriores, sin explicar el modo en que podía superarse 
+la generalidad de estas características para calibrar y sustentar una 
+individualización efectivamente certera, ni sopesar esta aseveración 
+en forma integrada con otra circunstancia insoslayable: más allá de 
+la coincidencia de rasgos fisonómicos que pudiera advertir el tribunal, 
+lo cierto es que en oportunidad de tenerlo enfrente, el testigo Enrique 
+Bravo, quien había procurado la descripción sobre la que argumenta­
+ba el tribunal, no identificó a Jorge González Nieva como el autor de 
+los hechos investigados (fs. 129/131 y 137 ibídem).
+8°) Que, a las severas falencias en la argumentación en torno a la 
+valoración del mentado reconocimiento fotográfico, cabe agregar la cir­
+cunstancia de que el resto de la evidencia producida en el debate no solo 
+no refuerza su peso convictivo, sino que, por el contrario, se lo resta.
+Al respecto, vale recordar que en el sub examine no se obtuvo prue­
+ba forense que vincule físicamente a González Nieva con los hechos de 
+la condena, ni tampoco pudo establecerse vinculación entre las perso­
+nas identificadas como miembros de la banda que cometió el robo y el 
+encartado González Nieva. Así lo declararon todos los preventores (fs. 
+34, 139/151 ibídem) y lo destacó uno de los coimputados, Walter Balcaza, 
+quien negó conocer a González Nieva (fs. 63/64 y 176 ibídem).
+
+1201
+DE JUSTICIA DE LA NACIÓN
+343
+9°) Que, asimismo, tanto los descargos realizados por González 
+Nieva, como la prueba testimonial producida en su favor que los avala­
+ban, fueron descartados en la sentencia de mérito -en temperamento 
+convalidado posteriormente en las sucesivas instancias judiciales- con 
+base en fundamentos que, en su propia formulación, son inadmisibles 
+por ser directamente contrarios a las fundamentales garantías del in 
+dubio pro reo y defensa en juicio.
+Puntualmente, la defensa aportó dos testigos, Víctor Brizuela y 
+Dolores Concepción Benega, tendientes a acreditar que, al momento 
+de los hechos, Jorge González Nieva se encontraba en otro lugar y, por 
+lo tanto, era ajeno a su comisión. No obstante ello, sus testimonios fue­
+ron descartados aduciendo que, además de no ser concluyentes por no 
+haber sido expresados con suficiente certeza, constituían testigos in­
+teresados por haber sido propuestos por la defensa y porque esta, “…
+en vez de llevarlas a concurrir a prestar declaración ante la autori­
+dad competente, se eligió como lugar para preservar sus narrativas 
+una escribanía… lo que le quita credibilidad e imparcialidad” (fs. 
+164/165 ibídem). El tribunal de casación confirmó estas apreciaciones, 
+señalando que las mismas no merecían reparos, ni se advertían vicios 
+lógicos, destacando que su tarea estaba limitada por la falta de inme­
+diación (fs. 370 y 371 ibídem).
+En primer lugar, vale poner de resalto que esta Corte Suprema, 
+en Fallos: 328:3399 (“Casal”), advirtió que la reconstrucción de los he­
+chos que lleva a cabo el juez penal en sus sentencias presupone -en­
+tre otros aspectos- la comparación de las diferentes pruebas, la eva­
+luación de las condiciones de cada proveedor de prueba respecto de 
+su posibilidad de conocer, su interés en la causa y su compromiso con 
+el acusado o el ofendido (conf. especialmente, considerando 30 del 
+voto de la mayoría). Asimismo, frente al sector doctrinario que mag­
+nificaba lo que es puro producto de la inmediación, el Tribunal preci­
+só que “Si bien esto sólo puede establecerse en cada caso, lo cierto 
+es que, en general, no es mucho lo que presenta la característica de 
+conocimiento exclusivamente proveniente de la inmediación. Por 
+regla, buena parte de la prueba se halla en la propia causa regis­
+trada por escrito, sea documental o pericial. La principal cuestión, 
+generalmente, queda limitada a los testigos. De cualquier manera, 
+es controlable por actas lo que éstos deponen. Lo no controlable es 
+la impresión personal que los testigos pueden causar en el tribunal, 
+pero de la cual el tribunal debe dar cuenta circunstanciada si pre­
+
+343
+1202
+FALLOS DE LA CORTE SUPREMA
+tende que se la tenga como elemento fundante válido, pues a este 
+respecto también el tribunal de casación puede revisar criterios; 
+no sería admisible, por ejemplo, que el tribunal se basase en una 
+mejor o peor impresión que le cause un testigo por mero prejuicio 
+discriminatorio respecto de su condición social, de su vestimenta, 
+etc.” (considerando 25 del voto de la mayoría).
+Del examen de las razones consignadas para descartar las versio­
+nes de los testigos de descargo -temperamento avalado en las posterio­
+res decisiones-, cabe concluir que estas no se ajustan a esas premisas.
+En efecto y en contraposición con lo sostenido por los jueces de 
+casación, no cabía fundar el demérito de estos testimonios en razones 
+ligadas a la inmediación de la prueba producida en el juicio -que efec­
+tivamente los hubiera colocado al amparo de controles posteriores- 
+y, por lo tanto, nada impedía la amplia revisión de los razonamientos 
+lógicos de la sentencia y del procedimiento de valoración probatoria.
+Asimismo, la falta de asertividad atribuida a estos testimonios por 
+el tribunal de mérito contradice abiertamente el contenido de las de­
+claraciones que el propio tribunal transcribe en el acta de debate y en 
+la sentencia, conforme las cuales, al momento de los hechos, González 
+Nieva se encontraba en la peluquería de Brizuela. Ello así, toda vez 
+que más allá de algunas expresiones vacilantes, ambos testimonios 
+permitirían datar los acontecimientos referidos en base a un mismo 
+episodio que toman como referencia: un acto escolar realizado el día 
+de los hechos (cfr. fs. 37/38 y 162/164 ibídem). A punto tal que la testigo 
+Banega declaró, conforme se consignó en la propia sentencia conde­
+natoria, que “…cuando se enteró que el citado se encontraba dete­
+nido, pensó que era imposible que estuviera a la vez en dos lados, 
+dado que ella lo vio a la misma hora en que se produjo la salidera 
+bancaria” (fs. 162/163).
+Por otro lado, la circunstancia invocada para restar credibilidad 
+a estos testimonios -esto es, que inicialmente fueron prestados ante 
+escribano público- soslaya la circunstancia de que ambos testigos de­
+clararon también ante las autoridades judiciales bajo juramento y de 
+conformidad con las reglas que rigen este tipo de medio probatorio.
+Finalmente, tachar estos testimonios de “interesados” por la sola 
+razón de haber sido ofrecidos por la defensa, no puede en modo alguno
+
+1203
+DE JUSTICIA DE LA NACIÓN
+343
+constituir un “elemento fundante válido” en el marco del paradigma 
+constitucional vigente. En efecto, semejante preconcepto implica, ni 
+más ni menos, privar de razón de ser y de toda eficacia a la garantía 
+de defensa en juicio reconocida por el artículo 18 de la Constitución 
+Nacional en cuanto establece que “es inviolable la defensa en juicio 
+de la persona y de los derechos”. Además, ello importa, también, con­
+vertir en letra muerta las previsiones específicas del artículo 8.2.f de 
+la Convención Americana sobre Derechos Humanos en cuanto con­
+sagra que “…toda persona inculpada de delito tiene derecho […] en 
+plena igualdad, a las siguientes garantías mínimas: […] derecho de 
+la defensa de interrogar a los testigos presentes en el tribunal y de 
+obtener la comparecencia, como testigos o peritos, de otras personas 
+que puedan arrojar luz sobre los hechos” y del artículo 14.3.e del Pacto 
+Internacional de Derechos Civiles y Políticos que establece que “…du­
+rante el proceso, toda persona acusada de un delito tendrá derecho, 
+en plena igualdad, a las siguientes garantías mínimas: […] interro­
+gar o hacer interrogar a los testigos de cargo y a obtener la compa­
+recencia de los testigos de descargo y que éstos sean interrogados en 
+las mismas condiciones que los testigos de cargo”.
+Por tal motivo, esta Corte Suprema, en su calidad de custodio de los 
+derechos y garantías constitucionales, debe recordar con vehemencia 
+que “…juicio e inviolabilidad de la defensa en juicio se encuentran 
+eslabonados tan inescindiblemente” que resulta indiscutible que “las 
+formas sustanciales de la garantía constitucional de la defensa in­
+cluyen la de asegurar al imputado la posibilidad de ofrecer prueba de 
+su inocencia o de su derecho […] hacer valer sus medios de defensa 
+y producir prueba, proscribiendo los procedimientos que conducen 
+necesariamente a la condena del imputado, porque no le permiten 
+sino la apariencia formal de su defensa” (Fallos: 316:2940).
+Asimismo, debe remarcarse que el criterio aquí criticado por 
+tornar vacuo el ejercicio de una garantía constitucional tan funda­
+mental también debe ser enérgicamente censurado porque, al dejar 
+inerme al imputado para poder resistir eficazmente la acusación, 
+atenta contra “…el ‘principio de igualdad de armas’ que, como 
+parte del derecho al debido proceso y a la defensa en juicio, asiste 
+a toda persona inculpada de delito (arts. 8.2. del Pacto de San José 
+de Costa Rica y 14.2. del Pacto Internacional de Derechos Civiles 
+y Políticos)” (Fallos: 328:3233).
+
+343
+1204
+FALLOS DE LA CORTE SUPREMA
+10) Que, asimismo, por necesaria derivación de las consideracio­
+nes expuestas en el anterior considerando, debe también reprobar­
+se que, en el fallo de mérito, en temperamento convalidado durante 
+el ulterior tramo recursivo, se fundara la condena de González Nieva 
+sosteniendo que constituía indicio de cargo “…el de mendacidad, ne­
+gando el hecho ante prueba tan directa que lo compromete”.
+Ello, toda vez que configura un argumento circular y de una lógica 
+inaceptable, al considerar como elemento de cargo los dichos del en­
+causado González Nieva al mantener su ajenidad al hecho atribuido. 
+En efecto, constituye un despropósito lógico y nunca puede ser un ar­
+gumento válido para atribuir culpabilidad, que el juez considere men­
+daz los dichos de un imputado que se limita a negar toda participación 
+en los hechos atribuidos, alegando su inocencia. No se trata de premiar 
+la mentira de un encartado sino de asumir que la tacha de mendacidad 
+exige la existencia de una decisión apriorística de culpabilidad basada 
+en pruebas, impidiendo que la misma aseveración del encausado ope­
+re como premisa y conclusión de un mismo razonamiento.
+Resulta claro así que, en la medida que se valoró como elemento 
+de cargo el ejercicio en sí mismo del acto más fundamental de la de­
+fensa que puede realizar un imputado para resistir la imputación en su 
+contra, como es el predicar su inocencia, se debe concluir que “…tales 
+fundamentos del fallo resultan per se difícilmente compatibles con 
+un ejercicio amplio del derecho de defensa como el que tradicional­
+mente ha reconocido esta Corte” (Fallos: 339:1493, considerando 19).
+11) Que también debe censurarse, por contrario al principio de in 
+dubio pro reo, el indicio de cargo valorado en el fallo de mérito, con­
+validado durante el ulterior tramo recursivo, consistente en que las 
+circunstancias en las que se produjo la detención del imputado consti­
+tuían un “…indicio de peso que concurre a sellar la suerte de Gonzá­
+lez” ya que “…si tan inocente se creía debió concurrir ante la autori­
+dad a aclarar su situación y no poner pies en polvoroza (sic)”.
+Frente a las explicaciones vertidas al respecto por el imputado, 
+los propios términos con que fue formulada dicha conclusión resul­
+tan particularmente problemáticos de cara a la mentada garantía por 
+cuanto, como ha dicho esta Corte Suprema “…resulta decisivo que el 
+juez, aún frente a un descargo que pudiera estimarse poco verosí­
+mil, mantenga una disposición neutral y contemple la alternativa de
+
+1205
+DE JUSTICIA DE LA NACIÓN
+343
+inocencia seriamente, esto es, que examine la posibilidad de que la 
+hipótesis alegada por el imputado pueda ser cierta. Desde esta pers­
+pectiva, la presunción de inocencia consagrada en el artículo 18 de 
+la Constitución Nacional puede ser vista, en sustancia, como el re­
+verso de la garantía de imparcialidad del tribunal” (Fallos: 339:1493, 
+considerando 22).
+12) Que, en este punto, corresponde detenerse en circunstan­
+cias relativas a la primera etapa de investigación del caso, que la 
+defensa puso oportunamente de resalto no obstante lo cual, con ar­
+gumentos que se analizarán más adelante, fueron soslayadas por 
+el tribunal de mérito y, luego, por las decisiones que afirmaron la 
+sentencia de condena.
+Se advierten contradicciones flagrantes entre lo declarado por el 
+agente policial Alberto Casco y distintas piezas probatorias, circuns­
+tancia que pone en tela de juicio el camino investigativo que derivó en 
+la irrupción de Jorge González Nieva en el expediente y la producción 
+de la única prueba de cargo relevante en su contra: el reconocimiento 
+fotográfico en sede policial.
+En efecto, surge de las actas de audiencia del debate oral que, con 
+fecha 18 de julio de 2006, a menos de dos meses del hecho, el -entonces- 
+subteniente Alberto Casco declaró que “…continuando con las tareas 
+investigativas a fin de lograr el total esclarecimiento del presente 
+hecho con la debida cobertura y contando con información fidedig­
+na estableció que N.N. ‘Funfa’, responde al nombre de Jorge Enrique 
+González, y que el mismo se afinca en…”. Así reza el acta obrante a fs. 
+397, firmada por el declarante, el -entonces- capitán Carlos Genel y por 
+un sumariante (fs. 34/35 ibídem). De las actuaciones se desprende que, 
+ese mismo día, se incluyó la fotografía de González Nieva en el conjun­
+to de imágenes que le exhibieron al testigo Bravo, materializándose 
+el mentado reconocimiento fotográfico sobre el cual, como ya se sabe, 
+se erigió la condena de González Nieva y el acta quedó agregada a fs. 
+401 (en referencia a la medida asentada en el acta obrante a fs. 401/401 
+vta., respecto de las fotografías glosadas a fs. 493/494, de la causa 2757 
+del registro del Tribunal Oral en lo Criminal n° 1 del Departamento 
+Judicial de Morón, Provincia de Buenos Aires; fs. 130/131 ibídem).
+En oportunidad de explicar la fuente de la información incorpo­
+rada en esa declaración testimonial, Casco aseveró que mantuvo una
+
+343
+1206
+FALLOS DE LA CORTE SUPREMA
+conversación con Bravo, quien le refirió que la persona que había dis­
+parado contra Aguerre era un sujeto rubio, teñido de rubio, con clari­
+tos, que vivía cerca del lugar de los hechos, se dedicaba a las “salide­
+ras bancarias”, se apodaba “Funfa”, pero se trataba de Jorge Enrique 
+González (fs. 150/152 ibídem). También explicó que: “…fue el Capitán 
+Genel quien redactó el acta de fojas 397/vta. que el deponente firma­
+ra, desconociendo el por qué no se volcó en el acta que la información 
+acerca de ‘Funfa’ fue brindada por el albañil”, en referencia a Bravo, 
+así como que “…no se había volcado lo que él había escuchado por­
+que él no hizo el acta”, que “…el no compartía lo que firmó, porque 
+no estaban seguros”, pero que el contenido relativo a la identificación 
+de “Funfa” como González Nieva “…se ajusta a la verdad” (fs. 34/35 y 
+155/156 ibídem).
+Ahora bien: por un lado, de los dichos de Enrique Bravo se des­
+prende que no conocía a ninguno de los autores del hecho que pre­
+senció y, en el juicio, afirmó no haberse fijado en el color de cabello de 
+la persona que disparó contra Aguerre (fs. 129/131 ibídem), mientras 
+que el otro testigo presencial de los hechos, Alejandro Zamorano, de­
+claró que el cabello era negro (fs. 127/131 ibídem). Por otro lado, el 
+capitán Genel contradijo a Casco al señalar que el acta había sido 
+redactada por el oficial Yacante, afirmó no haber aportado informa­
+ción alguna a los fines de identificar a sospechosos del hecho y negó 
+conocer la fuente que le aportó al policía Casco la identidad del sujeto 
+apodado “Funfa” (fs. 35/36 y 159 ibídem). Por lo demás, los restantes 
+policías que declararon en el juicio también negaron conocer el ca­
+mino investigativo que había permitido identificar a González Nieva 
+como autor del hecho (ver testimonios de Hugo Marcelo López y Os­
+car Daniel Quiroga, fs. 139/149 ibídem).
+Lo cierto es que la información que introduce el nombre de Gon­
+zález Nieva en esta investigación quedó asentada en una declaración 
+testimonial del policía Alberto Casco y su confusa versión sobre el 
+modo en que fue obtenida presenta severas contradicciones, tanto con 
+el testimonio de su superior Carlos Genel, como de quien invoca como 
+fuente de esos datos, Enrique Bravo. Ello lleva a preguntarse por qué, 
+si Bravo conocía a González Nieva como “Funfa” y podía describirlo, 
+no lo identificó como tal durante el reconocimiento fotográfico, nunca 
+lo reconoció en persona, ni lo mencionó en ninguna de sus declaracio­
+nes testimoniales. Como así también surge el interrogante de porqué, 
+al declarar ante el tribunal, el testigo Bravo no fue interrogado sobre
+
+1207
+DE JUSTICIA DE LA NACIÓN
+343
+su conocimiento respecto del sujeto apodado “Funfa” o sobre si efecti­
+vamente le había brindado esa información al agente Casco, como este 
+último alega.
+En este cuadro de contradicciones, cabe recordar que el recono­
+cimiento fotográfico que, al final, se convertiría en la principal pieza 
+de cargo en contra del imputado González Nieva, fue llevado a cabo, 
+justamente, por el agente Casco, bajo la supervisión del capitán Genel 
+(fs. 34/36 y 159 ibídem).
+Al respecto, corresponde recordar lo sostenido en torno a la noti­
+ficación de la medida y el modo en que se practicó según el relato del 
+testigo (v. gr. las fisonomías de las fotografías exhibidas). Asimismo, 
+cabe destacar que tampoco se aprecia en las actuaciones una explica­
+ción coherente de los motivos por los que esta medida de prueba fue la 
+única en su tipo materializada durante la instrucción policial del caso, 
+siendo que los restantes testigos presenciales e imputados participa­
+ron directamente de reconocimientos en rueda de personas. En orden 
+a ello, tal como se adelantó y sin que importe desconocer el valor de 
+las identificaciones por fotografía, en la medida en que la instrucción 
+contaba con datos suficientes para la localización y citación de Gonzá­
+lez Nieva, no se observa -a priori- ningún impedimento ni se conoce 
+ninguna situación excepcional que explique las razones por las cuales 
+los preventores eligieron realizar esta medida con el testigo Bravo y 
+la fotografía de González Nieva, en lugar de llevar a cabo un reconoci­
+miento en rueda de personas.
+El hecho de que ninguno de estos interrogantes haya sido respon­
+dido por el tribunal de mérito, ni abordado en lo sucesivo a pesar de 
+los planteos de la defensa, debilita fatalmente la fundamentación de la 
+condena dictada con respecto de González Nieva.
+13) Que, en atención a las circunstancias reseñadas en los consi­
+derandos precedentes, resulta especialmente reprochable la posición 
+adoptada en la sentencia de mérito -y convalidada a lo largo del tramo 
+recursivo-, sobre todo, al ponderarse el alarmante contexto de serias 
+irregularidades en el que la defensa articuló sus cuestionamientos.
+Al respecto, cabe recordar que, al momento del debate oral, efec­
+tivos policiales que tuvieron un rol central en la instrucción del caso 
+(entre ellos, los ya mencionados capitán Carlos Genel y agente Alberto
+
+343
+1208
+FALLOS DE LA CORTE SUPREMA
+Casco), se encontraban detenidos y bajo proceso por distintos hechos 
+delictivos que involucraban la adulteración y manipulación de infor­
+mación y pruebas en sus investigaciones policiales y la fabricación de 
+imputaciones con fines extorsivos, entre otras cuestiones.
+Específicamente, Alberto Casco estaba siendo investigado por 
+este tipo de conductas ocurridas en el marco de esta misma investi­
+gación policial, es decir, de la investigación del robo sufrido por Josías 
+Rodríguez Cardoso y el homicidio de Analía Aguerre. Sin profundizar 
+en esos hechos, vale resaltar, por ejemplo, que Walter Balcaza, coim­
+putado de González Nieva y también condenado en ese juicio por el 
+mentado robo, tanto ante el tribunal de mérito como en otras instan­
+cias posteriores denunció a varios policías -entre ellos, a Casco-, así 
+como al primer agente fiscal del caso Alejandro Jons y a Silvio Hipólito 
+Cascella quien, haciéndose pasar por abogado, asumió su defensa. De 
+hecho, Alberto Casco fue detenido mientras se encontraba viviendo en 
+un inmueble cedido por Balcaza tres meses después de estos hechos 
+(ver fs. 63/66 y 167/178 ibídem). En la misma línea, y como ya se señaló, 
+el propio González Nieva declaró ante los jueces sentenciantes que el 
+policía Casco le había exigido que le entregara su automóvil “taxi” y 
+que su negativa había contribuido a mantenerlo imputado y detenido 
+(fs. 95/96 ibídem).
+Si bien las severas condenas impuestas a estos efectivos policiales, 
+tal como lo acreditó el recurrente ante la Suprema Corte bonaerense 
+(ver fs. 1/103 del anexo al expediente agregado al presente legajo de 
+queja) serían sobrevinientes, lo cierto es que al momento del debate 
+oral y público el tribunal de mérito ya se encontraba en conocimiento 
+de estas graves y múltiples imputaciones.
+Pese a todo, el tribunal oral consideró que las referidas circuns­
+tancias no restaban credibilidad a la imputación dirigida contra Jorge 
+González Nieva, por cuanto entendió que se trataba de “…hipótesis 
+aún no confirmadas judicialmente…”, sobre las cuales “…hasta aho­
+ra, nada se comprobó…” (fs. 166/167 ibídem), incluso cuando, en la 
+propia sentencia de mérito, se tuvo por acreditado el desprendimien­
+to patrimonial de Balcaza “…a favor de terceros no deseados” en el 
+marco de sus denuncias en contra de “…funcionarios sospechosos de 
+irregularidades” (fs. 184/185). Con base en esos argumentos, se sosla­
+yó analizar las implicancias que podían desprenderse de este anormal 
+cuadro de situación.
+
+1209
+DE JUSTICIA DE LA NACIÓN
+343
+Dicho de otro modo, resultaba imperativo que el tribunal de mé­
+rito analizase el planteo de la parte, atendiendo al grave contexto de 
+irregularidades que afectaba la legitimidad del proceso, el cual no sur­
+gía únicamente de los dichos de los imputados, sino también -como se 
+mencionó- de la circunstancia de que los preventores encargados de 
+la pesquisa acudieron al debate procesados con prisión preventiva por 
+graves delitos vinculados a sus funciones e, incluso, a los hechos del 
+caso, así como del sospechoso desprendimiento patrimonial del impu­
+tado Balcaza en favor del agente policial a cargo de la investigación y 
+de las notorias inconsistencias entre los dichos de los preventores y la 
+prueba producida durante el plenario.
+14) Que al decidir del modo en que lo hizo, el tribunal oral desaten­
+dió uno de los principales deberes que pesan sobre quienes ejercen la 
+magistratura en el fuero penal, que no es otro que velar por la legalidad 
+de los procesos judiciales, garantizando que las sentencias no sean el 
+producto de procedimientos irregulares o directamente ilegales, siem­
+pre en resguardo de los derechos fundamentales de los ciudadanos.
+Ello se deriva de la garantía de debido proceso legal, consagrada 
+en el recaudo del artículo 18 de la Constitución Nacional, que estable­
+ce: “Ningún habitante de la Nación puede ser penado sin juicio pre­
+vio fundado en ley anterior al hecho del proceso”. Bajo esta manda 
+constitucional, el ejercicio del poder punitivo del Estado exige la ob­
+servancia del debido proceso legal que, entre otras cuestiones, supone 
+la obtención de prueba en observancia de los derechos fundamentales 
+de los individuos.
+Lo aseverado respecto de la garantía constitucional de debido pro­
+ceso legal se relaciona, a la luz del presente caso, con lo establecido 
+en el artículo 25.1 de la Convención Americana sobre Derechos Huma­
+nos, en cuanto impone a los “jueces y tribunales competentes” la obli­
+gación de amparar a todas las personas “…contra actos que violen 
+sus derechos fundamentales reconocidos por la Constitución, la ley o 
+la presente Convención, aun cuando tal violación sea cometida por 
+personas que actúen en ejercicio de sus funciones oficiales”.
+Así las cosas, y a los efectos de impedir la vulneración de la garan­
+tía contenida en el artículo 25.1 de la CADH, es preciso que el juzgador, 
+cuando se enfrenta a la sospecha fundada de algún vicio sustancial 
+en el origen o producción (fuente) de un elemento probatorio (medio)
+
+343
+1210
+FALLOS DE LA CORTE SUPREMA
+-y, en especial, cuando en el vicio sospechado se vislumbra una posi­
+ble o alegada violación de los derechos fundamentales- no se limite 
+a analizar el cumplimiento de los aspectos formales establecidos en 
+la normativa procesal aplicable, sino que procure descartar la posible 
+existencia de tal vicio a efectos de que tal elemento pueda tener vali­
+dez y eficacia probatoria en el proceso penal. Asimismo, y en aras de 
+salvaguardar el derecho de defensa del imputado, este análisis efec­
+tuado por el juzgador debe ser reflejado en una decisión motivada, ya 
+sea durante el proceso o en la propia sentencia de mérito.
+15) Que los deberes y principios aquí mencionados también fueron 
+incumplidos por el tribunal de casación, en cuanto convalidó el deciso­
+rio de mérito por entender que “…ninguna conclusión incriminante” 
+se había extraído de los testimonios del personal policial (fs. 369/369 
+vta. ibídem), desconociendo las implicancias de la actuación policial 
+conforme las constancias del caso.
+Más aún, al así decidir, se vulneró el derecho a la amplia revisión de 
+las sentencias reconocido por este Tribunal a partir de Fallos: 328:3399 
+(“Casal”), que garantiza la realización del máximo de esfuerzo en el 
+contralor e importa el agotamiento de la capacidad de revisión o ren­
+dimiento, es decir, la realización del esfuerzo por revisar todo lo que 
+pueda revisar en cada caso (cf. en especial, considerandos 23 a 25 del 
+voto de la mayoría).
+En el contexto de las particulares circunstancias del sub judice, 
+el adecuado cumplimiento del citado estándar conllevaba analizar en 
+profundidad el modo en que el tribunal de mérito había tratado –o, en 
+el caso, soslayado tratar- los serios y concretos indicios vinculados a 
+irregularidades que, se denunció, habían tenido lugar durante la ins­
+trucción, circunstancias en que la defensa afirmó su alegato de “causa 
+armada”, y que oportunamente planteó ante el tribunal de casación.
+Nada de ello ocurrió en el sub examine, donde en función de todo 
+lo expuesto no cabe más que concluir que se descartó el compromiso 
+con esta garantía, predicando en forma abstracta la falta de perjuicio 
+que las mencionadas inobservancias procesales causaron a la parte 
+y soslayando ponderar, en forma palmaria, las implicancias que, para 
+esta cuestión podían aparejar las graves irregularidades endilgadas 
+a las autoridades que intervinieron durante toda la investigación -en 
+especial durante la realización del reconocimiento fotográfico de Gon­
+
+1211
+DE JUSTICIA DE LA NACIÓN
+343
+zález Nieva, efectuado sin contralor de la parte- las que fueran de­
+nunciadas por el imputado y su defensa técnica en los términos antes 
+mencionados, y que incluso dieron lugar a procesos de responsabili­
+dad penal y disciplinarios que, tramitados en esa jurisdicción local en 
+forma paralela al presente proceso, fueron corroborando el accionar 
+ilícito de aquellos.
+Es menester que los tribunales encargados de llevar a cabo la revi­
+sión integral de las sentencias cumplan acabada y rigurosamente con 
+su tarea, lo que importa abordar cabalmente este tipo de defensas, 
+en correspondencia con la seriedad y densidad de los indicios o evi­
+dencias en que se sustenten, en cumplimiento del derecho al doble 
+conforme, a la doble defensa o revisabilidad de sentencias, consagrado 
+en los artículos 8.2.h de la Convención Americana sobre Derechos Hu­
+manos y 14.5 del Pacto Internacional de Derechos Civiles y Políticos, 
+en consonancia con el amplio alcance que le ha venido reconociendo la 
+citada jurisprudencia de esta Corte Suprema (Fallos: 328:3399; 337:901, 
+entre otros), el que -a su vez- supone un recurso ordinario, accesible y 
+eficaz y constituye un imperativo constitucional en virtud del inciso 22 
+del artículo 75 de la Constitución Nacional.
+16) Que el análisis realizado en los considerandos precedentes per­
+mite concluir que, en el pronunciamiento impugnado, la Suprema Cor­
+te provincial hizo propias las ostensibles deficiencias argumentativas 
+de los decisorios del tribunal de mérito y de casación y, al amparo de 
+un excesivo rigor formal y con base en expresiones dogmáticas y sin 
+contenido, desatendió los antecedentes que hacen a la cuestión fáctica 
+sustancial de la causa y el adecuado estudio de elementos conducen­
+tes obrantes en la misma. En tales condiciones, el pronunciamiento 
+apelado exhibe graves vicios de fundamentación que lo descalifican 
+como un acto jurisdiccional válido con arreglo a la doctrina sobre arbi­
+trariedad de sentencia.
+17) Que, por todo lo expuesto precedentemente, cabe concluir que 
+“en tales condiciones, la opción en favor de la condena” de Jorge En­
+rique González Nieva, sobre la base de fundamentos que no asegura­
+ron el debido respeto a la garantía de defensa en juicio y de extremos 
+que “carecen de apoyatura en otros elementos de convicción…afecta 
+el principio del in dubio pro reo que deriva de la presunción de ino­
+cencia (art. 18 Constitución Nacional y arts. 11.1 de la Declaración 
+Universal de Derechos Humanos y 8.2 de la Convención Americana
+
+343
+1212
+FALLOS DE LA CORTE SUPREMA
+sobre Derechos Humanos en virtud del art. 75 inc. 22 de la Constitu­
+ción Nacional), y su no aplicación al caso descalifica al pronuncia­
+miento como acto jurisdiccional válido en la medida en que obedece 
+a un proceder claramente arbitrario que, en el sub lite, se traduce en 
+la privación de libertad de una persona por un prolongado lapso sin 
+que mediare sentencia fundada en ley.
+En consecuencia, dado que la condena se ha basado fundamen­
+talmente en el reconocimiento cuestionado, la privación de su cali­
+dad de prueba dirimente trae aparejada la imposibilidad de cerrar 
+un juicio de imputación penal afianzado en la certeza acerca de la 
+intervención delictiva del recurrente, motivo por el cual el tribunal a 
+quo, al conferir a esos actos procesales tan categórico carácter para 
+confirmar el fallo condenatorio, afectó no sólo el principio de inocen­
+cia sino también las garantías constitucionales de defensa en juicio 
+y del debido proceso” (Fallos: 329:5628, considerando 12).
+Por tal motivo, frente a la situación descripta, no corresponde que 
+la causa sea devuelta para el dictado de una nueva decisión (conf. pri­
+mera parte del artículo 16 de la ley 48), pues ello implicaría continuar 
+dilatando una situación de indefinición reñida con el derecho de de­
+fensa y el debido proceso, por lo que, toda vez que a esta altura del 
+trámite de la causa aún no ha sido dictada una decisión que trate de 
+modo compatible con el debido proceso la hipótesis de los hechos pre­
+sentada por la defensa de Jorge Enrique González Nieva -vinculada 
+con la inocencia respecto de los ilícitos que se le atribuyen- y dado que 
+el análisis parcial e incongruente del caso resulta incompatible con la 
+necesaria certeza que requiere la sanción punitiva adoptada, corres­
+ponde que este Tribunal haga uso de las facultades establecidas en la 
+segunda parte del artículo 16 de la ley 48, absolviendo al procesado.
+Por ello, oído el señor Procurador Fiscal, se hace lugar a la queja, 
+se declara procedente el recurso extraordinario, se deja sin efecto la 
+sentencia apelada y se absuelve a Jorge Enrique González Nieva por 
+los delitos por los que fuera acusado por los fundamentos de la pre­
+sente (artículo 16, segunda parte, de la ley 48). Notifíquese y remítase 
+copia –en la fecha- al tribunal de origen, a sus efectos. Agréguese la 
+queja al principal y, oportunamente, devuélvase.
+Carlos Fernando Rosenkrantz — Elena I. Highton de Nolasco — 
+Juan Carlos Maqueda — Ricardo Luis Lorenzetti — Horacio Rosatti.
+
+1213
+DE JUSTICIA DE LA NACIÓN
+343
+Recurso de queja interpuesto por Jorge Enrique González, asistido por el Dr. Mario 
+Luis Coriolano.
 ```
 
 ---
@@ -4603,6 +6905,521 @@ FALLOS DE LA CORTE SUPREMA
 
 ---
 
+## 343_p412
+
+- **Tomo:** 343 | **wc_cons:** 1690 | **pattern:** segun_su_voto
+- **Carátula:** Bruno, Marcelo José y Otros s/ Queja por recurso de inconstitucionalidad denegado en: Bruno, Marcelo José y otros c/ GCBA
+
+```
+BRUNO, MARCELO JOSÉ y Otros s/ Queja por recurso de
+inconstitucionalidad denegado en: Bruno, Marcelo José y otros
+c/ GCBA
+DOCENTES
+Es improcedente la excepción de falta de legitimación pasiva opuesta 
+por el Gobierno de la Ciudad de Buenos Aires contra la demanda enta­
+blada por docentes destinada a que se liquide correctamente la asigna­
+ción especial prevista en la ley 25.053, pues la pretensión de los actores 
+se funda en la existencia de un régimen jurídico que instituye a los do­
+centes como beneficiarios de una asignación especial para sus salarios, 
+y al Gobierno de la Ciudad demandado como responsable de la liquida­
+ción y pago de tal asignación y lo debatido en el pleito versa, precisa­
+mente, sobre los alcances de los derechos y obligaciones de las partes 
+en el marco de esa relación.
+DOCENTES
+Corresponde rechazar la excepción de falta de legitimación pasiva 
+opuesta por el Gobierno de la Ciudad de Buenos Aires contra la deman­
+da entablada por docentes destinada a que liquide correctamente la 
+asignación especial prevista en la ley 25.053, pues del art. 17 de dicha 
+normativa y del decreto nacional 878/99 surge que el rol del citado Go­
+bierno excede el de un mero distribuidor del incentivo que le asignaran 
+las instancias jurisdiccionales locales.
+
+413
+DE JUSTICIA DE LA NACIÓN
+343
+DOCENTES
+Es arbitraria la sentencia que hizo lugar a la excepción de falta de le­
+gitimación pasiva interpuesta por el Gobierno de la Ciudad de Buenos 
+Aires a la demanda entablada por docentes a fin que se liquide correcta­
+mente la asignación especial prevista en la ley 25.053, si no dio adecua­
+do tratamiento a los planteos serios y conducentes de los recurrentes 
+que demostraban que el citado Gobierno no era un simple intermedia­
+rio que se limitaba a trasladar a los sueldos de sus docentes los fondos 
+que le giraba el Estado Nacional sino que era el responsable de realizar 
+la liquidación de los importes correspondientes al rubro en cuestión y 
+quien, en ejercicio de esa competencia, fijó el criterio que agravió a los 
+demandantes en su calidad de beneficiarios de la asignación y los llevó 
+a iniciar este pleito.
+RECURSO EXTRAORDINARIO
+El recurso extraordinario es formalmente admisible pues, si bien las re­
+soluciones por las cuales los superiores tribunales provinciales deciden 
+acerca de la procedencia de los recursos extraordinarios de carácter 
+local no son, en principio, revisables en la instancia del art. 14 de la ley 48 
+y la tacha de arbitrariedad a su respecto es sumamente restrictiva, tal 
+criterio admite excepción cuando la sentencia impugnada frustra la vía 
+utilizada por el justiciable sin fundamentación idónea suficiente, y ello 
+se traduce en una violación de la garantía del debido proceso consagra­
+da en el art. 18 de la Constitución Nacional.
+ACORDADA 4/2007
+La trascendencia de las cuestiones debatidas -demanda contra el Go­
+bierno de la Ciudad de Buenos Aires incoada a fin de que se liquide co­
+rrectamente a los docentes actores la asignación especial creada por 
+la ley nacional 25.053- justifica hacer uso de la excepción prevista en el 
+artículo 11 de la acordada 4/2007 y sortear las inobservancias formales 
+en que han incurrido los presentantes en su recurso.
+
+343
+414
+FALLOS DE LA CORTE SUPREMA
+Dictamen de la Procuración General
+Suprema Corte:
+-I-
+Ante todo, he de señalar que el recurso de hecho (fs. 140/145 de 
+la queja) no cumple en debida forma con la exigencia del art. 1° de la 
+acordada 4/07 en lo que se refiere al límite de renglones por página.
+Sin embargo, considero que el cumplimiento de los requisitos for­
+males a los que se refiere la citada acordada, corresponde que sean 
+examinados, en definitiva, por esa Corte, en atención a que se vinculan 
+con el dictado del citado reglamento.
+Por ende, frente a la eventualidad de que el Tribunal estime que el 
+defecto apuntado no resulta esencial ni importa un obstáculo insalva­
+ble para la tramitación de la queja, ingresaré al análisis del recurso.
+-II-
+A fs. 227/231 vta. del expte. 46399/0, la Cámara de Apelaciones en lo 
+Contencioso Administrativo y Tributario de la Ciudad Autónoma de Bue­
+nos Aires (sala II) revocó la sentencia de grado que: a) declaró el carác­
+ter remunerativo y no bonificable del FO.NA.IN.DO (Fondo Nacional de 
+Incentivo Docente) b) condenó al Gobierno de la Ciudad Autónoma de 
+Buenos (GCBA) a que abone las diferencias salariales que correspondie­
+ren y c) ordenó comunicar el fallo a la Administración Federal de Ingresos 
+Públicos por el reclamo de pago de aportes y contribuciones patronales.
+Para revertir el fallo de primera instancia, el tribunal -por mayoría- 
+sostuvo que el demandado -GCBA- no resultaba ser el titular de la re­
+lación jurídica sustancial objeto de autos, toda vez que el suplemento 
+fue creado por el Estado Nacional, financiado con fondos nacionales, 
+delimitado en cuanto a sus alcances y formas de pago por organismos 
+ajenos al estado local y porque la Ciudad es un mero distribuidor del 
+incentivo; máxime, además, según expresó, cuando el Estado Nacio­
+nal no había sido demandado en este pleito.
+A fs. 236/269 del expte. 46399/0, la parte actora deduce recurso de 
+inconstitucionalidad. Sostiene que la sentencia de la cámara es arbi­
+traria por violación de la garantía constitucional de igualdad ante la ley 
+y del principio de defensa en juicio.
+Entiende que el tribunal se expidió sobre un tema no debati­
+do en autos, como lo es la falta de legitimación pasiva del GCBA,
+
+415
+DE JUSTICIA DE LA NACIÓN
+343
+tanto es así que -arguye- ella no fue opuesta como excepción por 
+la demandada ni se permitió a la actora desarrollar una estrategia 
+defensiva al respecto.
+Asimismo, sostiene que existen antecedentes jurisprudenciales de 
+la misma cámara con una conclusión diferente de la expuesta en au­
+tos, pese a tratarse de la misma situación y del mismo hecho genera­
+dor del reclamo lo que, a su criterio, genera sentencias contradictorias 
+ante hechos idénticos y una desigualdad entre docentes en la satisfac­
+ción de iguales reclamos.
+Por otro lado, dice que la forma de liquidarse el incentivo docente 
+es contraria al ordenamiento legal vigente y a los principios del dere­
+cho laboral, y que en cuanto existe, en el ámbito de la Ciudad, un Es­
+tatuto Docente y una ley de relaciones laborales en la Administración 
+Pública, no hay dudas sobre la legitimación del GCBA en su carácter 
+de empleador de los actores y del carácter remunerativo y bonificable 
+del suplemento que debe. integrar el sueldo docente.
+La declaración de inadmisibilidad del recurso de inconstituciona­
+lidad presentado por los actores (fs. 285/286 del expte. 46399/0) motivó 
+la presentación en queja por recurso denegado que obra a fs. 92/96 del 
+expte. 13181 del Tribunal Superior de Justicia de la Ciudad Autónoma 
+de Buenos Aires.
+En esa queja, la actora reitera los agravios hasta ahora sostenidos 
+en el proceso -violación del derecho de defensa, de la igualdad ante la 
+ley, del principio de congruencia y la arbitrariedad del fallo- sostenien­
+do que el quid de la cuestión es que el GCBA liquida incorrectamente 
+el suplemento en cuestión.
+A fs. 107/115 (expte. TSJ mencionado en último término), el Tri­
+bunal Superior de Justicia resolvió -por mayoría- rechazar la queja 
+interpuesta contra la denegación del recurso de inconstitucionalidad 
+-por remisión a la sentencia en autos “Perroni, Mariana Marcela y 
+otros s/ queja por recurso de inconstitucionalidad denegado en: Pe­
+rroni, Mariana Marcela y otros c/ GCBA s/ empleo público (no cesan­
+tía ni exoneración)”- al entender que la actora no logró demostrar la 
+configuración de una cuestión constitucional que habilitara la instan­
+cia de excepción.
+-III-
+Disconforme, la actora interpone recurso extraordinario federal 
+(fs. 119/137 expte. Ídem), el que denegado -por mayoría- a fs. 149/151, 
+motivó la queja de autos.
+
+343
+416
+FALLOS DE LA CORTE SUPREMA
+Reitera su agravio de “arbitrariedad sorpresiva”, y aduce que no 
+es cierto que el GCBA sea un distribuidor de los fondos de incentivo 
+docente, para lo que trae a colación la cita y el texto de varios decre­
+tos locales por los cuales el GCBA se compromete a anticipar -de 
+su propio presupuesto- la asignación para el efectivo pago del suple­
+mento FO.NA.IN.DO.
+Insiste con: a) los defectos de fundamentación normativa de la 
+sentencia, en tanto no tuvo en cuenta las normas laborales ni el prin­
+cipio in dubio pro operario, b) el carácter remunerativo y bonificable 
+que debería atribuirse al suplemento en cuestión y c) la contradic­
+ción con antecedentes idénticos de primera y segunda instancia del 
+fuero interviniente.
+-IV-
+Ante todo, cabe recordar que, como ha dicho V.E., si bien, en princi­
+pio, la procedencia o improcedencia de los recursos locales no es ma­
+teria susceptible de revisión por la vía prevista en el art. 14 de la ley 48, 
+en virtud del carácter fáctico y procesal de las cuestiones que suscita, 
+cabe hacer excepción de tal premisa cuando la solución adoptada re­
+dunda en menoscabo del derecho de defensa del recurrente, en tanto 
+frustra una vía apta para obtener el reconocimiento del derecho invo­
+cado y cuando lo decidido revela un exceso ritual manifiesto, incompa­
+tible con el ejercicio del derecho de defensa en juicio (Fallos: 324:2456 y 
+2554, entre otros) y omite ponderar argumentos conducentes para una 
+adecuada solución del litigio (Fallos: 304:1397; 316:2477).
+En este sentido, dijo V.E. que la doctrina de la arbitrariedad no 
+se propone convertir al Tribunal en una tercera instancia, ni corregir 
+fallos que se reputen equivocados, sino que sólo tiende a resguardar 
+casos excepcionales -como ocurre en el sub examine- en los que defi­
+ciencias lógicas del razonamiento o una total ausencia de fundamento 
+normativo, impiden sostener que la decisión es una sentencia fundada 
+en ley (Fallos: 311:786).
+Por otra parte, cabe atribuir a la sentencia carácter de definitiva 
+por causar un agravio de insusceptible reparación posterior, ya que lo 
+cuestionado es la falta de legitimación pasiva de la Ciudad Autónoma 
+de Buenos Aires en autos y lo decidido sella definitivamente la cues­
+tión sin posibilidad de que pueda ser planteada en adelante (conf. args. 
+Fallos 324:2184), pues deja firme una decisión por la que se imposibilita 
+que los actores puedan plantear, en adelante, su pretensión frente a 
+aquella parte.
+
+417
+DE JUSTICIA DE LA NACIÓN
+343
+-V-
+Sentado ello, a mi entender, asiste razón a la recurrente al soste­
+ner que la Ciudad Autónoma de Buenos Aires es titular de la relación 
+jurídica sustancial que se debate en el proceso, aun cuando pueda no 
+ser la única parte que deba intervenir en el proceso como demandada 
+o tercero.
+Ello se deriva de que del entramado normativo por el que se ins­
+taura el fondo docente en cuestión se deriva una serie de obligaciones 
+atribuidas tanto al GCBA como al Estado Nacional, lo que torna inad­
+misible que se excluya al primero de la litis.
+En lo que aquí interesa, la ley 25.053 (Fondo Nacional de Incen­
+tivo Docente) establece que las autoridades de la Ciudad de Buenos 
+Aires deberán presentar a la cartera educativa nacional las plantas 
+docentes que cumplen con las condiciones determinadas en las nor­
+mas como para ser destinatarias del incentivo de marras, sobre cuya 
+base se realizarán las transferencias de los recursos a la jurisdicción 
+(art. 16). Asimismo, determina que las autoridades del gobierno de la 
+Ciudad Autónoma liquidarán y abonarán a cada docente identificado 
+en la planta aprobada, el importe pertinente discriminado bajo el ru­
+bro FONAINDO con los recibos de sueldo correspondientes (art. 17).
+Por decreto nacional 878/99 se aprobó la reglamentación parcial de 
+la ley, estableciéndose que “a fin de la distribución y transferencia de 
+los fondos recaudados, se suscribirán actas complementarias entre la 
+autoridad de aplicación y cada una de las jurisdicciones, fijándose 
+las obligaciones que asume cada parte estipulando el plazo y forma de 
+cumplimiento de cada una de ellas. Para ello, cada Provincia y la Ciudad 
+de Buenos Aires deberán: a) remitir al Ministerio de Cultura y Educa­
+ción las plantas docentes de todas las escuelas de gestión pública y de 
+gestión privada subvencionadas, conforme a los criterios fijados entre 
+el Consejo Federal de Cultura y Educación y los gremios docentes con 
+representación nacional; b) incorporar los desembolsos de fondos en las 
+respectivas leyes de presupuesto....” (la cursiva no es original).
+En igual orden, el art. 13 de la mencionada ley estipuló que los 
+criterios para definir la asignación a los distintos cargos serían acor­
+dados entre el Consejo Federal de Cultura y Educación y las organi­
+zaciones gremiales docentes con personería gremial. A raíz de ello, 
+se aprobó la resolución 102/99 CFCyE, en cuyo anexo “Criterios de 
+distribución” (aprobado por el art. 1°), se determinó que “cada Pro­
+vincia y la ciudad de Buenos Aires presentarán una preliquidación 
+con carácter de Declaración Jurada sobre la base de las plantas do­
+
+343
+418
+FALLOS DE LA CORTE SUPREMA
+centes que cumplan las condiciones de la Ley y la reglamentación vi­
+gentes” (la cursiva es agregada) y que “determinada la procedencia 
+de la preliquidación se formalizarán las actas complementarias y se 
+transferirán los recursos”.
+Por su parte, por medio de sendos decretos locales -548/01, 620/02, 
+2123/03, 742/04, entre otros- se ratificaron las respectivas actas com­
+plementarias entre la cartera ministerial nacional y el GCBA. En ellos, 
+la Ciudad afirmó haber presentado “... la preliquidación establecida en 
+el punto 14 del anexo de la resolución 102/99 y su modificatoria 122/99 
+del Consejo Federal de Cultura y Educación manifestando su repre­
+sentante con carácter de declaración jurada que la misma se ajusta 
+en un todo a las pautas y criterios aprobados por la citada resolución” 
+(vgr. Cláusula primera anexo decreto 620/GCABA/2002). A ello se agre­
+ga que los actores sustentaron su pretensión en que debía cumplirse 
+con lo dispuesto en la ley local 1528.
+Por lo expuesto, la sentencia resulta arbitraria porque, sin con­
+siderar en su totalidad el régimen normativo del fondo docente en 
+cuestión, cercenó en forma definitiva la posibilidad de que los acto­
+res demanden al GCBA, a quien aquél atribuye deberes específicos, y 
+tampoco tuvo en cuenta que los jueces de la causa tenían facultades 
+para integrar la litis con el Estado Nacional, de modo de garantizar 
+debidamente el derecho de defensa de las partes y el dictado de una 
+sentencia útil.
+Lo expuesto aquí se limita al examen de la falta de legitimación 
+del GCBA, sobre la base de la cual se resolvió el juicio y dio lugar 
+posteriormente al rechazo del recurso local mediante la sentencia 
+aquí apelada, pero no implica pronunciamiento alguno sobre el fondo 
+de la cuestión.
+Ello así, estímo que cabe descalificar el fallo apelado de acuerdo 
+con la reiterada doctrina del Tribunal en materia de arbitrariedad.
+-VI-
+Por lo expuesto, opino que corresponde admitir la queja, hacer lu­
+gar al recurso extraordinario con el alcance indicado precedentemen­
+te, dejar sin efecto la sentencia y remitir las actuaciones al tribunal de 
+origen a fin de que dicte una nueva ajustada a derecho. Buenos Aires, 
+19 de junio de 2018. Laura M. Monti.
+
+419
+DE JUSTICIA DE LA NACIÓN
+343
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 18 de junio de 2020.
+Vistos los autos: “Recurso de hecho deducido por los actores 
+en la causa Bruno, Marcelo José y otros s/ queja por recurso de 
+inconstitucionalidad denegado en: Bruno, Marcelo José y otros c/ 
+GCBA s/ empleo público (no cesantía ni exoneración)”, para decidir 
+sobre su procedencia.
+Considerando:
+1°) Que siete docentes, en actividad y retirados, demandaron al Go­
+bierno de la Ciudad de Buenos Aires a fin de que liquidara correctamen­
+te la asignación especial creada por la ley nacional 25.053, financiada 
+con el denominado “Fondo Nacional de Incentivo Docente” (FO.NA.IN.
+DO). Relataron que en el artículo 13 de la mencionada ley se había pre­
+visto expresamente el carácter remunerativo de la asignación pero que, 
+pese a ello, la demandada la había liquidado y abonado como no remu­
+nerativa ni bonificable, en un rubro separado del salario básico. Sobre 
+esa base, reclamaron que la suma se incorporara al salario básico, que 
+se les pagaran las diferencias salariales correspondientes y que se rea­
+lizaran los aportes de la seguridad social que habían sido omitidos.
+2°) Que, al revocar la sentencia de primera instancia que había he­
+cho lugar parcialmente a la pretensión, la Sala II de la Cámara de Ape­
+laciones en lo Contencioso Administrativo y Tributario de la Ciudad 
+Autónoma de Buenos Aires rechazó la demanda.
+Fundó su decisión en la falta de legitimación pasiva del Gobier­
+no de la Ciudad. A tales efectos sostuvo que “al debatirse en autos 
+la naturaleza de un suplemento creado por el Estado Federal (…) 
+financiado con fondos nacionales (…) delimitado en cuanto a sus 
+alcances y forma de pago por organismos ajenos al Estado local 
+(conf. arts. 13, 14, 18, entre otros, de la ley N°25.053, y resoluciones N° 
+102/CFCyE/99 y N° 122/CFCyE/99), así como que el Estado Nacional 
+habría reconocido expresamente el límite de la labor de la ciudad 
+de Buenos Aires en el pago del suplemento FO.NA.IN.DO. a una ac­
+tuación de ‘distribuidor’ de los fondos (v. anexos de los decretos N° 
+548/01, N° 620/02, N° 742/04, entre otros), no puede sino concluirse en
+
+343
+420
+FALLOS DE LA CORTE SUPREMA
+que el aquí demandado no resulta ser el titular de la relación jurí­
+dica sustancial objeto de autos” (fs. 43).
+3°) Que los actores impugnaron la sentencia mediante un recur­
+so de inconstitucionalidad local, que fue denegado y motivó una queja 
+ante el Tribunal Superior de Justicia de la Ciudad Autónoma de Bue­
+nos Aires. Esa presentación directa también fue rechazada, por consi­
+derar el a quo que no se había demostrado un supuesto de arbitrarie­
+dad que habilitara la vía extraordinaria intentada.
+Contra esa decisión, los actores dedujeron un recurso extraordina­
+rio federal, cuya denegación dio origen a la queja en examen.
+4°) Que el recurso extraordinario es formalmente admisible pues, 
+si bien las resoluciones por las cuales los superiores tribunales pro­
+vinciales deciden acerca de la procedencia de los recursos extraordi­
+narios de carácter local no son, en principio, revisables en la instancia 
+del art. 14 de la ley 48 y la tacha de arbitrariedad a su respecto es su­
+mamente restrictiva, tal criterio admite excepción cuando -como en 
+este caso- la sentencia impugnada frustra la vía utilizada por el justi­
+ciable sin fundamentación idónea suficiente, y ello se traduce en una 
+violación de la garantía del debido proceso consagrada en el art. 18 
+de la Constitución Nacional (Fallos 311:1446; 320:2089; 339:1453; entre 
+muchos otros).
+Por otra parte, la decisión apelada causa a los actores un agravio 
+de imposible reparación ulterior, ya que sella negativamente la cues­
+tión relativa a la legitimación pasiva del Gobierno de la Ciudad en for­
+ma definitiva, impidiendo que puedan plantear, en adelante, su preten­
+sión frente a aquella parte (Fallos: 308:1832; 312:2134; 324:2184 y causa 
+CSJ 3283/2002 (38-M)/CS1 “Municipalidad de San Isidro c/ Provincia de 
+Buenos Aires”, fallada el 22 de mayo de 2007).
+5°) Que, como primer punto, corresponde mencionar que la trascen­
+dencia de las cuestiones debatidas justifica hacer uso de la excepción 
+prevista en el artículo 11 de la acordada 4/2007 y sortear las inobservan­
+cias formales en que han incurrido los presentantes en su recurso.
+6°) Que, sentado lo expuesto, cabe recordar que la falta de legiti­
+mación se configura cuando una de las partes no es la titular de la rela­
+
+421
+DE JUSTICIA DE LA NACIÓN
+343
+ción jurídica sustancial en que se sustenta la pretensión, con prescin­
+dencia de la fundabilidad de esta (Fallos: 310:2943; 312:2138; 317:1615; 
+318:1323; 322:2525; 330:4811; entre otros).
+Para determinar si se configura tal extremo resulta necesario in­
+dagar si existe un vínculo entre el sujeto que alega y pretende titulari­
+zar el derecho y aquel frente a quien intenta hacerlo -que es el sujeto 
+pasivo-; así como también si lo que se discute en el pleito gira en torno 
+a los derechos y obligaciones emergentes de ese vínculo y, en particu­
+lar, a la obligación que el supuesto titular del derecho invocado intenta 
+hacer cumplir al demandado.
+Solo cuando ello ocurre, es posible afirmar que las partes tienen 
+un interés claro y directo en el resultado del pleito, pues lo que allí se 
+resuelva los beneficiará o perjudicará, en forma personal y concreta. 
+De este modo, se corrobora la existencia de un “caso”, “causa” o “con­
+troversia” en los términos del art. 116 de la Constitución Nacional que 
+habilita la intervención de los tribunales de justicia (Fallos: 313:144 y 
+1681; 315:2316; 316:604; 330:4804 y 340:151, entre muchos otros).
+7°) Que, a la luz de lo expuesto, es posible concluir que el Gobierno 
+de la Ciudad de Buenos Aires fue correctamente demandado.
+En efecto, la pretensión de los actores se funda en la existencia de 
+un régimen jurídico que instituye a los docentes como beneficiarios de 
+una asignación especial para sus salarios, y al Gobierno de la Ciudad 
+demandado como responsable de la liquidación y pago de tal asignación. 
+Y lo debatido en el pleito versa, precisamente, sobre los alcances de los 
+derechos y obligaciones de las partes en el marco de esa relación.
+Tal circunstancia surge, con meridiana claridad, del art. 17 de la 
+ley 25.053, que establece que “el gobierno de la Ciudad Autónoma 
+de Buenos Aires liquidará y abonará a cada docente que reúna las 
+condiciones determinadas por el artículo 13, el importe pertinente 
+discriminado bajo el rubro —Fondo Nacional de Incentivo Docente— 
+con los recibos de sueldo correspondientes y mientras esté vigente el 
+impuesto que se crea”.
+También resulta relevante mencionar, en este punto, lo dispuesto 
+por el decreto nacional 878/99 que, al reglamentar el art. 13 de la ley
+
+343
+422
+FALLOS DE LA CORTE SUPREMA
+citada, estableció que “a fin de la distribución y transferencia de los 
+fondos recaudados, se suscribirán Actas Complementarias entre la 
+autoridad de aplicación y cada una de las jurisdicciones, fijándose 
+las obligaciones que asume cada parte estipulando el plazo y forma 
+de cumplimiento de cada una de ellas. Para ello, cada Provincia y 
+la Ciudad de Buenos Aires deberán: a) remitir al Ministerio de Cul­
+tura y Educación las plantas docentes de todas las escuelas de ges­
+tión pública y de gestión privada subvencionadas, conforme a los 
+criterios fijados entre el Consejo Federal de Cultura y Educación 
+y los gremios docentes con representación nacional; b) incorporar 
+los desembolsos de fondos en las respectivas leyes de presupuesto”.
+En tales condiciones, y tal como lo reflejan las normas transcrip­
+tas, el rol del Gobierno de la Ciudad de Buenos Aires excede el de un 
+mero “distribuidor del incentivo” que le asignaran las instancias ju­
+risdiccionales locales.
+Más aún, así lo asumió la propia demandada, al dictar distintas 
+resoluciones en las que estableció el modo concreto en que debía li­
+quidarse la asignación y dispuso, expresamente, que ella “no estará 
+sujeta a aportes y contribuciones que recaen en el básico salarial, ni 
+se calculará para el Sueldo Anual Complementario” (Ver resolucio­
+nes n° 1024/99 de la Secretaría de Educación y n° 1169/99 de las Secre­
+tarías de Educación, Salud, Promoción Social, Cultura, Hacienda y 
+Finanzas de la Ciudad Autónoma de Buenos Aires).
+A lo dicho se puede agregar, todavía, que en la demanda se recla­
+mó al Gobierno de la Ciudad de Buenos Aires el incumplimiento de 
+una norma de exclusiva naturaleza local -la ley 1528 de “Dignidad del 
+Salario Docente”- que había dispuesto, en lo que aquí interesa, que 
+“los conceptos que perciben los docentes dependientes de la Secreta­
+ría de Educación de la Ciudad Autónoma de Buenos Aires, que en los 
+recibos de haberes conforman adicionales no renumerativos serán 
+incorporadas al sueldo básico rubro 001, eliminándose así la actual 
+naturaleza no renumerativa”.
+8°) Que, en tales condiciones, la sentencia apelada resulta descalifi­
+cable sobre la base de la doctrina de la arbitrariedad. Ello es así porque 
+no dio adecuado tratamiento a los planteos serios y conducentes de los 
+recurrentes que demostraban que el Gobierno de la Ciudad de Buenos 
+Aires no era un simple intermediario que se limitaba a trasladar a los
+
+423
+DE JUSTICIA DE LA NACIÓN
+343
+sueldos de sus docentes los fondos que le giraba el Estado Nacional 
+sino que era el responsable de realizar la liquidación de los importes 
+correspondientes al rubro en cuestión y quien, en ejercicio de esa com­
+petencia, fijó el criterio que agravió a los demandantes en su calidad de 
+beneficiarios de la asignación y los llevó a iniciar este pleito.
+De manera que, al decidir como lo hizo, el a quo cercenó, en forma 
+definitiva y sin fundamentación idónea, la posibilidad de los actores 
+de demandar al sujeto que, en caso de prosperar su pretensión, sería 
+el legitimado para satisfacerla, afectando gravemente su derecho de 
+defensa en juicio.
+9°) Que, finalmente, conviene dejar en claro que lo hasta aquí ex­
+puesto se limita a definir la cuestión de la legitimación del Gobierno de 
+la Ciudad de Buenos Aires para ser demandado en esta causa, pero no 
+implica pronunciamiento alguno sobre el fondo del asunto.
+Que el juez Lorenzetti suscribe la presente en la localidad de Ra­
+faela, Provincia de Santa Fe, y el juez Rosatti lo hace en la localidad de 
+Santa Fe, provincia homónima, en virtud de las medidas de aislamien­
+to social preventivas dispuestas por las autoridades nacionales.
+Por ello, en atención al estado de las presentes actuaciones se 
+resuelve:
+1) Habilitar días y horas inhábiles del día de la fecha exclusivamen­
+te a los fines del dictado de la presente sentencia.
+2) Hacer lugar a la queja, declarar procedente el recurso extraor­
+dinario y revocar la sentencia apelada, de conformidad con lo dictami­
+nado por la señora Procuradora Fiscal. Con costas. Vuelvan los autos 
+al tribunal de origen a fin de que, por quien corresponda, se dicte nue­
+va sentencia con arreglo al presente.
+Agréguese la queja a los autos principales. Notifíquese y, oportu­
+namente, remítase.
+Carlos Fernando Rosenkrantz (según su voto)— Elena I. Highton
+de Nolasco — Juan Carlos Maqueda — Ricardo Luis Lorenzetti — 
+Horacio Rosatti.
+
+343
+424
+FALLOS DE LA CORTE SUPREMA
+Voto del Señor Presidente Doctor Don Carlos Fernando
+Rosenkrantz
+Considerando:
+Que esta Corte comparte las consideraciones del dictamen de la 
+señora Procuradora Fiscal, a cuyos términos cabe remitir por razones 
+de brevedad.
+A lo expuesto en el referido dictamen corresponde agregar que no 
+es óbice para la solución adoptada lo resuelto por este Tribunal en la 
+causa CSJ 600/2016 (52-A)/CS1 “Avanzatti, Emilia Zunilda Alejandra y 
+otros c/ Entre Ríos, Provincia de y otro s/ ordinario”, sentencia del 29 
+de agosto de 2017. Allí se trató de una demanda de docentes jubilados 
+de la Provincia de Entre Ríos que impugnaban actos administrativos 
+locales en virtud de los cuales la asignación de la ley 25.053 no se com­
+putaba a los efectos del pago del haber de retiro. La Corte decidió que 
+no correspondía su competencia originaria pues el Estado Nacional 
+no era parte sustancial en el pleito por el mero hecho de que estuviera 
+en discusión el alcance de la ley 25.053 o que la asignación se hubiera 
+pagado con fondos aportados por gobierno federal. En este caso, en 
+cambio, se trata de un reclamo articulado por docentes en actividad de 
+la Ciudad Autónoma de Buenos Aires y la discusión esta centrada en 
+su legitimación para ser parte demandada en este pleito.
+Por ello, en atención al estado de las presentes actuaciones se 
+resuelve:
+1) Habilitar días y horas inhábiles del día de la fecha exclusivamen­
+te a los fines del dictado de la presente sentencia.
+2) Hacer lugar a la queja, declarar procedente el recurso extraor­
+dinario y revocar la sentencia apelada, de conformidad con lo dictami­
+nado por la señora Procuradora Fiscal. Con costas. Vuelvan los autos 
+al tribunal de origen a fin de que, por quien corresponda, se dicte una 
+nueva sentencia con arreglo al presente. Notifíquese, agréguese la 
+queja a los autos principales y, oportunamente, remítase.
+Carlos Fernando Rosenkrantz.
+
+425
+DE JUSTICIA DE LA NACIÓN
+343
+Recurso de queja interpuesto por los actores, Marcelo José Bruno y otros, represen­
+tados por la Dra. Celia Zorzenón.
+Tribunal de origen: Tribunal Superior de Justicia de la Ciudad Autónoma de Buenos 
+Aires.
+Tribunales que intervinieron con anterioridad: Cámara de Apelaciones en lo Conten­
+cioso Administrativo y Tributario de la Ciudad Autónoma de Buenos Aires, Sala 
+II; Juzgado Contencioso Administrativo y Tributario de la Ciudad Autónoma de 
+Buenos Aires n° 15.
+```
+
+---
+
 ## 344_p1507
 
 - **Tomo:** 344 | **wc_cons:** 369 | **pattern:** unanime
@@ -4680,6 +7497,94 @@ Elena I. Highton de Nolasco – Ricardo Luis Lorenzetti – Horacio
 Rosatti.
 Recurso de revocatoria interpuesto por Aero Sur S.A., representada por la Dra. Lucila 
 Brom, con el patrocinio letrado del Dr. Alberto B. Bianchi.
+```
+
+---
+
+## 344_p1783
+
+- **Tomo:** 344 | **wc_cons:** 507 | **pattern:** unanime
+- **Carátula:** Tolaba, Uvenceslao c/ Municipalidad de San Salvador de Jujuy s/ Demanda laboral indemnización por daños y perjuicios
+
+```
+TOLABA, UVENCESLAO c/ MUNICIPALIDAD de SAN 
+SALVADOR de JUJUY s/ Demanda laboral indemnización por
+daños y perjuicios
+RECURSO DE REPOSICION O REVOCATORIA
+La ampliación del plazo en razón de la distancia previsto en el art. 
+158 del Código Procesal Civil y Comercial de la Nación no es aplicable 
+a los efectos del plazo para formular un planteo de revocatoria, pues 
+dicha ampliación en el caso sólo era computable a los fines del pla­
+zo para presentar la queja, en tanto el auto denegatorio del recurso 
+extraordinario fue dictado por el Superior Tribunal de Justicia de la 
+Provincia de Jujuy, pero no respecto de los ulteriores actos procesales 
+de la presentación directa, ya que al ocurrir en queja ante la Corte la 
+recurrente tenía la carga de constituir domicilio legal dentro del perí­
+metro de la ciudad en la que tiene asiento el Tribunal (confr. art. 40 del
+
+344
+1784
+FALLOS DE LA CORTE SUPREMA
+Código Procesal Civil y Comercial de la Nación, art. 5 de la acordada 
+4/07 y, en análogo sentido, lo dispuesto en los arts. 249 y 257, tercer 
+párrafo del citado código) y la carga de constituir domicilio electróni­
+co, en cumplimiento de las pautas de la acordada 31/11, extremos que 
+resultaron cumplidos.
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 8 de julio de 2021.
+Autos y Vistos; Considerando:
+1°) Que contra la resolución del 11 de julio de 2019 (fs. 31), por la 
+que esta Corte desestimó la queja interpuesta por la demandada a raíz 
+de la denegación del recurso extraordinario por parte del Superior 
+Tribunal de Justicia de la Provincia de Jujuy, la recurrente dedujo un 
+pedido de reposición (fs. 33/35), que fue rechazado por haber sido pre­
+sentado fuera del plazo establecido por el art. 239 del Código Procesal 
+Civil y Comercial de la Nación (confr. resolución de fs. 37).
+2°) Que en su presentación de fs. 38/39, la recurrente solicita la 
+aclaratoria de la mencionada resolución. Sostiene que el Tribunal omi­
+tió considerar la ampliación del plazo en razón de la distancia prevista 
+en el art. 158 del ordenamiento procesal antes citado e invoca, para 
+abonar su posición, el precedente de “Pescasur S.A. y otro c/ Provincia 
+de Santa Cruz” (Fallos: 327:4850).
+3°) Que la ampliación de plazos prevista en el referido art. 158 tiene 
+lugar cuando se trata de una diligencia “que deba practicarse dentro 
+de la República y fuera del lugar del asiento del juzgado o tribunal”. 
+En el caso en examen esa ampliación solo es computable a los fines 
+del plazo para presentar la queja, pues el auto denegatorio del recurso 
+extraordinario fue dictado por el Superior Tribunal de Justicia de la 
+Provincia de Jujuy. Por el contrario, en lo que respecta a los ulteriores 
+actos procesales de la presentación directa, dicho supuesto no se ve­
+rifica, en tanto al ocurrir en queja ante esta Corte la recurrente tenía 
+la carga —que de hecho fue cumplida; confr. fs. 1— de constituir do­
+micilio legal dentro del perímetro de la ciudad en la que tiene asiento 
+el Tribunal (confr. art. 40 del Código Procesal Civil y Comercial de la
+
+1785
+DE JUSTICIA DE LA NACIÓN
+344
+Nación, art. 5 de la acordada 4/07 y, en análogo sentido, lo dispuesto en 
+los arts. 249 y 257, tercer párrafo del citado código). Tenía, asimismo, 
+la carga de constituir domicilio electrónico, en cumplimiento de las 
+pautas de la acordada 31/11, extremo que también resultó cumplido (v. 
+fs. 11 y 33). En consecuencia, lo dispuesto en el art. 158 no es aplicable 
+a los efectos del plazo para formular un planteo de revocatoria (confr. 
+sentencia del 11 de junio de 2013 in re “Ingema S.R.L. c/ Superior Go­
+bierno de la Provincia de Tucumán”).
+4°) Que en el precedente “Pescasur S.A.” invocado por la actora, la 
+parte que interpuso el recurso de reposición —la Provincia de Santa 
+Cruz, demandada en esa causa— no había constituido aún domicilio 
+en el ámbito de la Capital Federal y había impugnado una medida cau­
+telar solicitada por la demandante que resultó concedida inaudita par­
+te. Por lo tanto, al diferir notoriamente las circunstancias del presente 
+caso con las del referido antecedente, resulta claro que el criterio allí 
+admitido en cuanto a la ampliación del plazo no es trasladable al sub 
+examine (confr. fallo supra citado).
+Por ello, se desestima lo solicitado a fs. 37. Notifíquese y estese a lo 
+resuelto a fs. 31/32 y 37.
+Carlos Fernando Rosenkrantz – Elena I. Highton de Nolasco – Juan 
+Carlos Maqueda – Ricardo Luis Lorenzetti – Horacio Rosatti.
+Aclaratoria interpuesta por la Municipalidad de San Salvador de Jujuy, demandada 
+en autos, representada por el Dr. Eduardo Martín Rodríguez Brabo.
 ```
 
 ---
@@ -6182,6 +9087,1979 @@ M. Paderne.
 
 ---
 
+## 345_p440
+
+- **Tomo:** 345 | **wc_cons:** 11662 | **pattern:** unanime
+- **Carátula:** Kirchner, Carlos Santiago y Otro s/ Abuso de autoridad y viol. deb. de func. púb. (art.248)
+
+```
+KIRCHNER, CARLOS SANTIAGO y Otro s/ Abuso de autoridad
+y viol. deb. de func. púb. (art.248)
+SENTENCIA DEFINITIVA
+El examen de admisibilidad del recurso extraordinario constituye una 
+cuestión previa, que obliga a la Corte a considerar si al momento de su 
+interposición se han fundado adecuadamente las cuestiones que, como 
+de carácter federal, se invocan y asimismo, el Tribunal debe analizar 
+si el recurso contiene una demostración acabada de que se hallan re­
+unidos los demás requisitos necesarios para habilitar la competencia 
+apelada de la Corte, entre los que se encuentra el carácter definitivo, o 
+equiparable a tal, de la decisión recurrida.
+RECURSO EXTRAORDINARIO
+El recurso extraordinario federal debe satisfacer el requisito de funda­
+mentación autónoma a fin de que la Corte pueda tratar los agravios que 
+se pretenden traer a su conocimiento y, por ello, su incumplimiento im­
+plica la inadmisibilidad del recurso.
+RECURSO EXTRAORDINARIO
+La fundamentación autónoma requiere que el escrito de interposición del 
+recurso extraordinario contenga un relato prolijo de los hechos de la cau­
+sa de relevancia principal, que permita vincularlos con las cuestiones que 
+se plantean como de naturaleza federal mediante una crítica concreta y 
+razonada de los argumentos en que se basó la sentencia que se impugna, 
+sin que, incluso, valga a tal efecto una nueva crítica general a las líneas 
+principales de la argumentación del pronunciamiento apelado, pues re­
+sulta exigible rebatir todos y cada uno de los argumentos en que el juzga­
+dor se apoyó para arribar a las conclusiones de que el apelante se agravia.
+RECURSO EXTRAORDINARIO
+No resulta una refutación suficiente, a los fines del recurso extraordina­
+rio, el solo sostener un criterio interpretativo distinto del seguido en la 
+sentencia recurrida.
+
+441
+DE JUSTICIA DE LA NACIÓN
+345
+RECURSO EXTRAORDINARIO
+Cuando el recurso extraordinario no cumple con el requisito de funda­
+mentación autónoma, la queja debe ser desestimada.
+RECURSO EXTRAORDINARIO
+El recurso extraordinario interpuesto no satisface las exigencias de 
+fundamentación pues, por un lado, no acredita haber refutado en su re­
+curso de casación los fundamentos centrales dados por los jueces de 
+grado para desestimar las excepciones esgrimidas y, por el otro, no rea­
+liza una descripción prolija y suficiente de los antecedentes de la causa 
+que se vinculan de modo directo con sus agravios, frustrando de este 
+modo la posibilidad de que la Corte cuente con los elementos mínimos 
+necesarios para evaluar los planteos correspondientes; por lo cual las 
+deficiencias de fundamentación impiden considerar que los agravios 
+tengan, siquiera prima facie, la entidad suficiente para concluir en que 
+se ha logrado mostrar que la sentencia es equiparable a definitiva y, por 
+esta razón, corresponde la desestimación de la queja.
+SENTENCIA DEFINITIVA
+Es improcedente el planteo de la defensa, vinculado a que la Cámara 
+Federal de Casación Penal no habilitó su instancia para revisar el recha­
+zo de la excepción de incompetencia parcial, pues se encuentra insufi­
+cientemente fundado por cuanto no demuestra que la resolución fuera 
+equiparable a sentencia definitiva.
+SENTENCIA DEFINITIVA
+El concepto de sentencia equiparable a definitiva para el recurso ex­
+traordinario no difiere del establecido para el recurso de casación, 
+tomando en cuenta el carácter de tribunal intermedio de la cámara 
+homónima, siempre que se invoque en los planteos recursivos una 
+cuestión federal o la arbitrariedad del pronunciamiento conforme la 
+doctrina de la Corte.
+
+345
+442
+FALLOS DE LA CORTE SUPREMA
+SENTENCIA DEFINITIVA
+El requisito de sentencia definitiva es una consecuencia del carácter 
+excepcional del recurso extraordinario.
+SENTENCIA DEFINITIVA
+La carencia de ciertas pautas de admisibilidad del recurso extraor­
+dinario como la regla general del recaudo de sentencia definitiva, o 
+una aplicación desmesurada de sus excepciones, conduciría a des­
+naturalizar la función del mencionado recurso y a convertirlo en una 
+nueva instancia ordinaria de todos los pleitos que tramitan ante to­
+dos los tribunales del país; de tal manera, velar por la observancia 
+del requisito de sentencia definitiva es velar por el rol institucional 
+del Máximo Tribunal.
+SENTENCIA DEFINITIVA
+Las decisiones vinculadas a la competencia no se consideran sentencia 
+definitiva a los efectos de la admisibilidad del recurso, pues sentencia 
+definitiva es aquella que pone fin al pleito o hace imposible su continua­
+ción y esto es así a menos que medie denegación del fuero federal o una 
+privación de justicia incompatible con la naturaleza de los derechos en 
+juego, de tardía o imposible reparación ulterior.
+SENTENCIA DEFINITIVA
+Un recaudo de admisibilidad como el de sentencia definitiva, que en­
+cuentra su sentido en preservar el rol constitucional de la Corte, no 
+podría aplicarse en aquellos supuestos en que implicara subvertir 
+dicho rol.
+SENTENCIA DEFINITIVA
+Cuando en un planteo de incompetencia se pretende la equiparación a 
+sentencia definitiva por afectación de la garantía de juez natural, resul­
+ta imperioso que el recurrente demuestre una prístina y grosera viola­
+
+443
+DE JUSTICIA DE LA NACIÓN
+345
+ción a las reglas de competencia que justifique la intervención del a quo 
+–y eventualmente de la Corte– antes de la finalización del pleito, como 
+único remedio eficaz.
+SENTENCIA DEFINITIVA
+El recurso extraordinario interpuesto contra la decisión que no hizo 
+lugar al planteo de incompetencia debe ser rechazado pues no de­
+muestra que hubiere mediado una violación a la garantía del juez na­
+tural que requiriera tutela inmediata y cuya revisión debiera haber 
+habilitado el a quo.
+RECURSO EXTRAORDINARIO
+Es improcedente el recurso extraordinario si la defensa no refutó debi­
+damente lo resuelto por el tribunal oral que entendió que el caso es de 
+la competencia de la justicia federal –y de la que tiene jurisdicción en 
+la ciudad de Buenos Aires– toda vez que la hipótesis acusatoria com­
+prende centralmente la toma de decisiones por parte de funcionarios 
+federales y su correlativa ejecución de actos en la Ciudad Autónoma 
+de Buenos Aires, todo en perjuicio de las arcas y los intereses del Esta­
+do Nacional y en este punto, el planteo de la defensa ni siquiera intenta 
+explicar cómo un juez con competencia local podría estar habilitado 
+para investigar una hipótesis delictiva que comprenda la actuación de 
+funcionarios públicos federales y la afectación de las arcas y los inte­
+reses nacionales.
+RECURSO EXTRAORDINARIO
+Es improcedente el recurso extraordinario interpuesto contra la deci­
+sión que rechazó el planteo de incompetencia de la justicia federal - con 
+jurisdicción en la Ciudad de Buenos Aires- pues la defensa no logra de­
+mostrar de qué manera un criterio fijado en supuestos en que estaban 
+imputados únicamente funcionarios provinciales o en que no se analizó 
+la eventual afectación del erario nacional deba ser aplicable a una hipó­
+tesis delictiva como la del caso en el que -más allá de lo que se concluya 
+en el debate- comprende a funcionarios federales y la afectación de las 
+rentas de la Nación.
+
+345
+444
+FALLOS DE LA CORTE SUPREMA
+RECURSO EXTRAORDINARIO
+Cabe rechazar el recurso extraordinario interpuesto contra la decisión 
+que rechazó el planteo de incompetencia de la justicia federal - con 
+jurisdicción en la Ciudad de Buenos Aires- pues en el caso existe una 
+imputación concreta contra funcionarios nacionales, no ya como partí­
+cipes de maniobras destinadas a defraudar al erario local, sino por su 
+presunta participación en un plan delictivo encaminado a perjudicar 
+directamente a las rentas de la Nación, según la hipótesis investigativa 
+sostenida por los jueces de la causa y la apelante no efectúa ninguna 
+consideración que permita justificar una solución distinta.
+DOBLE PERSECUCION PENAL
+La doble persecución penal no resulta comprometida pues, tal como la 
+propia recurrente sostiene, ella no fue parte en los procesos tramitados 
+en sede local.
+COSA JUZGADA
+Las garantías constitucionales de la cosa juzgada y del ne bis in idem se 
+encuentran íntimamente relacionadas.
+DOBLE PERSECUCION PENAL
+La violación de la garantía del ne bis in idem debe entenderse confi­
+gurada cuando concurran las tres identidades clásicas, a saber, eadem 
+persona (identidad de la persona perseguida), eadem res (identidad de 
+objeto de persecución) y eadem causa petendi (identidad de la causa de 
+persecución); así tales recaudos típicos encuentran su razón de ser en 
+que la garantía se dirige a respetar al individuo que ya ha sufrido la per­
+secución del Estado contra la reiteración del ejercicio de la pretensión 
+punitiva ya sea en un proceso concluido o en trámite.
+
+445
+DE JUSTICIA DE LA NACIÓN
+345
+COSA JUZGADA
+La garantía de la cosa juzgada no se encuentra afectada cuando ni los 
+imputados fueron indagados ni molestados en otro proceso concluido o 
+en trámite respecto de los hechos en cuestión.
+EXCEPCION DE COSA JUZGADA
+La Corte siempre exigió el requisito de identidad de personas para 
+que opere la excepción de la cosa juzgada, en consonancia con los lí­
+mites del poder de los jueces para tomar decisiones en el marco de un 
+proceso, decisiones cuyos efectos naturalmente se circunscriben a las 
+partes de aquel.
+EXCEPCION DE COSA JUZGADA
+El alcance constitucional de la cosa juzgada requiere identidad subjeti­
+va o, puesto en otras palabras, que la misma persona esté involucrada 
+en ambos procesos penales.
+COSA JUZGADA
+Cabe rechazar el recurso interpuesto contra decisión que rechazó la 
+excepción de cosa juzgada invocada por la defensa con sustento en lo 
+resuelto en sede local en procesos penales, pues la defensa no logró 
+poner en evidencia la identidad de objeto procesal y que su posición no 
+entrañara otra cosa que la mera aserción dogmática de una determi­
+nada solución que no se ve acompañada de una reseña autosuficiente 
+y acabada de las constancias de la causa, máxime cuando se pretende 
+hacer valer resoluciones dictadas por jueces provinciales respecto de la 
+actuación de funcionarios incuestionablemente federales que habrían 
+afectado de manera directa las arcas nacionales.
+COSA JUZGADA
+Cabe rechazar el recurso interpuesto contra la decisión que rechazó la 
+excepción de cosa juzgada invocada por la defensa con sustento en lo
+
+345
+446
+FALLOS DE LA CORTE SUPREMA
+resuelto en sede local en procesos penales, pues el recurrente omite 
+toda explicación acerca de por qué el archivo de la denuncia y el so­
+breseimiento, en los términos en que fueron dispuestos en sede local, 
+tendrían el alcance de un pronunciamiento con carácter de cosa juz­
+gada respecto de los hechos investigados en la causa; explicación que 
+resultaba imprescindible.
+RECURSO EXTRAORDINARIO
+El recurso extraordinario es improcedente pues incumple lo exigido 
+por el art. 8 de la acordada 4/07, en tanto no transcribe –en el escrito 
+o en anexo separado– las normas procesales de la provincia de Santa 
+Cruz invocadas en relación con el archivo y el sobreseimiento dictados 
+en los procesos locales, lo que basta para desestimar la presentación 
+(art. 11, acordada 4/07).
+RECURSO EXTRAORDINARIO
+Si se invoca gravedad institucional el interesado tiene una particular 
+carga de justificación.
+RECURSO EXTRAORDINARIO
+A los fines de la invocación de la causal de gravedad institucional no bas­
+ta afirmar genéricamente que el proceso reviste una inusitada gravedad 
+institucional en función de los actores involucrados, las características 
+de la acusación y la enorme trascendencia de la causa, que excedería 
+holgadamente los intereses de la parte.
+RECURSO EXTRAORDINARIO
+La gravedad institucional se vincula con la trascendencia de la sentencia 
+apelada y, en su caso, con la necesidad impostergable de que la Corte 
+haga una declaratoria sobre el punto en discusión, por lo cual no toda de­
+cisión dictada en un caso de trascendencia es, en sí misma, trascendente, 
+ni reviste gravedad institucional, por ello, el hecho de que se trate de la si­
+tuación procesal de la actual Vicepresidenta de la Nación no es suficiente 
+para concluir, sin más, en que lo decidido reviste gravedad institucional.
+
+447
+DE JUSTICIA DE LA NACIÓN
+345
+RECURSO EXTRAORDINARIO
+No resulta admisible pretender que cualquier decisión adversa que se 
+adopte en procesos penales donde estén implicados altos funcionarios 
+exija la intervención inmediata de la Corte, prescindiendo de los recau­
+dos legales que regulan su competencia apelada.
+SENTENCIA DEFINITIVA
+Si bien resultan equiparables a definitiva las resoluciones dictadas en el 
+marco de recursos destinados a lograr la plena operatividad de la prohi­
+bición de la doble persecución penal, ello es así siempre que los agravios 
+del recurrente exhiban, prima facie, entidad bastante para conducir a 
+un resultado diverso del juicio, pues es solo en tales supuestos que se 
+produce un perjuicio de imposible reparación ulterior que permite la 
+equiparación en cuestión.
+SENTENCIA DEFINITIVA
+Para que proceda la equiparación a sentencia definitiva es necesario 
+que los agravios vinculados con la garantía del ne bis in idem se en­
+cuentren suficientemente fundados como para permitir la conclusión 
+provisoria de que su invocación tiene aptitud suficiente para variar la 
+decisión de la causa.
+SENTENCIA DEFINITIVA
+La mera invocación de garantías tendientes a evitar la persecución pe­
+nal múltiple no significa que la decisión apelada sea automáticamente 
+equiparada a una sentencia definitiva: la condición para esta equipara­
+ción, por supuesto, es que en el escrito que contiene el recurso el ape­
+lante demuestre la existencia de circunstancias que permitan prima 
+facie seriamente afirmar que podrían haberse afectado esas garantías 
+constitucionales.
+
+345
+448
+FALLOS DE LA CORTE SUPREMA
+COSA JUZGADA
+La garantía de la cosa juzgada se basa en dos fundamentos: lograr 
+la plena efectividad de la prohibición de la doble persecución penal y 
+conformar uno de los principios esenciales en que se funda la segu­
+ridad jurídica.
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 21 de junio de 2022.
+Vistos los autos: “Recurso de hecho deducido por la defensa de Cris­
+tina Elisabet Fernández de Kirchner en la causa Kirchner, Carlos San­
+tiago y otro s/ abuso de autoridad y viol. deb. de func. púb. (art. 248)”, 
+para decidir sobre su procedencia.
+Considerando:
+1º) Que habiendo sido elevada a juicio la causa por los delitos de 
+asociación ilícita y defraudación en perjuicio de la administración pú­
+blica —vinculada con la asignación direccionada de contrataciones de 
+obra pública vial en la provincia de Santa Cruz en beneficio del “Grupo 
+Austral”— la defensa de Cristina Fernández de Kirchner dedujo una 
+excepción de incompetencia parcial –exclusivamente con relación al 
+delito de defraudación a la administración pública– y solicitó que el 
+Tribunal Oral en lo Criminal Federal nº 2 declinara su competencia en 
+favor de los tribunales ordinarios de la mencionada provincia en razón 
+del carácter local de los intereses afectados. Subsidiariamente, tam­
+bién alegó la existencia de una cosa juzgada parcial –exclusivamente 
+con relación al delito de defraudación a la administración pública–, en 
+razón de decisiones previas adoptadas en la jurisdicción citada en ac­
+tuaciones en la que ella no fue parte pero cuyo objeto procesal sería 
+sustancialmente idéntico y en las que se habría determinado la inexis­
+tencia de delito.
+Los planteos fueron rechazados por el tribunal oral y esa decisión 
+fue impugnada mediante recurso de casación, que fue concedido. La 
+Sala IV de la Cámara Federal de Casación Penal, por mayoría, decla­
+ró inadmisible el recurso de su especialidad por entender, en síntesis,
+
+449
+DE JUSTICIA DE LA NACIÓN
+345
+que no se dirigía contra una sentencia definitiva y que la apelante no 
+había logrado demostrar un agravio actual de tardía o imposible repa­
+ración ulterior que permitiera considerar que la decisión era equipa­
+rable a definitiva.
+Contra la decisión de la Cámara Federal de Casación Penal, la 
+defensa dedujo recurso extraordinario federal, que fue declarado in­
+admisible por el a quo en razón de no dirigirse contra una sentencia 
+definitiva o equiparable a tal. Dicha denegatoria fue objeto del recurso 
+de hecho en examen.
+2°) Que en el recurso extraordinario federal interpuesto la recu­
+rrente critica el decisorio apelado en cuanto omitió responder a dos 
+agravios que —afirma— le causan un gravamen de imposible repara­
+ción ulterior puesto que, en primer lugar, la priva de que el debate oral 
+sea sustanciado ante quienes considera los jueces naturales y que, en 
+segundo lugar, se ha violado la cosa juzgada en un “claro caso de per­
+secución penal múltiple” (fs. 18 vta. y 19 vta.). Postula que la decisión 
+apelada constituye “un caso inequívoco de arbitrariedad” y que reviste 
+una “inusitada gravedad institucional en función de los actores involu­
+crados, las características de la acusación y la enorme trascendencia 
+de la causa” (fs. 25 vta.). Finalmente, menciona que la Sala IV de la Cá­
+mara Federal de Casación Penal resulta incompetente para intervenir 
+en esta causa (fs. 19/19 vta.)
+En primer lugar, para justificar su agravio vinculado a que el a quo 
+omitió habilitar su instancia para tratar sus planteos referidos a la in­
+competencia de los tribunales federales con asiento en la Ciudad Autó­
+noma de Buenos Aires, sostiene que dado que los hechos investigados 
+habrían causado perjuicio al erario provincial resulta irrelevante que 
+en las maniobras hubiesen intervenido funcionarios nacionales y cita 
+jurisprudencia de esta Corte al efecto (fs. 24/25).
+Por otra parte, y para fundar su agravio vinculado a que el tribu­
+nal de casación omitió habilitar esa instancia para tratar su planteo 
+sobre la cosa juzgada respecto de lo resuelto en la justicia local, la re­
+currente sostiene que en la Provincia de Santa Cruz “se denunciaron 
+e investigaron supuestas irregularidades advertidas en distintos pro­
+cesos licitatorios a través de los cuales se asignaron contratos de obra 
+pública vial a las empresas de Lázaro Báez (vgr. sobreprecios en las 
+adjudicaciones, incumplimientos contractuales de distinta índole, fal­
+
+345
+450
+FALLOS DE LA CORTE SUPREMA
+ta de controles, maniobras de cartelización, etc.)” (fs. 19 vta.). Afirma 
+que media identidad objetiva entre estas actuaciones y aquellas pues 
+“cuarenta y nueve de las cincuenta y una obras que son investigadas 
+en esta causa ya fueron analizadas en distintos procesos penales que 
+tramitaron en la provincia de Santa Cruz […] las cuales fueron archi­
+vadas por inexistencia de delito o bien concluyeron con el dictado de 
+un sobreseimiento” (fs. 19 vta.). Agrega que el tribunal oral yerra al 
+afirmar que la hipótesis delictiva en esta causa sea más amplia que 
+aquella de las causas instruidas en la provincia de Santa Cruz pues allí 
+“fueron expresamente denunciados e investigados” actos de funciona­
+rios del Poder Ejecutivo Nacional, descartándose la existencia de deli­
+to alguno (fs. 21 vta.). Precisa este punto al señalar que en la denuncia 
+efectuada en el año 2008, que originó la causa provincial n° 089/11 “se 
+hizo expresa referencia a la existencia de una supuesta asociación ilí­
+cita conformada por un grupo de empresarios y ex funcionarios del 
+anterior gobierno, vínculos entre Lázaro Báez y las máximas autori­
+dades del Poder Ejecutivo de la Nación y un presunto plan orquestado 
+con el propósito de apoderarse ilegítimamente de fondos estatales” 
+(fs. 20). La misma amplitud predica de la denuncia formulada por Ma­
+riana Zuvic ante el Juzgado Federal de Río Gallegos en el año 2013, 
+que dio origen a la causa FCR 33002610/13, que luego fue parcialmen­
+te acumulada a la citada n° 89/2011 del Juzgado de Instrucción n° 3 y 
+continuada en la causa n° 57.751/2015 del Juzgado de Instrucción n° 2 
+de Río Gallegos, pues afirma que allí “se requirió que se investigaran 
+los presuntos delitos de asociación ilícita que involucra a altos funcio­
+narios del gobierno nacional, provincial y/o empresarios, en ellos al ex 
+Presidente fallecido Néstor Kirchner, Gob. Daniel Peralta y funciona­
+rios provinciales responsables de controlar la administración del era­
+rio provincial, empresario santacruceño Lázaro Antonio Báez, Martín 
+Báez y Leandro Báez, y otros empresarios […]” (fs. 20/21 vta.)”.
+A su entender, no es cierto que el objeto procesal de las causas ins­
+truidas en la provincia de Santa Cruz fuera “vago o indeterminado” ni 
+más restringido, sino que por el contrario resulta idéntico al de estas 
+actuaciones (fs. 21). En este punto, cuestiona que los tribunales infe­
+riores hayan concluido en que no se ha vulnerado la cosa juzgada, ni 
+se ha incurrido en un supuesto de persecución penal múltiple. Ello por 
+cuanto, según afirma, “no se expuso un solo argumento que permita 
+suponer que en aquellos procesos penales no se llevó a cabo una in­
+vestigación material seria y objetiva” (fs. 22 vta.) y “resulta paradójico 
+que el mismo juez que instruyó aquel proceso por período tan extenso
+
+451
+DE JUSTICIA DE LA NACIÓN
+345
+alegue varios años más tarde y tras el cambio de gobierno nacional 
+que nunca llevó a cabo una investigación seria, con un contenido ma­
+terial relevante” (fs. 22 vta.). Semejante contradicción, en la que habría 
+incurrido el juez, revela “la absoluta falta de seriedad de las resolucio­
+nes dictadas en el marco del incidente n°37” en el que se rechazó la 
+excepción incoada por otro co-imputado, falta de seriedad que no fue 
+tenida en cuenta por el tribunal oral, que “de manera acrítica convali­
+dó el argumento sin reparar en el enorme contrasentido que el mismo 
+supone” (fs. 22 vta.).
+La recurrente agrega que incluso en el caso en que se considerase 
+que no existe la postulada identidad objetiva, la solución debería ser 
+la misma. En este sentido y con invocación del precedente “Pompas” 
+(Fallos: 325:3255), sostiene que si bien las decisiones dictadas en los 
+tribunales provinciales de Santa Cruz no alcanzan a la totalidad de las 
+obras comprendidas en esta causa, sí comprenden a “una porción sig­
+nificativa de los hechos descriptos en los requerimientos de elevación 
+a juicio (las presuntas irregularidades advertidas en estos cuarenta y 
+nueve procesos licitatorios)” (fs. 22).
+Estas circunstancias que, en su visión, determinan la identidad 
+objetiva entre los procesos resultan suficientes —según argumen­
+ta— para comprometer la garantía de la cosa juzgada. Bajo el título 
+“errónea interpretación y aplicación de la garantía ne bis in idem”, la 
+recurrente precisa –con apoyo en cierta posición doctrinaria– que la 
+garantía de la cosa juzgada no exige el requisito de identidad subjetiva 
+pues “pueden existir casos en que sin existir una persecución penal 
+duplicada o renovada sobre una misma persona (bis in idem) devenga 
+aplicable la cosa juzgada” (fs. 22 y 24). Agrega que, por las razones de 
+seguridad jurídica, “quien es perseguido penalmente en orden a un 
+hecho por el cual otra persona ha sido absuelta o sobreseída por sen­
+tencia firme puede invocar a su favor la excepción de cosa juzgada, 
+siempre y cuando aquel pronunciamiento se hubiere fundado en razo­
+nes extensibles a su situación (vgr., el hecho acriminado no existió)” 
+(fs. 23 vta./24; la itálica es del original).
+3°) Que, como se recordó en el precedente “Di Nunzio” (Fallos: 
+328:1108), el examen de admisibilidad del recurso extraordinario 
+constituye una cuestión previa, que obliga a esta Corte a considerar 
+si al momento de su interposición se han fundado adecuadamente 
+las cuestiones que, como de carácter federal, se invocan (en igual
+
+345
+452
+FALLOS DE LA CORTE SUPREMA
+sentido, Fallos: 320:2118). Asimismo, el Tribunal debe analizar si el 
+recurso contiene una demostración acabada de que se hallan reu­
+nidos los demás requisitos necesarios para habilitar la competencia 
+apelada de esta Corte, entre los que se encuentra el carácter defi­
+nitivo, o equiparable a tal, de la decisión recurrida (Fallos: 312:2348; 
+325:2623; 329:2903; entre otros).
+Así, de acuerdo con lo prescripto por el art. 15 de la ley 48 y por 
+una asentada jurisprudencia del Tribunal, el recurso extraordinario 
+federal debe satisfacer el requisito de fundamentación autónoma a fin 
+de que esta Corte pueda tratar los agravios que se pretenden traer a 
+su conocimiento y, por ello, su incumplimiento implica la inadmisibili­
+dad del recurso (Fallos: 315:142; 325:1478; 326:1478; 344:81; 345:89; entre 
+muchos otros).
+Concretamente, la fundamentación autónoma requiere que el es­
+crito de interposición del recurso extraordinario contenga un relato 
+prolijo de los hechos de la causa de relevancia principal, que permi­
+ta vincularlos con las cuestiones que se plantean como de naturaleza 
+federal mediante una crítica concreta y razonada de los argumentos 
+en que se basó la sentencia que se impugna (Fallos: 310:2937; 312:389; 
+323:1261; 328:4605, entre otros), sin que, incluso, valga a tal efecto una 
+nueva crítica general a las líneas principales de la argumentación del 
+pronunciamiento apelado (Fallos: 325:1905; 326:2575; entre otros), pues 
+resulta exigible rebatir todos y cada uno de los argumentos en que el 
+juzgador se apoyó para arribar a las conclusiones de que el apelante se 
+agravia (Fallos: 311:542; 328:4605; 343:1277; 344:81; 345:89; entre otros). 
+No resulta una refutación suficiente, por lo tanto, el solo sostener un 
+criterio interpretativo distinto del seguido en la sentencia recurrida 
+(conf. Fallos: 318:1593; 323:1261; 327:4622, 4813; 330:2639, entre otros). 
+Como consecuencia de lo anterior, y dado que tales deficiencias no pue­
+den ser subsanadas en el recurso de hecho (Fallos: 312:255; 324:1518; 
+344:81, entre otros), cuando el recurso extraordinario no cumple con el 
+requisito de fundamentación autónoma, la queja debe ser desestimada 
+(Fallos: 312:626; 314:117; 328:795; 329:734; entre otros).
+4°) Que la Sala IV de la Cámara Federal de Casación Penal, por 
+mayoría, sostuvo que la parte recurrente no había alcanzado a de­
+mostrar el agravio de tardía o imposible reparación ulterior que per­
+mitiese equiparar a definitiva la resolución dictada por el Tribunal 
+Oral en lo Criminal Federal n° 2. La apelante debía, en consecuencia,
+
+453
+DE JUSTICIA DE LA NACIÓN
+345
+mostrar que sus planteos sí habían logrado el objetivo de rebatir si­
+quiera mínimamente los argumentos del tribunal oral, de modo que 
+tuvieran entidad suficiente para considerar que la decisión era equi­
+parable a definitiva y, de ese modo, habilitasen la instancia casatoria. 
+En otras palabras, tenía la carga de fundamentar, en los términos 
+recordados en el considerando anterior, que la decisión del tribunal 
+oral era equiparable a definitiva y, por ello, debió haber sido revisada 
+por la cámara de casación.
+5º) Que el recurso extraordinario interpuesto no satisface las 
+exigencias reseñadas por cuanto, por un lado, no acredita haber re­
+futado en su recurso de casación los fundamentos centrales dados 
+por los jueces de grado para desestimar las excepciones esgrimidas 
+y, por el otro, no realiza una descripción prolija y suficiente de los 
+antecedentes de la causa que se vinculan de modo directo con sus 
+agravios, frustrando de este modo la posibilidad de que esta Corte 
+cuente con los elementos mínimos necesarios para evaluar los plan­
+teos correspondientes. Estas deficiencias de fundamentación impi­
+den considerar que los agravios tengan, siquiera prima facie, la en­
+tidad suficiente para concluir en que se ha logrado mostrar que la 
+sentencia es equiparable a definitiva y, por esta razón, corresponde 
+la desestimación de la queja (art. 14, ley 48).
+6°) Que, previo a todo, debe señalarse que los agravios vincula­
+dos a la pretendida vulneración de la garantía del juez natural por 
+haber intervenido la Sala IV de la Cámara Federal de Casación Pe­
+nal en lugar de la Sala I no han sido fundados mínimamente puesto 
+que, como señala la propia apelante, son reedición del planteo efec­
+tuado en las causas CFP 5048/2016/TO1/14/1/1/RH37, CFP 5048/2016/
+TO1/21/1/1/RH39 y CFP 5048/2016/TO1/22/1/1/RH41, sentenciadas en 
+el día de la fecha, por lo que no corresponde su abordaje en el pre­
+sente recurso de hecho.
+7°) Que, señalado lo anterior, conviene recordar que el Tribunal 
+Oral en lo Criminal Federal nº 2 consideró que todas las excepciones 
+deducidas por la recurrente se sostenían en una circunstancia común: 
+la existencia de procesos penales radicados en la provincia de Santa 
+Cruz que impedirían el juzgamiento de los hechos investigados en la 
+presente causa. Las excepciones fueron desestimadas por los jueces 
+haciendo suyos los argumentos que antes, frente a un planteo análogo 
+formulado durante la instrucción por otro co-imputado, habían dado el
+
+345
+454
+FALLOS DE LA CORTE SUPREMA
+juez titular del Juzgado en lo Criminal y Correccional Federal n° 10 y 
+los jueces integrantes de la Sala I de la Cámara Nacional de Apelacio­
+nes en lo Criminal y Correccional Federal.
+En efecto, los magistrados del tribunal oral afirmaron que el juez 
+instructor “realizó un pormenorizado análisis de lo actuado en cada 
+uno de los expedientes citados […] tuvo en consideración la forma 
+vaga e indeterminada en que se formularon las denunciadas en las 
+causas radicadas en Santa Cruz y que los fiscales actuantes en esos 
+legajos, en dos casos, pidieron su desestimación inmediata y, en el res­
+tante, delimitaron un objeto procesal genérico, sin realizar una investi­
+gación que pudiera siquiera activar el riesgo de una persecución penal 
+múltiple […] Ponderó también que la única medida realizada por el fis­
+cal en la causa nro. FCR 33002610/16 fue la obtención de los listados de 
+obras efectuadas en la Provincia de Santa Cruz y que estos no podrían 
+haber hecho referencia a las irregularidades ni a los sobreprecios, ya 
+que simplemente informaban el número de licitación, de obra, su título 
+y el valor del contrato. Así concluyó […] que los magistrados forma­
+ron sus posiciones y efectuaron los respectivos análisis sin tener a la 
+vista siquiera los legajos licitatorios del resto de los entes provincia­
+les”. También hicieron suyas las consideraciones vertidas, en similar 
+sentido, por los jueces de la alzada, quienes confirmaron la resolución 
+del juez inferior. Según el tribunal oral, uno de los magistrados afirmó 
+que todas las causas tramitadas en la Provincia de Santa Cruz habían 
+concluido sin una investigación material previa y en función de los pe­
+didos del Ministerio Público, y consideró que aquellas imputaciones no 
+tenían el mismo contenido ni la misma extensión que la efectuada en 
+estos autos, resultando también diferente el encuadramiento jurídico. 
+El restante magistrado, según se describió en la resolución del tribu­
+nal oral, señaló además que en las causas de la justicia de Santa Cruz 
+no existió delimitación de objeto, ni se precisaron cargos y se emitie­
+ron definiciones conclusivas argumentando la vaguedad, imprecisión 
+y generalidad de las denuncias (CFP 5048/2016/TO1/25, resolución el 
+25 de febrero de 2019).
+Así las cosas, los jueces del Tribunal Oral en lo Criminal Federal n° 
+2 entendieron que correspondía mantener el temperamento adoptado 
+por los magistrados que habían analizado planteos análogos realiza­
+dos con anterioridad, toda vez que “no se han introducido argumentos 
+de entidad que permitan reexaminar el criterio ya fijado en la presente 
+causa”. Concluyeron, además, en que “la hipótesis acusatoria de este
+
+455
+DE JUSTICIA DE LA NACIÓN
+345
+proceso […] resulta a todas luces más amplia e involucraría —más 
+allá del sitio donde se encuentren las obras cuestionadas— la toma 
+de decisiones y la ejecución de actos que habrían tenido lugar en la 
+Ciudad Autónoma de Buenos Aires, por funcionarios del Poder Eje­
+cutivo Nacional”, lo que explica que la causa deba tramitar en esta 
+sede y no en la Provincia de Santa Cruz. Agregaron, finalmente, que 
+la plataforma fáctica delimitada por los acusadores ante los tribunales 
+con asiento en la mencionada provincia determinaba que la extensión 
+y el alcance de la imputación formulada en estos autos fuera distinta 
+de la ventilada en aquellos procesos y que “si se parte de esa premisa, 
+la lógica indica que tampoco pueden prosperar las excepciones de fal­
+ta de acción por cosa juzgada y litispendencia (esta última entendida 
+como una variante del ne bis in idem)”. Ello por cuanto, según enten­
+dieron con remisión a los fundamentos dados por el juez instructor y 
+la cámara revisora (como también al análisis realizado por el fiscal de 
+juicio), no se verificaba la identidad de hecho punible que presupone la 
+garantía invocada (resolución citada).
+8°) Que, en la medida en que el tribunal oral hizo suya la argumen­
+tación completa del juez instructor y de la cámara de apelaciones, es 
+necesario reseñar sus aspectos centrales.
+El juez federal, analizando lo actuado en las causas tramitadas en 
+Santa Cruz, afirmó que “[…] Los representantes del Poder Judicial y 
+del Ministerio Público desestimaron las denuncias y sobreseyeron 
+a los imputados, usando como fundamento de sus decisiones el ca­
+rácter genérico de las denuncias y la ausencia de individualización 
+de las conductas reprochables. A su vez, refirieron que en dos de los 
+procesos citados (causas n° FCR 33002610/13 y 89/11) tampoco resul­
+taba aplicable el principio invocado, ello por ausencia del requisito 
+de identidad de causa, ya que ambas investigaciones no fueron im­
+pulsadas por la fiscalía [sic], lo que indefectiblemente provocó su pa­
+ralización, y por lo tanto, no existió una auténtica investigación […] 
+Delimitado que fue el objeto procesal del sumario aquí en trámite, 
+se tiene en cuenta que no existe identidad en el objeto de la persecu­
+ción con el de las causas n° FCR 33002610 (Fiscalnet 36613/13), 89/11 
+y 57.571/15, en tanto las denuncias que las originaron resultaron 
+amplias y poco circunstanciadas. Ello fue señalado por los fiscales 
+y jueces intervinientes en los tres sumarios de marras quienes se 
+referían a la prescripción como de carácter general, sin una plata­
+forma fáctica concreta a investigar. Por su parte, en solo uno de ellos
+
+345
+456
+FALLOS DE LA CORTE SUPREMA
+existió una pesquisa mínima que no logró delimitar de forma exitosa 
+los hechos atribuidos a los presuntos imputados. Particularmente, 
+en el expediente FCR 33002610/13 que tramitó por ante el Juzgado 
+Federal de Río Gallegos, el Ministerio Público Fiscal al efectuar el 
+requerimiento de instrucción fijó como objeto la “cartelización, so­
+breprecios y corrupción de la obra pública en la provincia de Santa 
+Cruz” y solicitó contadas medidas de prueba, las que no lograron 
+acercarse mínimamente a la compleja maniobra investigada en au­
+tos. Por otro lado, en los legajos nro. 89/11 y 57.751/15, el Dr. José An­
+tonio Chan —representante de la vindicta pública— sostuvo que las 
+conductas denunciadas no constituían un delito, por lo que propuso 
+su desestimación, sin la adopción de ninguna medida, razonamien­
+to que fue compartido en ambos casos por el fiscal ante la Cámara de 
+Apelaciones de la Primera Circunscripción Judicial de la Provincia 
+de Santa Cruz, Dr. Gabriel Giordano. En suma, surge claramente de 
+la lectura de las piezas procesales aludidas por la defensa que nos 
+encontramos frente a hechos que no fueron siquiera delimitados y 
+desestimados por la fiscalía desde su primer intervención o que no 
+se acercan a estar contenidos en las imputaciones por las que Láza­
+ro Antonio Báez resultó procesado por este tribunal, lo que fue confir­
+mado con fecha 14/9/17 por la Sala I de la Excma. Cámara Nacional 
+de Apelaciones en lo Criminal y Correccional Federal. Por lo demás 
+y tal como fue sostenido por el representante del Ministerio Público 
+Fiscal, la delimitación del objeto procesal es un paso fundamental 
+en el proceso penal y el modo en que dicho objeto se haya fijado -o la 
+ausencia de ello- son pautas dirimentes para resolver problemas de 
+litispendencia o cosa juzgada. Tal como lo fue analizado; dos causas 
+fueron desestimadas (nro. 89/11 y 57.751/15) y en la restante se fijó 
+como “cartelización y sobreprecios y corrupción de la obra pública 
+en la provincia de Santa Cruz”, de modo vago, impreciso, carente de 
+plataforma fáctica específica a investigar. Respecto a [sic] ésta últi­
+ma, cabe consignar que si bien fueron producidos algunos elementos 
+probatorios, con aquella delimitación amplia en las conductas objeto 
+de pesquisa, no se observa que hayan sido orientados a la averigua­
+ción de la verdad y a descartar o acreditar la intervención de Báez 
+en ellos” (CFP 5048/2016/37, resolución del 6 de noviembre de 2017).
+Específicamente respecto del sumario n° 089/11, el mismo juez 
+dijo: “la Dra. Suárez (Juzgado de Instrucción 3 de Río Gallegos) dictó 
+el sobreseimiento de Lázaro, Martín y Leandro Báez por el delito de 
+fraude en perjuicio de la administración pública —art. 175 inciso 5°
+
+457
+DE JUSTICIA DE LA NACIÓN
+345
+del CP— (ver fs. 335/344). En ese resolutorio, relató que el requeri­
+miento efectuado por la fiscalía carecía de los requisitos esenciales, 
+lo que impedía que fuera considerado como tal, y que era una solici­
+tud de diligencias probatorias tendientes a delimitar el objeto proce­
+sal y establecer la competencia jurisdiccional. Asimismo, consideró 
+que no se había logrado orientar la investigación o por lo menos ce­
+ñirla en un período y remarcó que las denuncias eran especulativas 
+y vagas en su contenido. Aparte, en virtud de lo expresado por los 
+señores fiscales y ante su voluntad de no efectuar el correspondiente 
+requerimiento, entendió que debía haber un pronunciamiento judi­
+cial sin dilaciones indebidas respecto de Lázaro, Martín y Leandro 
+Báez” (resolución citada).
+Consideró también, respecto de la causa n° 57.751/2015, que “la ti­
+tular del Juzgado de Instrucción nro. 2 [resolvió] desestimar la de­
+nuncia y proceder a su archivo (ver fs. 641/652 y 655/658). En ese reso­
+lutorio explicó que no estaba de acuerdo con lo sostenido por ambos 
+representantes del Ministerio Público Fiscal, pero que conforme los 
+dictámenes de aquéllos, no podía proceder de otro modo. Asimismo, 
+expuso que si bien compartía el criterio de los representantes de la 
+vindicta pública, con respecto a que la denuncia era vaga e impreci­
+sa; discrepaba con la conclusión, ya que consideró que la gravedad 
+de los hechos declarados, imponía la necesidad que los defectos fue­
+ran subsanados a través de una correcta investigación. No obstante, 
+entendió que no era posible expedirse respecto del sobreseimiento, 
+en virtud de que en el caso se había postulado la desestimación de la 
+denuncia, lo que provocaba que no se hubiera iniciado formalmente 
+ningún proceso y además porque de los correspondientes dictáme­
+nes no surgía con claridad cuáles eran los hechos atribuidos” (reso­
+lución citada).
+A su turno, uno de los miembros de la Sala I de la Cámara Nacio­
+nal de Apelaciones en lo Criminal y Correccional Federal consideró 
+que “[…] más allá de la identidad en la persona del imputado Lá­
+zaro Báez, en ninguna de las causas aludidas ha sido delimitada 
+la maniobra con el mismo sentido, alcance, aportes e intervinientes 
+que en esta pesquisa. En esta línea de pensamiento, si bien en los 
+expedientes indicados son mencionados Lázaro Báez y alguna o al­
+gunas de sus empresas, y se alude a procedimientos sustanciados en 
+la DNV o la AGVP, no se advierte identidad con la imputación formu­
+lada en los presentes actuados. Al respecto, interesa remarcar que
+
+345
+458
+FALLOS DE LA CORTE SUPREMA
+como consecuencia del enfoque sesgado que presentan aquellos pro­
+cesos, fundamentalmente en atención a la falta de investigación —
+en sentido material— (recuérdese que en dos de ellos —exptes. nros. 
+89/11 y 57.751/15— el fiscal solicitó ab initio la desestimación y que en 
+un tercero —causa n° 33002610/16—, la principal medida de prueba 
+fue un pedido de informes), la conducta que de ellos se desprende 
+en relación a Lázaro Báez, no exhibe en modo alguno los —necesa­
+rios— vínculos con funcionarios de las más altas jerarquías dentro 
+del circuito de la obra pública vial, tal como fue establecido en la 
+presente. Cabe remarcar, además, que la encuesta aquí desarrollada 
+comprende la conformación de una organización criminal dirigida 
+al apoderamiento de fondos públicos destinados a la obra pública 
+vial en Santa Cruz, durante el período comprendido entre mayo de 
+2003 y diciembre de 2015 de la que habrían formado parte, además del 
+propio Báez, quienes desempeñaron la presidencia de la Nación y 
+otros cargos de elevada jerarquía dentro la Administración Pública 
+Nacional (PEN). Extremos éstos que no fueron analizados en las cau­
+sas tramitadas en la justicia federal y la justicia ordinaria de Río 
+Gallegos. Asimismo, he de ponderar que en estos últimos expedientes 
+la plataforma fáctica no fue delimitada con claridad, atento la falta 
+de una descripción precisa y circunstanciada de los hechos”. El res­
+tante magistrado integrante de la sala concluyó en que “…En clara 
+diferencia con lo que ocurrió en este legajo (ver sobre ello dictamen 
+de la fiscalía, en particular fs. 26 y 27vta.), en las causas de la justicia 
+de Santa Cruz invocadas por la parte no existió delimitación de ob­
+jeto, ni se precisaron cargos. Es más, se emitieron definiciones con­
+clusivas argumentando la vaguedad, imprecisión y generalidad de 
+las denuncias. Evidentemente, en un contexto así no opera el ne bis 
+in idem, porque mal puede sostenerse peligro de doble juzgamiento 
+sobre la base de lo que nunca se sometió a juzgamiento en los prime­
+ros expedientes. (ii) Eso alcanza por sí solo para descartar el argu­
+mento del planteo. Por lo demás, recuerdo que “la desestimación y el 
+archivo de las actuaciones no causan estado, pues aquellas pueden 
+reactivarse cuando existen elementos o alegaciones no valoradas 
+anteriormente” (ambos en CFP 5048/2016/37/CA13, resolución del 24 
+de mayo de 2018).
+Sobre la base de estos argumentos, y otros propios ya reseñados, 
+el Tribunal Oral en lo Criminal Federal n° 2 concluyó en que no existía 
+identidad de objeto entre las distintas investigaciones mencionadas y, 
+por ello, no se verificaba la incompetencia de los tribunales federales
+
+459
+DE JUSTICIA DE LA NACIÓN
+345
+con asiento en la Ciudad de Buenos Aires ni se violentaba cosa juzga­
+da alguna. Asimismo, el tribunal consideró que no estaba en juego la 
+garantía del ne bis in idem por cuanto la falta de delimitación precisa 
+del objeto de investigación, la casi nula actividad probatoria desplega­
+da y la falta de impulso fiscal en las causas tramitadas en la provincia 
+de Santa Cruz, determinaban que no hubiese habido riesgo alguno de 
+persecución penal múltiple.
+9°) Que los argumentos recordados son aquellos que la apelante 
+debía refutar frente a la cámara de casación para mostrar que la reso­
+lución del tribunal oral que cuestionaba era efectivamente equiparable 
+a una decisión definitiva. Esa carga, como se mostrará en lo que sigue, 
+no ha sido cumplida.
+10) Que corresponde considerar, en primer lugar, el planteo de 
+la defensa vinculado a que la Cámara Federal de Casación Penal no 
+habilitó su instancia para revisar el rechazo de su excepción de in­
+competencia parcial. A través de ella había peticionado al Tribunal 
+Oral en lo Criminal Federal n° 2 que se declarase incompetente res­
+pecto del delito de estafa a la administración pública, argumentando 
+que tal hipótesis delictiva debía ser investigada por la justicia local de 
+la Provincia de Santa Cruz que ya había conocido en hechos —a su 
+entender— idénticos.
+11) Que el planteo de la defensa se encuentra insuficientemente 
+fundado por cuanto no demuestra que la resolución fuera equiparable 
+a sentencia definitiva y, por ello, no puede prosperar.
+De acuerdo con el canónico precedente “Di Nunzio”, “el concepto 
+de sentencia equiparable a definitiva para el recurso extraordinario no 
+difiere del establecido para el recurso de casación, tomando en cuenta 
+el carácter de tribunal intermedio de la cámara homónima, siempre 
+que se invoque en los planteos recursivos una cuestión federal o la ar­
+bitrariedad del pronunciamiento conforme la doctrina de esta Corte” 
+(Fallos: 328:1108).
+En el marco de dicho precedente, resulta relevante recordar 
+cómo define este Tribunal el requisito de sentencia definitiva, sus 
+excepciones y los fundamentos que inspiran ese histórico requeri­
+miento de admisibilidad.
+
+345
+460
+FALLOS DE LA CORTE SUPREMA
+Desde 1863, la ley 48 dispone que “sólo podrá apelarse a la Corte 
+Suprema de las sentencias definitivas” (art. 14) y, desde 1902, la ley 
+4055 establece que “la Corte Suprema conocerá por último, en grado 
+de apelación, de las sentencias definitivas pronunciadas por las Cá­
+maras Federales de Apelación…” (art. 6°). En tanto regla general —y 
+más allá de sus excepciones—, tal diseño legal encuentra su quicio 
+en la especial función que se reservó a esta Corte. Como supieron 
+explicar Imaz y Rey, el requisito de sentencia definitiva “es una con­
+secuencia del carácter excepcional” del recurso extraordinario (“El 
+Recurso Extraordinario”, Nerva ediciones de derecho y economía, 
+segunda edición, 1962, p. 198); recurso que, en lugar de constituir 
+“una apelación de orden común”, se define por su objeto específico: 
+“el mantenimiento de la supremacía constitucional” (cf. Imaz y Rey, 
+ob. cit., pág. 15 y 16).
+Por el contrario, la carencia de ciertas pautas de admisibilidad 
+como la regla general del recaudo de sentencia definitiva, o una apli­
+cación desmesurada de sus excepciones, conduciría a “desnatura­
+lizar” la función del recurso extraordinario y a “convertirlo en una 
+nueva instancia ordinaria de todos los pleitos que tramitan ante to­
+dos los tribunales del país” (cf. “Bacci”, Fallos: 179:5, y arg. “Ros­
+envald”, Fallos: 151:48). De tal manera, velar por la observancia del 
+requisito de sentencia definitiva es velar por el rol institucional de 
+este Máximo Tribunal.
+En ese entendimiento, esta Corte mantiene una línea jurispru­
+dencial según la cual las decisiones vinculadas a la competencia no 
+se consideran sentencia definitiva a los efectos de la admisibilidad 
+del recurso extraordinario (“Estrada”, Fallos: 13:115; “Mihanovich”, 
+Fallos: 121:181; y, más recientemente, Fallos: 344:2023), pues sen­
+tencia definitiva es aquella que pone fin al pleito o hace imposible 
+su continuación (“Sucesión de Cipriano de Urquiza”, Fallos: 35:302; 
+“Rosso”, Fallos: 292:479; entre muchos otros). Esto es así a menos 
+que medie denegación del fuero federal o una privación de justicia 
+incompatible con la naturaleza de los derechos en juego, de tardía 
+o imposible reparación ulterior (Fallos: 66:349; Fallos: 95:269; Fallos: 
+127:296; y, más recientemente, “Avellaneda, Arsinoe”, Fallos 307:2430 
+y “Olmedo”, Fallos 326:1198).
+A su vez, y con miras a la función de guardián de las garantías 
+constitucionales de todos los habitantes de la Nación que se le ha con­
+
+461
+DE JUSTICIA DE LA NACIÓN
+345
+fiado, esta Corte exceptuó del recaudo de sentencia definitiva a aque­
+llos recursos referidos a cuestiones de competencia que demostraban 
+la frustración de una garantía constitucional cuya reparación ulterior 
+resultaría imposible, tardía o insuficiente (cf. “Orona”, Fallos: 325:2960; 
+“Carrió”, Fallos: 344:692; entre otros). Naturalmente, un recaudo de 
+admisibilidad como el de sentencia definitiva que encuentra su sentido 
+en preservar el rol constitucional de este Tribunal no podría aplicarse 
+en aquellos supuestos en que implicara subvertir dicho rol.
+Por esa razón, esta Corte también declaró admisibles recursos ex­
+traordinarios que se interpusieron contra sentencias que no revestían 
+estrictamente el carácter de definitivas, pero en los que se invocaba 
+una afectación a la garantía de juez natural en términos tales que exi­
+gía una tutela inmediata.
+Así, se decidió que el pronunciamiento vinculado a la validez de la 
+actuación de un secretario que había sido designado juez subrogante 
+resultaba equiparable a sentencia definitiva en tanto surgía de manera 
+manifiesta un compromiso a la garantía del juez natural —“expresada 
+en la contundente prohibición de que los habitantes de la Nación pue­
+dan ser juzgados por comisiones especiales o ser sacados de los jueces 
+legítimamente nombrados (art. 18 de la Constitución Nacional)”— de 
+manera que el problema exigía “una consideración inmediata en tanto 
+ésta constituye la única oportunidad para su tutela adecuada” (“Ros­
+za”, Fallos: 330:2361).
+En este mismo sentido, en el caso “Meynet” (Fallos: 338:601) el Tri­
+bunal exceptuó del recaudo de sentencia definitiva al recurso de un 
+magistrado local que cuestionaba ser enjuiciado por un consejo de la 
+magistratura según la composición establecida para enjuiciar, y even­
+tualmente remover, fiscales y no por la correspondiente al enjuicia­
+miento de jueces, por entender que “el agravio que se vincula con la 
+imposibilidad de ser juzgado por un tribunal que no es el juez natural 
+previsto por el art. 18 de la Constitución Nacional, exige, de existir, una 
+reparación efectiva que solo puede tener lugar en forma inmediata”. 
+Cabe destacar que en esa oportunidad se precisó que “la revisión ju­
+dicial puede extenderse, siempre a título excepcional, también a las 
+decisiones del órgano juzgador que fuesen equiparables a definitivas, 
+configuración que naturalmente dependerá de las circunstancias que 
+singularicen cada asunto”.
+
+345
+462
+FALLOS DE LA CORTE SUPREMA
+De esta línea jurisprudencial se advierte que cuando en un planteo 
+de incompetencia se pretende la equiparación a sentencia definitiva 
+por afectación de la garantía de juez natural, resulta imperioso que 
+el recurrente demuestre una prístina y grosera violación a las reglas 
+de competencia que justifique la intervención del a quo —y eventual­
+mente de esta Corte— antes de la finalización del pleito, como único 
+remedio eficaz.
+12) Que para justificar la excepción de incompetencia parcial soli­
+citada y la alegada violación a la garantía de juez natural, cabe recor­
+dar, la defensa había partido de dos premisas que luego reitera en el 
+presente recurso extraordinario.
+En primer lugar, aduce que “los hechos investigados y juzgados en 
+la provincia de Santa Cruz resultan idénticos a los que fueron descrip­
+tos en los requerimientos de elevación a juicio” en esta causa. En con­
+creto se refiere a denuncias sobre irregularidades en obras públicas 
+viales investigadas en la causa n° 89/2011 del Juzgado de Instrucción 
+n° 3 de Río Gallegos — formada a raíz de la declaración de incompe­
+tencia del Juzgado Nacional en lo Criminal y Correccional Federal n° 
+10 en el expediente n° 1203/2009 y a la que se incorporaron testimonios 
+de la causa n° FCR 330002610/13, la que a su vez también dio lugar a la 
+causa n° 57.751/2015 del Juzgado de Instrucción n° 2 de Río Gallegos.
+A partir de esta premisa, alega que en el marco de aquellas causas 
+previas diversos magistrados intervinientes habían coincidido en que 
+las “supuestas irregularidades advertidas en el desarrollo de obras 
+públicas viales de Santa Cruz debían ser investigadas por la justicia 
+penal de la referida provincia”.
+Subsidiariamente, la recurrente sostiene que la “participación 
+de funcionarios nacionales en los hechos denunciados y la presunta 
+comisión de algunos actos en esta ciudad (que ni siquiera fueron 
+identificados) resulta totalmente irrelevante”. En este punto, en­
+tendió que resultaba extensible a su caso la doctrina del tribunal 
+según la cual corresponde declarar la competencia local “aunque 
+los imputados hayan evadido los controles de los funcionarios del 
+Ministerio de Salud y Acción Social y, en consecuencia, obstruido 
+el buen servicio de un organismo nacional, pues no puede confun­
+dirse la acción típica dirigida a corromper el buen servicio de los 
+funcionarios de control, con aquella que, dirigida objetivamente a
+
+463
+DE JUSTICIA DE LA NACIÓN
+345
+damnificar las rentas provinciales, incumple para ello disposicio­
+nes nacionales de carácter administrativo” (fs. 25).
+13) Que, al aplicar los estándares reseñados a los agravios de la re­
+currente, se advierte que el recurso extraordinario no demuestra que 
+hubiere mediado una violación a la garantía del juez natural que requi­
+riera tutela inmediata y cuya revisión debiera haber habilitado el a quo.
+En efecto, en su presentación ante el tribunal casatorio, en térmi­
+nos reiterados en el remedio federal, la defensa no refutó debidamente 
+lo resuelto por el tribunal oral que entendió que el presente caso es de 
+competencia de la justicia federal —y de la que tiene jurisdicción en la 
+ciudad de Buenos Aires— toda vez que la hipótesis acusatoria en este 
+proceso —más allá de lo que luego se compruebe en su ámbito natural 
+del juicio— comprende centralmente la toma de decisiones por par­
+te de funcionarios federales y su correlativa ejecución de actos en la 
+Ciudad Autónoma de Buenos Aires, todo en perjuicio de las arcas y los 
+intereses del Estado Nacional. En este punto, el planteo de la defensa 
+ni siquiera intenta explicar cómo un juez con competencia local podría 
+estar habilitado para investigar una hipótesis delictiva que comprenda 
+la actuación de funcionarios públicos federales y la afectación de las 
+arcas y los intereses nacionales, tal como aquí se busca dilucidar.
+14) Que, en línea con lo anterior, cabe agregar que la jurispruden­
+cia de este Tribunal que invoca la recurrente para intentar fundar la 
+equiparación a definitiva de lo decidido en materia de competencia y, 
+ulteriormente, la incompetencia de los tribunales federales con asien­
+to en la Ciudad Autónoma de Buenos Aires, resulta inaplicable al su­
+puesto de autos.
+En ese sentido, y más allá de que no media denegación del fuero 
+federal para habilitar la instancia de revisión, la apelante yerra en la 
+jurisprudencia que invoca para sostener que resultaría competente la 
+justicia provincial de Santa Cruz. Como se verá, la defensa no logra de­
+mostrar de qué manera un criterio fijado en supuestos en que estaban 
+imputados únicamente funcionarios provinciales o en que no se anali­
+zó la eventual afectación del erario nacional deba ser aplicable a una 
+hipótesis delictiva como la del presente en el que –más allá de lo que se 
+concluya en el debate– comprende a funcionarios federales y la afecta­
+ción de las rentas de la Nación. Tampoco intenta demostrar cómo sería 
+aplicable al caso de autos una decisión adoptada sobre la base de que
+
+345
+464
+FALLOS DE LA CORTE SUPREMA
+la afectación a los intereses nacionales sería, en el mejor de los casos, 
+mediata. Así, la recurrente cita la doctrina de Fallos: 303:655, 308:1993 
+y 311:1995 para justificar que no corresponde la competencia federal si 
+no se acredita que el perjuicio a las arcas nacionales se identifica con 
+el resultado directo de una acción típica (fs. 38). Sin embargo, ninguno 
+de los tres precedentes invocados atañe a un supuesto asimilable al de 
+autos pues precisamente la hipótesis delictiva que aquí se investiga 
+comprende –más allá del resultado del debate– una defraudación diri­
+gida desde su comienzo a afectar en forma directa el erario nacional.
+A su vez, la defensa cita el precedente “Mirra” (Fallos: 324:1619). 
+Allí se consideró que corresponde la competencia local aunque los 
+imputados hayan evadido los controles de los funcionarios naciona­
+les y, de esa forma, hayan obstruido el buen servicio de control de un 
+organismo nacional. Las diferencias con el presente caso son cla­
+ras: aquí no se investiga la posible comisión de delitos en perjuicio 
+del erario provincial en cuya realización se hayan evadido contro­
+les a cargo de funcionarios nacionales. Por el contrario, la hipótesis 
+afirmada por los jueces de grado supone la realización por parte de 
+funcionarios nacionales de maniobras dirigidas a perjudicar directa­
+mente al erario nacional.
+15) Que es cierto que esta Corte tiene dicho que frente a casos en 
+los que organismos nacionales remiten fondos a entes provinciales o 
+municipales, “una vez que aquéllos fueron recibidos e incorporados al 
+patrimonio local, su presunta afectación o uso indebido solo causaría 
+un perjuicio a sus rentas y no al Estado nacional, por lo que corres­
+ponde a la justicia local entender acerca de los hechos presuntamente 
+delictivos que pudieron haberse cometido desde entonces” (Compe­
+tencia CFP 16728/2016/1/CS1 “Nivello, Germán Andrés s/ abuso de au­
+toridad, violación de deberes de funcionario público, malversación de 
+caudales públicos. Denunciante: Revelli, María Claudia Ángela y otro”, 
+sentencia del 20 de febrero de 2018 y sus citas; criterio reiterado en Fa­
+llos: 343:593; entre otros). Esta doctrina, sin embargo, no es aplicable a 
+supuestos como el de autos.
+En efecto, su recto alcance surge de lo decidido en la compe­
+tencia CFP 13997/2017/1/CS1 “N.N. s/ abuso de autoridad y viol. deb. 
+func. públ. (art. 248 del C.P.)”, sentencia del 10 de marzo de 2020, opor­
+tunidad en la que se aplicó el precedente “Nivello” y se precisó que 
+“existe una prioridad de los jueces de provincia para investigar los
+
+465
+DE JUSTICIA DE LA NACIÓN
+345
+delitos que pueden haberse cometido en la ejecución de obra pública 
+financiada con fondos incorporados al patrimonio local, sin perjuicio 
+de la intervención que competa a la justicia federal en el supuesto de 
+que surjan en el curso de la investigación elementos que permitan 
+dirigir una imputación concreta contra funcionarios nacionales por 
+su participación en el hecho”.
+En autos existe una imputación concreta contra funcionarios na­
+cionales, no ya como partícipes de maniobras destinadas a defraudar 
+al erario local, sino por su presunta participación en un plan delictivo 
+encaminado a perjudicar directamente a las rentas de la Nación, se­
+gún la hipótesis investigativa sostenida por los jueces de la causa. La 
+apelante no efectúa ninguna consideración que permita justificar una 
+solución distinta a la que surge del criterio recordado en el párrafo 
+anterior, criterio que conduciría a declarar la competencia del fuero 
+federal y no del fuero provincial, contrariamente a lo que se pretende 
+en el escrito recursivo.
+16) Que, en conclusión, la defensa no demostró que la Cámara Fe­
+deral de Casación Penal, al denegar habilitar su instancia para tratar 
+el recurso de su especialidad, hubiera censurado la revisión de una 
+afectación a la garantía de juez natural que demandara una repara­
+ción inmediata.
+17) Que, por las razones que seguidamente se expondrán, tampoco 
+puede prosperar la crítica al temperamento adoptado por el a quo en 
+cuanto se negó a habilitar su instancia para tratar los agravios referi­
+dos al rechazo de la excepción de cosa juzgada articulada por la parte.
+Esta Corte ha descalificado decisiones dictadas por la Cámara 
+Federal de Casación Penal en las que excluyó su competencia revi­
+sora basándose en una interpretación irrazonable del artículo 457 
+del Código Procesal Penal, referido al requisito de sentencia defi­
+nitiva. Ello por no ajustarse a la jurisprudencia que establece que 
+corresponde hacer excepción a la doctrina según la cual no revisten 
+la calidad de sentencia definitiva las resoluciones cuya consecuen­
+cia sea la obligación de seguir sometido a proceso penal en los su­
+puestos en los que el recurso se dirige a lograr la plena efectividad 
+de la prohibición de la doble persecución penal (Fallos: 329:1541; 
+337:1252; entre muchos otros).
+
+345
+466
+FALLOS DE LA CORTE SUPREMA
+La razón de este criterio jurisprudencial consolidado radica en 
+que “el derecho constitucional que se refiere a la prohibición de la do­
+ble persecución penal sólo es susceptible de tutela inmediata porque 
+la garantía no veda únicamente la aplicación de una nueva sanción 
+por un hecho anteriormente penado, sino también la exposición al 
+riesgo de que ello ocurra mediante un nuevo sometimiento a juicio de 
+quien ya lo ha sufrido por el mismo hecho, porque el solo desarrollo 
+del proceso desvirtuaría el derecho invocado, dado que el gravamen 
+que es materia de agravio no se disiparía ni aún con el dictado de una 
+ulterior sentencia absolutoria” (Fallos: 308:84; en el mismo sentido, 
+Fallos: 314:377; 328:374; 333:519).
+Sin embargo, este Tribunal también ha precisado que “la condición 
+para esta equiparación, por supuesto, es que en el escrito que contiene 
+el recurso el apelante demuestre la existencia de circunstancias que 
+permitan prima facie seriamente afirmar que podrían haberse afec­
+tado esas garantías constitucionales” (CSJ 921/2012(48-P)/CS1 “Pino, 
+José Ángel s/ abuso sexual con acceso carnal, gravemente ultrajante”, 
+sentencia del 3 de marzo de 2015; en igual sentido, doctrina que sur­
+ge de CSJ 1600/2005 (41-L)/CS1 “Luzzi, Roberto Julio s/ defraudación- 
+causa n° 116169/00”, sentencia del 8 de mayo de 2007; Fallos: 330:3723; 
+CSJ 427/2009(45-V)/CS1 “Vera, Domingo Benito s/ causa n° 10.909”, 
+sentencia del 6 de diciembre de 2011; entre muchos otros).
+18) Que la recurrente alega que el a quo inválidamente se rehusó 
+a intervenir para tratar el recurso deducido contra el rechazo de la 
+excepción de cosa juzgada que oportunamente planteara. Mediante 
+la excepción en cuestión, la defensa pretende hacer extensiva, en su 
+favor, lo resuelto en sede local en cuanto —según sostiene— se de­
+claró la inexistencia del delito de fraude a la administración pública 
+respecto de un número importante de obras públicas que, refiere, 
+están incluidas en el presente caso, aun cuando la recurrente no fue 
+parte en aquellas actuaciones. En ese contexto, alega la violación de 
+la cosa juzgada.
+19) Que tal planteo soslaya por completo el requisito de identidad 
+subjetiva que exige la excepción de cosa juzgada.
+Este Tribunal ha dicho que las garantías constitucionales de la 
+cosa juzgada y del ne bis in idem se encuentran íntimamente relacio­
+nadas (“Videla”, Fallos: 326:2805, considerando 12, voto del juez Ma­
+
+467
+DE JUSTICIA DE LA NACIÓN
+345
+queda) y ha basado la garantía de la cosa juzgada en dos fundamentos: 
+“lograr la plena efectividad de la prohibición de la doble persecución 
+penal” y conformar “uno de los principios esenciales en que se funda 
+la seguridad jurídica” (Fallos: 308:84; 315:2680; entre otros).
+En los términos del recurso extraordinario promovido, la doble 
+persecución penal no resulta comprometida porque, tal como la pro­
+pia recurrente sostiene, ella no fue parte en los procesos tramitados 
+en sede local.
+Debe recordarse que, en lo que respecta a la garantía del ne bis 
+in idem, esta Corte ha establecido que “su violación debe entender­
+se configurada cuando concurran […] las tres identidades clásicas, 
+a saber, eadem persona (identidad de la persona perseguida), ea­
+dem res (identidad de objeto de persecución) y eadem causa petendi 
+(identidad de la causa de persecución)” (“Videla”, Fallos: 326:2805, 
+considerando 8°). Tales recaudos típicos encuentran su razón de ser 
+en que la garantía se dirige a respetar “al individuo que ya ha sufri­
+do la persecución del Estado contra la reiteración del ejercicio de la 
+pretensión punitiva […]” ya sea en un proceso concluido o en trámite 
+(“Videla”, Fallos: 326:2805, considerando 11°; en igual sentido, doc­
+trina de Fallos: 314:377; 327:4916; 330:1016, 2265 y 4928). En la misma 
+línea, se ha dicho que “el fundamento material de la regla non bis in 
+idem es que no es posible permitir al Estado, ‘con todos sus recursos 
+y poder, lleve a cabo esfuerzos repetidos para condenar a un indivi­
+duo por un supuesto delito, sometiéndolo así a molestias, gastos y 
+sufrimientos, y obligándolo a vivir en un continuo estado de ansiedad 
+e inseguridad, y a aumentar, también, la posibilidad de que, aun sien­
+do inocente, sea hallado culpable” (“Videla”, Fallos: 326:2805, voto del 
+juez Maqueda, considerando 12).
+El alcance de esta garantía, que se derivó tradicionalmente en 
+forma implícita del art. 18 de la Constitución Nacional, tiene análogo 
+correlato en las previsiones del derecho internacional de los derechos 
+humanos, dado que la Convención Americana sobre Derechos Huma­
+nos establece que “[e]l inculpado absuelto por una sentencia firme no 
+podrá ser sometido a nuevo juicio por los mismos hechos” (art. 8) y el 
+Pacto Internacional de Derechos Civiles y Políticos prevé que “[n]adie 
+podrá ser juzgado ni sancionado por un delito por el cual haya sido ya 
+condenado o absuelto por una sentencia firme de acuerdo con la ley 
+y el procedimiento penal de cada país” (art. 14.7). Resulta claro que,
+
+345
+468
+FALLOS DE LA CORTE SUPREMA
+como se sostuvo en “Macri” (Fallos: 325:1932, considerandos 7° de los 
+votos en disidencia de los jueces Fayt y Belluscio), estas previsiones 
+receptan el principio de ne bis in idem “con un alcance sustancial­
+mente análogo a la interpretación que ha realizado este Tribunal al 
+respecto” y “establecen la prohibición de someter al inculpado a un 
+nuevo juicio o a una nueva pena por los mismos hechos”.
+En los términos de esta interpretación constitucional, la garantía 
+invocada no se encuentra afectada cuando “ni los imputados fueron in­
+dagados ni molestados” en otro proceso concluido o en trámite respec­
+to de los hechos en cuestión (“Videla”, Fallos: 326:2805, voto del juez 
+Maqueda, considerando 13). Pero incluso teniendo en cuenta exclu­
+sivamente el valor de la seguridad jurídica, como pretende la defensa 
+para justificar su planteo, lo cierto es que esta Corte siempre exigió el 
+requisito de identidad de personas para que opere la excepción de la 
+cosa juzgada, en consonancia con los límites del poder de los jueces 
+para tomar decisiones en el marco de un proceso, decisiones cuyos 
+efectos naturalmente se circunscriben a las partes de aquel. Así, por 
+ejemplo, en procesos no penales el Tribunal también ha exigido la tri­
+ple identidad subjetiva, objetiva y de causa (Fallos: 116:220; 137:175; 
+169:330; 310:1449; 328:3299).
+Ya sea atendiendo a uno u otro fundamento de la cosa juzgada, no 
+es la primera vez que este Tribunal entiende que su alcance constitu­
+cional requiere también identidad subjetiva o, puesto en otras pala­
+bras, que la misma persona esté involucrada en ambos procesos pe­
+nales. Es en base a esta concepción y alcance de la garantía que esta 
+Corte sostuvo que resultaba conducente el agravio según el cual la 
+aplicación del instituto de la cosa juzgada exige verificar “la identidad 
+de sujeto (eadem persona)” y revocó la sentencia que había omitido 
+analizar seriamente dicho planteo (“Z., V. R y otros s/causa nº 14337”, 
+Fallos: 339:127, considerando 7°).
+En dirección contraria a esta línea jurisprudencial, la recurrente 
+intenta extender a su favor los efectos de lo resuelto en sede local en 
+procesos penales en los que —como ella misma reconoce— no fue 
+parte, para evitar un futuro pronunciamiento en este juicio, pero no 
+aporta razón legal alguna para justificar que en el marco de nuestro 
+Estado de Derecho se le confiera a aquellos jueces locales el poder 
+de decidir penalmente con efectos “erga omnes” como postula la re­
+currente (fs. 15).
+
+469
+DE JUSTICIA DE LA NACIÓN
+345
+En definitiva, la recurrente no demuestra que el a quo haya estado 
+obligado, en los términos del precedente “Di Nunzio”, a habilitar su 
+instancia en función de este planteo.
+20) Que, por otra parte, la recurrente no ha demostrado que se ve­
+rifique en el caso el requisito de identidad de objeto entre estos autos y 
+los procesos tramitados en la provincia de Santa Cruz.
+En efecto, más allá de su discrepancia con el rechazo resuelto, la 
+defensa no logró poner en evidencia la identidad de objeto procesal y 
+que su posición no entrañara otra cosa que la mera aserción dogmá­
+tica de una determinada solución que no se ve acompañada de una 
+reseña autosuficiente y acabada de las constancias de la causa.
+Este déficit resulta especialmente relevante si se atiende a que en 
+el presente caso, tal como refiere la propia recurrente, se investiga —
+además de la existencia de una asociación ilícita cuya imputación es 
+ajena a la incidencia en trato— la presunta defraudación a la adminis­
+tración pública nacional que habrían cometido distintos funcionarios 
+federales, junto con otras personas imputadas. Sin describir los tér­
+minos de la hipótesis delictiva de aquellas causas, la recurrente falla 
+absolutamente en demostrar la identidad de objeto entre los procesos 
+locales y el presente; máxime cuando se pretende hacer valer reso­
+luciones dictadas por jueces provinciales respecto de la actuación de 
+funcionarios incuestionablemente federales que habrían afectado de 
+manera directa las arcas nacionales. En efecto, la defensa no explica 
+mínimamente cómo aquellas resoluciones dictadas por jueces locales 
+efectivamente alcanzaron o estuvieron en condiciones jurídicas de al­
+canzar a funcionarios federales.
+Asimismo, cabe recordar que en el recurso, luego de predicarse la 
+identidad del objeto y de la pretensión punitiva entre estos procesos, 
+se sostuvo con invocación del precedente “Pompas” (Fallos: 325:3255) 
+que el efecto de la cosa juzgada se extiende a la imputación por esta­
+fa a la administración pública de todas las obras investigadas en esta 
+causa y más allá de la diferencia de dos obras públicas que no habrían 
+sido investigadas en el fuero local.
+Más allá de que lo relativo a las reglas del concurso de delitos, al 
+remitir al análisis de cuestiones de derecho común, constituye mate­
+ria ajena a esta instancia extraordinaria (Fallos: 306:925), el planteo
+
+345
+470
+FALLOS DE LA CORTE SUPREMA
+se ha presentado a partir de premisas abstractas y genéricas que, 
+dadas las particularidades del sub examine, no sólo no encuentran 
+suficiente apoyo en la breve referencia al precedente citado sino que, 
+además, omiten toda explicación tendiente a demostrar que en el 
+caso no se verifique el supuesto analizado en “Luzzi”. Allí, el Tribunal 
+sostuvo que por “más esfuerzos argumentales que se hagan, hay una 
+cosa cierta: una administración —más allá de la unidad que pueda o 
+no conformar a los fines de su estatuto legal o la calificación penal— 
+es una suma de hechos y actos jurídicos perfectamente diferenciados, 
+determinados, independientes y susceptibles de ser separados. No se 
+advierte, entonces, cómo el discrimen liberatorio de alguno de esos 
+hechos pueda arrastrar necesariamente a todos los demás, sin impor­
+tar si éstos son o no son delictivos. Por eso no resulta posible, como 
+insinúa la parte, asimilar este caso a aquellos delitos que describen 
+un acto humano que, aunque tal vez complejo, sea único e indivisible 
+en cuanto a su significación y sentido, completud y teleología: dañar, 
+matar, robar. Es contradictorio hablar de una unidad formada por dis­
+tintos actos —unidad conceptual, jurídica si se quiere, y de alguna 
+manera, artificial— y luego propugnar la inseparabilidad de estos ac­
+tos. […] Justamente, porque son varias acciones distinguibles, no se 
+ve cómo el hecho de separar algunos y procesar por otros afectaría el 
+principio del doble juzgamiento”.
+Finalmente, en el recurso extraordinario no se ha explicado, si­
+quiera mínimamente, de qué modo la tramitación de los presentes 
+actuados afectaría la seguridad jurídica que la cosa juzgada también 
+busca proteger, ante los términos en los que fueron desestimadas las 
+denuncias tramitadas en el fuero provincial santacruceño.
+21) Que, adicionalmente, el recurso extraordinario no demostró 
+haber refutado ante el tribunal de casación los argumentos dados por 
+los jueces de la causa —ya reseñados— para rechazar las excepciones 
+bajo análisis.
+Respecto del fundamento dado por los jueces para rechazar la in­
+vocada violación de la cosa juzgada y del ne bis in idem, la recurrente 
+sostiene que “resulta paradójico que el mismo juez que instruyó aquel 
+proceso por período tan extenso alegue varios años más tarde y tras 
+el cambio de gobierno nacional que nunca llevó a cabo una investi­
+gación seria, con un contenido material relevante” (fs. 22 vta.) y que 
+semejante contradicción revela “la absoluta falta de seriedad de las
+
+471
+DE JUSTICIA DE LA NACIÓN
+345
+resoluciones dictadas en el marco del incidente n° 37” en el que se 
+rechazó la excepción incoada por otro co-imputado, la que no fue te­
+nida en cuenta por el tribunal oral, que “de manera acrítica convalidó 
+el argumento sin reparar en el enorme contrasentido que el mismo 
+supone” (fs. 22 vta.).
+Cualquiera que fuese el juicio de valor que pudiera merecer el 
+tiempo insumido por la tramitación original de la causa n° 1209/09 
+en jurisdicción federal (posteriormente transformada en el sumario 
+local n° 089/11), ello nada tiene que ver con la entidad de la investiga­
+ción llevada a cabo en sede provincial y sus efectos sobre la garantía 
+del ne bis in ídem y sobre la alegada cosa juzgada. Por lo tanto, no 
+puede considerarse que las afirmaciones de la recurrente a este res­
+pecto constituyan una crítica suficiente del fundamento dado por los 
+jueces de grado.
+22) Que tampoco basta para demostrar que el tribunal de casación 
+debió habilitar su instancia el afirmar que este no “expuso un solo ar­
+gumento que permita suponer que en aquellos procesos penales no se 
+llevó a cabo una investigación material seria y objetiva” (fs. 22 vta.), 
+afirmación que no constituye otra cosa que la insistencia en una tesis 
+divergente de la adoptada por los magistrados de grado sobre lo re­
+suelto en sede local, máxime cuando no se brinda ninguna explicación 
+que pudiera dar sustento a tal tesis y, de ese modo, justificara la habi­
+litación de la instancia casatoria.
+En efecto, el recurso extraordinario promovido no demuestra que 
+hubiera refutado ante la cámara de casación los fundamentos que 
+brindaron los jueces del tribunal oral para concluir que lo resuelto en 
+sede local no tenía un alcance que permita afirmar que existe identi­
+dad de objeto respecto de los hechos investigados en la presente.
+En primer lugar, la apelante incumple el requisito de efectuar un 
+relato prolijo de los hechos principales de la causa, que permita rela­
+cionarlos con las cuestiones que se invocan como de naturaleza fede­
+ral, puesto que omite toda mención al tenor y contenido de las resolu­
+ciones que ordenaron el archivo y el sobreseimiento invocados, lo que 
+—a la luz del análisis efectuado por los jueces de la causa— impide 
+tener por fundado el agravio, déficit que alcanza tanto a la postulación 
+de violación de la cosa juzgada como a la de transgresión del ne bis in 
+idem. Es evidente que si se invoca el pretendido carácter de cosa juz­
+
+345
+472
+FALLOS DE LA CORTE SUPREMA
+gada que tendrían las resoluciones dictadas en las causas tramitadas 
+en la Provincia de Santa Cruz y su posible influencia en la activación 
+de la garantía del ne bis in idem, ellas debieron haber sido transcrip­
+tas o, en su caso, debió haberse explicado fiel y acabadamente su tenor 
+puesto que, de lo contrario, resulta imposible conocer su real alcance 
+y, en consecuencia, tampoco resulta posible considerar que los agra­
+vios vinculados a la pretendidas violaciones de la cosa juzgada y del ne 
+bis in idem tengan un mínimo de seriedad.
+Aun cuando se dejara de lado lo anterior, lo cierto es que, para 
+decidir de ese modo, los jueces tuvieron especialmente en cuenta: 
+que en aquellas causas “los hechos no fueron siquiera delimitados” 
+y fueron “desestimados por la fiscalía desde su primer intervención 
+[sic] o que no se acercan a estar contenidos en las imputaciones por 
+las que Lázaro Antonio Báez resultó procesado” en estos autos; que 
+las desestimaciones y archivos no causan estado, pues pueden reac­
+tivarse en ciertas condiciones; que en el sumario n° 089/11 la jueza 
+interviniente consideró que “el requerimiento efectuado por la fis­
+calía carecía de los requisitos esenciales, lo que impedía que fuera 
+considerado como tal” y “que no se había logrado orientar la in­
+vestigación o por lo menos ceñirla en un período y remarcó que las 
+denuncias eran especulativas y vagas en su contenido”; que, en ese 
+marco, dictó el sobreseimiento para garantizar un “pronunciamiento 
+sin dilaciones indebidas”; que en la causa n° 57.751/2015, la jueza a 
+cargo “explicó que no estaba de acuerdo con lo sostenido por ambos 
+representantes del Ministerio Público Fiscal, pero que conforme 
+los dictámenes de aquéllos, no podía proceder de otro modo”, que 
+“si bien compartía el criterio de los representantes de la vindicta 
+pública, con respecto a que la denuncia era vaga e imprecisa; dis­
+crepaba con la conclusión, ya que consideró que la gravedad de los 
+hechos declarados, imponía la necesidad que los defectos fueran 
+subsanados a través de una correcta investigación”, que “no era 
+posible expedirse respecto del sobreseimiento, en virtud de que en 
+el caso se había postulado la desestimación de la denuncia, lo que 
+provocaba que no se hubiera iniciado formalmente ningún proce­
+so” y que “de los correspondientes dictámenes no surgía con clari­
+dad cuáles eran los hechos atribuidos”.
+El recurso extraordinario adolece de una notable orfandad en su 
+fundamentación puesto que ni siquiera aborda los puntos recordados 
+en el párrafo anterior, fundamentos que resultaron determinantes del
+
+473
+DE JUSTICIA DE LA NACIÓN
+345
+criterio adoptado por los jueces intervinientes y cuya revocación por 
+esta Corte se pretende. Asimismo, el escrito recursivo omite toda ex­
+plicación acerca de por qué el archivo de la denuncia y el sobresei­
+miento, en los términos en que fueron dispuestos, tendrían el alcance 
+de un pronunciamiento con carácter de cosa juzgada respecto de los 
+hechos aquí investigados. Tal explicación resultaba imprescindible 
+dado el tenor del agravio que se pretende fundar. La crítica se limita 
+a invocar la cosa juzgada y el ne bis in idem, pero no explica de qué 
+modo las conclusiones de los jueces sobre la cuestión, a la luz de las 
+consideraciones recordadas, serían desacertadas y pondrían en juego 
+las citadas garantías, forzando de este modo la habilitación de la ins­
+tancia casatoria.
+A ello cabe agregar que, en este punto, el recurso extraordinario 
+incumple lo exigido por el art. 8 de la acordada 4/07, en tanto no trans­
+cribe —en el escrito o en anexo separado— las normas procesales de 
+la provincia de Santa Cruz invocadas en relación con el archivo y el so­
+breseimiento ya mencionados, lo que bastaría por sí para desestimar 
+la presentación (art. 11, acordada 4/07).
+23) Que finalmente, y sin perjuicio de lo señalado en torno a 
+la alegada gravedad institucional en los legajos CFP 5048/2016/
+TO1/14/1/1/RH37 “Fernández de Kirchner, Cristina” y CFP 
+5048/2016/TO1/21/1/1/RH39 “Fernández de Kirchner, Cristina”, cabe 
+agregar que en éste tampoco se ha demostrado su conformación 
+—con la precisión y concreción que es dable exigir para este tipo 
+de alegaciones— a los fines de sortear la ausencia de una decisión 
+definitiva o equiparable a tal. Puesto en otras palabras, también 
+respecto de este planteo el recurso carece de la fundamentación 
+autónoma exigida por el art. 15 de la ley 48.
+Como tiene dicho este Tribunal, si se invoca gravedad institucio­
+nal el interesado tiene una particular carga de justificación (Fallos: 
+306:538; 312:575, 1484, entre otros). Dicha carga no se ha satisfecho en 
+el caso, en tanto el planteo no se basa en un serio y concreto razona­
+miento que demuestre la concurrencia de aquella circunstancia.
+Así, no basta afirmar genéricamente que el proceso “reviste una 
+inusitada gravedad institucional en función de los actores involucra­
+dos, las características de la acusación y la enorme trascendencia de 
+la causa”, que excedería holgadamente “los intereses de la parte” para
+
+345
+474
+FALLOS DE LA CORTE SUPREMA
+concluir en que “el concepto de gravedad institucional [resulta] inequí­
+vocamente aplicable al sub lite” (fs. 39 del recurso). Tampoco es sufi­
+ciente mencionar, sin más, que “la enorme gravedad institucional del 
+caso” determina la admisibilidad formal del recurso (fs. 2 del recurso).
+La gravedad institucional se vincula con la trascendencia de la 
+sentencia apelada y, en su caso, con la necesidad impostergable de 
+que esta Corte haga una declaratoria sobre el punto en discusión. No 
+toda decisión dictada en un caso de trascendencia es, en sí misma, 
+trascendente, ni reviste gravedad institucional. Por ello, el hecho de 
+que se trate de la situación procesal de la actual Vicepresidenta de 
+la Nación no es suficiente para concluir, sin más, en que lo decidido 
+reviste gravedad institucional.
+Tampoco brinda fundamento suficiente al planteo la mención ge­
+nérica de las “características de la acusación” —que no se describen— 
+y de la “enorme trascendencia del caso”, si no se elabora prolijamente 
+por qué el rechazo de las excepciones deducidas por la recurrente y la 
+declaración de inadmisibilidad del recurso de casación por parte del a 
+quo tendrían un efecto que excedería el interés de las partes y alcanza­
+ría a la comunidad toda o afectaría las instituciones básicas de la Na­
+ción, tal como exige la jurisprudencia de esta Corte sobre la materia. 
+No resulta admisible pretender que cualquier decisión adversa que se 
+adopte en procesos penales donde estén implicados altos funcionarios 
+exija la intervención inmediata de esta Corte, prescindiendo de los re­
+caudos legales que regulan su competencia apelada.
+En suma, no se advierte la existencia de un supuesto de gravedad 
+institucional en virtud del rechazo de las excepciones planteadas, toda 
+vez que tal objeción sólo se ha hecho en términos genéricos y en forma 
+que no satisface el requisito de fundamentación del recurso extraor­
+dinario exigible de acuerdo con el art. 15 de la ley 48 y la reiterada 
+doctrina de la Corte (Fallos: 325:1905).
+24) Que, en las condiciones analizadas en los considerandos prece­
+dentes, el recurso extraordinario fracasa en demostrar que la decisión 
+apelada sea equiparable a definitiva y, por esa razón, corresponde la 
+desestimación de la queja (art. 14, ley 48).
+Si bien, como se recordó antes, esta Corte ha sostenido que resul­
+tan equiparables a definitiva las resoluciones dictadas en el marco de
+
+475
+DE JUSTICIA DE LA NACIÓN
+345
+recursos destinados a lograr la plena operatividad de la prohibición 
+de la doble persecución penal (Fallos: 314:377, considerando 4°; Fa­
+llos: 329:1541, entre otros), ello es así siempre que los agravios del 
+recurrente exhiban, prima facie, entidad bastante para conducir a 
+un resultado diverso del juicio, pues es solo en tales supuestos que 
+se produce un perjuicio de imposible reparación ulterior que permite 
+la equiparación en cuestión, tal como se exige desde Fallos: 314:377 
+(considerando 3°).
+Como se explicó con claridad en el voto concurrente del juez Pe­
+tracchi en Fallos: 320:742, para que proceda la equiparación a senten­
+cia definitiva es necesario que los agravios vinculados con la garantía 
+del ne bis in idem se encuentren suficientemente fundados como para 
+permitir la conclusión provisoria de que su invocación tiene aptitud 
+suficiente para variar la decisión de la causa (véanse, especialmente, 
+considerandos 4° y 10, voto del juez Petracchi). Con posterioridad, una 
+mayoría del Tribunal hizo explícito que la mera invocación de garan­
+tías tendientes a evitar la persecución penal múltiple no significa que 
+la decisión apelada sea automáticamente equiparada a una sentencia 
+definitiva: “la condición para esta equiparación, por supuesto, es que 
+en el escrito que contiene el recurso el apelante demuestre la exis­
+tencia de circunstancias que permitan prima facie seriamente afirmar 
+que podrían haberse afectado esas garantías constitucionales” (CSJ 
+921/2012(48-P)/CS1 “Pino, José Ángel s/ abuso sexual con acceso car­
+nal gravemente ultrajante”, sentencia del 3 de marzo de 2015).
+Esta doctrina mantiene plena vigencia y es la que explica que en 
+distintas ocasiones el Tribunal haya desestimado por falta de senten­
+cia definitiva recursos que invocaban la violación de la garantía men­
+cionada (Fallos: 320:742; FCB 32022117/2011/RH1 y FCB 32022117/2011/
+RH2 “Martínez, Alberto Rubén y otro s/ infracción ley 23.737 (art. 5, 
+inc. c)”, sentencias del 5 de abril de 2018; CFP 2637/2004/ RH10 “Ne­
+rone, Rolando Oscar y otros s/ incidente de recurso extraordinario”, 
+sentencia del 30 de setiembre de 2021 —con voto concurrente del juez 
+Rosatti—; CFP 15448/2016/RH5 “De Vido, Julio Miguel s/ averiguación 
+de delito”, sentencia del 28 de octubre de 2021; CFP 1875/2009/RH2 
+“Martínez de Hoz, José Alfredo y otros s/ secuestro extorsivo, robo, 
+coacción (art. 149 bis), encubrimiento (art. 277), asociación ilícita, deli­
+tos de lesa humanidad y desaparición forzada de personas”, sentencia 
+del 28 de diciembre de 2021; entre otros).
+
+345
+476
+FALLOS DE LA CORTE SUPREMA
+Por esa misma razón el Tribunal ha desestimado las presenta­
+ciones en que la mera invocación de la violación a la cosa juzga­
+da carecía de una fundamentación autonóma y suficiente o no se 
+presentaba, en su formulación, como sustancial (arg. causa CSJ 
+519/2007(43-T)/CS1 “Tealdo, José s/ causa n° 8690”, sentencia del 18 
+de agosto de 2009; CSJ 809/2011(47-R)/CS1, “Rocchi, Miguel Ángel s/ 
+abuso sexual etc. -causa nº 3982-”, sentencia del 22 de abril de 2014; 
+“Pino, José Ángel”, ya citada y FRO 83000092/12/3/2/1/RH1 “Cuello, 
+Elba Liliana s/ incidente de recurso extraordinario”, sentencia del 
+26 de abril de 2022; entre muchos otros). Y lo propio ocurre con los 
+agravios relativos a la pretendida incompetencia de los tribunales 
+federales con asiento en la Ciudad Autónoma de Buenos Aires (Fa­
+llos: 307:2029; 339:658), alegaciones todas que carecen del sustento 
+argumentativo mínimo indispensable para mostrar que la decisión 
+apelada produce un agravio de difícil o imposible reparación ulterior 
+(arg. Fallos: 307:965) y, de ese modo, habilitar la competencia reviso­
+ra del Tribunal (arts. 14 y 15 de la ley 48).
+Por último, resulta igualmente manifiesta la falta de fundamen­
+tación suficiente de la gravedad institucional alegada para pretender 
+sortear la ausencia de sentencia definitiva que, como se dijo, deter­
+mina inexorablemente la inadmisibilidad del recurso extraordinario 
+y, en consecuencia, la desestimación de la queja interpuesta (Fallos: 
+311:565; 312:575; entre otros).
+Por ello, se desestima la queja. Intímese a la recurrente a que, den­
+tro del quinto día de notificada, efectúe el depósito que dispone el art. 
+286 del Código Procesal Civil y Comercial de la Nación, bajo apercibi­
+miento de ejecución. Notifíquese y, oportunamente, archívese.
+Horacio Rosatti — Carlos Fernando Rosenkrantz — Juan Carlos 
+Maqueda — Ricardo Luis Lorenzetti.
+Recurso de queja interpuesto por Cristina Elisabet Fernández de Kirchner asistida 
+por el Dr. Carlos Alberto Beraldi.
+Tribunal de origen: Sala IV de la Cámara Federal de Casación Penal.
+Tribunal que intervino con anterioridad: Tribunal Oral en lo Criminal Federal n° 2.
+
+477
+DE JUSTICIA DE LA NACIÓN
+345
+```
+
+---
+
+## 345_p670
+
+- **Tomo:** 345 | **wc_cons:** 2969 | **pattern:** segun_su_voto
+- **Carátula:** González Meneses, Herminio s/ Legajo de evaluación n° 13/15 – Consejo de la Magistratura
+
+```
+GONZÁLEZ MENESES, HERMINIO s/ Legajo de evaluación
+n° 13/15 – Consejo de la Magistratura
+ENJUICIAMIENTO DE MAGISTRADOS JUDICIALES
+Cabe desestimar el recurso interpuesto contra la decisión que destituyó 
+al actor del cargo de fiscal general, pues los planteos del apelante no son 
+suficientes para demostrar una afectación al debido proceso de entidad 
+constitucional; de lo que se sigue que no existe cuestión federal que ha­
+bilite la intervención de la Corte en el marco de los rigurosos límites que 
+tiene la revisión judicial en asuntos de esta naturaleza.
+FUNDAMENTOS DEL RECURSO
+Cabe desestimar el recurso interpuesto contra la decisión que destituyó 
+al actor del cargo de fiscal general, pues la presentación del remedio 
+federal carece de fundamentación autónoma, en tanto omite relatar los 
+antecedentes relevantes de la causa, indispensables para analizar el 
+mérito de los agravios propuestos.
+FUNDAMENTOS DEL RECURSO
+Corresponde desestimar el recurso interpuesto contra la decisión que 
+destituyó al actor del cargo de fiscal general, toda vez que el apelante 
+no expone el contenido de la evaluación que dio origen al juicio político; 
+no da precisiones sobre la prueba que califica como sustancial y cuya 
+lectura habría sido omitida durante la audiencia de debate; no describe 
+los términos de la acusación que tacha de vaga e imprecisa; y no hace 
+referencia alguna a los motivos que dio el Tribunal de Enjuiciamiento 
+para destituirlo.
+
+671
+DE JUSTICIA DE LA NACIÓN
+345
+FUNDAMENTOS DEL RECURSO
+Debe desestimarse el recurso interpuesto contra la decisión que desti­
+tuyó al actor del cargo de fiscal general, si el escrito no constituye una 
+crítica concreta y razonada de la sentencia apelada, pues no se hace car­
+go del argumento central que utilizó el a quo para declarar inadmisible 
+la queja: que los agravios estaban manifiestamente infundados porque 
+no relacionaban las circunstancias relevantes de la causa y ello impedía 
+evaluar si las vulneraciones constitucionales invocadas habían ocurri­
+do efectivamente y, en su caso, si tenían la suficiente relevancia para 
+justificar la intervención judicial en el marco de un procedimiento de 
+naturaleza eminentemente político.
+FUNDAMENTOS DEL RECURSO
+Los defectos de fundamentación de un recurso resultan especialmen­
+te graves cuando se presentan en una causa de revisión de un juicio 
+político, pues no solo implican un incumplimiento de los recaudos exi­
+gidos para la admisibilidad de la apelación extraordinaria federal (ar­
+tículo 15 de la ley 48 y artículo 3°, incisos b y d, de la acordada 4/2007); 
+sino que, además, impiden tener por demostrada la invocada lesión a 
+las reglas estructurales del debido proceso, que constituye un requi­
+sito ineludible para habilitar la intervención de la Corte en asuntos de 
+esta naturaleza.
+DESTITUCION
+Cabe desestimar el recurso interpuesto contra la decisión que des­
+tituyó al actor del cargo de fiscal general, pues no existen elementos 
+que pongan en duda, siquiera en forma indiciaria, que el ex fiscal 
+fue imputado por un cargo definido, en base a una conducta descrip­
+ta con suficiente precisión; que pudo ejercer su derecho de defensa, 
+efectuando su descargo sobre la base de los hechos concretos que 
+le fueron imputados; que su conducta fue evaluada y juzgada den­
+tro de un plazo razonable; y que fue destituido, con sustento en los 
+mismos hechos, por el órgano en cuyas manos la Constitución local 
+puso el ejercicio exclusivo de dicha atribución -cuya ausencia de im­
+parcialidad no fue demostrada-, tras tener por acreditadas las cau­
+sales contempladas en el ordenamiento provincial, por las cuales 
+el enjuiciado fue acusado y oído; y promovido el control judicial de 
+dicho procedimiento, intervino el Superior Tribunal provincial, sin 
+que se haya demostrado que su integración ofenda garantía cons­
+
+345
+672
+FALLOS DE LA CORTE SUPREMA
+titucional alguna; y dictó una sentencia que dio fundada respuesta 
+a los planteos que fueron sometidos a su conocimiento mediante 
+desarrollos argumentativos que la sostienen suficientemente como 
+acto judicial válido.
+DEBIDO PROCESO
+Ausente la demostración por parte del recurrente -fiscal destituido- de 
+una grave transgresión a las reglas estructurales del debido proceso, no 
+hay materia federal que habilite la intervención de la Corte en el marco 
+de los rigurosos límites de su competencia que, para asuntos de esta 
+naturaleza, le imponen los artículos 31, 116 y 117 de la Constitución Na­
+cional, y el artículo 14 de la ley 48.
+ENJUICIAMIENTO DE MAGISTRADOS JUDICIALES
+El proceso de remoción de un magistrado tiene una naturaleza esencial­
+mente política, cuyo objetivo reside, antes que en sancionar al acusado, 
+en determinar si este ha perdido los requisitos que la ley y la Constitu­
+ción exigen para el desempeño de una función de tan alta responsabili­
+dad; esa especificidad explica que el juicio político no pueda equipararse 
+llanamente a una causa judicial; que las exigencias formales durante su 
+trámite revistan una mayor laxitud; y que el control judicial posterior 
+sobre sus resultados se realice bajo un estándar francamente riguroso 
+(Voto de los jueces Rosatti y Maqueda).
+ENJUICIAMIENTO DE MAGISTRADOS JUDICIALES
+Quien pretenda la revisión judicial de una decisión adoptada en un pro­
+ceso de remoción de magistrados deberá demostrar en forma nítida, in­
+equívoca y concluyente, con flagrancia, un grave menoscabo a las reglas 
+del debido proceso y a la garantía de defensa en juicio que, asimismo, 
+exhiba relevancia bastante para variar la suerte de la causa, en función 
+de la directa e inmediata relación que debe tener la cuestión federal in­
+vocada con la materia del juicio (artículo 18 de la Constitución Nacional; 
+artículos 8° y 25 de la Convención Americana sobre Derechos Humanos; 
+artículo 15 de la ley 48).
+
+673
+DE JUSTICIA DE LA NACIÓN
+345
+ENJUICIAMIENTO DE MAGISTRADOS JUDICIALES
+El alcance de la revisión en la instancia del artículo 14 de la ley 48 
+en asuntos de remoción de magistrados, se encuentra delineado a 
+partir del estándar fijado en el precedente “Graffigna Latino” (Fallos: 
+308:961), según el cual las decisiones en materia de los llamados jui­
+cios políticos o enjuiciamiento de magistrados en la esfera provincial, 
+cuyo trámite se efectuó ante órganos ajenos a los poderes judiciales 
+locales, configura una cuestión justiciable en la que compete inter­
+venir a la Corte por la vía del recurso extraordinario solo cuando se 
+acredite la violación del debido proceso legal (Voto de los jueces Ro­
+senkrantz y Lorenzetti).
+ENJUICIAMIENTO DE MAGISTRADOS JUDICIALES
+Por ser el objetivo del instituto del juicio político, antes que sancionar 
+al magistrado, el de determinar si este ha perdido los requisitos que 
+la ley y la Constitución exigen para el desempeño de una función de 
+tan alta responsabilidad, el sentido de un proceso de esta naturaleza 
+es muy diverso al de las causas de naturaleza judicial, por lo que sus 
+exigencias revisten una mayor laxitud (Voto de los jueces Rosenkrantz 
+y Lorenzetti).
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 12 de agosto de 2022.
+Vistos los autos: “Recurso de hecho deducido por el actor en la 
+causa González Meneses, Herminio s/ legajo de evaluación n° 13/15 – 
+Consejo de la Magistratura”, para decidir sobre su procedencia.
+Considerando:
+1°) Que Herminio González Meneses fue designado como Fiscal 
+General de la Circunscripción Judicial de Sarmiento de la Provincia 
+del Chubut y, como consecuencia de lo dispuesto en la Constitución 
+local, fue sometido a una evaluación por los tres primeros años en el 
+ejercicio de sus funciones.
+
+345
+674
+FALLOS DE LA CORTE SUPREMA
+En el marco de dicho procedimiento, el Consejo de la Magistratura 
+decidió que su actuación había resultado insatisfactoria y, de conformi­
+dad con lo previsto por el artículo 192 de la Constitución provincial y 24 
+de la Ley V N° 80, elevó sus conclusiones al Tribunal de Enjuiciamiento 
+para que decidiera acerca de su continuidad en el cargo.
+El 26 de marzo de 2019, luego de hacer lugar a la formación de la 
+causa, abrirla a prueba y llevar adelante el debate oral y público, el 
+mencionado tribunal emitió el veredicto final, en el que resolvió des­
+tituir a González Meneses por las causales de mal desempeño de las 
+funciones y desconocimiento inexcusable del derecho, previstas en el 
+artículo 165 de la Constitución provincial y en el artículo 15, incisos a y 
+b de la ley citada.
+2°) Que el funcionario destituido impugnó dicha decisión, pero el 
+órgano juzgador declaró que la vía intentada era inadmisible porque 
+sus decisiones no eran susceptibles de recurso alguno, salvo el de 
+aclaratoria.
+Frente a ello, interpuso una queja ante el Superior Tribunal local 
+en la que alegó que tenía derecho a la revisión judicial del fallo en tan­
+to, durante el enjuiciamiento, se habían vulnerado las reglas estructu­
+rales del debido proceso.
+3°) Que la Corte provincial también declaró inadmisible su recurso. 
+Consideró, en lo esencial, que los agravios del recurrente estaban ma­
+nifiestamente infundados y no eran suficientes siquiera para evaluar 
+si se había producido la invocada afectación constitucional.
+En primer lugar, desestimó el planteo según el cual el veredicto se 
+había fundado en prueba documental que no había sido leída durante la 
+audiencia y, por ende, no había podido ser controlada ni refutada por el 
+acusado. Al respecto, señaló que “no basta afirmar que la prueba docu­
+mental no fue leída en la audiencia del juicio si la impugnación omite 
+determinar el contenido particular de esa prueba, la eficacia de toda esa 
+información para acreditar los pertinentes extremos de la acusación y 
+el mérito que los Vocales del Tribunal asentaron en el fallo resistido”.
+En igual sentido, el a quo rechazó la queja relacionada con la pro­
+hibición del doble juzgamiento, basada en que varios hechos por los
+
+675
+DE JUSTICIA DE LA NACIÓN
+345
+que se había enjuiciado a González Meneses ya habían sido sancio­
+nados por parte de los órganos a cargo del control de superintenden­
+cia de los fiscales provinciales. En este punto, sostuvo que “González 
+Meneses no explicita los sucesos por los cuales el Fiscal procesado 
+mereció sanciones impuestas por la autoridad de superintendencia 
+de la que él depende, ni la incidencia que ellas habrían tenido dentro 
+de la sentencia pronunciada por el Tribunal de Enjuiciamiento. Por 
+otro costado (…) [no existe] identidad perfecta entre aquellas actua­
+ciones sustanciadas en el ámbito del Ministerio Público Fiscal (…) [y 
+las llevadas a cabo por el] plenario establecido con el fin de separar 
+al atribuido del cargo que desempeña. Adviértase: la pena adminis­
+trativa -interna del Ministerio Público Fiscal- cancela la posibilidad 
+de otra igual, interna, contra la misma persona, por los mismos mo­
+tivos. Pero (…) no impide la destitución del infractor; el sujeto es el 
+mismo, la falta es idéntica, el proceso ante el Jury no es equivalente, 
+interno, sino externo: éste realiza un interés jurídico diverso al inte­
+rés en la adecuada actuación personal dentro del Ministerio Público 
+Fiscal; la imputación administrativa ante el Tribunal de Enjuicia­
+miento no procura corregir al funcionario, persigue excluir del car­
+go al culpable”.
+Del mismo modo, el Superior Tribunal desechó el planteo de nu­
+lidad de la acusación, fundado en que la vaguedad de sus términos 
+impedía el adecuado ejercicio del derecho de defensa. En este aspecto, 
+volvió a reprochar la falta de fundamentación del agravio y destacó 
+que “también este capítulo desconecta los vicios que afectarían el 
+acto requirente formulado contra González Meneses y la realidad 
+declarada en perjuicio suyo dentro del pronunciamiento del Jury 
+(…) Sin referencia alguna dentro del escrito de la queja, a la conduc­
+ta de González Meneses que el tribunal expuso al instante de la desti­
+tución, es imposible reconocer la trascendencia del defecto esencial 
+en el requerimiento que habilitó el debate y la sentencia”.
+Finalmente, el a quo descartó el agravio que invocaba que el Tri­
+bunal de Enjuiciamiento había tenido en cuenta hechos posteriores, 
+pese a manifestar que solo se habían considerado los tres primeros 
+años del ejercicio de la función. Entendió que no era suficiente “la cita 
+de actuaciones labradas con motivo de hechos imputados a Herminio 
+González Meneses ocurridos después de cumplir tres (3) años desem­
+peñándose en el cargo de Fiscal, no significa formular motivos comple­
+tos y razonados que muestren errores patentes y decisivos en el fallo
+
+345
+676
+FALLOS DE LA CORTE SUPREMA
+cuestionado. Incluso, aunque no se acreditara esa entrega indebida 
+de un arma de fuego (…) a quien no estaba habilitado para recibirla 
+(…) no es revisable el sentido último que conduce a la destitución (…) 
+Desdibujado el cúmulo de razones fácticas y jurídicas que sostienen el 
+decisorio, no basta derribar algún motivo si los otros -indeterminados 
+dentro del remedio extraordinario- subsisten inobjetables”.
+4°) Que, contra dicho pronunciamiento, González Meneses inter­
+puso un recurso extraordinario federal que, denegado, dio lugar a la 
+queja en examen.
+Alega que existe cuestión federal porque el a quo no dio adecuado 
+tratamiento a los planteos realizados por su parte que, a su criterio, 
+demostraban que durante el juicio político había existido una grave 
+afectación de la garantía constitucional del debido proceso. Sostiene 
+que, al haberlos desestimado con respuestas meramente formularias 
+y dogmáticas, el Superior Tribunal lo privó de su derecho al recurso y 
+a la tutela judicial efectiva.
+A continuación, desarrolla los agravios que considera debieron ser 
+evaluados por la Corte local:
+En primer término, aduce que se vulneraron los artículos 36 
+y 37 de la ley provincial V N° 80 “por no haberse dado lectura de 
+prueba documental en la audiencia de debate que se incorporó al 
+proceso”. Refiere que “el mentado art. 37 dice precisamente que: ‘A 
+continuación el Presidente del Tribunal hará leer la parte sustan­
+cial de la prueba que no se recibiere en la audiencia y procederá 
+al examen de testigos y peritos’. Y por si fuera poco, el art. 314 
+del CPP dispone que: ‘La lectura de los elementos esenciales de 
+esta prueba en la audiencia no podrá omitirse ni siquiera con el 
+acuerdo de las partes’. Esta lectura nunca se efectuó y la prueba 
+documental que se acompañó en dos cajas, permaneció en la sala 
+de audiencias mientras el tribunal se retiraba a deliberar. Deli­
+beración que, por otra parte, duró aproximadamente 50 minutos, 
+conforme el registro de audio ¿Entonces cómo puede formar par­
+te de la decisión del Tribunal? ¿Cómo pueden invocarla si nunca 
+la leyeron? Hay un detalle que evidencia que el tribunal tomó su 
+decisión basándose solamente en la mención de esta documenta­
+ción que hizo el Sr. Procurador General (…) [uno de los votos que 
+formaron el veredicto dice] ‘Instada la revisión ante esta Procu­
+
+677
+DE JUSTICIA DE LA NACIÓN
+345
+ración General’ (…) Es evidente que se trató de una fundamenta­
+ción de copia y pegue del alegato del Procurador General”.
+En segundo lugar, alega que “se afectó la prohibición del doble 
+juzgamiento por haberse valorado situaciones y hechos que ya ha­
+bían merecido sanciones de parte de los órganos del control de su­
+perintendencia de los fiscales (…) Concretamente se valoraron si­
+tuaciones y hechos (identificados como puntos 4, 11.16 y 12) que ya 
+habían sido sancionados o sumariados”.
+En tercer término, se queja porque “la acusación fue imprecisa 
+(…) en un caso que se le imputó no existían criterios unívocos en la 
+materia (…) en otro se aludió a un número indeterminado de su­
+puestos acuerdos celebrados fuera de plazo, sin precisión de tales 
+acuerdos y cuáles fueron los plazos incumplidos (…) se le efectuaron 
+imputaciones de falta de compromiso y de conocimiento de manera 
+imprecisa (…) Tan precaria fue la acusación que el Procurador Ge­
+neral (…) resumió: ‘habremos de sostener que se está en presencia 
+de una causal de mal desempeño autónoma; circunstancia que se 
+refuerza a partir de la previsión del art. 24 de la Ley V N° 80, por 
+cuanto es el único caso de mal desempeño en el que no se exige al 
+Consejo otro sumario que la misma evaluación (…) estamos en este 
+debate para analizar una causal autónoma que es la declaración 
+de insatisfacción de los tres años”.
+Finalmente, señala que resulta imposible determinar qué hechos 
+efectivamente fueron evaluados para destituirlo pues, en los distintos 
+votos, se afirman cosas diferentes: “el Dr. Panizzi dijo que quedaban 
+fuera de la imputación los puntos: 1, 2 y 11.3, 11.4, 11.7, 11.10, 11.14, 
+11.15 y 11.17 (…) el Dr. Cohen acogió a la depuración del Dr. Panizzi 
+(…) el Dr. Goya dejó afuera: 9, 11.1, 11.2, 11.14 y 11.17 (…) Roddy In­
+gram adhirió al completo y minucioso detalle del Dr. Panizzi de los 
+supuestos que son dables de analizar, sin referirse en particular a los 
+hechos que evaluaría (…) Grazzini Agüero dice que adhiere al voto 
+del Dr. Panizzi, que no tendrá en cuenta los que se encontraban fuera 
+del plazo de tres años, pero no aclara respecto a qué hechos valora 
+para tomar su decisión. Y para colmo, a pesar de que todos están 
+de acuerdo en que no se debía considerar hechos posteriores al trie­
+nio evaluado, no se descartaron los hechos imputados en los puntos 
+11.11, 11.12, 11.13, que son posteriores a diciembre de 2015”.
+
+345
+678
+FALLOS DE LA CORTE SUPREMA
+5º) Que cabe recordar que el alcance de la revisión judicial en la 
+instancia del artículo 14 de la ley 48, en asuntos de esta naturaleza, 
+parte del tradicional principio establecido en el precedente “Graffig­
+na Latino” (Fallos: 308:961) y se realiza conforme al estándar delinea­
+do, con mayores precisiones, en el conocido caso “Nicosia” (Fallos: 
+316:2940), que fue mantenido con posterioridad a la reforma de 1994, 
+en el caso publicado en Fallos: 326:4816, y aplicado de modo invariable 
+por la Corte, tanto al ámbito de los enjuiciamientos de magistrados 
+provinciales como al de los juicios políticos en el orden federal (Fallos: 
+329:3235 y 339:1463 y sus citas).
+En esos antecedentes se señaló que el proceso de remoción de un 
+magistrado tiene una naturaleza esencialmente política, cuyo objetivo 
+reside, antes que en sancionar al acusado, en determinar si este ha 
+perdido los requisitos que la ley y la Constitución exigen para el des­
+empeño de una función de tan alta responsabilidad. Esa especificidad 
+explica que el juicio político no pueda equipararse llanamente a una 
+causa judicial; que las exigencias formales durante su trámite revistan 
+una mayor laxitud; y que el control judicial posterior sobre sus resul­
+tados se realice bajo un estándar francamente riguroso (doctrina de 
+Fallos: 316:2940; 329:3027; 341:512, entre otros).
+6°) Que, de conformidad con tal criterio, quien pretenda la revisión 
+judicial de una decisión adoptada en ese tipo de procedimientos políti­
+cos deberá demostrar en forma nítida, inequívoca y concluyente, con 
+flagrancia, un grave menoscabo a las reglas del debido proceso y a la 
+garantía de defensa en juicio que, asimismo, exhiba relevancia bastante 
+para variar la suerte de la causa, en función de la directa e inmediata 
+relación que debe tener la cuestión federal invocada con la materia del 
+juicio (artículo 18 de la Constitución Nacional; artículos 8° y 25 de la Con­
+vención Americana sobre Derechos Humanos; artículo 15 de la ley 48).
+7°) Que los planteos del apelante contra la sentencia que lo destitu­
+yó no son suficientes para demostrar, en las circunstancias que singu­
+larizan el sub lite, una afectación al debido proceso de la entidad cons­
+titucional señalada; de lo que se sigue que no existe cuestión federal 
+que habilite la intervención de esta Corte en el marco de los rigurosos 
+límites que tiene la revisión judicial en asuntos de esta naturaleza.
+8°) Que, ello es así, pues la presentación del remedio federal ca­
+rece de fundamentación autónoma, en tanto omite relatar los antece­
+
+679
+DE JUSTICIA DE LA NACIÓN
+345
+dentes relevantes de la causa, indispensables para analizar el mérito 
+de los agravios propuestos.
+Por un lado, el apelante no expone el contenido de la evaluación 
+que dio origen al juicio político; no da precisiones sobre la prueba que 
+califica como sustancial y cuya lectura habría sido omitida durante la 
+audiencia de debate; no describe los términos de la acusación que ta­
+cha de vaga e imprecisa; y no hace referencia alguna a los motivos que 
+dio el Tribunal de Enjuiciamiento para destituirlo.
+Por otra parte, el escrito no constituye una crítica concreta y ra­
+zonada de la sentencia apelada, pues no se hace cargo del argumento 
+central que utilizó el a quo para declarar inadmisible la queja: que los 
+agravios estaban manifiestamente infundados porque no relacionaban 
+las circunstancias relevantes de la causa y ello impedía evaluar si las 
+vulneraciones constitucionales invocadas habían ocurrido efectiva­
+mente y, en su caso, si tenían la suficiente relevancia para justificar la 
+intervención judicial en el marco de un procedimiento de naturaleza 
+eminentemente político.
+Nada dice el apelante al respecto y tampoco acompaña copia de la 
+queja presentada ante la Corte local. Más aún, cuando relata en esta 
+instancia los agravios que expresó en sede provincial incurre en la 
+misma falencia que le reprochó el a quo: omite conectar sus quejas 
+con situaciones fácticas concretas y, con ello, impide cualquier evalua­
+ción objetiva sobre el mérito de las conclusiones que enuncia.
+Por ejemplo, alega que se vulneró el artículo 37 de la ley provincial 
+V N° 80 porque, a su criterio, durante el debate no se leyó “la parte 
+sustancial” de la prueba instrumental. Pero no dice a qué documen­
+tos específicos se refiere, no describe su contenido, ni tampoco explica 
+qué incidencia tuvieron en su destitución. No requiere mayor esfuerzo 
+advertir que, sin tal información, resulta absolutamente imposible de­
+terminar si el material probatorio que no se leyó era sustancial y, por 
+ende, si su falta de lectura implicó una vulneración de la legislación 
+provincial o del derecho de defensa del acusado.
+Del mismo modo, aduce que se afectó la prohibición del doble juz­
+gamiento por haberse valorado “situaciones y hechos (identificados 
+como puntos 4, 11.16 y 12) que ya habían sido sancionados o sumaria­
+dos”. No advierte que la mera cita de esos números, sin ninguna otra
+
+345
+680
+FALLOS DE LA CORTE SUPREMA
+aclaración adicional, no aporta los elementos fácticos mínimos que re­
+quiere cualquier tribunal para siquiera ingresar en la evaluación del 
+mérito de su agravio.
+Lo mismo ocurre con el resto de sus planteos ya que no es factible 
+evaluar si la motivación del veredicto es falsa o contradictoria si no se 
+conoce su contenido ni determinar si la acusación fue vaga e impreci­
+sa si no se detallan sus términos.
+9°) Que los serios defectos de fundamentación resultan especial­
+mente graves cuando se presentan en una causa de revisión de un jui­
+cio político, pues no solo implican un incumplimiento de los recaudos 
+exigidos para la admisibilidad de la apelación extraordinaria federal 
+(artículo 15 de la ley 48 y artículo 3°, incisos b y d, de la acordada 4/2007); 
+sino que, además, impiden tener por demostrada la invocada lesión a 
+las reglas estructurales del debido proceso, que constituye un requi­
+sito ineludible para habilitar la intervención de la Corte en asuntos de 
+esta naturaleza (Fallos: 331:810 y 335:1779; y causa CSJ 1082/2018/RH1 
+“Mazzucco, Roberto José s/ recurso extraordinario”, fallada el 10 de 
+septiembre de 2019).
+10) Que, en las condiciones expresadas, no existen en autos ele­
+mentos que pongan en duda, siquiera en forma indiciaria, que el ex 
+fiscal fue imputado por un cargo definido, en base a una conducta des­
+cripta con suficiente precisión; que pudo ejercer su derecho de defen­
+sa, efectuando su descargo sobre la base de los hechos concretos que 
+le fueron imputados; que su conducta fue evaluada y juzgada dentro de 
+un plazo razonable; y que fue destituido, con sustento en los mismos 
+hechos, por el órgano en cuyas manos la Constitución de la Provincia 
+del Chubut puso el ejercicio exclusivo de dicha atribución -cuya ausen­
+cia de imparcialidad no fue demostrada-, tras tener por acreditadas las 
+causales contempladas en el ordenamiento provincial, por las cuales 
+el enjuiciado fue acusado y oído. Promovido el control judicial de di­
+cho procedimiento, intervino el Superior Tribunal provincial, sin que 
+se haya demostrado que su integración ofenda garantía constitucional 
+alguna; y dictó una sentencia que dio fundada respuesta a los planteos 
+que fueron sometidos a su conocimiento mediante desarrollos argu­
+mentativos que la sostienen suficientemente como acto judicial válido.
+De ahí que, ausente la demostración por parte del recurrente de 
+una grave transgresión a las reglas estructurales del debido proceso,
+
+681
+DE JUSTICIA DE LA NACIÓN
+345
+no hay materia federal que habilite la intervención de esta Corte en el 
+marco de los rigurosos límites de su competencia que, para asuntos 
+de esta naturaleza, le imponen los artículos 31, 116 y 117 de la Consti­
+tución Nacional, y el artículo 14 de la ley 48 (causas CSJ 32/2011 (47-B)/
+CS1 “Badano”, sentencia del 14 de febrero de 2012, y sus citas; CSJ 
+425/2013 (49-R)/CS1 “Reuter”, sentencia del 15 de mayo de 2014 y “Sa­
+ladino”, publicada en Fallos: 340:1927).
+Por ello, se desestima la queja. Notifíquese y, oportunamente, 
+archívese.
+Horacio Rosatti — Carlos Fernando Rosenkrantz (según su voto)— 
+Juan Carlos Maqueda — Ricardo Luis Lorenzetti (según su voto).
+Voto del Señor Vicepresidente Doctor Don Carlos Fernando
+Rosenkrantz y el Señor Ministro Doctor Don Ricardo Luis
+Lorenzetti
+Considerando:
+Que los infrascriptos concuerdan con los considerandos 1° a 4° del 
+voto que encabeza este pronunciamiento, que dan íntegramente por 
+reproducidos por razones de brevedad.
+5°) Que cabe precisar, en primer lugar, que el alcance de la revisión 
+en la instancia del artículo 14 de la ley 48 en asuntos de esta naturale­
+za, se encuentra delineado a partir del estándar fijado en el conocido 
+precedente “Graffigna Latino” (Fallos: 308:961), según el cual las de­
+cisiones en materia de los llamados juicios políticos o enjuiciamiento 
+de magistrados en la esfera provincial, cuyo trámite se efectuó ante 
+órganos ajenos a los poderes judiciales locales, configura una cuestión 
+justiciable en la que compete intervenir a este Tribunal por la vía del 
+recurso extraordinario solo cuando se acredite la violación del debido 
+proceso legal.
+6°) Que, en efecto, por ser el objetivo del instituto del juicio po­
+lítico, antes que sancionar al magistrado, el de determinar si este 
+ha perdido los requisitos que la ley y la Constitución exigen para el
+
+345
+682
+FALLOS DE LA CORTE SUPREMA
+desempeño de una función de tan alta responsabilidad, el sentido 
+de un proceso de esta naturaleza es muy diverso al de las causas 
+de naturaleza judicial, por lo que sus exigencias revisten una ma­
+yor laxitud. De ahí, pues, que como concordemente lo ha subrayado 
+este Tribunal desde su tradicional precedente sentado en la causa 
+“Nicosia” (Fallos: 316:2940) -y lo ha mantenido con posterioridad a 
+la reforma de 1994 en la causa “Brusa” (Fallos: 326:4816) y aplica­
+do de modo invariable hasta en sus decisiones más recientes-, quien 
+pretenda el ejercicio de aquel escrutinio deberá demostrar un grave 
+menoscabo a las reglas del debido proceso y a la garantía de defen­
+sa en juicio que, asimismo, exhiba relevancia bastante para variar 
+la suerte de la causa en función de la directa e inmediata relación 
+que debe tener la cuestión federal invocada con la materia del juicio 
+[artículo 18 de la Constitución Nacional; artículos 8° y 25 de la Con­
+vención Americana sobre Derechos Humanos; artículo 15 de la ley 
+48; causa “Saladino” (Fallos: 340:1927), voto de los jueces Lorenzetti 
+y Rosenkrantz; causa “Samamé” (Fallos: 341:54), voto de los jueces 
+Lorenzetti y Rosenkrantz].
+Que los infrascriptos concuerdan, asimismo, con los consideran­
+dos 7° a 10 del voto que encabeza este pronunciamiento, que dan ínte­
+gramente por reproducidos por razones de brevedad.
+Por ello, se desestima la queja. Notifíquese y, oportunamente, archívese.
+Carlos Fernando Rosenkrantz — Ricardo Luis Lorenzetti.
+Recurso de queja interpuesto por Herminio González Meneses, asistido por el Defen­
+sor General de la Provincia del Chubut, Dr. Sebastián Daroca.
+Tribunal de origen: Superior Tribunal de Justicia de la Provincia del Chubut.
+Tribunal que intervino con anterioridad: Consejo de la Magistratura de la Provincia 
+del Chubut.
+
+683
+DE JUSTICIA DE LA NACIÓN
+345
+```
+
+---
+
 ## 346_p1159
 
 - **Tomo:** 346 | **wc_cons:** 42 | **pattern:** mixed
@@ -6827,6 +11705,595 @@ DE JUSTICIA DE LA NACIÓN
 Recurso de queja interpuesto por la Universidad Nacional de Formosa, parte deman­
 dada, representada por los Dres. Vicente Emilio Grippaldi y Mario Héctor Baran.
 Tribunal de origen: Cámara Federal de Apelaciones de Resistencia.
+```
+
+---
+
+## 346_p391
+
+- **Tomo:** 346 | **wc_cons:** 2808 | **pattern:** segun_su_voto
+- **Carátula:** Ifrán, Sandra Mabel s/ Acusación por mal desempeño en el ejercicio de sus funciones – art. 197 de la Constitución de la Provincia de Corrientes
+
+```
+IFRÁN, SANDRA MABEL s/ Acusación por mal desempeño en
+el ejercicio de sus funciones – art. 197 de la Constitución de la
+Provincia de Corrientes
+ENJUICIAMIENTO DE MAGISTRADOS JUDICIALES
+Corresponde rechazar el recurso extraordinario interpuesto contra la 
+sentencia que confirmó la destitución de la actora de su cargo como 
+asesora de menores e incapaces, pues los argumentos de la recurrente 
+no son suficientes para demostrar que se haya incurrido en una afecta­
+ción al debido proceso de entidad constitucional, de lo que se sigue que 
+no existe cuestión federal que habilite la intervención de la Corte en el 
+marco de los rigurosos límites que tiene la revisión judicial en asuntos 
+de esta naturaleza.
+ENJUICIAMIENTO DE MAGISTRADOS JUDICIALES
+Corresponde rechazar el recurso extraordinario interpuesto contra la 
+sentencia que confirmó la destitución de la actora de su cargo de aseso­
+ra de menores e incapaces, pues las quejas vinculadas al encuadre de su 
+conducta en la causal de mal desempeño y a la supuesta desproporción 
+de la sanción impuesta se refieren a una materia no revisable judicial­
+mente en asuntos de esta naturaleza.
+DESTITUCION
+Corresponde rechazar el recurso extraordinario interpuesto con­
+tra la sentencia que confirmó la destitución de la actora de su cargo 
+de asesora de menores e incapaces, pues fue imputada por cargos 
+definidos, en base a conductas descriptas con suficiente precisión; 
+pudo ejercer su derecho de defensa, efectuando su descargo sobre la 
+base de los hechos concretos que le fueron imputados; su conducta 
+fue evaluada y juzgada dentro de un plazo razonable; fue destituida
+
+346
+392
+FALLOS DE LA CORTE SUPREMA
+-con sustento en los mismos hechos- por el órgano en cuyas manos 
+la Constitución local puso el ejercicio exclusivo de dicha atribución, 
+con una integración que no ofende garantía alguna de la Constitución 
+Nacional y tras tener por acreditada la causal contemplada en el or­
+denamiento provincial por la cual la recurrente fue acusada y oída y 
+promovido el control judicial de dicho enjuiciamiento, la apelante no 
+ha acreditado que la sentencia impugnada resulte arbitraria ni tam­
+poco ha demostrado la ausencia de imparcialidad de los integrantes 
+del Superior Tribunal de Justicia.
+ENJUICIAMIENTO DE MAGISTRADOS JUDICIALES
+La valoración de los aspectos sustanciales del proceso de enjuicia­
+miento de magistrados –la subsunción de los hechos en las causales 
+de destitución, la apreciación de los extremos fácticos, la valoración 
+de la prueba, y la calificación de la conducta- no son cuestiones fe­
+derales aptas para ser examinadas por los jueces, pues el órgano 
+judicial no debe sustituir el criterio de quienes, por imperio de la ley, 
+están encargados en forma excluyente del juicio de responsabilidad 
+política del magistrado.
+REVISION JUDICIAL
+Quien pretenda la revisión judicial de una decisión adoptada en un pro­
+cedimiento político de remoción deberá demostrar en forma nítida, in­
+equívoca y concluyente, con flagrancia, un grave menoscabo a las reglas 
+del debido proceso y a la garantía de defensa en juicio que, asimismo, 
+exhiba relevancia bastante para variar la suerte de la causa, en función 
+de la directa e inmediata relación que debe tener la cuestión federal in­
+vocada con la materia del juicio (artículo 18 de la Constitución Nacional; 
+artículos 8° y 25 de la Convención Americana sobre Derechos Humanos; 
+artículo 15 de la ley 48).
+ENJUICIAMIENTO DE MAGISTRADOS JUDICIALES
+El proceso de remoción de un magistrado tiene una naturaleza esen­
+cialmente política, cuyo objetivo reside, antes que en sancionar al 
+acusado, en determinar si este ha perdido los requisitos que la ley y 
+la Constitución exigen para el desempeño de una función de tan alta 
+responsabilidad; esa especificidad explica que el juicio político no pue­
+
+393
+DE JUSTICIA DE LA NACIÓN
+346
+da equipararse llanamente a una causa judicial; que las exigencias 
+formales durante su trámite revistan una mayor laxitud; y que el con­
+trol judicial posterior sobre sus resultados se realice bajo un estándar 
+francamente riguroso.
+ENJUICIAMIENTO DE MAGISTRADOS JUDICIALES
+Las decisiones en materia de los llamados juicios políticos o enjuicia­
+miento de magistrados en la esfera provincial, cuyo trámite se efectuó 
+ante órganos ajenos a los poderes judiciales locales, configura una cues­
+tión justiciable en la que compete intervenir a la Corte por la vía del 
+recurso extraordinario solo cuando se acredite la violación del debido 
+proceso legal (Voto de los jueces Rosenkrantz y Lorenzetti).
+ENJUICIAMIENTO DE MAGISTRADOS JUDICIALES
+Por ser el objetivo del instituto del juicio político, antes que sancionar 
+al magistrado, el de determinar si este ha perdido los requisitos que 
+la ley y la Constitución exigen para el desempeño de una función de 
+tan alta responsabilidad, el sentido de un proceso de esta naturaleza 
+es muy diverso al de las causas de naturaleza judicial, por lo que sus 
+exigencias revisten una mayor laxitud, de ahí que quien pretenda el 
+ejercicio de aquel escrutinio deberá demostrar un grave menoscabo 
+a las reglas del debido proceso y a la garantía de defensa en juicio 
+que, asimismo, exhiba relevancia bastante para variar la suerte de la 
+causa en función de la directa e inmediata relación que debe tener la 
+cuestión federal invocada con la materia del juicio (Voto de los jueces 
+Rosenkrantz y Lorenzetti).
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 3 de mayo de 2023.
+Vistos los autos: “Recurso de hecho deducido por la actora en la 
+causa Ifrán, Sandra Mabel s/ acusación por mal desempeño en el ejer­
+cicio de sus funciones – art. 197 de la Constitución de la Provincia de 
+Corrientes”, para decidir sobre su procedencia.
+
+346
+394
+FALLOS DE LA CORTE SUPREMA
+Considerando:
+1°) Que el Jurado de Enjuiciamiento de la Provincia de Corrientes, 
+mediante sentencia del 10 de mayo de 2016, destituyó a la doctora San­
+dra Mabel Ifrán de su cargo como titular de la Asesoría de Menores e 
+Incapaces de la ciudad de Paso de los Libres, Cuarta Circunscripción 
+Judicial, por considerar encuadrada su conducta en la causal de mal 
+desempeño en el ejercicio de sus funciones, prevista en el artículo 197 
+de la Constitución provincial.
+El procedimiento de destitución fue admitido con relación a los 
+siguientes hechos: “A) el mal desempeño en el manejo y organiza­
+ción de la Defensoría de Menores e Incapaces, Pobres y Ausentes de 
+Paso de los Libres, concretándose en: 1) Incumplimiento de los de­
+beres impuestos en la normativa atinentes a la registración de los 
+libros obligatorios (…) 2) Inactividad de la enjuiciada respecto a las 
+funciones atinentes al carácter de Asesora de Menores e Incapaces 
+(…) 3) Poca o nula actuación como Defensora de Pobres y Ausentes 
+(…) B) Mal desempeño en el cargo vinculado con el trato dispensado 
+por la enjuiciada a los funcionarios y empleados que conformaban el 
+grupo de trabajo de la Defensoría de Paso de los Libres, quienes reci­
+bían violencia psicológica injustificada a través de actos negativos 
+y hostiles en el trabajo de forma sistemática y recurrente, durante 
+un tiempo prolongado, a lo largo de meses o años, transformándose 
+la actitud para con sus dependientes en hostigamiento, intimida­
+ción, amenazas o perturbación y C) Mal desempeño en el ejercicio 
+de la función de Asesora de Menores e Incapaces en el Expediente 
+Administrativo A01 825/15 del Registro de la Defensoría de Paso de 
+los Libres, respecto a la asistencia de una niña menor de edad […]” 
+(ver sentencia del Jurado de Enjuiciamiento del 10 mayo de 2016, es­
+pecialmente páginas 38 y 39).
+Sobre esa base, una vez formulada la acusación, producidas las 
+pruebas y alegatos y concluidos los debates, el Jurado tuvo por acredi­
+tados varios de los hechos imputados y procedió -por mayoría- a des­
+tituir a Ifrán. Para fundar su decisión, ponderó especialmente los tes­
+timonios aportados a la causa y explicó que eran “lo suficientemente 
+elocuentes, de la existencia de conductas de acoso llevadas a cabo 
+por la enjuiciada en perjuicio del personal a su cargo durante su 
+gestión al frente de la Defensoría de la ciudad de Paso de los Libres, 
+que configuran claramente, en el contexto en que se desarrollaron,
+
+395
+DE JUSTICIA DE LA NACIÓN
+346
+un caso de ‘violencia moral o psicológica en el lugar de trabajo’. E[s] 
+evidente que el accionar constante de la enjuiciada ha puesto de 
+relieve una situación crítica y de graves consecuencias (físicas y 
+psíquicas) sobre el personal a su cargo, configurando un comporta­
+miento abusivo que implicó, por su repetición, sistematicidad y ex­
+tensión en el tiempo, un verdadero atentado contra la dignidad del 
+grupo de trabajo, no sólo degradando el clima de trabajo en el que 
+desempeñaban sus tareas cotidianas sino poniendo en serio peligro 
+–además- la estabilidad o conservación del empleo al proferir conti­
+nuas amenazas de sumarios” (ver sentencia citada, página 98).
+Cabe mencionar, asimismo, que uno de los integrantes del tribunal 
+juzgador votó en disidencia; y que su discrepancia residió, fundamen­
+talmente, en la definición del concepto de mal desempeño, en la valo­
+ración de la gravedad de las conductas acreditadas y en la subsunción 
+de dichos hechos en la causal de destitución mencionada (ver senten­
+cia citada, páginas 103 a 127).
+2º) Que la funcionaria destituida interpuso un recurso de casación 
+e inconstitucionalidad contra el veredicto, que fue rechazado por el 
+Superior Tribunal de Justicia de la Provincia de Corrientes.
+3º) Que, frente a ello, la recurrente articuló el recurso extraordina­
+rio federal, cuya denegación dio origen a la queja en examen.
+La apelante relata que la causa tiene su origen en un sumario ad­
+ministrativo que le inició el Fiscal General de la provincia. Se queja 
+porque, a su criterio, dicho funcionario carecía de competencia para 
+ejercer facultades disciplinarias sobre los defensores en virtud de lo 
+dispuesto por el artículo 182 de la Constitución provincial, que prevé 
+que la Defensoría y la Fiscalía General serán órganos separados y au­
+tónomos. Considera que dicha circunstancia también lo inhabilitaba 
+para ejercer el rol de acusador en su juicio político.
+Menciona que impugnó el veredicto ante el Superior Tribunal de 
+Justicia local y volvió a plantear dicha incompetencia, así como tam­
+bién otros vicios graves que afectaban la validez del procedimiento. 
+Concretamente, explica que no solo cuestionó las facultades del Fiscal 
+General para intervenir en el proceso, sino que también se quejó por­
+que la acusación no era precisa y no se había respetado el principio de 
+congruencia. Esto último con sustento en que, en el alegato de clausu­
+
+346
+396
+FALLOS DE LA CORTE SUPREMA
+ra, el acusador no había solicitado expresamente su destitución sino 
+“que la Dra. Ifrán no siga siendo Defensora de Menores de la ciudad 
+de [Paso de los] Libres”.
+Hace referencia a la sentencia del Superior Tribunal que recha­
+zó su recurso y menciona solamente los siguientes fundamentos que 
+la sustentaron: que “la decisión se adoptó por unanimidad” y que el 
+Fiscal General estaba habilitado para intervenir en el juicio político 
+pese a que “es cierto que la Constitución de la Provincia de Corrien­
+tes con absoluta claridad describe la división del Ministerio Público 
+en Fiscal General, Defensor y Asesor General y este primer votante 
+viene pregonando, el Ministerio Público debe tener sus leyes regla­
+mentarias específicas por fuera del Poder Judicial (…). No obstante, 
+se advierte con absoluta claridad que hay una tremenda deuda en 
+el dictado de las leyes orgánicas y el dictado de reglamentaciones 
+e instrucciones internas. Pero si todo esto es así, no podemos dejar 
+de considerar que, frente a ciertos obstáculos legales, no exista una 
+jefatura o funcionarios que, en forma subsidiaria, como subrogante 
+tenga la obligación constitucional de controlar y llevar adelante la 
+responsabilidad que todo funcionario judicial debe asumir”.
+Se agravia porque la sentencia prescindió de lo dispuesto por el ar­
+tículo 182 de la Constitución provincial y de lo resuelto por esta Corte 
+en el precedente publicado en Fallos: 335:2360 “Sotelo”, de los cuales 
+desprende la conclusión de que la Defensoría es un órgano autónomo 
+y no puede estar sujeto al control del Fiscal General. Cuestiona el ar­
+gumento utilizado por el Superior Tribunal para justificar la no apli­
+cación de la cláusula y considera que es inadmisible convalidar una 
+omisión inconstitucional por el solo hecho de que no fue reglamentada.
+También tacha la sentencia de arbitraria por no haber resuelto 
+cuestiones conducentes oportunamente propuestas y por haber incu­
+rrido en afirmaciones falsas. Por un lado, refuta la afirmación de que 
+la destitución fue decidida por unanimidad y señala que existió una 
+disidencia en el Jurado de Enjuiciamiento, que fue absolutamente sos­
+layada por el Superior Tribunal. Alega que se trata de “una equivoca­
+ción tan grosera que aparece como algo inconcebible dentro de una 
+racional administración de justicia (…) significa que ni siquiera se 
+leyó el fallo cuestionado por el recurso y se cayó en consideraciones 
+dogmáticas sin una crítica al medio impugnativo”. Por otra parte, 
+asevera que “no es cierto que en la sustanciación del sumario admi­
+
+397
+DE JUSTICIA DE LA NACIÓN
+346
+nistrativo no haya intervenido el fiscal general, acuso en el sumario, 
+denuncio ante el consejo y luego intervino ante el jurado de enjuicia­
+miento. Por ello se cuestiona la conclusión que ‘no puede prosperar 
+el agravio en cuanto a la actuación del Sr. Fiscal General sobre los 
+actos de los integrantes del Ministerio Público, así como tampoco el 
+Sumario Administrativo indicado a la acusada’”.
+Finalmente, se queja del encuadre de su conducta en la causal de 
+mal desempeño y sostiene que “el supuesto mobing no es causal de 
+destitución y lo tiene resuelto de esta manera el jurado de enjuicia­
+miento en el orden nacional que estas acciones, de comprobarse, 
+se sancionan con multa o suspensión, lo que viola el principio de 
+razonabilidad”. Agrega que “no [se] tuvo en cuenta que a la Dra. 
+Ifrán le hacían cumplir tareas contradictorias de fiscal, asesor de 
+menores y defensora oficial que motivó pedidos del propio Tribunal 
+Oral Penal de Paso de los Libres denunciando esta irregularidad. 
+No se tuvo en cuenta que de los hechos apuntados como descali­
+ficación de la conducta ninguno puso en crisis la prestación del 
+servicio de defensa pública que era el cargo y la función que la Dra. 
+Ifrán debía cumplir. La sanción de destitución luce cuanto menos 
+desproporcionada”.
+5º) Que cabe recordar que el alcance de la revisión judicial en la 
+instancia del artículo 14 de la ley 48, en asuntos de esta naturaleza, 
+parte del tradicional principio establecido en el precedente “Graffig­
+na Latino” (Fallos: 308:961) y se realiza conforme al estándar delinea­
+do, con mayores precisiones, en el conocido caso “Nicosia” (Fallos: 
+316:2940), que fue mantenido con posterioridad a la reforma de 1994, 
+en el caso publicado en Fallos: 326:4816, y aplicado de modo invariable 
+por la Corte, tanto al ámbito de los enjuiciamientos de magistrados 
+provinciales como al de los juicios políticos en el orden federal (Fallos: 
+329:3235 y 339:1463 y sus citas).
+En esos antecedentes se señaló que el proceso de remoción de un 
+magistrado tiene una naturaleza esencialmente política, cuyo objetivo 
+reside, antes que en sancionar al acusado, en determinar si este ha 
+perdido los requisitos que la ley y la Constitución exigen para el des­
+empeño de una función de tan alta responsabilidad. Esa especificidad 
+explica que el juicio político no pueda equipararse llanamente a una 
+causa judicial; que las exigencias formales durante su trámite revistan 
+una mayor laxitud; y que el control judicial posterior sobre sus resul­
+
+346
+398
+FALLOS DE LA CORTE SUPREMA
+tados se realice bajo un estándar francamente riguroso (doctrina de 
+Fallos: 316:2940; 329:3027; 341:512, entre otros).
+6°) Que, de conformidad con tal criterio, quien pretenda la revi­
+sión judicial de una decisión adoptada en ese tipo de procedimientos 
+políticos deberá demostrar en forma nítida, inequívoca y concluyente, 
+con flagrancia, un grave menoscabo a las reglas del debido proceso 
+y a la garantía de defensa en juicio que, asimismo, exhiba relevancia 
+bastante para variar la suerte de la causa, en función de la directa e 
+inmediata relación que debe tener la cuestión federal invocada con la 
+materia del juicio (artículo 18 de la Constitución Nacional; artículos 8° 
+y 25 de la Convención Americana sobre Derechos Humanos; artículo 
+15 de la ley 48).
+7°) Que los planteos de la recurrente no son suficientes para de­
+mostrar, en las circunstancias que singularizan el sub lite, que se haya 
+incurrido en una afectación al debido proceso de la entidad constitu­
+cional señalada; de lo que se sigue que no existe cuestión federal que 
+habilite la intervención de esta Corte en el marco de los rigurosos lími­
+tes que tiene la revisión judicial en asuntos de esta naturaleza.
+8°) Que ello se debe, en este caso, a que el recurso omite consig­
+nar antecedentes relevantes de la causa que resultan indispensables 
+para evaluar la procedencia de los agravios propuestos. La apelante 
+no hace una reseña completa de la sentencia apelada, sino que se li­
+mita a mencionar algunos argumentos aislados, en forma escueta e 
+inconexa. A lo dicho se agrega que tampoco se acompañó copia de tal 
+resolución -en ostensible incumplimiento de la acordada 4/2007-, lo que 
+torna directamente imposible conocer sus fundamentos, verificar los 
+“errores materiales” invocados por la apelante y, en definitiva, evaluar 
+la tacha de arbitrariedad endilgada.
+Sin perjuicio de que las graves deficiencias señaladas serían sufi­
+cientes para desestimar la presentación, también debe señalarse que 
+los agravios carecen de un desarrollo argumental sólido que sustente 
+las conclusiones que afirman. Así, por ejemplo, la apelante insiste en 
+sostener que el Superior Tribunal se apartó de lo dispuesto por el ar­
+tículo 182 de la Carta Magna local y de la doctrina del precedente de 
+Fallos: 335:2360, pero no explica cómo llega a esa conclusión. No hace 
+una interpretación razonada de la cláusula constitucional que invoca, 
+ni tampoco analiza la sentencia de esta Corte que cita en sustento de
+
+399
+DE JUSTICIA DE LA NACIÓN
+346
+su postura. Esto último resulta especialmente reprochable si se ad­
+vierte que, si bien en el precedente “Sotelo” se cuestionaba la validez 
+del artículo 182 de la Constitución de Corrientes, la pretensión estaba 
+pura y exclusivamente fundada en la extralimitación de las facultades 
+de la convención constituyente y el debate se limitó a ese aspecto. En 
+tales condiciones, no es posible extraer conclusiones sobre el conteni­
+do sustancial de dicha cláusula, ni mucho menos inferir que este Tri­
+bunal fijó un criterio interpretativo respecto a su significado y alcance.
+Finalmente, resulta conveniente recordar que las quejas vincula­
+das al encuadre de su conducta en la causal de mal desempeño y a 
+la supuesta desproporción de la sanción impuesta se refieren a una 
+materia no revisable judicialmente en asuntos de esta naturaleza. En 
+este punto, la Corte tiene dicho que la valoración de los aspectos sus­
+tanciales del proceso de enjuiciamiento –la subsunción de los hechos 
+en las causales de destitución, la apreciación de los extremos fácti­
+cos, la valoración de la prueba, y la calificación de la conducta- no son 
+cuestiones federales aptas para ser examinadas por los jueces, pues el 
+órgano judicial no debe sustituir el criterio de quienes, por imperio de 
+la ley, están encargados en forma excluyente del juicio de responsabili­
+dad política del magistrado (ver Fallos: 330:725; 331:810, 2156; y causas 
+CSJ 1593/2008 (44-C)/CS1 “Castría, José Néstor -Agente Fiscal de San 
+José de Feliciano- s/ denuncia promovida por el Superior Tribunal 
+de Justicia”, sentencia del 27 de mayo de 2009; CSJ 908/2012 (48-R)/
+CS1 “Ramos, Alfredo Eduardo s/ amparo”, sentencia del 4 de febrero 
+de 2014; y CSJ 156/2014 (50-R)/CS1 “Rossi, Graciela Beatriz s/ jurado 
+de enjuiciamiento”, sentencia del 2 de septiembre de 2014).
+9°) Que los serios defectos de fundamentación señalados resultan 
+especialmente graves cuando se presentan en una causa de revisión 
+de un juicio político, pues no solo implican un incumplimiento de los 
+recaudos exigidos para la admisibilidad de la apelación extraordinaria 
+federal (artículo 15 de la ley 48 y artículo 3°, incisos b y d, de la acordada 
+4/2007); sino que, además, impiden tener por demostrada la invocada 
+lesión a las reglas estructurales del debido proceso, que constituye 
+un requisito ineludible para habilitar la intervención de la Corte en 
+asuntos de esta naturaleza (Fallos: 331:810 y 335:1779; y causas CSJ 
+1082/2018/RH1 “Mazzucco, Roberto José s/ recurso extraordinario” y 
+CSJ 1497/2019/RH1 “Reyes, José Antonio s/ recurso de casación en 
+autos expte. n° 07-JE-2006, ‘Díaz, Gabriel Leonardo s/ formación j.e. 
+al señor juez de instrucción n° 4 –apóstoles- de la Primera Circuns­
+
+346
+400
+FALLOS DE LA CORTE SUPREMA
+cripción Judicial de la Provincia de Misiones - Dr. José Antonio Re­
+yes’”, falladas el 10 de septiembre de 2019 y el 2 de septiembre de 2021, 
+respectivamente).
+10) Que, por los motivos expresados, no puede ponerse fundada­
+mente en tela de juicio que la magistrada fue imputada por cargos de­
+finidos, en base a conductas descriptas con suficiente precisión; pudo 
+ejercer su derecho de defensa, efectuando su descargo sobre la base 
+de los hechos concretos que le fueron imputados; su conducta fue eva­
+luada y juzgada dentro de un plazo razonable; y fue destituida -con 
+sustento en los mismos hechos- por el órgano en cuyas manos la Cons­
+titución de la Provincia de Corrientes puso el ejercicio exclusivo de 
+dicha atribución, con una integración que no ofende garantía alguna 
+de la Constitución Nacional, tras tener por acreditada la causal con­
+templada en el ordenamiento provincial por la cual la recurrente fue 
+acusada y oída. Promovido el control judicial de dicho enjuiciamiento, 
+la apelante no ha acreditado que la sentencia impugnada resulte arbi­
+traria ni tampoco ha demostrado la ausencia de imparcialidad de los 
+integrantes del Superior Tribunal de Justicia.
+De ahí que, ausente la justificación por parte de la recurrente de 
+haberse transgredido en forma nítida, inequívoca y concluyente las re­
+glas estructurales del debido proceso, no hay materia federal que ha­
+bilite la intervención de esta Corte en el marco de los rigurosos límites 
+de su competencia que, para asuntos de esta naturaleza, le imponen 
+los artículos 31, 116 y 117 de la Constitución Nacional, y el artículo 14 
+de la ley 48 (causas CSJ 32/2011 (47-B)/CS1 “Badano, Eduardo José 
+s/ juicio político”, sentencia del 14 de febrero de 2012, y sus citas; CSJ 
+425/2013 (49-R)/CS1 “Reuter, Javier Enrique s/ legajo de evaluación n° 
+10/09 CM”, sentencia del 15 de mayo de 2014).
+Por ello, se desestima la queja. Reintégrese el depósito por no co­
+rresponder. Notifíquese y, oportunamente, archívese.
+Horacio Rosatti — Carlos Fernando Rosenkrantz (según su voto)— 
+Juan Carlos Maqueda — Ricardo Luis Lorenzetti (según su voto).
+
+401
+DE JUSTICIA DE LA NACIÓN
+346
+Voto del Señor Vicepresidente Doctor Don Carlos Fernando
+Rosenkrantz y del Señor Ministro Doctor Don Ricardo Luis
+Lorenzetti
+Considerando:
+Que los infrascriptos concuerdan con los considerandos 1° a 4° del 
+voto que encabeza este pronunciamiento, que dan íntegramente por 
+reproducidos por razones de brevedad.
+5°) Que cabe precisar, en primer lugar, que el alcance de la revisión 
+en la instancia del artículo 14 de la ley 48 en asuntos de esta naturale­
+za, se encuentra delineado a partir del estándar fijado en el conocido 
+precedente “Graffigna Latino” (Fallos: 308:961), según el cual las de­
+cisiones en materia de los llamados juicios políticos o enjuiciamiento 
+de magistrados en la esfera provincial, cuyo trámite se efectuó ante 
+órganos ajenos a los poderes judiciales locales, configura una cuestión 
+justiciable en la que compete intervenir a este Tribunal por la vía del 
+recurso extraordinario solo cuando se acredite la violación del debido 
+proceso legal.
+6°) Que, en efecto, por ser el objetivo del instituto del juicio político, 
+antes que sancionar al magistrado, el de determinar si este ha perdido 
+los requisitos que la ley y la Constitución exigen para el desempeño de 
+una función de tan alta responsabilidad, el sentido de un proceso de 
+esta naturaleza es muy diverso al de las causas de naturaleza judicial, 
+por lo que sus exigencias revisten una mayor laxitud. De ahí, pues, que 
+como concordemente lo ha subrayado este Tribunal desde su tradicio­
+nal precedente sentado en la causa “Nicosia” (Fallos: 316:2940) -y lo ha 
+mantenido con posterioridad a la reforma de 1994 en la causa “Brusa” 
+(Fallos: 326:4816) y aplicado de modo invariable hasta en sus decisio­
+nes más recientes-, quien pretenda el ejercicio de aquel escrutinio de­
+berá demostrar un grave menoscabo a las reglas del debido proceso 
+y a la garantía de defensa en juicio que, asimismo, exhiba relevancia 
+bastante para variar la suerte de la causa en función de la directa e 
+inmediata relación que debe tener la cuestión federal invocada con la 
+materia del juicio [artículo 18 de la Constitución Nacional; artículos 8° 
+y 25 de la Convención Americana sobre Derechos Humanos; artículo 
+15 de la ley 48; causa “Saladino” (Fallos: 340:1927), voto de los jueces 
+Lorenzetti y Rosenkrantz; causa “Samamé” (Fallos: 341:54), voto de 
+los jueces Lorenzetti y Rosenkrantz].
+
+346
+402
+FALLOS DE LA CORTE SUPREMA
+Que los infrascriptos concuerdan, asimismo, con los consideran­
+dos 7° a 9° del voto que encabeza este pronunciamiento, que dan ínte­
+gramente por reproducidos por razones de brevedad.
+10) Que, por los motivos expresados, no puede ponerse fundada­
+mente en tela de juicio que la magistrada fue imputada por cargos 
+definidos, en base a conductas descriptas con suficiente precisión; 
+pudo ejercer su derecho de defensa, efectuando su descargo sobre 
+la base de los hechos concretos que le fueron imputados; su con­
+ducta fue evaluada y juzgada dentro de un plazo razonable; y fue 
+destituida -con sustento en los mismos hechos- por el órgano en 
+cuyas manos la Constitución de la Provincia de Corrientes puso el 
+ejercicio exclusivo de dicha atribución, con una integración que no 
+ofende garantía alguna de la Constitución Nacional, tras tener por 
+acreditada la causal contemplada en el ordenamiento provincial 
+por la cual la recurrente fue acusada y oída. Promovido el control 
+judicial de dicho enjuiciamiento, la apelante no ha acreditado que la 
+sentencia impugnada resulte arbitraria ni tampoco ha demostrado 
+la ausencia de imparcialidad de los integrantes del Superior Tribu­
+nal de Justicia.
+De ahí que, ausente la demostración por parte de la recurrente 
+de una grave transgresión a la reglas estructurales del debido pro­
+ceso, no hay materia federal que habilite la intervención de esta Cor­
+te en el marco de los rigurosos límites de su competencia que, para 
+asuntos de esta naturaleza, le imponen los artículos 31, 116 y 117 de 
+la Constitución Nacional, y el artículo 14 de la ley 48 (causas CSJ 
+32/2011 (47-B)/CS1 “Badano, Eduardo José s/ juicio político”, senten­
+cia del 14 de febrero de 2012, y sus citas; CSJ 425/2013 (49-R)/CS1 
+“Reuter, Javier Enrique s/ legajo de evaluación n° 10/09 CM”, senten­
+cia del 15 de mayo de 2014).
+Por ello, se desestima la queja. Reintégrese el depósito por no co­
+rresponder. Notifíquese y, oportunamente, archívese.
+Carlos Fernando Rosenkrantz — Ricardo Luis Lorenzetti.
+Recurso de queja interpuesto por Sandra Mabel Ifrán, actora en autos, representada 
+por el Dr. Armando Rafael Aquino Britos.
+Tribunal de origen: Superior Tribunal de Justicia de la Provincia de Corrientes.
+
+403
+DE JUSTICIA DE LA NACIÓN
+346
+Tribunal que intervino con anterioridad: Jurado de Enjuiciamiento de la Provincia 
+de Corrientes.
+```
+
+---
+
+## 348_p1502
+
+- **Tomo:** 348 | **wc_cons:** 551 | **pattern:** unanime
+- **Carátula:** Núñez, Víctor Edgardo c/ Spinazze, Elio y otro s/ ejecución prendaria
+
+```
+Núñez, Víctor Edgardo c/ Spinazze, Elio y otro s/ ejecución
+prendaria
+RECURSO EXTRAORDINARIO
+El recurso extraordinario incoado contra la sentencia que rechazó la 
+ejecución prendaria resulta extemporáneo, sin que obste a ello la inter­
+posición del recurso de aclaratoria -al que el recurrente pretende otor­
+garle efecto interruptivo del plazo-, pues no se vinculó con el tema de 
+fondo sino con una cuestión accesoria -honorarios- y fue deducido por el 
+letrado apoderado en su exclusivo interés.
+RECURSO EXTRAORDINARIO
+Corresponde a la Corte Suprema, en su carácter de juez del recurso 
+extraordinario, el último examen de admisibilidad de dicho remedio, ya 
+sea que haya sido concedido o denegado y, en este último caso, mediante 
+la deducción del recurso de queja por parte del interesado.
+RECURSO EXTRAORDINARIO
+El término para interponer el recurso extraordinario federal es peren­
+torio y no se interrumpe ni suspende por una aclaratoria desestimada, 
+que no altera la resolución impugnada por esa vía.
+
+1503
+DE JUSTICIA DE LA NACIÓN
+348
+FALLO DE LA CORTE SUPREMA
+Buenos Aires 4 de noviembre de 2025.
+Vistos los autos: “Recurso de hecho deducido por Víctor Edgardo 
+Núñez en la causa Núñez, Víctor Edgardo c/ Spinazze, Elio y otro s/ 
+ejecución prendaria”, para decidir sobre su procedencia.
+Considerando:
+1°) Que contra el pronunciamiento del Tribunal Superior de Justi­
+cia de la Provincia de Córdoba que desestimó una queja por recurso de 
+casación denegado, el actor vencido dedujo el recurso extraordinario 
+federal cuya denegación originó el presente recurso de hecho.
+2°) Que del examen de las actuaciones surge que, al desestimar 
+la queja, el Superior Tribunal provincial confirmó la sentencia de la 
+cámara de apelaciones que había hecho lugar a la excepción de pago 
+opuesta por los ejecutados y, por ende, había rechazado la ejecución 
+prendaria.
+3°) Que contra este fallo, notificado el 7 de julio de 2023 (confr. copia 
+adjunta de la carátula prevista en el art. 2° de la acordada 4/2007), el 
+abogado apoderado del actor –doctor Héctor Sebastián Valfredo– de­
+dujo un recurso de aclaratoria en el entendimiento de que el tribunal 
+no se había expedido en relación a sus honorarios.
+4°) Que después del rechazo del pedido de aclaratoria por senten­
+cia del 26 de diciembre de 2023, el ejecutante interpuso, el 1° de mar­
+zo de 2024, el recurso extraordinario federal en el cual se agravia de 
+la cuestión de fondo vinculada con la desestimación de la queja por 
+casación denegada y la consecuente confirmación del rechazo de la 
+ejecución prendaria por él promovida.
+Afirma el apelante que el plazo para interponer el remedio fe­
+deral “…fue interrumpido por la interposición de un recurso de 
+aclaratoria el cual fue resuelto mediante Auto N° 289 de fecha 
+26/12/23…” (confr. copia adjunta de la carátula prevista en el art. 2° 
+de la acordada 4/2007).
+
+348
+1504
+FALLOS DE LA CORTE SUPREMA
+5°) Que según conocida jurisprudencia de este Tribunal el término 
+para interponer el recurso extraordinario federal es perentorio y no 
+se interrumpe ni suspende por una aclaratoria desestimada, que no 
+altera la resolución impugnada por esa vía (Fallos: 288:219; 307:1739; 
+307:1746 y 308:924, entre otros).
+6°) Que, en tales condiciones, el recurso extraordinario deducido el 
+1° de marzo de 2024 por el ejecutante –Víctor Edgardo Núñez- resulta 
+extemporáneo.
+En efecto, no existen dudas de que en cuanto al tema de fondo so­
+bre el que se agravia el actor en el remedio federal la sentencia defini­
+tiva es la notificada el 7 de julio de 2023, toda vez que no existió ningún 
+pedido de aclaratoria contra lo decidido al respecto.
+7°) Que no podría obstar a esta conclusión el recurso de aclaratoria 
+rechazado el 26 de diciembre de 2023 al que alude el recurrente, pues 
+además de estar vinculado con una cuestión accesoria –honorarios–, 
+fue deducido por el letrado apoderado –doctor Héctor Sebastián Val­
+fredo– en su exclusivo interés.
+8°) Que, por último, si bien en el auto denegatorio el a quo afirma 
+expresamente que el recurso “…ha sido interpuesto oportunamen­
+te…” cabe recordar que “…corresponde a la Corte Suprema, en su 
+carácter de juez del recurso extraordinario, el último examen de 
+admisibilidad de dicho remedio, ya sea que haya sido concedido o 
+denegado y, en este último caso, mediante la deducción del recurso 
+de queja por parte del interesado” (confr. Fallos: 315:726 y sentencia 
+dictada el 14 de junio de 2016 in re CSJ 4672/2015/RH1 “Banco del Su­
+quía S.A. c/ Montenegro, Luis Martín y otros s/ ejecución hipotecaria 
+– recurso directo – civil”).
+Por ello, se desestima la presentación directa. Declárase perdido 
+el depósito efectuado. Notifíquese y, oportunamente, archívese.
+Horacio Rosatti — Carlos Fernando Rosenkrantz — Ricardo Luis 
+Lorenzetti.
+Recurso de queja interpuesto por Víctor Edgardo Núñez, representado por los Dres. 
+Héctor Sebastián Valfredo y Pablo Miguel Sterpone.
+
+1505
+DE JUSTICIA DE LA NACIÓN
+348
+Tribunal de origen: Tribunal Superior de Justicia de Córdoba.
+Tribunales que intervinieron con anterioridad: Cámara de Apelaciones en lo Civil, Co­
+mercial, Trabajo y Familia de Río Tercero, Córdoba; Juzgado de Primera Instancia 
+en lo Civil, Comercial y Familia de 2° Nominación de Río Tercero, Córdoba.
 ```
 
 ---
