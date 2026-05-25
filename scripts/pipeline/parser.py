@@ -171,7 +171,7 @@ RE_DISID_HDR = re.compile(
     re.I
 )
 
-# B077: marcador editorial para señal de corte en detectar_fin_real (Pista 4).
+# B077: marcador editorial para señal de corte en detectar_fin_real (Pista 2).
 # La clasificación detallada por subtipos vive en parser_editorial.py (H061).
 # Validado H058: 0 falsos positivos en zona de fallos contra tomos 330, 342.
 
@@ -1445,7 +1445,7 @@ def buscar_firma_inversa(bloque, max_retroceso=80):
     return firma_inicio, firma_raw, "ok"
 
 
-# ── H040: wrapper con guardas para Pista 2 de detectar_fin_real ──────────────
+# ── H040: wrapper con guardas para Pista 3 de detectar_fin_real ──────────────
 #
 # linea_es_header_sumario matchea falsos positivos en la zona de firma:
 # líneas como "ARGIBAY (en disidencia)." pasan porque empiezan con ≥5
@@ -1453,7 +1453,7 @@ def buscar_firma_inversa(bloque, max_retroceso=80):
 # headers de página y marcadores de apertura antes de aceptar el match.
 
 def linea_es_header_sumario_guardado(linea):
-    """linea_es_header_sumario + guardas de exclusión para Pista 2."""
+    """linea_es_header_sumario + guardas de exclusión para Pista 3."""
     if not linea_es_header_sumario(linea):
         return False
     s = linea.strip()
@@ -1680,7 +1680,17 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
                 continue
             return (k - 1, "fin_extendido_pag_compartida", "caratula_siguiente")
 
-    # Pista 2: header de sumario nuevo. Búsqueda atrás solo en mitad inferior
+    # Pista 2: marcador editorial (B077, B088)
+    # Acordadas, índices, discursos al final del tomo. Prioridad sobre
+    # sumario/apertura porque Pista 3/4 pueden encontrar headers dentro
+    # del índice editorial que parecen sumarios (B088: 330_p2849 110k wc).
+    # Busca desde li hacia adelante — los marcadores son suficientemente
+    # específicos para no generar FP en texto de fallos (validado H058).
+    k = buscar_adelante(_es_marcador_editorial, li, lfc)
+    if k is not None:
+        return (k - 1, "fin_por_editorial", "editorial_siguiente")
+
+    # Pista 3: header de sumario nuevo. Búsqueda atrás solo en mitad inferior
     # del bloque para no confundir con sumarios del propio fallo X.
     # H040: usa wrapper con guardas para excluir firmas, calificadores,
     # headers de página y marcadores de apertura.
@@ -1692,7 +1702,7 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
     if k is not None:
         return (k - 1, "fin_extendido_pag_compartida", "sumario_siguiente")
 
-    # Pista 3: DICTAMEN o FALLO DE LA CORTE del fallo siguiente. Solo adelante
+    # Pista 4: DICTAMEN o FALLO DE LA CORTE del fallo siguiente. Solo adelante
     # (atrás siempre hay marcadores del propio fallo).
     def es_marcador_apertura(linea):
         s = linea.strip()
@@ -1702,15 +1712,6 @@ def detectar_fin_real(lines, linea_inicio, linea_fin_catalogo,
     k = buscar_adelante(es_marcador_apertura, lfc + 1, limite_adelante)
     if k is not None:
         return (k - 1, "fin_extendido_pag_compartida", "marcador_apertura_siguiente")
-
-    # Pista 4: marcador editorial (B077)
-    # Acordadas, índices, discursos al final del tomo. Solo afecta al
-    # último caso del archivo donde ninguna pista anterior funciona.
-    # Busca desde li hacia adelante — los marcadores son suficientemente
-    # específicos para no generar FP en texto de fallos (validado H058).
-    k = buscar_adelante(_es_marcador_editorial, li, lfc)
-    if k is not None:
-        return (k - 1, "fin_por_editorial", "editorial_siguiente")
 
     # Fallback: firma del fallo actual — bidireccional closest-to-lfc (B045 H069)
     # Busca en ambas direcciones y elige la firma más cercana a lfc.
