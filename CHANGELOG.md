@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H075 (2026-05-25)
+
+- `parser.py`: B095 Pista 5 H1 — prefix match como fallback en refinar_inicio_por_titulo. 6 casos, ancla_catalogo -6.
+- `parser.py`: B095 Pista 5b — fullname + inverted matching para token <4 chars. Helpers `_build_fullname_variants`, `_build_flexible_pattern`. 41 casos, ancla_catalogo -41. Total ancla_catalogo 122→75.
+- `output/parser/csjn_casos.csv` — 5862 filas (=). Votos 27463 (-2, mejora). Zonas 141055 (-137).
+
 ## H074 (2026-05-25)
 
 - `parser.py`: B094 — guarda firma en Pista 1 forward (`linea_es_firma_de_juez` + raya). 2 sin_firma recuperados.

@@ -6,11 +6,13 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-25 (H074: B094 aplicado — guarda
-firma en Pista 1 forward, sin_firma 17→15. B089 parcial — _strip_accents
-en refinar_inicio_por_titulo + B074, guarda cola de bloque; ancla_catalogo
-428→123, votos +28, ~305 casos con residuo corregidos, ~15 outcomes
-corregidos. B095 nuevo — token corto en ancla_catalogo (51 casos).
+**Última actualización:** 2026-05-25 (H075: B095 parcial — Pista 5
+H1 prefix match (6 casos, abreviaciones catálogo→.md) + Pista 5b
+fullname+inverted (41 casos, nombres completos directos e invertidos
+apellido,nombre→nombre apellido); ancla_catalogo 122→75, votos -2
+(mejora: firma caso anterior contaminante), zonas -137. B089 residual
+diagnosticado: 71 token≥4, H4=27 OCR/typo no atacables. B096-B097
+nuevos. M11 nuevo (versionar parser).
 H073: B091 aplicado — fallback
 "revocar" en classify_outcome v13, revoca 208→359. B093 aplicado —
 primer_token_de_caratula con búsqueda profunda de tokens no-genéricos
@@ -2359,19 +2361,20 @@ canónicos actuales B0NN.
   - editorial sections: 135→150 (B088, reorden Pistas).
   - 330_p2849: 110k→7448 wc (B088).
 
-**Próximo trabajo priorizado (orden sugerido, H074):**
+**Próximo trabajo priorizado (orden sugerido, H075):**
 
-1. **B095 — Token corto en ancla_catalogo.** 51 casos con nombres
-   anonimizados (N.N., R.M., QC). Pista 5 en refinar_inicio_por_titulo.
-   Importante: causas sensibles (menores, privacidad).
-2. **B090 — Tier 5 dispositivo embebido.** PoC para 4 sin_dispositivo
-   residuales (competencia, caducidad). Bajo riesgo.
-3. **B089 residual — 59 token sin tilde no matcheados.** Investigar
-   causas: residuo >50 líneas, nombre distinto en .md vs catálogo.
-4. **Codebook dataset (inglés).** Documentación de variables para
+1. **B095 residual — H2: ampliar ventana de búsqueda.** 25 casos token≥4
+   con match después de línea 50. Ampliar MAX_LINEAS_BUSQUEDA_TITULO.
+   13 safe (trim <50%, ≥20 líneas restantes). Requiere PoC.
+2. **B090 — Tier 5 dispositivo embebido.** 4 sin_dispositivo residuales.
+   Bajo riesgo.
+3. **B095 residual — H4: OCR/typo catálogo→.md.** 27 casos con nombre
+   distinto. Documentar o parchar catálogo manualmente.
+4. **M11 — Versionar parser.py.** Número incremental en header.
+5. **Codebook dataset (inglés).** Documentación de variables para
    publicación en Harvard Dataverse.
-5. **README publicable.** Actualizar para repositorio público.
-6. **sin_firma (16 casos)** — auditar residuo por causa raíz.
+6. **README publicable.** Actualizar para repositorio público.
+7. **sin_firma (16 casos)** — auditar residuo por causa raíz.
 
 
 ### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula
@@ -3463,7 +3466,7 @@ sin_firma 17→15 (329_p1881 Tortorelli, 340_p1213). 0 regresiones.
 **Referencias cruzadas:** H074. B093, B070.
 
 
-### B095 — Token corto en refinar_inicio_por_titulo (ancla_catalogo residual)
+### B095 — Token corto en refinar_inicio_por_titulo (ancla_catalogo residual) — PARCIAL H075
 
 **Componente:** parser (refinar_inicio_por_titulo).
 **Origen / fuente del diagnóstico:** H074, diagnóstico B089 residual.
@@ -3474,11 +3477,61 @@ texto. Resultado: `refinar_inicio_por_titulo` no recorta el residuo.
 **Importancia:** muchos son casos sensibles (menores, privacidad,
 causas penales anonimizadas) donde la anonimización genera nombres
 cortos. No son marginales.
-**Diseño propuesto:** Pista 5 en `refinar_inicio_por_titulo` para tokens
-cortos. Opciones: (a) combinar token corto + señal estructural (header
-de sumario, "Vistos los autos", apertura); (b) buscar el nombre completo
-del catálogo como frase (ej: "R. M., J. L.") en vez de token suelto;
-(c) matching contra variante larga del catálogo si existe.
-**Estado de verificación:** `confirmado_cuantificado` (51 casos).
+**Fix aplicado (H075):**
+- Pista 5 H1: prefix match (sin trailing `\b`) como fallback cuando
+  word-boundary falla. Cubre abreviaciones catálogo→.md: Camnasi→CAMNASIO,
+  Transp→TRANSPORTES, Schr→SCHRÖDER, Bank→BANKBOSTON, Pers→PERSONAL,
+  Serv→Servicios. 6 casos. Commit `ff7b765`.
+- Pista 5b: fullname + inverted para token <4. Busca el nombre completo
+  del catálogo como frase, primero directo ("N. N.") luego invertido
+  ("S. D. P." ← "P., S. D.") porque el catálogo usa "apellido, nombre"
+  pero el .md usa "nombre apellido". Para carátulas con "c/", invierte
+  cada parte. 41 casos rescatados. -2 votos = mejora (firma caso anterior
+  contaminante removida, confirmado con auditar_fallo).
+- Total: ancla_catalogo 122→75 (-47). Zonas -137 (residuo eliminado).
+**Residuo pendiente:** 75 ancla_catalogo (65 token≥4 sin match + 10 token<4
+sin match). Los 65 token≥4 se clasificaron en H075: H2 (25, después de
+línea 50), H4 (27, nombre distinto catálogo→.md por OCR/typo: Hojean→HOJMAN,
+Jiménez→GIMENEZ, SOMOSA→SOMISA, GCBA→GOBIERNO DE LA CIUDAD). H3 (13,
+guarda correcta en bloques cortos). H2 es atacable ampliando ventana.
+H4 requiere corrección en catálogo o fuzzy matching.
+**Estado de verificación:** `confirmado_cuantificado`.
+**Estado del fix:** aplicado (parcial).
+**Referencias cruzadas:** H074, H075. B089.
+
+### B096 — Residuo post-epílogo: sumarios del caso siguiente en bloque
+
+**Componente:** parser (detectar_fin_real).
+**Origen / fuente del diagnóstico:** H075, spot-check 333_p1192 post-fix.
+**Causa raíz:** `linea_fin_real` se extiende más allá del epílogo del caso
+e incluye sumarios editoriales del caso siguiente (HOJA COMPLEMENTARIA,
+carátula+sumarios de otro caso). Pista de fin no detectó el límite.
+**Diagnóstico / evidencia:** 333_p1192 — después de firma + datos recurso
++ tribunal de origen, aparecen HOJA COMPLEMENTARIA + carátula "CESAR
+VALENZUELA" + sumarios de EXTRADICION que pertenecen al caso siguiente.
+**Estado de verificación:** `confirmado_caso_testigo`.
+**Validador propuesto:** buscar patrón en otros casos con `fin_extendido`.
 **Estado del fix:** no diseñado.
-**Referencias cruzadas:** H074. B089.
+**Referencias cruzadas:** H075.
+
+### B097 — Voto de Argibay cortado en display (zona voto mal delimitada)
+
+**Componente:** parser (zonificador).
+**Origen / fuente del diagnóstico:** H075, spot-check 331_p466 post-fix.
+**Causa raíz:** la disidencia de Argibay aparece contada correctamente
+(disidencia) pero el span del voto está truncado: "Disidencia de la señora"
+como zona de voto separado, "ministra doctora doña Carmen M. Argibay" como
+firma. El contenido del voto no se captura completo en la zona.
+**Estado de verificación:** `confirmado_caso_testigo`.
+**Estado del fix:** no diseñado.
+**Referencias cruzadas:** H075.
+
+### M11 — Versionar parser.py con número incremental
+
+**Componente:** parser.
+**Origen:** H075, propuesta de Guillermo.
+**Descripción:** agregar `__version__` al header de parser.py con número
+incremental (ej: "18.3" = arquitectura v18, minor por sesión). Facilita
+tracking de qué versión produjo cada output.
+**Estado:** pendiente.
+**Referencias cruzadas:** H075.

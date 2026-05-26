@@ -7032,3 +7032,52 @@ Segundo run con guarda cola: 329_p2218 protegido. 490 casos afectados, 996 campo
 **Commits:** 2.
 1. `H074: B094 aplicado — guarda firma Pista 1, sin_firma 17→15`
 2. `H074: B089 — trim pre-caratula con _strip_accents, ancla_catalogo 428→123, votos +17`
+
+## H075 — B095 Pista 5: prefix match + fullname+inverted para ancla_catalogo (2026-05-25)
+
+**Objetivo:** reducir ancla_catalogo atacando tokens cortos (<4 chars) y abreviaciones catálogo→.md.
+
+### H075-01 — Diagnóstico B089 residual (71 token≥4)
+
+Clasificación de los 71 ancla_catalogo con token ≥4 chars que no matchean:
+- H1 (prefix sin word boundary): 6 — catálogo abrevia (Transp→TRANSPORTES, Camnasi→CAMNASIO, Schr→SCHRÖDER, Bank→BANKBOSTON, Pers→PERSONAL, Serv→Servicios).
+- H2 (después de línea 50): 25 — token existe pero más allá de MAX_LINEAS_BUSQUEDA_TITULO.
+- H3 (guarda últimas 5 correcta): 13 — bloques cortos, guarda protege correctamente.
+- H4 (ausente total): 27 — nombre distinto catálogo→.md (OCR/typo: Hojean→HOJMAN, Jiménez→GIMENEZ, SOMOSA→SOMISA, GCBA→GOBIERNO DE LA CIUDAD).
+
+Scripts: `scripts/auditoria/H075/diag_b095_token_corto.py`, `diag_b095_token_largo.py`.
+
+### H075-02 — B095 Pista 5 H1: prefix match (6 casos)
+
+Segundo paso en `refinar_inicio_por_titulo`: si word-boundary (`\b`+token+`\b`) falla, probar prefix match (`\b`+token sin trailing `\b`). Solo corre si paso 1 no matcheó. 6 casos rescatados. ancla_catalogo 122→116. Zonas -17 (residuo eliminado). Votos invariante. Commit `ff7b765`.
+
+### H075-03 — Diagnóstico B095 token corto (51 casos)
+
+Inspección de las carátulas reales en los .md fuente. Hallazgo clave: las iniciales anonimizadas están **invertidas** entre catálogo ("P., S. D." = apellido, nombre) y .md ("S. D. P." = nombre apellido). Los 15 casos que matcheaban con fullname directo eran palindrómicos ("N. N.") o sin coma ("M. D. H. c/ M. B. M. F.").
+
+### H075-04 — B095 Pista 5b: fullname + inverted (41 casos)
+
+Helpers `_build_fullname_variants` (genera forma directa + invertida vía `split(",",1)` + swap) y `_build_flexible_pattern` (regex con espaciado variable). Para carátulas con "c/", invierte cada parte por separado. Corre solo cuando token <4 chars.
+
+Validación: 41 casos rescatados. -2 votos: 329_p2133 (7→5) y 331_p68 (6→4) — confirmado con auditar_fallo que las firmas removidas pertenecían al caso anterior (Bernasconi, no D., J. A.; caso previo a J., L. L., no J., L. L.). Mejora de calidad, no regresión. ancla_catalogo 116→75. Zonas -120.
+
+Spot-checks post-fix: 333_p1192 tiene residuo post-epílogo (B096 nuevo). 331_p466 tiene voto Argibay truncado (B097 nuevo). Ambos preexistentes, no causados por el fix.
+
+### H075 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallos + 33 sumario_editorial + 160 sumario_con_link).
+- **Sin firma:** 16 / 5669 fallos. Cobertura firma: 99.7%.
+- **Votos:** 27463 filas.
+- **Zonas:** 141055 segmentos.
+- **ancla_catalogo:** 75 (trayectoria: ...428→123→122→116→75).
+- **Trayectoria sin_firma:** ...33→31→17→15→16.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27463 filas.
+- `output/parser/csjn_casos_zonas.csv` — 141055 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+
+**Scripts creados:** `scripts/auditoria/H075/` — `diag_b095_token_corto.py`, `diag_b095_token_largo.py`, `ver_caratulas_b095.py`.
+
+**Commits:** 4 (diagnósticos, H1 prefix match, snapshot pre-5b, 5b fullname+inverted).
