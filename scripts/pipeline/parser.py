@@ -1536,6 +1536,85 @@ def primer_token_de_caratula(nombres_indice):
 MAX_LINEAS_BUSQUEDA_TITULO = 50
 
 
+# ── B095 Pista 5b: helpers para fullname matching (token corto) ──────────────
+#
+# Cuando primer_token_de_caratula devuelve <4 chars (iniciales anonimizadas,
+# acrónimos cortos), el matching por token individual es inviable. Pista 5b
+# busca el nombre COMPLETO del catálogo como frase, primero en formato
+# directo ("P., S. D.") y luego invertido ("S. D. P."), porque el catálogo
+# usa formato "apellido, nombre" pero el .md usa "nombre apellido".
+# Validado H075: 15 fullname + ~23 inverted, 0 regresiones.
+
+def _build_fullname_variants(nombres_indice):
+    """Construye variantes del nombre para fullname matching.
+
+    Devuelve lista de strings a buscar en orden: [forma_directa, forma_invertida].
+    La forma invertida se genera swappeando "apellido, nombre" → "nombre apellido".
+    Para carátulas con "c/", cada parte se invierte por separado.
+    """
+    if not nombres_indice:
+        return []
+    first = nombres_indice.split("|")[0].strip()
+    # Limpiar prefijos editoriales: "(4) ", "(5) "
+    first = re.sub(r"^\(\d+\)\s*", "", first)
+    if len(first) < 2:
+        return []
+
+    variants = [first]  # forma directa primero
+
+    # Forma invertida: "apellido, nombre" → "nombre apellido"
+    if " c/ " in first:
+        # "V., M. N. c/ S., W. F." → invertir cada parte
+        parties = first.split(" c/ ", 1)
+        inv_parts = []
+        for p in parties:
+            p = p.strip()
+            cp = p.split(",", 1)
+            if len(cp) == 2 and cp[1].strip():
+                inv_parts.append(cp[1].strip() + " " + cp[0].strip())
+            else:
+                inv_parts.append(p)
+        inverted = " c/ ".join(inv_parts)
+        if inverted != first:
+            variants.append(inverted)
+    elif "," in first:
+        # "P., S. D." → "S. D. P."
+        cp = first.split(",", 1)
+        if cp[1].strip():
+            inverted = cp[1].strip() + " " + cp[0].strip()
+            if inverted != first:
+                variants.append(inverted)
+
+    return variants
+
+
+def _build_flexible_pattern(text):
+    """Regex flexible para matching de nombre con espaciado variable.
+
+    Puntos y comas aceptan espacio opcional después. Espacios aceptan
+    variación. Devuelve regex compilado o None.
+    """
+    norm = _strip_accents(text)
+    if len(norm) < 2:
+        return None
+    parts = []
+    for c in norm:
+        if c == '.':
+            parts.append(r'\.\s*')
+        elif c == ',':
+            parts.append(r',\s*')
+        elif c == ' ':
+            parts.append(r'\s+')
+        elif c.isalnum():
+            parts.append(re.escape(c))
+        else:
+            parts.append(re.escape(c))
+    try:
+        return re.compile(''.join(parts), re.I)
+    except re.error:
+        return None
+
+
 def refinar_inicio_por_titulo(bloque, nombres_indice):
     """
     Intenta refinar linea_inicio recortando residuo pre-título.
@@ -1578,6 +1657,23 @@ def refinar_inicio_por_titulo(bloque, nombres_indice):
                 if k >= len(bloque) - 5:
                     continue
                 return (k, 'titulo')
+
+    # ── B095 Pista 5b (H075): fullname + inverted para token corto ────────────
+    # Cuando el token es <4 chars (iniciales anonimizadas, acrónimos), se
+    # busca el nombre completo del catálogo como frase. Primero en formato
+    # directo ("N. N.", "M. D. H. c/ M. B. M. F."), luego en formato
+    # invertido ("S. D. P." ← "P., S. D.") porque el catálogo usa
+    # "apellido, nombre" pero el .md usa "nombre apellido".
+    if not token or len(token) < 4:
+        for variant in _build_fullname_variants(nombres_indice):
+            pat = _build_flexible_pattern(variant)
+            if pat is None:
+                continue
+            for k, ln in enumerate(bloque[:MAX_LINEAS_BUSQUEDA_TITULO]):
+                if pat.search(_strip_accents(ln)):
+                    if k >= len(bloque) - 5:
+                        continue
+                    return (k, 'titulo')
 
     # ── Señal secundaria: "Vistos los autos" ─────────────────────────────────
     for k, ln in enumerate(bloque[:MAX_LINEAS_BUSQUEDA_TITULO]):
