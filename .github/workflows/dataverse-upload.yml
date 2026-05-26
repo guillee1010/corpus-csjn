@@ -12,7 +12,11 @@ jobs:
           DATAVERSE_TOKEN: ${{ secrets.DATAVERSE_TOKEN }}
           DATAVERSE_SERVER: https://dataverse.harvard.edu
           DATAVERSE_DATASET_DOI: doi:10.7910/DVN/TJTVKW
+<<<<<<< Updated upstream
           GITHUB_DIR: |
             output/parser
             corpus
             scripts/pipeline
+=======
+          GITHUB_DIR: output/parser/ corpus/ CODEBOOK.md README.md
+>>>>>>> Stashed changes
