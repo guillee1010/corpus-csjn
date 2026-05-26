@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.0"  # H076
+__version__ = "18.01"  # H076: Tier 4 refinar_inicio
 
 import re
 import csv
@@ -1520,6 +1520,35 @@ def primer_token_de_caratula(nombres_indice):
     return tokens[0] if tokens else ""
 
 
+def segundo_token_de_caratula(nombres_indice):
+    """Extrae el segundo token significativo para confirmar genéricos.
+
+    H076: cuando primer_token_de_caratula devuelve un token genérico
+    (Buenos, Administración), el segundo token sirve como confirmación
+    para evitar falsos positivos en ventana ampliada.
+    """
+    if not nombres_indice:
+        return None
+    _SKIP = {"otro", "otros", "sociedad", "sucesion", "sucesión",
+             "empresa", "compania", "compañia", "compañía"}
+    _GENERICOS = {"provincia", "anses", "nacion", "nación", "estado",
+                  "afip", "buenos", "nacional", "administracion",
+                  "federal", "direccion", "instituto"}
+    first = nombres_indice.split("|")[0].strip()
+    first = re.sub(r"^\(\d+\)\s*", "", first)
+    tokens = re.findall(r"[A-ZÁÉÍÓÚÑa-záéíóúñ]+", first)
+    found_first = False
+    for t in tokens:
+        if len(t) < 3:
+            continue
+        if not found_first:
+            found_first = True
+            continue
+        if t.lower() not in _SKIP and t.lower() not in _GENERICOS:
+            return t
+    return None
+
+
 # ── v18 Fase F: refinador de linea_inicio por título ─────────────────────────
 #
 # El localizador ancla linea_inicio en el header de página del .md, que
@@ -1532,10 +1561,13 @@ def primer_token_de_caratula(nombres_indice):
 # Señal secundaria: "Vistos los autos" — emite warning en status_localizacion.
 # Fallback final  : linea_inicio del catálogo sin cambios — emite warning.
 #
-# La búsqueda se restringe a las primeras MAX_LINEAS_BUSQUEDA_TITULO líneas
-# del bloque para no matchear citas del caso en el cuerpo del fallo.
+# Tiers 1-3: búsqueda en ventana base (50 líneas).
+# Tier 4 (H076): ventana ampliada (100 líneas) con guardas portadas de Pista 1
+# de detectar_fin_real: _es_texto_corriente, stoplist + segundo token, trim≤50%.
 
 MAX_LINEAS_BUSQUEDA_TITULO = 50
+MAX_VENTANA_AMPLIADA = 100
+MAX_TRIM_PCT = 50
 
 
 # ── B095 Pista 5b: helpers para fullname matching (token corto) ──────────────
@@ -1636,8 +1668,8 @@ def refinar_inicio_por_titulo(bloque, nombres_indice):
     # CAPS sin tildes ("JUAREZ"). Sin normalización, 318 casos caían a
     # ancla_catalogo con residuo del caso anterior no recortado.
     token = primer_token_de_caratula(nombres_indice)
+    token_norm = _strip_accents(token) if token else ""
     if token and len(token) >= 4:
-        token_norm = _strip_accents(token)
         pat = re.compile(r'\b' + re.escape(token_norm) + r'\b', re.I)
         for k, ln in enumerate(bloque[:MAX_LINEAS_BUSQUEDA_TITULO]):
             if pat.search(_strip_accents(ln)):
@@ -1677,8 +1709,82 @@ def refinar_inicio_por_titulo(bloque, nombres_indice):
                         continue
                     return (k, 'titulo')
 
+    # ── H076 Tier 4: ventana ampliada con guardas ─────────────────────────────
+    # Solo corre si Tiers 1-3 con ventana base fallaron. Porta heurísticas
+    # de Pista 1 de detectar_fin_real:
+    #   - _es_texto_corriente: descarta matches en texto corrido (retry loop)
+    #   - Stoplist: tokens genéricos requieren segundo token confirmatorio
+    #   - Guarda trim ≤ MAX_TRIM_PCT del bloque
+    #   - Fullname+inverted para TODOS los tokens (no solo <4)
+    _STOPLIST_TITULO = {"provincia", "anses", "nacion", "estado",
+                        "afip", "buenos", "nacional", "administracion",
+                        "federal", "direccion", "instituto"}
+    len_bloque = len(bloque)
+
+    def _buscar_con_guardas(pat, ventana):
+        """Busca pat con retry loop + guarda texto corriente."""
+        desde = 0
+        limite = min(ventana, len_bloque)
+        while desde < limite:
+            found_k = None
+            for j in range(desde, limite):
+                if pat.search(_strip_accents(bloque[j])):
+                    found_k = j
+                    break
+            if found_k is None:
+                return None
+            if found_k >= len_bloque - 5:
+                desde = found_k + 1
+                continue
+            if _es_texto_corriente(bloque, found_k):
+                desde = found_k + 1
+                continue
+            return found_k
+        return None
+
+    def _trim_ok(k):
+        return len_bloque > 0 and (100 * k / len_bloque) <= MAX_TRIM_PCT
+
+    def _confirma_generico(k, nombres_indice):
+        """Para tokens genéricos, verificar segundo token en ±3 líneas."""
+        tok2 = segundo_token_de_caratula(nombres_indice)
+        if not tok2 or len(tok2) < 3:
+            return False
+        tok2_norm = _strip_accents(tok2)
+        pat2 = re.compile(r'\b' + re.escape(tok2_norm) + r'\b', re.I)
+        ventana_conf = bloque[max(0, k - 2):k + 5]
+        return any(pat2.search(_strip_accents(ln)) for ln in ventana_conf)
+
+    es_generico = (token_norm.lower() in _STOPLIST_TITULO) if token_norm else False
+
+    # 4a: exact word boundary, ventana ampliada
+    if token and len(token) >= 4:
+        pat = re.compile(r'\b' + re.escape(token_norm) + r'\b', re.I)
+        k = _buscar_con_guardas(pat, MAX_VENTANA_AMPLIADA)
+        if k is not None and _trim_ok(k):
+            if not es_generico or _confirma_generico(k, nombres_indice):
+                return (k, 'titulo')
+
+    # 4b: prefix match, ventana ampliada
+    if token and len(token) >= 4:
+        pat_prefix = re.compile(r'\b' + re.escape(token_norm), re.I)
+        k = _buscar_con_guardas(pat_prefix, MAX_VENTANA_AMPLIADA)
+        if k is not None and _trim_ok(k):
+            if not es_generico or _confirma_generico(k, nombres_indice):
+                return (k, 'titulo')
+
+    # 4c: fullname+inverted para TODOS los tokens, ventana ampliada
+    for variant in _build_fullname_variants(nombres_indice):
+        pat = _build_flexible_pattern(variant)
+        if pat is None:
+            continue
+        k = _buscar_con_guardas(pat, MAX_VENTANA_AMPLIADA)
+        if k is not None and _trim_ok(k):
+            return (k, 'titulo')
+
     # ── Señal secundaria: "Vistos los autos" ─────────────────────────────────
-    for k, ln in enumerate(bloque[:MAX_LINEAS_BUSQUEDA_TITULO]):
+    # H076: extender búsqueda a ventana ampliada (antes era ventana base)
+    for k, ln in enumerate(bloque[:MAX_VENTANA_AMPLIADA]):
         if RE_VISTOS_LOS_AUTOS.match(ln):
             return (k, 'vistos')
 
