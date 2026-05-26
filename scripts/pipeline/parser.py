@@ -1566,6 +1566,19 @@ def refinar_inicio_por_titulo(bloque, nombres_indice):
                     continue
                 return (k, 'titulo')
 
+        # B095 Pista 5 (H075): prefix match como fallback.
+        # Cubre abreviaciones catálogo→.md: "Transp"→"TRANSPORTES",
+        # "Camnasi"→"CAMNASIO", "Schr"→"SCHRÖDER", "Bank"→"BANKBOSTON".
+        # Solo corre si el word-boundary exacto (arriba) no matcheó.
+        # \b inicial garantiza inicio de palabra; sin \b final permite
+        # que el token sea prefijo. Validado H075: 6 casos, 0 regresiones.
+        pat_prefix = re.compile(r'\b' + re.escape(token_norm), re.I)
+        for k, ln in enumerate(bloque[:MAX_LINEAS_BUSQUEDA_TITULO]):
+            if pat_prefix.search(_strip_accents(ln)):
+                if k >= len(bloque) - 5:
+                    continue
+                return (k, 'titulo')
+
     # ── Señal secundaria: "Vistos los autos" ─────────────────────────────────
     for k, ln in enumerate(bloque[:MAX_LINEAS_BUSQUEDA_TITULO]):
         if RE_VISTOS_LOS_AUTOS.match(ln):
