@@ -6,7 +6,12 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-25 (H073: B091 aplicado — fallback
+**Última actualización:** 2026-05-25 (H074: B094 aplicado — guarda
+firma en Pista 1 forward, sin_firma 17→15. B089 parcial — _strip_accents
+en refinar_inicio_por_titulo + B074, guarda cola de bloque; ancla_catalogo
+428→123, votos +28, ~305 casos con residuo corregidos, ~15 outcomes
+corregidos. B095 nuevo — token corto en ancla_catalogo (51 casos).
+H073: B091 aplicado — fallback
 "revocar" en classify_outcome v13, revoca 208→359. B093 aplicado —
 primer_token_de_caratula con búsqueda profunda de tokens no-genéricos
 + stoplist sincronizada; sin_firma 31→17, sin_dispositivo 35→24,
@@ -2354,20 +2359,19 @@ canónicos actuales B0NN.
   - editorial sections: 135→150 (B088, reorden Pistas).
   - 330_p2849: 110k→7448 wc (B088).
 
-**Próximo trabajo priorizado (orden sugerido, H072):**
+**Próximo trabajo priorizado (orden sugerido, H074):**
 
-1. **B089 — Residuo pre-carátula.** 96% de bloques. Prioridad alta
-   para publicación dataset. Fix: recortar bloque desde carátula
-   por token de catálogo.
+1. **B095 — Token corto en ancla_catalogo.** 51 casos con nombres
+   anonimizados (N.N., R.M., QC). Pista 5 en refinar_inicio_por_titulo.
+   Importante: causas sensibles (menores, privacidad).
 2. **B090 — Tier 5 dispositivo embebido.** PoC para 4 sin_dispositivo
    residuales (competencia, caducidad). Bajo riesgo.
-3. **B091 — classify_outcome revoca.** 2 casos. Fix trivial en regex.
+3. **B089 residual — 59 token sin tilde no matcheados.** Investigar
+   causas: residuo >50 líneas, nombre distinto en .md vs catálogo.
 4. **Codebook dataset (inglés).** Documentación de variables para
    publicación en Harvard Dataverse.
 5. **README publicable.** Actualizar para repositorio público.
-6. **B045 — sesión dedicada de fix.** Tres caminos evaluados en H068.
-7. **sin_firma (31 casos)** — post-H069, piso ~17 irrecuperable.
-8. **B054/M06 — epílogo.**
+6. **sin_firma (16 casos)** — auditar residuo por causa raíz.
 
 
 ### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula
@@ -3321,7 +3325,7 @@ editorial sections 135→150, zonas 142489→141938, votos 27377→27382.
 0 regresiones en sin_dispositivo (35).
 
 
-### B089 — Bloque incluye residuo del caso anterior (pre-carátula) — CRÍTICO
+### B089 — Bloque incluye residuo del caso anterior (pre-carátula) — PARCIAL H074
 
 **Componente:** parser (delimitación de bloques).
 **Origen / fuente del diagnóstico:** H072, revisión manual de 329_p2221.
@@ -3336,12 +3340,23 @@ caso anterior (data corruption silenciosa). Concentrados en tomos
 tempranos (329+). Además, 96% de bloques (5646/5862) tienen residuo
 que contamina zonas y word counts.
 **Estado de verificación:** `confirmado_cuantificado`.
-**Fix propuesto:** recortar el bloque desde la carátula detectada por
-token del catálogo, descartando líneas anteriores. Alternativa: filtrar
-campos de texto por zona.
-**Prioridad:** CRÍTICA. Bloqueante para publicación dataset.
-**Estado del fix:** no diseñado.
-**Referencias cruzadas:** H072. B083, B092.
+**Fix parcial aplicado (H074):** causa raíz identificada: `refinar_inicio_por_titulo`
+no normalizaba tildes (mismo bug que B071 en Pista 1). El catálogo tiene
+tildes ("Juárez", "Martínez") pero el .md es ALL CAPS sin tildes ("JUAREZ").
+Fix: `_strip_accents` en token y línea del bloque para matching
+tilde-insensitive. Aplicado también a B074 `_li_for_dfr`.
+Guarda adicional: skip match en últimas 5 líneas del bloque (protege contra
+token que matchea carátula del caso siguiente, ej: 329_p2218 "Bergés"
+matcheaba "BERGES" al final del bloque).
+Validación: ancla_catalogo 428→123 (-305), ~490 casos afectados, ~15
+outcomes corregidos, votos +17, 0 regresiones reales. 2 aparentes
+(329_p5151, 329_p326) son correcciones de datos previamente corruptos.
+**Residuo:** 123 ancla_catalogo restantes. Desglose: 51 token corto (<4
+chars, B095), 59 token sin tilde que no matchea (residuo >50 líneas o
+nombre distinto en .md), 12+ otros (cruza archivos, página no en mapa).
+**Prioridad:** residuo no es bloqueante (zonificador protege), pero B095
+es atacable.
+**Referencias cruzadas:** H072, H074. B083, B092, B095.
 
 
 ### B090 — Tier 5: fallback para sin_dispositivo con dispositivo embebido
@@ -3428,3 +3443,42 @@ aparece en texto transcrito), ~4 bloques cortos, ~3 firma atípica
 o token en firma, ~5 otros. 1 regresión nueva: 329_p1881
 (Tortorelli, no era sin_firma antes de B093, investigar causa).
 **Referencias cruzadas:** H073. B070, B071.
+
+
+### B094 — Pista 1 forward matchea firma de juez como carátula del siguiente — CERRADO H074
+
+**Componente:** parser (detectar_fin_real, Pista 1 forward).
+**Origen / fuente del diagnóstico:** H074, regresión 329_p1881 post-B093.
+**Causa raíz:** B093 cambió el token del caso siguiente (Zavalía c/
+Provincia de Santiago del Estero) de "Provincia" a "Santiago". "SANTIAGO"
+matcheaba en la firma "ENRIQUE SANTIAGO PETRACCHI —" antes de llegar a
+la carátula real. Pista 1 cortaba en la firma → bloque perdía la firma.
+`_es_texto_corriente` no filtraba porque la firma es ALL CAPS.
+**Fix aplicado (H074):** guarda en Pista 1 forward: si la línea matchea
+`linea_es_firma_de_juez` Y tiene raya (— o –), skip y seguir buscando.
+Raya obligatoria para no filtrar carátulas de jueces-parte (Boggiano,
+Moliné O'Connor — verificados: 0 FP en 5862 casos).
+**Validación:** diff 5862 casos: 8 cambios, todos en 2 casos recuperados.
+sin_firma 17→15 (329_p1881 Tortorelli, 340_p1213). 0 regresiones.
+**Referencias cruzadas:** H074. B093, B070.
+
+
+### B095 — Token corto en refinar_inicio_por_titulo (ancla_catalogo residual)
+
+**Componente:** parser (refinar_inicio_por_titulo).
+**Origen / fuente del diagnóstico:** H074, diagnóstico B089 residual.
+**Causa raíz:** 51 casos con `case_name_indice` corto o anonimizado
+(N.N., R.M., J.L., EMM S.R.L., QC, etc.) donde `primer_token_de_caratula`
+devuelve tokens <4 chars. La función los descarta por riesgo de FP en
+texto. Resultado: `refinar_inicio_por_titulo` no recorta el residuo.
+**Importancia:** muchos son casos sensibles (menores, privacidad,
+causas penales anonimizadas) donde la anonimización genera nombres
+cortos. No son marginales.
+**Diseño propuesto:** Pista 5 en `refinar_inicio_por_titulo` para tokens
+cortos. Opciones: (a) combinar token corto + señal estructural (header
+de sumario, "Vistos los autos", apertura); (b) buscar el nombre completo
+del catálogo como frase (ej: "R. M., J. L.") en vez de token suelto;
+(c) matching contra variante larga del catálogo si existe.
+**Estado de verificación:** `confirmado_cuantificado` (51 casos).
+**Estado del fix:** no diseñado.
+**Referencias cruzadas:** H074. B089.

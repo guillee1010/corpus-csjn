@@ -6975,3 +6975,60 @@ Decisión de diseño: `_GENERICOS` = {provincia, anses, nacion, nación, estado,
 **Scripts creados:** `scripts/auditoria/extraer_sin_firma.py`.
 
 **Commits:** 2 (snapshot pre-H073, H073: B091+B093).
+
+## H074 — B094 guarda firma Pista 1 + B089 trim pre-carátula con tildes (2026-05-25)
+
+**Objetivo:** corregir regresión 329_p1881 post-B093, eliminar residuo pre-carátula masivo (B089).
+
+### H074-01 — Diagnóstico regresión 329_p1881 (Opción C)
+
+Caso Tortorelli (329_p1881): sin_firma post-B093 pero con dispositivo. Diagnóstico: B093 cambió token del caso siguiente de "Provincia" a "Santiago". "SANTIAGO" matcheaba en la firma "ENRIQUE SANTIAGO PETRACCHI —" antes de la carátula real. Pista 1 cortaba en la firma → bloque perdía la firma. Verificado: firma no en el bloque (0 líneas con jueces en 709 líneas), linea_fin_real=20094 corta justo antes de la firma en L20095+.
+
+Segundo hallazgo: 340_p1213 tenía mecanismo idéntico (token "Ricardo" matcheaba en "Ricardo Luis Lorenzetti —").
+
+### H074-02 — B094: guarda firma en Pista 1 forward
+
+Fix: en `detectar_fin_real`, Pista 1 forward, agregar guarda: si la línea matchea `linea_es_firma_de_juez` Y tiene raya (— o –), skip y seguir buscando. Raya obligatoria para no filtrar carátulas de jueces-parte (Boggiano, Moliné — 0 FP verificados en 5862 casos, solo 3 carátulas matchean JUECES_CONOCIDOS y ninguna tiene raya).
+
+Validación: diff 5862 casos, 8 cambios, todos en 2 casos recuperados (329_p1881, 340_p1213). sin_firma 17→15. 0 regresiones.
+
+Commit: `H074: B094 aplicado — guarda firma Pista 1, sin_firma 17→15`.
+
+### H074-03 — B089: diagnóstico de ancla_catalogo
+
+428 casos con `ancla_catalogo` analizados. Desglose de causa raíz:
+- 318 (74%): token con tilde (Juárez, Martínez, Díaz) vs .md ALL CAPS sin tildes (JUAREZ). `refinar_inicio_por_titulo` no normalizaba tildes — mismo bug que B071 resolvió para Pista 1.
+- 59: token sin tilde que no matchea (residuo >50 líneas o nombre distinto).
+- 51: token corto (<4 chars, nombres anonimizados N.N., R.M., etc.).
+
+### H074-04 — B089: fix _strip_accents + guarda cola
+
+Fix: agregar `_strip_accents` a `refinar_inicio_por_titulo` (token y línea) y a B074 `_li_for_dfr`. Guarda adicional: skip match en últimas 5 líneas del bloque (protege contra token que matchea carátula del caso siguiente, caso testigo: 329_p2218 "Bergés").
+
+Primer run sin guarda cola: 3 regresiones identificadas. Diagnóstico con script `diag_b089_regresiones.py`:
+- 329_p2218: token "Berges" matcheaba en bloque[17]/18 (última línea = carátula del siguiente). → guarda cola resuelve.
+- 329_p326, 329_p5151: trim correcto, datos previos eran corrupción del caso anterior. No son regresiones.
+
+Segundo run con guarda cola: 329_p2218 protegido. 490 casos afectados, 996 campos cambiados (mayoría word_count). Diff validado contra baseline.
+
+### H074 — Estado final
+
+- **Corpus:** 5862 casos (5668 fallos + 34 sumario_editorial + 160 sumario_con_link).
+- **Votos:** 27465 filas.
+- **sin_firma:** 16 / 5668 fallos (0.3%). Cobertura firma: 99.7%.
+- **sin_dispositivo:** 25.
+- **ancla_catalogo:** 123 (era 428).
+- **ok (status_loc):** 5451 (era 5080).
+- **Trayectoria sin_firma:** 813→…→33→31→17→15→16.
+
+**Outcomes corregidos (B089):** ~15 casos con por_ello_text del caso anterior → outcome correcto. competencia -6, desestima -6, inadmisible_280 +6, procedente +3, originaria +1.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27465 filas.
+- `output/parser/csjn_casos_zonas.csv` — 141192 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+
+**Commits:** 2.
+1. `H074: B094 aplicado — guarda firma Pista 1, sin_firma 17→15`
+2. `H074: B089 — trim pre-caratula con _strip_accents, ancla_catalogo 428→123, votos +17`

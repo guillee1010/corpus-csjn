@@ -2,6 +2,13 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H074 (2026-05-25)
+
+- `parser.py`: B094 — guarda firma en Pista 1 forward (`linea_es_firma_de_juez` + raya). 2 sin_firma recuperados.
+- `parser.py`: B089 — `_strip_accents` en `refinar_inicio_por_titulo` + B074 `_li_for_dfr`. Guarda cola bloque (<5 líneas). ancla_catalogo 428→123, votos +28.
+- `output/parser/csjn_casos.csv`: 5862 filas. Votos 27465. sin_firma 16. sin_dispositivo 25.
+
+
 ## H073 (2026-05-25)
 
 - `parser.py`: B091 — fallback `\brevocar\b` en OUTCOME_PATTERNS_DISPOSITIVO (posición pre-catch-all). classify_outcome v13. revoca +151.
