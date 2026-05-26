@@ -7080,4 +7080,53 @@ Spot-checks post-fix: 333_p1192 tiene residuo post-epílogo (B096 nuevo). 331_p4
 
 **Scripts creados:** `scripts/auditoria/H075/` — `diag_b095_token_corto.py`, `diag_b095_token_largo.py`, `ver_caratulas_b095.py`.
 
-**Commits:** 4 (diagnósticos, H1 prefix match, snapshot pre-5b, 5b fullname+inverted).
+**Commits:** 4 (diagnósticos, H1 prefix match, snapshot pre-5b, 5b fullname+inverted)
+
+## H076 — Limpieza repo + M11 versionado + B095 Tier 4 (2026-05-26)
+
+**Objetivo:** housekeeping del repo, versionar scripts canónicos, ampliar matching de refinar_inicio_por_titulo con guardas de Pista 1.
+
+### H076-01 — Limpieza del repositorio
+
+Scripts sueltos en raíz, scripts/pipeline/ y scripts/auditoria/ movidos a subdirectorios H0xx/ según sesión de origen (cruzado con BITACORA). Snapshots pre_* movidos de output/parser/ a archivo/data/. Scripts colados en output/ (conteo_aperturas_h051.py en output/mapa/, extraer_monstruos (1).py en output/diagnostico/) devueltos a scripts/auditoria/. Directorios vacíos (HB063, 041) eliminados. Nombres inconsistentes normalizados (H37→H037). directorio 069/ fusionado en H070/.
+
+Resultado: raíz con solo 4 .md canónicos + config; pipeline con solo 5 scripts productivos; auditoria con solo auditar_fallo.py suelto + 24 subdirectorios de sesión.
+
+### H076-02 — M11: versionar scripts canónicos
+
+Script `agregar_version.py` agrega `__version__` después del docstring de 6 scripts canónicos. Idempotente. auditar_fallo.py ya tenía v1.0.0 con print propio.
+
+Versiones iniciales: parser.py v18.0, parser_editorial.py v1.0, construir_catalogo.py v1.0, cruzar_catalogo_y_mapa.py v1.0, detectar_paginas.py v1.0. Print de versión agregado al bloque diagnóstico del parser.
+
+Convención: minor sube .01 por sesión, major por cambio de arquitectura.
+
+### H076-03 — B095 Tier 4: refinar_inicio con ventana ampliada y guardas
+
+Diagnóstico previo (`diag_b095_ventana.py`): de 75 ancla_catalogo, solo 8 tienen token≥4 que matchea fuera de la ventana actual (>50 líneas). 5 safe con trim≤50%, 3 riesgosos.
+
+Decisión de diseño: en vez de ampliar la ventana ciegamente, portar guardas de Pista 1 de detectar_fin_real a refinar_inicio_por_titulo. Guardas portadas: `_es_texto_corriente` (retry loop), stoplist con `segundo_token_de_caratula` confirmatorio, trim ≤50%. También fullname+inverted para TODOS los tokens (no solo <4) y "Vistos los autos" extendido a 100 líneas.
+
+PoC inicial (poc_b095_tier4.py) mostró 24 rescates, pero 13 eran falsos positivos por bug en construcción del bloque (usaba linea_fin en vez de linea_fin_real). Corregido, el número real era 11 (8 T4a + 3 vistos).
+
+Se patchó el parser directamente (no el PoC). Parser corrido con v18.01. Diff validado: 11 cambios en status_localizacion, 0 regresiones. 2 outcomes corregidos por eliminación de texto contaminante del caso anterior. 334_p471 (Morán) auditado manualmente — correcto: fallo corto de competencia con dictamen largo, el trim eliminó el caso anterior completo.
+
+### H076 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallos + 33 sumario_editorial + 160 sumario_con_link).
+- **Sin firma:** 16 / 5669 fallos (0.3%). Cobertura firma: 99.7%.
+- **Sin dispositivo:** 25.
+- **ancla_catalogo:** 64. Trayectoria: 428→123→122→116→75→64.
+- **Votos:** 27463 filas.
+- **Zonas:** 140956 segmentos.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27463 filas.
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+
+**Scripts creados:** `scripts/auditoria/H076/` — agregar_version.py, diag_b095_ventana.py, poc_b095_tier4.py, diff_h076.py, ver_cambios_h076.py, check_t1.py.
+
+**Versiones de scripts canónicos:** parser.py v18.01, parser_editorial.py v1.0, construir_catalogo.py v1.0, cruzar_catalogo_y_mapa.py v1.0, detectar_paginas.py v1.0, auditar_fallo.py v1.0.0.
+
+**Commits:** 3 (limpieza repo, M11 versionado, B095 Tier 4)..

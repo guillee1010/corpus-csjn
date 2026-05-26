@@ -2,6 +2,13 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H076 (2026-05-26)
+
+- `parser.py` v18.01: Tier 4 en refinar_inicio_por_titulo — ventana ampliada (100) con guardas (texto corriente, stoplist+segundo token, trim≤50%, fullname+inverted para todos). ancla_catalogo 75→64. `segundo_token_de_caratula()` nueva. __version__ + print versión en diagnóstico.
+- `parser_editorial.py`, `construir_catalogo.py`, `cruzar_catalogo_y_mapa.py`, `detectar_paginas.py`: __version__ agregado (M11).
+- `output/parser/csjn_casos.csv`: 5862 filas (11 casos con status_localizacion cambiado).
+- `output/parser/csjn_casos_zonas.csv`: 140956 segmentos (−99).
+
 ## H075 (2026-05-25)
 
 - `parser.py`: B095 Pista 5 H1 — prefix match como fallback en refinar_inicio_por_titulo. 6 casos, ancla_catalogo -6.

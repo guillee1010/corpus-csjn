@@ -6,13 +6,12 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-25 (H075: B095 parcial — Pista 5
-H1 prefix match (6 casos, abreviaciones catálogo→.md) + Pista 5b
-fullname+inverted (41 casos, nombres completos directos e invertidos
-apellido,nombre→nombre apellido); ancla_catalogo 122→75, votos -2
-(mejora: firma caso anterior contaminante), zonas -137. B089 residual
-diagnosticado: 71 token≥4, H4=27 OCR/typo no atacables. B096-B097
-nuevos. M11 nuevo (versionar parser).
+**Última actualización:** 2026-05-26 (H076: M11 cerrado — __version__
+en 6 scripts canónicos + print en parser. B095 Tier 4 — refinar_inicio
+con ventana ampliada (100) + guardas portadas de Pista 1 (texto corriente,
+stoplist+segundo token, trim≤50%, fullname+inverted para todos);
+ancla_catalogo 75→64, 0 regresiones. Limpieza repo: scripts sueltos
+a H0xx/, snapshots a archivo/data/, dirs normalizados.
 H073: B091 aplicado — fallback
 "revocar" en classify_outcome v13, revoca 208→359. B093 aplicado —
 primer_token_de_caratula con búsqueda profunda de tokens no-genéricos
@@ -150,24 +149,24 @@ a las hipótesis de la tesis (H1-H5).
   160 `sumario_con_link`.
 - **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV).
   Catálogo validado contra corpus: 0 fallos no catalogados (H051).
-  Cobertura de firma sobre fallos: 5651/5668 = **99,7%**.
-- **Sin firma:** 17 casos (post-H073). Desglose residual:
+  Cobertura de firma sobre fallos: 5653/5669 = **99,7%**.
+- **Sin firma:** 16 casos (post-H076). Desglose residual:
   - Citas in extenso ("Dicha sentencia dice así:") donde el token del
     caso siguiente aparece en el texto citado (~5 casos).
   - Bloques cortos (wc < 200) por delimitación errónea (~4 casos).
   - Firma en formato atípico o token en línea de firma (~3 casos).
   - Otros (sumario truncado, estructura atípica) (~5 casos).
   Concentración: tomos 329-330 (10/17).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35→34→33→31→17.
-- **Votos:** 27455 filas (post-H073, +73 vs H072).
+  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35→34→33→31→17→15→16.
+- **Votos:** 27463 filas (post-H076).
 - **Arquitectura:** `zonificar_bloque()` integrado en parser.py (H051-H052,
   Refacción C). Retorna `(list[str], list[tuple])` con zonas por línea y
   anclas. `extraer_segmentos()` genera CSV zona-centered (H053).
   Uso actual: clasificación sumario_editorial + lineas_dictamen +
   CSV zona-centered canónico. Uso futuro: firma zonificada (descartado
   por ROI insuficiente, ver diagnóstico H053-B).
-- **Zonas:** 142505 segmentos en `output/parser/csjn_casos_zonas.csv` (post-H069,
-  −645 por contenido editorial removido de bloques de caso).
+- **Zonas:** 140956 segmentos en `output/parser/csjn_casos_zonas.csv` (post-H076,
+  −99 por residuo eliminado por Tier 4).
   Schema: caso_id_canonico, tomo, zona, segmento, linea_ini, linea_fin,
   n_lineas, wc.
 - **Editorial:** 135 secciones en `output/parser/csjn_casos_editorial.csv`
@@ -2361,20 +2360,21 @@ canónicos actuales B0NN.
   - editorial sections: 135→150 (B088, reorden Pistas).
   - 330_p2849: 110k→7448 wc (B088).
 
-**Próximo trabajo priorizado (orden sugerido, H075):**
+**Próximo trabajo priorizado (orden sugerido, H076):**
 
-1. **B095 residual — H2: ampliar ventana de búsqueda.** 25 casos token≥4
-   con match después de línea 50. Ampliar MAX_LINEAS_BUSQUEDA_TITULO.
-   13 safe (trim <50%, ≥20 líneas restantes). Requiere PoC.
-2. **B090 — Tier 5 dispositivo embebido.** 4 sin_dispositivo residuales.
-   Bajo riesgo.
-3. **B095 residual — H4: OCR/typo catálogo→.md.** 27 casos con nombre
-   distinto. Documentar o parchar catálogo manualmente.
-4. **M11 — Versionar parser.py.** Número incremental en header.
-5. **Codebook dataset (inglés).** Documentación de variables para
+1. **Subdividir outcome "otro" (1562 casos, 26.6%).** Diagnosticar qué
+   contiene: fórmulas dispositivas no capturadas, hace lugar parcialmente,
+   inadmisibles sin art. 280, etc. Prerequisito para análisis estadístico.
+2. **B090 — Tier 5 dispositivo embebido + revisión global de fórmulas
+   dispositivas y fundamentos.** Estudiar todos los patrones posibles
+   (revocar, abstracto, etc.) antes de implementar.
+3. **Codebook dataset (inglés).** Documentación de variables para
    publicación en Harvard Dataverse.
-6. **README publicable.** Actualizar para repositorio público.
-7. **sin_firma (16 casos)** — auditar residuo por causa raíz.
+4. **B095 residual — OCR/typo catálogo→.md.** 36 casos con nombre
+   distinto. Documentar en codebook o parchar catálogo manualmente.
+5. **README publicable.** Actualizar para repositorio público.
+6. **sin_firma (16 casos)** — auditar residuo por causa raíz.
+7. **Normalizar tribunal_origen** (1316 sin_marcador).
 
 
 ### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula
@@ -3466,7 +3466,7 @@ sin_firma 17→15 (329_p1881 Tortorelli, 340_p1213). 0 regresiones.
 **Referencias cruzadas:** H074. B093, B070.
 
 
-### B095 — Token corto en refinar_inicio_por_titulo (ancla_catalogo residual) — PARCIAL H075
+### B095 — Token corto en refinar_inicio_por_titulo (ancla_catalogo residual) — PARCIAL H076
 
 **Componente:** parser (refinar_inicio_por_titulo).
 **Origen / fuente del diagnóstico:** H074, diagnóstico B089 residual.
@@ -3489,15 +3489,22 @@ cortos. No son marginales.
   cada parte. 41 casos rescatados. -2 votos = mejora (firma caso anterior
   contaminante removida, confirmado con auditar_fallo).
 - Total: ancla_catalogo 122→75 (-47). Zonas -137 (residuo eliminado).
-**Residuo pendiente:** 75 ancla_catalogo (65 token≥4 sin match + 10 token<4
-sin match). Los 65 token≥4 se clasificaron en H075: H2 (25, después de
-línea 50), H4 (27, nombre distinto catálogo→.md por OCR/typo: Hojean→HOJMAN,
-Jiménez→GIMENEZ, SOMOSA→SOMISA, GCBA→GOBIERNO DE LA CIUDAD). H3 (13,
-guarda correcta en bloques cortos). H2 es atacable ampliando ventana.
-H4 requiere corrección en catálogo o fuzzy matching.
+**Fix aplicado (H076) — Tier 4:**
+- Ventana ampliada (100 líneas) como fallback cuando Tiers 1-3 (ventana
+  50) fallan. Guardas portadas de Pista 1 de detectar_fin_real:
+  `_es_texto_corriente` con retry loop, stoplist + `segundo_token_de_caratula`
+  confirmatorio para tokens genéricos, trim ≤50%, fullname+inverted para
+  TODOS los tokens (no solo <4). "Vistos los autos" extendido a 100 líneas.
+- 11 casos rescatados (8 por Tier 4a exact guardado, 3 por vistos ampliado).
+  ancla_catalogo 75→64. Zonas -99. 0 regresiones. 2 outcomes corregidos
+  (contaminación del caso anterior eliminada).
+**Residuo pendiente:** 64 ancla_catalogo. Desglose: 36 OCR/typo catálogo→.md
+(no atacables sin fuzzy matching o parche manual), 17 token<4 sin match
+fullname, 11 ventana/genéricos bloqueados por guardas (trim>50% o sin
+segundo token).
 **Estado de verificación:** `confirmado_cuantificado`.
 **Estado del fix:** aplicado (parcial).
-**Referencias cruzadas:** H074, H075. B089.
+**Referencias cruzadas:** H074, H075, H076. B089.
 
 ### B096 — Residuo post-epílogo: sumarios del caso siguiente en bloque
 
@@ -3526,12 +3533,13 @@ firma. El contenido del voto no se captura completo en la zona.
 **Estado del fix:** no diseñado.
 **Referencias cruzadas:** H075.
 
-### M11 — Versionar parser.py con número incremental
+### M11 — Versionar scripts canónicos con __version__ — CERRADO H076
 
-**Componente:** parser.
+**Componente:** parser + pipeline + auditor.
 **Origen:** H075, propuesta de Guillermo.
-**Descripción:** agregar `__version__` al header de parser.py con número
-incremental (ej: "18.3" = arquitectura v18, minor por sesión). Facilita
-tracking de qué versión produjo cada output.
-**Estado:** pendiente.
-**Referencias cruzadas:** H075.
+**Fix aplicado (H076):** `__version__` agregado a 6 scripts canónicos:
+parser.py (v18.01), parser_editorial.py (v1.0), construir_catalogo.py (v1.0),
+cruzar_catalogo_y_mapa.py (v1.0), detectar_paginas.py (v1.0),
+auditar_fallo.py (v1.0.0, ya lo tenía). Print de versión en output del parser.
+Convención: minor sube .01 por sesión, major por cambio de arquitectura.
+**Referencias cruzadas:** H076.
