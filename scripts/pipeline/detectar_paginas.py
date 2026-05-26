@@ -30,6 +30,9 @@ Asume que construir_catalogo.py está en la misma carpeta que este script
 (usa su función extraer_tomo_de_filename).
 """
 
+__version__ = "1.0"  # H076
+
+
 import csv
 import sys
 from collections import Counter

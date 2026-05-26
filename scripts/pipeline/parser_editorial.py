@@ -41,6 +41,9 @@ Decisiones de diseño (H060):
     - 330.4 anomalía documentada: único archivo con índice acumulativo.
 """
 
+__version__ = "1.0"  # H076
+
+
 import re
 
 # ── Títulos-mojón ─────────────────────────────────────────────────────

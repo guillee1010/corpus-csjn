@@ -44,6 +44,8 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
+__version__ = "18.0"  # H076
+
 import re
 import csv
 import json
@@ -3248,6 +3250,8 @@ def main():
         print(f"[OK] {output_editorial_path}: {len(all_editorial)} secciones editoriales")
 
     # ── Diagnóstico ───────────────────────────────────────────────────────────
+    print(f"\n  CSJN Fallos Parser v{__version__}")
+    print(f"  {'='*40}")
     if all_casos:
         outcomes  = Counter(c["outcome"]        for c in all_casos)
         patterns  = Counter(c["voting_pattern"] for c in all_casos)

@@ -86,6 +86,9 @@ USO
       --verbose
 """
 
+__version__ = "1.0"  # H076
+
+
 import argparse
 import csv
 import re

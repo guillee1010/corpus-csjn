@@ -37,6 +37,9 @@ Status posibles:
   fallo_cruza_archivos        — fallo cuyo cuerpo abarca dos archivos físicos
 """
 
+__version__ = "1.0"  # H076
+
+
 import csv
 import sys
 from collections import Counter, defaultdict
