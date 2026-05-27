@@ -2385,6 +2385,62 @@ canónicos actuales B0NN.
 9. **Normalizar tribunal_origen** (1316 sin_marcador).
 
 
+### Referencia: taxonomía oficial CSJN (Anuario Estadístico 2025)
+
+Fuente: Informe sobre Anuario Estadístico 2025, Oficina de Estadísticas,
+CSJN. Analizado en H077 para alinear la taxonomía del parser con las
+categorías institucionales. Las tablas cubren el período 2025; nuestro
+corpus es 2006–2011 (tomos 329–349) pero la estructura clasificatoria
+es estable.
+
+**Sentido de la resolución (recursos admitidos, 3722 casos 2025):**
+Revoca 51.61%, **Deja sin efecto 36.32%**, Confirma 9.73%, Revoca
+parcialmente 1.02%, otros 1.32% (declara competencia, rechaza,
+desestima, nulidad, declara inexistencia, declara inoficioso, declara
+improcedente, modifica, rechaza la demanda). → "Deja sin efecto" es
+categoría separada de "Revoca". Nuestro parser tiene ~85 casos
+detectables; implementar como outcome "deja_sin_efecto".
+
+**Causales de inadmisibilidad (20823 recursos inadmitidos 2025):**
+Art. 280 CPCCN 60.25%, Acordada 4/2007 21.85%, falta sentencia
+definitiva 5.73%, falta fundamentación 2.83%, depósito previo 2.24%,
+cuestión abstracta 1.97%, desistimiento 1.85%, fuera de término 1.38%,
+falta denegación REF, caducidad instancia, salto de instancia, falta
+firma, otras. → Nuestro parser distingue 280 y ac4. Subdivisión
+adicional de baja prioridad.
+
+**Cuestiones federales (recursos admitidos, 3767 cuestiones 2025):**
+Art. 14 ley 48: 67.29% (cuestión federal propiamente dicha — conflicto
+norma local vs. Constitución/ley federal). Sentencia arbitraria: 32.71%
+(doctrina pretoriana — sentencia sin fundamentos válidos, omisión prueba
+decisiva, valoración absurda, exceso ritual, auto-contradicción).
+74.92% de arbitrariedades se originan en la Cámara Nacional de
+Apelaciones del Trabajo. → Detectable en considerando_text: "sentencia
+arbitraria" / "arbitrariedad" vs. "artículo 14" / "ley 48".
+
+**Vía de acceso recursiva (56614 recursos ingresados 2025):**
+Queja REF denegado 77.9%, REF concedido 21.61%, queja recurso
+ordinario denegado 0.35%, salto de instancia 0.09%, recurso ordinario
+0.06%. → Variables futuras: `es_queja` (bool), `queja_resultado`.
+Detectable desde por_ello_text (2181 fallos en nuestro corpus, 38.5%).
+
+**Materia (por secretaría de radicación, 26524 resueltos 2025):**
+Previsional 54.06%, Penal 11.84%, Laboral 11.35%, Penal Especial
+5.68%, Contencioso-Administrativo 4.68%, Civil y Comercial 4.46%,
+Consumo 3.93%, Tributario/Aduanero/Bancario 3.34%, Juicios Originarios
+0.33%, Juicios Ambientales 0.33%. → No tenemos secretaría. Inferible
+desde `tribunal_origen` (Cám. Trabajo→laboral, CFSS→previsional, etc.)
+tras normalización. También desde carátula: "ANSeS"→previsional,
+"ART"→laboral.
+
+**Tipos de votos (79928 votos emitidos 2025):**
+Unanimidad 48.97%, voto conjunto 33.97%, voto propio 16.92%,
+disidencia propia 0.11%, disidencia conjunta 0.03%, disidencia parcial
+propia 0.001%. → Nuestro parser captura voting_pattern (unanime,
+disidencia, segun_su_voto, mixed). "Voto conjunto" vs "voto propio"
+requeriría análisis del texto de cada voto individual.
+
+
 ### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula
 
 **Componente:** auditor (cosmético — no afecta CSV).

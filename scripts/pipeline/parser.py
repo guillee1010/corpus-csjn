@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.01"  # H076: Tier 4 refinar_inicio
+__version__ = "18.02"  # H077: classify_outcome v14 — fallbacks + rechaza
 
 import re
 import csv
@@ -327,6 +327,28 @@ OUTCOME_PATTERNS_DISPOSITIVO = [
     # catch-all) para que originaria, abstracto y otros merit outcomes tengan
     # prioridad sobre la mención de revocar en dispositivos mixtos.
     ("revoca",          re.compile(r"\brevocar\b", re.I)),
+    # ── H077: zona fallback — solo rescatan de "otro" ────────────────────────
+    # Rechaza: formas directas + infinitivo (outcome NUEVO).
+    # "se rechaza la demanda", "se rechazan las recusaciones", "Rechazar in
+    # limine", etc.  No existía pattern previo.
+    ("rechaza",         re.compile(r"\bse (lo |los |la |las )?rechazan?\b", re.I)),
+    ("rechaza",         re.compile(r"\brechazar\b", re.I)),
+    # Capa 2: plurales y pronombres que los patterns de zona alta no cubren.
+    # "se la desestima", "se declaran procedentes", "se confirman".
+    ("desestima",       re.compile(r"\bse (la |las )?desestiman?\b", re.I)),
+    ("procedente",      re.compile(r"\bse declaran procedentes?\b", re.I)),
+    ("confirma",        re.compile(r"\bse confirman\b", re.I)),
+    # Capa 1: infinitivos — "el Tribunal resuelve: Confirmar / Desestimar /
+    # Hacer lugar / Declarar procedente".  Misma lógica que B091 (revocar).
+    ("confirma",        re.compile(r"\bconfirmar\b", re.I)),
+    ("desestima",       re.compile(r"\bdesestimar\b", re.I)),
+    ("hace_lugar",      re.compile(r"\bhacer lugar\b", re.I)),
+    ("procedente",      re.compile(r"\bdeclarar procedentes?\b", re.I)),
+    # Competencia: formas faltantes en zona alta.
+    ("competencia",     re.compile(
+        r"\bse declara competente\b|\bdeclarar(?:se)? (?:la )?(?:in)?competente\b|"
+        r"\bdeclarar que .{0,20}(?:debe|deberá|resulta)\b", re.I)),
+    # ── fin zona fallback H077 ───────────────────────────────────────────────
     # catch-all
     ("otro",            re.compile(r".*")),
 ]
@@ -342,25 +364,30 @@ def _unhyphenate(text: str) -> str:
 
 def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     """
-    v13 (H073/B091): agrega fallback "revocar" (infinitivo) al final del
-    cascade, antes de catch-all "otro". Captura 144+ dispositivos con forma
-    "el Tribunal resuelve: Revocar...", "corresponde revocar", etc.
+    v14 (H077): zona fallback con outcome "rechaza" + infinitivos (confirmar,
+    desestimar, hacer lugar, declarar procedente) + plurales/pronombres.
+    Normalización de whitespace pre-matching (double spaces de OCR).
+    610 "otro" reclasificados, 0 regresiones.
 
-      0. Normalizar textos: _unhyphenate para unir quiebres tipográficos.
+      0. Normalizar textos: _unhyphenate + whitespace.
       1. Determinar outcome del dispositivo (por_ello_text)
       2. Si el dispositivo da merit outcome (hace_lugar, procedente, revoca,
-         confirma, nulidad, competencia, abstracto, originaria, desistimiento),
-         NO sobreescribir con 280/ac4 del considerando.
+         confirma, rechaza, nulidad, competencia, abstracto, originaria,
+         desistimiento), NO sobreescribir con 280/ac4 del considerando.
          Motivo: en fallos mixtos la Corte rechaza un agravio por 280 pero
          concede otro — el outcome relevante es la concesión.
       3. Si el dispositivo NO da merit outcome, buscar 280/ac4 en considerando.
     """
-    MERIT_OUTCOMES = {"hace_lugar", "procedente", "revoca", "confirma", "nulidad",
-                      "competencia", "abstracto", "originaria", "desistimiento"}
+    MERIT_OUTCOMES = {"hace_lugar", "procedente", "revoca", "confirma", "rechaza",
+                      "nulidad", "competencia", "abstracto", "originaria",
+                      "desistimiento"}
 
     # Paso 0 (H066): normalizar quiebres tipográficos
     por_ello_text = _unhyphenate(por_ello_text)
     considerando_text = _unhyphenate(considerando_text)
+    # Paso 0b (H077): normalizar whitespace (double spaces de OCR)
+    por_ello_text = re.sub(r"\s+", " ", por_ello_text).strip()
+    considerando_text = re.sub(r"\s+", " ", considerando_text).strip()
 
     # Paso 1: outcome del dispositivo
     outcome_disp = "otro"
