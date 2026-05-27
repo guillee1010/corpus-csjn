@@ -2,6 +2,11 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H079 (2026-05-27)
+
+- `parser.py` v18.03→v18.04: outcome `deja_sin_efecto` nuevo (87 casos de "otro"). Procedente regex expandido a zona fallback: "se declara formalmente/parcialmente procedente" + "procedente el recurso" en aposición (56 casos de "otro", 7 de inadmisible_280). otro 893→757. 0 regresiones en revoca/confirma.
+- `output/parser/csjn_casos.csv`: 5862 filas (143 outcomes reclasificados).
+
 ## H078 (2026-05-26)
 
 - `parser.py` v18.02→v18.03: tres columnas nuevas aditivas en csjn_casos.csv.

@@ -7251,3 +7251,51 @@ Nota conceptual (Guillermo): tipo_cuestion_federal es la **vía procesal de acce
 - `output/parser/csjn_casos_editorial.csv` — 151 secciones.
 
 **Commits:** 2 (snapshot pre-H078, feature v18.03).
+
+## H079 — Diagnóstico tipo_cuestion_federal + outcome deja_sin_efecto (2026-05-27)
+
+**Objetivo:** validar la variable tipo_cuestion_federal (H078) y agregar outcome deja_sin_efecto al parser.
+
+### H079-01 — Diagnóstico tipo_cuestion_federal (A+B)
+
+**A — Cobertura per-tomo:** 50.1% global (2843/5669), rango 38.7% (T339) a 74.2% (T347). Sin caídas abruptas que indiquen formato editorial no detectado. Fuente sumario editorial ~72% consistente en todos los tomos, sin cambio de régimen.
+
+**B — Validación por muestreo:** 30 casos auditados (10 arbitrariedad, 10 cuestion_federal, 10 mixto): 0 falsos positivos. Mixto genuino: 486/670 clasificados solo por sumario editorial. Proporción mixto sube de ~8% a ~19% en tomos tardíos (341-349), consistente con ratio de fuente. 74 competencia/originaria con tipo_cuestion_federal: plausibles. 513 quejas sin dato: genuino (resoluciones cortas que remiten al Procurador).
+
+**Conclusión:** variable sólida, sin ajustes necesarios.
+
+### H079-02 — Outcome deja_sin_efecto + procedente regex
+
+Análisis de 893 "otro": 128 contienen "deja sin efecto" en por_ello_text. Desglose: 41 con "procedente" (gap regex), 48 con "admisible" sin procedente, 39 puro deja_sin_efecto.
+
+**PoC v1 (parser v18.04, regex procedente en zona alta):** 190 cambios, 54 regresiones — el regex expandido ("se declara formalmente procedente") en posición alta de la cascada pisaba revoca/confirma existentes. "Se declara formalmente procedente el REF y se revoca la sentencia" matcheaba procedente en vez de revoca.
+
+**Decisión de diseño:** mover regex expandido a zona fallback (después de revoca, confirma, etc.). Así "se declara formalmente procedente y se revoca" mantiene revoca (outcome más informativo), y solo casos sin otro merit outcome se rescatan de "otro". Pregunta abierta: outcome como par gate+action (procedente + revoca) para la tesis.
+
+**PoC v2 (regex en zona fallback):** 143 cambios, 0 regresiones reales.
+- otro → deja_sin_efecto: 85
+- otro → procedente: 51
+- inadmisible_280 → procedente: 5 (mejoras: dispositivo dice procedente, considerando menciona 280 por otro agravio)
+- inadmisible_280 → deja_sin_efecto: 2 (ídem)
+
+Patterns agregados a OUTCOME_PATTERNS_DISPOSITIVO (zona fallback):
+- Fix A1: `\bse\s+declara\s+(?:formalmente|parcialmente)\s+procedente\b`
+- Fix A2: `\bprocedentes?\s+(?:el\s+recurso|los\s+recursos)` (aposición)
+- Fix B: `(?:se\s+)?deja(?:r|n)?\s+sin\s+efecto` + `corresponde dejar sin efecto`
+
+deja_sin_efecto agregado a ambos MERIT_OUTCOMES (classify_outcome e is_merit_decision).
+
+### H079 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallos + 33 sumario_editorial + 160 sumario_con_link).
+- **Sin firma:** 16 / 5669 fallos (0.3%). Cobertura firma: 99.7%.
+- **Votos:** 27463 filas.
+- **Outcome "otro":** 757 (era 893, -136).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27463 filas.
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+
+**Distribución de outcomes (H079, classify_outcome v14 + deja_sin_efecto):**
