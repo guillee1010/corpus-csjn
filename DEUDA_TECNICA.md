@@ -6,7 +6,11 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-26 (H078: `es_queja` + `queja_resultado` +
+**Última actualización:** 2026-05-27 (H079: outcome `deja_sin_efecto` nuevo
+(87 casos), procedente regex expandido (56 casos rescatados de "otro"),
+otro 893→757. Diagnóstico tipo_cuestion_federal validado: 50.1% cobertura
+confirmada, 0 falsos positivos en muestreo de 30. parser.py v18.04.
+H078: `es_queja` + `queja_resultado` +
 `tipo_cuestion_federal` — tres columnas nuevas aditivas. es_queja: 1993/5669
 (35.2%), queja_resultado 98.2% cobertura. tipo_cuestion_federal: detección
 en dos capas (sumario editorial + fallback considerando), 2843/5669 (50.1%)
@@ -2325,7 +2329,7 @@ canónicos actuales B0NN.
 
 ## Resumen ejecutivo
 
-*Actualizado H078 (2026-05-26).*
+*Actualizado H079 (2026-05-27).*
 
 - **Bugs cerrados:** ~39 (B001-B008, B013, B029, B030, B032, B039, B046,
   B055, B060, B063-B064, B066-B074, B076-B077, B079, A001,
@@ -2350,34 +2354,32 @@ canónicos actuales B0NN.
   B056-B058, B061-B062, B065, VIS001-VIS004).
 - **Pendientes metodológicos:** 8 (M01 cerrado, M02-M04, M05 cerrado,
   M06-M09, M10).
-- **Detectores (H078, parser v18.03):**
-  - outcome "otro": 893 (estable). classify_outcome v14.
+- **Detectores (H079, parser v18.04):**
+  - outcome "otro": 757 (era 893). classify_outcome v14 + deja_sin_efecto.
+  - deja_sin_efecto: 87 (outcome nuevo H079).
+  - procedente: 753 (era 697, +56 por regex expandido H079).
   - es_queja: 1993/5669 (35.2%). queja_resultado 98.2% cobertura.
-  - tipo_cuestion_federal: 2843/5669 detectados (50.1%).
+  - tipo_cuestion_federal: 2843/5669 detectados (50.1%). Validado H079:
+    0 FP en muestreo 30, cobertura per-tomo estable, mixto genuino.
     cuestion_federal 1291, arbitrariedad 882, mixto 670, sin_dato 2826.
   - sin_dispositivo: 25. sin_firma: 16. ancla_catalogo: 64.
 
-**Próximo trabajo priorizado (orden sugerido, H078):**
+**Próximo trabajo priorizado (orden sugerido, H079):**
 
-1. **Track 2 taxonómico: "deja_sin_efecto" como outcome separado
-   de "revoca".** ~128-234 casos en "otro" donde es la acción primaria.
-   Alineado con Anuario 2025 (36.32%). Nota: muchos "deja sin efecto"
-   ya clasificados como hace_lugar/procedente (la cadena causal es
-   hace_lugar_queja → procedente_REF → deja_sin_efecto_sentencia).
-   Requiere diseño cuidadoso del scope.
-2. **Track 2 taxonómico: categorías menores.** "caducidad" (23),
+1. **Track 2 taxonómico: categorías menores.** "caducidad" (23),
    "desierto" (12), "improcedente" (15), "inadmisible genérico" (21).
-3. **Afinar regex tipo_cuestion_federal.** 50.1% detectados; los 2826
-   sin_dato incluyen no-REF (competencia, originaria, extradición, etc.)
-   que correctamente no aplican. Explorar variantes en sumarios
-   editoriales de tomos intermedios para mejorar cobertura.
-4. **Variable `materia` (inferida desde tribunal_origen).** Depende de
+2. **Variable `materia` (inferida desde tribunal_origen).** Depende de
    normalizar tribunal_origen (1316 sin_marcador).
-5. **B090 — Tier 5 dispositivo embebido.** 16 sin_dispositivo con firma.
-6. **Codebook dataset (inglés).** Documentación de variables para
-   publicación en Harvard Dataverse.
-7. **sin_firma (16 casos)** — auditar residuo por causa raíz.
-8. **Normalizar tribunal_origen** (1316 sin_marcador).
+3. **B090 — Tier 5 dispositivo embebido.** 16 sin_dispositivo con firma.
+4. **Codebook dataset (inglés).** Documentación de variables para
+   publicación en Harvard Dataverse (incluir deja_sin_efecto,
+   es_queja, queja_resultado, tipo_cuestion_federal).
+5. **sin_firma (16 casos)** — auditar residuo por causa raíz.
+6. **Normalizar tribunal_origen** (1316 sin_marcador).
+7. **Diseño taxonómico: outcome como par gate+action.** Pregunta
+   abierta H079: "se declara procedente y se revoca" tiene dos
+   dimensiones (puerta procesal + acción sobre sentencia). Evaluar
+   si descomponer outcome en dos columnas para la tesis.
 
 
 ### Referencia: taxonomía oficial CSJN (Anuario Estadístico 2025)
@@ -2393,8 +2395,8 @@ Revoca 51.61%, **Deja sin efecto 36.32%**, Confirma 9.73%, Revoca
 parcialmente 1.02%, otros 1.32% (declara competencia, rechaza,
 desestima, nulidad, declara inexistencia, declara inoficioso, declara
 improcedente, modifica, rechaza la demanda). → "Deja sin efecto" es
-categoría separada de "Revoca". Nuestro parser tiene ~85 casos
-detectables; implementar como outcome "deja_sin_efecto".
+categoría separada de "Revoca". **Implementado H079:** 87 casos
+como outcome `deja_sin_efecto`.
 
 **Causales de inadmisibilidad (20823 recursos inadmitidos 2025):**
 Art. 280 CPCCN 60.25%, Acordada 4/2007 21.85%, falta sentencia

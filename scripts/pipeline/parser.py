@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.03"  # H078: es_queja + queja_resultado, tipo_cuestion_federal
+__version__ = "18.04"  # H079: procedente regex fix + outcome deja_sin_efecto
 
 import re
 import csv
@@ -349,6 +349,26 @@ OUTCOME_PATTERNS_DISPOSITIVO = [
         r"\bse declara competente\b|\bdeclarar(?:se)? (?:la )?(?:in)?competente\b|"
         r"\bdeclarar que .{0,20}(?:debe|deberá|resulta)\b", re.I)),
     # ── fin zona fallback H077 ───────────────────────────────────────────────
+    # ── H079: procedente expandido + aposición + deja_sin_efecto ──────────────
+    # Fix A1: "se declara formalmente/parcialmente procedente". Posición en
+    # zona fallback para no pisar revoca/confirma que vienen antes en la cascada.
+    # Así "se declara formalmente procedente el REF y se revoca" sigue siendo
+    # revoca (outcome más informativo), y solo casos sin otro merit outcome
+    # se rescatan de "otro".
+    ("procedente",      re.compile(
+        r"\bse\s+declara\s+(?:formalmente|parcialmente)\s+procedente\b", re.I)),
+    # Fix A2: "procedente" en aposición: "se declara admisible la queja,
+    # procedente el recurso extraordinario y se deja sin efecto".
+    ("procedente",      re.compile(
+        r"\bprocedentes?\s+(?:el\s+recurso|los\s+recursos)", re.I)),
+    # Fix B: "se deja sin efecto la sentencia/resolución/pronunciamiento".
+    # Posición final (antes de catch-all): solo rescata de "otro".
+    # 1302 fallos mencionan "deja sin efecto" pero la mayoría ya está
+    # clasificada por patterns anteriores (hace_lugar, procedente, etc.).
+    ("deja_sin_efecto", re.compile(
+        r"(?:se\s+)?deja(?:r|n)?\s+sin\s+efecto|"
+        r"corresponde\s+dejar\s+sin\s+efecto", re.I)),
+    # ── fin H079 ──────────────────────────────────────────────────────────────
     # catch-all
     ("otro",            re.compile(r".*")),
 ]
@@ -380,7 +400,7 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     """
     MERIT_OUTCOMES = {"hace_lugar", "procedente", "revoca", "confirma", "rechaza",
                       "nulidad", "competencia", "abstracto", "originaria",
-                      "desistimiento"}
+                      "desistimiento", "deja_sin_efecto"}
 
     # Paso 0 (H066): normalizar quiebres tipográficos
     por_ello_text = _unhyphenate(por_ello_text)
@@ -3125,7 +3145,8 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                           and "(conjuez)" not in j["nombre"])
         is_full_bench = int(n_titulares == 5)
 
-        MERIT_OUTCOMES    = {"hace_lugar", "procedente", "revoca", "nulidad", "confirma"}
+        MERIT_OUTCOMES    = {"hace_lugar", "procedente", "revoca", "nulidad",
+                              "confirma", "deja_sin_efecto"}
         GATEKEEP_OUTCOMES = {"desestima", "inadmisible_280", "inadmisible_acordada_4",
                              "abstracto", "desistimiento", "mal_concedido"}
         is_merit = int(outcome in MERIT_OUTCOMES)
