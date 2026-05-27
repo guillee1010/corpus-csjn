@@ -1,0 +1,23 @@
+======================================================================
+H038 — Forward + validación firma (full 5702)
+Procesados: 5702  Errores: 0
+======================================================================
+
+── Método usado ──
+  forward_con_firma: 5198
+  sin_match: 414
+  fallback_sin_firma: 90
+
+── Resultado global ──
+  Idénticos: 5422
+  Con cambio: 280
+
+── Detalle ──
+   mejora_gano_firma: 279
+   mejora_mas_jueces: 1
+
+  ✓ 0 regresiones
+
+── Mejoras: 280 ──
+  mejora_gano_firma: 279
+  mejora_mas_jueces: 1

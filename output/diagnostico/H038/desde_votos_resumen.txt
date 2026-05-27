@@ -1,0 +1,60 @@
+======================================================================
+H038 — Reversa desde inicio_votos_indiv, forward sin votos
+Procesados: 5702  Errores: 0
+======================================================================
+
+── Método usado ──
+  forward_sin_votos: 3368
+  reversa_desde_votos: 1920
+  forward_sin_match: 376
+  reversa_sin_match: 38
+
+── Resultado global ──
+  Idénticos: 5497
+  Con cambio: 205
+
+── Detalle ──
+   mejora_gano_firma: 146
+   cambio_outcome: 40
+   mejora_mas_jueces: 10
+  ⚠️ REGRESION_menos_jueces: 7
+   cambio_vp: 1
+  ⚠️ REGRESION_perdio_firma: 1
+
+── ⚠️  REGRESIONES (8) ──
+  330_p2685: REGRESION_menos_jueces (reversa_desde_votos)
+    vp: mixed→unanime, n: 6→1
+    old: Por ello, y lo concordemente dictaminado por el señor Procur
+    new: Por ello, y oído el señor Procurador Fiscal, se hace lugar a
+  330_p3409: REGRESION_menos_jueces (reversa_desde_votos)
+    vp: mixed→unanime, n: 10→3
+    old: Por ello, y lo concordemente dictaminado por la señora Procu
+    new: Por ello, se desestima la queja. Declárase perdido el depósi
+  331_p1596: REGRESION_menos_jueces (reversa_desde_votos)
+    vp: disidencia→unanime, n: 7→1
+    old: Por ello, se hace lugar a la queja y al recurso extraordinar
+    new: Por ello, se hace lugar a la queja, se declara procedente el
+  340_p1038: REGRESION_menos_jueces (reversa_desde_votos)
+    vp: mixed→unanime, n: 6→1
+    old: Por ello, y oída la señora Procuradora Fiscal subrogante, se
+    new: Por ello, y oída la señora Procuradora Fiscal subrogante, se
+  340_p2029: REGRESION_perdio_firma (reversa_desde_votos)
+    vp: unanime→sin_firma, n: 4→0
+    old: Por ello, se rechaza la reposición planteada y se reitera la
+    new: Por ello ACORDARON: I. Declarar que la ley 27.275 resulta co
+  341_p2027: REGRESION_menos_jueces (reversa_desde_votos)
+    vp: unanime→unanime, n: 5→3
+    old: Por ello, se desestima esta presentación directa. Notifíques
+    new: Por ello, Acordaron: 1°. Sustituir el artículo 86, 2° párraf
+  344_p421: REGRESION_menos_jueces (reversa_desde_votos)
+    vp: mixed→unanime, n: 6→1
+    old: Por ello, se declara formalmente procedente el recurso extra
+    new: Por ello, se declara formalmente admisible el recurso extrao
+  349_p40: REGRESION_menos_jueces (reversa_desde_votos)
+    vp: unanime→mixed, n: 3→2
+    old: Por ello, oído el señor Procurador General de la Nación inte
+    new: Por ello, se desestima la presentación directa. Declárase pe
+
+── Mejoras: 156 ──
+  mejora_gano_firma: 146
+  mejora_mas_jueces: 10

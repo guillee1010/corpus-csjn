@@ -1,0 +1,368 @@
+
+Casos totales: 5862
+Casos con cambios: 459
+Casos sin cambios: 5403
+
+=== Clasificaci├│n de cambios ===
+  mejora_mas_jueces                     152
+  mejora_gano_firma                     116
+  cambio_dispositivo                     95
+  regresion_perdio_firma                 57
+  regresion_menos_jueces                 27
+  regresion_perdio_dispositivo           11
+  cambio_otro                             1
+
+--- regresion_perdio_firma (57 casos) ---
+  329_p1568 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ ''
+    por_ello_text: 'Por ello, de conformidad con el dictamen del se├▒or Procurador Fis- cal...' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    voting_pattern: 'unanime' ΓåÆ 'sin_firma'
+    n_jueces: '6' ΓåÆ '0'
+    wc_considerando: '0' ΓåÆ '1241'
+  329_p1586 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ ''
+    por_ello_text: 'Por ello, de conformidad con el dictamen del se├▒or Procurador Fis- cal...' ΓåÆ 'En su m├⌐rito modific├│ el objeto de la demanda y solicit├│ al Tribu- nal...'
+    voting_pattern: 'unanime' ΓåÆ 'sin_firma'
+    n_jueces: '6' ΓåÆ '0'
+  329_p1862 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ ''
+    por_ello_text: 'Por ello, se resuelve: Rechazar la impugnaci├│n formulada a fs. 225 y o...' ΓåÆ 'En consecuencia, corresponde rechazar la excepci├│n de falta de legiti-...'
+    outcome: 'abstracto' ΓåÆ 'otro'
+    voting_pattern: 'unanime' ΓåÆ 'sin_firma'
+    n_jueces: '5' ΓåÆ '0'
+  329_p2197 (tomo 329):
+    firma_raw: 'CARMEN M. ARGIBAY. Recurso ordinario interpuesto por la ANSeS, represe...' ΓåÆ ''
+    por_ello_text: 'Por ello, se declara admisible el recurso ordinario de apelaci├│n, se c...' ΓåÆ ''
+    outcome: 'revoca' ΓåÆ 'sin_dispositivo'
+    voting_pattern: 'unanime' ΓåÆ 'sin_firma'
+    n_jueces: '1' ΓåÆ '0'
+    wc_considerando: '130' ΓåÆ '498'
+  329_p2218 (tomo 329):
+    firma_raw: 'CARMEN M. ARGIBAY.' ΓåÆ ''
+    por_ello_text: 'Por ello, se desestima la queja. Decl├írase perdido el dep├│sito de fs. ...' ΓåÆ ''
+    outcome: 'desestima' ΓåÆ 'sin_dispositivo'
+    voting_pattern: 'unanime' ΓåÆ 'sin_firma'
+    n_jueces: '1' ΓåÆ '0'
+    wc_considerando: '40' ΓåÆ '127'
+  329_p2827 (tomo 329):
+    firma_raw: 'CARMEN M. ARGIBAY. Recurso ordinario interpuesto por el se├▒or Brizuela...' ΓåÆ ''
+    por_ello_text: 'Por ello, se confirma la sentencia. Notif├¡quese y devu├⌐lvase.' ΓåÆ ''
+    outcome: 'confirma' ΓåÆ 'sin_dispositivo'
+    voting_pattern: 'unanime' ΓåÆ 'sin_firma'
+    n_jueces: '1' ΓåÆ '0'
+    wc_considerando: '48' ΓåÆ '76'
+  329_p2830 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ ''
+    por_ello_text: 'Por ello, se declara procedente el recurso ordinario deducido por el o...' ΓåÆ ''
+    outcome: 'procedente' ΓåÆ 'sin_dispositivo'
+    voting_pattern: 'unanime' ΓåÆ 'sin_firma'
+    n_jueces: '5' ΓåÆ '0'
+    wc_considerando: '0' ΓåÆ '62'
+  329_p3373 (tomo 329):
+    firma_raw: 'la destituci├│n del doctor Antonio Boggiano en el cargo de ministro de ...' ΓåÆ ''
+    por_ello_text: 'Por ello, o├¡do el se├▒or Procurador General de la Naci├│n, correspon- de...' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    voting_pattern: 'unanime' ΓåÆ 'sin_firma'
+    n_jueces: '1' ΓåÆ '0'
+    wc_considerando: '46' ΓåÆ '982'
+  329_p4148 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ ''
+    por_ello_text: 'Por ello, se resuelve: Rechazar la nulidad deducida a fs. 991/994.' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    voting_pattern: 'unanime' ΓåÆ 'sin_firma'
+    n_jueces: '7' ΓåÆ '0'
+    wc_considerando: '1' ΓåÆ '243'
+  329_p4172 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...' ΓåÆ ''
+    por_ello_text: 'Por ello, se resuelve: Desestimar el pedido efectuado a fs. 541/543 y ...' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    voting_pattern: 'unanime' ΓåÆ 'sin_firma'
+    n_jueces: '5' ΓåÆ '0'
+    wc_considerando: '19' ΓåÆ '858'
+  ... y 47 m├ís
+
+--- regresion_menos_jueces (27 casos) ---
+  329_p1834 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'Por ello, se resuelve: Declarar la competencia de esta Corte para ente...' ΓåÆ 'Por ello se resuelve: No hacer lugar al planteo efectuado en el es- cr...'
+    n_jueces: '7' ΓåÆ '5'
+    wc_considerando: '1' ΓåÆ '637'
+  329_p2221 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ 'ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. FAYT ΓÇö JUAN CARLOS MAQUEDA ΓÇö R...'
+    por_ello_text: 'Por ello, se desestima el recurso extraordinario. H├ígase saber y devu├⌐...' ΓåÆ 'Por ello, se declara procedente el recurso de hecho y se dispone la su...'
+    outcome: 'desestima' ΓåÆ 'procedente'
+    n_jueces: '6' ΓåÆ '5'
+    wc_considerando: '22' ΓåÆ '512'
+  329_p2492 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö E. RA├ÜL'
+    por_ello_text: 'Por ello, y o├¡do el se├▒or Procurador Fiscal subrogante, se resuelve: D...' ΓåÆ 'Por ello y de conformidad con la opini├│n expresada por el se├▒or Procur...'
+    n_jueces: '5' ΓåÆ '2'
+    wc_considerando: '110' ΓåÆ '916'
+  329_p2745 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...'
+    por_ello_text: 'Por ello, y o├¡do el se├▒or Procurador Fiscal subrogante, se resuelve: D...' ΓåÆ 'Por ello y de conformidad con lo dictaminado por el se├▒or Procura- dor...'
+    n_jueces: '6' ΓåÆ '5'
+    wc_considerando: '24' ΓåÆ '1659'
+  329_p2817 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...'
+    por_ello_text: 'Por ello, y o├¡do el se├▒or Procurador Fiscal, se declara que resulta in...' ΓåÆ 'Por los fundamentos y conclusiones del dictamen del se├▒or Procu- rador...'
+    n_jueces: '7' ΓåÆ '6'
+    wc_considerando: '84' ΓåÆ '306'
+  329_p2941 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...'
+    por_ello_text: 'Por ello, se confirma la sentencia apelada de acuerdo con los fun- dam...' ΓåÆ 'Por ello, se desestiman los recursos extraordinarios. Con costas (art....'
+    outcome: 'confirma' ΓåÆ 'desestima'
+    n_jueces: '6' ΓåÆ '5'
+    wc_considerando: '0' ΓåÆ '28'
+  329_p3851 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...'
+    por_ello_text: 'Por ello, se declara procedente el recurso ordinario y se revoca la se...' ΓåÆ 'Por ello, se hace lugar a la queja y se declara mal denegado el recurs...'
+    outcome: 'procedente' ΓåÆ 'hace_lugar'
+    n_jueces: '7' ΓåÆ '5'
+    wc_considerando: '0' ΓåÆ '145'
+  329_p4370 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'Por ello, corresponde suspender la tramitaci├│n de las presentes quejas...' ΓåÆ 'Por ello se resuelve: Declarar abstracta la cuesti├│n planteada.'
+    n_jueces: '6' ΓåÆ '5'
+    wc_considerando: '43' ΓåÆ '712'
+  329_p4577 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...' ΓåÆ 'ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS MAQUEDA ΓÇö E. RA├ÜL ZAFFARONI ...'
+    por_ello_text: 'Por ello, de conformidad con lo dictaminado por aqu├⌐l, se confirma la ...' ΓåÆ 'Por ello se declara formalmente admisible el recurso extraordina- rio ...'
+    n_jueces: '6' ΓåÆ '5'
+    wc_considerando: '0' ΓåÆ '29'
+  329_p5234 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...'
+    por_ello_text: 'Por ello, se desestima el recurso extraordinario parcialmente con- ced...' ΓåÆ 'Por ello, de conformidad con lo dictaminado por aqu├⌐lla, se declara pr...'
+    outcome: 'desestima' ΓåÆ 'procedente'
+    voting_pattern: 'segun_su_voto' ΓåÆ 'unanime'
+    n_jueces: '7' ΓåÆ '5'
+    wc_considerando: '0' ΓåÆ '356'
+  ... y 17 m├ís
+
+--- regresion_perdio_dispositivo (11 casos) ---
+  329_p3925 (tomo 329):
+    por_ello_text: 'De conformidad con lo dispuesto por los arts. 88 y 188 inc. 3 del C├│di...' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    wc_considerando: '230' ΓåÆ '334'
+  330_p3055 (tomo 330):
+    por_ello_text: 'Por lo expuesto, opino que debe rechazarse la presente queja. Bue- nos...' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    wc_considerando: '0' ΓåÆ '3441'
+  330_p4396 (tomo 330):
+    por_ello_text: 'De conformidad con lo previsto por el art. 24, inc. 7, ├║ltima parte de...' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    wc_considerando: '14' ΓåÆ '1119'
+  330_p5108 (tomo 330):
+    por_ello_text: 'Por ello, se lo declara improcedente. Notif├¡quese y vuelvan los au- to...' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    wc_considerando: '25' ΓåÆ '41'
+  333_p724 (tomo 333):
+    por_ello_text: 'Atento el car├ícter federal que reviste un documento nacional de identi...' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    wc_considerando: '8' ΓåÆ '944'
+  334_p749 (tomo 334):
+    por_ello_text: 'Por ello, seg├║n mi entender, los argumentos expuestos por los magis- t...' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    wc_considerando: '1148' ΓåÆ '1594'
+  337_p1530 (tomo 337):
+    por_ello_text: 'Por lo expuesto, lo decidido resulta adecuado a los t├⌐rminos del  art....' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    wc_considerando: '0' ΓåÆ '1645'
+  339_p160 (tomo 339):
+    por_ello_text: 'En consecuencia, opino que corresponde al juzgado federal que  previno...' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    wc_considerando: '1494' ΓåÆ '1587'
+  347_p1084 (tomo 347):
+    por_ello_text: 'Por ello, habiendo dictaminado la se├▒ora Procuradora Fiscal, y de  acu...' ΓåÆ ''
+    outcome: 'otro' ΓåÆ 'sin_dispositivo'
+    wc_considerando: '13887' ΓåÆ '14085'
+  347_p1673 (tomo 347):
+    por_ello_text: 'Por ello, se declara procedente el recurso extraordinario dedu\xad cido p...' ΓåÆ ''
+    outcome: 'desestima' ΓåÆ 'sin_dispositivo'
+    wc_considerando: '3568' ΓåÆ '7557'
+  ... y 1 m├ís
+
+--- mejora_gano_firma (116 casos) ---
+  329_p1847 (tomo 329):
+    firma_raw: '' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...'
+    por_ello_text: 'En consecuencia, atribuy├│ responsabilidad no s├│lo a Marcelo Da- niel D...' ΓåÆ 'Por ello, de conformidad con lo dictaminado por el Procurador Fis- cal...'
+    voting_pattern: 'sin_firma' ΓåÆ 'unanime'
+    n_jueces: '0' ΓåÆ '6'
+    wc_considerando: '254' ΓåÆ '1769'
+  329_p2925 (tomo 329):
+    firma_raw: '' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'En su m├⌐rito, la cuesti├│n radica en determinar si en autos se pre- sen...' ΓåÆ 'Por ello y habiendo dictaminado la se├▒ora Procuradora Fiscal, se resue...'
+    voting_pattern: 'sin_firma' ΓåÆ 'unanime'
+    n_jueces: '0' ΓåÆ '7'
+    wc_considerando: '274' ΓåÆ '1236'
+  329_p2986 (tomo 329):
+    firma_raw: '' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO (seg├║n su vot...'
+    por_ello_text: 'Por lo expuesto, opino que corresponde hacer lugar al recurso de queja...' ΓåÆ 'Por ello, o├¡do el se├▒or Procurador Fiscal, se hace lugar a la queja y ...'
+    outcome: 'otro' ΓåÆ 'hace_lugar'
+    voting_pattern: 'sin_firma' ΓåÆ 'segun_su_voto'
+    n_jueces: '0' ΓåÆ '7'
+    wc_considerando: '0' ΓåÆ '2448'
+  329_p4266 (tomo 329):
+    firma_raw: '' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'Por ello, en virtud de lo expuesto en dicha causa, que doy aqu├¡ por re...' ΓåÆ 'Por ello y o├¡do el se├▒or Procurador Fiscal subrogante, se decide: Rech...'
+    voting_pattern: 'sin_firma' ΓåÆ 'unanime'
+    n_jueces: '0' ΓåÆ '5'
+    wc_considerando: '0' ΓåÆ '553'
+  329_p4289 (tomo 329):
+    firma_raw: '' ΓåÆ 'ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. FAYT ΓÇö JUAN CARLOS MAQUEDA ΓÇö E...'
+    por_ello_text: 'Por lo expuesto, afirma que en virtud de la importancia del tema del t...' ΓåÆ 'Por ello: a) se desestiman las presentaciones de fs. 5814/5834, 5836/5...'
+    outcome: 'otro' ΓåÆ 'desestima'
+    voting_pattern: 'sin_firma' ΓåÆ 'disidencia'
+    n_jueces: '0' ΓåÆ '6'
+    wc_considerando: '0' ΓåÆ '133'
+  329_p4309 (tomo 329):
+    firma_raw: '' ΓåÆ 'ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS MAQUEDA ΓÇö E. RA├ÜL ZAFFARONI ...'
+    por_ello_text: 'Por todo lo expuesto, entiendo que corresponde hacer lugar a los recur...' ΓåÆ 'Por ello, o├¡do el se├▒or Procurador Fiscal subrogante, se hace lugar a ...'
+    outcome: 'otro' ΓåÆ 'hace_lugar'
+    voting_pattern: 'sin_firma' ΓåÆ 'unanime'
+    n_jueces: '0' ΓåÆ '5'
+    wc_considerando: '0' ΓåÆ '5975'
+  329_p4907 (tomo 329):
+    firma_raw: '' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'En consecuencia, y puesto que la Corte provincial no lo hizo en su fal...' ΓåÆ 'Por ello, y lo concordemente dictaminado por el se├▒or Procurador Fisca...'
+    outcome: 'otro' ΓåÆ 'hace_lugar'
+    voting_pattern: 'sin_firma' ΓåÆ 'disidencia'
+    n_jueces: '0' ΓåÆ '7'
+    wc_considerando: '0' ΓåÆ '28'
+  329_p5139 (tomo 329):
+    firma_raw: '' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO (en disidenci...'
+    por_ello_text: 'Por todo lo expuesto, opino que corresponde hacer lugar a la queja, de...' ΓåÆ 'Por ello, y o├¡da la se├▒ora Procuradora Fiscal subrogante, se hace luga...'
+    outcome: 'otro' ΓåÆ 'hace_lugar'
+    voting_pattern: 'sin_firma' ΓåÆ 'disidencia'
+    n_jueces: '0' ΓåÆ '7'
+    wc_considerando: '0' ΓåÆ '414'
+  329_p5239 (tomo 329):
+    firma_raw: '' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö CARLOS S. FAYT ΓÇö JUAN CARLOS MAQUEDA ΓÇö E....'
+    por_ello_text: 'De conformidad con los arts. 4┬║, incs. 4 y 5, 26 y 33 de la ley 25.326...' ΓåÆ 'Por ello, y o├¡do el se├▒or Procurador Fiscal, se declara formalmente pr...'
+    outcome: 'otro' ΓåÆ 'revoca'
+    voting_pattern: 'sin_firma' ΓåÆ 'segun_su_voto'
+    n_jueces: '0' ΓåÆ '6'
+    wc_considerando: '0' ΓåÆ '1251'
+  329_p5266 (tomo 329):
+    firma_raw: '' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'por ello es, precisamente, la negaci├│n m├ís completa del anterior, pues...' ΓåÆ 'Por ello y de conformidad, en lo pertinente, con lo dictaminado por el...'
+    outcome: 'otro' ΓåÆ 'hace_lugar'
+    voting_pattern: 'sin_firma' ΓåÆ 'segun_su_voto'
+    n_jueces: '0' ΓåÆ '7'
+    wc_considerando: '0' ΓåÆ '6019'
+  ... y 106 m├ís
+
+--- mejora_mas_jueces (152 casos) ---
+  329_p1236 (tomo 329):
+    firma_raw: 'JUAN CARLOS MAQUEDA. Profesionales: Dra. Cecilia Mercedes Fern├índez, l...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI (seg├║n su voto) ΓÇö ELENA I. HIGHTON DE NOLAS...'
+    por_ello_text: 'Por ello, se resuelve: Imponer las costas ocasionadas por la actua- ci...' ΓåÆ 'De conformidad con lo dictaminado por la se├▒ora Procuradora Fis- cal s...'
+    voting_pattern: 'unanime' ΓåÆ 'segun_su_voto'
+    n_jueces: '1' ΓåÆ '7'
+  329_p1506 (tomo 329):
+    firma_raw: 'JUAN CARLOS MAQUEDA ΓÇö E. RA├ÜL ZAFFARONI.' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...'
+    por_ello_text: 'Por ello, se hace lugar a la queja, se declara procedente el recurso e...' ΓåÆ 'Por ello, se desestima el recurso de hecho planteado. Int├¡mese a la ap...'
+    outcome: 'hace_lugar' ΓåÆ 'desestima'
+    voting_pattern: 'unanime' ΓåÆ 'disidencia'
+    n_jueces: '2' ΓåÆ '6'
+    wc_considerando: '30' ΓåÆ '709'
+  329_p1514 (tomo 329):
+    firma_raw: 'RICARDO LUIS LORENZETTI.' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...'
+    por_ello_text: 'Por ello, se hace lugar parcialmente a la queja y al recurso ex- traor...' ΓåÆ 'Por ello, se hace lugar a la queja, se declara procedente el recurso e...'
+    voting_pattern: 'unanime' ΓåÆ 'segun_su_voto'
+    n_jueces: '1' ΓåÆ '6'
+    wc_considerando: '0' ΓåÆ '27'
+  329_p1661 (tomo 329):
+    firma_raw: 'CARLOS S. FAYT ΓÇö E. RA├ÜL ZAFFARONI.' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'Por ello, se hace lugar a la queja y se declara formalmente proce- den...' ΓåÆ 'Por ello, con el alcance indicado, se declara formalmente admisi- ble ...'
+    outcome: 'hace_lugar' ΓåÆ 'otro'
+    voting_pattern: 'unanime' ΓåÆ 'disidencia'
+    n_jueces: '2' ΓåÆ '7'
+    wc_considerando: '0' ΓåÆ '37'
+  329_p1758 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'Por ello, se resuelve suspender el pronunciamiento en el presente recu...' ΓåÆ 'Por ello y o├¡da la se├▒ora Procuradora Fiscal subrogante, se deses- tim...'
+    n_jueces: '6' ΓåÆ '7'
+    wc_considerando: '0' ΓåÆ '351'
+  329_p1794 (tomo 329):
+    firma_raw: 'RICARDO LUIS LORENZETTI ΓÇö CARMEN M. ARGIBAY.' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...'
+    por_ello_text: 'Por ello, y habiendo dictaminado el se├▒or Procurador Fiscal, se la des...' ΓåÆ 'Por ello, y lo dictaminado por el se├▒or Procurador Fiscal, se hace lug...'
+    outcome: 'otro' ΓåÆ 'hace_lugar'
+    voting_pattern: 'unanime' ΓåÆ 'segun_su_voto'
+    n_jueces: '2' ΓåÆ '6'
+    wc_considerando: '1' ΓåÆ '2326'
+  329_p1963 (tomo 329):
+    firma_raw: 'CARMEN M. ARGIBAY. Recurso extraordinario interpuesto por Auch├ín Argen...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...'
+    por_ello_text: 'Por ello, se declara procedente el recurso extraordinario y se con- fi...' ΓåÆ 'Por ello, y lo concordemente dictaminado por el se├▒or Procurador Fisca...'
+    voting_pattern: 'unanime' ΓåÆ 'segun_su_voto'
+    n_jueces: '1' ΓåÆ '6'
+    wc_considerando: '0' ΓåÆ '28'
+  329_p1984 (tomo 329):
+    firma_raw: 'E. RA├ÜL ZAFFARONI. Recurso extraordinario interpuesto por Ra├║l A. Bust...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...'
+    por_ello_text: 'Por ello, habiendo dictaminado el se├▒or Procurador Fiscal, se de- clar...' ΓåÆ 'Por ello, se declara improcedente el recurso extraordinario. H├íga- se ...'
+    outcome: 'confirma' ΓåÆ 'otro'
+    voting_pattern: 'unanime' ΓåÆ 'segun_su_voto'
+    n_jueces: '1' ΓåÆ '6'
+    wc_considerando: '0' ΓåÆ '26'
+  329_p2037 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO.' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'Por ello, y o├¡do el se├▒or Procurador Fiscal subrogante, se hace lu- ga...' ΓåÆ 'Por ello, se hace lugar a la queja, se declara procedente el recurso e...'
+    outcome: 'procedente' ΓåÆ 'hace_lugar'
+    voting_pattern: 'unanime' ΓåÆ 'disidencia'
+    n_jueces: '2' ΓåÆ '14'
+    wc_considerando: '0' ΓåÆ '28'
+  329_p2105 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö RICARDO LUIS LORENZETTI. DIA ARGENTINA S....' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'Por ello, se decide: I. Hacer lugar a la demanda seguida por Eliazar C...' ΓåÆ 'Por ello, se resuelve: Declarar que la presente causa es ajena a la co...'
+    n_jueces: '2' ΓåÆ '5'
+    wc_considerando: '47' ΓåÆ '943'
+  ... y 142 m├ís
+
+--- cambio_dispositivo (95 casos) ---
+  329_p1092 (tomo 329):
+    por_ello_text: 'De conformidad con la forma de gobierno federal adoptada, la Constituc...' ΓåÆ 'En consecuencia, revisar la doctrina jurisprudencial que funda el menc...'
+    outcome: 'otro' ΓåÆ 'abstracto'
+    wc_considerando: '0' ΓåÆ '1421'
+  329_p1343 (tomo 329):
+    por_ello_text: 'Por lo expuesto, opino que corresponde a la justicia local continuar c...' ΓåÆ 'Por los fundamentos y conclusiones del dictamen del se├▒or Procu- rador...'
+    outcome: 'otro' ΓåÆ 'competencia'
+    wc_considerando: '21' ΓåÆ '65'
+  329_p1673 (tomo 329):
+    firma_raw: 'ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS MAQUEDA ΓÇö E. RA├ÜL ZAFFARONI ...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'Por ello, se rechazan las recusaciones deducidas. Notif├¡quese.' ΓåÆ 'Por ello, se resuelve: Hacer lugar a la caducidad de instancia opues- ...'
+    wc_considerando: '12' ΓåÆ '559'
+  329_p1690 (tomo 329):
+    por_ello_text: 'En consecuencia, tampoco se configuran en el sub examine ningu- na de ...' ΓåÆ 'Por los fundamentos y conclusiones del dictamen del se├▒or Procu- rador...'
+    wc_considerando: '497' ΓåÆ '600'
+  329_p2125 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö JUAN CARLOS...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'Por ello y o├¡do el se├▒or Procurador Fiscal subrogante, se resuelve: De...' ΓåÆ 'Por ello se resuelve: Diferir para el momento de dictar sentencia la e...'
+    wc_considerando: '199' ΓåÆ '766'
+  329_p244 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'Por ello, se desestima la recusaci├│n planteada. Notif├¡quese.' ΓåÆ 'Por ello, o├¡do el se├▒or Procurador General de la Naci├│n, se desesti- m...'
+    outcome: 'desestima' ΓåÆ 'otro'
+    voting_pattern: 'unanime' ΓåÆ 'mixed'
+    wc_considerando: '0' ΓåÆ '508'
+  329_p2496 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö E. RA├ÜL ZAF...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö E. RA├ÜL ZAF...'
+    por_ello_text: 'Por ello y de conformidad con la opini├│n expresada por el se├▒or Procur...' ΓåÆ 'Por los fundamentos y conclusiones del dictamen del se├▒or Procu- rador...'
+    outcome: 'otro' ΓåÆ 'competencia'
+    wc_considerando: '61' ΓåÆ '344'
+  329_p2759 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö CARLOS S. FAYT ΓÇö JUAN CARLOS MAQUEDA ΓÇö E....'
+    por_ello_text: 'Por ello, se resuelve: Rechazar la excepci├│n opuesta y mandar lle- var...' ΓåÆ 'Por ello, se decide: 1) Hacer lugar a la medida cautelar y, en conse- ...'
+    wc_considerando: '20' ΓåÆ '515'
+  329_p2985 (tomo 329):
+    por_ello_text: 'Atento a que una decisi├│n respecto de los temas planteados en el recur...' ΓåÆ 'Atento a que una decisi├│n respecto de los temas planteados por los dem...'
+    wc_considerando: '13' ΓåÆ '110'
+  329_p3879 (tomo 329):
+    firma_raw: 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...' ΓåÆ 'ENRIQUE SANTIAGO PETRACCHI ΓÇö ELENA I. HIGHTON DE NOLASCO ΓÇö CARLOS S. F...'
+    por_ello_text: 'Por ello, y de conformidad con lo dictaminado por el se├▒or Procu- rado...' ΓåÆ 'Por ello, se resuelve: Rechazar in limine el interdicto de obra nue- v...'
+    voting_pattern: 'unanime' ΓåÆ 'segun_su_voto'
+  ... y 85 m├ís
+
+--- cambio_otro (1 casos) ---
+  334_p1043 (tomo 334):
+    firma_raw: 'Ricardo Luis Lorenzetti ΓÇö Elena I. Highton de Nolasco ΓÇö Juan Carlos Ma...' ΓåÆ 'Ricardo Luis Lorenzetti ΓÇö Elena I. Highton de Nolasco ΓÇö Juan Carlos Ma...'
+    wc_considerando: '0' ΓåÆ '804'

@@ -1,0 +1,66 @@
+VERIFICACION 2: bloques con 2+ matches del patron sumario-con-link
+======================================================================
+
+Filas totales en localizados: 5690
+Filas validas (con linea_inicio/linea_fin/archivo): 5647
+Filas descartadas por NaN: 43
+Filas saltadas por archivo inexistente: 0
+Filas procesadas: 5647
+
+Bloques con al menos 1 match: 254
+Bloques con 2+ matches: 52
+
+Detalle de bloques con 2+ matches:
+----------------------------------------------------------------------
+  345_p98 en LibroVol345-1.md (lineas 3730-3877): 2 matches
+  345_p154 en LibroVol345-1.md (lineas 5970-6041): 2 matches
+  345_p160 en LibroVol345-1.md (lineas 6180-6274): 3 matches
+  345_p181 en LibroVol345-1.md (lineas 6969-7036): 2 matches
+  345_p182 en LibroVol345-1.md (lineas 7005-7064): 2 matches
+  345_p183 en LibroVol345-1.md (lineas 7037-7096): 2 matches
+  345_p184 en LibroVol345-1.md (lineas 7065-7110): 2 matches
+  345_p185 en LibroVol345-1.md (lineas 7097-7169): 3 matches
+  345_p202 en LibroVol345-1.md (lineas 7694-7755): 2 matches
+  345_p203 en LibroVol345-1.md (lineas 7728-7790): 2 matches
+  345_p243 en LibroVol345-1.md (lineas 9192-9254): 2 matches
+  345_p244 en LibroVol345-1.md (lineas 9222-9463): 2 matches
+  345_p250 en LibroVol345-1.md (lineas 9432-9493): 2 matches
+  345_p276 en LibroVol345-1.md (lineas 10435-10543): 2 matches
+  345_p296 en LibroVol345-1.md (lineas 11166-11224): 2 matches
+  345_p378 en LibroVol345-1.md (lineas 14396-14453): 2 matches
+  345_p379 en LibroVol345-1.md (lineas 14427-14485): 2 matches
+  345_p380 en LibroVol345-1.md (lineas 14454-14518): 2 matches
+  345_p383 en LibroVol345-1.md (lineas 14552-14610): 2 matches
+  345_p384 en LibroVol345-1.md (lineas 14577-14667): 2 matches
+  345_p386 en LibroVol345-1.md (lineas 14635-15201): 2 matches
+  345_p600 en LibroVol345-1.md (lineas 22962-23054): 3 matches
+  345_p602 en LibroVol345-1.md (lineas 23025-23085): 2 matches
+  345_p603 en LibroVol345-1.md (lineas 23055-23119): 2 matches
+  345_p604 en LibroVol345-1.md (lineas 23086-23148): 2 matches
+  345_p849 en LibroVol345-1.md (lineas 32572-33303): 2 matches
+  345_p936 en LibroVol345-2.md (lineas 2200-2265): 2 matches
+  345_p1083 en LibroVol345-2.md (lineas 7919-7970): 2 matches
+  345_p1084 en LibroVol345-2.md (lineas 7948-8000): 2 matches
+  345_p1170 en LibroVol345-2.md (lineas 11206-11343): 2 matches
+  345_p1289 en LibroVol345-2.md (lineas 15768-15828): 2 matches
+  346_p48 en LibroVol346-1.md (lineas 1842-2181): 2 matches
+  346_p74 en LibroVol346-1.md (lineas 2865-2924): 2 matches
+  346_p254 en LibroVol346-1.md (lineas 9796-9897): 2 matches
+  346_p624 en LibroVol346-1.md (lineas 24226-24293): 2 matches
+  346_p625 en LibroVol346-1.md (lineas 24265-24322): 2 matches
+  346_p1082 en LibroVol346-2.md (lineas 12219-12401): 3 matches
+  346_p1086 en LibroVol346-2.md (lineas 12364-12411): 2 matches
+  346_p1194 en LibroVol346-2.md (lineas 16485-16572): 2 matches
+  346_p1241 en LibroVol346-2.md (lineas 18253-18346): 2 matches
+  347_p316 en LibroVol347-1.md (lineas 12290-12489): 2 matches
+  347_p823 en LibroVol347-1.md (lineas 31712-31774): 2 matches
+  347_p1378 en LibroVol347-2.md (lineas 7851-7985): 2 matches
+  347_p1381 en LibroVol347-2.md (lineas 7957-8048): 2 matches
+  347_p1383 en LibroVol347-2.md (lineas 8024-8080): 2 matches
+  347_p1762 en LibroVol347-2.md (lineas 22675-22717): 2 matches
+  348_p274 en LibroVol348-1.md (lineas 10475-10524): 2 matches
+  348_p275 en LibroVol348-1.md (lineas 10495-10949): 2 matches
+  348_p293 en LibroVol348-1.md (lineas 11147-11211): 2 matches
+  348_p294 en LibroVol348-1.md (lineas 11182-11238): 2 matches
+  348_p328 en LibroVol348-1.md (lineas 12478-12534): 2 matches
+  348_p1533 en LibroVol348-1.md (lineas 59193-59260): 2 matches

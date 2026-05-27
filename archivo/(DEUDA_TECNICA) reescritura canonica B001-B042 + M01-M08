@@ -1,0 +1,1179 @@
+[1mdiff --git a/DEUDA_TECNICA.md b/DEUDA_TECNICA.md[m
+[1mindex fdd1a5f..5873b65 100644[m
+[1m--- a/DEUDA_TECNICA.md[m
+[1m+++ b/DEUDA_TECNICA.md[m
+[36m@@ -1,242 +1,993 @@[m
+ # Deuda Técnica[m
+ [m
+[31m-Estado de bugs identificados en el pipeline. Diferencia clara entre **deuda activa** (bugs sin resolver), **deuda en validación** (fix aplicado, validación pendiente) y **deuda cerrada** (resuelto y verificado).[m
+[32m+[m[32mLista canónica de bugs del pipeline corpus-csjn y de la herramienta auditora[m
+[32m+[m[32m(`scripts/auditoria/auditar_fallo.py`). Una entrada por bug. El diagnóstico[m
+[32m+[m[32mtécnico vivo de los bugs cuantificados contra el código vive en `PIPELINE.md`[m
+[32m+[m[32m(secciones §X.Y); las entradas de esta lista que tienen referencia §X.Y[m
+[32m+[m[32mapuntan allá para detalle. Las entradas sin §X.Y tienen el diagnóstico[m
+[32m+[m[32mcompleto acá.[m
+ [m
+[31m-**Última actualización:** 2/5/2026.[m
+[32m+[m[32m**Última actualización:** 2026-05-14.[m
+ [m
+ ---[m
+ [m
+[31m-## Estado del corpus[m
+[31m-[m
+[31m-- **Catálogo:** 5862 entradas (v15)[m
+[31m-- **Universo procesable:** 19 tomos (329-349, exclusión metodológica de 335-336)[m
+[31m-- **Cobertura objetivo:** ≥99%[m
+[31m-- **Cobertura actual (último parser):** 5819 / 5862 = 99,3% del catálogo[m
+[31m-- **Cobertura post fix Bug D (esperada, en validación):** ≥99,7%[m
+[31m-[m
+[31m----[m
+[31m-[m
+[31m-## Deuda EN VALIDACIÓN[m
+[31m-[m
+[31m-### Bug D — Último fallo del tomo arrastraba aparato editorial de índices[m
+[32m+[m[32m## Convención[m
+ [m
+[31m-**Estado:** Fix aplicado 2/5/2026, validación post-corrida pendiente.[m
+[32m+[m[32m**IDs:** los bugs activos y cerrados se numeran `B001..B0NN` correlativos,[m
+[32m+[m[32magrupados por componente. La letra `H` no se usa para bugs porque se reserva[m
+[32m+[m[32ma las hipótesis de la tesis (H1-H5).[m
+ [m
+[31m-**Causa raíz:** el localizador `paginas/cruzar_catalogo_y_mapa.py` asignaba `linea_fin = última línea del .md` para los últimos fallos del tomo. Como el final del `.md` contiene los índices oficiales (nombres, materias, sumario, legislación, general), el bloque del último fallo arrastraba todo el aparato editorial. El localizador, defensivamente, marcaba estos casos como `ultimo_del_tomo` y los enviaba a huérfanos.[m
+[32m+[m[32m**Campos por entrada de bug activo:**[m
+ [m
+[31m-**Casos afectados:** 19 (uno por archivo terminal de cada tomo: 329_p6087, 330_p5435, 331_p2925, 332_p2898, 333_p2445, 334_p1920, 337_p1581, 338_p1583, 339_p1834, 340_p2029, 341_p2027, 342_p2399, 343_p2280, 344_p3782, 345_p1549, 346_p1564, 347_p2352, 348_p1796, 349_p306).[m
+[32m+[m[32m- **Componente:** catálogo / cruzador / parser / auditor.[m
+[32m+[m[32m- **Origen / fuente del diagnóstico:** dónde se identificó (XXI-letra del[m
+[32m+[m[32m  forense, F-N de BITACORA, sesión X, etc.).[m
+[32m+[m[32m- **Causa raíz:** mecanismo del bug en el código, cuando se conoce.[m
+[32m+[m[32m- **Diagnóstico / evidencia:** caso testigo, cuantificación, líneas exactas.[m
+[32m+[m[32m- **Estado de verificación:** uno de cuatro niveles —[m
+[32m+[m[32m  - `confirmado_cuantificado`: con números contra el CSV o el corpus.[m
+[32m+[m[32m  - `confirmado_caso_testigo`: con un `.md` auditado, sin cuantificación.[m
+[32m+[m[32m  - `hipotesis_no_verificada`: identificado leyendo código, sin medir.[m
+[32m+[m[32m  - `sospecha_cardinal`: número estimado pero sin verificar el mecanismo.[m
+[32m+[m[32m- **Validador propuesto:** script o método de verificación. Si requiere[m
+[32m+[m[32m  trabajo significativo, se anota como plan, no se codea aún.[m
+[32m+[m[32m- **Estado del fix:** no diseñado / diseñado / aplicado / aplicado y validado.[m
+[32m+[m[32m- **Referencias cruzadas:** §X.Y de PIPELINE.md cuando existe, equivalencias[m
+[32m+[m[32m  con otras letras (XXI-N, F-N), etc.[m
+ [m
+[31m-**Fix aplicado:** modificación de `paginas/cruzar_catalogo_y_mapa.py` para usar `linea_fin = linea_inicio_indice_nombres - 1` cuando se pasa `secciones_indices_v14.csv` como quinto argumento. Status nuevo: `ok_cortado_en_indice`. Backward compatible.[m
+[31m-[m
+[31m-**Validación pendiente en próxima sesión:**[m
+[31m-1. Spot-check que los 19 casos tengan `linea_fin` exactamente igual a la predicción.[m
+[31m-2. Re-corrida del parser sobre `fallos_localizados.csv` regenerado.[m
+[31m-3. Verificación que los 19 casos quedan bien parseados (voting_pattern, firmas, outcome).[m
+[31m-4. Diff contra output del parser pre-fix para confirmar cero regresión en los 5819 que andaban.[m
+[32m+[m[32m**Mapeo histórico de IDs viejos (A, B, C, D, Bug 1) al final del archivo.**[m
+ [m
+ ---[m
+ [m
+[31m-## Deuda ACTIVA[m
+[31m-[m
+[31m-### Bug A — Cabecera con dictamen del Procurador embebido (`pagina_no_en_mapa`)[m
+[31m-[m
+[31m-**Casos afectados:** 43.[m
+[31m-[m
+[31m-**Patrón estructural:**[m
+[31m-```[m
+[31m-Línea N:         CARÁTULA EN MAYÚSCULAS         ← cabecera del fallo[m
+[31m-Líneas N+1 a M:  Sumarios doctrinales            ← resumen oficial[m
+[31m-Línea M+1:       Dictamen de la Procuración General[m
+[31m-...              [cuerpo del dictamen, secciones romanas I-V][m
+[31m-Línea P:         [fecha del dictamen][m
+[31m-Línea P+1:       FALLO DE LA CORTE SUPREMA[m
+[31m-```[m
+[31m-[m
+[31m-**Causa raíz hipotética:** el detector de páginas (`paginas/detectar_paginas.py`) no reconoce la cabecera en mayúsculas como inicio de página de fallo cuando hay dictamen previo. Por lo tanto la página de inicio del fallo nunca entra al `mapa_paginas.csv`, y el localizador devuelve `pagina_no_en_mapa`.[m
+[31m-[m
+[31m-**Distribución por tomo:**[m
+[31m-- Tomo 331: 11 casos (Boston Cía. de Seguros, Villarreal, Barhoumi, etc.)[m
+[31m-- Tomo 332: 11 casos[m
+[31m-- Tomo 333: 11 casos[m
+[31m-- Tomo 334: 10 casos[m
+[31m-[m
+[31m-Es decir: el bug se concentra en el régimen editorial 2008-2011 de la Secretaría de Jurisprudencia. Tomos posteriores tienen el patrón en proporción mucho menor o no lo tienen.[m
+[31m-[m
+[31m-**Caso paradigmático:** Boston Cía. de Seguros (Tomo 331 p. 7). En `markdowns_v2/LibroVol331.1.md`:[m
+[31m-- Línea 58: cabecera `BOSTON Cía. de SEGUROS S.A. c/ FEDERAL EXPRESS`[m
+[31m-- Líneas 59-96: sumarios[m
+[31m-- Líneas 97-230: dictamen del Procurador Esteban Righi[m
+[31m-- Línea 231: marcador `FALLO DE LA CORTE SUPREMA`[m
+[31m-- Línea 232: `Buenos Aires, 5 de febrero de 2008.`[m
+[31m-[m
+[31m-**Importancia metodológica:** estos 43 casos pueden tener composición sustantiva distinta del corpus general — fallos con dictamen tienden a ser por recurso extraordinario, con disidencias presentes. Boston confirmó: tiene mayoría + Lorenzetti/Maqueda en disidencia. Si los 43 casos están sesgados hacia disidencias, perderlos sesga el corpus contra H3 de la tesis (que postula que la ausencia de incentivos institucionales para opinión unificada promueve concurrencias y disidencias).[m
+[31m-[m
+[31m-**Fix candidato:** modificar `paginas/detectar_paginas.py` para reconocer el patrón "cabecera mayúsculas + sumarios + dictamen" como inicio alternativo de página cuando el header convencional no aparece.[m
+[31m-[m
+[31m-**Estimación:** 1-3 horas de trabajo + validación. Riesgo medio-alto: el detector sustenta los 5773 casos que ya andan, cualquier modificación puede generar regresión.[m
+[31m-[m
+[31m-**Atribuible a:** pipeline interno. Resoluble en código.[m
+[32m+[m[32m## Estado del corpus[m
+ [m
+[31m-**Prioridad:** ALTA. Es el cluster más grande pendiente y el más relevante metodológicamente.[m
+[32m+[m[32m- **Catálogo:** 5862 entradas (v15).[m
+[32m+[m[32m- **Universo procesable:** 19 tomos (329-349, exclusión metodológica de 335-336).[m
+[32m+[m[32m- **Output parser productivo:** 5819 casos en `output/parser/csjn_casos.csv`[m
+[32m+[m[32m  (Fix 1 aplicado, commit `2adda06`).[m
+[32m+[m[32m- **Cobertura sobre catálogo:** 5819 / 5862 = **99,3%**.[m
+[32m+[m[32m- **Fixes aplicados en sprint 2026-05-09:** §3.6.a `pg_fin+1`, §3.6.e Fase 1[m
+[32m+[m[32m  (39 casos `pagina_fin_no_en_mapa` reasignados), §4.6.j `RE_APERTURA` doble[m
+[32m+[m[32m  espacio (17/18 casos), Fix 1 (V1 como fuente primaria de `case_name_cuerpo`).[m
+[32m+[m[32m- **Pendiente verificación post-sprint:** identificación caso-a-caso de los[m
+[32m+[m[32m  32 oks que cambiaron de status post §3.6.a (eran XXI-v).[m
+ [m
+ ---[m
+ [m
+[31m-### Bug C — Página final +1 no detectada (`pagina_fin_no_en_mapa`)[m
+[31m-[m
+[31m-**Casos afectados:** 39 (pre-fix). **Post-fix Bug D: 0 casos.**[m
+[31m-[m
+[31m-**Anomalía detectada en validación post-fix Bug D:** los 39 casos desaparecieron del CSV de huérfanos sin que el fix los hubiera tocado directamente. Hipótesis principal: la categorización pre-fix se hizo contra `fallos_localizados_huerfanos.csv` generado con catálogo v14, mientras que la corrida post-fix usó catálogo v15.[m
+[31m-[m
+[31m-**Estado:** sospechoso de estar resuelto por mejora del catálogo (v14→v15), pero pendiente de verificación.[m
+[32m+[m[32m## Deuda CERRADA[m
+ [m
+[31m-**Acción pendiente:** confirmar la hipótesis comparando carátulas entre snapshot del huérfanos viejo y output actual.[m
+[32m+[m[32mBugs resueltos en commit con validación. Quedan documentados acá para[m
+[32m+[m[32mtrazabilidad histórica; el diagnóstico técnico vive en PIPELINE.md.[m
+[32m+[m
+[32m+[m[32m### B001 — Bug `pg_fin + 1` del cruzador[m
+[32m+[m
+[32m+[m[32m**Componente:** cruzador.[m
+[32m+[m[32m**Fix aplicado:** 2026-05-09, una línea en `cruzar_catalogo_y_mapa.py`[m
+[32m+[m[32mlínea 235. Disolvió bloques inflados de ~32 líneas en 5.695/5.695 pares[m
+[32m+[m[32mconsecutivos.[m
+[32m+[m[32m**Referencias:** PIPELINE §3.6.a. XXI-e del forense. ID histórico: no[m
+[32m+[m[32mtenía letra propia en el documento del 2/5 (era el bug del +1 que[m
+[32m+[m[32mDEUDA_TECNICA original no había identificado todavía).[m
+[32m+[m
+[32m+[m[32m### B002 — `fallo_cruza_archivos` calibración (efecto colateral §3.6.a)[m
+[32m+[m
+[32m+[m[32m**Componente:** cruzador.[m
+[32m+[m[32m**Fix:** disuelto como efecto colateral de B001. 27 casos pre-fix → 20[m
+[32m+[m[32mpost-fix. Los 7 casos que salieron eran falsos positivos predichos.[m
+[32m+[m[32mCierre 2026-05-09.[m
+[32m+[m[32m**Referencias:** PIPELINE §3.6.d. XXI-b del forense. ID histórico: era[m
+[32m+[m[32m**Bug B** del documento del 2/5.[m
+[32m+[m
+[32m+[m[32m### B003 — Hojas complementarias tomos 331-334 (Fase 1)[m
+[32m+[m
+[32m+[m[32m**Componente:** cruzador.[m
+[32m+[m[32m**Fix aplicado:** 2026-05-09, post §3.6.a. 39 casos `pagina_fin_no_en_mapa`[m
+[32m+[m[32mreasignados (32 → `ok_pg_fin_redirigida`, 7 → `ok_cortado_en_indice`).[m
+[32m+[m[32mFase 2 sigue abierta para los 43 `pagina_no_en_mapa` simétricos (= B009).[m
+[32m+[m[32m**Referencias:** PIPELINE §3.6.e. ID histórico: era **Bug C** del[m
+[32m+[m[32mdocumento del 2/5 (39 casos `pagina_fin_no_en_mapa` que se pensaban[m
+[32m+[m[32mresueltos por catálogo v15; en realidad se resolvieron acá).[m
+[32m+[m
+[32m+[m[32m### B004 — Último fallo del tomo arrastra aparato editorial[m
+[32m+[m
+[32m+[m[32m**Componente:** cruzador.[m
+[32m+[m[32m**Fix aplicado:** 2/5/2026, `cruzar_catalogo_y_mapa.py` usa[m
+[32m+[m[32m`linea_fin = linea_inicio_indice_nombres - 1` cuando se pasa[m
+[32m+[m[32m`secciones_indices_v14.csv`. Status nuevo: `ok_cortado_en_indice`. 19[m
+[32m+[m[32mcasos cubiertos, uno por tomo.[m
+[32m+[m[32m**Referencias:** PIPELINE §3.6.e (mismo dominio). BITACORA H005-H008. ID[m
+[32m+[m[32mhistórico: era **Bug D** del documento del 2/5.[m
+[32m+[m
+[32m+[m[32m### B005 — `RE_APERTURA` estricto doble espacio (parcial)[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Fix aplicado:** 2026-05-09, `parser.py` línea 57. `RE_APERTURA` cambió[m
+[32m+[m[32mde espaciado literal a `\s+` libre. 17 de 18 casos capturados (16 pasaron[m
+[32m+[m[32mde `ok_sin_marcador_apertura` a `ok`, 1 de `fallo_cruza_archivos_sin_marcador`[m
+[32m+[m[32ma `fallo_cruza_archivos`). El caso 18 (`343_p646`) tiene patrón editorial[m
+[32m+[m[32mirregular distinto, queda como B016.[m
+[32m+[m[32m**Referencias:** PIPELINE §4.6.j. XXI-g del forense (variante 1 de 3 — las[m
+[32m+[m[32motras dos variantes "pegado" y "partido en 2 líneas" siguen vivas como B015,[m
+[32m+[m[32mB016). Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B006 — `apertura_idx + len(bloque)` aritmético (efecto evaporado post-§3.6.a)[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Estado:** bug aritmético sobrevive en código pero daño efectivo plausible[m
+[32m+[m[32mes ~0 post-fix B001. La cota superior bajó de 3.863 a 3.682 casos[m
+[32m+[m[32mpotenciales. Re-evaluado 2026-05-09 como prioridad baja (cosmético).[m
+[32m+[m[32m**Referencias:** PIPELINE §4.6.a. XXI-k del forense. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B007 — `ok_sin_marcador_apertura` reclasificado (descriptivo)[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Estado:** no era bug, era información descriptiva contaminada. 185 →[m
+[32m+[m[32m347 casos post §3.6.a. Validación caso-a-caso confirmó cero regresiones[m
+[32m+[m[32m(151/163 con `wc_pre > wc_post`, 11 igual, 1 mejora). Reclasificado como[m
+[32m+[m[32mfenómeno editorial real del corpus.[m
+[32m+[m[32m**Referencias:** PIPELINE §4.6.h. Sin equivalente en XXI. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B008 — Fix 1: V1 como fuente primaria de `case_name_cuerpo`[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Fix aplicado:** commit `2adda06`. V1 como fuente primaria + columna[m
+[32m+[m[32mshadow `case_name_cuerpo_legacy` para comparación. Cubre el ~67% del[m
+[32m+[m[32mcorpus donde V1 acierta. El 33% restante cae al fallback de `find_case_name`[m
+[32m+[m[32m(viejo comportamiento, sigue con bug — ver B011).[m
+[32m+[m[32m**Referencias:** PIPELINE §4.4.i. XXI-a del forense (XXI decía "no aplicado"[m
+[32m+[m[32mporque XXI fue del 3-4/5 y el commit posterior).[m
+ [m
+ ---[m
+ [m
+[31m-### Bug B — Fallo cruza archivos (`fallo_cruza_archivos`)[m
+[31m-[m
+[31m-**Casos afectados:** 20 (pre-fix) / 27 (post-fix Bug D).[m
+[31m-[m
+[31m-**Anomalía detectada:** subió +7 casos post-fix. Improbable que sea efecto del fix Bug D (toca otra rama). Hipótesis principal: cambio de catálogo v14→v15.[m
+[31m-[m
+[31m-**Causa raíz:** el catálogo coloca el fallo siguiente en otro `.md`, y el localizador termina el bloque actual con la última línea del archivo de inicio. Mismo problema que Bug D pero entre archivos en lugar de al final del tomo.[m
+[31m-[m
+[31m-**Fix candidato:** aplicar la misma lógica del Bug D — cortar en `linea_inicio` del primer índice (de nombres) del archivo de inicio. Cambio quirúrgico en la rama `fallo_cruza_archivos` del mismo script.[m
+[31m-[m
+[31m-**Estimación:** 30-45 minutos. Riesgo bajo si se aplica como fix separado de Bug D.[m
+[31m-[m
+[31m-**Decisión metodológica:** no aplicar junto con Bug D. Validar Bug D primero, después abrir sesión separada para Bug B.[m
+[32m+[m[32m## Deuda EN VALIDACIÓN[m
+ [m
+[31m-**Prioridad:** MEDIA. Pocos casos, pero fix barato.[m
+[32m+[m[32m### B009 — `pagina_no_en_mapa` tomos 331-334 (Fase 2 de §3.6.e)[m
+[32m+[m
+[32m+[m[32m**Componente:** cruzador.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-d del forense. BITACORA H001, H002.[m
+[32m+[m[32m**Causa raíz:** hipótesis 1: el detector de páginas no detecta el primer[m
+[32m+[m[32mheader tipográfico al inicio de cada `.md` (limitación en §1.5). Hipótesis 2:[m
+[32m+[m[32mparticularidad editorial de tomos 331-334 con índices o aparato preliminar al[m
+[32m+[m[32m**inicio** en vez de al final.[m
+[32m+[m[32m**Diagnóstico / evidencia:** 43 casos. Distribución: tomo 331: 11, tomo 332: 11,[m
+[32m+[m[32mtomo 333: 11, tomo 334: 10. Caso paradigmático: Boston Cía. de Seguros[m
+[32m+[m[32m(331_p7), línea 58 cabecera mayúsculas, dictamen 97-230, fallo desde 232.[m
+[32m+[m[32mPatrón: cabecera mayúsculas + sumarios + dictamen previo al[m
+[32m+[m[32m`FALLO DE LA CORTE SUPREMA`.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_cuantificado` (43 casos identificados).[m
+[32m+[m[32m**Validador propuesto:** inspeccionar primeras ~100 líneas de[m
+[32m+[m[32m`LibroVol331.1.md` (¿hay header tipográfico para la página 7?). Comparar[m
+[32m+[m[32m`mapa_paginas.csv` para 331-334 contra 329. Comparar con tomo 329 (sin casos)[m
+[32m+[m[32mpara identificar qué hace distinto su `.md` 1. Plan, no codear.[m
+[32m+[m[32m**Estado del fix:** no diseñado.[m
+[32m+[m[32m**Referencias cruzadas:** PIPELINE §3.6.c. XXI-d. BITACORA H001, H002. ID[m
+[32m+[m[32mhistórico: era **Bug A** del documento del 2/5.[m
+[32m+[m
+[32m+[m[32m### B010 — `RE_CONSIDERANDO` restrictivo + `.match()` con anclaje `^...$`[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** PIPELINE §4.6.b. Rediagnóstico[m
+[32m+[m[32m2026-05-09 (continuación) y recalibración 2026-05-14 sobre CSV vivo[m
+[32m+[m[32m(BITACORA H019).[m
+[32m+[m[32m**Causa raíz:** `RE_CONSIDERANDO` (parser.py línea 121) anclado con `^...$`[m
+[32m+[m[32me invocado con `.match()` solo detecta `Considerando:` como línea aislada.[m
+[32m+[m[32mLas variantes con prefijo (`Vistos los autos; Considerando:`) caen al[m
+[32m+[m[32mfallback `inicio_cons = 0` que arrastra todo el bloque desde la primera línea.[m
+[32m+[m[32m**Diagnóstico / evidencia:** cluster recontado 14/5: 320 casos con[m
+[32m+[m[32m`wc_cons ≥ 0.9 × wc` (vs 480 estimados originalmente). Apertura `fallo`: 229.[m
+[32m+[m[32mApertura `sentencia`: 3. Sin apertura: 88. Vacíos: 1.672. **El cluster[m
+[32m+[m[32m§4.6.b puro (con apertura detectada) no cambió: 232 casos.**[m
+[32m+[m[32mHallazgo lateral: existe `RE_CONSIDERANDO_NUMERADO_1` separado, usado en[m
+[32m+[m[32mdetección de "estructura autónoma" en votos largos. El diseño del fix debe[m
+[32m+[m[32mconsiderar si unificar criterios con el numerado.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_cuantificado`.[m
+[32m+[m[32m**Validador propuesto:** diagnóstico fino del cluster de 232 con[m
+[32m+[m[32m`auditar_fallo.py` (catch-all sobre cluster). Sample dirigido de ~5 casos[m
+[32m+[m[32mcon seed reproducible. Pendiente para próxima sesión (acordado 14/5).[m
+[32m+[m[32m**Estado del fix:** rediagnosticado, no diseñado todavía. El fix con guard[m
+[32m+[m[32mespacial es la dirección probable (`RE_CONSIDERANDO` permisivo + `.search()`[m
+[32m+[m[32mdentro de ventana `(apertura, por_ello)` excluyendo span del dictamen),[m
+[32m+[m[32mpero F013 enseñó que permisivo + .search() sin guard rompe fallos.[m
+[32m+[m[32m**Referencias cruzadas:** PIPELINE §4.6.b. BITACORA H019. Sin ID histórico.[m
+ [m
+ ---[m
+ [m
+[31m-### Cluster sin causa raíz documentada — fallos breves de 2014-2025[m
+[31m-[m
+[31m-**Casos afectados:** ~5 fallos breves del régimen reciente (rango 6-13 páginas) que aparecen como huérfanos sin patrón obvio.[m
+[31m-[m
+[31m-**Estado:** sin investigar. La hipótesis de "plenos largos atípicos" cubría los huérfanos largos del régimen reciente, pero estos cinco son cortos.[m
+[31m-[m
+[31m-**Acción pendiente:** abrir 2-3 de estos casos en su `.md` correspondiente y mapear el patrón.[m
+[31m-[m
+[31m-**Prioridad:** BAJA. Pocos casos, sustantivamente menos relevante.[m
+[32m+[m[32m## Deuda ACTIVA — Catálogo (Etapa 2)[m
+[32m+[m
+[32m+[m[32m### B011 — Bug catalográfico `344_p344` (caso aislado)[m
+[32m+[m
+[32m+[m[32m**Componente:** catálogo.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-j del forense.[m
+[32m+[m[32m**Causa raíz:** dos entradas distintas del catálogo (`344_p1` con[m
+[32m+[m[32m`inicio_pag=51`, `344_p344` con `inicio_pag=53`) apuntan al mismo arranque[m
+[32m+[m[32mdel corpus (caso ARAUJO).[m
+[32m+[m[32m**Diagnóstico / evidencia:** caso aislado. Verificable directamente en[m
+[32m+[m[32m`catalogo.csv` con filtro `tomo=344` y `caso in ('p1', 'p344')`.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo`.[m
+[32m+[m[32m**Validador propuesto:** script de 5 líneas: `df_cat[df_cat['tomo']==344[m
+[32m+[m[32m& df_cat['caso'].isin(['p1','p344'])]` y verificar `inicio_pag`. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Probablemente requiere mirar[m
+[32m+[m[32m`construir_catalogo.py` para entender por qué dos entradas distintas[m
+[32m+[m[32mmatchean el mismo arranque.[m
+[32m+[m[32m**Referencias cruzadas:** XXI-j. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+ [m
+ ---[m
+ [m
+[31m-### Bug 1 (CSJN editorial, no resoluble en código) — Y.P.F. c/ Mercante Hnos. del Tomo 349[m
+[31m-[m
+[31m-**Casos afectados:** 1 (Y.P.F. en p.43 del Tomo 349).[m
+[31m-[m
+[31m-**Causa:** truncamiento del índice oficial del Tomo 349 (provisorio, publicado 2026). El índice corta en V (Vargas) y omite W-Z. El fallo Y.P.F. existe en el cuerpo del `.md` pero no en el índice, por lo que el catálogo no lo registra.[m
+[32m+[m[32m## Deuda ACTIVA — Cruzador (Etapa 3)[m
+[32m+[m
+[32m+[m[32m### B012 — Catálogo de localización con `linea_fin` extendido sobre próximo caso[m
+[32m+[m
+[32m+[m[32m**Componente:** cruzador (o etapa de localización aguas arriba).[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** F011 (BITACORA sesión 2026-05-09,[m
+[32m+[m[32mlínea 640).[m
+[32m+[m[32m**Causa raíz:** no diagnosticada. Caso paradigmático: 339_p1648 con[m
+[32m+[m[32mcatálogo dice fin=26634, pero contenido real termina en 26599. Líneas[m
+[32m+[m[32m26605-26634 ya pertenecen al fallo 339_p1651 (sumarios + dictamen de[m
+[32m+[m[32m"Diez, Ernesto Osvaldo"). No es problema del detector de borde inferior[m
+[32m+[m[32mdel auditor; es del proceso de localización/catalogación.[m
+[32m+[m[32m**Diagnóstico / evidencia:** caso testigo `339_p1648`. Magnitud[m
+[32m+[m[32mdesconocida — no se midió todavía cuántos casos tienen `linea_fin`[m
+[32m+[m[32mextendido similar.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo`.[m
+[32m+[m[32m**Validador propuesto:** script ad-hoc que para cada caso compare[m
+[32m+[m[32m`linea_fin` del catálogo de localización contra la primera línea del[m
+[32m+[m[32mcaso siguiente. Si `linea_fin > linea_inicio_siguiente - margen`, flag.[m
+[32m+[m[32mCuantificar magnitud antes de diseñar fix. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado.[m
+[32m+[m[32m**Referencias cruzadas:** F011. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m[32mProbable relación con la dinámica de §3.6.a residual.[m
+ [m
+[31m-**Atribuible a:** Editor de Fallos de la CSJN, no al pipeline.[m
+[31m-[m
+[31m-**Resolución prevista:** esperar publicación de la versión definitiva del Tomo 349 con índice completo. Re-correr el pipeline. Y.P.F. quedará incorporado naturalmente.[m
+[31m-[m
+[31m-**Tomos auditados con índice completo:** 337 (2014), 343 (2020), 347 (2024), 348 (2025) — todos terminan en Z. El 349 es excepcional por ser provisorio del año en curso.[m
+[32m+[m[32m---[m
+ [m
+[31m-**Hallazgo sustantivo (anotado para tesis):** Y.P.F. tiene composición ampliada por conjueces (Rosatti + Lorenzetti + Aranguren + Lozano + Sánchez = 5 firmantes, 3 conjueces). Caso útil como ejemplo de integración atípica para H4 de la tesis.[m
+[32m+[m[32m## Deuda ACTIVA — Parser (Etapa 4)[m
+[32m+[m
+[32m+[m[32m### B013 — Bug XII: cascada del dispositivo por falso positivo[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-c del forense. Sesión XII[m
+[32m+[m[32m(3/5/2026) con caso Benedetti como arquetipo.[m
+[32m+[m[32m**Causa raíz:** `detectar_apertura_dispositivo` (parser.py líneas 92-118) +[m
+[32m+[m[32mloop principal "primera ocurrencia gana" (líneas 1554-1563). Variantes[m
+[32m+[m[32malternativas del dispositivo (`En consecuencia`, `Por los fundamentos`,[m
+[32m+[m[32metc.) matchean en cuerpo argumental antes del verdadero dispositivo.[m
+[32m+[m[32mCascadea a firma capturada de lugar incorrecto.[m
+[32m+[m[32m**Diagnóstico / evidencia:** 234 casos identificados con[m
+[32m+[m[32m`voting_pattern=sin_firma` o firma anómala.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_cuantificado` (234 casos).[m
+[32m+[m[32m**Validador propuesto:** auditar caso Benedetti con `auditar_fallo.py`[m
+[32m+[m[32mpara confirmar mecanismo. Sample dirigido de N=5 sobre el cluster de 234[m
+[32m+[m[32mpara verificar que todos tienen el mismo patrón. Plan.[m
+[32m+[m[32m**Estado del fix:** diseñado conceptualmente — cuatro opciones en XXI:[m
+[32m+[m[32mA (variantes solo en mitad inferior del bloque), B (validar con verbos[m
+[32m+[m[32minstitucionales en línea siguiente), C (`Por ello` posterior como veto),[m
+[32m+[m[32mD (combinación A+C). No aplicado.[m
+[32m+[m[32m**Referencias cruzadas:** XXI-c. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B014 — `find_case_name` retrocede y captura citas del dictamen previo (fallback Fix 1)[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-a del forense. Sesión VIII[m
+[32m+[m[32m(2/5/2026), 6 casos auditados manualmente.[m
+[32m+[m[32m**Causa raíz:** `find_case_name` (parser.py línea 344,[m
+[32m+[m[32m`max_back=15, max_back_fallback=60`) retrocede desde `apertura_idx`. Cuando[m
+[32m+[m[32mel dictamen previo contiene citas doctrinales con `c/`, las captura como[m
+[32m+[m[32mcarátula. También captura cierre del fallo anterior cuando hay página[m
+[32m+[m[32mcompartida.[m
+[32m+[m[32m**Diagnóstico / evidencia:** 33% del corpus cae al fallback de Fix 1 (B008[m
+[32m+[m[32mcubre el 67% restante con V1). Casos testigos: 329_p9, 329_p117, 329_p147,[m
+[32m+[m[32m329_p171, 329_p184, 329_p218.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_cuantificado` (33% del corpus =[m
+[32m+[m[32m~1.920 casos).[m
+[32m+[m[32m**Validador propuesto:** comparar `case_name_cuerpo` vs[m
+[32m+[m[32m`case_name_cuerpo_legacy` (columna shadow del Fix 1) en los casos donde V1[m
+[32m+[m[32mno acertó. Cuantificar cuántos del 33% tienen captura espuria de[m
+[32m+[m[32mdictamen previo. Plan.[m
+[32m+[m[32m**Estado del fix:** diseñado en sesión VIII: validar contra `primer_token`[m
+[32m+[m[32mdel índice antes de aceptar candidato. Pase 1 con primer_token, pase 2[m
+[32m+[m[32mfallback al comportamiento actual. Backward compatible. No aplicado.[m
+[32m+[m[32m**Referencias cruzadas:** XXI-a (segunda mitad). PIPELINE §4.4.i menciona[m
+[32m+[m[32mFix 1 pero no el fallback residual. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B015 — `RE_APERTURA` variante "pegado en línea continua con cuerpo"[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-g del forense (variante 2 de 3),[m
+[32m+[m[32mchat 28/4.[m
+[32m+[m[32m**Causa raíz:** `RE_APERTURA` requiere línea exacta. Cuando el marcador[m
+[32m+[m[32m`FALLO DE LA CORTE SUPREMA` aparece pegado en línea continua con el cuerpo[m
+[32m+[m[32m(sin salto de línea propio), el anclaje `^...$` no matchea.[m
+[32m+[m[32m**Diagnóstico / evidencia:** mencionado en chat 28/4. No cuantificado.[m
+[32m+[m[32m**Estado de verificación:** `hipotesis_no_verificada`.[m
+[32m+[m[32m**Validador propuesto:** grep en `markdowns_v2/*.md` con expresión que[m
+[32m+[m[32mmatchee el marcador no aislado. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Aclarar primero si "pegado" significa[m
+[32m+[m[32m"sin salto antes" o "sin salto después" o "embebido en línea de cuerpo".[m
+[32m+[m[32m**Referencias cruzadas:** XXI-g variante 2. Sin §X.Y en PIPELINE (B005[m
+[32m+[m[32mcubrió solo doble espacio). Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B016 — `RE_APERTURA` variante "partido en dos líneas"[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-g del forense (variante 3 de 3),[m
+[32m+[m[32mmencionada por el usuario en sesión XXI. Caso testigo es el "caso 18" de[m
+[32m+[m[32mB005: `343_p646`.[m
+[32m+[m[32m**Causa raíz:** carátula del fallo en mayúsculas, tema en mayúsculas,[m
+[32m+[m[32msumario editorial, header tipográfico de página, **luego** marcador[m
+[32m+[m[32m`FALLO DE LA CORTE SUPREMA` con doble espacio (línea 24641 de[m
+[32m+[m[32m`LibroVol343-1.md`). La cascada `detectar_fin_real` cortó el bloque en[m
+[32m+[m[32mlínea 24618 (tomando el header de página como pista de fin) antes de[m
+[32m+[m[32mllegar al marcador.[m
+[32m+[m[32m**Diagnóstico / evidencia:** 1 caso confirmado (`343_p646`). No[m
+[32m+[m[32mcuantificado en otros tomos.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo`.[m
+[32m+[m[32m**Validador propuesto:** revisar tomos modernos buscando estructura[m
+[32m+[m[32m"carátula → tema → sumario → header pág → marcador". Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Posible dirección: extender la cascada[m
+[32m+[m[32m`detectar_fin_real` para mirar más adelante antes de aceptar un corte[m
+[32m+[m[32mbasado en header de página.[m
+[32m+[m[32m**Referencias cruzadas:** PIPELINE §4.6.j (mencionado como "caso 18" pero[m
+[32m+[m[32mno abierto como bug propio). XXI-g variante 3. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B017 — Firma multilínea partida por header de página intra-bloque cae a catch_all[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** F012 (BITACORA sesión 2026-05-09,[m
+[32m+[m[32mlíneas 771, 901). Diagnóstico mecánico cerrado en la misma sesión leyendo[m
+[32m+[m[32m`parser.py` línea 283.[m
+[32m+[m[32m**Causa raíz:** los 14 patrones de `JUECES_CONOCIDOS` exigen nombre+apellido[m
+[32m+[m[32men la misma línea (ej. `r"carmen\s+m\.?\s*argibay"`). Cuando la firma se[m
+[32m+[m[32mparte por corte editorial entre nombre y apellido, la línea aislada con el[m
+[32m+[m[32mapellido suelto no matchea ningún patrón y cae al `catch_all 31`.[m
+[32m+[m[32m**Diagnóstico / evidencia:** caso testigo `333_p2410`, línea 20848:[m
+[32m+[m[32m"M. Argibay." cae al catch_all porque la línea anterior (20847, dentro[m
+[32m+[m[32mdel span de firma) termina en "Carmen". El patrón completo[m
+[32m+[m[32m"Carmen ... Argibay" no existe en una línea sola y por eso no matchea.[m
+[32m+[m[32mContribuye a `voting_pattern=sin_firma`.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo`. Magnitud no[m
+[32m+[m[32mcuantificada.[m
+[32m+[m[32m**Validador propuesto:** extender `auditar_fallo.py` con detector[m
+[32m+[m[32m"apellido suelto post-Considerando". La función[m
+[32m+[m[32m`linea_es_continuacion_firma` del auditor (líneas 159-211) ya usa[m
+[32m+[m[32m`APELLIDOS_FIRMA_TITULARES` con apellidos sueltos y es directamente[m
+[32m+[m[32mreutilizable. Plan.[m
+[32m+[m[32m**Estado del fix:** diseñado conceptualmente — agregar reconocimiento de[m
+[32m+[m[32mapellido suelto como continuación de firma reutilizando[m
+[32m+[m[32m`linea_es_continuacion_firma` en `detectar_firma_mayoria` del segmentador.[m
+[32m+[m[32mPrecondición pendiente: confirmar caso testigo en `.md` crudo (BITACORA[m
+[32m+[m[32mlínea 923).[m
+[32m+[m[32m**Referencias cruzadas:** F012. Sin §X.Y en PIPELINE (línea 2834 reconoce[m
+[32m+[m[32mla deuda). Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B018 — Pista 1 `detectar_fin_real` con falso positivo en cuerpo del dictamen[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** F013 (BITACORA sesión 2026-05-09,[m
+[32m+[m[32mlínea 897). Equivalente a XXI-m.[m
+[32m+[m[32m**Causa raíz:** la pista 1 de `detectar_fin_real` hace búsqueda hacia atrás[m
+[32m+[m[32mdentro del bloque (`buscar_atras(es_caratula, lfc, li + 5)`) usando un[m
+[32m+[m[32mregex sobre `primer_token`. Cuando ese token aparece como mención dentro[m
+[32m+[m[32mdel cuerpo del dictamen previo, la pista 1 matchea ahí y corta. Después[m
+[32m+[m[32m`construir_bloque_desde_localizacion` recibe `linea_fin_real` truncado y[m
+[32m+[m[32m`segmentar_bloque` trabaja sobre lo que sobrevive — sin ver cuerpo de[m
+[32m+[m[32mmayoría ni firma posteriores.[m
+[32m+[m[32m**Diagnóstico / evidencia:** caso testigo `330_p2739`,[m
+[32m+[m[32m`linea_fin_real=54297`, `status=fin_dentro_bloque`, pista=`caratula_siguiente`.[m
+[32m+[m[32mEl span de dictamen también termina en 54297. Magnitud agregada: no[m
+[32m+[m[32mcuantificada.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo`.[m
+[32m+[m[32m**Validador propuesto:** revisar el `.md` crudo entre líneas 54165-54310[m
+[32m+[m[32mde `LibroVol330.2.md` para identificar la mención del primer_token del[m
+[32m+[m[32msiguiente caso que disparó el match. Una vez confirmado mecánicamente,[m
+[32m+[m[32mscript de auditoría que para cada caso con `pista=caratula_siguiente`[m
+[32m+[m[32mverifique que el match no cae dentro de un span de dictamen detectado.[m
+[32m+[m[32mPlan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. La salida natural sería un guard espacial[m
+[32m+[m[32m(no aceptar match de pista 1 si cae dentro del span del dictamen[m
+[32m+[m[32mdetectado), pero requiere que el span del dictamen esté detectado antes[m
+[32m+[m[32mde la pista 1 — orden de operaciones del parser.[m
+[32m+[m[32m**Referencias cruzadas:** F013. XXI-m. Sin §X.Y en PIPELINE. Sin ID[m
+[32m+[m[32mhistórico.[m
+[32m+[m
+[32m+[m[32m### B019 — `detectar_fin_real` off-by-one en firmas multilínea[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** F010 (BITACORA sesión 2026-05-09,[m
+[32m+[m[32mlínea 631).[m
+[32m+[m[32m**Causa raíz:** no diagnosticada al nivel de mecanismo. Caso paradigmático[m
+[32m+[m[32m`339_p1648`: la firma se extiende líneas 26598-26599 con silabación[m
+[32m+[m[32m("Juan / Carlos Maqueda."). `detectar_fin_real` reporta linea_fin_real=26598,[m
+[32m+[m[32momitiendo la segunda línea de la firma.[m
+[32m+[m[32m**Diagnóstico / evidencia:** caso testigo `339_p1648`. Detectado por la[m
+[32m+[m[32malerta `firma_multilinea_partida_por_fin_real` del detector de borde[m
+[32m+[m[32minferior del auditor.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo`.[m
+[32m+[m[32m**Validador propuesto:** correr `auditar_fallo.py --random 50` con[m
+[32m+[m[32mdetector de borde inferior activo y filtrar alerta[m
+[32m+[m[32m`firma_multilinea_partida_por_fin_real` para cuantificar magnitud. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Prioridad alta según BITACORA.[m
+[32m+[m[32m**Referencias cruzadas:** F010. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B020 — `detectar_fin_real` extiende al fallo siguiente[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** F002 (BITACORA sesión H014).[m
+[32m+[m[32m**Causa raíz:** no diagnosticada al nivel de mecanismo. Pista de la[m
+[32m+[m[32mcascada que extiende `linea_fin_real` más allá del fallo actual hacia[m
+[32m+[m[32mcontenido del fallo siguiente.[m
+[32m+[m[32m**Diagnóstico / evidencia:** caso testigo Décima (`349_p40`), residuo 22%[m
+[32m+[m[32men auditor: el bloque incluye Y.P.F. c/ Mercante entero.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo`.[m
+[32m+[m[32m**Validador propuesto:** muestra mayor con `auditar_fallo.py --random 50`[m
+[32m+[m[32mfiltrando por residuo >15%. Identificar cuántos casos tienen el mecanismo[m
+[32m+[m[32m"linea_fin_real extiende al siguiente". Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Severidad: alta. Probable relación con[m
+[32m+[m[32mB018 (mismo dominio: pistas de la cascada `detectar_fin_real`).[m
+[32m+[m[32m**Referencias cruzadas:** F002. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B021 — `detectar_fin_real` corta corto en último del tomo[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** F003 (BITACORA sesión H014).[m
+[32m+[m[32m**Causa raíz:** no diagnosticada al nivel de mecanismo. La cascada corta[m
+[32m+[m[32mantes de incluir la segunda línea de la firma cuando es último del tomo.[m
+[32m+[m[32m**Diagnóstico / evidencia:** caso testigo Sivaslian (`349_p306`), pierde[m
+[32m+[m[32msegunda línea de firma. Status `ok_cortado_en_indice` (= fix de B004).[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo`.[m
+[32m+[m[32m**Validador propuesto:** auditar los 19 casos con status[m
+[32m+[m[32m`ok_cortado_en_indice` (uno por tomo) y verificar si pierden segunda[m
+[32m+[m[32mlínea de firma o algún elemento estructural. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Probable relación con B019 (mismo[m
+[32m+[m[32mdominio: cascada `detectar_fin_real`).[m
+[32m+[m[32m**Referencias cruzadas:** F003. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B022 — Arrastre del fallo previo al inicio del bloque (sistemático)[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** F004 (BITACORA sesión H014).[m
+[32m+[m[32m**Causa raíz:** no diagnosticada al nivel de mecanismo. El bloque inicia[m
+[32m+[m[32mincluyendo firma y metadatos editoriales del caso anterior. Sistemático[m
+[32m+[m[32men muestra auditada.[m
+[32m+[m[32m**Diagnóstico / evidencia:** sistemático en Sivaslian, Cerboni, Macri,[m
+[32m+[m[32mLavrentiev (muestra H014).[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo` (sistemático en[m
+[32m+[m[32m4 casos auditados). Magnitud agregada no cuantificada.[m
+[32m+[m[32m**Validador propuesto:** corrida `--random 50` con detector de borde[m
+[32m+[m[32m**superior** del auditor (análogo al de borde inferior implementado en[m
+[32m+[m[32mH018). Plan. Decisión "A" (mencionada en BITACORA como[m
+[32m+[m[32m`metadatos_editoriales`) pendiente.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Severidad: sistemática.[m
+[32m+[m[32m**Referencias cruzadas:** F004. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B023 — Fin del dictamen pisa el FALLO DE LA CORTE[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** F005 (BITACORA sesión H014).[m
+[32m+[m[32m**Causa raíz:** mismo patrón del bug interno del auditor (ya fixeado en[m
+[32m+[m[32mel auditor durante H014, sesión 8/5). Cuando el dictamen no termina con[m
+[32m+[m[32m"Buenos Aires, fecha." en línea propia, la heurística del parser[m
+[32m+[m[32mconfunde la fecha del fallo con cierre del dictamen.[m
+[32m+[m[32m**Diagnóstico / evidencia:** detectado durante construcción del auditor[m
+[32m+[m[32men H014. Cuantificación agregada no realizada.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo` (al menos los casos[m
+[32m+[m[32mde la muestra inicial de H014).[m
+[32m+[m[32m**Validador propuesto:** el fix ya validado en el auditor es directamente[m
+[32m+[m[32maplicable. Validar en muestra de N=10 antes de migrar.[m
+[32m+[m[32m**Estado del fix:** diseñado (mismo fix del auditor). Migración al parser[m
+[32m+[m[32mpendiente.[m
+[32m+[m[32m**Referencias cruzadas:** F005. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B024 — Sumarios editoriales no segmentados contaminan `wc_mayoria`[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** F006 (BITACORA sesión H014).[m
+[32m+[m[32mEquivalente al motivo original de H013.[m
+[32m+[m[32m**Causa raíz:** el parser no separa sumarios editoriales del cuerpo del[m
+[32m+[m[32mfallo. Los sumarios quedan incluidos en `wc_mayoria` inflando el conteo.[m
+[32m+[m[32m**Diagnóstico / evidencia:** sistemático en casos auditados con sumarios[m
+[32m+[m[32meditoriales pre-fallo (caso Lavrentiev `349_p28` entre otros).[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo`. Magnitud agregada[m
+[32m+[m[32mno cuantificada.[m
+[32m+[m[32m**Validador propuesto:** el detector v17 de `sumario_con_link` (§4.4.g[m
+[32m+[m[32mPIPELINE) cubre 164 casos con link. Falta detector para sumarios sin link[m
+[32m+[m[32m(formato editorial más viejo). Diseñar detector de "sumario sin link"[m
+[32m+[m[32manálogo. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Es rediseño del parser, no fix puntual[m
+[32m+[m[32m(motivo original de H013 que generó la construcción del auditor).[m
+[32m+[m[32m**Referencias cruzadas:** F006. H013. PIPELINE §4.4.g (cubre solo[m
+[32m+[m[32msumarios con link). Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B025 — 414 falsos `unanime` (sospecha cardinal)[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-f del forense. Hipótesis sobre[m
+[32m+[m[32m`parse_firma` (parser.py línea 449).[m
+[32m+[m[32m**Causa raíz hipotética:** `parse_firma` captura firma del fallo anterior[m
+[32m+[m[32mcuando hay página compartida y el parser no detectó la frontera[m
+[32m+[m[32mcorrectamente. Los casos resultantes quedan con `voting_pattern=unanime`[m
+[32m+[m[32mpor la firma capturada en lugar de la del fallo actual.[m
+[32m+[m[32m**Diagnóstico / evidencia:** cardinalidad confirmada al 3-4/5/2026 (XXI):[m
+[32m+[m[32mcruce de los 435 sospechosos del Bloque B contra el CSV da 414 con[m
+[32m+[m[32m`voting_pattern=unanime`. Mecanismo NO auditado contra los `.md`.[m
+[32m+[m[32mPost fix §3.6.a (B001 resuelto), la página compartida quedó menos[m
+[32m+[m[32mcontaminada, por lo que el número 414 puede haberse reducido — sin medir.[m
+[32m+[m[32m**Estado de verificación:** `sospecha_cardinal`.[m
+[32m+[m[32m**Validador propuesto:** (1) re-medir post fix §3.6.a contra CSV vivo del[m
+[32m+[m[32m14/5. (2) Sample dirigido de N=5 contra `.md` para verificar que la firma[m
+[32m+[m[32mmatcheada corresponde al fallo actual y no al anterior. Plan. **Prioridad[m
+[32m+[m[32mde medir antes de fixear: alta.**[m
+[32m+[m[32m**Estado del fix:** no diseñado. Pendiente verificación del mecanismo[m
+[32m+[m[32mcontra `.md`.[m
+[32m+[m[32m**Referencias cruzadas:** XXI-f. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B026 — `V.` mayúsculas en tomos 329-330 (subtítulos editoriales viejos)[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-h del forense.[m
+[32m+[m[32m**Causa raíz:** el parser no tiene detector para el formato editorial[m
+[32m+[m[32m`NOMBRE V. NOMBRE` que aparece como subtítulo en tomos viejos antes de[m
+[32m+[m[32m`Autos y Vistos;` o `Autos y Vistos:`.[m
+[32m+[m[32m**Diagnóstico / evidencia:** ~1.211 nulos en tomos 329-330 (sesión IX).[m
+[32m+[m[32mTipo de nulo no especificado en XXI (probable: `case_name_cuerpo` vacío[m
+[32m+[m[32men el régimen 2008-2011).[m
+[32m+[m[32m**Estado de verificación:** `hipotesis_no_verificada` para el mecanismo.[m
+[32m+[m[32mLa magnitud (1.211 nulos) es cuantificada, pero no se confirmó que estos[m
+[32m+[m[32mnulos sean efecto del formato `V.` mayúsculas y no de otro patrón.[m
+[32m+[m[32m**Validador propuesto:** filtrar tomos 329-330 por `case_name_cuerpo` vacío[m
+[32m+[m[32my verificar manualmente en 5-10 casos si tienen el formato `NOMBRE V.[m
+[32m+[m[32mNOMBRE` antes de `Autos y Vistos`. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado.[m
+[32m+[m[32m**Referencias cruzadas:** XXI-h. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B027 — `Autos y Vistos;` / `Autos y Vistos:` sin regex específica (V4/V5)[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-i del forense.[m
+[32m+[m[32m**Causa raíz:** el parser actual no tiene regex específica para esos[m
+[32m+[m[32mmarcadores fuera del fallback archivado en el bloque de XVII. Cuando un[m
+[32m+[m[32mfallo abre con `Autos y Vistos;` (sin carátula entre comillas), V1 no[m
+[32m+[m[32mcaptura y la lógica del parser cae a paths no diseñados.[m
+[32m+[m[32m**Diagnóstico / evidencia:** mencionado en XXI sin caso testigo concreto.[m
+[32m+[m[32mMagnitud desconocida.[m
+[32m+[m[32m**Estado de verificación:** `hipotesis_no_verificada`.[m
+[32m+[m[32m**Validador propuesto:** grep en `markdowns_v2/*.md` por `Autos y Vistos`[m
+[32m+[m[32my cruzar con casos donde V1 no acertó. Cuantificar. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Probable: agregar regex específica como[m
+[32m+[m[32mfuente adicional para V1 / `case_name_cuerpo`.[m
+[32m+[m[32m**Referencias cruzadas:** XXI-i. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B028 — `find_tribunal_origen` ventana excede el bloque[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-k del forense. Equivalente a[m
+[32m+[m[32mPIPELINE §4.6.a (B006 era el cerrado por daño efectivo ~0; este es el[m
+[32m+[m[32mmismo bug aritmético pero como entrada viva con prioridad baja).[m
+[32m+[m[32m**Causa raíz:** ver PIPELINE §4.6.a. Aritmética[m
+[32m+[m[32m`apertura_idx + len(bloque)` excede el bloque cuando `apertura_rel > 0`.[m
+[32m+[m[32m**Diagnóstico / evidencia:** ver PIPELINE §4.6.a.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_cuantificado` (daño efectivo ~0[m
+[32m+[m[32mpost §3.6.a).[m
+[32m+[m[32m**Validador propuesto:** ya cuantificado. No requiere validador adicional.[m
+[32m+[m[32m**Estado del fix:** diseñado (PIPELINE §4.6.a tiene el código corregido).[m
+[32m+[m[32mPrioridad baja (cosmético post §3.6.a). Aplicar como higiene del código.[m
+[32m+[m[32m**Referencias cruzadas:** PIPELINE §4.6.a. XXI-k.[m
+[32m+[m[32m**Nota:** redundante con B006. B006 documenta el cierre conceptual (daño[m
+[32m+[m[32m~0); B028 está acá como recordatorio de que el fix de higiene sigue[m
+[32m+[m[32mpendiente. Si se aplica el fix, ambos pasan a CERRADO. Si se decide no[m
+[32m+[m[32maplicar, B028 puede mergearse con B006 en una próxima pasada del documento.[m
+[32m+[m
+[32m+[m[32m### B029 — `collect_firma_lines` con `max_lines=40` puede ser insuficiente[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-l del forense.[m
+[32m+[m[32m**Causa raíz:** constante hardcodeada `max_lines=40` en[m
+[32m+[m[32m`parser.py` línea 423. Casos con firma fuera de ese rango (Brizuela y[m
+[32m+[m[32mColegio de Escribanos mencionados en sesión XV) no capturan firma.[m
+[32m+[m[32m**Diagnóstico / evidencia:** mencionado en XXI sin medición. Brizuela y[m
+[32m+[m[32mColegio de Escribanos como casos paradigmáticos, no auditados directamente[m
+[32m+[m[32msobre este mecanismo.[m
+[32m+[m[32m**Estado de verificación:** `hipotesis_no_verificada`.[m
+[32m+[m[32m**Validador propuesto:** identificar casos en CSV con `voting_pattern=[m
+[32m+[m[32msin_firma` que sean fallos largos (`word_count > P75`). Auditar 5-10[m
+[32m+[m[32mcontra `.md` para verificar si la firma existe pero está fuera del rango[m
+[32m+[m[32mde 40 líneas. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Salida natural: aumentar `max_lines` o[m
+[32m+[m[32mhacer dinámico según largo del bloque.[m
+[32m+[m[32m**Referencias cruzadas:** XXI-l. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B030 — `detectar_fin_real` excluye solo las primeras 5 líneas del bloque[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-m del forense. Equivalente a F013[m
+[32m+[m[32m(= B018). Está documentado como bug separado en XXI pero el mecanismo es[m
+[32m+[m[32mel mismo que B018.[m
+[32m+[m[32m**Estado:** **redundante con B018**. Probablemente se fusionan en próxima[m
+[32m+[m[32mpasada del documento. Mantenido como entrada propia hasta confirmar que[m
+[32m+[m[32m"buscar_atras 5 líneas" (XXI-m) y "primer_token matchea dentro del[m
+[32m+[m[32mdictamen" (F013) son el mismo bug.[m
+[32m+[m[32m**Referencias cruzadas:** XXI-m. F013. B018.[m
+[32m+[m
+[32m+[m[32m### B031 — `linea_es_header_sumario` requiere MAYÚSCULAS en primeros 5 caracteres[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-n del forense.[m
+[32m+[m[32m**Causa raíz:** `parser.py` línea 1077. Si el sumario empieza con[m
+[32m+[m[32mcapitalización mixta (formato corpus moderno), no matchea.[m
+[32m+[m[32m**Diagnóstico / evidencia:** identificado leyendo código en XXI. Sin[m
+[32m+[m[32mmedición.[m
+[32m+[m[32m**Estado de verificación:** `hipotesis_no_verificada`.[m
+[32m+[m[32m**Validador propuesto:** grep en `markdowns_v2/*.md` por headers de[m
+[32m+[m[32msumario en capitalización mixta. Verificar si esos casos tienen[m
+[32m+[m[32m`is_sumario_con_link=False` cuando deberían tener `True`. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Salida natural: relajar el match a[m
+[32m+[m[32m`re.IGNORECASE` o detectar mayúsculas en porción mayor del header.[m
+[32m+[m[32m**Referencias cruzadas:** XXI-n. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B032 — `RE_VOTO_HDR` requiere "Señor[es]" / "Vicepresidente" / etc.[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-ñ del forense. Equivalente a F001[m
+[32m+[m[32m(BITACORA sesión H014). XXI-ñ y F001 son el mismo bug.[m
+[32m+[m[32m**Causa raíz:** `RE_VOTO_HDR` (parser.py línea 142) requiere palabras[m
+[32m+[m[32mespecíficas en el header del voto. No matchea `Voto la señora`[m
+[32m+[m[32m(sin "de" antes del artículo). Caso paradigmático: voto de Argibay no se[m
+[32m+[m[32mdetecta en algunos formatos.[m
+[32m+[m[32m**Diagnóstico / evidencia:** medición empírica de F001 (BITACORA línea 305):[m
+[32m+[m[32mscript `medir_voto_hdr.py` sobre 2 archivos (`LibroVol331.2.md`,[m
+[32m+[m[32m`LibroVol349-1.md`). Regex viejo: 32 matches. Regex nuevo: 34. Dos votos[m
+[32m+[m[32mperdidos (ambos "Voto la señora ministra doctora doña Carmen M. Argibay"[m
+[32m+[m[32men tomo 331.2, líneas 957 y 11724). Verificados manualmente como votos[m
+[32m+[m[32mreales, no falsos positivos.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo` con muestra parcial[m
+[32m+[m[32m(2 archivos). Cuantificación sobre corpus completo pendiente.[m
+[32m+[m[32m**Validador propuesto:** correr `medir_voto_hdr.py` sobre corpus completo[m
+[32m+[m[32men Windows (pendiente desde 2026-05-08 según BITACORA línea 312). Plan.[m
+[32m+[m[32m**Estado del fix:** diseñado (fix de 1 línea identificado en BITACORA).[m
+[32m+[m[32mAplicar coordinado con regeneración.[m
+[32m+[m[32m**Referencias cruzadas:** XXI-ñ. F001. Sin §X.Y en PIPELINE. Sin ID[m
+[32m+[m[32mhistórico.[m
+[32m+[m
+[32m+[m[32m### B033 — `cargar_localizados` no filtra `ultimo_del_tomo_sin_fin`[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-o del forense.[m
+[32m+[m[32m**Causa raíz:** `parser.py` línea 1735. Los casos con status[m
+[32m+[m[32m`ultimo_del_tomo_sin_fin` entran al loop con `linea_fin` vacía y el[m
+[32m+[m[32mbloque se extiende hasta el final del archivo, arrastrando todo el[m
+[32m+[m[32maparato editorial e inflando word counts.[m
+[32m+[m[32m**Diagnóstico / evidencia:** XXI-o identifica el mecanismo leyendo código.[m
+[32m+[m[32mPIPELINE §4.6.g cubre el caso análogo con `fallo_cruza_archivos` (20 casos[m
+[32m+[m[32mpost-fix con outlier máximo `wc_mayoria=105.559`). Probable que B033 sea[m
+[32m+[m[32muna variante del mismo síndrome.[m
+[32m+[m[32m**Estado de verificación:** `hipotesis_no_verificada` para el mecanismo[m
+[32m+[m[32mespecífico de `ultimo_del_tomo_sin_fin`. La magnitud y los casos[m
+[32m+[m[32mespecíficos no están listados.[m
+[32m+[m[32m**Validador propuesto:** identificar casos con[m
+[32m+[m[32m`status_localizacion=ultimo_del_tomo_sin_fin` en CSV y verificar[m
+[32m+[m[32m`word_count`. Comparar contra distribución del corpus. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Salida natural análoga a la mitigación[m
+[32m+[m[32mde §4.6.g: filtrar este status antes de procesar.[m
+[32m+[m[32m**Referencias cruzadas:** XXI-o. PIPELINE §4.6.g (dominio relacionado).[m
+[32m+[m[32mSin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B034 — `RE_FECHA_LINEA` no cubre formatos con paréntesis o guiones[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** XXI-p del forense.[m
+[32m+[m[32m**Causa raíz:** `parser.py` líneas 58-59.[m
+[32m+[m[32m`RE_FECHA_LINEA = r"^Buenos Aires[,]?\s+\d{1,2}..."`. No cubre[m
+[32m+[m[32m`(Buenos Aires, 14 de marzo...)` o `Buenos Aires - 14 de...`.[m
+[32m+[m[32m**Diagnóstico / evidencia:** identificado leyendo código en XXI. Sin[m
+[32m+[m[32mmedición. Caso testigo no proporcionado.[m
+[32m+[m[32m**Estado de verificación:** `hipotesis_no_verificada`.[m
+[32m+[m[32m**Validador propuesto:** grep en `markdowns_v2/*.md` por patrones de[m
+[32m+[m[32mfecha con paréntesis o guiones y cruzar con casos donde la columna[m
+[32m+[m[32m`date` está vacía. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Salida natural: extender regex para[m
+[32m+[m[32mcubrir variantes.[m
+[32m+[m[32m**Referencias cruzadas:** XXI-p. Sin §X.Y en PIPELINE. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B035 — Fecha sin marcador de apertura captura del dictamen[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** PIPELINE §4.6.c.[m
+[32m+[m[32m**Estado:** ya documentado en PIPELINE. La entrada acá apunta para[m
+[32m+[m[32mtrazabilidad.[m
+[32m+[m[32m**Diagnóstico / evidencia:** ver PIPELINE §4.6.c. 35 casos potencialmente[m
+[32m+[m[32mafectados. Validación contra `.md` pendiente para 2-3 casos.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_cuantificado` (35 casos como cota[m
+[32m+[m[32msuperior).[m
+[32m+[m[32m**Validador propuesto:** ya identificado en PIPELINE — auditar 2-3 casos[m
+[32m+[m[32mcon `apertura_tipo=''`, `tipo_entrada='fallo'`, `date != ''` contra `.md`.[m
+[32m+[m[32m**Estado del fix:** diseñado (PIPELINE §4.6.c). Cambio menor, requiere[m
+[32m+[m[32mreordenar flujo. No aplicado.[m
+[32m+[m[32m**Referencias cruzadas:** PIPELINE §4.6.c. Sin equivalente en XXI ni en[m
+[32m+[m[32mBITACORA. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B036 — `extraer_textos_votos` incluye el header del voto[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** PIPELINE §4.6.d.[m
+[32m+[m[32m**Estado:** ya documentado en PIPELINE. Probable que sea decisión de[m
+[32m+[m[32mdiseño intencional, no bug.[m
+[32m+[m[32m**Diagnóstico / evidencia:** ver PIPELINE §4.6.d. Inflado constante de[m
+[32m+[m[32m`wc_voto` por ~10 palabras (header del voto). No altera la clasificación[m
+[32m+[m[32mA/B/C/D/E en ningún caso plausible.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_cuantificado` con efecto medido[m
+[32m+[m[32mnulo en clasificación.[m
+[32m+[m[32m**Validador propuesto:** no se requiere — el efecto ya está cuantificado[m
+[32m+[m[32mcomo no-impactante.[m
+[32m+[m[32m**Estado del fix:** decisión pendiente — confirmar si es intencional[m
+[32m+[m[32m(permite que `clasificar_tipo_voto` use info del header) y reescribir[m
+[32m+[m[32mcomentario, o aplicar fix mínimo (cambiar `range(k_ini, k_fin)` a[m
+[32m+[m[32m`range(k_ini + 1, k_fin)`).[m
+[32m+[m[32m**Referencias cruzadas:** PIPELINE §4.6.d. Sin equivalente. Sin ID[m
+[32m+[m[32mhistórico.[m
+[32m+[m
+[32m+[m[32m### B037 — `dictamen_presente == '0'` (string) en `sumario_con_link`[m
+[32m+[m
+[32m+[m[32m**Componente:** parser.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** PIPELINE §4.6.e.[m
+[32m+[m[32m**Estado:** ya documentado en PIPELINE. Inconsistencia de tipos en output.[m
+[32m+[m[32m**Diagnóstico / evidencia:** ver PIPELINE §4.6.e. 164 filas con[m
+[32m+[m[32m`dictamen_presente == '0'` (string) en lugar de booleano. Coincide[m
+[32m+[m[32mexactamente con `tipo_entrada == 'sumario_con_link'`.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_cuantificado`.[m
+[32m+[m[32m**Validador propuesto:** ya identificado.[m
+[32m+[m[32m**Estado del fix:** diseñado (PIPELINE §4.6.e). No aplicado.[m
+[32m+[m[32m**Referencias cruzadas:** PIPELINE §4.6.e. Sin equivalente. Sin ID[m
+[32m+[m[32mhistórico.[m
+[32m+[m
+[32m+[m[32m### B038 — `fallo_cruza_archivos` produce bloques gigantescos (residual)[m
+[32m+[m
+[32m+[m[32m**Componente:** parser (efecto), cruzador (origen).[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** PIPELINE §4.6.g. Re-evaluado[m
+[32m+[m[32m2026-05-09 (20 casos post-fix B001).[m
+[32m+[m[32m**Estado:** ya documentado en PIPELINE. Prioridad media. Mitigación[m
+[32m+[m[32mtemporal: filtrar `status_localizacion in ('fallo_cruza_archivos',[m
+[32m+[m[32m'fallo_cruza_archivos_sin_marcador')` antes del análisis estadístico[m
+[32m+[m[32m(20/5.819 = 0,3% de cobertura).[m
+[32m+[m[32m**Estado de verificación:** `confirmado_cuantificado`.[m
+[32m+[m[32m**Validador propuesto:** ya identificado.[m
+[32m+[m[32m**Estado del fix:** dependiente de Etapa 3 (corregir asignación de[m
+[32m+[m[32m`linea_fin` para cruza_archivos). No aplicado.[m
+[32m+[m[32m**Referencias cruzadas:** PIPELINE §4.6.g. Sin equivalente en XXI ni en[m
+[32m+[m[32mBITACORA con ese nombre. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B039 — Tomos antiguos sin `marcador_apertura_siguiente` (descriptivo)[m
+[32m+[m
+[32m+[m[32m**Componente:** parser (descriptivo).[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** PIPELINE §4.6.i.[m
+[32m+[m[32m**Estado:** no es bug, es información descriptiva sobre el corpus. Útil[m
+[32m+[m[32mpara entender por qué la cascada tiene cuatro pistas distintas. No[m
+[32m+[m[32mrequiere fix.[m
+[32m+[m[32m**Referencias cruzadas:** PIPELINE §4.6.i.[m
+ [m
+ ---[m
+ [m
+[31m-## Deuda CERRADA[m
+[31m-[m
+[31m-(Pendiente de mover Bug D acá una vez confirmada la validación.)[m
+[32m+[m[32m## Deuda ACTIVA — Auditor (`auditar_fallo.py`)[m
+[32m+[m
+[32m+[m[32mBugs de la herramienta de diagnóstico. No afectan el corpus producido,[m
+[32m+[m[32mpero afectan la calidad de las auditorías que se usan para diagnosticar[m
+[32m+[m[32mbugs del pipeline.[m
+[32m+[m
+[32m+[m[32m### B040 — Auditor emite spans de fallos previos arrastrados[m
+[32m+[m
+[32m+[m[32m**Componente:** auditor.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** F007 (BITACORA sesión H014, línea 370).[m
+[32m+[m[32m**Causa raíz:** `detectar_votos_y_disidencias()` en `auditar_fallo.py` busca[m
+[32m+[m[32mmatches de `RE_VOTO_HDR` y `RE_DISID_HDR` en TODO el bloque. Cuando el[m
+[32m+[m[32mbloque arrastra contenido del fallo previo (= B022, F004), los headers de[m
+[32m+[m[32mvoto/disidencia del previo matchean y se emiten como spans del actual.[m
+[32m+[m[32m**Diagnóstico / evidencia:** 4 casos con disjunción rota en muestra de 50[m
+[32m+[m[32m(BITACORA línea 368).[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo`.[m
+[32m+[m[32m**Validador propuesto:** corrida `--random 50` con detector de borde[m
+[32m+[m[32msuperior (análogo al de borde inferior, no implementado todavía). Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado. Acoplado con B022 (mientras el parser[m
+[32m+[m[32marrastre fallo previo, el auditor va a heredarlo).[m
+[32m+[m[32m**Referencias cruzadas:** F007. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B041 — Off-by-one entre auditor y `.md`[m
+[32m+[m
+[32m+[m[32m**Componente:** auditor.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** F008 (BITACORA sesión 2026-05-09,[m
+[32m+[m[32mlínea 476).[m
+[32m+[m[32m**Causa raíz:** no diagnosticada al nivel de mecanismo. Posible bug en el[m
+[32m+[m[32mrenderer absoluto/relativo del auditor o bug real en cálculo de offsets.[m
+[32m+[m[32m**Diagnóstico / evidencia:** caso testigo `339_p1648`. Span 17 del reporte[m
+[32m+[m[32mdice `firma (26598-26598)` con texto "Ricardo Luis Lorenzetti – Elena I.[m
+[32m+[m[32mHighton de Nolasco – Juan", pero la línea 26598 del `.md` real es[m
+[32m+[m[32m"mencionada localidad bonaerense." (la firma está en 26599-26600).[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo`.[m
+[32m+[m[32m**Validador propuesto:** investigar en sesión separada. Mirar funciones[m
+[32m+[m[32mde conversión absoluta/relativa del renderer del auditor. Plan.[m
+[32m+[m[32m**Estado del fix:** no diseñado.[m
+[32m+[m[32m**Referencias cruzadas:** F008. Sin ID histórico.[m
+[32m+[m
+[32m+[m[32m### B042 — Colisión de timestamp en `auditar_fallo.py`[m
+[32m+[m
+[32m+[m[32m**Componente:** auditor.[m
+[32m+[m[32m**Origen / fuente del diagnóstico:** F-AUDITOR-01 (BITACORA sesión[m
+[32m+[m[32m2026-05-09, línea 911).[m
+[32m+[m[32m**Causa raíz:** `auditar_fallo.py` línea 1694: `ts = datetime.now().strftime[m
+[32m+[m[32m("%Y-%m-%d_%H-%M-%S")` con resolución de segundos. `out_path.write_text[m
+[32m+[m[32m(md, encoding="utf-8")` sobreescribe sin avisar.[m
+[32m+[m[32m**Diagnóstico / evidencia:** tres llamadas seguidas el 9/5[m
+[32m+[m[32m(`333_p2420`, `330_p1854`, `330_p2746`) cayeron todas en `21-15-54`,[m
+[32m+[m[32mlas dos primeras se perdieron. Hubo que reorrer las dos.[m
+[32m+[m[32m**Estado de verificación:** `confirmado_caso_testigo`.[m
+[32m+[m[32m**Validador propuesto:** trivial. Tres llamadas seguidas verifican el fix.[m
+[32m+[m[32m**Estado del fix:** diseñado y trivial (agregar microsegundos al timestamp,[m
+[32m+[m[32mo sufijo numérico cuando el archivo ya existe). No aplicado.[m
+[32m+[m[32m**Referencias cruzadas:** F-AUDITOR-01. Sin ID histórico.[m
+ [m
+ ---[m
+ [m
+ ## Deuda METODOLÓGICA[m
+ [m
+[31m-### Reorganización del proyecto[m
+[31m-[m
+[31m-**Estado:** pendiente de sesión dedicada.[m
+[31m-[m
+[31m-Hay duplicados de varios `.py` entre raíz y `paginas/`:[m
+[31m-- `construir_catalogo.py` (raíz) ≡ `paginas/construir_catalogo.py`[m
+[31m-- `cruce_anuarios.py` (raíz) ≡ `paginas/cruce_anuarios.py`[m
+[31m-- `extraer_muestra.py` (raíz) ≡ `paginas/extraer_muestra_sf.py`[m
+[31m-- `diag_sin_firma_ascii.py` (en `scripts/diagnosticos/` y `paginas/`)[m
+[31m-[m
+[31m-Sugerencia de estructura objetivo:[m
+[31m-```[m
+[31m-corpus-csjn/[m
+[31m-├── pipeline/                  ← scripts del pipeline activo[m
+[31m-│   ├── 01_detectar_paginas.py[m
+[31m-│   ├── 02_construir_catalogo.py[m
+[31m-│   ├── 03_cruzar_catalogo_y_mapa.py[m
+[31m-│   └── 04_parser.py (csjnv17)[m
+[31m-├── data/                      ← inputs y outputs[m
+[31m-│   ├── catalogos/[m
+[31m-│   ├── mapas/[m
+[31m-│   └── corpus_estructurado/[m
+[31m-├── markdowns_v2/              ← .md fuente (sin cambio)[m
+[31m-├── analisis/                  ← scripts de análisis (cruce_anuarios, etc.)[m
+[31m-├── diagnosticos/              ← scripts ad-hoc[m
+[31m-├── snapshots/                 ← backups[m
+[31m-└── docs/                      ← README, CHANGELOG, BITACORA, DEUDA[m
+[31m-```[m
+[31m-[m
+[31m-**Riesgo:** los scripts usan rutas relativas que cambian con la mudanza. Requiere validación del pipeline completo post-mudanza.[m
+[31m-[m
+[31m-**Recomendación:** sesión dedicada con backup completo previo, plan de rollback claro, y suite de tests post-reorganización.[m
+[32m+[m[32mPendientes que no son bugs concretos sino mejoras de proceso o[m
+[32m+[m[32marquitectura. No usan ID `B0NN`.[m
+ [m
+[31m----[m
+[32m+[m[32m### M01 — Re-recorrer parser y actualizar PIPELINE.md[m
+ [m
+[31m-### Refactor v18 — unidad operativa por línea, no por página[m
+[32m+[m[32mPIPELINE.md fue construido leyendo el parser en muchas sesiones del 1-9/5.[m
+[32m+[m[32mDesde entonces se aplicaron Fix 1 (`2adda06`), fix §3.6.a (B001) y fix[m
+[32m+[m[32m§4.6.j doble espacio (B005), todos sobre `parser.py` y/o[m
+[32m+[m[32m`cruzar_catalogo_y_mapa.py`. PIPELINE.md ya tiene incorporados esos fixes[m
+[32m+[m[32mcomo cuadros "RESUELTO". Pero la línea 2834 reconoce explícitamente:[m
+[32m+[m[32m"incorporación de bugs F001–F011 reorganizados, actualización del diagrama[m
+[32m+[m[32mglobal". F012, F013 y F-AUDITOR-01 son aún más recientes.[m
+ [m
+[31m-**Estado:** propuesta para versión futura del pipeline.[m
+[32m+[m[32m**Acción pendiente:** sesión dedicada a re-recorrer `parser.py` vivo y[m
+[32m+[m[32m`cruzar_catalogo_y_mapa.py` vivo contra PIPELINE.md, agregando §X.Y nuevos[m
+[32m+[m[32mpara los bugs B017, B018, B019, B020, B021, B022, B023, B024, B025 que[m
+[32m+[m[32mhoy no están como §X.Y en PIPELINE. Conservar la versión actual de[m
+[32m+[m[32mPIPELINE.md como referencia (trabajo de muchas sesiones, no se descarta).[m
+ [m
+[31m-**Diagnóstico:** la arquitectura actual mezcla dos sistemas de coordenadas (página del catálogo, línea del archivo). Los clusters `pagina_no_en_mapa` y `pagina_fin_no_en_mapa` (82 casos pre-fix) son errores de la traducción página↔línea, no de detección de contenido.[m
+[32m+[m[32m**Precondición:** ninguna. Trabajo en sesión limpia con backup de[m
+[32m+[m[32mPIPELINE.md previo.[m
+ [m
+[31m-**Propuesta:** trabajar siempre en líneas. La página queda como metadato de validación post-hoc, no como anclaje primario. La detección de inicio/fin de fallo se hace buscando patrones textuales (carátula, firma, marcador editorial) directamente en el `.md`.[m
+[32m+[m[32m### M02 — Reorganización del repo (continuación)[m
+ [m
+[31m-**Beneficio estimado:** elimina categóricamente dos clusters de bugs.[m
+[32m+[m[32mLa Fase 2 del inventario del repo está abierta. Bloque scripts cerrado[m
+[32m+[m[32m(commits `e695e16`, `e3c53b2`). Bloque docs parcialmente avanzado en[m
+[32m+[m[32msesión 14/5. Bloque snapshots pendiente (tres snapshots por procesar:[m
+[32m+[m[32m`snapshots/snapshot_2026-05-02_1559/`, `snapshots/snapshot_pre_reorg_2026-05-02_1843/`,[m
+[32m+[m[32m`archivo/snapshots_ad_hoc/pre_fix_xii_20260503_1308/`).[m
+ [m
+[31m-**Riesgo:** refactor profundo, requiere revalidación del pipeline entero.[m
+[32m+[m[32mUna decisión ya tomada (XXI): `csjn_casos_pre_refactor_subloques.csv` y[m
+[32m+[m[32msu par de votos son byte-a-byte idénticos al productivo (MD5 confirmado).[m
+[32m+[m[32mPueden archivarse cuando se llegue al bloque snapshots.[m
+ [m
+[31m-**Decisión:** mantener arquitectura actual para esta tesis. Considerar para v18 si el proyecto continúa post-tesis.[m
+[32m+[m[32m**Acción pendiente:** sesión dedicada al bloque snapshots de la Fase 2.[m
+[32m+[m[32mDespués, Fase 3 (zona oscura) y Fase 4 (hallazgos laterales acumulados:[m
+[32m+[m[32m`.pytest_cache/` raíz, `scripts/pipeline/parser.py.bak` del 9/5).[m
+ [m
+[31m----[m
+[32m+[m[32m### M03 — Refactor v18 — unidad operativa por línea[m
+ [m
+[31m-### Refactor — parser de estructura editorial por secciones[m
+[32m+[m[32m**Propuesta arquitectónica registrada en BITACORA H011 (2/5/2026).** La[m
+[32m+[m[32marquitectura actual mezcla dos sistemas de coordenadas (página + línea).[m
+[32m+[m[32mLos clusters `pagina_no_en_mapa` y `pagina_fin_no_en_mapa` (82 casos[m
+[32m+[m[32mpre-fix) son errores de la traducción página↔línea, no de detección de[m
+[32m+[m[32mcontenido. Refactorizar a "línea como unidad primaria" eliminaría[m
+[32m+[m[32mcategóricamente dos clusters de bugs.[m
+ [m
+[31m-**Estado:** propuesta para versión futura del pipeline.[m
+[32m+[m[32m**Decisión:** mantener arquitectura actual para esta tesis. Considerar[m
+[32m+[m[32mpara v18 si el proyecto continúa post-tesis. **No es trabajo para[m
+[32m+[m[32mv17.x.**[m
+ [m
+[31m-**Idea:** detectar secciones editoriales del `.md` (portada → prólogo → fallos → índices → apéndices) como primer paso del pipeline, y parsear cada sección con lógica específica. Reemplaza heurísticas puntuales de delimitación por arquitectura explícita.[m
+[32m+[m[32m### M04 — Convención: snapshots cubren todo archivo modificable[m
+ [m
+[31m-**Decisión:** propuesta para v18, no v17.x. Mismo razonamiento que el refactor anterior.[m
+[32m+[m[32m**Lección de la sesión 2026-05-02 (BITACORA H012).** El snapshot inicial[m
+[32m+[m[32msolo cubrió archivos de raíz, no de `paginas/`. Cuando se aplicó el fix[m
+[32m+[m[32mBug D al script de `paginas/`, el original quedó sobrescrito sin backup[m
+[32m+[m[32mexplícito.[m
+ [m
+[31m----[m
+[32m+[m[32m**Convención adoptada:** antes de modificar archivo X, copiar X al[m
+[32m+[m[32msnapshot del día sin asumir que el snapshot inicial cubre todo.[m
+ [m
+[31m-### Snapshots: cubrir todo archivo modificable[m
+[32m+[m[32m### M05 — Verificación caso-a-caso de identidad de los 32 oks de XXI-v[m
+ [m
+[31m-**Lección de la sesión 2/5/2026:** el snapshot inicial solo cubrió archivos de raíz, no de `paginas/`. Cuando se aplicó el fix Bug D al script de `paginas/`, el original quedó sobrescrito sin backup. Quedó recuperable solo a través del diff registrado en la sesión.[m
+[32m+[m[32m**Pendiente derivado de la sesión del 14/5.** XXI-v ("32 oks falsos")[m
+[32m+[m[32mquedó como "estado desconocido". Post §3.6.a (B001) hay 32 fallos que[m
+[32m+[m[32mpasaron de `ok` a `pagina_fin_no_en_mapa` (PIPELINE §3.6.a). El número[m
+[32m+[m[32mcoincide. Probablemente son los mismos 32 casos, pero la identidad[m
+[32m+[m[32mcaso-a-caso no se verificó.[m
+ [m
+[31m-**Convención adoptada:** antes de modificar archivo X, copiar X al snapshot del día. No asumir que el snapshot inicial cubre todo.[m
+[32m+[m[32m**Acción pendiente:** comparar lista de los 32 documentados en §3.6.a[m
+[32m+[m[32mcontra el "Bloque B" mencionado en XXI-v (si la lista existe en algún[m
+[32m+[m[32moutput histórico). Trabajo estimado 10 minutos.[m
+ [m
+ ---[m
+ [m
+[31m-## Universo de huérfanos esperado post-fix Bug D[m
+[31m-[m
+[31m-Si se confirma la validación, el desglose post-fix sería:[m
+[31m-[m
+[31m-| Status | Casos | Cluster |[m
+[31m-|--------|------:|---------|[m
+[31m-| `pagina_no_en_mapa` | 43 | Bug A (activo) |[m
+[31m-| `fallo_cruza_archivos` | 27 | Bug B (activo) |[m
+[31m-| `pagina_fin_no_en_mapa` | 0-? | Bug C (en validación) |[m
+[31m-| Total huérfanos esperado | 70 | |[m
+[31m-[m
+[31m-Cobertura procesada esperada: 5862 - 70 = **5792 casos delimitados correctamente** (asumiendo parser exitoso sobre todos).[m
+[32m+[m[32m## Mapeo histórico[m
+[32m+[m
+[32m+[m[32mTrazabilidad de IDs viejos del documento del 2026-05-02 a los IDs[m
+[32m+[m[32mcanónicos actuales B0NN.[m
+[32m+[m
+[32m+[m[32m| ID histórico | ID actual | Estado |[m
+[32m+[m[32m|---|---|---|[m
+[32m+[m[32m| **Bug A** (`pagina_no_en_mapa`, 43 casos) | **B009** | En validación (cuantificado, sin fix) |[m
+[32m+[m[32m| **Bug B** (`fallo_cruza_archivos`, 20/27 casos) | **B002** | Cerrado 2026-05-09 (disuelto como efecto colateral de B001) |[m
+[32m+[m[32m| **Bug C** (`pagina_fin_no_en_mapa`, 39 casos) | **B003** | Cerrado 2026-05-09 (Fase 1 de §3.6.e). Fase 2 = B009 |[m
+[32m+[m[32m| **Bug D** (`ultimo_del_tomo`, 19 casos) | **B004** | Cerrado 2/5/2026 |[m
+[32m+[m[32m| **Bug 1** (Y.P.F. Tomo 349 truncamiento de índice) | (no entra) | Decisión XXI: editorial CSJN, no resoluble en código. Se espera publicación definitiva del Tomo 349. Anotado en CHANGELOG / nota de tesis |[m
+[32m+[m
+[32m+[m[32m**IDs históricos del forense XXI mapeados a B0NN:**[m
+[32m+[m
+[32m+[m[32m| Letra XXI | ID actual | Notas |[m
+[32m+[m[32m|---|---|---|[m
+[32m+[m[32m| XXI-a | B008 (cerrado) + B014 (residuo del fallback) | Fix 1 aplicado; el 33% que cae al fallback sigue como B014 |[m
+[32m+[m[32m| XXI-b | B002 (cerrado) | El "fix extendido" mencionado en XXI-b sigue como mitigación temporal en B038 |[m
+[32m+[m[32m| XXI-c | B013 | Bug XII, 234 casos |[m
+[32m+[m[32m| XXI-d | B009 | En validación |[m
+[32m+[m[32m| XXI-e | B001 (cerrado) | `pg_fin+1` |[m
+[32m+[m[32m| XXI-f | B025 | 414 falsos unánime, sospecha cardinal |[m
+[32m+[m[32m| XXI-g variante 1 | B005 (cerrado) | Doble espacio |[m
+[32m+[m[32m| XXI-g variante 2 | B015 | Pegado |[m
+[32m+[m[32m| XXI-g variante 3 | B016 | Partido en 2 líneas |[m
+[32m+[m[32m| XXI-h | B026 | V. mayúsculas tomos 329-330 |[m
+[32m+[m[32m| XXI-i | B027 | Autos y Vistos |[m
+[32m+[m[32m| XXI-j | B011 | `344_p344` |[m
+[32m+[m[32m| XXI-k | B006 (cerrado conceptual) + B028 (fix de higiene pendiente) | Aritmética `apertura_idx + len(bloque)` |[m
+[32m+[m[32m| XXI-l | B029 | `collect_firma_lines max_lines=40` |[m
+[32m+[m[32m| XXI-m | B030 (= B018) | Redundante con F013, mismo mecanismo |[m
+[32m+[m[32m| XXI-n | B031 | `linea_es_header_sumario` mayúsculas |[m
+[32m+[m[32m| XXI-ñ | B032 (= F001) | `RE_VOTO_HDR` |[m
+[32m+[m[32m| XXI-o | B033 | `ultimo_del_tomo_sin_fin` |[m
+[32m+[m[32m| XXI-p | B034 | `RE_FECHA_LINEA` paréntesis/guiones |[m
+[32m+[m[32m| XXI-q | (descartado) | XXI mismo: no es bug, código muerto |[m
+[32m+[m[32m| XXI-r | (no entra) | Decisión "no fixear" sesión V |[m
+[32m+[m[32m| XXI-s | (no entra) | `jueces_desconocidos` vacío, intencional |[m
+[32m+[m[32m| XXI-t | B003 parcial | Hojas complementarias Fase 1 ✅, Fase 2 = B009 |[m
+[32m+[m[32m| XXI-u | (no entra) | Cubierto implícito por §2.5.e PIPELINE |[m
+[32m+[m[32m| XXI-v | M05 | Verificación caso-a-caso pendiente |[m
+[32m+[m
+[32m+[m[32m**IDs F-numerados de BITACORA mapeados a B0NN:**[m
+[32m+[m
+[32m+[m[32m| F-N | ID actual | Notas |[m
+[32m+[m[32m|---|---|---|[m
+[32m+[m[32m| F001 | B032 (= XXI-ñ) | `RE_VOTO_HDR` |[m
+[32m+[m[32m| F002 | B020 | `detectar_fin_real` extiende |[m
+[32m+[m[32m| F003 | B021 | `detectar_fin_real` corta corto |[m
+[32m+[m[32m| F004 | B022 | Arrastre del fallo previo |[m
+[32m+[m[32m| F005 | B023 | Fin del dictamen pisa FALLO |[m
+[32m+[m[32m| F006 | B024 | Sumarios editoriales |[m
+[32m+[m[32m| F007 | B040 | Spans del fallo previo (auditor) |[m
+[32m+[m[32m| F008 | B041 | Off-by-one auditor vs `.md` |[m
+[32m+[m[32m| F009 | (descartado) | Retractado en BITACORA línea 648 |[m
+[32m+[m[32m| F010 | B019 | Off-by-one firmas multilínea |[m
+[32m+[m[32m| F011 | B012 | Catálogo localización extendido |[m
+[32m+[m[32m| F012 | B017 | Firma partida → catch_all |[m
+[32m+[m[32m| F013 | B018 (= XXI-m) | Pista 1 falso positivo en dictamen |[m
+[32m+[m[32m| F-AUDITOR-01 | B042 | Colisión timestamp |[m
+[32m+[m[32m| F-AUDITOR-02 | (descartado) | Retractado en BITACORA línea 913 |[m
+ [m
+ ---[m
+ [m
+[31m-## Roadmap de fixes restantes (orden sugerido)[m
+[31m-[m
+[31m-1. **Validar Bug D** (próxima sesión, prioridad alta).[m
+[31m-2. **Confirmar diagnóstico de Bug C** (¿catálogo v15 lo resolvió?).[m
+[31m-3. **Bug B — `fallo_cruza_archivos`** (fix barato, ~30-45 min).[m
+[31m-4. **Bug A — `pagina_no_en_mapa`** (fix mediano, 1-3 horas, riesgo medio).[m
+[31m-5. **Cluster fallos breves sin causa documentada** (investigación, prioridad baja).[m
+[31m-6. **Reorganización del proyecto** (sesión dedicada, prioridad media).[m
+[31m-7. **Refactor v18** (post-tesis si corresponde).[m
+[32m+[m[32m## Resumen ejecutivo[m
+[32m+[m
+[32m+[m[32m- **Bugs cerrados:** 8 (B001-B008).[m
+[32m+[m[32m- **Bugs en validación:** 2 (B009 cuantificado pendiente fix, B010[m
+[32m+[m[32m  rediagnosticado pendiente fix).[m
+[32m+[m[32m- **Bugs activos del pipeline (catálogo + cruzador + parser):** 30[m
+[32m+[m[32m  (B011-B039). De ellos:[m
+[32m+[m[32m  - 1 confirmado_cuantificado pendiente de aplicar fix de higiene (B028)[m
+[32m+[m[32m  - ~13 confirmado_caso_testigo o confirmado_cuantificado (B011, B012,[m
+[32m+[m[32m    B013, B014, B016, B017, B018, B019, B020, B021, B022, B023, B035-B039)[m
+[32m+[m[32m  - 1 sospecha_cardinal (B025)[m
+[32m+[m[32m  - 7 hipotesis_no_verificada — identificados leyendo código en XXI sin[m
+[32m+[m[32m    medir (B015, B026, B027, B029, B031, B033, B034)[m
+[32m+[m[32m- **Bugs activos del auditor:** 3 (B040-B042).[m
+[32m+[m[32m- **Pendientes metodológicos:** 5 (M01-M05).[m
+[32m+[m
+[32m+[m[32m**Próximo trabajo priorizado (orden sugerido):**[m
+[32m+[m
+[32m+[m[32m1. Cerrar el bloque docs de la Fase 2 (commit de este archivo + decisión[m
+[32m+[m[32m   sobre destino del forense + decisión sobre PIPELINE.md M01).[m
+[32m+[m[32m2. Diagnóstico fino de B010 con `auditar_fallo.py` (acordado para[m
+[32m+[m[32m   próxima sesión, BITACORA H019).[m
+[32m+[m[32m3. M05: verificar identidad de los 32 oks de XXI-v contra los 32 de B001.[m
+[32m+[m[32m4. Cuantificar los `hipotesis_no_verificada` antes de fixearlos. Prioridad[m
+[32m+[m[32m   especial: B025 (414 unanime) re-medir post §3.6.a.[m
+[32m+[m[32m5. Bloque snapshots Fase 2 (M02).[m

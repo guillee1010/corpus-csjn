@@ -1,0 +1,95 @@
+======================================================================
+DIAGNÓSTICO B059 — Evaluación de estrategias
+Casos analizados: 363
+Archivos .md procesados: 45
+Errores: 0
+======================================================================
+
+── Distribución de cantidad de matches por caso ──
+  1 matches: 80 casos
+  2 matches: 196 casos
+  3 matches: 58 casos
+  4 matches: 25 casos
+  5 matches: 3 casos
+  6 matches: 1 casos
+
+  1 solo match (3 estrategias coinciden): 80
+  2+ matches (estrategias pueden diferir): 283
+
+── Variante del match actual (primer match) ──
+  en_consecuencia: 148
+  por_ello: 115
+  de_conformidad: 47
+  por_lo_expuesto: 11
+  por_todo_ello: 9
+  por_estas_razones: 8
+  por_todo_lo_exp: 7
+  en_su_merito: 6
+  atento_a: 6
+  por_los_fund: 3
+  en_merito: 3
+
+── ¿Match actual tiene firma en 40 líneas? ──
+  False: 363
+
+── Estrategia A (último match) ──
+  Donde A ≠ actual: 283/283 multi-match
+  Firma del último match:
+    True: 273
+    False: 10
+
+── Estrategia C (primer match con firma) ──
+  C = actual (ya tenía firma):       0
+  C ≠ actual (encontró otro mejor):  274
+  C sin match (ninguno tiene firma): 89
+
+── Estrategia C refinada (fuertes siempre, débiles con firma) ──
+  Cref = actual:  118
+  Cref ≠ actual:  225
+  Cref sin match: 20
+
+── Cruce categoría × resultado ──
+
+  A1 (265 casos):
+    Match actual sin firma: 265
+    A ≠ actual:     252
+    A con firma:    243
+    C ≠ actual:     244
+    C sin match:    21
+    Cref ≠ actual:  200
+    Cref sin match: 9
+
+  A2 (39 casos):
+    Match actual sin firma: 39
+    A ≠ actual:     3
+    A con firma:    3
+    C ≠ actual:     3
+    C sin match:    36
+    Cref ≠ actual:  2
+    Cref sin match: 7
+
+  A3 (59 casos):
+    Match actual sin firma: 59
+    A ≠ actual:     28
+    A con firma:    27
+    C ≠ actual:     27
+    C sin match:    32
+    Cref ≠ actual:  23
+    Cref sin match: 4
+
+── Top 10 casos con más matches (auditoría manual) ──
+  347_p128: 6 matches, actual=de_conformidad(firma=False), último=por_ello(firma=True)
+  332_p1466: 5 matches, actual=en_consecuencia(firma=False), último=por_ello(firma=True)
+  343_p195: 5 matches, actual=por_todo_ello(firma=False), último=por_ello(firma=True)
+  348_p983: 5 matches, actual=en_consecuencia(firma=False), último=por_ello(firma=True)
+  331_p1262: 4 matches, actual=en_consecuencia(firma=False), último=por_ello(firma=True)
+  331_p1123: 4 matches, actual=de_conformidad(firma=False), último=por_ello(firma=True)
+  332_p1571: 4 matches, actual=en_consecuencia(firma=False), último=por_ello(firma=True)
+  334_p419: 4 matches, actual=por_lo_expuesto(firma=False), último=en_consecuencia(firma=True)
+  337_p388: 4 matches, actual=por_ello(firma=False), último=por_ello(firma=True)
+  337_p966: 4 matches, actual=en_consecuencia(firma=False), último=por_ello(firma=True)
+
+── Casos sin match C (89): ningún dispositivo tiene firma ──
+    A2: 36
+    A3: 32
+    A1: 21
