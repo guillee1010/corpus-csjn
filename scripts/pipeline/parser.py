@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.02"  # H077: classify_outcome v14 — fallbacks + rechaza
+__version__ = "18.03"  # H078: es_queja + queja_resultado, tipo_cuestion_federal
 
 import re
 import csv
@@ -412,6 +412,151 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
             return "inadmisible_acordada_4"
 
     return outcome_disp
+
+# ── H078: es_queja + queja_resultado ─────────────────────────────────────────
+# "Queja" = recurso de hecho = presentación directa. Tres sinónimos para la
+# misma vía de acceso: el recurso que se interpone ante la CSJN cuando la
+# Cámara deniega el REF.
+
+RE_ES_QUEJA = re.compile(
+    r"\bqueja\b|\brecurso de hecho\b|\bpresentaci[oó]n directa\b", re.I)
+
+_SYN_Q = r"(?:queja|presentaci[oó]n directa|recurso de hecho)"
+
+QUEJA_RESULTADO_PATTERNS = [
+    ("hace_lugar", re.compile(
+        rf"(?:se\s+)?(?:re)?hace\s+lugar\s+(?:\w+\s+)?(?:a\s+)?la\s+{_SYN_Q}|"
+        rf"(?:se\s+resuelve|resuelve)\s*:?\s*(?:I\.\s*)?[Hh]acer\s+lugar\s+"
+        rf"(?:\w+\s+)?a\s+la\s+{_SYN_Q}|"
+        rf"hacer\s+lugar\s+(?:a\s+)?la\s+{_SYN_Q}", re.I)),
+    ("admisible", re.compile(
+        rf"se\s+declara[n]?\s+(?:formalmente\s+)?admisibles?\s+"
+        rf"(?:la\s+|el\s+)?{_SYN_Q}|"
+        rf"se\s+admite[n]?\s+(?:la\s+|el\s+)?{_SYN_Q}|"
+        rf"[Dd]eclarar\s+admisibles?\s+(?:la\s+|el\s+)?{_SYN_Q}|"
+        rf"admitir\s+(?:la\s+|el\s+)?{_SYN_Q}|"
+        rf"se\s+decide\s+admitir\s+(?:la\s+)?{_SYN_Q}", re.I)),
+    ("procedente", re.compile(
+        rf"se\s+declara[n]?\s+(?:formalmente\s+)?procedentes?\s+"
+        rf"(?:la\s+|el\s+)?{_SYN_Q}|"
+        rf"procedentes?\s+(?:la\s+|el\s+){_SYN_Q}|"
+        rf"procedentes?\s+(?:el\s+recurso|los\s+recursos).*{_SYN_Q}", re.I)),
+    ("desestima", re.compile(
+        rf"se\s+desestima[n]?\s+.*?\b{_SYN_Q}\b|"
+        rf"[Dd]esestimar\s+(?:la\s+|el\s+|esta?\s+)?{_SYN_Q}", re.I)),
+    ("rechaza", re.compile(
+        rf"se\s+rechaza[n]?\s+.*?\b{_SYN_Q}\b|"
+        rf"rechaz[áa]ndose\s+.*?\b{_SYN_Q}\b|"
+        rf"rechaza\s+(?:la\s+|el\s+){_SYN_Q}|"
+        rf"rechazar\s+la\s+{_SYN_Q}", re.I)),
+    ("inadmisible", re.compile(
+        rf"se\s+declara[n]?\s+inadmisibles?\s+(?:la\s+|el\s+)?{_SYN_Q}", re.I)),
+    ("agreguese", re.compile(rf"agr[ée]guese\s+la\s+{_SYN_Q}", re.I)),
+    ("desistida", re.compile(
+        rf"se\s+tiene\s+por\s+desistid[ao]\s+.*?\b{_SYN_Q}\b", re.I)),
+    ("abstracta", re.compile(
+        rf"abstracta?\s+.*?\b{_SYN_Q}\b|"
+        rf"inoficioso\s+.*?\b{_SYN_Q}\b", re.I)),
+    ("improcedente", re.compile(
+        rf"improcedente\s+.*?\b{_SYN_Q}\b", re.I)),
+    ("nula", re.compile(
+        rf"(?:se\s+)?decl[áa]ra(?:se)?\s+nul[oa]\s+.*?\b{_SYN_Q}\b", re.I)),
+    ("suspendida", re.compile(
+        rf"(?:suspender|suspende|difi[ée]rese)\s+.*?\b{_SYN_Q}\b|"
+        rf"resérvese\s+.*?\b{_SYN_Q}\b", re.I)),
+]
+
+
+def classify_queja(por_ello_text: str):
+    """H078: detecta si el fallo es una queja y clasifica su resultado.
+    Retorna (es_queja: bool, queja_resultado: str).
+    queja_resultado es "" si es_queja=False o si no se pudo clasificar."""
+    text = _unhyphenate(por_ello_text)
+    text = re.sub(r"\s+", " ", text).strip()
+    if not RE_ES_QUEJA.search(text):
+        return False, ""
+    for label, pat in QUEJA_RESULTADO_PATTERNS:
+        if pat.search(text):
+            return True, label
+    return True, ""
+
+
+# ── H078: tipo_cuestion_federal ──────────────────────────────────────────────
+# Dos puertas de entrada al REF:
+#   - Art. 14 ley 48: cuestión federal propiamente dicha.
+#   - Doctrina de la arbitrariedad: creación pretoriana.
+#
+# Fuente primaria: sumario editorial (texto pre-apertura en el bloque).
+#   La Secretaría de Jurisprudencia clasifica explícitamente:
+#   - Tomo 330 (viejo): "RECURSO EXTRAORDINARIO: ... Sentencias arbitrarias."
+#                        "RECURSO EXTRAORDINARIO: ... Cuestión federal."
+#   - Tomo 348 (nuevo): "SENTENCIA ARBITRARIA" como header standalone.
+# Fuente secundaria (fallback): considerando_text de la Corte.
+
+# Patterns para sumario editorial (más confiable)
+RE_SUMARIO_ARBITRARIEDAD = re.compile(
+    r"SENTENCIA\s+ARBITRARIA|"
+    r"[Ss]entencias?\s+arbitrarias?|"
+    r"[Dd]octrina\s+de\s+la\s+arbitrariedad|"
+    r"[Dd]escalific\w+\s+como\s+acto\s+jurisdiccional",
+    re.I)
+
+RE_SUMARIO_CUESTION_FEDERAL = re.compile(
+    r"[Cc]uesti[oó]n\s+federal|"
+    r"[Cc]uestiones\s+federales",
+    re.I)
+
+# Patterns para considerando_text (fallback, menos confiable)
+RE_TIPO_CF_ARBITRARIEDAD = re.compile(
+    r"sentencia\s+arbitraria|"
+    r"doctrina\s+de\s+la\s+arbitrariedad|"
+    r"arbitrariedad\s+de\s+(?:la\s+)?sentencia|"
+    r"tacha\s+de\s+arbitrariedad|"
+    r"descalific\w+\s+como\s+acto\s+jurisdiccional|"
+    r"\barbitrariedad\b",
+    re.I)
+
+RE_TIPO_CF_CUESTION_FEDERAL = re.compile(
+    r"art[íi]culo\s+14\s+de\s+la\s+ley\s+48|"
+    r"art\.?\s*14\s+(?:de\s+)?(?:la\s+)?ley\s+48|"
+    r"cuesti[oó]n\s+federal|"
+    r"ley\s+48",
+    re.I)
+
+
+def classify_cuestion_federal(sumario_text: str, considerando_text: str) -> str:
+    """H078: clasifica tipo de cuestión federal.
+    Busca primero en sumario editorial (clasificación de la Secretaría de
+    Jurisprudencia), fallback al considerando_text de la Corte.
+    Retorna: 'arbitrariedad', 'cuestion_federal', 'mixto', o ''."""
+
+    # ── Fuente primaria: sumario editorial ──
+    if sumario_text:
+        st = _unhyphenate(sumario_text)
+        st = re.sub(r"\s+", " ", st).strip()
+        has_arb = bool(RE_SUMARIO_ARBITRARIEDAD.search(st))
+        has_cf  = bool(RE_SUMARIO_CUESTION_FEDERAL.search(st))
+        if has_arb and has_cf:
+            return "mixto"
+        if has_arb:
+            return "arbitrariedad"
+        if has_cf:
+            return "cuestion_federal"
+
+    # ── Fuente secundaria: considerando_text ──
+    if considerando_text:
+        ct = _unhyphenate(considerando_text)
+        ct = re.sub(r"\s+", " ", ct).strip()
+        has_arb = bool(RE_TIPO_CF_ARBITRARIEDAD.search(ct))
+        has_cf  = bool(RE_TIPO_CF_CUESTION_FEDERAL.search(ct))
+        if has_arb and has_cf:
+            return "mixto"
+        if has_arb:
+            return "arbitrariedad"
+        if has_cf:
+            return "cuestion_federal"
+
+    return ""
 
 # ── Jueces conocidos ──────────────────────────────────────────────────────────
 # (idéntico a v9, copiado tal cual)
@@ -2105,6 +2250,9 @@ def construir_caso_sumario_link(caso_id_canonico, tomo, nombres_indice,
         "is_originaria":          0,
         "is_full_bench":          0,
         "is_merit_decision":      0,
+        "es_queja":               0,
+        "queja_resultado":        "",
+        "tipo_cuestion_federal":  "",
         "word_count":             0,
         "wc_mayoria":             0,
         "wc_votos":               0,
@@ -2910,6 +3058,18 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                   or RE_ACORDADA_4_DIRECTA.search(_ct)):
                 outcome = "inadmisible_acordada_4"
 
+        # H078: queja + cuestion federal (sobre textos completos, pre-truncamiento)
+        es_queja, queja_resultado = classify_queja(por_ello_text)
+        # Sumario editorial = texto del bloque antes de la apertura.
+        # Contiene los headers de la Secretaría de Jurisprudencia
+        # ("SENTENCIA ARBITRARIA", "Cuestión federal", etc.).
+        _sumario_lines = []
+        if apertura_rel is not None:
+            _sumario_lines = [bloque[k] for k in range(apertura_rel)
+                              if k < len(bloque)]
+        sumario_text = " ".join(_sumario_lines)
+        tipo_cuestion_federal = classify_cuestion_federal(sumario_text, considerando_text)
+
         firma_raw    = ""
         firma_parsed = {"jueces": [], "voting_pattern": "sin_firma", "desconocidos": []}
 
@@ -3017,6 +3177,9 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             "is_originaria":          is_originaria,
             "is_full_bench":          is_full_bench,
             "is_merit_decision":      is_merit,
+            "es_queja":               int(es_queja),
+            "queja_resultado":        queja_resultado,
+            "tipo_cuestion_federal":  tipo_cuestion_federal,
             "word_count":             word_count,
             "wc_mayoria":             wc_mayoria,
             "wc_votos":               wc_votos,
@@ -3314,6 +3477,7 @@ def main():
             "n_jueces", "n_titulares", "n_votos_svoto", "n_disidencias",
             "dictamen_presente", "is_originaria", "is_full_bench",
             "is_merit_decision",
+            "es_queja", "queja_resultado", "tipo_cuestion_federal",
             "word_count", "wc_mayoria", "wc_votos", "wc_considerando",
             "wc_dictamen",
             "firma_raw", "jueces", "jueces_conocidos", "jueces_desconocidos",
@@ -3417,6 +3581,22 @@ def main():
         print(f"  tribunal_origen_status:")
         for k, v in trib_status.most_common():
             print(f"    {k:<22}      {v:>5}")
+
+        # H078: queja
+        fallos_only = [c for c in all_casos if c["tipo_entrada"] == "fallo"]
+        n_queja = sum(1 for c in fallos_only if c["es_queja"])
+        queja_res = Counter(c["queja_resultado"] for c in fallos_only if c["es_queja"])
+        print(f"\n── Queja (H078) ──")
+        print(f"  es_queja=1:                {n_queja}/{len(fallos_only)}"
+              f" ({100*n_queja/len(fallos_only):.1f}%)")
+        for k, v in queja_res.most_common():
+            print(f"    {k or '(sin_clasificar)':<22}  {v:>5}")
+
+        # H078: cuestion federal
+        tipo_cf = Counter(c["tipo_cuestion_federal"] for c in fallos_only)
+        print(f"\n── Cuestión federal (H078) ──")
+        for k, v in tipo_cf.most_common():
+            print(f"    {k or '(sin_dato)':<22}  {v:>5}")
 
     if desconocidos_global:
         print("\n── Top desconocidos en firma (auditar) ──")
