@@ -6,12 +6,13 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-26 (H076: M11 cerrado — __version__
-en 6 scripts canónicos + print en parser. B095 Tier 4 — refinar_inicio
-con ventana ampliada (100) + guardas portadas de Pista 1 (texto corriente,
-stoplist+segundo token, trim≤50%, fullname+inverted para todos);
-ancla_catalogo 75→64, 0 regresiones. Limpieza repo: scripts sueltos
-a H0xx/, snapshots a archivo/data/, dirs normalizados.
+**Última actualización:** 2026-05-26 (H077: classify_outcome v14 —
+outcome "rechaza" nuevo (216 casos) + fallbacks infinitivo (confirmar,
+desestimar, hacer lugar, declarar procedente) + plurales/pronombres
++ normalización whitespace OCR. "otro" 1562→893 (−669), 0 regresiones
+merit→otro. parser.py v18.02. Diagnóstico taxonómico con Anuario
+Estadístico CSJN 2025: "deja_sin_efecto", es_queja, tipo_cuestion_federal
+identificados como variables futuras.
 H073: B091 aplicado — fallback
 "revocar" en classify_outcome v13, revoca 208→359. B093 aplicado —
 primer_token_de_caratula con búsqueda profunda de tokens no-genéricos
@@ -2351,30 +2352,37 @@ canónicos actuales B0NN.
   B056-B058, B061-B062, B065, VIS001-VIS004).
 - **Pendientes metodológicos:** 8 (M01 cerrado, M02-M04, M05 cerrado,
   M06-M09, M10).
-- **Detectores (H072, post B085+B086+B087+B088):**
-  - inadmisible_280: 272. Limpios.
-  - inadmisible_acordada_4: 52. Limpios.
-  - is_originaria: 474.
-  - sin_dispositivo: 50→35 (15 recuperados por B085+B086).
-  - unanime: 3501→3496 (B087, 5 casos→svoto). svoto: 740→745.
-  - editorial sections: 135→150 (B088, reorden Pistas).
-  - 330_p2849: 110k→7448 wc (B088).
+- **Detectores (H077, post classify_outcome v14):**
+  - outcome "otro": 1562→893 (−669). classify_outcome v14.
+  - rechaza: 0→216 (outcome nuevo).
+  - hace_lugar: 1102→1367. confirma: 237→327. desestima: 476→541.
+  - procedente: 656→697. competencia: 571→603.
+  - inadmisible_280: 267→245 (−22, ahora merit outcomes).
+  - revoca: 360→340 (−20, dispositivos compuestos).
+  - inadmisible_acordada_4: 52→50. is_originaria: 477.
+  - sin_dispositivo: 25. sin_firma: 16. ancla_catalogo: 64.
 
-**Próximo trabajo priorizado (orden sugerido, H076):**
+**Próximo trabajo priorizado (orden sugerido, H077):**
 
-1. **Subdividir outcome "otro" (1562 casos, 26.6%).** Diagnosticar qué
-   contiene: fórmulas dispositivas no capturadas, hace lugar parcialmente,
-   inadmisibles sin art. 280, etc. Prerequisito para análisis estadístico.
-2. **B090 — Tier 5 dispositivo embebido + revisión global de fórmulas
-   dispositivas y fundamentos.** Estudiar todos los patrones posibles
-   (revocar, abstracto, etc.) antes de implementar.
-3. **Codebook dataset (inglés).** Documentación de variables para
+1. **Track 2 taxonómico: "deja_sin_efecto" como outcome separado
+   de "revoca".** 85 casos detectados. Alineado con taxonomía del
+   Anuario Estadístico CSJN 2025 que los distingue explícitamente.
+2. **Variables nuevas: `es_queja`, `queja_resultado`.** 2181 fallos
+   mencionan "queja" (38.5%). Alto valor analítico para la tesis.
+   Detección mecánica desde por_ello_text.
+3. **Track 2 taxonómico: categorías menores.** "caducidad" (23),
+   "desierto" (12), "improcedente" (15), "inadmisible genérico" (21),
+   "admisible" (117, paso procesal → outcome real detrás).
+4. **Variable `tipo_cuestion_federal`.** Art. 14 ley 48 vs. sentencia
+   arbitraria. Detectable en considerando_text. Anuario CSJN distingue
+   67.29% art. 14 vs 32.71% arbitrariedad.
+5. **B090 — Tier 5 dispositivo embebido.** 16 sin_dispositivo con firma.
+6. **Codebook dataset (inglés).** Documentación de variables para
    publicación en Harvard Dataverse.
-4. **B095 residual — OCR/typo catálogo→.md.** 36 casos con nombre
+7. **B095 residual — OCR/typo catálogo→.md.** 36 casos con nombre
    distinto. Documentar en codebook o parchar catálogo manualmente.
-5. **README publicable.** Actualizar para repositorio público.
-6. **sin_firma (16 casos)** — auditar residuo por causa raíz.
-7. **Normalizar tribunal_origen** (1316 sin_marcador).
+8. **sin_firma (16 casos)** — auditar residuo por causa raíz.
+9. **Normalizar tribunal_origen** (1316 sin_marcador).
 
 
 ### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula

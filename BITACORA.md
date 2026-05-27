@@ -7130,3 +7130,84 @@ Se patchó el parser directamente (no el PoC). Parser corrido con v18.01. Diff v
 **Versiones de scripts canónicos:** parser.py v18.01, parser_editorial.py v1.0, construir_catalogo.py v1.0, cruzar_catalogo_y_mapa.py v1.0, detectar_paginas.py v1.0, auditar_fallo.py v1.0.0.
 
 **Commits:** 3 (limpieza repo, M11 versionado, B095 Tier 4)..
+
+## H077 — classify_outcome v14: rechaza + infinitivos + normalización (2026-05-26)
+
+**Objetivo:** reducir el outcome "otro" (27.5% del corpus) mediante diagnóstico
+de patrones dispositivos no capturados y mejora de classify_outcome.
+
+### H077-01 — Diagnóstico del outcome "otro" (1562 casos)
+
+Descomposición completa de los 1562 fallos clasificados como "otro".
+Identificadas tres brechas principales:
+1. **Rechazar no existía como pattern** — 213 casos sin captura.
+2. **Formas infinitivas** ("el Tribunal resuelve: Confirmar/Desestimar/
+   Hacer lugar/Declarar procedente") — 516 casos.
+3. **Regex rotas por OCR** (double spaces, plurales, pronombres) — 49 casos.
+
+Agrupados en tres tracks: Track 1 (mecánico, cero riesgo), Track 2
+(taxonómico, requiere decisiones), Track 3 (variables nuevas).
+
+### H077-02 — PoC classify_outcome v14
+
+PoC v14a: 840 cambios pero 129 merit→merit por normalización whitespace
+que cambia orden de match en dispositivos compuestos. Descartado.
+PoC v14b: zona fallback intacta + patterns nuevos solo como fallbacks
+después de los existentes. 610 cambios, 0 regresiones. Aprobado.
+Whitespace normalization aplicada uniformemente a ambas zonas.
+
+### H077-03 — Aplicación y validación
+
+parser.py v18.01→v18.02. classify_outcome v13→v14. Cambios:
+- Paso 0b: `re.sub(r"\s+", " ", text)` en por_ello_text y considerando_text.
+- Outcome "rechaza" nuevo: formas directas + infinitivo.
+- Fallbacks infinitivo: confirmar, desestimar, hacer lugar, declarar procedente.
+- Fallbacks plurales/pronombres: "se la desestima", "se declaran procedentes",
+  "se confirman".
+- Fallback competencia: "se declara competente", "declararse incompetente".
+- "rechaza" agregado a MERIT_OUTCOMES.
+
+Resultados parser completo:
+- otro: 1562→893 (−669, de 27.5% a 15.7%)
+- rechaza: 0→216 (nuevo)
+- hace_lugar: 1102→1367 (+265)
+- confirma: 237→327 (+90)
+- desestima: 476→541 (+65)
+- procedente: 656→697 (+41)
+- competencia: 571→603 (+32)
+- inadmisible_280: 267→245 (−22, ahora merit outcomes skip Paso 3)
+- revoca: 360→340 (−20, dispositivos compuestos)
+- sin_firma: 16, sin_dispositivo: 25, ancla_catalogo: 64 (sin cambio)
+
+### H077-04 — Diagnóstico taxonómico con Anuario CSJN 2025
+
+Comparación de taxonomía del parser con Anuario Estadístico CSJN 2025
+(Oficina de Estadísticas). Hallazgos clave:
+- "Deja sin efecto" es categoría separada de "Revoca" en estadística oficial
+  (36.32% vs 51.61% de recursos admitidos). 85 casos detectados en nuestro
+  corpus dentro de "otro".
+- "Rechaza" existe como categoría separada de "Desestima" → validado.
+- CSJN distingue "Art. 14 ley 48" (67.29%) de "Sentencia Arbitraria" (32.71%)
+  en cuestiones federales. Variable futura: tipo_cuestion_federal.
+- Queja vs. Concedido trackeado oficialmente (77.9% vs 21.6%). Variables
+  futuras: es_queja, queja_resultado (2181 fallos, 38.5%).
+- Causales de inadmisibilidad más granulares que nuestro 280/ac4.
+
+### H077 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallos + 33 sumario_editorial + 160 sumario_con_link).
+- **Sin firma:** 16 / 5669 fallos (0.3%). Cobertura firma: 99.7%.
+- **Sin dispositivo:** 25.
+- **Outcome "otro":** 893 / 5669 fallos (15.7%). Trayectoria: 27.5%→15.7%.
+- **Votos:** 27463 filas.
+- **Ancla catálogo:** 64.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27463 filas.
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+
+**Versiones:** parser.py v18.02.
+
+**Commits:** 2 (parser v18.02 + outputs; docs).

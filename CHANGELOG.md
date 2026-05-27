@@ -2,6 +2,14 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H077 (2026-05-26)
+
+- `parser.py` v18.02: classify_outcome v14. Outcome "rechaza" nuevo (216 casos).
+  Fallbacks infinitivo (confirmar, desestimar, hacer lugar, declarar procedente)
+  + plurales/pronombres + normalización whitespace OCR. "otro" 1562→893 (−669).
+  inadmisible_280 267→245 (merit outcomes skip Paso 3). 0 regresiones.
+- `output/parser/csjn_casos.csv`: 5862 filas (outcome redistribuido).
+
 ## H076 (2026-05-26)
 
 - `parser.py` v18.01: Tier 4 en refinar_inicio_por_titulo — ventana ampliada (100) con guardas (texto corriente, stoplist+segundo token, trim≤50%, fullname+inverted para todos). ancla_catalogo 75→64. `segundo_token_de_caratula()` nueva. __version__ + print versión en diagnóstico.
