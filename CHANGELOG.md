@@ -2,6 +2,15 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H078 (2026-05-26)
+
+- `parser.py` v18.02→v18.03: tres columnas nuevas aditivas en csjn_casos.csv.
+  - `es_queja` (0/1): 1993/5669 (35.2%). Sinónimos: queja / recurso de hecho / presentación directa.
+  - `queja_resultado`: 12 categorías, cobertura 98.2%.
+  - `tipo_cuestion_federal`: arbitrariedad (882) / cuestion_federal (1291) / mixto (670). Detección primaria en sumario editorial, fallback considerando_text. 50.1% detectados.
+- `output/parser/csjn_casos.csv` — 5862 filas (estable, +3 columnas).
+
+
 ## H077 (2026-05-26)
 
 - `parser.py` v18.02: classify_outcome v14. Outcome "rechaza" nuevo (216 casos).

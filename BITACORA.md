@@ -7211,3 +7211,43 @@ Comparación de taxonomía del parser con Anuario Estadístico CSJN 2025
 **Versiones:** parser.py v18.02.
 
 **Commits:** 2 (parser v18.02 + outputs; docs).
+
+## H078 — Variables nuevas: es_queja, queja_resultado, tipo_cuestion_federal (2026-05-26)
+
+**Objetivo:** implementar tres columnas analíticas nuevas en csjn_casos.csv — vía de acceso (queja vs REF concedido), resultado de la queja, y tipo de cuestión federal (arbitrariedad vs art. 14 ley 48).
+
+### H078-01 — es_queja + queja_resultado
+
+PoC sobre por_ello_text (truncado a 300 chars en CSV). Detección por sinónimos: "queja" / "recurso de hecho" / "presentación directa". Cascada de 12 patterns para queja_resultado: hace_lugar, desestima, procedente, admisible, rechaza, inadmisible, agreguese, desistida, abstracta, improcedente, nula, suspendida.
+
+PoC en CSV: 1951 quejas detectadas (34.4%), cobertura resultado 98.4%. Run completo (por_ello_text sin truncar): 1993 (35.2%), cobertura 98.2% (36 sin_clasificar). Los 42 adicionales son cases donde el pattern matchea en chars 301+.
+
+Decisión de diseño: normalización interna en classify_queja() con _unhyphenate + whitespace collapse, igual que classify_outcome.
+
+### H078-02 — tipo_cuestion_federal
+
+Iteración 1 (considerando_text solo): 772/5669 detectados (13.6%). Cobertura muy baja.
+
+Exploración de casos reales (tomos 348 y 330 subidos): el considerando de la Corte frecuentemente dice solo "razones de brevedad" (27.5% de merit decisions). La señal real está en el **sumario editorial** — los headers de la Secretaría de Jurisprudencia clasifican explícitamente:
+- Tomo 330 (viejo): `RECURSO EXTRAORDINARIO: Requisitos propios. Cuestiones no federales. Sentencias arbitrarias.` / `... Cuestión federal.`
+- Tomo 348 (nuevo): `SENTENCIA ARBITRARIA` como header standalone.
+
+Iteración 2 (sumario + fallback considerando): extracción de texto pre-apertura del bloque (`bloque[0:apertura_rel]`). Detección primaria en sumario (RE_SUMARIO_ARBITRARIEDAD, RE_SUMARIO_CUESTION_FEDERAL), fallback a considerando_text.
+
+Run completo: 2843/5669 (50.1%). cuestion_federal 1291, arbitrariedad 882, mixto 670, sin_dato 2826. Los sin_dato incluyen competencia, originaria, extradición, etc. donde la distinción no aplica.
+
+Nota conceptual (Guillermo): tipo_cuestion_federal es la **vía procesal de acceso** al REF, no un resultado. Ortogonal al outcome.
+
+### H078 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallos + 33 sumario_editorial + 160 sumario_con_link).
+- **Sin firma:** 16 / 5669 fallos (0.3%). Cobertura firma: 99.7%.
+- **Votos:** 27463 filas.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas (3 columnas nuevas: es_queja, queja_resultado, tipo_cuestion_federal).
+- `output/parser/csjn_casos_votos.csv` — 27463 filas.
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+
+**Commits:** 2 (snapshot pre-H078, feature v18.03).

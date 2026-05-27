@@ -6,13 +6,11 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-26 (H077: classify_outcome v14 —
-outcome "rechaza" nuevo (216 casos) + fallbacks infinitivo (confirmar,
-desestimar, hacer lugar, declarar procedente) + plurales/pronombres
-+ normalización whitespace OCR. "otro" 1562→893 (−669), 0 regresiones
-merit→otro. parser.py v18.02. Diagnóstico taxonómico con Anuario
-Estadístico CSJN 2025: "deja_sin_efecto", es_queja, tipo_cuestion_federal
-identificados como variables futuras.
+**Última actualización:** 2026-05-26 (H078: `es_queja` + `queja_resultado` +
+`tipo_cuestion_federal` — tres columnas nuevas aditivas. es_queja: 1993/5669
+(35.2%), queja_resultado 98.2% cobertura. tipo_cuestion_federal: detección
+en dos capas (sumario editorial + fallback considerando), 2843/5669 (50.1%)
+detectados. parser.py v18.03.
 H073: B091 aplicado — fallback
 "revocar" en classify_outcome v13, revoca 208→359. B093 aplicado —
 primer_token_de_caratula con búsqueda profunda de tokens no-genéricos
@@ -2327,7 +2325,7 @@ canónicos actuales B0NN.
 
 ## Resumen ejecutivo
 
-*Actualizado H072 (2026-05-25).*
+*Actualizado H078 (2026-05-26).*
 
 - **Bugs cerrados:** ~39 (B001-B008, B013, B029, B030, B032, B039, B046,
   B055, B060, B063-B064, B066-B074, B076-B077, B079, A001,
@@ -2352,37 +2350,34 @@ canónicos actuales B0NN.
   B056-B058, B061-B062, B065, VIS001-VIS004).
 - **Pendientes metodológicos:** 8 (M01 cerrado, M02-M04, M05 cerrado,
   M06-M09, M10).
-- **Detectores (H077, post classify_outcome v14):**
-  - outcome "otro": 1562→893 (−669). classify_outcome v14.
-  - rechaza: 0→216 (outcome nuevo).
-  - hace_lugar: 1102→1367. confirma: 237→327. desestima: 476→541.
-  - procedente: 656→697. competencia: 571→603.
-  - inadmisible_280: 267→245 (−22, ahora merit outcomes).
-  - revoca: 360→340 (−20, dispositivos compuestos).
-  - inadmisible_acordada_4: 52→50. is_originaria: 477.
+- **Detectores (H078, parser v18.03):**
+  - outcome "otro": 893 (estable). classify_outcome v14.
+  - es_queja: 1993/5669 (35.2%). queja_resultado 98.2% cobertura.
+  - tipo_cuestion_federal: 2843/5669 detectados (50.1%).
+    cuestion_federal 1291, arbitrariedad 882, mixto 670, sin_dato 2826.
   - sin_dispositivo: 25. sin_firma: 16. ancla_catalogo: 64.
 
-**Próximo trabajo priorizado (orden sugerido, H077):**
+**Próximo trabajo priorizado (orden sugerido, H078):**
 
 1. **Track 2 taxonómico: "deja_sin_efecto" como outcome separado
-   de "revoca".** 85 casos detectados. Alineado con taxonomía del
-   Anuario Estadístico CSJN 2025 que los distingue explícitamente.
-2. **Variables nuevas: `es_queja`, `queja_resultado`.** 2181 fallos
-   mencionan "queja" (38.5%). Alto valor analítico para la tesis.
-   Detección mecánica desde por_ello_text.
-3. **Track 2 taxonómico: categorías menores.** "caducidad" (23),
-   "desierto" (12), "improcedente" (15), "inadmisible genérico" (21),
-   "admisible" (117, paso procesal → outcome real detrás).
-4. **Variable `tipo_cuestion_federal`.** Art. 14 ley 48 vs. sentencia
-   arbitraria. Detectable en considerando_text. Anuario CSJN distingue
-   67.29% art. 14 vs 32.71% arbitrariedad.
+   de "revoca".** ~128-234 casos en "otro" donde es la acción primaria.
+   Alineado con Anuario 2025 (36.32%). Nota: muchos "deja sin efecto"
+   ya clasificados como hace_lugar/procedente (la cadena causal es
+   hace_lugar_queja → procedente_REF → deja_sin_efecto_sentencia).
+   Requiere diseño cuidadoso del scope.
+2. **Track 2 taxonómico: categorías menores.** "caducidad" (23),
+   "desierto" (12), "improcedente" (15), "inadmisible genérico" (21).
+3. **Afinar regex tipo_cuestion_federal.** 50.1% detectados; los 2826
+   sin_dato incluyen no-REF (competencia, originaria, extradición, etc.)
+   que correctamente no aplican. Explorar variantes en sumarios
+   editoriales de tomos intermedios para mejorar cobertura.
+4. **Variable `materia` (inferida desde tribunal_origen).** Depende de
+   normalizar tribunal_origen (1316 sin_marcador).
 5. **B090 — Tier 5 dispositivo embebido.** 16 sin_dispositivo con firma.
 6. **Codebook dataset (inglés).** Documentación de variables para
    publicación en Harvard Dataverse.
-7. **B095 residual — OCR/typo catálogo→.md.** 36 casos con nombre
-   distinto. Documentar en codebook o parchar catálogo manualmente.
-8. **sin_firma (16 casos)** — auditar residuo por causa raíz.
-9. **Normalizar tribunal_origen** (1316 sin_marcador).
+7. **sin_firma (16 casos)** — auditar residuo por causa raíz.
+8. **Normalizar tribunal_origen** (1316 sin_marcador).
 
 
 ### Referencia: taxonomía oficial CSJN (Anuario Estadístico 2025)
@@ -2415,14 +2410,17 @@ norma local vs. Constitución/ley federal). Sentencia arbitraria: 32.71%
 (doctrina pretoriana — sentencia sin fundamentos válidos, omisión prueba
 decisiva, valoración absurda, exceso ritual, auto-contradicción).
 74.92% de arbitrariedades se originan en la Cámara Nacional de
-Apelaciones del Trabajo. → Detectable en considerando_text: "sentencia
-arbitraria" / "arbitrariedad" vs. "artículo 14" / "ley 48".
+Apelaciones del Trabajo. → **Implementado H078:** `tipo_cuestion_federal`
+(arbitrariedad / cuestion_federal / mixto). Detección primaria en sumario
+editorial (headers Secretaría de Jurisprudencia), fallback a considerando_text.
+2843/5669 (50.1%) detectados.
 
 **Vía de acceso recursiva (56614 recursos ingresados 2025):**
 Queja REF denegado 77.9%, REF concedido 21.61%, queja recurso
 ordinario denegado 0.35%, salto de instancia 0.09%, recurso ordinario
-0.06%. → Variables futuras: `es_queja` (bool), `queja_resultado`.
-Detectable desde por_ello_text (2181 fallos en nuestro corpus, 38.5%).
+0.06%. → **Implementado H078:** `es_queja` (bool) + `queja_resultado`
+(12 categorías). 1993/5669 fallos (35.2%). Sinónimos: queja / recurso
+de hecho / presentación directa.
 
 **Materia (por secretaría de radicación, 26524 resueltos 2025):**
 Previsional 54.06%, Penal 11.84%, Laboral 11.35%, Penal Especial
