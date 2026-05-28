@@ -1,0 +1,5590 @@
+# Auditoría de fallos
+Generado: 2026-05-18 15:06
+Versión: 1.0.0
+Comando: `--random 12 --seed 891 --stdout`
+Casos auditados: 12
+Seed: 891
+Borde inferior: solapado_con_proximo=10, gap_con_residuo=1, fin_archivo=1 | alertas totales: 11
+
+---
+
+## 346_p627 — Petroquímica Comodoro Rivadavia S.A. c/ Mendoza, Provincia de s/ Acción declarativa de inconstitucionalidad
+
+**Localización**
+- Archivo: `LibroVol346-1.md`
+- Páginas catálogo: 627–629 | Página consultada: 629
+- Líneas catálogo: 24323–24387 | Línea fin real: 24403 (status_fin=`fin_extendido_pag_compartida`, pista=`caratula_siguiente`)
+- Status localización: `ok`
+
+**Resumen de spans**
+
+| # | Tipo | Líneas (abs) | Líneas |
+|---|------|--------------|-------:|
+| 1 | header_pagina | 24323–24323 | 1 |
+| 2 | sumario [1] | 24324–24329 | 6 |
+| 3 | sumario [2] | 24330–24332 | 3 |
+| 4 | sumario [3] | 24333–24340 | 8 |
+| 5 | cuerpo_mayoria | 24341–24394 | 54 |
+| 6 | header_pagina | 24349–24349 | 1 |
+| 7 | header_pagina | 24350–24350 | 1 |
+| 8 | header_pagina | 24351–24351 | 1 |
+| 9 | header_pagina | 24386–24386 | 1 |
+| 10 | header_pagina | 24387–24387 | 1 |
+| 11 | header_pagina | 24388–24388 | 1 |
+| 12 | firma | 24395–24396 | 2 |
+| 13 | catch_all | 24397–24403 | 7 |
+
+**Invariantes**: cobertura=OK, disjunción=OK, líneas_residuo=7 (8.64% del bloque, n=81)
+
+---
+
+### [span 1] header_pagina (24323–24323)
+```
+346
+```
+
+### [span 2] sumario [1] (24324–24329)
+**Header**: CONFLICTO DE COMPETENCIA
+**Atribución**: (sin atribución detectada)
+```
+CONFLICTO DE COMPETENCIA
+Los conflictos de competencia en materia penal deben decidirse de 
+acuerdo con la real naturaleza del delito y las circunstancias especia­
+les en que se ha perpetrado, según pueda apreciarse prima facie y con 
+prescindencia de la calificación que le atribuyan, en iguales condiciones, 
+los jueces en conflicto.
+```
+
+### [span 3] sumario [2] (24330–24332)
+**Header**: PETROQUÍMICA COMODORO RIVADAVIA S.A. c/
+**Atribución**: (sin atribución detectada)
+```
+PETROQUÍMICA COMODORO RIVADAVIA S.A. c/ 
+MENDOZA, PROVINCIA de s/ Acción declarativa de
+inconstitucionalidad
+```
+
+### [span 4] sumario [3] (24333–24340)
+**Header**: COSTAS
+**Atribución**: (sin atribución detectada)
+```
+COSTAS
+El acuerdo al que arribaron la actora y la Provincia de Mendoza respec­
+to de la distribución de las costas del proceso no es oponible al Estado 
+Nacional citado como tercero, razón por la cual corresponde aplicar el 
+principio general establecido en el segundo párrafo del art. 73 del Có­
+digo Procesal Civil y Comercial de la Nación e imponer las costas ge­
+neradas por su intervención del Estado Nacional a la parte actora que 
+desistió de la acción.
+```
+
+### [span 5] cuerpo_mayoria (24341–24394)
+```
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 13 de junio de 2023.
+Autos y Vistos; Considerando:
+1°) Que a fs. 736/740 la actora desiste de la acción y solicita que se 
+distribuyan las costas en el orden causado. En el mismo acto, la Pro­
+vincia de Mendoza manifiesta su conformidad a lo requerido por su 
+contraria (v. página 2 de dicha presentación).
+
+346
+628
+FALLOS DE LA CORTE SUPREMA
+Corrido el pertinente traslado, el Estado Nacional citado como ter­
+cero, a fs. 733, presta su conformidad con el desistimiento formulado 
+por la demandante, se opone a la distribución de costas por su orden y 
+solicita que se impongan a la accionante (fs. 774).
+A fs. 776/778 la actora contesta el traslado conferido a fs. 775 y soli­
+cita el rechazo de lo peticionado por el Estado Nacional.
+2°) Que, en atención a la conformidad manifestada por la Provincia 
+de Mendoza y el Estado Nacional respecto del desistimiento de la acción 
+de la actora, corresponde declarar extinguido el proceso (conf. art. 304, 
+primer párrafo, del Código Procesal Civil y Comercial de la Nación).
+3°) Que corresponde distribuir las costas por su orden en la por­
+ción que corresponde a la intervención de la Provincia de Mendoza, de 
+conformidad con lo manifestado por ambas partes en la presentación 
+obrante a fs. 736/740.
+4°) Que, por su parte, las costas generadas a raíz de la intervención 
+del Estado Nacional deberán ser soportadas por la parte actora.
+No obstan a esta decisión los argumentos esgrimidos por Petro­
+química Comodoro Rivadavia S.A. a fs. 776/778. Ello, en mérito a que 
+el desistimiento de la acción ocurrió con posterioridad a la notificación 
+de la citación al Estado Nacional (v. constancias de fs. 375 y art. 304, 
+segundo párrafo, del Código Procesal Civil y Comercial de la Nación).
+En cuanto al criterio sostenido por la accionante referente a la “ca­
+lidad de tercero interesado” que pretende que se le asigne al Estado 
+Nacional, los términos empleados en la demanda al requerir su inter­
+vención y lo establecido en los arts. 94 y 96 del Código Procesal Civil y 
+Comercial de la Nación, imponen su rechazo.
+5°) Que, en estas condiciones, el acuerdo al que arribaron la actora 
+y la Provincia de Mendoza respecto de la distribución de las costas del 
+proceso no es oponible al Estado Nacional, razón por la cual corres­
+ponde aplicar el principio general establecido en el segundo párrafo 
+del art. 73 del código citado y, tal como se adelantó, imponer las costas 
+generadas por la intervención del Estado Nacional a la parte actora 
+(arg. Fallos: 310:2829).
+
+629
+DE JUSTICIA DE LA NACIÓN
+346
+Por ello, se resuelve: I. Declarar extinguido el proceso (art. 304 del 
+Código Procesal Civil y Comercial de la Nación). II. Distribuir las cos­
+tas por su orden en lo que respecta a la intervención de la Provincia de 
+Mendoza. III. Imponer las costas generadas por la actuación del Esta­
+do Nacional a Petroquímica Comodoro Rivadavia S.A. (art. 73, segundo 
+párrafo, del código citado). Notifíquese.
+```
+
+### [span 6] header_pagina (24349–24349)
+```
+346
+```
+
+### [span 7] header_pagina (24350–24350)
+```
+628
+```
+
+### [span 8] header_pagina (24351–24351)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 9] header_pagina (24386–24386)
+```
+629
+```
+
+### [span 10] header_pagina (24387–24387)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 11] header_pagina (24388–24388)
+```
+346
+```
+
+### [span 12] firma (24395–24396)
+```
+Horacio Rosatti — Carlos Fernando Rosenkrantz — Juan Carlos 
+Maqueda — Ricardo Luis Lorenzetti.
+```
+
+### [span 13] catch_all (24397–24403)
+```
+Parte actora: Petroquímica Comodoro Rivadavia S.A., representada por el Dr. Maria­
+no Juárez Goñi, letrado apoderado, con el patrocinio letrado de los Dres. Juan Cruz 
+Azzarri y José Alfredo Martínez de Hoz (h).
+Parte demandada: Provincia de Mendoza, representada por el Dr. Ricardo Alberto 
+Canet, Asesor de Gobierno de la Provincia de Mendoza.
+Tercero: Estado Nacional (Ministerio de Economía - Secretaría de Energía): Dr. 
+Esteban Spinelli, letrado apoderado.
+```
+
+### Borde inferior (transición al próximo caso)
+**Estado**: `solapado_con_proximo` | linea_fin_real=24403 | linea_inicio_proximo_caso=24388 | delta=-16
+**Alertas**: `solapado_con_proximo`
+
+
+---
+
+## 339_p181 — Gobernador de la Provincia de La Pampa, Oscar Mario Jorge c/ Cámara de Diputados de la Provincia de La Pampa s/ Acción d
+
+**Localización**
+- Archivo: `LibroVol339.1.md`
+- Páginas catálogo: 181–183 | Página consultada: 183
+- Líneas catálogo: 6640–6705 | Línea fin real: 6723 (status_fin=`fin_extendido_pag_compartida`, pista=`caratula_siguiente`)
+- Status localización: `ok`
+
+**Resumen de spans**
+
+| # | Tipo | Líneas (abs) | Líneas |
+|---|------|--------------|-------:|
+| 1 | header_pagina | 6640–6640 | 1 |
+| 2 | catch_all | 6641–6650 | 10 |
+| 3 | caratula | 6651–6651 | 1 |
+| 4 | sumario [1] | 6652–6652 | 1 |
+| 5 | sumario [2] | 6653–6654 | 2 |
+| 6 | sumario [3] | 6655–6660 | 6 |
+| 7 | sumario [4] | 6661–6670 | 10 |
+| 8 | header_pagina | 6668–6668 | 1 |
+| 9 | header_pagina | 6669–6669 | 1 |
+| 10 | header_pagina | 6670–6670 | 1 |
+| 11 | sumario [5] | 6671–6679 | 9 |
+| 12 | cuerpo_mayoria | 6680–6717 | 38 |
+| 13 | header_pagina | 6704–6704 | 1 |
+| 14 | header_pagina | 6705–6705 | 1 |
+| 15 | header_pagina | 6706–6706 | 1 |
+| 16 | firma | 6718–6718 | 1 |
+| 17 | catch_all | 6719–6723 | 5 |
+
+**Invariantes**: cobertura=OK, disjunción=OK, líneas_residuo=15 (17.86% del bloque, n=84)
+
+---
+
+### [span 1] header_pagina (6640–6640)
+```
+339
+```
+
+### [span 2] catch_all (6641–6650)
+```
+Por ello, se desestima la queja. Notifíquese, hágase saber, comuní­
+quese al Tribunal Superior de Justicia de la Provincia de Córdoba para 
+que tome noticia de lo aquí resuelto y archívese.
+Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan 
+Carlos Maqueda.
+Recurso de queja interpuesto por José Humberto Eladio Fernández, con la asistencia 
+del Dr. Erik N. Griotto, Asesor Letrado Penal del 13° Turno de la ciudad de Córdoba.
+Tribunal de origen: Sala Penal del Tribunal Superior de Justicia de la Provincia 
+de Córdoba.
+Tribunal que intervino con anterioridad: Sala Unipersonal de la Cámara en lo Crimi­
+```
+
+### [span 3] caratula (6651–6651)
+```
+nal y Correccional de la Ciudad de Cruz del Eje.
+```
+
+### [span 4] sumario [1] (6652–6652)
+**Header**: GOBERNADOR de la PROVINCIA de LA PAMPA, OSCAR
+**Atribución**: (sin atribución detectada)
+```
+GOBERNADOR de la PROVINCIA de LA PAMPA, OSCAR
+```
+
+### [span 5] sumario [2] (6653–6654)
+**Header**: MARIO JORGE c/ CÁMARA de DIPUTADOS de la
+**Atribución**: (sin atribución detectada)
+```
+MARIO JORGE c/ CÁMARA de DIPUTADOS de la 
+PROVINCIA de LA PAMPA s/ Acción declarativa de certeza
+```
+
+### [span 6] sumario [3] (6655–6660)
+**Header**: CONFLICTO DE PODERES
+**Atribución**: (sin atribución detectada)
+```
+CONFLICTO DE PODERES
+La Corte Suprema carece de jurisdicción para entender respecto de las 
+cuestiones que, según su esencia, constituyen conflictos de poderes lo­
+cales toda vez que la atribución para que el Tribunal conozca y decida en 
+conflictos entre los diferentes poderes públicos de una misma provincia 
+fue suprimida en la reforma de la Constitución Nacional de 1860.
+```
+
+### [span 7] sumario [4] (6661–6670)
+**Header**: CONFLICTO DE PODERES
+**Atribución**: (sin atribución detectada)
+```
+CONFLICTO DE PODERES
+La protección y vigencia de las garantías debe buscarse dentro de los 
+diversos resortes institucionales de la respectiva jurisdicción y por ello, 
+los conflictos entre autoridades locales deben hallar solución –jurídica 
+y política– en el ámbito provincial, sin injerencia de la justicia de la Na­
+ción.
+
+339
+182
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 8] header_pagina (6668–6668)
+```
+339
+```
+
+### [span 9] header_pagina (6669–6669)
+```
+182
+```
+
+### [span 10] header_pagina (6670–6670)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 11] sumario [5] (6671–6679)
+**Header**: CONFLICTO DE PODERES
+**Atribución**: (sin atribución detectada)
+```
+CONFLICTO DE PODERES
+Corresponde desestimar la queja deducida para dilucidar el conflicto sus­
+citado entre un gobernador y la cámara de diputados de una provincia con 
+motivo de la interpretación de las facultades de veto reconocidas a aquel en 
+la constitución provincial, y resuelto por el superior tribunal estadual en el 
+ámbito de la atribución que aquella le reconoce toda vez que no se trata de 
+una cuestión justiciable que justifique la intervención de la Corte Suprema 
+con arreglo a lo dispuesto en los artículos 31 y 116 de la Constitución Nacio­
+nal, en el artículo 2° de la ley 27, y en el artículo 14 de la ley 48.
+```
+
+### [span 12] cuerpo_mayoria (6680–6717)
+```
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 23 de febrero de 2016.
+Vistos los autos: “Recurso de hecho deducido por la demandada en 
+la causa Gobernador de la Provincia de La Pampa, Oscar Mario Jorge 
+c/ Cámara de Diputados de la Provincia de La Pampa s/ acción decla­
+rativa de certeza”, para decidir sobre su procedencia.
+Considerando:
+1°) Que con arreglo a la jurisprudencia clásica de esta Corte de Fa­
+llos: 259:11, reproducida en Fallos: 328:1689 (voto de los jueces Lorenzet­
+ti y Maqueda) y en Fallos: 331:810 (voto de los jueces Highton de Nolasco 
+y Maqueda), entre muchos otros, el Tribunal carece de jurisdicción para 
+entender respecto de las cuestiones que, según su esencia, constituyen 
+conflictos de poderes locales. Ello es así, porque en la reforma constitu­
+cional de 1860 se suprimió de la Constitución Nacional la atribución que 
+confería a esta Corte jurisdicción para conocer y decidir los conflictos 
+entre los diferentes poderes públicos de una misma provincia.
+2°) Que por la aplicación de la doctrina citada, la protección y vi­
+gencia de las garantías deben buscarse dentro de los diversos resor­
+tes institucionales de la respectiva jurisdicción y por ello los conflictos 
+entre autoridades locales deben hallar solución –jurídica y política– en 
+el ámbito provincial, sin injerencia de la justicia de la Nación (Fallos: 
+136:147; 264:7; 291:384; Joaquín V. González, Manual de la Constitución 
+Argentina, Buenos Aires, Estrada, 1897, págs. 770 y 771).
+
+183
+DE JUSTICIA DE LA NACIÓN
+339
+3°) Que en las condiciones expresadas, el conflicto suscitado entre 
+el Gobernador y la Cámara de Diputados de la Provincia de La Pampa 
+con motivo de la interpretación de las facultades de veto reconocidas a 
+aquel en el art. 70 de la Constitución local, y resuelto por el superior tri­
+bunal estadual en el ámbito de la atribución que le reconoce el art. 97, 
+inc. 2°, ap. A, de la Constitución provincial, no constituye una cuestión 
+justiciable que justifique la intervención de esta Corte Suprema con 
+arreglo a lo dispuesto en los arts. 31 y 116 de la Constitución Nacional, 
+en el art. 2° de la ley 27, y en el art. 14 de la ley 48.
+Por ello, se desestima la queja y se da por perdido el depósito. No­
+tifíquese y archívese.
+```
+
+### [span 13] header_pagina (6704–6704)
+```
+183
+```
+
+### [span 14] header_pagina (6705–6705)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 15] header_pagina (6706–6706)
+```
+339
+```
+
+### [span 16] firma (6718–6718)
+```
+Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan 
+```
+
+### [span 17] catch_all (6719–6723)
+```
+Carlos Maqueda.
+Recurso de hecho interpuesto por la Presidenta de la Cámara de Diputados de la 
+Provincia de La Pampa Dra. Norma Haydeé Durango, con el patrocinio de los Dres. 
+Pablo Luis Langlois y Carlos Matías Chapalcaz.
+Tribunal de origen: Superior Tribunal de Justicia de la Provincia de La Pampa.
+```
+
+### Borde inferior (transición al próximo caso)
+**Estado**: `solapado_con_proximo` | linea_fin_real=6723 | linea_inicio_proximo_caso=6706 | delta=-18
+**Alertas**: `solapado_con_proximo`
+
+
+---
+
+## 332_p548 — Entre Ríos, Provincia de | Basigaluz Sáez, Laura Ema
+
+**Localización**
+- Archivo: `LibroVol332.1.md`
+- Páginas catálogo: 548–552 | Página consultada: 552
+- Líneas catálogo: 21244–21375 | Línea fin real: 21370 (status_fin=`fin_dentro_bloque`, pista=`caratula_siguiente`)
+- Status localización: `ok`
+
+**Resumen de spans**
+
+| # | Tipo | Líneas (abs) | Líneas |
+|---|------|--------------|-------:|
+| 1 | header_pagina | 21244–21244 | 1 |
+| 2 | catch_all | 21245–21248 | 4 |
+| 3 | disidencia | 21249–21370 | 122 |
+| 4 | caratula | 21261–21261 | 1 |
+| 5 | sumario [1] | 21262–21262 | 1 |
+| 6 | sumario [2] | 21263–21278 | 16 |
+| 7 | header_pagina | 21270–21270 | 1 |
+| 8 | header_pagina | 21271–21271 | 1 |
+| 9 | header_pagina | 21272–21272 | 1 |
+| 10 | dictamen | 21279–21358 | 80 |
+| 11 | header_pagina | 21303–21303 | 1 |
+| 12 | header_pagina | 21304–21304 | 1 |
+| 13 | header_pagina | 21305–21305 | 1 |
+| 14 | header_pagina | 21343–21343 | 1 |
+| 15 | header_pagina | 21344–21344 | 1 |
+| 16 | header_pagina | 21345–21345 | 1 |
+
+**Invariantes**: cobertura=OK, disjunción=FALLA, líneas_residuo=4 (3.15% del bloque, n=127)
+
+---
+
+### [span 1] header_pagina (21244–21244)
+```
+332
+```
+
+### [span 2] catch_all (21245–21248)
+```
+por quien corresponda, se dicte nuevo pronunciamiento con arreglo a 
+lo resuelto. Notifíquese.
+Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan Carlos 
+Maqueda — E. Raúl Zaffaroni — Carmen M. Argibay (en disidencia).
+```
+
+### [span 3] disidencia (21249–21370)
+**Header**: Disidencia de la señora
+```
+Disidencia de la señora
+ministra doctora doña Carmen M. Argibay
+Considerando:
+Que el recurso extraordinario, cuya denegación origina esta queja, 
+es inadmisible (art. 280 del Código Procesal Civil y Comercial de la 
+Nación).
+Por ello, se desestima la queja. Declárase perdido el depósito de 
+fs. 1. Hágase saber y, oportunamente, archívese.
+Carmen M. Argibay.
+Recurso de hecho interpuesto por Y.P.F. S.A., representada por el Dr. Rogelio Driollet 
+Laspiur, con el patrocinio de los Dres. Enrique Bulit Goñi y Gonzalo J. Llanos.
+Tribunal de origen: Superior Tribunal de Justicia de la Provincia de Tierra del 
+Fuego, Antártida e Islas del Atlántico Sur.
+LAURA EMA BASIGALUZ SAEZ c/ PROVINCIA de ENTRE RIOS
+COMPETENCIA ORIGINARIA DE LA CORTE SUPREMA.
+Resulta ajeno a la competencia originaria de la Corte Suprema de Justicia de la 
+Nación el reclamo de los daños y perjuicios derivados del impedimento de circular 
+libremente por la ruta internacional Nº 136, que une las ciudades de Gualeguay­
+chú y Fray Bentos ya que a partir del precedente “Barreto” (Fallos: 329:759) se 
+otorgó un nuevo contorno al concepto de “causa civil” que deriva del art. 116 de
+
+549
+DE JUSTICIA DE LA NACION
+332
+la Constitución Nacional al que expresamente se refiere el art. 24, inc. 1º, del 
+decreto-ley 1285/58, excluyendo de tal naturaleza a los casos de presunta “falta 
+de servicio” por entender que es una materia propia del derecho público y su re-
+gulación corresponde al derecho administrativo, por lo que resultan del resorte 
+exclusivo de los gobiernos locales.
+–Del dictamen de la Procuración General, al que remitió la Corte Suprema–.
+Dictamen de la Procuración General
+Suprema Corte:
+– I –
+A fs. 10/13, Laura Ema Basigaluz Sáez, quien dice tener su domicilio 
+en la Provincia de Buenos Aires, promueve demanda, con fundamento 
+en los arts. 903, 910, 1066, 1067, 1068, 1069, 1078, 1096 y concordan-
+tes del Código Civil, contra la Provincia de Entre Ríos y la Asamblea 
+Ciudadana Ambientalista de Gualeguaychu, a fin de obtener el pago 
+de los daños y perjuicios derivados del impedimento de circular libre-
+mente con su automóvil por la ruta internacional Nº 136, que une las 
+ciudades de Gualeguaychú y Fray Bentos.
+Relata que la prohibición de paso le fue impuesta por integrantes 
+de la Asamblea demandada que mantiene desde hace dos años –en 
+“Arroyo Verde”–, una barrera que bloquea por la fuerza el tránsito 
+vehicular entre la Argentina y Uruguay.
+Dirige su pretensión contra la Provincia, puesto que –a su en-
+tender– las actividades de la “Asamblea” son subsidiadas por dicho 
+Estado local.
+A fs. 14, se corre vista, por la competencia, a este Ministerio Pú-
+blico.
+– II –
+Ante todo, cabe recordar que para que proceda la competencia ori-
+ginaria de la Corte establecida en los arts. 116 y 117 de la Constitución
+
+550
+FALLOS DE LA CORTE SUPREMA
+332
+Nacional y 24, inc. 1º, del decreto-ley 1285/58, en un juicio en que una 
+provincia es parte, resulta necesario examinar, además, la materia sobre 
+la que éste versa, es decir, que se trate de una causa de manifiesto con-
+tenido federal o de naturaleza civil, en cuyo último caso resulta esencial 
+la distinta vecindad o nacionalidad de la contraria, quedando excluidos 
+de dicha instancia aquellos procesos que se rigen por el derecho público 
+local (Fallos: 324:533; 325:618, 747 y 3070, entre otros).
+Asimismo, tiene dicho V.E. que para dilucidar la competencia resul-
+ta imprescindible examinar el origen de la pretensión, como así también 
+la relación de derecho existente entre las partes (Fallos: 311:1791 y 
+2065; 322:617, entre otros).
+En el sub lite, según se desprende de los términos de la demanda –a 
+cuya exposición de los hechos se debe atender de modo principal para 
+determinar la competencia, según los arts. 4º y 5º del Código Procesal 
+Civil y Comercial de la Nación y doctrina de Fallos: 306:1056; 308:1239 
+y 2230–, la actora reclama un resarcimiento por la presunta falta de 
+servicio en que habría incurrido la Provincia por medio de alguno de 
+sus órganos, atribuyendo responsabilidad al Estado local por el irre-
+gular cumplimiento de las obligaciones a su cargo.
+Al respecto, es dable resaltar que a partir de la sentencia dictada in 
+re “Barreto”, publicada en Fallos: 329:759, V.E. otorgó un nuevo contorno 
+al concepto de “causa civil” que deriva del art. 116 de la Constitución 
+Nacional al que expresamente se refiere el art. 24, inc. 1º, del decreto-ley 
+1285/58, coincidiendo así con nuestro criterio sostenido desde hace más 
+de quince años (v. causa “Durán”, publicada en Fallos: 329:1847).
+De acuerdo con lo allí expresado, se excluye de tal naturaleza a 
+estos casos de presunta “falta de servicio” por entender que es una ma-
+teria propia del derecho público y su regulación corresponde al derecho 
+administrativo. Por ende, tales causas son del resorte exclusivo de los 
+gobiernos locales, de conformidad con lo dispuesto por los arts. 121 y 
+concordantes de la Constitución Nacional, aunque eventualmente se 
+invoquen o se apliquen, de manera subsidiaria, disposiciones de derecho 
+común o principios generales del derecho (v. causa “Aguilar”, publicada 
+en Fallos: 329:2069, entre otras).
+En consecuencia, entiendo que el pleito corresponde al conocimiento 
+de los jueces provinciales, en tanto el respeto del sistema federal y de
+
+551
+DE JUSTICIA DE LA NACION
+332
+las autonomías locales requiere que sean ellos los que intervengan en 
+las causas en las que se ventilen asuntos de esa naturaleza, sin per-
+juicio de que las cuestiones federales que también puedan comprender 
+esos pleitos sean susceptibles de adecuada tutela por la vía del recurso 
+extraordinario reglado por el art. 14 de la ley 48 (Fallos: 311:1588 y 
+1597; 313:548; 323:3859 y sus citas).
+En tales condiciones, dado que el art. 117 de la Constitución Na-
+cional establece de modo taxativo los casos en que la Corte ejercerá 
+su competencia originaria y exclusiva, la cual por su raigambre, es 
+insusceptible de extenderse a otros casos no previstos (Fallos: 314:94; 
+318:1837; 322:1514; 323:1854; 325:3070), opino que este proceso es aje-
+no a la competencia originaria de la Corte. Buenos Aires, 2 de febrero 
+de 2009. Laura M. Monti.
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 17 de marzo de 2009.
+Autos y Vistos; Considerando:
+Que el Tribunal comparte los argumentos y la conclusión expuestos 
+en el dictamen de la señora Procuradora Fiscal que antecede, a los que 
+corresponde remitir a fin de evitar repeticiones innecesarias.
+Por ello, se resuelve: Declarar que la presente causa es ajena a la 
+competencia originaria de la Corte Suprema de Justicia de la Nación. 
+Notifíquese y comuníquese al señor Procurador General.
+Elena I. Highton de Nolasco — Carlos S. Fayt — Enrique Santiago 
+Petracchi — Juan Carlos Maqueda.
+Demanda promovida por Laura Ema Basigaluz Sáez. Profesionales intervinientes: 
+```
+
+### [span 4] caratula (21261–21261)
+```
+Fuego, Antártida e Islas del Atlántico Sur.
+```
+
+### [span 5] sumario [1] (21262–21262)
+**Header**: LAURA EMA BASIGALUZ SAEZ c/ PROVINCIA de ENTRE RIOS
+**Atribución**: (sin atribución detectada)
+```
+LAURA EMA BASIGALUZ SAEZ c/ PROVINCIA de ENTRE RIOS
+```
+
+### [span 6] sumario [2] (21263–21278)
+**Header**: COMPETENCIA ORIGINARIA DE LA CORTE SUPREMA.
+**Atribución**: –Del dictamen de la Procuración General, al que remitió la Corte Suprema–.
+```
+COMPETENCIA ORIGINARIA DE LA CORTE SUPREMA.
+Resulta ajeno a la competencia originaria de la Corte Suprema de Justicia de la 
+Nación el reclamo de los daños y perjuicios derivados del impedimento de circular 
+libremente por la ruta internacional Nº 136, que une las ciudades de Gualeguay­
+chú y Fray Bentos ya que a partir del precedente “Barreto” (Fallos: 329:759) se 
+otorgó un nuevo contorno al concepto de “causa civil” que deriva del art. 116 de
+
+549
+DE JUSTICIA DE LA NACION
+332
+la Constitución Nacional al que expresamente se refiere el art. 24, inc. 1º, del 
+decreto-ley 1285/58, excluyendo de tal naturaleza a los casos de presunta “falta 
+de servicio” por entender que es una materia propia del derecho público y su re-
+gulación corresponde al derecho administrativo, por lo que resultan del resorte 
+exclusivo de los gobiernos locales.
+–Del dictamen de la Procuración General, al que remitió la Corte Suprema–.
+```
+
+### [span 7] header_pagina (21270–21270)
+```
+549
+```
+
+### [span 8] header_pagina (21271–21271)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 9] header_pagina (21272–21272)
+```
+332
+```
+
+### [span 10] dictamen (21279–21358)
+```
+Dictamen de la Procuración General
+Suprema Corte:
+– I –
+A fs. 10/13, Laura Ema Basigaluz Sáez, quien dice tener su domicilio 
+en la Provincia de Buenos Aires, promueve demanda, con fundamento 
+en los arts. 903, 910, 1066, 1067, 1068, 1069, 1078, 1096 y concordan-
+tes del Código Civil, contra la Provincia de Entre Ríos y la Asamblea 
+Ciudadana Ambientalista de Gualeguaychu, a fin de obtener el pago 
+de los daños y perjuicios derivados del impedimento de circular libre-
+mente con su automóvil por la ruta internacional Nº 136, que une las 
+ciudades de Gualeguaychú y Fray Bentos.
+Relata que la prohibición de paso le fue impuesta por integrantes 
+de la Asamblea demandada que mantiene desde hace dos años –en 
+“Arroyo Verde”–, una barrera que bloquea por la fuerza el tránsito 
+vehicular entre la Argentina y Uruguay.
+Dirige su pretensión contra la Provincia, puesto que –a su en-
+tender– las actividades de la “Asamblea” son subsidiadas por dicho 
+Estado local.
+A fs. 14, se corre vista, por la competencia, a este Ministerio Pú-
+blico.
+– II –
+Ante todo, cabe recordar que para que proceda la competencia ori-
+ginaria de la Corte establecida en los arts. 116 y 117 de la Constitución
+
+550
+FALLOS DE LA CORTE SUPREMA
+332
+Nacional y 24, inc. 1º, del decreto-ley 1285/58, en un juicio en que una 
+provincia es parte, resulta necesario examinar, además, la materia sobre 
+la que éste versa, es decir, que se trate de una causa de manifiesto con-
+tenido federal o de naturaleza civil, en cuyo último caso resulta esencial 
+la distinta vecindad o nacionalidad de la contraria, quedando excluidos 
+de dicha instancia aquellos procesos que se rigen por el derecho público 
+local (Fallos: 324:533; 325:618, 747 y 3070, entre otros).
+Asimismo, tiene dicho V.E. que para dilucidar la competencia resul-
+ta imprescindible examinar el origen de la pretensión, como así también 
+la relación de derecho existente entre las partes (Fallos: 311:1791 y 
+2065; 322:617, entre otros).
+En el sub lite, según se desprende de los términos de la demanda –a 
+cuya exposición de los hechos se debe atender de modo principal para 
+determinar la competencia, según los arts. 4º y 5º del Código Procesal 
+Civil y Comercial de la Nación y doctrina de Fallos: 306:1056; 308:1239 
+y 2230–, la actora reclama un resarcimiento por la presunta falta de 
+servicio en que habría incurrido la Provincia por medio de alguno de 
+sus órganos, atribuyendo responsabilidad al Estado local por el irre-
+gular cumplimiento de las obligaciones a su cargo.
+Al respecto, es dable resaltar que a partir de la sentencia dictada in 
+re “Barreto”, publicada en Fallos: 329:759, V.E. otorgó un nuevo contorno 
+al concepto de “causa civil” que deriva del art. 116 de la Constitución 
+Nacional al que expresamente se refiere el art. 24, inc. 1º, del decreto-ley 
+1285/58, coincidiendo así con nuestro criterio sostenido desde hace más 
+de quince años (v. causa “Durán”, publicada en Fallos: 329:1847).
+De acuerdo con lo allí expresado, se excluye de tal naturaleza a 
+estos casos de presunta “falta de servicio” por entender que es una ma-
+teria propia del derecho público y su regulación corresponde al derecho 
+administrativo. Por ende, tales causas son del resorte exclusivo de los 
+gobiernos locales, de conformidad con lo dispuesto por los arts. 121 y 
+concordantes de la Constitución Nacional, aunque eventualmente se 
+invoquen o se apliquen, de manera subsidiaria, disposiciones de derecho 
+común o principios generales del derecho (v. causa “Aguilar”, publicada 
+en Fallos: 329:2069, entre otras).
+En consecuencia, entiendo que el pleito corresponde al conocimiento 
+de los jueces provinciales, en tanto el respeto del sistema federal y de
+
+551
+DE JUSTICIA DE LA NACION
+332
+las autonomías locales requiere que sean ellos los que intervengan en 
+las causas en las que se ventilen asuntos de esa naturaleza, sin per-
+juicio de que las cuestiones federales que también puedan comprender 
+esos pleitos sean susceptibles de adecuada tutela por la vía del recurso 
+extraordinario reglado por el art. 14 de la ley 48 (Fallos: 311:1588 y 
+1597; 313:548; 323:3859 y sus citas).
+En tales condiciones, dado que el art. 117 de la Constitución Na-
+cional establece de modo taxativo los casos en que la Corte ejercerá 
+su competencia originaria y exclusiva, la cual por su raigambre, es 
+insusceptible de extenderse a otros casos no previstos (Fallos: 314:94; 
+318:1837; 322:1514; 323:1854; 325:3070), opino que este proceso es aje-
+no a la competencia originaria de la Corte. Buenos Aires, 2 de febrero 
+de 2009. Laura M. Monti.
+```
+
+### [span 11] header_pagina (21303–21303)
+```
+550
+```
+
+### [span 12] header_pagina (21304–21304)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 13] header_pagina (21305–21305)
+```
+332
+```
+
+### [span 14] header_pagina (21343–21343)
+```
+551
+```
+
+### [span 15] header_pagina (21344–21344)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 16] header_pagina (21345–21345)
+```
+332
+```
+
+### Borde inferior (transición al próximo caso)
+**Estado**: `gap_con_residuo` | linea_fin_real=21370 | linea_inicio_proximo_caso=21376 | delta=5
+**Alertas**: `caratula_siguiente_en_gap`
+
+| Línea | Clasificación | Texto |
+|------:|---------------|-------|
+| 21371 | `apertura_proximo_caso` | Dres. Raúl María González y Ricardo Martín Centeno, letrados patrocinan- |
+| 21372 | `no_clasificable` | tes. |
+| 21373 | `vacia` |  |
+| 21374 | `header_pagina` | 552 |
+| 21375 | `header_pagina` | FALLOS DE LA CORTE SUPREMA |
+
+
+---
+
+## 342_p2236 — Asociación Trabajadores del Estado c/ Fisco de la Provincia de Buenos Aires s/ Apelación de resolución administrativa
+
+**Localización**
+- Archivo: `LibroVol342-2.md`
+- Páginas catálogo: 2236–2244 | Página consultada: 2244
+- Líneas catálogo: 36391–36690 | Línea fin real: 36701 (status_fin=`fin_extendido_pag_compartida`, pista=`caratula_siguiente`)
+- Status localización: `ok`
+
+**Resumen de spans**
+
+| # | Tipo | Líneas (abs) | Líneas |
+|---|------|--------------|-------:|
+| 1 | header_pagina | 36391–36391 | 1 |
+| 2 | header_pagina | 36392–36392 | 1 |
+| 3 | header_pagina | 36393–36393 | 1 |
+| 4 | catch_all | 36394–36406 | 13 |
+| 5 | caratula | 36407–36407 | 1 |
+| 6 | sumario [1] | 36408–36410 | 3 |
+| 7 | sumario [2] | 36411–36425 | 15 |
+| 8 | header_pagina | 36423–36423 | 1 |
+| 9 | header_pagina | 36424–36424 | 1 |
+| 10 | header_pagina | 36425–36425 | 1 |
+| 11 | sumario [3] | 36426–36437 | 12 |
+| 12 | sumario [4] | 36438–36450 | 13 |
+| 13 | sumario [5] | 36451–36465 | 15 |
+| 14 | header_pagina | 36463–36463 | 1 |
+| 15 | header_pagina | 36464–36464 | 1 |
+| 16 | header_pagina | 36465–36465 | 1 |
+| 17 | sumario [6] | 36466–36477 | 12 |
+| 18 | cuerpo_mayoria | 36478–36667 | 190 |
+| 19 | header_pagina | 36500–36500 | 1 |
+| 20 | header_pagina | 36501–36501 | 1 |
+| 21 | header_pagina | 36502–36502 | 1 |
+| 22 | header_pagina | 36542–36542 | 1 |
+| 23 | header_pagina | 36543–36543 | 1 |
+| 24 | header_pagina | 36544–36544 | 1 |
+| 25 | header_pagina | 36582–36582 | 1 |
+| 26 | header_pagina | 36583–36583 | 1 |
+| 27 | header_pagina | 36584–36584 | 1 |
+| 28 | header_pagina | 36622–36622 | 1 |
+| 29 | header_pagina | 36623–36623 | 1 |
+| 30 | header_pagina | 36624–36624 | 1 |
+| 31 | header_pagina | 36662–36662 | 1 |
+| 32 | header_pagina | 36663–36663 | 1 |
+| 33 | header_pagina | 36664–36664 | 1 |
+| 34 | firma | 36668–36670 | 3 |
+| 35 | voto | 36671–36683 | 13 |
+| 36 | disidencia | 36684–36701 | 18 |
+| 37 | header_pagina | 36691–36691 | 1 |
+| 38 | header_pagina | 36692–36692 | 1 |
+| 39 | header_pagina | 36693–36693 | 1 |
+
+**Invariantes**: cobertura=OK, disjunción=OK, líneas_residuo=13 (4.18% del bloque, n=311)
+
+---
+
+### [span 1] header_pagina (36391–36391)
+```
+342
+```
+
+### [span 2] header_pagina (36392–36392)
+```
+2236
+```
+
+### [span 3] header_pagina (36393–36393)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 4] catch_all (36394–36406)
+```
+Por ello, y lo concordemente dictaminado por el señor Procura­
+dor General de la Nación interino, se hace lugar a la queja, se declara 
+procedente el recurso extraordinario y se deja sin efecto el pronun­
+ciamiento apelado. Agréguese la queja al principal y vuelvan los au­
+tos al tribunal de origen para que, por quien corresponda, se dicte un 
+nuevo pronunciamiento con arreglo a lo expresado en el presente. 
+Notifíquese y cúmplase.
+Carlos Fernando Rosenkrantz — Elena I. Highton de Nolasco — 
+Juan Carlos Maqueda — Horacio Rosatti.
+Recurso de queja interpuesto por el Dr. Javier A. De Luca, Fiscal General ante la 
+Cámara Federal de Casación Penal.
+Tribunal de origen: Sala III de la Cámara Federal de Casación Penal.
+Tribunal que intervino con anterioridad: Sala I de la Cámara Federal de Apelaciones 
+```
+
+### [span 5] caratula (36407–36407)
+```
+de Salta.
+```
+
+### [span 6] sumario [1] (36408–36410)
+**Header**: ASOCIACIÓN TRABAJADORES del ESTADO c/ FISCO
+**Atribución**: (sin atribución detectada)
+```
+ASOCIACIÓN TRABAJADORES del ESTADO c/ FISCO
+de la PROVINCIA de BUENOS AIRES s/ Apelación de
+resolución administrativa
+```
+
+### [span 7] sumario [2] (36411–36425)
+**Header**: CUESTION ABSTRACTA
+**Atribución**: (sin atribución detectada)
+```
+CUESTION ABSTRACTA
+Aunque haya finalizado el conflicto colectivo suscitado entre la Provin­
+cia de Buenos Aires y su personal, que motivó la intervención de la auto­
+ridad laboral, las cuestiones planteadas en la causa no se tornaron abs­
+tractas, pues persiste un interés jurídico actual y concreto que habilita 
+a emitir un pronunciamiento útil, en tanto el fallo dictado le reconoció 
+al Ministerio de Trabajo la atribución de seguir implementando procedi­
+mientos de conciliación y arbitraje hasta tanto el estado provincial insti­
+tuya el órgano imparcial previsto en la constitución local.
+-La jueza Highton de Nolasco, en disidencia, desestimó el recurso ex­
+traordinario por considerarlo inadmisible (art. 280 CPCCN)-
+
+2237
+DE JUSTICIA DE LA NACIÓN
+342
+```
+
+### [span 8] header_pagina (36423–36423)
+```
+2237
+```
+
+### [span 9] header_pagina (36424–36424)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 10] header_pagina (36425–36425)
+```
+342
+```
+
+### [span 11] sumario [3] (36426–36437)
+**Header**: RECURSO EXTRAORDINARIO
+**Atribución**: (sin atribución detectada)
+```
+RECURSO EXTRAORDINARIO
+Corresponde hacer una excepción a la regla de que las resoluciones que 
+declaran la improcedencia de los recursos planteados ante los superio­
+res tribunales de provincia no justifican el otorgamiento de la apelación 
+extraordinaria, cuando la resolución de la corte provincial frustra la vía 
+recursiva utilizada por el justiciable apoyándose en meras considera­
+ciones dogmáticas y omitiendo, de ese modo, el tratamiento de las cues­
+tiones relevantes llevadas a su conocimiento, lo que se traduce en una 
+violación de la garantía del debido proceso consagrada en el art. 18 de la 
+Constitución Nacional.
+-La jueza Highton de Nolasco, en disidencia, desestimó el recurso ex­
+traordinario por considerarlo inadmisible (art. 280 CPCCN)-
+```
+
+### [span 12] sumario [4] (36438–36450)
+**Header**: SENTENCIA ARBITRARIA
+**Atribución**: (sin atribución detectada)
+```
+SENTENCIA ARBITRARIA
+No basta para dar una respuesta adecuada al serio planteo de la aso­
+ciación gremial recurrente referido al incumplimiento de lo dispuesto 
+por el art. 39 inc. 4 de la Constitución de la Provincia de Buenos Aires 
+a pesar de exhortaciones y un largo plazo transcurrido, el argumento 
+adicional de que una sentencia previa firme ya había exhortado al Poder 
+Ejecutivo a que impulsara un proyecto legislativo a los fines de viabilizar 
+la operatividad de la manda constitucional referida, pues sobre la base 
+de meras apreciaciones dogmáticas se ha prescindido de efectuar un 
+examen serio de las cuestiones de índole constitucional planteadas lo 
+que implica una grave afectación del derecho de defensa en juicio.
+-La jueza Highton de Nolasco, en disidencia, desestimó el recurso ex­
+traordinario por considerarlo inadmisible (art. 280 CPCCN)-
+```
+
+### [span 13] sumario [5] (36451–36465)
+**Header**: SENTENCIA ARBITRARIA
+**Atribución**: (sin atribución detectada)
+```
+SENTENCIA ARBITRARIA
+Es arbitraria la sentencia que se limitó a aseverar en forma dogmá­
+tica que no se hallaban involucradas cuestiones federales que tornen 
+procedente los recursos locales deducidos, conforme la doctrina esta­
+blecida por el propio tribunal, pues de ese modo omitió brindar razo­
+nes concretas por las cuales consideró que no resultaban atendibles 
+argumentos fundados en preceptos constitucionales, pactos interna­
+cionales y convenios de la O.I.T., que a criterio de la actora, protegen 
+el derecho a que intervenga un órgano independiente en los conflictos 
+colectivos de trabajo en los que se utilice el procedimiento de concilia­
+ción (Voto del juez Rosenkrantz).
+
+342
+2238
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 14] header_pagina (36463–36463)
+```
+342
+```
+
+### [span 15] header_pagina (36464–36464)
+```
+2238
+```
+
+### [span 16] header_pagina (36465–36465)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 17] sumario [6] (36466–36477)
+**Header**: SENTENCIA ARBITRARIA
+**Atribución**: (sin atribución detectada)
+```
+SENTENCIA ARBITRARIA
+Es arbitraria la sentencia que soslayó el tratamiento de los argumentos 
+relativos a que ya no se encontraría vigente el procedimiento de conci­
+liación obligatoria dispuesto por la ley 10.149 de la Provincia de Buenos 
+Aires, en virtud de lo establecido por el art. 39 inc. 4 de la Constitución 
+provincial y por el convenio 151 de la O.I.T., como así también los cues­
+tionamientos formulados con respecto a las facultades de los organis­
+mos provinciales para imponer un arbitrajes obligatorio que impediría 
+el ejercicio del derecho de huelga, pues con ello se ha prescindido de 
+efectuar un examen de las cuestiones que se encuentran en juego, lo 
+que importa un serio menoscabo a los derechos de defensa y debido 
+proceso (Voto del juez Rosenkrantz).
+```
+
+### [span 18] cuerpo_mayoria (36478–36667)
+```
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 17 de diciembre de 2019.
+Vistos los autos: “Recurso de hecho deducido por la parte actora 
+en la causa Asociación Trabajadores del Estado c/ Fisco de la Provin­
+cia de Buenos Aires s/ apelación de resolución administrativa”, para 
+decidir sobre su procedencia.
+Considerando:
+1°) Que mediante la resolución 2420/14 el Subsecretario de Tra­
+bajo de la Provincia de Buenos Aires (fs. 42/46 de los autos principa­
+les, a cuya foliatura se aludirá en lo sucesivo) confirmó la disposición 
+23/14 del Director Provincial de Relaciones Laborales que calificaba 
+como conflicto colectivo al que se había planteado entre la provincia 
+y su personal representado, entre otros sindicatos, por la Asociación 
+Trabajadores del Estado (ATE), y que, por tal motivo, sometía a las 
+partes al procedimiento obligatorio de conciliación regulado por la 
+ley local 10.149.
+ATE (fs. 49/59) apeló judicialmente la resolución 2420/14 puntua­
+lizando (1) que desde la reforma introducida en 1994, la constitución 
+local “garantiza a los trabajadores estatales el derecho de negocia­
+ción de sus condiciones de trabajo y la substanciación de los conflic­
+tos colectivos entre el Estado provincial y aquéllos a través de un or­
+
+2239
+DE JUSTICIA DE LA NACIÓN
+342
+ganismo imparcial que determine la ley”, y también dispone que todo 
+acto que contravenga esa garantía “será nulo” (art. 39, inc. 4); (2) que 
+pese a haber transcurrido 20 años desde aquella reforma, y a mediar 
+pronunciamientos de los tribunales del trabajo –dictados en 2009 y 
+2012- que conminaban a los poderes políticos provinciales a adoptar 
+medidas tendientes a la creación por ley del mencionado “organismo 
+imparcial”, dicho organismo todavía no había sido creado; y (3) que 
+ello comportaba una clara vulneración de la garantía otorgada por la 
+constitución local que no podía seguir siendo tolerada. Por tal motivo, 
+solicitó que se declarara, sin más, la inconstitucionalidad de todas 
+las disposiciones legales que habilitaban a la autoridad laboral para 
+intervenir en los conflictos colectivos de los trabajadores estatales; 
+y que, en consecuencia, se revocara la resolución administrativa que 
+sometía a las partes al procedimiento obligatorio de conciliación de 
+la ley 10.149.
+El tribunal del trabajo (fs. 121/124) rechazó la apelación. Sostuvo 
+que, hasta tanto el Estado instituyera definitivamente el órgano im­
+parcial previsto en la constitución local, habría de seguir siendo el 
+Ministerio de Trabajo quien debería intervenir en las negociaciones 
+colectivas del sector público ejerciendo facultades de conciliación y 
+arbitraje en el marco de la ley provincial 10.149. También destacó que 
+el Poder Ejecutivo provincial había enviado al Senado un proyecto de 
+ley para la creación de ese organismo imparcial; que el Senado había 
+aprobado un proyecto en igual sentido y remitido las actuaciones a la 
+Cámara de Diputados para su consideración; y que no le correspondía 
+a la justicia “indagar el actual estado parlamentario de dichos proyec­
+tos por resultar ajeno a su competencia”.
+Ante esa decisión, ATE (fs. 128/140) interpuso los recursos locales 
+de inaplicabilidad de ley e inconstitucionalidad.
+2°) Que la Suprema Corte de Justicia de la Provincia de Buenos Ai­
+res (fs. 152/154) desestimó los recursos locales limitándose a señalar, 
+sin dar más explicaciones, que las resoluciones dictadas por la autori­
+dad laboral “sólo son revisables por medio de recursos extraordinarios 
+cuando se lesionen de manera directa e inmediata garantías constitu­
+cionales, particularmente el derecho de defensa en juicio…, planteán­
+dose una cuestión federal”; y que, “en el caso, no se advierte configu­
+rada la indicada situación de excepción…, pues la mera denuncia de 
+lesión de garantías constitucionales que contiene la impugnación no
+
+342
+2240
+FALLOS DE LA CORTE SUPREMA
+comporta adecuado sustento a los fines indicados, sin que aparezca 
+manifiesta la existencia de agravio federal”.
+Como argumentación adicional, la corte provincial sostuvo que, 
+además, la cuestión se había tornado abstracta por haber concluido el 
+conflicto que dio lugar a la intervención de la autoridad administrativa. 
+Y también recordó que, “en un precedente sustancialmente análogo al 
+presente”, ya había desestimado el recurso de inaplicabilidad de ley 
+planteado por ATE dejando firme una sentencia de la justicia laboral 
+que adoptaba un temperamento similar al de estas actuaciones, amén 
+de exhortar al Poder Ejecutivo provincial, como principal responsable, 
+a que impulsara el proyecto legislativo pertinente “a los fines de viabi­
+lizar la operatividad de la manda constitucional referida”.
+3°) Que contra el pronunciamiento de la máxima instancia local 
+la asociación sindical dedujo el recurso extraordinario federal (fs. 
+159/175) cuya denegación dio origen a la queja en examen.
+En la apelación federal la recurrente sostiene que, mediante sim­
+ples consideraciones dogmáticas, el a quo le frustró el acceso a la vía 
+recursiva local especialmente establecida para garantizar la vigencia 
+de la constitución de la provincia; y que ello implicó convalidar una 
+situación de clara inconstitucionalidad provocada por la muy prolon­
+gada omisión del legislador de crear el organismo imparcial previsto 
+por la reforma que se introdujo en 1994.
+Asimismo, señala que la corte provincial no pudo invocar como 
+fundamento del rechazo de la pretensión que un fallo firme -dictado 
+varios años antes- había exhortado a cumplir con ese mandato cons­
+titucional. Sostiene que, frente a la circunstancia de que esta exhorta­
+ción fue infructuosa, el superior tribunal, en todo caso, debió adoptar 
+el mismo criterio que había seguido ante la demora en la puesta en 
+funciones del fuero contencioso administrativo también previsto en la 
+constitución local, es decir, fijar plazos para que los poderes ejecutivo 
+y legislativo adopten las medidas necesarias para implementar el or­
+ganismo en cuestión, bajo la amenaza de ejecución por la propia corte 
+en caso de incumplimiento.
+4°) Que, tal como lo afirma la recurrente, no es cierto que las cues­
+tiones planteadas en el sub lite se hayan tornado abstractas. Aunque 
+haya finalizado el conflicto colectivo que motivó la intervención de la
+
+2241
+DE JUSTICIA DE LA NACIÓN
+342
+autoridad laboral, persiste un interés jurídico actual y concreto que 
+habilita a emitir un pronunciamiento útil.
+Ello es así pues el fallo dictado en autos por el tribunal del trabajo, 
+que la corte provincial dejó firme, le reconoció a la autoridad laboral la 
+atribución de seguir implementando procedimientos de conciliación y 
+arbitraje hasta tanto el Estado provincial instituya el órgano imparcial 
+previsto en la constitución local. En consecuencia, la conclusión del a 
+quo según la cual las cuestiones planteadas en la causa se tornaron 
+abstractas carece de fundamento ya que lo ordenado en el fallo del 
+tribunal laboral implica que el Ministerio de Trabajo seguirá intervi­
+niendo en las negociaciones y convenciones colectivas de trabajo en la 
+Provincia de Buenos Aires.
+5°) Que, por otra parte, en este caso corresponde hacer una excep­
+ción a la regla de que las resoluciones que declaran la improcedencia 
+de los recursos planteados ante los superiores tribunales de provincia 
+no justifican el otorgamiento de la apelación extraordinaria (doctrina 
+de Fallos: 307:1100; 313:493, entre otros).
+Tal principio no resulta aplicable cuando, como acontece en el sub 
+examine, la resolución de la corte provincial frustra la vía recursiva 
+utilizada por el justiciable apoyándose en meras consideraciones dog­
+máticas y omitiendo, de ese modo, el tratamiento de las cuestiones 
+relevantes llevadas a su conocimiento, lo que se traduce en una vio­
+lación de la garantía del debido proceso consagrada en el art. 18 de la 
+Constitución Nacional (Fallos: 317:1133).
+6°) Que, en efecto, el a quo se limitó a sostener dogmáticamente 
+que la argumentación recursiva no superaba el nivel de una “mera 
+denuncia de lesión de garantías constitucionales”. Bajo ese pretexto 
+formal, omitió dar un tratamiento adecuado al serio planteo de la re­
+currente basado en que, después de haber transcurrido más de veinte 
+años, no podía seguir tolerándose la demora de los poderes políticos 
+provinciales en cumplir con lo ordenado por el inc. 4 del art. 39 de la 
+constitución local.
+La seriedad de los argumentos constitucionales que fueron some­
+tidos por ATE a consideración de la corte local resulta incuestionable. 
+Al resolver en 2014 la causa “Intendente Municipal Capital s/ ampa­
+ro” este Tribunal señaló que constituía una demora irrazonable que la
+
+342
+2242
+FALLOS DE LA CORTE SUPREMA
+Provincia de La Rioja no hubiese dictado en 16 años una ley de copar­
+ticipación municipal, a pesar de que la constitución provincial de 1998 
+así lo establecía (Fallos: 337:1263).
+Más aún, en dicho precedente el Tribunal descartó la posibilidad 
+de justificar un incumplimiento tan prolongado bajo el argumento de 
+la dificultad de lograr acuerdos políticos. Al respecto, dijo que “no re­
+sulta posible sostener que el dictado de la ley -es decir, el acatamiento 
+de la Constitución- queda condicionado a la concreción de acuerdos 
+políticos entre provincia y municipios que en 16 años no han sido lo­
+grados. Al subordinar la realización del proyecto constitucional a la po­
+sibilidad o no de obtener esos acuerdos sin considerar la irrazonable 
+demora en alcanzarlos, el argumento invierte una regla elemental del 
+orden constitucional argentino, según la cual la Constitución materia­
+liza el consenso más perfecto de la soberanía popular; frente a sus de­
+finiciones, los poderes constituidos deben realizar todos los esfuerzos 
+necesarios para asegurar el desarrollo del proyecto de organización 
+institucional que traza su texto” (cfr. considerando 13).
+7°) Que, a la luz de la doctrina reseñada en el considerando ante­
+rior, es claro que no basta para dar una respuesta adecuada al serio 
+planteo de la recurrente el argumento adicional del a quo de que una 
+sentencia previa firme ya había exhortado al Poder Ejecutivo a que im­
+pulsara un proyecto legislativo “a los fines de viabilizar la operatividad 
+de la manda constitucional referida”. Justamente, el planteo de ATE 
+se basaba en que, pese a dicha exhortación y al largo tiempo transcu­
+rrido, la ley prevista en la constitución local no fue dictada.
+En suma, sobre la base de meras apreciaciones dogmáticas se ha 
+prescindido de efectuar un examen serio de las cuestiones de índole 
+constitucional planteadas en autos, lo que implica una grave afecta­
+ción del derecho de defensa en juicio.
+En tales condiciones, corresponde descalificar el fallo apelado con 
+arreglo a la doctrina de la arbitrariedad de sentencias mencionada en 
+el considerando 5°.
+Por ello, y lo concordemente dictaminado por la señora Procura­
+dora Fiscal, se hace lugar a la queja, se declara procedente el recurso 
+extraordinario y se deja sin efecto la sentencia apelada con el alcance 
+indicado, con costas (art. 68 del Código Procesal Civil y Comercial de la
+
+2243
+DE JUSTICIA DE LA NACIÓN
+342
+Nación). Agréguese la queja al principal y vuelvan los autos al tribunal 
+de origen a fin de que se dicte un nuevo fallo con arreglo al presente. 
+Notifíquese y remítase.
+```
+
+### [span 19] header_pagina (36500–36500)
+```
+2239
+```
+
+### [span 20] header_pagina (36501–36501)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 21] header_pagina (36502–36502)
+```
+342
+```
+
+### [span 22] header_pagina (36542–36542)
+```
+342
+```
+
+### [span 23] header_pagina (36543–36543)
+```
+2240
+```
+
+### [span 24] header_pagina (36544–36544)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 25] header_pagina (36582–36582)
+```
+2241
+```
+
+### [span 26] header_pagina (36583–36583)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 27] header_pagina (36584–36584)
+```
+342
+```
+
+### [span 28] header_pagina (36622–36622)
+```
+342
+```
+
+### [span 29] header_pagina (36623–36623)
+```
+2242
+```
+
+### [span 30] header_pagina (36624–36624)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 31] header_pagina (36662–36662)
+```
+2243
+```
+
+### [span 32] header_pagina (36663–36663)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 33] header_pagina (36664–36664)
+```
+342
+```
+
+### [span 34] firma (36668–36670)
+```
+Carlos Fernando Rosenkrantz (según su voto)— Elena I. Highton
+de Nolasco (en disidencia)— Juan Carlos Maqueda — Ricardo Luis 
+Lorenzetti — Horacio Rosatti.
+```
+
+### [span 35] voto (36671–36683)
+**Header**: Voto del Señor Presidente Doctor Don Carlos Fernando
+```
+Voto del Señor Presidente Doctor Don Carlos Fernando
+Rosenkrantz
+Considerando:
+Que los agravios de la apelante encuentran adecuada respuesta 
+en el dictamen de la señora Procuradora Fiscal, a cuyos fundamen­
+tos y conclusiones corresponde remitir, en lo pertinente, por razones 
+de brevedad.
+Por ello, se hace lugar a la queja, se declara procedente el recurso 
+extraordinario y se deja sin efecto la sentencia apelada con el alcan­
+ce indicado. Con costas. Agréguese la queja al expediente principal y 
+vuelvan los autos al tribunal de origen a fin de que dicte un nuevo fallo 
+con arreglo al presente. Notifíquese y remítase.
+Carlos Fernando Rosenkrantz.
+```
+
+### [span 36] disidencia (36684–36701)
+**Header**: Disidencia de la Señora Vicepresidenta Doctora Doña Elena I.
+```
+Disidencia de la Señora Vicepresidenta Doctora Doña Elena I.
+Highton de Nolasco
+Considerando:
+Que el recurso extraordinario, cuya denegación dio origen a esta 
+queja, es inadmisible (art. 280 del Código Procesal Civil y Comercial 
+de la Nación).
+
+342
+2244
+FALLOS DE LA CORTE SUPREMA
+Por ello, habiendo dictaminado la señora Procuradora Fiscal se 
+desestima la queja. Hágase saber y, previa devolución de los autos 
+principales, archívese.
+Elena I. Highton de Nolasco.
+Recurso de queja interpuesto por la Asociación Trabajadores del Estado representa­
+da por el Dr. Marcelo Enrique Ponce Núñez.
+Tribunal de origen: Suprema Corte de Justicia de la Provincia de Buenos Aires.
+Tribunal que intervino con anterioridad: Tribunal del Trabajo n° 1 de La Plata.
+```
+
+### [span 37] header_pagina (36691–36691)
+```
+342
+```
+
+### [span 38] header_pagina (36692–36692)
+```
+2244
+```
+
+### [span 39] header_pagina (36693–36693)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### Borde inferior (transición al próximo caso)
+**Estado**: `solapado_con_proximo` | linea_fin_real=36701 | linea_inicio_proximo_caso=36691 | delta=-11
+**Alertas**: `solapado_con_proximo`
+
+
+---
+
+## 331_p756 — GCBA | Asociación Francesa Filantrópica y de Beneficencia
+
+**Localización**
+- Archivo: `LibroVol331.1.md`
+- Páginas catálogo: 756–760 | Página consultada: 760
+- Líneas catálogo: 28530–28671 | Línea fin real: 28689 (status_fin=`fin_extendido_pag_compartida`, pista=`sumario_siguiente`)
+- Status localización: `ok`
+
+**Resumen de spans**
+
+| # | Tipo | Líneas (abs) | Líneas |
+|---|------|--------------|-------:|
+| 1 | header_pagina | 28530–28530 | 1 |
+| 2 | catch_all | 28531–28531 | 1 |
+| 3 | caratula | 28532–28532 | 1 |
+| 4 | sumario [1] | 28533–28540 | 8 |
+| 5 | sumario [2] | 28541–28549 | 9 |
+| 6 | sumario [3] | 28550–28558 | 9 |
+| 7 | sumario [4] | 28559–28570 | 12 |
+| 8 | header_pagina | 28568–28568 | 1 |
+| 9 | header_pagina | 28569–28569 | 1 |
+| 10 | header_pagina | 28570–28570 | 1 |
+| 11 | dictamen | 28571–28589 | 19 |
+| 12 | cuerpo_mayoria | 28590–28607 | 18 |
+| 13 | header_pagina | 28601–28601 | 1 |
+| 14 | header_pagina | 28602–28602 | 1 |
+| 15 | header_pagina | 28603–28603 | 1 |
+| 16 | firma | 28608–28610 | 3 |
+| 17 | catch_all | 28611–28611 | 1 |
+| 18 | disidencia | 28612–28650 | 39 |
+| 19 | header_pagina | 28636–28636 | 1 |
+| 20 | header_pagina | 28637–28637 | 1 |
+| 21 | header_pagina | 28638–28638 | 1 |
+| 22 | disidencia | 28651–28689 | 39 |
+| 23 | header_pagina | 28670–28670 | 1 |
+| 24 | header_pagina | 28671–28671 | 1 |
+| 25 | header_pagina | 28672–28672 | 1 |
+
+**Invariantes**: cobertura=OK, disjunción=OK, líneas_residuo=2 (1.25% del bloque, n=160)
+
+---
+
+### [span 1] header_pagina (28530–28530)
+```
+331
+```
+
+### [span 2] catch_all (28531–28531)
+```
+GOBIERNO de la CIUDAD de BUENOS AIRES c/ ASOCIACION FRANCESA 
+```
+
+### [span 3] caratula (28532–28532)
+```
+GOBIERNO de la CIUDAD de BUENOS AIRES c/ ASOCIACION FRANCESA FILANTROPICA y de BENEFICENCIA
+
+```
+
+### [span 4] sumario [1] (28533–28540)
+**Header**: JURISDICCION Y COMPETENCIA: Competencia ordinaria. Por la materia. Cuestiones
+**Atribución**: (sin atribución detectada)
+```
+JURISDICCION Y COMPETENCIA: Competencia ordinaria. Por la materia. Cuestiones 
+civiles y comerciales. Quiebra. Fuero de atracción.
+Si la sentencia ejecutiva fue dictada cuando se hallaba abierto y en trámite el 
+concurso de la demandada, y la misma se encuentra firme, resulta inoficiosa la 
+remisión de la causa al juez del proceso universal sin perjuicio de que el actor 
+solicite la verificación de su crédito en el trámite concursal.
+–Del precedente “Gobierno de la Ciudad de Buenos Aires”, al que remitió la 
+Corte Suprema–.
+```
+
+### [span 5] sumario [2] (28541–28549)
+**Header**: JURISDICCION Y COMPETENCIA: Competencia ordinaria. Por la materia. Cuestiones
+**Atribución**: (sin atribución detectada)
+```
+JURISDICCION Y COMPETENCIA: Competencia ordinaria. Por la materia. Cuestiones 
+civiles y comerciales. Quiebra. Fuero de atracción.
+De conformidad con lo dispuesto por el art. 21, inc. 1º, de la ley 24.522–sustituido 
+por el art. 4º de la ley 26.086 –, todos los juicios de contenido patrimonial deben 
+quedar radicados ante el juez que entiende en el proceso universal, lo cual resulta 
+procedente aún en el supuesto de que en aquéllos hubiere recaído sentencia de-
+finitiva, pues el juicio atraído ha de ser la razón y fundamento de la pretensión 
+de verificación que pueda llegar a ejercer el acreedor (Disidencia del Dr. Ricardo 
+L. Lorenzetti). –
+```
+
+### [span 6] sumario [3] (28550–28558)
+**Header**: JURISDICCION Y COMPETENCIA: Competencia ordinaria. Por la materia. Cuestiones
+**Atribución**: (sin atribución detectada)
+```
+JURISDICCION Y COMPETENCIA: Competencia ordinaria. Por la materia. Cuestiones 
+civiles y comerciales. Quiebra. Fuero de atracción.
+La doctrina que resulta del precedente “Vildoza”, conforme la cual los procesos 
+de conocimiento en trámite se encuentran excluidos del fuero de atracción del 
+proceso universal, no resulta aplicable al caso ya que a diferencia de lo que acon-
+tece en el sub lite, allí se trataba de un proceso de conocimiento que, en virtud de 
+la reforma instrumentada mediante la ley 26.086, se encuentra expresamente 
+excluido del fuero de atracción (Disidencias de los Dres Ricardo L. Lorenzetti, 
+Elena I. Highton de Nolasco y Enrique S. Petracchi).
+```
+
+### [span 7] sumario [4] (28559–28570)
+**Header**: JURISDICCION Y COMPETENCIA: Competencia ordinaria. Por la materia. Cuestiones
+**Atribución**: (sin atribución detectada)
+```
+JURISDICCION Y COMPETENCIA: Competencia ordinaria. Por la materia. Cuestiones 
+civiles y comerciales. Quiebra. Fuero de atracción.
+El art. 21, inc. 1º, de la ley 24.522 –sustituido por el art. 4º de ley 26.086, no excluye 
+a los juicios ejecutivos del fuero de atracción del concurso preventivo, razón por 
+la cual aquellos deben quedar radicados ante el juez que entiende en el proceso 
+universal, aún cuando hubiese recaído sentencia firme, pues el crédito debe ve-
+rificarse con arreglo al contenido del pronunciamiento que declaró su existencia 
+(Disidencia de los Dres. Elena I. Highton de Nolasco y Enrique S. Petracchi).
+
+757
+DE JUSTICIA DE LA NACION
+331
+```
+
+### [span 8] header_pagina (28568–28568)
+```
+757
+```
+
+### [span 9] header_pagina (28569–28569)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 10] header_pagina (28570–28570)
+```
+331
+```
+
+### [span 11] dictamen (28571–28589)
+```
+Dictamen de la Procuración General
+Suprema Corte:
+El señor juez a cargo del Juzgado de Primera Instancia en lo Con-
+tencioso Administrativo y Tributario Nº 9 de la Ciudad Autónoma de 
+Buenos Aires, y el magistrado a cargo del Juzgado Nacional en lo Co-
+mercial Nº 20, discrepan en torno a la competencia para entender en 
+la presente causa (v. fs. 25 y 27).
+En tales condiciones, se suscita una contienda jurisdiccional que 
+corresponde resolver a V.E. de conformidad con lo dispuesto por el ar-
+tículo 24, inciso 7º del decreto-ley 1285/58, texto según ley 21.708.
+Advierto que en la presente causa se ha dictado sentencia que se 
+encuentra firme (v. fs. 20), y, en consecuencia, las actuaciones deben 
+permanecer en el juzgado de origen (cf. Fallos: 325:154; 326:4012), sin 
+perjuicio de la suspensión de los procedimientos y de que el acreedor 
+ocurra a verificar su crédito ante el juez del concurso.
+Por lo expuesto, opino que la presente causa deberá ser devuelta 
+al Juzgado de Primera Instancia en lo Contencioso Administrativo y 
+Tributario Nº 9 de la Ciudad Autónoma de Buenos Aires. Buenos Aires, 
+28 de diciembre de 2006. Marta A. Beiró De Gonçalvez.
+```
+
+### [span 12] cuerpo_mayoria (28590–28607)
+```
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 8 de abril de 2008.
+Autos y Vistos; Considerando:
+Que resulta de aplicación –en lo pertinente– la doctrina del pre-
+cedente (Competencia Nº 607.XXXIX. “Gobierno de la Ciudad de Bue-
+nos Aires c/ ARPEC S.A.”, sentencia del 9 marzo de 2004, publicado 
+en Fallos: 327:457), a cuyos fundamentos y conclusiones corresponde 
+remitir en razón de brevedad.
+Por lo expuesto, y lo concordemente dictaminado por la señora 
+Procuradora Fiscal, se declara que resulta competente para conocer
+
+758
+FALLOS DE LA CORTE SUPREMA
+331
+en las actuaciones el Juzgado de Primera Instancia en lo Contencioso 
+Administrativo y Tributario Nº 9 de la Ciudad Autónoma de Buenos 
+Aires, al que se le remitirán. Hágase saber al Juzgado Nacional de 
+Primera Instancia en lo Comercial Nº 20.
+```
+
+### [span 13] header_pagina (28601–28601)
+```
+758
+```
+
+### [span 14] header_pagina (28602–28602)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 15] header_pagina (28603–28603)
+```
+331
+```
+
+### [span 16] firma (28608–28610)
+```
+Ricardo Luis Lorenzetti (en disidencia) — Elena I. Highton de Nolasco 
+(en disidencia) — Carlos S. Fayt — Enrique Santiago Petracchi (en 
+disidencia) — Juan Carlos Maqueda — E. Raúl Zaffaroni — Carmen 
+```
+
+### [span 17] catch_all (28611–28611)
+```
+M. Argibay.
+```
+
+### [span 18] disidencia (28612–28650)
+**Header**: Disidencia del señor presidente
+```
+Disidencia del señor presidente
+doctor don Ricardo Luis Lorenzetti
+Considerando:
+1º) Que tanto el titular del Juzgado de Primera Instancia en lo 
+Contencioso Administrativo y Tributario Nº 9 de la Ciudad Autónoma 
+de Buenos Aires, como el del Juzgado Nacional de Primera Instancia 
+en lo Comercial Nº 20, se declararon incompetentes para entender en 
+la causa, quedando trabado un conflicto negativo de competencia que 
+corresponde dirimir a esta Corte, de conformidad con lo dispuesto por 
+el art. 24, inc. 7º, del decreto-ley 1285/58.
+2º) Que el art. 21 de la ley 24.522, sustituido por el art. 4º de la ley 
+26.086, no excluye a los juicios ejecutivos del fuero de atracción del 
+concurso preventivo, razón por la cual deben quedar radicados ante el 
+juez que entiende en el proceso universal.
+Por otra parte, la circunstancia de que en el proceso ejecutivo hu-
+biera recibido sentencia no obsta a su radicación en sede concursal, 
+pues el juicio atraído ha de ser la razón y fundamento de la pretensión 
+de verificación que pueda llegar a ejercer el acreedor (Competencia 
+Nº 1099.XL. “Gobierno de la Ciudad de Buenos Aires c/ Federación Ci-
+clista Argentina”, sentencia del 16 de agosto de 2005, Fallos: 328:3088, 
+disidencia del juez Lorenzetti).
+3º) Que corresponde aclarar que la doctrina que surge del preceden-
+te Competencia Nº 1720.XLI. “Vildoza, Gloria Mercedes c/ Trenes de Bs.
+
+759
+DE JUSTICIA DE LA NACION
+331
+As. S.A. s/ daños y perjuicios”, sentencia del 12 de diciembre de 2006, 
+Fallos: 329:5726), no resulta aplicable a las presentes actuaciones, ya 
+que a diferencia de lo que acontece en el sub lite, allí se trataba de un 
+proceso de conocimiento que, en virtud de la reforma instrumentada 
+mediante la ley 26.086, se encuentra expresamente excluido del fuero 
+de atracción.
+Por ello, y oída la señora Procuradora Fiscal, se declara que resulta 
+competente para conocer en las actuaciones el Juzgado Nacional de 
+Primera Instancia en lo Comercial Nº 20, al que se le remitirán. Hágase 
+saber al Juzgado de Primera Instancia en lo Contencioso Administra-
+tivo y Tributario Nº 9 de la Ciudad Autónoma de Buenos Aires.
+Ricardo Luis Lorenzetti.
+```
+
+### [span 19] header_pagina (28636–28636)
+```
+759
+```
+
+### [span 20] header_pagina (28637–28637)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 21] header_pagina (28638–28638)
+```
+331
+```
+
+### [span 22] disidencia (28651–28689)
+**Header**: Disidencia de la señora vicepresidenta doctora
+```
+Disidencia de la señora vicepresidenta doctora
+doña Elena I. Highton de Nolasco y del señor ministro doctor
+don Enrique Santiago Petracchi
+Considerando:
+1º) Que tanto el titular del Juzgado de Primera Instancia en lo 
+Contencioso Administrativo y Tributario Nº 9 de la Ciudad Autónoma 
+de Buenos Aires, como el del Juzgado Nacional de Primera Instancia 
+en lo Comercial Nº 20, se declararon incompetentes para entender en 
+la causa, quedando trabado un conflicto negativo de competencia que 
+corresponde dirimir a esta Corte, de conformidad con lo dispuesto por 
+el art. 24, inc. 7º, del decreto-ley 1285/58.
+2º) Que el art. 21 de la ley 24.522, sustituido por el art. 4º de la ley 
+26.086, no excluye a los juicios ejecutivos del fuero de atracción del 
+concurso preventivo, razón por la cual aquellos deben quedar radicados 
+ante el juez que entiende en el proceso universal.
+Ello es así aún cuando –como en el caso– hubiese recaído senten-
+cia firme, pues el crédito debe verificarse con arreglo al contenido del 
+pronunciamiento que declaró su existencia (Competencia Nº 96.XL.
+
+760
+FALLOS DE LA CORTE SUPREMA
+331
+“Metche, Jorge c/ Tribuzio Smith, Francisco pablo y otros s/ cobro de 
+alquileres s/ reconstrucción”, sentencia del 19 de agosto de 2004 Fallos: 
+327:3211, disidencia de la jueza Highton de Nolasco).
+3º) Que corresponde aclarar que la doctrina que surge del preceden-
+te Competencia Nº 1720.XLI. “Vildoza, Gloria Mercedes c/ Trenes de Bs. 
+As. S.A. s/ daños y perjuicios”, sentencia del 12 de diciembre de 2006, 
+(Fallos: 329:5726), no resulta aplicable a las presentes actuaciones, ya 
+que a diferencia de lo que acontece en el sub lite, allí se trataba de un 
+proceso de conocimiento que, en virtud de la reforma instrumentada 
+mediante la ley 26.086, se encuentra expresamente excluido del fuero 
+de atracción.
+Por ello, y oída la señora Procuradora Fiscal, se declara que resulta 
+competente para conocer en las actuaciones el Juzgado Nacional de 
+Primera Instancia en lo Comercial Nº 20, al que se le remitirán. Hágase 
+saber al Juzgado de Primera Instancia en lo Contencioso Administra-
+tivo y Tributario Nº 9 de la Ciudad Autónoma de Buenos Aires.
+Elena I. Highton de Nolasco — Enrique Santiago Petracchi.
+```
+
+### [span 23] header_pagina (28670–28670)
+```
+760
+```
+
+### [span 24] header_pagina (28671–28671)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 25] header_pagina (28672–28672)
+```
+331
+```
+
+### Borde inferior (transición al próximo caso)
+**Estado**: `solapado_con_proximo` | linea_fin_real=28689 | linea_inicio_proximo_caso=28672 | delta=-18
+**Alertas**: `solapado_con_proximo`
+
+
+---
+
+## 331_p1262 — Obra Social para la Actividad Docente (OSPLAD) | Catamarca, Provincia de | Obra Social para la Actividad Docente (O.S.P.
+
+**Localización**
+- Archivo: `LibroVol331.2.md`
+- Páginas catálogo: 1262–1282 | Página consultada: 1282
+- Líneas catálogo: 9813–10608 | Línea fin real: 10624 (status_fin=`fin_extendido_pag_compartida`, pista=`caratula_siguiente`)
+- Status localización: `ok`
+
+**Resumen de spans**
+
+| # | Tipo | Líneas (abs) | Líneas |
+|---|------|--------------|-------:|
+| 1 | header_pagina | 9813–9813 | 1 |
+| 2 | catch_all | 9814–9846 | 33 |
+| 3 | header_pagina | 9847–9847 | 1 |
+| 4 | header_pagina | 9848–9848 | 1 |
+| 5 | header_pagina | 9849–9849 | 1 |
+| 6 | catch_all | 9850–9855 | 6 |
+| 7 | caratula | 9856–9856 | 1 |
+| 8 | sumario [1] | 9857–9869 | 13 |
+| 9 | sumario [2] | 9870–9877 | 8 |
+| 10 | sumario [3] | 9878–9884 | 7 |
+| 11 | sumario [4] | 9885–9907 | 23 |
+| 12 | header_pagina | 9889–9889 | 1 |
+| 13 | header_pagina | 9890–9890 | 1 |
+| 14 | header_pagina | 9891–9891 | 1 |
+| 15 | sumario [5] | 9908–9918 | 11 |
+| 16 | sumario [6] | 9919–9936 | 18 |
+| 17 | header_pagina | 9931–9931 | 1 |
+| 18 | header_pagina | 9932–9932 | 1 |
+| 19 | header_pagina | 9933–9933 | 1 |
+| 20 | dictamen | 9937–10152 | 216 |
+| 21 | header_pagina | 9967–9967 | 1 |
+| 22 | header_pagina | 9968–9968 | 1 |
+| 23 | header_pagina | 9969–9969 | 1 |
+| 24 | header_pagina | 10007–10007 | 1 |
+| 25 | header_pagina | 10008–10008 | 1 |
+| 26 | header_pagina | 10009–10009 | 1 |
+| 27 | header_pagina | 10044–10044 | 1 |
+| 28 | header_pagina | 10045–10045 | 1 |
+| 29 | header_pagina | 10046–10046 | 1 |
+| 30 | header_pagina | 10084–10084 | 1 |
+| 31 | header_pagina | 10085–10085 | 1 |
+| 32 | header_pagina | 10086–10086 | 1 |
+| 33 | header_pagina | 10126–10126 | 1 |
+| 34 | header_pagina | 10127–10127 | 1 |
+| 35 | header_pagina | 10128–10128 | 1 |
+| 36 | cuerpo_mayoria | 10153–10618 | 466 |
+| 37 | header_pagina | 10159–10159 | 1 |
+| 38 | header_pagina | 10160–10160 | 1 |
+| 39 | header_pagina | 10161–10161 | 1 |
+| 40 | header_pagina | 10199–10199 | 1 |
+| 41 | header_pagina | 10200–10200 | 1 |
+| 42 | header_pagina | 10201–10201 | 1 |
+| 43 | header_pagina | 10240–10240 | 1 |
+| 44 | header_pagina | 10241–10241 | 1 |
+| 45 | header_pagina | 10242–10242 | 1 |
+| 46 | header_pagina | 10279–10279 | 1 |
+| 47 | header_pagina | 10280–10280 | 1 |
+| 48 | header_pagina | 10281–10281 | 1 |
+| 49 | header_pagina | 10318–10318 | 1 |
+| 50 | header_pagina | 10319–10319 | 1 |
+| 51 | header_pagina | 10320–10320 | 1 |
+| 52 | header_pagina | 10360–10360 | 1 |
+| 53 | header_pagina | 10361–10361 | 1 |
+| 54 | header_pagina | 10362–10362 | 1 |
+| 55 | header_pagina | 10401–10401 | 1 |
+| 56 | header_pagina | 10402–10402 | 1 |
+| 57 | header_pagina | 10403–10403 | 1 |
+| 58 | header_pagina | 10442–10442 | 1 |
+| 59 | header_pagina | 10443–10443 | 1 |
+| 60 | header_pagina | 10444–10444 | 1 |
+| 61 | header_pagina | 10483–10483 | 1 |
+| 62 | header_pagina | 10484–10484 | 1 |
+| 63 | header_pagina | 10485–10485 | 1 |
+| 64 | header_pagina | 10525–10525 | 1 |
+| 65 | header_pagina | 10526–10526 | 1 |
+| 66 | header_pagina | 10527–10527 | 1 |
+| 67 | header_pagina | 10566–10566 | 1 |
+| 68 | header_pagina | 10567–10567 | 1 |
+| 69 | header_pagina | 10568–10568 | 1 |
+| 70 | header_pagina | 10607–10607 | 1 |
+| 71 | header_pagina | 10608–10608 | 1 |
+| 72 | header_pagina | 10609–10609 | 1 |
+| 73 | firma | 10619–10620 | 2 |
+| 74 | catch_all | 10621–10624 | 4 |
+
+**Invariantes**: cobertura=OK, disjunción=OK, líneas_residuo=43 (5.3% del bloque, n=812)
+
+---
+
+### [span 1] header_pagina (9813–9813)
+```
+331
+```
+
+### [span 2] catch_all (9814–9846)
+```
+funcionamiento de la Superintendencia de Servicios de Salud (arts. 22 
+de la ley 23.661 y 1º y 4º del decreto 1615/96), la decisión de negarle en 
+el caso legitimación activa no se presenta como una razonable inter-
+pretación del derecho vigente en la materia, si se tiene en cuenta que 
+entre las facultades que expresamente fueron atribuidas a la DGI por 
+el decreto 507/93 y posteriormente a la AFIP por el decreto 1156/96, 
+no se encuentra incluida aquella vinculada con el aporte cuyo cobro se 
+persigue, que no puede calcularse sobre la nómina salarial, y que ori-
+ginariamente se encontraba en cabeza de su antecesora (leyes 23.660 
+y 23.661 y decretos 2741/91; 507/93; 863/98; 576/93 y 1215/99).
+Por ello, y habiendo dictaminado el señor Procurador Fiscal subro-
+gante, se declara procedente el recuso extraordinario y se deja sin efecto 
+la sentencia apelada con el alcance indicado. Con costas. Vuelvan los 
+autos al tribunal de origen a fin de que, por medio de quien corresponda, 
+dicte un nuevo pronunciamiento con arreglo a lo señalado. Agréguese 
+la queja al principal. Notifíquese.
+Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos 
+S. Fayt — Enrique Santiago Petracchi — Juan Carlos Maqueda — E. 
+Raúl Zaffaroni.
+Recurso de hecho interpuesto por la Superintendencia de Servicios de Salud, re-
+presentada por la Dra. Silvia Mabel Albino.
+Tribunal de origen: Sala I de la Cámara Federal de la Seguridad Social.
+Tribunales que intervinieron con anterioridad: Juzgado Federal de la Seguridad 
+Social Nº 9.
+OBRA SOCIAL para la ACTIVIDAD DOCENTE (OSPLAD)
+c/ PROVINCIA de CATAMARCA
+ACCION DECLARATIVA DE INCONSTITUCIONALIDAD.
+La vía intentada por la Obra Social para la Actividad Docente con arreglo a lo 
+dispuesto en el art. 322 del Código Procesal Civil y Comercial de la Nación, a 
+fin de que se declare la inconstitucionalidad de la resolución 205/01 de la Sub-
+secretaría de Recursos Humanos y Gestión Pública del Ministerio de Educación 
+Provincial– en cuanto ordena que los aportes patronales y personales del perso-
+
+```
+
+### [span 3] header_pagina (9847–9847)
+```
+1263
+```
+
+### [span 4] header_pagina (9848–9848)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 5] header_pagina (9849–9849)
+```
+331
+```
+
+### [span 6] catch_all (9850–9855)
+```
+nal docente que desempeña tareas en los establecimientos de enseñanza estatal 
+nacional, transferido al ámbito provincial, se efectúen obligatoriamente a la Obra 
+Social de Empleados Públicos local–, es formalmente admisible, pues se verifica 
+una controversia concreta en torno al alcance de dicha norma, cuyos efectos son 
+resistidos por la actora quien le atribuye ilegitimidad y lesión al régimen fede-
+ral en la materia, extremo que admite remedio mediante un pronunciamiento 
+```
+
+### [span 7] caratula (9856–9856)
+```
+definitivo del Tribunal.
+```
+
+### [span 8] sumario [1] (9857–9869)
+**Header**: JURISDICCION Y COMPETENCIA: Competencia federal. Competencia originaria de la
+**Atribución**: (sin atribución detectada)
+```
+JURISDICCION Y COMPETENCIA: Competencia federal. Competencia originaria de la 
+Corte Suprema. Causas en que es parte una provincia. Causas civiles. Causas que versan 
+sobre normas locales y actos de las autoridades provinciales regidas por aquéllas.
+La vía intentada por la Obra Social para la Actividad Docente con arreglo a lo 
+dispuesto en el art. 322 del Código Procesal Civil y Comercial de la Nación es 
+formalmente admisible, pues la demandante se agravia del perjuicio que le causa 
+la aplicación del acto administrativo local que impugna, al verse privada de los 
+aportes de los afiliados transferidos al ámbito provincial, configurándose la afec-
+tación de su interés legítimo en forma concreta, directa y suficiente, resultando 
+intrascendente el hecho de que no se hayan agotado los trámites administrativos 
+previstos en la legislación provincial, habida cuenta de que la competencia origi-
+naria de la Corte, que proviene de la Constitución, no puede quedar subordinada 
+al cumplimiento de los requisitos exigidos por las leyes locales.
+```
+
+### [span 9] sumario [2] (9870–9877)
+**Header**: CONSTITUCION NACIONAL: Derechos y garantías. Seguridad social.
+**Atribución**: (sin atribución detectada)
+```
+CONSTITUCION NACIONAL: Derechos y garantías. Seguridad social.
+Cuando la Constitución Nacional en su art. 14 bis, párrafo tercero, establece que 
+el Estado otorgará los beneficios de la seguridad social y garantizará la protección 
+integral de la familia, el término “Estado”, empleado en sentido genérico, alude 
+tanto al Estado Nacional como a los estados provinciales, de tal manera que la 
+reglamentación de este precepto no es privativa del gobierno federal, por lo que 
+la facultad de legislar en materia de seguridad social, jubilaciones y pensiones 
+compete a la Nación y a las provincias.
+```
+
+### [span 10] sumario [3] (9878–9884)
+**Header**: OBRAS SOCIALES.
+**Atribución**: (sin atribución detectada)
+```
+OBRAS SOCIALES.
+Las obras sociales son entes de la seguridad social, a cuyo cargo se encuentra la 
+administración de las prestaciones, prioritariamente médico-asistenciales, para la 
+cobertura de las contingencias vinculadas a la salud, a las que pueden adicionar 
+otras prestaciones de carácter social, y se constituyen como organizaciones des-
+centralizadas y autónomas, destinadas a procurar, por sí o a través de terceros, 
+la satisfacción del derecho a la salud de sus afiliados y beneficiarios.
+```
+
+### [span 11] sumario [4] (9885–9907)
+**Header**: OBRAS SOCIALES.
+**Atribución**: (sin atribución detectada)
+```
+OBRAS SOCIALES.
+Según lo establece el art. 2º de la ley 23.660, las obras sociales tienen personali-
+dad jurídica propia y diferenciada del organismo, dependencia estatal, empresa
+
+1264
+FALLOS DE LA CORTE SUPREMA
+331
+o asociación sindical o profesional a las que se hallan vinculadas, y para el cum-
+plimiento de su función reciben y administran recursos de la seguridad social, 
+conformados por los aportes y contribuciones –“cotizaciones”– de los empleados 
+y empleadores, empresa o dependencia pública cuya existencia determina la 
+conformación del grupo de beneficiarios (art. 16 de la ley 23.661).
+LEY: Interpretación y aplicación.
+Es principio básico de la hermenéutica atender en la interpretación de las leyes, al 
+contexto general de ellas y a los fines que las informan, no debiendo prescindirse 
+de las consecuencias que se derivan de cada criterio, pues ellas constituyen uno 
+de los índices más seguros para verificar su razonabilidad y su coherencia con el 
+sistema en que está engarzada la norma.
+LEY: Interpretación y aplicación.
+La hermenéutica de las normas constitucionales y legales no puede ser realizada 
+por el intérprete en un estado de indiferencia respecto del resultado, y sin tener 
+en cuenta el contexto social en que tal resultado fue previsto originariamente y 
+habrá de ser aplicado al tiempo de la emisión del fallo judicial.
+```
+
+### [span 12] header_pagina (9889–9889)
+```
+1264
+```
+
+### [span 13] header_pagina (9890–9890)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 14] header_pagina (9891–9891)
+```
+331
+```
+
+### [span 15] sumario [5] (9908–9918)
+**Header**: EDUCACION.
+**Atribución**: (sin atribución detectada)
+```
+EDUCACION.
+El Convenio de Transferencia de Servicios Educativos Nacionales a la Provincia, 
+suscripto el 21 de diciembre de 1992 entre el Ministerio de Cultura y Educación 
+de la Nación y el gobernador de la Provincia de Catamarca, no sólo se dirige a 
+implementar los mecanismos trazados por las normas nacionales aplicables, 
+sino que constituye una expresión de las relaciones de coordinación propias de 
+la dinámica del Estado federal, por lo que no parece razonable que el gobierno 
+provincial que lo acordó para suscribirlo y posteriormente le dio su aprobación 
+con la sanción de la ley provincial 4762, termine por desconocer su real sentido, 
+al asignar a la opción una inteligencia distinta de la establecida en la cláusula 
+décima del acuerdo.
+```
+
+### [span 16] sumario [6] (9919–9936)
+**Header**: CONSTITUCION NACIONAL: Constitucionalidad e inconstitucionalidad. Resoluciones
+**Atribución**: (sin atribución detectada)
+```
+CONSTITUCION NACIONAL: Constitucionalidad e inconstitucionalidad. Resoluciones 
+administrativas provinciales.
+Corresponde hacer lugar a la demanda promovida por la Obra Social para el 
+Personal Docente y declarar la inconstitucionalidad de la resolución 205/01 de la 
+Subsecretaría de Recursos Humanos y Gestión Pública del Ministerio de Educa-
+ción de la Provincia de Catamarca– en cuanto ordena que los aportes patronales 
+y personales de los docentes que desempeñan tareas en los establecimientos de 
+enseñanza estatal nacional, transferido al ámbito provincial, se efectúen obliga-
+toriamente a la Obra Social de Empleados Públicos local–, pues por aplicación 
+del principio de supremacía federal se desprende con nitidez que la pretensión 
+provincial expresada en dicha norma altera un mecanismo que ha sido legislado
+
+1265
+DE JUSTICIA DE LA NACION
+331
+a nivel nacional y acordado entre el gobierno nacional y el provincial en el Con-
+venio de Transferencia y desvirtúa así el derecho de opción de los beneficiarios 
+del sistema.
+```
+
+### [span 17] header_pagina (9931–9931)
+```
+1265
+```
+
+### [span 18] header_pagina (9932–9932)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 19] header_pagina (9933–9933)
+```
+331
+```
+
+### [span 20] dictamen (9937–10152)
+```
+Dictamen de la Procuración General
+Suprema Corte:
+– I –
+A fs. 238/246, la Obra Social para la Actividad Docente (OSPLAD), 
+promueve demanda, en los términos del art. 322 del Código Procesal 
+Civil y Comercial de la Nación, contra la Provincia de Catamarca, a 
+fin de obtener que se declare la inconstitucionalidad de la resolución 
+205/01 de la Subsecretaría de Recursos Humanos y Gestión Pública del 
+Ministerio de Educación provincial y se disponga la nulidad de todos 
+los actos que se dicten conforme a ella, por contrariar lo establecido 
+en los arts. 14 bis, 17, 31, 75, inc. 12), 108 y 125 de la Constitución 
+Nacional.
+En su carácter de agente natural del seguro nacional de salud 
+(art. 15 de la ley 23.661), cuestiona dicha norma en cuanto ordena que 
+los aportes patronales y personales del personal docente que desem-
+peñaba tareas en los establecimientos de enseñanza estatal nacional 
+transferidos al ámbito provincial se efectúen obligatoriamente a la 
+Obra Social de Empleados Públicos local (OSEP), porque ello implica su 
+desafiliación compulsiva de OSPLAD, sin permitirles ejercer la opción 
+de la obra social local prevista en el art. 9º de la ley nacional 24.049, 
+en el decreto 504/98 del Poder Ejecutivo Nacional y en el art. 10 del 
+convenio citado.
+Relata que tanto en 1978 como en 1992, cuando las leyes 21.809 y 
+24.049 facultaron al Poder Ejecutivo Nacional a transferir a las pro-
+vincias y la Municipalidad de la Ciudad de Buenos Aires los servicios 
+educativos nacionales, se contempló que el personal transferido podría 
+optar por continuar en OSPLAD, en cuyo caso el gobierno de la juris-
+dicción deberá actuar como agente de retención de los aportes, o por 
+afiliarse a la obra social provincial (arts. 7º y 9º de las leyes menciona-
+
+1266
+FALLOS DE LA CORTE SUPREMA
+331
+das). En tales condiciones, el 21 de diciembre de 1992 se celebró entre 
+el Ministerio de Cultura y Educación de la Nación y el gobernador de 
+la Provincia de Catamarca el “Convenio de Transferencia de Servicios 
+Educativos Nacionales a la Provincia”, en cuyo art. 10 se prevé que 
+el personal transferido, en determinado plazo podrá optar por la obra 
+social provincial y que, en caso de que no se produzca esa opción, la 
+Provincia actuará como agente de retención de los aportes personales 
+destinados a la OSPLAD.
+En esta opción no se habla de cargos totales o parciales, sino de 
+posibilitar que el docente pueda elegir su obra social. Así –continúa–, 
+es evidente e incuestionable que el que revistaba como personal trans-
+ferido en ciertas horas cátedra al ser reubicado en otras mantenga la 
+misma calidad y no pueda asimilarse esta situación a una nueva de-
+signación. Sin embargo, desde que se dictó la resolución impugnada 
+se inició un proceso de desafiliación compulsiva que le ocasionó un 
+grave perjuicio económico, por la pérdida de aportes, y porque tuvo 
+que hacerse cargo –sin contar con los recursos correspondientes– de la 
+asistencia y prácticas médicas de distinta complejidad que los docentes 
+requirieron a la OSEP sin obtener respuesta.
+En consecuencia, señala que ha existido un enriquecimiento ilícito 
+por parte de la obra social local, toda vez que recibió los aportes de los 
+afiliados pero no brindó las prestaciones solicitadas y que decidió en-
+tablar esta demanda para evitar que se tornen ilusorios sus derechos 
+y que se produzcan perjuicios irreparables tanto para ella como para 
+sus afiliados y beneficiarios de la Provincia de Catamarca.
+– II –
+La Provincia de Catamarca contesta demanda y solicita su rechazo 
+por medio del escrito que obra a fs. 305/313.
+En primer término, manifiesta que en autos no concurren los pre-
+supuestos para que proceda la acción, porque la actora no acredita la 
+existencia de una situación de incertidumbre, toda vez que conocía el 
+contenido y los alcances de la resolución 205/01 desde el momento en 
+que ya había intentado impugnarla por vía de recursos administrativos 
+y acciones judiciales, que fueron rechazados en dos oportunidades por 
+el máximo tribunal provincial, al no haber cumplido con los requisitos 
+indispensables para agotar la vía administrativa previstos en el código
+
+1267
+DE JUSTICIA DE LA NACION
+331
+de procedimientos administrativos provincial y que ahora insiste en el 
+mismo error cuando plantea nuevamente la cuestión ante V.E.
+Niega que se hayan efectuado desafiliaciones en forma unilateral 
+e ilícita por parte del Estado provincial, que los docentes no hayan pe-
+ticionado expresamente el cambio de obra social, así como que se les 
+haya producido a ellos y a OSPLAD gravísimos perjuicios y reclamos 
+por falta de asistencias médicas y prácticas de distintas complejidad.
+En este orden de ideas, explica que la resolución 205/01 contempla 
+la situación de aquellos docentes nacionales transferidos en cargos 
+transitorios (interinos y suplentes) y que, a la fecha del dictado de la 
+resolución, ocupaban cargos permanentes; por consiguiente habían 
+modificado su estado al revestir, en la actualidad, el carácter exclusivo 
+de docentes provinciales y, en consecuencia, debían aportar a la obra 
+social local y no a la actora.
+Por otra parte, considera contradictoria la postura exhibida por 
+aquélla al manifestar, por un lado, que los docentes transferidos deben 
+permanecer vinculados a OSPLAD a perpetuidad y, por el otro, al in-
+vocar la aplicación de la ley nacional de obras sociales y su reglamen-
+tación, que propicia la movilidad de los afilados y la libre afiliación.
+Finalmente, sostiene que no es cierto que OSEP resulte más onerosa 
+y brinde menos servicios a sus afiliados, puesto que las prestaciones 
+que ofrece son con casi todos los profesionales y clínicas de la Provincia 
+y cuenta, además, con una amplia cobertura asistencial en todo el país 
+que incluye tratamientos de alta complejidad.
+– III –
+Clausurado el período probatorio, las partes presentaron sus ale-
+gatos, por medio de los escritos de fs. 579/583 y 585/588 (actora y de-
+mandada, respectivamente).
+A fs. 590, el Tribunal dispuso correr vista a este Ministerio Públi-
+co.
+– IV –
+Ante todo, en cuanto a las objeciones que la demandada plantea a 
+la admisibilidad formal de la acción intentada, corresponde destacar
+
+1268
+FALLOS DE LA CORTE SUPREMA
+331
+que la jurisprudencia del Tribunal enseña que su competencia origi-
+naria proviene de la Constitución Nacional y no puede quedar subor-
+dinada al cumplimiento de requisitos previstos en las leyes locales ni 
+le resulta exigible a quien la invoca el agotamiento de trámites admi-
+nistrativos previos (doctrina de Fallos: 312:1003; 322:473; 323:1192, 
+entre muchos otros).
+Sobre tales pautas, en su concreta aplicación al sub lite, entiendo 
+que esta defensa debe ser desestimada.
+Con relación al fondo del asunto en debate, conviene recordar que el 
+Congreso Nacional facultó al Poder Ejecutivo a transferir, a partir del 1º 
+de enero de 1992, a las provincias y a la Municipalidad de la Ciudad de 
+Buenos Aires, los servicios educativos administrados en forma directa 
+por el Ministerio de Cultura y Educación y por el Consejo Nacional de 
+Educación Técnica, así como también las facultades y funciones sobre 
+los establecimientos privados reconocidos, bajo determinadas condi-
+ciones (art. 1º de la ley 24.049).
+Asimismo, previó que los requisitos específicos de las transferencias 
+se establecerían mediante convenios que celebrarían el Poder Ejecutivo 
+Nacional y cada una de las jurisdicciones, en los que se acordaría toda 
+otra cuestión no prevista en la ley atendiendo a las particularidades 
+de cada jurisdicción (art. 2º).
+El capítulo III de la ley fijó las bases sobre las cuales se haría el 
+traspaso del personal docente, técnico, administrativo y de servicios 
+generales que se desempeñaba en los servicios transferidos y, en cuanto 
+concierne al caso de autos, el art. 9º previó: “Las jurisdicciones podrán 
+convenir mecanismos para facilitar al personal transferido optar por 
+continuar en la Obra Social para la Actividad Docente (OSPLAD), en 
+cuyo caso el gobierno de la jurisdicción deberá actuar como agente de 
+retención de los correspondientes aportes, o incorporarse a la Obra So-
+cial de la jurisdicción receptora”.
+En este escenario, el 21 de diciembre de 1992 se celebró entre el 
+Ministerio de Cultura y Educación de la Nación y el gobernador de la 
+Provincia de Catamarca el convenio de transferencia al que se refiere 
+la ley (v. copia a fs. 5/16), en el que se estipula que “el personal transfe-
+rido, en un plazo no mayor de noventa (90) días desde la fecha en que la 
+Provincia inicie la liquidación de los haberes del personal, podrá optar
+
+1269
+DE JUSTICIA DE LA NACION
+331
+por la Obra Social de la Provincia, la cual realizará las prestaciones 
+sin período de carencia. En caso de que no se produzca la opción, la 
+Provincia actuará como agente de retención de los aportes personales 
+destinados a la Obra Social de la jurisdicción nacional (OSPLAD)”, 
+mientras que en las disposiciones transitorias se prevé que durante el 
+término en que la Nación liquide los sueldos, el personal continuará 
+con la cobertura de la actora (cláusula cuadragésimo sexta).
+Por otra parte, la resolución que se impugna en autos ordena a la 
+Dirección de Informática y Organización provincial que reasigne con 
+código obra social “OSEP” en las liquidaciones de haberes de los agentes 
+comprendidos en la cláusula sexta del Convenio de transferencia de 
+servicios educativos nacionales a la Provincia que determine la Oficina 
+Provincial de Asuntos Previsionales (art. 1º de la resolución 205/01, 
+cuya copia obra a fs. 18/19).
+Entre sus considerandos se explica que el aludido convenio incorpo-
+ró a la Administración Provincial al personal que se desempeñaba en 
+los establecimientos y servicios de enseñanza nacionales, manteniendo 
+la identidad y equivalencia en la jerarquía, funciones y situaciones 
+de revista en que se encontraban a la fecha de la transferencia, pero 
+que se debían evaluar los casos de aquellos agentes que, por diversos 
+motivos, habían cambiado la identidad, equivalencia y funciones del 
+cargo de revista. En tales condiciones –siempre según las expresiones 
+del emisor del acto–, el personal transferido que hubiese alterado la 
+situación de revista que poseía al momento de la transferencia, es decir, 
+funciones y situaciones de revista en un nuevo cargo de la órbita pro-
+vincial, debía aportar obligatoriamente a la obra social local, además 
+de los que voluntariamente así lo solicitaren.
+Pues bien, una vez descripto el marco normativo que rige el caso, 
+corresponde señalar que el análisis de las previsiones del convenio 
+de transferencia de los servicios educativos nacionales y del personal 
+que se desempeñaba en ellos permite extraer dos conclusiones para 
+la resolución de esta causa. La primera, que los Estados contratantes 
+acordaron en asegurarles a los agentes transferidos, sin importar su 
+condición de revista, el derecho de elegir la obra social (nacional o 
+provincial) a la que pertenecerían. Esta opción sólo puede ser ejercida 
+por aquellos agentes, sin injerencia estatal ni de la obra social a la 
+que hasta ese momento estaban afiliados, ni, por supuesto, de la local 
+que atiende obligatoriamente a los empleados públicos provinciales.
+
+1270
+FALLOS DE LA CORTE SUPREMA
+331
+La segunda es que, mientras los agentes transferidos no expresen su 
+voluntad de afiliarse a otra obra social, OSPLAD tiene el derecho de 
+recibir los aportes correspondientes y a tal fin se definió que las auto-
+ridades provinciales actuarían como agentes de retención y le remiti-
+rían esos fondos.
+Todo ello, además, en perfecta compatibilidad con la ley marco de 
+transferencia de los servicios educativos nacionales.
+En tales condiciones, la interpretación que surge de la resolución 
+que se cuestiona en estos autos contraviene el acuerdo suscripto entre 
+los Estados para hacer efectivo el traspaso de los establecimientos, 
+servicios y agentes educativos nacionales que, como se vio, se ajusta a 
+las exigencias de la ley de transferencia 24.049.
+Dicha circunstancia, entonces, otorga sustento suficiente a la postu-
+ra de la actora en cuanto afirma que la resolución provincial es ilegítima 
+y que tiene derecho a seguir percibiendo los aportes de los agentes que 
+no optaron por afiliarse a la OSEP. En efecto, nada hay en el texto del 
+convenio que permita sostener que los agentes transferidos mutan en 
+esa condición cuando acceden a otro cargo en la estructura educativa 
+provincial, o que ello habilite a las autoridades locales a disponer que 
+los aportes se efectúen obligatoriamente en la obra social de los em-
+pleados públicos provinciales.
+– V –
+Por lo expuesto, considero que se debe hacer lugar a la demanda 
+instaurada. Buenos Aires, 27 de diciembre de 2006. Laura M. Monti.
+```
+
+### [span 21] header_pagina (9967–9967)
+```
+1266
+```
+
+### [span 22] header_pagina (9968–9968)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 23] header_pagina (9969–9969)
+```
+331
+```
+
+### [span 24] header_pagina (10007–10007)
+```
+1267
+```
+
+### [span 25] header_pagina (10008–10008)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 26] header_pagina (10009–10009)
+```
+331
+```
+
+### [span 27] header_pagina (10044–10044)
+```
+1268
+```
+
+### [span 28] header_pagina (10045–10045)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 29] header_pagina (10046–10046)
+```
+331
+```
+
+### [span 30] header_pagina (10084–10084)
+```
+1269
+```
+
+### [span 31] header_pagina (10085–10085)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 32] header_pagina (10086–10086)
+```
+331
+```
+
+### [span 33] header_pagina (10126–10126)
+```
+1270
+```
+
+### [span 34] header_pagina (10127–10127)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 35] header_pagina (10128–10128)
+```
+331
+```
+
+### [span 36] cuerpo_mayoria (10153–10618)
+```
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 20 de mayo de 2008.
+Vistos los autos “Obra Social para la Actividad Docente (OSPLAD) 
+c/ Catamarca, Provincia de s/ acción declarativa de inconstitucionali-
+dad”, de los que
+
+1271
+DE JUSTICIA DE LA NACION
+331
+Resulta:
+I) Que a fs. 238/246, la Obra Social para la Actividad Docente (en 
+adelante, “OSPLAD”) promovió demanda en los términos del art. 322 
+del Código Procesal Civil y Comercial de la Nación contra la Provincia 
+de Catamarca a fin de obtener que se declare la inconstitucionalidad 
+de la resolución 205/01, de la Subsecretaría de Recursos Humanos y 
+Gestión Pública del Ministerio de Educación Provincial.
+En su carácter de agente natural del seguro social nacional de salud 
+(conf. art. 15 de la ley 23.661), cuestionó dicha resolución en cuanto 
+ordena que los aportes patronales y personales del personal docente 
+comprendido en la cláusula sexta del Convenio de Transferencia de 
+Servicios Educativos Nacionales a la Provincia (v. fs. 5/16) –es decir, 
+aquél que desempeñaba tareas en los establecimientos de enseñanza 
+estatal nacional, transferido al ámbito provincial– se efectúen obliga-
+toriamente a la Obra Social de Empleados Públicos de la Provincia de 
+Catamarca (en adelante, “OSEP”).
+Adujo que tal conducta comporta la desafiliación compulsiva de 
+OSPLAD, no obstante no haber ejercido los interesados la opción a fa-
+vor de la obra social local prevista en los arts. 7º y 9º de la ley nacional 
+24.049, en el decreto 504/98 y en el art. 10 del citado convenio, lo cual 
+importa un avance indebido –a su entender– sobre un asunto de com-
+petencia exclusiva de las autoridades nacionales, como es el Sistema 
+Nacional del Seguro de Salud regido por las leyes 23.660 y 23.661 y, 
+en consecuencia, conculca los arts. 14 bis, 17, 31, 75 (inc. 12), 108 y 125 
+de la Constitución Nacional.
+Explicó que tanto en 1978 como en 1992, cuando las leyes 21.809 
+y 24.049 facultaron al Poder Ejecutivo Nacional a transferir a las 
+provincias y a la entonces Municipalidad de la Ciudad de Buenos Ai-
+res los servicios educativos nacionales, se contempló que el personal 
+transferido podía continuar en OSPLAD o, bien, optar por afiliarse a 
+la obra social provincial.
+Señaló que, en tales condiciones, el 21 de diciembre de 1992 se 
+celebró entre el Ministerio de Cultura y Educación de la Nación y el 
+gobernador de la Provincia de Catamarca el Convenio de Transferen-
+cia de Servicios Educativos Nacionales a la Provincia, en cuyo artículo 
+10 se previó que el personal transferido, en determinado plazo podría
+
+1272
+FALLOS DE LA CORTE SUPREMA
+331
+optar por la obra social provincial y que, en caso de que no se produjese 
+el ejercicio de la opción referida, la provincia actuaría como agente de 
+retención de los aportes personales destinados a OSPLAD.
+Afirmó que la ulterior reglamentación nacional del procedimiento 
+de traspaso aseguró mecanismos claros para hacer uso del ejercicio 
+del derecho de opción. Observó, además, que aquélla no alude a car-
+gos totales o parciales sino a posibilitar que el docente pueda elegir su 
+obra social, de allí que, a su criterio, aquel docente que revistaba como 
+personal transferido en ciertas horas cátedra al ser reubicado en otras 
+mantenga la misma calidad y no pueda asimilarse dicha situación a 
+una nueva designación.
+Arguyó que la Provincia de Catamarca, mediante el dictado de 
+la disposición cuya tacha de inconstitucionalidad persigue, al iniciar 
+un proceso de desafiliación compulsiva avanzó de manera ilegal y ar-
+bitraria sobre asuntos de exclusiva competencia de las autoridades 
+nacionales en materias atinentes al Sistema Nacional de Seguro de 
+Salud creado por la ley 23.661 y de la ley 23.660 de Obras Sociales. En 
+ese orden señaló que la OSEP no ha ingresado en el proceso de desre-
+gulación de las obras sociales ni ha adherido al sistema nacional, del 
+cual no forma parte.
+Indicó, en tal sentido, que tiene interés jurídico suficiente para 
+promover esta demanda puesto que la desafiliación le ocasionó un 
+grave perjuicio económico al verse privada de los aportes de numero-
+sos afiliados, y al haber tenido que tomar a su cargo –sin contar con 
+los recursos correspondientes– la asistencia y las prácticas médicas 
+de distinta complejidad que los beneficiarios requirieron a la OSEP 
+sin obtener respuesta. Añadió, que todo ello también afecta a los do-
+centes comprendidos en el sistema, los que se ven desprovistos sin su 
+consentimiento de los beneficios que les da OSPLAD, entidad a la que 
+legítimamente quieren pertenecer. Se agravió, además, de la existencia 
+de un enriquecimiento ilícito por parte de la obra social local, toda vez 
+que recibe los aportes de los afiliados pero no les da las prestaciones 
+debidas.
+Por todo ello dice que decidió entablar esta demanda para evitar 
+que se tornen ilusorios sus derechos, y que se produzcan perjuicios 
+irreparables tanto para la actora como para sus afiliados y beneficia-
+rios de la Provincia de Catamarca.
+
+1273
+DE JUSTICIA DE LA NACION
+331
+En virtud de lo expuesto solicitó la concesión de una medida de no 
+innovar mientras dure el proceso; a fin de que la demandada dispusiese 
+la reincorporación de los afiliados a OSPLAD, que fueron dados de baja 
+en virtud de la aplicación de la resolución impugnada.
+II) A fs. 246 vta., se corrió vista a la Procuración General de la Na-
+ción, quien entendió que el caso corresponde a la competencia originaria 
+ratione personae, toda vez que la actora es una entidad de obra social 
+que litiga en el fuero federal, de conformidad con la previsión contenida 
+en el art. 38 de la ley 23.661, y demanda a una provincia con derecho 
+a esta instancia de excepción, según lo dispuesto en el art. 117 de la 
+Constitución Nacional (v. fs. 248/249).
+III) A fs. 250 el Tribunal se declaró competente para conocer el 
+asunto e hizo lugar a la medida cautelar ya referida.
+IV) A fs. 305/313, la Provincia de Catamarca contestó la demanda 
+y solicitó su rechazo.
+Con respecto a la vía intentada, señaló que en autos no concurrían 
+los presupuestos para la procedencia de la acción declarativa, a cuyo 
+efecto sostuvo que la actora no había logrado acreditar la situación 
+de incertidumbre invocada, dado que conocía el contenido y los alcan-
+ces de la resolución 205/01, a la que había atacado sin éxito en sede 
+administrativa y judicial en jurisdicción provincial. Asimismo señaló 
+que no había agotado la vía administrativa prevista en el código de 
+procedimientos administrativo provincial.
+Negó que se hubiesen efectuado desafiliaciones en forma unilateral 
+y arbitraria por parte del Estado provincial, que los docentes no hayan 
+requerido expresamente el cambio de obra social, así como que se les 
+haya provocado, a OSPLAD y a los beneficiarios, perjuicios graves por 
+la falta de asistencia médica y prácticas de alta complejidad.
+Argumentó que la resolución 205/01 contempló la situación de aque-
+llos docentes nacionales transferidos en cargos transitorios –interinos 
+y suplentes– y que, a la fecha del dictado de ese acto administrativo, 
+ocupaban cargos permanentes. Por ende, explicó que su estado se 
+había modificado al revestir en la actualidad el carácter exclusivo de 
+docentes provinciales, por lo que debían aportar a la obra social local 
+y no a OSPLAD.
+
+1274
+FALLOS DE LA CORTE SUPREMA
+331
+Por otra parte, consideró contradictoria la postura exhibida por esa 
+entidad al manifestar, por un lado, que los docentes transferidos deben 
+permanecer vinculados a OSPLAD a perpetuidad y, por otro, invocar 
+la aplicación de la ley nacional de obras sociales y su reglamentación, 
+que propicia la movilidad de los afiliados y la libre afiliación.
+Por último, sostuvo que no era cierto que OSEP resulte más one-
+rosa y dé menos servicios a sus afiliados que la entidad reclamante, 
+puesto que ofrece prestaciones con un amplio espectro de profesiona-
+les y clínicas en la provincia, con cobertura asistencial en todo el país, 
+comprensiva de tratamientos de alta complejidad.
+V) Producida la prueba y clausurado el período correspondiente, 
+las partes presentaron sus alegatos a fs. 579/583 y 585/588, respecti-
+vamente.
+VI) A fs. 590, se confirió vista a la Procuración General a fin de que 
+dictamine acerca de las cuestiones constitucionales comprometidas 
+(fs. 591/593).
+Considerando:
+1º) Que este juicio es de la competencia originaria de la Corte Su-
+prema (arts. 116 y 117 de la Ley Fundamental).
+2º) Que la actora plantea la inconstitucionalidad de la resolución 
+205/01 de la Subsecretaría de Recursos Humanos y Gestión Pública 
+del Ministerio de Educación Provincial por cuanto, al ordenar que los 
+aportes en cuestión se efectúen obligatoriamente a la Obra Social de 
+Empleados Públicos (OSEP), efectiviza una desafiliación compulsi-
+va de OSPLAD del personal docente comprendido en el Convenio de 
+Transferencia de Servicios Educativos Nacionales a la Provincia, y 
+desconoce lo dispuesto en los arts. 7º y 9º de la ley 24.049 y en el decreto 
+del Poder Ejecutivo Nacional 504/98 en el marco del Sistema Nacional 
+del Seguro de Salud.
+3º) Que la vía intentada es formalmente admisible con arreglo 
+a lo dispuesto en el art. 322 del Código Procesal Civil y Comercial 
+de la Nación, pues se verifica una controversia concreta en torno al 
+alcance de la resolución 205/01, cuyos efectos son resistidos por OS-
+PLAD, quien le atribuye ilegitimidad y lesión al régimen federal en la 
+materia, extremo que admite remedio mediante un pronunciamiento
+
+1275
+DE JUSTICIA DE LA NACION
+331
+definitivo del Tribunal (Fallos: 316:1713; 320:1556 y 2851). Asimismo, 
+la demandante se agravia del perjuicio que le causa la aplicación del 
+acto administrativo local que impugna, al verse privada de los aportes 
+de los afiliados transferidos al ámbito provincial; de allí que la afec-
+tación de su interés legítimo aparece configurada en forma concreta, 
+directa y suficiente.
+Por lo demás, resulta intrascendente el hecho de que no se hayan 
+agotado los trámites administrativos previstos en la legislación provin-
+cial, habida cuenta de que la competencia originaria de la Corte, que 
+proviene de la Constitución, no puede quedar subordinada al cumpli-
+miento de los requisitos exigidos por las leyes locales (Fallos: 312:475; 
+323:1206 y 328:1442).
+4º) Que corresponde indicar, en primer lugar, que la Constitución 
+Nacional en su art. 14 bis, párrafo tercero, establece que el Estado otor-
+gará los beneficios de la seguridad social y garantizará la protección 
+integral de la familia. El término “Estado”, empleado en sentido gené-
+rico, alude tanto al Estado Nacional como a los estados provinciales, 
+de tal manera que la reglamentación de este precepto no es privativa 
+del gobierno federal (conf. dictamen del Procurador General en Fallos: 
+302:721 y sus citas y Fallos: 312:418). En efecto, la facultad de legis-
+lar en materia de seguridad social, jubilaciones y pensiones compete 
+a la Nación y a las provincias, por cuanto la obligación que impone el 
+art. 14 bis, no se limita al Estado Nacional sino que se extiende a los 
+estados provinciales, si bien limitada al ámbito de la administración 
+pública provincial y al del ejercicio del poder de policía (v. causa S.1992.
+XXXVII “San Juan, Provincia de c/ Administración Federal de Ingresos 
+Públicos s/ impugnación de deuda”, pronunciamiento del 24 de abril 
+de 2007, Fallos: 330:1927).
+5º) Que como fundamento liminar para el estudio de la cuestión 
+planteada, en el precedente de Fallos: 312:418, el Tribunal señaló que 
+el inc. 11 del art. 67 (hoy inc. 12 del art. 75) de la Constitución confiere 
+al Congreso Nacional el mandato de dictar el Código de Seguridad So-
+cial, atribuyéndole potestad para legislar en tal materia. No obstante 
+–se sostenía en ese pronunciamiento– “en determinadas circunstancias 
+se ha reconocido que como consecuencia del poder conservado por las 
+provincias en virtud de lo dispuesto por el art. 105 de la Constitución 
+Nacional éstas pueden crear y reglamentar regímenes de seguridad 
+social bien que limitada esa facultad al ámbito de los agentes de su ad-
+
+1276
+FALLOS DE LA CORTE SUPREMA
+331
+ministración pública, los magistrados y funcionarios de sus tribunales, 
+los integrantes de sus legislaturas y también, en razón del ejercicio del 
+poder de policía retenido sobre el ejercicio de las profesiones liberales, 
+respecto de estas últimas actividades.” (v. causa O.124.XXIV “Obra So-
+cial para la Actividad Docente c/ Buenos Aires, Provincia de s/ sumario”, 
+pronunciamiento del 11 de abril de 1996, Fallos: 319:408).
+A su vez, el art. 121 de la Constitución Nacional sienta el principio 
+según el cual las provincias conservan los poderes que no fueron de-
+legados al gobierno federal y todos aquéllos que se reservaron en los 
+pactos especiales al tiempo de su incorporación; y el art. 125 reconoce 
+los poderes concurrentes sobre ciertas materias que son de competencia 
+tanto federal como de las provincias y que por lo tanto son susceptibles 
+de convenios o acuerdos de concertación.
+6º) Que, establecido el plexo constitucional de referencia, correspon-
+de examinar el régimen normativo dictado en su consecuencia por el 
+Congreso de la Nación que se conforma con las leyes nacionales 23.660, 
+de obras sociales; 23.661 del Sistema Nacional del Seguro de Salud, y 
+24.049, aplicables al sub judice.
+7º) Que con relación a la ley citada en primer término es oportuno 
+señalar que las obras sociales son entes de la seguridad social, a cuyo 
+cargo se encuentra la administración de las prestaciones, prioritaria-
+mente médico-asistenciales, para la cobertura de las contingencias 
+vinculadas a la salud, a las que pueden adicionar otras prestaciones 
+de carácter social. Estas entidades se constituyen como organizaciones 
+descentralizadas y autónomas, destinadas a procurar, por sí o a tra-
+vés de terceros, la satisfacción del derecho a la salud de sus afiliados 
+y beneficiarios.
+En esta línea y según lo establece el art. 2º de la ley 23.660, las obras 
+sociales tienen personalidad jurídica propia y diferenciada del organis-
+mo, dependencia estatal, empresa o asociación sindical o profesional 
+a las que se hallan vinculadas. Para el cumplimiento de su función 
+reciben y administran recursos de la seguridad social, conformados 
+por los aportes y contribuciones –“cotizaciones”– de los empleados y 
+empleadores, empresa o dependencia pública cuya existencia determina 
+la conformación del grupo de beneficiarios (art. 16 de la ley 23.661).
+8º) Que la actora, persona pública no estatal, es una de las obras 
+sociales comprendidas en el inc. b, del art. 1º, de la ley 23.660, “nuclea”
+
+1277
+DE JUSTICIA DE LA NACION
+331
+al personal docente, y en tal condición se constituyó en agente del Sis-
+tema Nacional del Seguro de Salud conforme el art. 2º de la ley 23.661, 
+que tiene un alcance comprensivo de los sujetos comprendidos en su 
+art. 5º, del que se excluye únicamente el personal “dependiente de los 
+gobiernos provinciales y sus municipalidades y los jubilados retirados 
+y pensionados del mismo ámbito” –art. 6º– (ver también decreto 492/95 
+y resolución conjunta del ANSSAL – INOS 6108-148/96).
+Al ser una entidad que desarrolla una actividad de interés público, 
+se encuentra sometida al contralor estatal que sobre ella ejerce la Su-
+perintendencia de Servicios de Salud de la Nación (conf. arts. 3, 8, 15, 
+18, 28 y concordantes de la ley 23.661; art. 7º de la ley 23.660, v. causa 
+O.124. XXIV. “Obra Social para la Actividad Docente c/ Buenos Aires, 
+Provincia de s/ sumario”, pronunciamiento del 11 de abril de 1996, ya 
+citada, Fallos: 319:408)
+9º) Que, a su vez, la ley 23.661, en sus artículos 1º y 2º, establece 
+como principios fundantes del Sistema Nacional del Seguro de Salud, 
+en primer lugar, la búsqueda del pleno goce del derecho a la salud para 
+todos los habitantes del país sin discriminación de ninguna clase y, en 
+segundo término, la provisión de prestaciones de salud igualitarias, 
+integrales y humanizadas, tendientes a la promoción, protección, re-
+cuperación y rehabilitación de la salud, que respondan al mejor nivel 
+de calidad disponible y garanticen a los beneficiarios la obtención del 
+mismo tipo y nivel de prestaciones.
+10) Que, por su parte, la ley 24.049 facultó en su art. 1º al Poder 
+Ejecutivo Nacional a transferir, a partir del 1º de enero de 1992, a las 
+provincias y a la Municipalidad de la Ciudad de Buenos Aires, los ser-
+vicios educativos administrados en forma directa por el Ministerio de 
+Cultura y Educación y por el Consejo Nacional de Educación Técnica, 
+así como también las facultades y funciones sobre los establecimientos 
+privados reconocidos, en las condiciones que prescribe esta ley.
+Por medio de su art. 2º dispuso que “los requisitos específicos de 
+las transferencias se establecerían mediante convenios a celebrarse 
+entre el Poder Ejecutivo Nacional y cada una de las jurisdicciones, en 
+los que se acordará toda otra cuestión no prevista en la presente ley de 
+acuerdo con las particularidades de cada jurisdicción”. Dichos convenios 
+deberían ser refrendados según la normativa vigente en cada una de 
+las jurisdicciones, por medio de las legislaturas provinciales.
+
+1278
+FALLOS DE LA CORTE SUPREMA
+331
+Con relación al personal transferido, el art. 9º dejó en claro que las 
+jurisdicciones podrían convenir mecanismos para facilitar la opción por 
+continuar en la Obra Social para la Actividad Docente (OSPLAD), en 
+cuyo caso el gobierno de la jurisdicción respectiva debía actuar como 
+agente de retención de los correspondientes aportes, o incorporarse a 
+la obra social de la jurisdicción receptora.
+11) Que, en ese marco, el 21 de diciembre de 1992, el Ministro de 
+Cultura y Educación de la Nación y el gobernador de la Provincia de 
+Catamarca suscribieron el Convenio de Transferencia de Servicios 
+Educativos Nacionales a esa Provincia, el que fue aprobado por la le-
+gislatura local por medio de la ley 4762, del 16 de diciembre de 1993.
+En lo que aquí interesa, por medio de la cláusula sexta se determinó 
+cuál era el personal comprendido en la transferencia, y en la cláusula 
+décima se estableció que “El personal transferido, en un plazo no mayor 
+de noventa (90) días desde la fecha en que LA PROVINCIA inicie la 
+liquidación de los haberes del personal, podrá optar por la Obra Social 
+de LA PROVINCIA, la cual realizará las prestaciones sin período de 
+carencia. En caso de que no se produzca la opción, LA PROVINCIA 
+actuará como agente de retención de los aportes personales destinados 
+a la Obra Social de la jurisdicción nacional (OSPLAD)” (v fs. 5/16).
+12) Que, con posterioridad, el decreto del Poder Ejecutivo Nacional 
+504/98, al reglamentar estos aspectos dispuso la sistematización y ade-
+cuación del derecho a la opción –consagrado en el decreto 9/93, modifi-
+cado por su similar 1301/97– a efectos de simplificar el procedimiento 
+y asegurar así que la manifestación de la decisión de los beneficiarios 
+sea un acto de voluntad libremente expresada.
+13) Que, a pesar de ello, por medio de la resolución 205/01, el sub-
+secretario de Recursos Humanos y Gestión Pública del Ministerio de 
+Educación de la Provincia de Catamarca dispuso que la Dirección de 
+Informática y Organización debía proceder a reasignar con código de 
+obra social “OSEP”, en las liquidaciones de haberes de los agentes 
+comprendidos en la cláusula sexta del Convenio de Transferencia de 
+Servicios Educativos Nacionales a la Provincia, que determine por acto 
+administrativo expreso la oficina provincial de asuntos previsionales 
+(art. 1º).
+Los considerandos de la referida resolución justificaron su dictado 
+en la necesidad de atender la situación de “aquel personal transferido
+
+1279
+DE JUSTICIA DE LA NACION
+331
+que por diversos motivos hubiesen cambiado la identidad y equivalen-
+cia en la jerarquía o funciones...”; a cuyo efecto se interpretó que dicho 
+personal “que hubiese alterado la situación de revista que poseía al 
+momento de la transferencia, es decir, funciones y situaciones de re-
+vista en un nuevo cargo de la órbita provincial, le corresponde conse-
+cuentemente la obligatoriedad de aportar a la Obra Social Provincial” 
+(v. considerandos 2º y 4º).
+Por ello conforme lo establecido en el art. 2º, la citada oficina provin-
+cial de asuntos previsionales “deberá realizar el ajuste y rectificación 
+de las imputaciones de los Aportes Personales y Contribuciones Patro-
+nales de la Obra Social, desde la fecha en que se verifique el cambio 
+de las condiciones de Transferencia” (fs. 18/19).
+14) Que el Tribunal ha sostenido que es principio básico de la herme-
+néutica atender en la interpretación de las leyes, al contexto general de 
+ellas y a los fines que las informan (causa “Carlos José Outon y otros”, 
+del 29 de marzo de 1967, Fallos: 267:215); y que, en la interpretación 
+de la ley no debe prescindirse de las consecuencias que se derivan de 
+cada criterio, pues ellas constituyen uno de los índices más seguros 
+para verificar su razonabilidad y su coherencia con el sistema en que 
+está engarzada la norma (causa B.389.XXXV “Bustos, Vicente Amadeo 
+c/ Banco Central de la República Argentina s/ cobro de pesos”, del 9 de 
+agosto de 2001, Fallos: 324:2107). También ha dicho que la hermenéu-
+tica de las normas constitucionales y legales no puede ser realizada 
+por el intérprete en un estado de indiferencia respecto del resultado, 
+y sin tener en cuenta el contexto social en que tal resultado fue pre-
+visto originariamente y habrá de ser aplicado al tiempo de la emisión 
+del fallo judicial (causa S.351.XXXV “Sosa, Marcelo Claudio s/ recurso 
+extraordinario”, del 9 de agosto de 2001, Fallos: 324:2153).
+15) Que sobre tales premisas corresponde abordar la cuestión 
+traída a juicio.
+16) Que, como se ha indicado, la materia sub examine ha sido re-
+gulada por normas federales e implementada por medio del recordado 
+Convenio de Transferencia suscripto el 21 de diciembre de 1992. Este 
+instrumento da cuenta del compromiso asumido por la Provincia de 
+Catamarca y el Estado Nacional a su respecto, y, como las demás crea-
+ciones legales del federalismo de concertación, configura el derecho 
+intrafederal (causa T.151.XXIII “Transportes Automotores Chevallier 
+S.A. c/ Buenos Aires, Provincia de s/ acción declarativa”, del 20 de agosto
+
+1280
+FALLOS DE LA CORTE SUPREMA
+331
+de 1991, Fallos: 314:862) y se incorpora una vez ratificado por la legis-
+latura al derecho público interno de cada Estado provincial aunque 
+con la diversa jerarquía que le otorga su condición de ser expresión de 
+la voluntad común de los órganos superiores de nuestra organización 
+constitucional: nación y provincias. Esa gestación institucional ubica 
+a los tratados o leyes convenios celebrados entre las provincias y el 
+gobierno nacional con un rango normativo específico dentro del dere-
+cho federal. Prueba de su categoría singular es que no es posible su 
+derogación unilateral por cualquiera de las partes (Horacio Zorraquín 
+Becú: “El Federalismo Argentino”, Edit. Perrot, 1958, pág. 194; v. causa 
+A.95.XXX “Asociación de Grandes Usuarios de Energía Eléctrica de la 
+República Argentina (AGUEERA) c/ Buenos Aires, Provincia de y otro 
+s/ acción declarativa”, del 19 de agosto de 1999, Fallos: 322:1781).
+17) Que, por cierto, dicho convenio no sólo se dirige a implementar 
+los mecanismos trazados por las normas nacionales aplicables, sino 
+que constituye una expresión de las relaciones de coordinación propias 
+de la dinámica del Estado federal, por lo que no parece razonable que 
+el gobierno provincial que lo acordó para suscribirlo y posteriormente 
+le dio su aprobación con la sanción de la ley provincial 4762, termine 
+por desconocer su real sentido, al asignar a la opción una inteligencia 
+distinta de la establecida en la cláusula décima del acuerdo.
+18) Que, por lo demás, debe advertirse que las disposiciones del 
+convenio en nada favorecen a la postura de la demandada, antes bien 
+ratifican que en la lógica del sistema la opción es un acto individual 
+que debe ser ejercido libremente por parte de cada beneficiario y que 
+la elección de la obra social provincial sólo puede resultar de una ma-
+nifestación expresa y positiva en ese sentido.
+De allí que como bien lo señala la señora Procuradora Fiscal en su 
+dictamen de fs. 591/593, nada hay en su texto que autorice a sostener 
+que los docentes transferidos mutan en esa condición cuando acceden 
+a otro cargo en la estructura educativa provincial, o que habilite a las 
+autoridades locales a disponer que los aportes se efectúen obligato-
+riamente en la obra Social de los Empleados Públicos Provinciales, 
+según se pretende en los considerandos de la resolución 205/01, para 
+justificar su dictado.
+19) Que, en estas condiciones, del examen de los textos normativos 
+relacionados se desprende con nitidez que la pretensión provincial
+
+1281
+DE JUSTICIA DE LA NACION
+331
+expresada en la resolución 205/01 altera un mecanismo que ha sido 
+legislado a nivel nacional y acordado entre el gobierno nacional y el 
+provincial en el Convenio de Transferencia y desvirtúa así el derecho 
+de opción de los beneficiarios del sistema.
+20) Que, en su mérito, corresponde hacer lugar a la demanda 
+promovida por OSPLAD y declarar que la resolución 205/01, dictada 
+por la Subsecretaría de Recursos Humanos y Gestión Pública del Mi-
+nisterio de Educación de la Provincia de Catamarca debe ser privada 
+de validez por aplicación del principio de supremacía federal (causas 
+A.771.XXV “Abbot Laboratories S.A. y otros c/ Buenos Aires, Provincia 
+de s/ inconstitucionalidad”, del 21 de junio de 2000, Fallos: 323:1705 y 
+M.372.XXXIX “Massalín Particulares S.A. c/ Tierra del Fuego, Provin-
+cia de s/ acción declarativa de inconstitucionalidad”, del 21 de marzo 
+de 2006, Fallos: 329:792).
+21) Que la solución que se adopta descansa en los principios rec-
+tores de las leyes nacionales aplicables, los que constituyen derechos 
+inalienables de los beneficiarios del Sistema Nacional del Seguro de 
+Salud, por ser bienes jurídicamente superiores, a cuya preservación y 
+desarrollo deben propender las demás normas y las reglamentaciones 
+que se dictan en su consecuencia. Pues, de otro modo, se frustrarían 
+sus propósitos en orden a “procurar el pleno goce del derecho a la salud 
+para todos los habitantes del país sin discriminación social, económica, 
+cultural o geográfica” (art. 1º de la ley 23.661).
+22) Que esta conclusión es la que mejor concilia las normas vigen-
+tes en el orden nacional al tiempo de la suscripción del Convenio de 
+Transferencia, con el compromiso asumido en dicho instrumento por 
+la Provincia de Catamarca, frente a las cláusulas constitucionales que 
+imponen otorgar y asegurar los beneficios de la seguridad social (conf. 
+arg. R.94.XXII “Rodríguez Louro de Lheritier, Cecilia Aidée c/ Poder 
+Ejecutivo de Santa Cruz y Caja de Previsión Social de la Provincia 
+de Santa Cruz”, del 14 de agosto de 1990, de Fallos: 313:721 y causa 
+S.1992.XXXVII “San Juan, Provincia de c/ Administración Federal de 
+Ingresos Públicos s/ impugnación de deuda”, pronunciamiento del 24 
+de abril de 2007, Fallos: 330:1927).
+23) Que las costas del juicio deben ser soportadas por la Provincia 
+de Catamarca toda vez que no existe mérito para apartarse del principio 
+general que impone tal condenación a la vencida, según lo establece
+
+1282
+FALLOS DE LA CORTE SUPREMA
+331
+el art. 68 del Código Procesal Civil y Comercial de la Nación, toda vez 
+que la posición asumida por la demandada dio lugar a la promoción 
+de este proceso.
+Por ello, y de conformidad con el dictamen de la señora Procuradora 
+Fiscal que antecede, se resuelve: Hacer lugar a la demanda deducida 
+por OSPLAD contra la Provincia de Catamarca. Con costas (art. 68 del 
+Código Procesal Civil y Comercial de la Nación). Notifíquese. Remíta-
+se copia de esta decisión al señor Procurador General de la Nación y 
+oportunamente archívese.
+```
+
+### [span 37] header_pagina (10159–10159)
+```
+1271
+```
+
+### [span 38] header_pagina (10160–10160)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 39] header_pagina (10161–10161)
+```
+331
+```
+
+### [span 40] header_pagina (10199–10199)
+```
+1272
+```
+
+### [span 41] header_pagina (10200–10200)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 42] header_pagina (10201–10201)
+```
+331
+```
+
+### [span 43] header_pagina (10240–10240)
+```
+1273
+```
+
+### [span 44] header_pagina (10241–10241)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 45] header_pagina (10242–10242)
+```
+331
+```
+
+### [span 46] header_pagina (10279–10279)
+```
+1274
+```
+
+### [span 47] header_pagina (10280–10280)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 48] header_pagina (10281–10281)
+```
+331
+```
+
+### [span 49] header_pagina (10318–10318)
+```
+1275
+```
+
+### [span 50] header_pagina (10319–10319)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 51] header_pagina (10320–10320)
+```
+331
+```
+
+### [span 52] header_pagina (10360–10360)
+```
+1276
+```
+
+### [span 53] header_pagina (10361–10361)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 54] header_pagina (10362–10362)
+```
+331
+```
+
+### [span 55] header_pagina (10401–10401)
+```
+1277
+```
+
+### [span 56] header_pagina (10402–10402)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 57] header_pagina (10403–10403)
+```
+331
+```
+
+### [span 58] header_pagina (10442–10442)
+```
+1278
+```
+
+### [span 59] header_pagina (10443–10443)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 60] header_pagina (10444–10444)
+```
+331
+```
+
+### [span 61] header_pagina (10483–10483)
+```
+1279
+```
+
+### [span 62] header_pagina (10484–10484)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 63] header_pagina (10485–10485)
+```
+331
+```
+
+### [span 64] header_pagina (10525–10525)
+```
+1280
+```
+
+### [span 65] header_pagina (10526–10526)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 66] header_pagina (10527–10527)
+```
+331
+```
+
+### [span 67] header_pagina (10566–10566)
+```
+1281
+```
+
+### [span 68] header_pagina (10567–10567)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 69] header_pagina (10568–10568)
+```
+331
+```
+
+### [span 70] header_pagina (10607–10607)
+```
+1282
+```
+
+### [span 71] header_pagina (10608–10608)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 72] header_pagina (10609–10609)
+```
+331
+```
+
+### [span 73] firma (10619–10620)
+```
+Elena I. Highton de Nolasco — Carlos S. Fayt — Enrique Santiago 
+Petracchi — Juan Carlos Maqueda — Carmen M. Argibay.
+```
+
+### [span 74] catch_all (10621–10624)
+```
+Nombre del actor: Obra Social de la Actividad Docente (OSPLAD).
+Nombre de la demandada: Provincia de Catamarca.
+Profesionales intervinientes: Lucas Gabriel Mayor y Horacio Ricardo González 
+y María Fabiana Meglioli, Liliana E. Barrientos y Graciela B. Rodríguez.
+```
+
+### Borde inferior (transición al próximo caso)
+**Estado**: `solapado_con_proximo` | linea_fin_real=10624 | linea_inicio_proximo_caso=10609 | delta=-16
+**Alertas**: `solapado_con_proximo`
+
+
+---
+
+## 329_p2567 — Inversiones y Servicios S.A. c/ United Airlines | United Airlines (Inversiones y Servicios S.A. c/)
+
+**Localización**
+- Archivo: `LibroVol329.2.md`
+- Páginas catálogo: 2567–2569 | Página consultada: 2569
+- Líneas catálogo: 45250–45319 | Línea fin real: 45345 (status_fin=`fin_extendido_pag_compartida`, pista=`caratula_siguiente`)
+- Status localización: `ok`
+
+**Resumen de spans**
+
+| # | Tipo | Líneas (abs) | Líneas |
+|---|------|--------------|-------:|
+| 1 | header_pagina | 45250–45250 | 1 |
+| 2 | catch_all | 45251–45274 | 24 |
+| 3 | caratula | 45275–45275 | 1 |
+| 4 | sumario [1] | 45276–45284 | 9 |
+| 5 | header_pagina | 45282–45282 | 1 |
+| 6 | header_pagina | 45283–45283 | 1 |
+| 7 | header_pagina | 45284–45284 | 1 |
+| 8 | sumario [2] | 45285–45293 | 9 |
+| 9 | cuerpo_mayoria | 45294–45335 | 42 |
+| 10 | header_pagina | 45318–45318 | 1 |
+| 11 | header_pagina | 45319–45319 | 1 |
+| 12 | header_pagina | 45320–45320 | 1 |
+| 13 | firma | 45336–45337 | 2 |
+| 14 | catch_all | 45338–45345 | 8 |
+
+**Invariantes**: cobertura=OK, disjunción=OK, líneas_residuo=32 (33.33% del bloque, n=96)
+
+---
+
+### [span 1] header_pagina (45250–45250)
+```
+329
+```
+
+### [span 2] catch_all (45251–45274)
+```
+Por ello, de conformidad con lo dictaminado por aquélla, se declara
+parcialmente procedente el recurso extraordinario interpuesto y se deja
+sin efecto la decisión apelada, con los alcances indicados en el dicta-
+men. Con costas. Vuelvan los autos al tribunal de origen para que, por
+quien corresponda, dicte un nuevo pronunciamiento, con arreglo al
+presente. Notifíquese y, oportunamente, devuélvase.
+ENRIQUE SANTIAGO PETRACCHI — ELENA I. HIGHTON DE NOLASCO — CARLOS
+S. FAYT — JUAN CARLOS MAQUEDA — E. RAÚL ZAFFARONI — RICARDO LUIS
+LORENZETTI — CARMEN M. ARGIBAY (en disidencia parcial).
+DISIDENCIA PARCIAL DE LA
+ SEÑORA MINISTRA DOCTORA DOÑA CARMEN M. ARGIBAY
+Considerando:
+Que el recurso extraordinario es inadmisible (art. 280 del Código
+Procesal Civil y Comercial de la Nación).
+Por ello, y oído la señora Procuradora Fiscal subrogante se declara
+improcedente el recurso extraordinario, con costas. Notifíquese y de-
+vuélvase.
+CARMEN M. ARGIBAY.
+Recurso extraordinario interpuesto por Rubén Ferrau, representado por los Dres.
+Arístides O. Ginesta y Darío E. Laurito.
+Traslado contestado por el Ministerio de Economía de la Nación, representado por
+la Dra. Laura Mena.
+Tribunal de origen: Cámara Federal de Apelaciones de Resistencia.
+Tribunales que intervinieron con anterioridad: Juzgado Federal de Resistencia.
+```
+
+### [span 3] caratula (45275–45275)
+```
+INVERSIONES Y SERVICIOS S.A. V. UNITED AIRLINES
+```
+
+### [span 4] sumario [1] (45276–45284)
+**Header**: RECURSO EXTRAORDINARIO: Requisitos propios. Sentencia definitiva. Concepto y
+**Atribución**: (sin atribución detectada)
+```
+RECURSO EXTRAORDINARIO: Requisitos propios. Sentencia definitiva. Concepto y
+generalidades.
+El recurso extraordinario es inadmisible respecto de las sentencias incompletas,
+pues su consideración impondría a la Corte Suprema la resolución de la causa
+por partes y no de manera final.
+
+2568
+FALLOS DE LA CORTE SUPREMA
+329
+```
+
+### [span 5] header_pagina (45282–45282)
+```
+2568
+```
+
+### [span 6] header_pagina (45283–45283)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 7] header_pagina (45284–45284)
+```
+329
+```
+
+### [span 8] sumario [2] (45285–45293)
+**Header**: RECURSO EXTRAORDINARIO: Requisitos propios. Sentencia definitiva. Concepto y
+**Atribución**: (sin atribución detectada)
+```
+RECURSO EXTRAORDINARIO: Requisitos propios. Sentencia definitiva. Concepto y
+generalidades.
+Es improcedente el recurso extraordinario si la sentencia de la cámara resolvió
+sólo parcialmente el juicio, ya que dispuso el reenvío de la causa a la primera
+instancia para que allí se decida sobre la procedencia o no de la eventual con-
+versión de la deuda a moneda de curso legal de acuerdo a lo previsto por las
+leyes 25.561 y 25.820 y decreto 214/02, lo cual tiene una clara repercusión en el
+monto de la condena cuya procedencia en sí misma se discute en el recurso
+extraordinario.
+```
+
+### [span 9] cuerpo_mayoria (45294–45335)
+```
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 11 de julio de 2006.
+Vistos los autos: “Inversiones y Servicios S.A. c/ United Airlines s/
+incumplimiento de contrato”.
+Considerando:
+1º) Que la Cámara Nacional de Apelaciones en lo Civil y Comercial
+Federal, Sala 2, confirmó la sentencia de la instancia anterior –en
+cuanto condenó a “United Airlines Inc.” a pagar a “Inversiones y Ser-
+vicios Sociedad Anónima” la suma de U$S 595.501,75 en concepto de
+deuda por prestaciones de servicio de rampa en el Aeropuerto Inter-
+nacional de Ezeiza, Ministro Pistarini, entre marzo de 1993 y julio de
+1994–, intereses y costas (fs. 2971/2980).
+Contra tal sentencia la demandada interpuso recurso extraordi-
+nario (fs. 2988/3068).
+2º) Que el tribunal a quo concedió el recurso extraordinario en
+cuanto al fondo del asunto, pero lo denegó –por ausencia de sentencia
+definitiva– respecto del agravio vinculado a la aplicación de las nor-
+mas de emergencia referentes a la “pesificación” de las deudas origi-
+nariamente expresadas en moneda extranjera, aspecto este último que,
+aclaró, debía ser decidido por el juez de primera instancia, previo plan-
+teo de la interesada (fs. 3076).
+3º) Que, según resulta de lo expresado, la sentencia de la cámara
+ha resuelto sólo parcialmente este juicio, ya que dispuso el reenvío de
+
+2569
+DE JUSTICIA DE LA NACION
+329
+la causa a la primera instancia para que allí se decida sobre la proce-
+dencia o no de la eventual conversión de la deuda a moneda de curso
+legal de acuerdo a lo previsto por las leyes 25.561 y 25.820 por el de-
+creto 214/02, lo cual tiene una clara repercusión en el monto de la
+condena cuya procedencia en sí misma se discute en el recurso ex-
+traordinario articulado.
+4º) Que, en tales condiciones, resulta aplicable la jurisprudencia
+de esta Corte atinente a las sentencias incompletas, respecto de las
+cuales el recurso extraordinario es inadmisible, pues su consideración
+impondría al Tribunal la resolución de la causa por partes y no de
+manera final (Fallos: 206:301; 215:248; 252:236; 319:1474; 324:817 y
+328:3553).
+Por ello, se declara improcedente el recurso extraordinario. Costas
+por su orden en razón del modo como se resuelve y las particularida-
+des que presenta el caso. Notifíquese y devuélvase.
+```
+
+### [span 10] header_pagina (45318–45318)
+```
+2569
+```
+
+### [span 11] header_pagina (45319–45319)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 12] header_pagina (45320–45320)
+```
+329
+```
+
+### [span 13] firma (45336–45337)
+```
+ELENA I. HIGHTON DE NOLASCO — JUAN CARLOS MAQUEDA — E. RAÚL
+ZAFFARONI — RICARDO LUIS LORENZETTI — CARMEN M. ARGIBAY.
+```
+
+### [span 14] catch_all (45338–45345)
+```
+Recurso extraordinario interpuesto por United Airlines Inc., representada por la Dra.
+Elizabeth M. Freidenberg, con el patrocinio del Dr. Julio César Rivera.
+Traslado contestado por Inversiones y Servicios S.A., representada por la Dra. Mónica
+P. Villafañe, patrocinada por el Dr. Vicente A. Bustos.
+Tribunal de origen: Cámara Nacional de Apelaciones en lo Civil y Comercial
+Federal Nº 2.
+Tribunales que intervinieron con anterioridad: Juzgado Nacional en lo Civil y Co-
+mercial Federal Nº 3.
+```
+
+### Borde inferior (transición al próximo caso)
+**Estado**: `solapado_con_proximo` | linea_fin_real=45345 | linea_inicio_proximo_caso=45320 | delta=-26
+**Alertas**: `solapado_con_proximo`
+
+
+---
+
+## 340_p131 — De Cillis, Sergio Luis c/ La Caja ART S.A. s/ Accidente - ley especial
+
+**Localización**
+- Archivo: `LibroVol340.1.md`
+- Páginas catálogo: 131–136 | Página consultada: 136
+- Líneas catálogo: 4593–4779 | Línea fin real: 4800 (status_fin=`fin_extendido_pag_compartida`, pista=`caratula_siguiente`)
+- Status localización: `ok`
+
+**Resumen de spans**
+
+| # | Tipo | Líneas (abs) | Líneas |
+|---|------|--------------|-------:|
+| 1 | header_pagina | 4593–4593 | 1 |
+| 2 | catch_all | 4594–4598 | 5 |
+| 3 | caratula | 4599–4599 | 1 |
+| 4 | sumario [1] | 4600–4611 | 12 |
+| 5 | sumario [2] | 4612–4626 | 15 |
+| 6 | header_pagina | 4624–4624 | 1 |
+| 7 | header_pagina | 4625–4625 | 1 |
+| 8 | header_pagina | 4626–4626 | 1 |
+| 9 | dictamen | 4627–4764 | 138 |
+| 10 | header_pagina | 4664–4664 | 1 |
+| 11 | header_pagina | 4665–4665 | 1 |
+| 12 | header_pagina | 4666–4666 | 1 |
+| 13 | header_pagina | 4707–4707 | 1 |
+| 14 | header_pagina | 4708–4708 | 1 |
+| 15 | header_pagina | 4709–4709 | 1 |
+| 16 | header_pagina | 4752–4752 | 1 |
+| 17 | header_pagina | 4753–4753 | 1 |
+| 18 | header_pagina | 4754–4754 | 1 |
+| 19 | cuerpo_mayoria | 4765–4775 | 11 |
+| 20 | firma | 4776–4778 | 3 |
+| 21 | catch_all | 4779–4779 | 1 |
+| 22 | header_pagina | 4780–4780 | 1 |
+| 23 | header_pagina | 4781–4781 | 1 |
+| 24 | header_pagina | 4782–4782 | 1 |
+| 25 | disidencia | 4783–4800 | 18 |
+
+**Invariantes**: cobertura=OK, disjunción=OK, líneas_residuo=6 (2.88% del bloque, n=208)
+
+---
+
+### [span 1] header_pagina (4593–4593)
+```
+340
+```
+
+### [span 2] catch_all (4594–4598)
+```
+Tribunal de origen: Cámara Nacional de Apelaciones en lo Contencioso Administra­
+tivo Federal, Sala I.
+Tribunal que intervino con anterioridad: Juzgado Nacional de Primera Instancia en lo 
+Contencioso Administrativo Federal n° 9.
+DE CILLIS, SERGIO LUIS c/ LA CAJA ART S.A. s/ Accidente -
+```
+
+### [span 3] caratula (4599–4599)
+```
+DE CILLIS, SERGIO LUIS c/ LA CAJA ART S.A. s/ Accidente ley especial
+
+```
+
+### [span 4] sumario [1] (4600–4611)
+**Header**: OMISION EN EL PRONUNCIAMIENTO
+**Atribución**: -Del dictamen de la Procuración General al que la disidencia remite-.
+```
+OMISION EN EL PRONUNCIAMIENTO
+El examen de cuestiones fácticas y de derecho común y procesal, aje­
+nas -como regla y por su tenor- a la instancia del artículo 14 de la ley 48, 
+cede cuando se ha omitido dar un tratamiento adecuado al asunto de 
+acuerdo a los términos en que fue planteado, al derecho aplicable y a 
+las pruebas rendidas, como ocurrió si el a quo omitió tratar el planteo 
+referente a la calificación laboral de las patologías denunciadas como 
+generadoras del daño (De la disidencia de los Dres. Juan Carlos Ma­
+queda y Horacio Rosatti).
+-Del dictamen de la Procuración General al que la disidencia remite-.
+-La mayoría consideró que el recurso extraordinario era inadmisible 
+(art. 280 CPCCN)-.
+```
+
+### [span 5] sumario [2] (4612–4626)
+**Header**: RIESGOS DEL TRABAJO
+**Atribución**: (sin atribución detectada)
+```
+RIESGOS DEL TRABAJO
+La Ley de Riesgos del Trabajo de 1995 es incompatible con el orden 
+constitucional y supralegal enunciado, pues ha negado todo tipo de re­
+paración al trabajador víctima de una enfermedad que guarda relación 
+de causalidad adecuada con el trabajo, por el sólo hecho de que aqué­
+lla no resulta calificada de enfermedad profesional en los términos de 
+dicha norma (De la disidencia de los Dres. Juan Carlos Maqueda y 
+Horacio Rosatti).
+-Del dictamen de la Procuración General al que la disidencia remite-.
+-La mayoría consideró que el recurso extraordinario era inadmisible 
+(art. 280 CPCCN)-.
+
+340
+132
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 6] header_pagina (4624–4624)
+```
+340
+```
+
+### [span 7] header_pagina (4625–4625)
+```
+132
+```
+
+### [span 8] header_pagina (4626–4626)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 9] dictamen (4627–4764)
+```
+Dictamen de la Procuración General
+Suprema Corte:
+-I-
+La Sala II de la Cámara Nacional de Apelaciones del Trabajo dejó 
+sin efecto la decisión de grado y rechazó la demanda interpuesta en los 
+términos de la ley 24.557 (v. fs. 146/147 y 193/197 del expediente princi­
+pal, al que me referiré, salvo aclaración).
+Los jueces sostuvieron que la pretensión debe ser desestimada 
+dado que las patologías objeto de reclamo no califican como con­
+tingencias cubiertas en los términos del artículo 6 de la ley 24.557. 
+Agregaron que esa preceptiva no habilita un reproche constitucio­
+nal, ya que nada impide que el Congreso Nacional elabore un listado 
+de dolencias a las que les reconoce cobertura automática y sitúe las 
+restantes en el plano del derecho común. Destacaron que el rechazo 
+no implica abrir juicio sobre el eventual planteo que pudiera realizar 
+el trabajador ante las autoridades administrativas, a fin de que se re­
+conozca su afección concreta y se le provea cobertura (dec. 1278/00), 
+ni obsta a su derecho a reclamar la protección de la incapacidad al 
+amparo de la responsabilidad civil.
+Contra el pronunciamiento, el actor interpuso recurso federal, que 
+fue replicado y denegado, dando lugar a esta queja (fs. 203/221, 224/227 
+y 229 y fs. 129/133 del cuaderno respectivo).
+-II-
+El actor alega, en síntesis, que la sentencia es arbitraria, dado 
+que omitió expedirse sobre el carácter profesional de las patologías 
+cuya indemnización reclama, a tenor del artículo 6, inciso 2.b), de la ley 
+24.557 (conforme decreto 1278/00). En tal sentido, refiere que solicitó 
+expresamente que se declarara la inconstitucionalidad del procedi­
+miento establecido ante las comisiones médicas, y que fuera la justicia 
+laboral quien esclareciera, en el caso concreto, la naturaleza profe­
+sional de las enfermedades que lo aquejan. Adiciona que el esquema 
+de numerus clausus contenido en la ley 24.557 fue modificado por el 
+decreto 1278/00, que admitió la reparación de afecciones no incluidas 
+en el decreto 658/96.
+Aduce que ha quedado probado que el actor padece dolencias que 
+le generan una minusvalía total y permanente del 30% de la total obre­
+
+133
+DE JUSTICIA DE LA NACIÓN
+340
+ra, y que ellas guardan relación causal con los esfuerzos realizados 
+en su calidad de “operario armador de neumáticos” de Bridgestone 
+Argentina S.A.I.C. -asegurado de la demandada-. Agrega que las ta­
+reas desplegadas han sido calificadas como agente dañoso a partir del 
+decreto 49/14, que amplió el listado de las enfermedades profesionales 
+resarcibles en el plano de la ley especial.
+Por último, sostiene que la decisión cuestionada atenta contra los 
+derechos de igualdad legal, defensa en juicio y propiedad, al tiempo 
+que desconoce los principios pro homine, de progresividad y de justi­
+cia social (arts. 14, 16 a 18 y 75, inc. 22, C.N.).
+-III-
+Ante todo, cabe precisar que si bien los agravios relacionados 
+con la atribución de responsabilidad a la aseguradora remiten al 
+examen de cuestiones fácticas y de derecho común y procesal, aje­
+nas -como regla y por su tenor- a la instancia del artículo 14 de la 
+ley 48, el Tribunal tiene dicho que ello no resulta óbice para admitir 
+el remedio cuando se ha omitido dar un tratamiento adecuado al 
+asunto, de acuerdo a los términos en que fue planteado, al derecho 
+aplicable y a las pruebas rendidas (cfr. Fallos: 311:2547; 317:768; y 
+S.C. B. 521. XLIX; “Benítez, Andrés c/ Eriday U.T.E. s/ laboral”, del 
+03/11/15, entre otros).
+En ese marco, le asiste razón al recurrente, dado que el a 
+quo omitió tratar el planteo referente a la calificación laboral 
+de las patologías denunciadas como generadoras del daño, con 
+el argumento de que no se hallaban incluidas dentro del listado 
+de enfermedades del artículo 6, inciso 2.a), de la LRT. Esa afir­
+mación soslaya, por un lado, el reclamo específico de que fuera 
+el juzgador quien determinara la calidad profesional del padeci­
+miento, resultado del vínculo causal entre las tareas realizadas 
+y el perjuicio sufrido por el trabajador. Por el otro, veda el acce­
+so a la reparación reclamada, producto de no haberse cumplido 
+con la instancia administrativa previa, contrariando la doctrina 
+expuesta en Fallos: 327:3610 (En igual sentido, S.C.O. 223. XLIV; 
+“Obregón, Francisco c/ Liberty ART”, del 17/4/12; y los votos mi­
+noritarios de los jueces Maqueda y Lorenzetti en Fallos: 331:241 
+y S.C. C. 1434; XLII; “Cacace, Gustavo c/ Provincia ART S.A. s/ 
+accidente -ley 9.688”, del 23/02/10).
+En ese sentido, insisto, los jueces no pudieron desconocer que 
+el trabajador en su escrito de demanda solicitó que se declare la in­
+
+340
+134
+FALLOS DE LA CORTE SUPREMA
+constitucionalidad del precepto que impone la intervención de las 
+comisiones médicas en el procedimiento del artículo 6, inciso 2.b), 
+de la LRT, y que sea la justicia quien determine la calificación labo­
+ral de las patologías sufridas por el actor (fs. 18/22). Sin embargo, 
+la cámara omitió expedirse sobre el asunto y se limitó a sostener la 
+razonabilidad del listado de patologías a las que brinda protección la 
+ley especial –art. 6, inc. 2.a)- y a insistir con la necesidad de acudir a 
+las comisiones médicas, sin proveer respuesta a los planteos consti­
+tucionales articulados.
+Ello cobra singular relevancia en el supuesto, dado que la sala 
+apoyó su decisión en las conclusiones del informe del perito oficial, 
+que da cuenta de que el trabajador padece cervicalgia, hernia dis­
+cal cervical (entre C 5-6), osteofitos y hernia discal lumbar (entre 
+L 4-5), que le generan una incapacidad del 30% de la T.O. (cfse. fs. 
+122/123 y 194). Agregó el perito que la patología que porta el actor 
+se relaciona con una “concatenación lesión accidental traumática, 
+secuela álgida y limitación funcional con coincidencia de sitio ana­
+tomo-topográfica” y que no hay constancias de su preexistencia (v. 
+fs. 122/123; testimonios de fs. 103/105, 111/113 y 114/115 y sentencia 
+de grado; fs. 146 vta./147).
+Cabe añadir que, aun cuando la lesión que sufre el trabajador 
+resulte ajena al listado de patologías cubiertas por la ley espe­
+cial, esa Corte en el caso “Silva”, de Fallos: 330:5435, expresó que 
+“no parecen quedar dudas de que la LRT, de 1995, es incompati­
+ble con el orden constitucional y supralegal enunciado, puesto que 
+ha negado todo tipo de reparación al trabajador víctima de una 
+enfermedad que guarda relación de causalidad adecuada con el 
+trabajo, por el sólo hecho de que aquélla no resulta calificada de 
+enfermedad profesional en los términos de dicha norma”. Tam­
+bién expresó que: “En lo que al universo laboral y al subexamine 
+concierne, la eliminación, por vía de la LRT, del marco tutelar de 
+las llamadas enfermedades accidente, importó un incumplimiento 
+de las dos obligaciones [respetar y proteger], las cuales, tanto en 
+su vigencia como en su indudable aplicación al derecho al trabajo, 
+fueron ratificadas en la ya citada Observación General n° 18 (esp. 
+párrs. 25/25, 33 y 35)” (v. considerandos 6° y 9° del voto de los jue­
+ces Petracchi y Fayt).
+En definitiva, el a quo desestimó el reclamo de reparación del daño 
+producto del trabajo, sin exponer motivos suficientes que justifiquen 
+esa decisión y contrariando los criterios delineados por esa Corte y lo 
+dispuesto por el artículo 3° del Código Civil y Comercial (ley n° 26.994).
+
+135
+DE JUSTICIA DE LA NACIÓN
+340
+En tales condiciones, la resolución se torna descalificable, sin que ello 
+implique anticipar un criterio sobre el fondo del problema, cuestión, 
+por lo demás, propia de los tribunales de la causa y ajena -por norma- a 
+la vía de excepción.
+-IV-
+Por lo expuesto, considero que corresponde hacer lugar a la queja, 
+declarar procedente el recurso, dejar sin efecto la sentencia y restituir 
+la causa al tribunal de origen para que, por quien competa, se dicte 
+un nuevo fallo con arreglo a lo expresado. Buenos Aires, 13 de julio de 
+2016. Irma Adriana García Netto.
+```
+
+### [span 10] header_pagina (4664–4664)
+```
+133
+```
+
+### [span 11] header_pagina (4665–4665)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 12] header_pagina (4666–4666)
+```
+340
+```
+
+### [span 13] header_pagina (4707–4707)
+```
+340
+```
+
+### [span 14] header_pagina (4708–4708)
+```
+134
+```
+
+### [span 15] header_pagina (4709–4709)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 16] header_pagina (4752–4752)
+```
+135
+```
+
+### [span 17] header_pagina (4753–4753)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 18] header_pagina (4754–4754)
+```
+340
+```
+
+### [span 19] cuerpo_mayoria (4765–4775)
+```
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 7 de marzo de 2017.
+Vistos los autos: “Recurso de hecho deducido por la actora en la 
+causa De Cillis, Sergio Luis c/ La Caja ART S.A. s/ accidente – ley es­
+pecial”, para decidir sobre su procedencia.
+Considerando:
+Que el recurso extraordinario, cuya denegación origina la presen­
+te queja, es inadmisible (art. 280 del Código Procesal Civil y Comercial 
+de la Nación).
+Por ello, oída la señora Procuradora Fiscal subrogante, se desestima 
+el recurso de hecho planteado. Notifíquese y, oportunamente, archívese.
+```
+
+### [span 20] firma (4776–4778)
+```
+Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — 
+Juan Carlos Maqueda (en disidencia)— Horacio Rosatti (en 
+disidencia)— Carlos Fernando Rosenkrantz.
+```
+
+### [span 21] catch_all (4779–4779)
+```
+
+```
+
+### [span 22] header_pagina (4780–4780)
+```
+340
+```
+
+### [span 23] header_pagina (4781–4781)
+```
+136
+```
+
+### [span 24] header_pagina (4782–4782)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 25] disidencia (4783–4800)
+**Header**: Disidencia de los señores ministros doctores don Juan Carlos
+```
+Disidencia de los señores ministros doctores don Juan Carlos
+Maqueda y don Horacio Rosatti
+Considerando:
+Que esta Corte comparte y hace suyos los fundamentos y conclu­
+siones del dictamen de la señora Procuradora Fiscal subrogante, a los 
+que cabe remitir en razón de brevedad.
+Por ello, de conformidad con lo dictaminado, se hace lugar a la que­
+ja, se declara procedente el extraordinario y se deja sin efecto la sen­
+tencia apelada con el alcance indicado. Con costas. Vuelvan los autos 
+al tribunal de origen a fin de que, por quien corresponda, se dicte un 
+nuevo fallo con arreglo al presente. Notifíquese, agréguese la queja al 
+principal y, oportunamente, remítase.
+Juan Carlos Maqueda — Horacio Rosatti.
+Recurso de queja interpuesto por Sergio Luis De Cillis, representado por el Dr. Ro­
+berto Oscar Barone.
+Tribunal de origen: Sala II de la Cámara Nacional de Apelaciones del Trabajo.
+Tribunal que intervino con anterioridad: Juzgado Nacional de Primera Instancia del 
+Trabajo nº 64.
+```
+
+### Borde inferior (transición al próximo caso)
+**Estado**: `solapado_con_proximo` | linea_fin_real=4800 | linea_inicio_proximo_caso=4780 | delta=-21
+**Alertas**: `solapado_con_proximo`
+
+
+---
+
+## 330_p4794 — Rodolfi, Leopoldo Rolando y otros (Vázquez de Sindona, Clotilde Inés Antonia y otros c/) | Vázquez de Sindona, Clotilde 
+
+**Localización**
+- Archivo: `LibroVol330.4.md`
+- Páginas catálogo: 4794–4796 | Página consultada: 4796
+- Líneas catálogo: 18241–18314 | Línea fin real: 18328 (status_fin=`fin_extendido_pag_compartida`, pista=`caratula_siguiente`)
+- Status localización: `ok`
+
+**Resumen de spans**
+
+| # | Tipo | Líneas (abs) | Líneas |
+|---|------|--------------|-------:|
+| 1 | header_pagina | 18241–18241 | 1 |
+| 2 | catch_all | 18242–18258 | 17 |
+| 3 | caratula | 18259–18259 | 1 |
+| 4 | sumario [1] | 18260–18265 | 6 |
+| 5 | cuerpo_mayoria | 18266–18317 | 52 |
+| 6 | header_pagina | 18272–18272 | 1 |
+| 7 | header_pagina | 18273–18273 | 1 |
+| 8 | header_pagina | 18274–18274 | 1 |
+| 9 | header_pagina | 18313–18313 | 1 |
+| 10 | header_pagina | 18314–18314 | 1 |
+| 11 | header_pagina | 18315–18315 | 1 |
+| 12 | firma | 18318–18319 | 2 |
+| 13 | catch_all | 18320–18328 | 9 |
+
+**Invariantes**: cobertura=OK, disjunción=OK, líneas_residuo=26 (29.55% del bloque, n=88)
+
+---
+
+### [span 1] header_pagina (18241–18241)
+```
+330
+```
+
+### [span 2] catch_all (18242–18258)
+```
+carga de impulsar el proceso. Es criterio reiterado que por ser la cadu-
+cidad de la instancia un modo anormal de terminación del proceso y
+de interpretación restrictiva, la aplicación que de ella se haga debe
+adecuarse a ese carácter sin llevar ritualistamente el criterio que la
+preside más allá del ámbito que le es propio (conf. Fallos: 325:3392;
+326:1183; 327:1430, 4415 y 5063, entre otros).
+Por ello, se desestima la caducidad de instancia acusada a fs. 344.
+Con costas. Notifíquese y siga la causa según su estado.
+RICARDO LUIS LORENZETTI — ELENA I. HIGHTON DE NOLASCO — ENRIQUE
+SANTIAGO PETRACCHI — JUAN CARLOS MAQUEDA — E. RAÚL ZAFFARONI.
+Recurso extraordinario interpuesto por la parte demandada, representada por el Dr.
+Ricardo Leggire, patrocinado por el Dr. Pedro Schellini.
+Traslado contestado por la parte actora, representada por el Dr. Adrián J. Figueroa.
+Tribunal de origen: Sala I de la Cámara Nacional de Apelaciones en lo Civil.
+Tribunales que intervinieron con anterioridad: Juzgado Nacional de Primera Ins-
+tancia en lo Civil Nº 74.
+CLOTILDE INES ANTONIA VAZQUEZ DE SINDONA Y OTROS
+```
+
+### [span 3] caratula (18259–18259)
+```
+CLOTILDE INES ANTONIA VAZQUEZ DE SINDONA Y OTROS V. LEOPOLDO ROLANDO RODOLFI Y OTROS
+
+```
+
+### [span 4] sumario [1] (18260–18265)
+**Header**: RECURSO EXTRAORDINARIO: Trámite.
+**Atribución**: (sin atribución detectada)
+```
+RECURSO EXTRAORDINARIO: Trámite.
+Cabe rechazar la caducidad de la instancia extraordinaria, cuando pese a haber
+transcurrido el plazo previsto por el art. 310, inc. 2º, del Código Procesal Civil y
+Comercial de la Nación desde la formación del incidente de ejecución de sentencia
+hasta el pedido de elevación efectuado por los demandados, el proceso no se encon-
+traba integrado en debida forma respecto de uno de los legitimados pasivos.
+```
+
+### [span 5] cuerpo_mayoria (18266–18317)
+```
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 13 de noviembre de 2007.
+Autos y Vistos; Considerando:
+1º) Que contra el pronunciamiento de la Sala I de la Cámara Na-
+cional de Apelaciones en lo Civil los demandados interpusieron el re-
+
+4795
+DE JUSTICIA DE LA NACION
+330
+curso extraordinario. Conferido el traslado previsto en el art. 257 del
+Código Procesal Civil y Comercial de la Nación, los actores lo contesta-
+ron y la apelación fue concedida mediante la resolución de fs. 152.
+2º) Que con fecha 9 de noviembre de 2006, los ejecutantes solicita-
+ron que se declarara la caducidad de la instancia extraordinaria por
+haber transcurrido con exceso el plazo del inc. 2 del art. 310 del Códi-
+go Procesal Civil y Comercial de la Nación, sin que los recurrentes
+hubiesen impulsado la elevación de las actuaciones (fs. 295).
+3º) Que sustanciado dicho planteo, uno de los codemandados con-
+testó traslado e informó acerca del fallecimiento de otro de los
+codeudores, motivo por el cual, denunciada la existencia de un herede-
+ro, se procedió a citarlo para que concurriese a estar a derecho y se le
+dio traslado de la caducidad sin que lo haya contestado (fs. 320, 336 y
+339).
+4º) Que aun cuando desde la formación del incidente de ejecución
+de sentencia con fecha 27 de diciembre de 2005 –trámite que duró seis
+meses desde la concesión del recurso extraordinario– hasta el pedido
+de elevación efectuado por los demandados el 7 de noviembre de 2006,
+habría transcurrido el plazo previsto por el art. 310, inc. 2º, del Código
+Procesal Civil y Comercial de la Nación, lo cierto es que la caducidad
+debe ser rechazada en razón de que el proceso no se encontraba inte-
+grado en debida forma respecto de uno de los legitimados pasivos.
+5º) Que el hecho de que el fallecimiento del codeudor Domingo
+Damián Luque hubiese sido denunciado por el letrado patrocinante
+en el mencionado incidente de ejecución el 19 de septiembre de 2006
+(fs. 311 y 316), da cuenta de la imposibilidad de impulsar el procedi-
+miento en que se encontraba el heredero derivada de su falta de cita-
+ción al juicio, la que solo ocurrió con fecha 4 de diciembre de 2006 en el
+incidente y 17 de abril de 2007 en las presentes actuaciones, circuns-
+tancia que impide hacer lugar al planteo de caducidad si se tiene en
+cuenta el principio de indivisibilidad de la instancia.
+6º) Que, por otra parte, esta Corte ha resuelto en reiteradas opor-
+tunidades que por ser la caducidad de la instancia un modo anormal
+de terminación del proceso y de interpretación restrictiva, la aplica-
+ción que de ella se haga debe adecuarse a ese carácter sin llevar
+ritualistamente el criterio que la preside más allá del ámbito que le es
+propio (conf. Fallos: 319:1024, 1142 y 1769; 324:1992 y 325:3392) .
+
+4796
+FALLOS DE LA CORTE SUPREMA
+330
+Por ello, se desestima la caducidad de la instancia acusada a fs. 295.
+Con costas. Notifíquese y siga la causa según su estado.
+```
+
+### [span 6] header_pagina (18272–18272)
+```
+4795
+```
+
+### [span 7] header_pagina (18273–18273)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 8] header_pagina (18274–18274)
+```
+330
+```
+
+### [span 9] header_pagina (18313–18313)
+```
+4796
+```
+
+### [span 10] header_pagina (18314–18314)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 11] header_pagina (18315–18315)
+```
+330
+```
+
+### [span 12] firma (18318–18319)
+```
+RICARDO LUIS LORENZETTI — ELENA I. HIGHTON DE NOLASCO — ENRIQUE
+SANTIAGO PETRACCHI — JUAN CARLOS MAQUEDA — E. RAÚL ZAFFARONI.
+```
+
+### [span 13] catch_all (18320–18328)
+```
+Recurso extraordinario interpuesto por Leopoldo Rolando Rodolfi, Domingo Damián
+Luque y Juan Carlos Nicoll en representación de Bibiana Esperanza Villagra,
+patrocinados por el Dr. Miguel Angel Villanueva.
+Traslado contestado por Clotilde Inés Antonia Vázquez de Sindona, Hilde Teresa
+Guerra, Sofía Pesiney, Fénix Felisa Ballarini de Sole y Angélica María Ric de
+Cortés, representados por el Dr. Jorge O. D’Onofrio.
+Tribunal de origen: Sala I de la Cámara Nacional de Apelaciones en lo Civil.
+Tribunales que intervinieron con anterioridad: Juzgado Nacional de Primera Ins-
+tancia en lo Civil Nº 80.
+```
+
+### Borde inferior (transición al próximo caso)
+**Estado**: `solapado_con_proximo` | linea_fin_real=18328 | linea_inicio_proximo_caso=18315 | delta=-14
+**Alertas**: `solapado_con_proximo`
+
+
+---
+
+## 334_p972 — Oscar Melendez Construcciones y Otro | A.N.A. | Oscar Meléndez Construcciones y otro
+
+**Localización**
+- Archivo: `LibroVol334.2.md`
+- Páginas catálogo: 972–983 | Página consultada: 983
+- Líneas catálogo: 9963–10374 | Línea fin real: 10347 (status_fin=`fin_dentro_bloque`, pista=`sumario_siguiente`)
+- Status localización: `ok_pg_fin_redirigida`
+
+**Resumen de spans**
+
+| # | Tipo | Líneas (abs) | Líneas |
+|---|------|--------------|-------:|
+| 1 | header_pagina | 9963–9963 | 1 |
+| 2 | catch_all | 9964–9982 | 19 |
+| 3 | caratula | 9983–9983 | 1 |
+| 4 | sumario [1] | 9984–9985 | 2 |
+| 5 | sumario [2] | 9986–10001 | 16 |
+| 6 | header_pagina | 9999–9999 | 1 |
+| 7 | header_pagina | 10000–10000 | 1 |
+| 8 | header_pagina | 10001–10001 | 1 |
+| 9 | dictamen | 10002–10311 | 310 |
+| 10 | header_pagina | 10038–10038 | 1 |
+| 11 | header_pagina | 10039–10039 | 1 |
+| 12 | header_pagina | 10040–10040 | 1 |
+| 13 | header_pagina | 10077–10077 | 1 |
+| 14 | header_pagina | 10078–10078 | 1 |
+| 15 | header_pagina | 10079–10079 | 1 |
+| 16 | header_pagina | 10114–10114 | 1 |
+| 17 | header_pagina | 10115–10115 | 1 |
+| 18 | header_pagina | 10116–10116 | 1 |
+| 19 | header_pagina | 10149–10149 | 1 |
+| 20 | header_pagina | 10150–10150 | 1 |
+| 21 | header_pagina | 10151–10151 | 1 |
+| 22 | header_pagina | 10188–10188 | 1 |
+| 23 | header_pagina | 10189–10189 | 1 |
+| 24 | header_pagina | 10190–10190 | 1 |
+| 25 | header_pagina | 10227–10227 | 1 |
+| 26 | header_pagina | 10228–10228 | 1 |
+| 27 | header_pagina | 10229–10229 | 1 |
+| 28 | header_pagina | 10269–10269 | 1 |
+| 29 | header_pagina | 10270–10270 | 1 |
+| 30 | header_pagina | 10271–10271 | 1 |
+| 31 | header_pagina | 10309–10309 | 1 |
+| 32 | header_pagina | 10310–10310 | 1 |
+| 33 | header_pagina | 10311–10311 | 1 |
+| 34 | cuerpo_mayoria | 10312–10324 | 13 |
+| 35 | firma | 10325–10327 | 3 |
+| 36 | catch_all | 10328–10347 | 20 |
+
+**Invariantes**: cobertura=OK, disjunción=OK, líneas_residuo=39 (10.13% del bloque, n=385)
+
+---
+
+### [span 1] header_pagina (9963–9963)
+```
+334
+```
+
+### [span 2] catch_all (9964–9982)
+```
+precedente resultan de aplicación en el sub lite, y a ellas se remite por 
+razón de brevedad.
+Por ello, y concordemente con lo dictaminado por la señora Pro-
+curadora Fiscal, se declara admisible el recurso extraordinario y se 
+confirma la sentencia apelada. Costas por su orden, en atención a que 
+en la interpretación de las normas en juego la actora pudo creerse con 
+derecho para reclamar (art. 68, 2º párrafo del Código Procesal Civil y 
+Comercial de la Nación). Notifíquese con copia del precedente antes 
+citado y, oportunamente, devuélvase.
+Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan Carlos 
+Maqueda — Carmen M. Argibay.
+Recurso extraordinario interpuesto por Silvia Beatriz Hirzy, representada por el 
+Dr. Agustín Juan Gualberto Joaquín Durañona y Vedia.
+Traslado contestado por el Estado Nacional, Corte Suprema de Justicia de la 
+Nación, representada por el Dr. Alejo A. Martínez Araujo, con el patrocinio letrado 
+del Dr. Norberto Salvador Bisaro.
+Tribunal de origen: Cámara Nacional de Apelaciones en lo Contencioso Admi-
+nistrativo Federal, Sala II.
+Tribunales que intervinieron con anterioridad: Juzgado Nacional de Primera Ins-
+```
+
+### [span 3] caratula (9983–9983)
+```
+tancia en lo Contencioso Administrativo Federal Nº 1.
+```
+
+### [span 4] sumario [1] (9984–9985)
+**Header**: OSCAR MELENDEZ CONSTRUCCIONES y Otro c/ A.N.A.
+**Atribución**: (sin atribución detectada)
+```
+OSCAR MELENDEZ CONSTRUCCIONES y Otro c/ A.N.A.
+s/ Administración Nacional de Aduanas
+```
+
+### [span 5] sumario [2] (9986–10001)
+**Header**: CODIGO ADUANERO.
+**Atribución**: (sin atribución detectada)
+```
+CODIGO ADUANERO.
+Si bien una lectura descuidada del art. 91.2 del Código Aduanero podría llevar 
+a pensar que únicamente son exportadores “las personas que en su nombre ex-
+portan mercadería...”, y que ellos deben realizar los trámites pertinentes para 
+operar (registrándose o no, en los términos de los arts. 92 y cc. de dicho cuerpo 
+normativo), ello implicaría dejar sin sentido los casos también autorizados por 
+la normativa aduanera en los cuales la operación –más compleja– se realiza 
+“por cuenta y orden de otro”, ya que la persona que formalmente documenta la 
+exportación aclara ante el organismo fiscal que lo hace sólo en tal carácter, y 
+denuncia concretamente en nombre y representación de otra en cuyo interés y 
+nombre es que actúa.
+–Del dictamen de la Procuración General, al que remitió la Corte Suprema–.
+
+973
+DE JUSTICIA DE LA NACION
+334
+```
+
+### [span 6] header_pagina (9999–9999)
+```
+973
+```
+
+### [span 7] header_pagina (10000–10000)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 8] header_pagina (10001–10001)
+```
+334
+```
+
+### [span 9] dictamen (10002–10311)
+```
+Dictamen de la Procuración General
+Suprema Corte:
+– I –
+A fs. 546/548, la juez de primera instancia hizo lugar a lo solicitado 
+por Oscar Meléndez y Oscar Meléndez Construcciones (sociedad de 
+hecho) y condenó a la Administración General de Aduanas al pago de 
+los reembolsos por exportaciones al área aduanera especial de Tierra 
+del Fuego (ley 19.640 y resolución 1221/85 del Ministerio de Econo-
+mía) por las operaciones documentadas en los permisos de embarque 
+16.695/88 y 16.001/88.
+Tuvo por acreditado que la actora, por no encontrarse inscripta como 
+firma exportadora en el registro pertinente, encomendó la operación a 
+Comexa S.R.L., en los términos de la resolución ANA 370/86, que au-
+torizaba la presentación de solicitudes de destinación de exportación 
+para consumo por cuenta de terceros, a la vez que fijaba la responsa-
+bilidad solidaria de ambos por situaciones relativas a la concesión de 
+beneficios promocionales.
+Con cita de los arts. 91 y 827 del Código Aduanero, indicó que lo 
+sustancial en este caso es determinar el sujeto en cuyo nombre se ha 
+realizado la exportación, y que los reembolsos persiguen restituir –total 
+o parcialmente– lo pagado en virtud de tributos interiores vinculados 
+con la mercadería exportada para consumo. Por tal razón, concluyó 
+en que quien es propietario de esa mercadería, y en consecuencia se 
+supone que abonó dichos gravámenes, es el beneficiario del reembolso 
+(Oscar Meléndez y Oscar Meléndez Construcciones, en la especie) más 
+allá de que la documentante haya sido otra persona, inscripta como 
+exportadora.
+Recordó que ya al contestar la demanda a fs. 101/102 vta., el or-
+ganismo fiscal reconoció que la actora realizó la exportación indicada 
+por intermedio de la señalada Comexa S.R.L., que los permisos de 
+embarque eran los referidos, que ambos gozaban de un derecho de re-
+embolso del 30%, y que el motivo por el cual el pago se había demorado 
+era, exclusivamente, que en la causa Nº 304/88, “Argentini”, tramitada 
+ante el Juzgado Federal de Bahía Blanca (en la que se investigaba la 
+comisión de una serie de delitos de contrabando y defraudación a la
+
+974
+FALLOS DE LA CORTE SUPREMA
+334
+Administración Pública), el magistrado interviniente había dispuesto 
+la suspensión del pago de los reembolsos vinculados con tales docu-
+mentos.
+Señaló que en el citado expediente, con posterioridad, se declaró 
+extinta la acción penal por prescripción y que, según las constancias 
+incorporadas a fs. 441 –copia certificada de la sentencia de primera 
+instancia– quedó acreditado que, a pesar de lo inicialmente señalado, 
+dichos instrumentos no estaban comprendidos entre aquellos cuya 
+tramitación se había bloqueado oportunamente.
+– II –
+La Sala IV de la Cámara Nacional de Apelaciones en lo Contencioso 
+Administrativo Federal confirmó lo decidido por la instancia anterior 
+(ver fs. 617/619 vta.), rechazando los agravios vertidos tanto por la 
+Aduana como por Comexa S.R.L.
+Con relación a los argumentos del ente recaudador, enderezados 
+a poner en tela de juicio la procedencia misma del reembolso, dijo que 
+ese organismo, al responder a la demanda, había reconocido tanto las 
+operaciones como el derecho de los actores al reembolso pretendido, y 
+que la única traba argüida para su efectivo pago era la mentada exis-
+tencia de una causa penal por contrabando y lo en ella ordenado.
+Agregó que a fs. 138/147 obra copia certificada de los permisos de 
+embarque 16.695/88 y 16.001/88, y que, de acuerdo con las constancias 
+de autos, se desprende que ellos no fueron impugnados por la justicia 
+penal ni formaron parte de la denuncia. Si bien la Aduana adujo en su 
+memorial que hubo operaciones como las aquí documentadas mediante 
+las cuales se hicieron maniobras fraudulentas, y acusó la inexistencia o 
+simulación de las operaciones aquí involucradas, afirmó la cámara que 
+tales alegaciones no sólo eran extemporáneas, sino además carentes 
+de todo tipo de prueba.
+Con relación a la legitimación de Oscar Meléndez y Oscar Meléndez 
+Construcciones para percibir los reembolsos –cuestionada tanto por la 
+Aduana como principalmente por Comexa S.R.L.–, indicó que dicho be-
+neficio busca restituir el pago de tributos interiores abonados en virtud 
+de la mercadería que se exportare para consumo a título oneroso y por 
+los servicios que se hubieran prestado por esa misma mercadería.
+
+975
+DE JUSTICIA DE LA NACION
+334
+Añadió que de la documentación aduanera indicada surge que los 
+permisos de mentas fueron documentados por Comexa S.R.L, pero “por 
+cuenta” de los actores. Por ello, estimó que ambas –la exportadora al 
+documentar, y la Aduana al dar trámite a la declaración– aceptaron 
+que la operación se realizaba por cuenta y orden de los aquí actores, 
+reconociéndolos como titulares de los bienes exportados y, en conse-
+cuencia, del derecho a percibir los reembolsos.
+– III –
+A fs. 623/633 luce el recurso extraordinario interpuesto por Comexa 
+S.R.L.
+En primer término, indicó que se presentó en juicio por medio de 
+un mandatario –Oscar Meléndez– a quien apoderó en su oportunidad, 
+pero que debió reasumir directamente su participación cuando advir-
+tió que aquél pretendía percibir los reembolsos para sí, más allá del 
+mandato conferido. Por ello, critica la sentencia apelada en cuanto hizo 
+caso omiso de la revocación del poder.
+Por otra parte, señala que es ella la real beneficiaria de los reembol-
+sos, al ser el exportador documentante de los permisos de embarque.
+Arguye también que la sentencia recurrida afecta sus derechos 
+de defensa en juicio, al debido proceso y de propiedad, tildándola de 
+arbitraria, porque en definitiva se verá compelida a abonar sumas ya 
+canceladas.
+– IV –
+Por su lado, la Aduana interpuso el recurso extraordinario que luce 
+a fs. 638/647 vta.
+En síntesis, puntualiza que, por una parte, se ha desconocido la 
+inteligencia de los arts. 825 y cc. del Código Aduanero en cuanto a la 
+procedencia de los reembolsos y, por otra, que la sentencia resulta arbi-
+traria al ser violatoria de su derecho de defensa en juicio y de igualdad 
+ante la ley. Afirma que Oscar Meléndez se presentó en autos mediante 
+un poder especial otorgado por el representante legal de Comexa S.R.L., 
+quien luego lo revocó. Por ende, se agravia al haberse considerado a 
+Oscar Meléndez como titular del derecho a cobrar los reembolsos, a
+
+976
+FALLOS DE LA CORTE SUPREMA
+334
+pesar de no haber actuado como exportador. En tal sentido, sostiene 
+que la actora carecía de legitimación para obrar.
+Agrega, por último, que las operaciones efectuadas por Comexa 
+S.R.L. no se habrían realizado, motivo por el cual tampoco correspon-
+derían los reembolsos hasta tanto ella no probase fehacientemente su 
+veracidad.
+– V –
+A fs. 666/666 vta., la Cámara concedió ambos recursos extraordi-
+narios en lo que respecta a la inteligencia de normas federales, mas 
+los rechazó en cuanto arguyeron la existencia de un supuesto de ar-
+bitrariedad.
+Al no haberse interpuesto queja alguna a su respecto, considero 
+que esa Corte carece de jurisdicción para examinar los agravios fun-
+dados en la arbitrariedad endilgada a la sentencia, toda vez que la 
+apelación extraordinaria fue expresamente denegada por el tribunal 
+recurrido en este aspecto, al limitarse a concederla sólo en lo tocante 
+a la interpretación de normas federales (Fallos: 313:1319; 317:1342; 
+318:141; 319:1057; 321:1997; 322:1231, entre otros).
+– VI –
+Tengo para mí que, para el correcto encuadramiento de la discusión 
+en esta instancia excepcional, resulta indispensable poner aquí de re-
+lieve que se hallan fuera de debate los siguientes extremos:
+1. Que los permisos de embarque 16.695/88 y 16.001/88 documen-
+taron sendas exportaciones realizadas por Comexa S.R.L., actuando 
+ésta “por cuenta de” Oscar Meléndez (ver documentación obrante a 
+fs. 138/147; en especial, fs. 141 y 146).
+2. Que ambas operaciones se realizaron al amparo de las resolucio-
+nes 1221/85 del Ministerio de Economía, y 370/86 de la Administración 
+Nacional de Aduanas.
+3. Que la Aduana reconoció la procedencia del pago de los reem-
+bolsos por las operaciones relativas a esos permisos de embarque al
+
+977
+DE JUSTICIA DE LA NACION
+334
+momento de contestar la demanda (ver fs. 101, último párrafo; y ver sen-
+tencia de fs. 203/205, confirmada por la Cámara a fs. 215/216 vta.).
+4. Que la única razón aducida en su momento por la Aduana como 
+óbice para el pago a Oscar Meléndez era que la documentación pertinen-
+te había sido remitida al Juzgado Federal de Bahía Blanca (ver fs. 102, 
+segundo párrafo; asimismo, en la respuesta dada a los numerosos oficios 
+que le fueron cursados durante la larga tramitación de este expediente 
+–ver, como ejemplo, la documentación obrante a fs. 96–, de la que surge 
+que no habría impedimento para el pago, salvo lo indicado).
+5. Que si bien dicho Juzgado informó primero que había ordenado 
+la suspensión de todo pago vinculado con esos permisos de embarque 
+(ver fs. 99 vta.), más tarde aclaró que ellos no estaban comprendidos 
+en la investigación realizada lo que, por ende, implicaba que la pro-
+hibición referida no los abarcaba (ver informe de fs. 542 y copia de su 
+sentencia del 30/4/1996, obrante a fs. 306/441 vta., en especial el punto 
+XIV de su fallo, fs. 441),
+6. Que Oscar Meléndez y Oscar Meléndez Construcciones actuaron, 
+desde el inicio mismo de este pleito, por derecho propio (ver fs. 5/12), sin 
+perjuicio de haber ejercido en algún momento, y de manera paralela, la 
+representación de Comexa S.R.L. (ver presentaciones de fs. 77 y 79).
+7. Que ni la Aduana ni Comexa S.R.L. han controvertido en tiempo 
+oportuno que la mercadería objeto de las operaciones de exportación 
+fuera de propiedad de Oscar Meléndez y Oscar Meléndez Construc-
+ciones, ni mucho menos puesto en tela de juicio que fueran éstos quie-
+nes hubieran abonado los tributos internos en razón de los cuales se 
+origina –en lo sustantivo– el derecho al cobro de los reembolsos aquí 
+involucrados.
+Considero que es la luz de estas premisas que han de estudiarse 
+los agravios subsistentes en cada una de las apelaciones extraordina-
+rias deducidas.
+En tal orden de ideas, tengo para mí que la queja fincada en que 
+las instancias anteriores omitieron tomar en cuenta que Oscar Melén-
+dez participó en autos exclusivamente en carácter de mandatario de 
+Comexa S.R.L. –vertida por ambas recurrentes–, por vincularse con 
+cuestiones de hecho, prueba y derecho procesal, resultan ajenas al
+
+978
+FALLOS DE LA CORTE SUPREMA
+334
+estudio en esta instancia, y dicho ello sin perjuicio de indicar la com-
+pleta falta de asidero de tales argumentos (ver punto 6 de la reseña 
+que antecede) con la mera constatación de las presentaciones obrantes 
+en esté expediente.
+De la misma manera, considero que tampoco puede ser atendido 
+aquí el agravio del ente fiscal ligado con la presunta inexistencia de las 
+operaciones documentadas, puesto que no sólo involucran cuestiones de 
+índole fáctica y procesal que, como expresé, son extrañas por principio 
+al recurso del art. 14 de la ley 48, sino que además sus argumentos en 
+tal sentido fueron introducidos en autos recién al expresar agravios 
+contra la sentencia de fs. 546/548 (ver escrito de fs. 588/592 vta.), pre-
+sentado el 12/11/2007, es decir 17 años después de haber contestado 
+la demanda (ver fs. 101/102), lo cual deja a las claras que es fruto de 
+una reflexión tardía.
+– VII –
+Así las cosas, tengo para mí que el único agravio que cabe estudiar 
+ahora es el vinculado con la inteligencia otorgada por el a quo a las 
+normas federales involucradas (ley 19.640; arts. 91, 827 y cc. del Código 
+Aduanero, y resolución 370/86), en cuanto de ellas se ha derivado el 
+derecho al cobro de los reembolsos por parte de Oscar Meléndez.
+La postura de ambas recurrentes, en síntesis, radica en sostener, 
+en primer lugar, que de dichas normas se desprende que ha de consi-
+derarse “exportador” únicamente a quien documenta la operación en 
+los instrumentos pertinentes (los permisos de embarque, en el caso de 
+autos) para, seguidamente, derivar que sólo quien así es considerado 
+tiene derecho a la concesión de los beneficios de los regímenes promo-
+cionales, en los términos del art. 1.2 de la citada resolución 370/86.
+Estimo que corresponde adentrarse en el meollo del tema –pese a 
+que ambos escritos de interposición del recurso exhiben serias deficien-
+cias en su fundamentación al ser meras reiteraciones de argumentos 
+expuestos en las etapas anteriores, carentes de una crítica concreta 
+y razonada de la sentencia de la alzada– dado que esa Corte tiene 
+reiteradamente dicho que en la tarea de establecer la correcta inter-
+pretación que cabe asignar a normas federales no debe ceñirse a las 
+posturas del recurrente ni del tribunal apelado, sino que le incumbe
+
+979
+DE JUSTICIA DE LA NACION
+334
+realizar una declaratoria sobre el punto disputado (Fallos: 323:1409, 
+1460 y 1566; 328:3381, entre otros).
+Contrariamente a lo postulado por las apelantes, considero que 
+una interpretación armónica de las normas en juego conduce a dar 
+por plausible la solución a la que se arribó en la sentencia apelada, 
+puesto que, según lo pienso –y dadas las particulares circunstancias 
+del caso de autos– no cabría reservar el concepto de “exportador” sólo 
+para aquel que documentó el permiso de embarque. Esa coincidencia 
+se podrá dar en la mayoría de los casos, pero no implica, por sí, que 
+sean términos siempre equivalentes.
+En efecto, si bien una lectura descuidada del art. 91.2 del Código 
+Aduanero podría llevar a pensar que únicamente son exportadores 
+“las personas que en su nombre exportan mercadería (...)”, y que ellos 
+deben realizar los trámites pertinentes para operar (registrándose o 
+no, en los términos de los arts. 92 y cc. de dicho cuerpo normativo), ello 
+implicaría dejar sin sentido los casos también autorizados por la nor-
+mativa aduanera en los cuales la operación –más compleja– se realiza 
+“por cuenta y orden de otro” –supuesto de autos–, ya que la persona que 
+formalmente documenta la exportación declara ante el organismo fiscal 
+que lo hace sólo en tal carácter, y denuncia concretamente en nombre 
+y representación de otra en cuyo interés y nombre es qué actúa.
+Dichas las cosas en otros términos y recurriendo al presente caso 
+para ejemplificar, está fuera de discusión aquí que fue Oscar Meléndez 
+quien, como propietario de una mercadería que vendió a un tercero 
+radicado en el área aduanera especial de la ley 19.640, para concretar 
+tal negocio y realizar la “exportación” (y así no sólo llevar a cabo la 
+compra venta entre privados, sino además poder gozar de los beneficios 
+tributarios consiguientes al régimen) optó por acudir a una firma ins-
+cripta en los registros pertinentes para que documentara la operación, 
+tal como lo permitía la reglamentación vigente.
+Ello surge, como quedó dicho, de los propios permisos de embar-
+que 16.001/88 y 16.695/88 –en los que quedaron involucradas las tres 
+personas que aquí disputaron sus derechos–, bajo los términos fijados 
+por la propia Aduana en su resolución 370/86, art. 1.1, en cuanto au-
+torizó “la presentación de solicitudes de destinación para consumo y/o 
+temporales de exportación y/o importación en los que el documentante, 
+debidamente inscripto ante la aduana, actúe por cuenta de un tercero 
+inscripto o no inscripto”.
+
+980
+FALLOS DE LA CORTE SUPREMA
+334
+No debe escaparse que lo importante aquí, también a los fines del 
+derecho al cobro del reembolso, es ese “tercero” que participó en la 
+sustancia dé la operación mercantil y en la exportación, con indepen-
+dencia de si está o no inscripto formalmente como “exportador” en los 
+registros pertinentes.
+Debo advertir que una inteligencia opuesta a la aquí propiciada 
+conduce derechamente a resultados disvaliosos. Por un lado, porque 
+dejaría sin sentido lo preceptuado por el propio reglamento citado, 
+tornando fútil la distinción allí hecha para permitir que una “ex-
+portadora” (en sentido restringido) actuara por cuenta y orden de 
+terceros, ya que la mención u omisión de la existencia de éstos sería 
+irrelevante. En efecto, si únicamente fuera relevante quien documentó 
+la operación, el así considerado “exportador”, carecería de interés dife-
+renciar aquellos casos en que lo hace por sí de los otros en que actúa 
+por terceros, como asimismo mencionar la responsabilidad solidaria 
+de éstos con aquél.
+Por otro lado, y más grave aún, ha de verse que privaría de justi-
+cia al régimen de reintegros y reembolsos de los arts. 825, 827 y cc., 
+puesto que ellos persiguen la “restitución” –total o parcial– de ciertos 
+tributos interiores oportunamente “pagados” por el sujeto interesado 
+cuando se realiza una exportación. En efecto, si “exportador” única-
+mente es el “documentante” (aun en el caso en que haya actuado por 
+cuenta y orden de un tercero, es decir cuando no lo haya sido quien 
+hubiera efectivamente pagado los tributos a devolver), puede apre-
+ciarse con nitidez que la intención del legislador se vería completa-
+mente burlada.
+En tal sentido, tal como lo ha sostenido V.E., no debe prescindirse 
+de las consecuencias que naturalmente derivan de un fallo, toda vez 
+que constituyen uno de los índices más seguros para verificar la razo-
+nabilidad de la interpretación y su congruencia con el sistema en que 
+está engarzada la norma (arg. Fallos: 302:1284, entre otros).
+– VIII –
+Por lo expuesto, considero que, con el alcance indicado en el acápite 
+anterior, debe declararse formalmente admisible los recursos extraor-
+dinarios, y confirmar la sentencia apelada, de acuerdo con lo aquí in-
+dicado. Buenos Aires, 28 de abril de 2011. Laura. M. Monti.
+
+981
+DE JUSTICIA DE LA NACION
+334
+```
+
+### [span 10] header_pagina (10038–10038)
+```
+974
+```
+
+### [span 11] header_pagina (10039–10039)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 12] header_pagina (10040–10040)
+```
+334
+```
+
+### [span 13] header_pagina (10077–10077)
+```
+975
+```
+
+### [span 14] header_pagina (10078–10078)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 15] header_pagina (10079–10079)
+```
+334
+```
+
+### [span 16] header_pagina (10114–10114)
+```
+976
+```
+
+### [span 17] header_pagina (10115–10115)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 18] header_pagina (10116–10116)
+```
+334
+```
+
+### [span 19] header_pagina (10149–10149)
+```
+977
+```
+
+### [span 20] header_pagina (10150–10150)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 21] header_pagina (10151–10151)
+```
+334
+```
+
+### [span 22] header_pagina (10188–10188)
+```
+978
+```
+
+### [span 23] header_pagina (10189–10189)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 24] header_pagina (10190–10190)
+```
+334
+```
+
+### [span 25] header_pagina (10227–10227)
+```
+979
+```
+
+### [span 26] header_pagina (10228–10228)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 27] header_pagina (10229–10229)
+```
+334
+```
+
+### [span 28] header_pagina (10269–10269)
+```
+980
+```
+
+### [span 29] header_pagina (10270–10270)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 30] header_pagina (10271–10271)
+```
+334
+```
+
+### [span 31] header_pagina (10309–10309)
+```
+981
+```
+
+### [span 32] header_pagina (10310–10310)
+```
+DE JUSTICIA DE LA NACION
+```
+
+### [span 33] header_pagina (10311–10311)
+```
+334
+```
+
+### [span 34] cuerpo_mayoria (10312–10324)
+```
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 30 de agosto de 2011.
+Vistos los autos: “Oscar Meléndez Construcciones y otro c/ A.N.A. 
+s/ Administración Nacional de Aduanas”.
+Considerando:
+Que las cuestiones planteadas han sido correctamente tratadas 
+en el dictamen de la señora Procuradora Fiscal, cuyos fundamentos 
+son compartidos por el Tribunal, y a los que corresponde remitirse en 
+razón de brevedad.
+Por ello, de conformidad con lo dictaminado por la señora Procura-
+dora Fiscal, se declaran formalmente procedentes los recursos extraor-
+dinarios y se confirma la sentencia apelada. Con costas. Notifíquese 
+y devuélvase.
+```
+
+### [span 35] firma (10325–10327)
+```
+Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Carlos 
+S. Fayt — Enrique Santiago Petracchi — Juan Carlos Maqueda — E. 
+Raúl Zaffaroni — Carmen M. Argibay.
+```
+
+### [span 36] catch_all (10328–10347)
+```
+Recursos extraordinarios interpuestos por: Eduardo Manuel De Dios, en represen-
+tación de Comexa SRL, con el patrocinio del Dr. Alejandro Pablo Boggiano y por 
+la Dirección General de Aduanas, representada y patrocinada por el Dr. Juan 
+Manuel Seitz.
+Traslados contestados por la Dirección General de Aduanas, representada y pa-
+trocinada por la Dra. Gloria del C. Fernández García y por la actora, Oscar Me-
+léndez Construcciones, representada por el Dr. Angel Cattaneo, con el patrocinio 
+del Dr. Daniel Palenque Bullrich.
+Tribunal de origen: Sala IV de la Cámara Nacional de Apelaciones en lo Con-
+tencioso Administrativo Federal.
+Tribunal que intervino con anterioridad: Juzgado Nacional de Primera Instancia 
+en lo Contencioso Administrativo Federal Nº 4.
+
+HOJA COMPLEMENTARIA
+Hoja incorporada a los efectos de permitir la búsqueda por 
+página dentro del Volumen.
+
+SEPTIEMBRE
+MARA, HUGO JORGE c/ E.N. Mº DEFENSA SSI GN Resol. 1219/96 y 1307/97 SS
+s/ Personal Militar y Civil de las FFAA y de Seg.
+```
+
+### Borde inferior (transición al próximo caso)
+**Estado**: `solapado_con_proximo` | linea_fin_real=10347 | linea_inicio_proximo_caso=10329 | delta=-19
+**Alertas**: `solapado_con_proximo`
+
+
+---
+
+## 339_p933 — Sode, Margarita Segunda Carlota y Suñer, Raúl Andrés s/ Ssucesiones ab intestato
+
+**Localización**
+- Archivo: `LibroVol339.1.md`
+- Páginas catálogo: 933–1027 | Página consultada: 1027
+- Líneas catálogo: 35083–35607 | Línea fin real: 35503 (status_fin=`fin_dentro_bloque`, pista=`caratula_siguiente`)
+- Status localización: `fallo_cruza_archivos`
+
+**Resumen de spans**
+
+| # | Tipo | Líneas (abs) | Líneas |
+|---|------|--------------|-------:|
+| 1 | header_pagina | 35083–35083 | 1 |
+| 2 | catch_all | 35084–35084 | 1 |
+| 3 | caratula | 35085–35085 | 1 |
+| 4 | sumario [1] | 35086–35092 | 7 |
+| 5 | sumario [2] | 35093–35098 | 6 |
+| 6 | cuerpo_mayoria | 35099–35122 | 24 |
+| 7 | header_pagina | 35113–35113 | 1 |
+| 8 | header_pagina | 35114–35114 | 1 |
+| 9 | header_pagina | 35115–35115 | 1 |
+| 10 | firma | 35123–35123 | 1 |
+| 11 | catch_all | 35124–35127 | 4 |
+| 12 | header_pagina | 35128–35128 | 1 |
+| 13 | header_pagina | 35129–35129 | 1 |
+| 14 | header_pagina | 35130–35130 | 1 |
+| 15 | catch_all | 35131–35503 | 373 |
+
+**Invariantes**: cobertura=OK, disjunción=OK, líneas_residuo=378 (89.79% del bloque, n=421)
+
+---
+
+### [span 1] header_pagina (35083–35083)
+```
+339
+```
+
+### [span 2] catch_all (35084–35084)
+```
+SODE, MARGARITA SEGUNDA CARLOTA y SUÑER, RAÚL
+```
+
+### [span 3] caratula (35085–35085)
+```
+ANDRÉS s/ Ssucesiones ab intestato
+```
+
+### [span 4] sumario [1] (35086–35092)
+**Header**: ACORDADAS
+**Atribución**: (sin atribución detectada)
+```
+ACORDADAS
+Corresponde declarar inadmisible el recurso de reposición contra el 
+pronunciamiento del Tribunal que desestimó el recurso de queja por no 
+haber cumplido con uno de los recaudos previstos por el art. 4° del re­
+glamento aprobado por la acordada 4/2007, a poco que se advierte que 
+éste es bien claro en cuanto a que el escrito no debe exceder de diez 
+“páginas” y no hojas.
+```
+
+### [span 5] sumario [2] (35093–35098)
+**Header**: RECURSO DE QUEJA
+**Atribución**: (sin atribución detectada)
+```
+RECURSO DE QUEJA
+La pretensión de readecuar el recurso de queja –con la presentación 
+de un nuevo escrito que respeta el límite de diez páginas– es improce­
+dente porque los incumplimientos reglamentarios no son subsanables 
+después de la interposición del recurso de hecho (conf. art. 11 del regla­
+mento aprobado por acordada 4/2007).
+```
+
+### [span 6] cuerpo_mayoria (35099–35122)
+```
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 12 de julio de 2016.
+Autos y Vistos; Considerando:
+Que contra el pronunciamiento del Tribunal que desestimó el re­
+curso de queja por no haber cumplido con uno de los recaudos previs­
+tos por el art. 4º del reglamento aprobado por la acordada 4/2007, el 
+apelante dedujo recurso de reposición a fs. 89/94.
+Que los planteos del peticionario son inadmisibles, a poco que se 
+advierta que el art. 4º del reglamento aprobado por la acordada 4/2007 
+es bien claro en cuanto a que el escrito no debe exceder de diez “pági­
+nas” y no hojas, como parece entender el presentante (conf. causa CSJ 
+675/2008 (44-A)/CS1 “Andino, Adrián c/ Laboratorio y Molino Porta S.A. 
+y otros s/ despido”, resolución del 22 de diciembre de 2008).
+
+339
+934
+FALLOS DE LA CORTE SUPREMA
+Que, por lo demás, la pretensión de readecuar el recurso de que­
+ja –con la presentación de un nuevo escrito que respeta el límite de 
+diez páginas– es improcedente porque los incumplimientos reglamen­
+tarios no son subsanables después de la interposición del recurso de 
+hecho (conf. art. 11 del reglamento aprobado por acordada 4/2007).
+Por ello, se desestima la petición de fs. 89/94. Notifíquese y cúmpla­
+se con el archivo ordenado a fs. 88.
+```
+
+### [span 7] header_pagina (35113–35113)
+```
+339
+```
+
+### [span 8] header_pagina (35114–35114)
+```
+934
+```
+
+### [span 9] header_pagina (35115–35115)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 10] firma (35123–35123)
+```
+Ricardo Luis Lorenzetti — Elena I. Highton de Nolasco — Juan 
+```
+
+### [span 11] catch_all (35124–35127)
+```
+Carlos Maqueda.
+Recurso de revocatoria interpuesto por Néstor Mariano Camacho, con el patrocinio 
+letrado del Dr. Santiago D. M. Ruiz Rocha.
+
+```
+
+### [span 12] header_pagina (35128–35128)
+```
+935
+```
+
+### [span 13] header_pagina (35129–35129)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 14] header_pagina (35130–35130)
+```
+339
+```
+
+### [span 15] catch_all (35131–35503)
+```
+
+
+A
+A., F. J. y Otro c/ Estado Nacional s/ Amparo
+ley 16.986: p. 245
+Acosta, Aída y Otros c/ Ministerio de Economía
+Obras y Servicios Públicos - PPP y Otros s/ 
+Proceso de conocimiento: p. 419
+Actuaciones remitidas por Fiscalia Única de
+Jachal: p. 602
+Agencia Especial de Financiamiento Industrial
+Finame y Gobierno Federal c/ Cidef 
+Argentina Corporación de Inversiones s/ 
+Exhorto: p. 901
+Agueros, Carlos Adolfo y Otro c/ Espósito,
+Mario Alberto y Otros s/ Ejecutivo: p. 737
+Almonacid, Gustavo Martín s/ Infracción ley
+23.737: p. 307
+Alperovich, José Jorge y Otros s/ Abuso de
+autoridad y viol. deb. func. publ. (art. 248) - 
+incidente nº 1: p. 721
+Alsogaray, María Julia s/ Recurso de casación.:
+p. 608
+Álvarez, Norberto Oscar y Otro c/ Estado
+Nacional - Ministerio de Economía y Otro 
+s/ Incumplimiento de contrato: p. 456
+Anaquín, Juan Ramón c/ Policía de la Provincia
+de Jujuy - Estado Provincial s/ Daños y 
+perjuicios, daño moral por accidente de 
+trabajo: p. 299
+Aseguradora de Créditos y Garantías SA c/ EN
+- DGA - resol. 2420/07 (expte. 601287/02) 
+s/ Dirección General de Aduanas: p. 79
+Asociación Argentina de Abogados
+Ambientalistas de la Patagonia c/ Santa Cruz 
+Provincia de y Otro s/ Amparo ambiental: 
+p. 515
+NOMBRES DE LAS PARTES
+(I)
+INDICE POR LOS NOMBRES DE LAS PARTES
+Asociación Civil Protecc. Ambiental del Río
+Paraná Ctrol. Contam. y Restauración del 
+Hábitat y Otro c/ Carboquímica del Paraná 
+S.A. y Otro/a s/ Amparo: p. 353
+Asociación de Padres Dinad (Defensa
+Integral de Niños) c/ A. P., R. s/ 
+Cobro de sumas de dinero: p. 302
+Asociación Hoja de Tilo y Otros c/
+Municipalidad de La Plata s/ Amparo: 
+p. 864
+Astilleros Corrientes SAIC (TF 20.010-A)
+c/ DGA: p. 487
+Automóviles Saavedra S.A. c/ Fiat Argentina
+S.A. y Otro: p. 489
+B
+B., V. P. c/ Obra Social del Poder Judicial de la
+Nación s/ Expedientes civiles: p. 683
+Ballejo, Edelmira Luisa y Otros c/ Estado
+Nacional y Otro s/ Diferencias de salarios: 
+p. 405
+Banco de la Nación Argentina c/ Roldán de
+Brandan, Ángela Nilda y Otro s/ Cobro de 
+pesos - incompetencia: p. 490
+Barzaghi, Ángel Oscar y Otros c/ Provincia
+de Buenos Aires s/ Demanda contencioso 
+administrativa: p. 399
+Blanco, Marina Alexia c/ Estado Nacional s/
+Cobro de salarios: p. 822
+Bergés, Jorge Antonio s/ Recurso de casación:
+p. 542
+Boggiano, Antonio c/ Estado Nacional -
+Ministerio de Desarrollo Social s/ Proceso 
+administrativo: p. 323
+
+NOMBRES DE LAS PARTES
+(II)
+Bravo Ruiz, Paulo César c/ Martocq, Sebastián
+Marcelo y Otros s/ Daños y perjuicios (acc. 
+trán. c/ les. o muerte): p. 635
+C
+Caballero López, Pablina s/ Extradición:
+p. 94
+Callirgós, Chávez José Luis s/ Extradición:
+p. 906
+Car Market SRL c/ Dirección Nacional de
+los Registros Nacionales de la Propiedad 
+Automotor y Creditos Prendarios s/ Amparo 
+ley 16.986: p. 891
+Carranza Pons, Raúl c/ Caruso Compañia
+Argentina de Seguros S.A. s/ Ordinario - 
+despido: p. 550
+Carvallo Quintana c/ Banco Central de la
+República Argentina s/ Daños y perjuicios: 
+p. 126
+Cejas Meliare, Ariel s/ Hábeas corpus: p. 381
+Central Puerto SA (TF 19.325-I) c/ EN-AFIP-DGI
+y Otro s/ DGI Tribunal Fiscal: p. 643
+Ciudadanos del Sur de la Provincia de
+Mendoza c/ Estado Nacional Argentino 
+y Otros s/ acción mere declarativa de 
+inconstitucionalidad: p. 927
+Club de Caza de Tandil s/ Infracción ley 22.421
+(art. 25): p. 160
+Coihue S.R.L. c/ Santa Cruz, Provincia de s/
+Acción declarativa de inconstitucionalidad y 
+daños y perjuicios: p. 90
+Comisión de Tierras Fiscales Nacionales
+“Programa Arraigo” c/ José Danuzzo y/o 
+inquilinos y/o intrusos y/u ocupantes s/ 
+Desalojo por intrusión: p. 869
+Comita, Nilda Eloisa c/ Aguiar, Gabriel Esteban
+y Otros s/ Daños y perjuicios (acc. trán. c/
+les. o muerte): p. 873
+Compañía Financiera Argentina SA c/ Dirección
+General Impositiva s/ Recurso directo de 
+organismo externo: p. 216
+Concejo Deliberante de Mercedes c/
+Departamento Ejecutivo Municipal s/ 
+Conflicto de poderes: p. 92
+Constantino, Eduardo Francisco c/ ANSeS s/
+Reajustes varios: p. 740
+Cormenzana, Alfredo Eduardo y Otros c/
+Estado Provincial s/ Cobro de salarios: 
+p. 814
+Coronel, Emiliano Armando y Otro s/
+Recurso extraordinario de inaplicabilidad 
+de ley: p. 179
+Coronel, Francisco Emilio c/ ANSeS s/
+Reajustes de haberes: p. 219
+Coto Centro Integral de Comercialización S.A.
+c/ Santa Fe, Provincia de s/ Amparo: p. 525
+Cruz, Felipa y Otros c/ Minera Alumbrera
+Limited y Otro s/ Recusación: p. 751
+Cruz, Felipa y Otros c/ Minera Alumbrera
+Limited y Otro s/ Sumarísimo: p. 142
+D
+D., L. L. c/ R. J. C. y Otros s/ daños y
+perjuicios (acc. tráns. c/ les. o muerte): 
+p. 222
+Dalamaca S.A. c/ Nahra, Raúl Héctor y Otro
+s/ Ejecución especial ley 24.441: p. 919
+De Caso, Andrea Lorena c/ Cascada S.R.L.
+s/ Reinstalación (sumarísimo) s/ 
+Inaplicabilidad de ley: p. 155
+Defensor del Pueblo de la Nación c/ EN-Mº
+Planificación-resol 1961/06 s/ Proceso de 
+conocimiento: p. 464
+Deprati, Adrian Francisco c/ ANSeS
+s/ Amparos y sumarísimos: p. 61
+E
+E., M. D. c/ P., P. F. s/ Restitución del menor
+E.P.C.D.: p. 609
+Empresa Alas Argentinas SRL (TF 29.795-I)
+c/ DGI: p. 713
+Empresa Flumian Hnos. S.R.L. c/ Provincia de
+Formosa s/ Cobro de pesos: p. 493
+Empresa San José Sociedad Anónima c/ Santa
+Fe, Provincia de s/ Acción declarativa (art. 
+322 Cód. Procesal) s/ Incidente: p. 225
+Escaris, Sergio Roberto c/ EN - DNV - OCCOVI
+y Otros s/ Daños y perjuicios: p. 429
+Espósito, Dardo Luis c/ Provincia ART S.A. s/
+Accidente - ley especial: p. 781
+Estado Nacional - Fuerza Aérea Argentina c/
+Buenos Aires, Provincia de s/ Cobro de 
+pesos/sumas de dinero: p. 876
+Estudio Nissen & Asociados c/ Kahl, Amalia
+Lucia s/ Cobro de honorarios: p. 893
+Expreso Tigre Iguazú SRL c/ La Nueva Estrella
+SCC y Otro s/ Medida cautelar: p. 622
+
+F
+Fernández, José Humberto Eladio s/ Abuso
+sexual - art. 119, 3° párrafo: p. 180
+Ferrosur S.R.L. c/ YCF SE s/ Daños y
+perjuicios: p. 357
+Figueroa de Cornejo, Hortensia y Otros c/
+Administración de Parques Nacionales 
+s/ Expropiación inversa: p. 468
+Fiscalía de Feria s/ actuaciones (Ref. Banco
+Chubut S.A.): p. 304
+G
+G., A. N. c/ S., R. s/ Filiación: p. 276
+G., C. L. s/ Lesiones agravadas y amenazas
+-incidente nº 1-: p. 652
+Gabellieri, Francisco s/ Causa nº 105/2013:
+p. 754
+Gallardo, Luis Ángel y Otros c/ Telecom SA y
+Otro s/ Proceso de conocimiento: p. 185
+García, Guillermo y Otros c/ Estado Nac. y
+Ministerio de Defensa s/ Ordinario: p. 407
+Garrido, Carlos Manuel c/ EN - AFIP s/ Amparo
+ley 16.986: p. 827
+Giménez, Julio César c/ Unidad de Gestión
+Operativa Ferroviaria de Emergencias s/ 
+Daños y perjuicios: p. 819
+Giménez, Mariano c/ Provincia de Tucumán s/
+Expropiación: p. 432
+Glibota, Pedro Pablo c/ EN - Mº Economía -
+resol. 235 166 334/2011 y Otros s/ Proceso 
+de conocimiento: p. 499
+Gobernador de la Provincia de La Pampa,
+Oscar Mario Jorge c/ Cámara de Diputados 
+de la Provincia de La Pampa s/ Acción 
+declarativa de certeza: p. 181
+Graciela Franceschini SA c/ Administración
+Federal de Ingresos Públicos s/ Impugnación 
+de deuda: p. 359
+Grupo Posadas S.A. c/ A.F.I.P. - D.G.I. s/
+Demanda contenciosa: p. 434
+Guzman, Cristina c/ ANSeS s/ Amparo-ley
+16.986: p. 189
+H
+H., D. c/ R., F. H. s/ Homologación de acuerdo
+- mediación: p. 658
+NOMBRES DE LAS PARTES
+(III)
+Hirshfeld, Pablo Santiago s/ Lesiones culposas
+(art. 94 - 1º párrafo): p. 186
+I
+I., J. M. s/ Protección especial: p. 795
+IBM Argentina SRL c/ Dirección General
+Impositiva s/ Recurso directo de organismo 
+externo: p. 444
+Industrias Aral SRL c/ Fundemap SA y Ot.
+s/ Daños y perjuicios: p. 882
+Instituto Concepcionista Colegio San Cayetano
+c/ Administración Federal de Ingresos 
+Públicos - Dirección General Impositiva s/ 
+Impugnación de deuda: p. 597
+Instituto de Servicios Sociales Bancarios c/
+Mendoza, Provincia de s/ Cobro de sumas 
+de dinero: p. 108
+Iturriaga, Julio Alfredo c/ Domech de
+Brettos, Luisa Nélida s/ Cobro de dólares 
+estadounidenses: p. 80
+L
+La Pampa, Provincia de c/ Fondo Fiduciario
+Federal de Infraestructura Regional y Otros 
+s/ Incumplimiento contractual: p. 725
+Lajmadi, José Adrián c/ Diario La Unión y Otros
+s/ Daño moral: p. 194
+Liberty Art SA c/ Superintendencia Riesgos T y
+Seguros resols. 39 y 806/98 s/ Proceso de 
+conocimiento: p. 259
+Lijo, Ariel y Otros s/ Averiguación de delito:
+p. 428
+Línea 17 S.A. c/ Buenos Aires, Provincia de s/
+Acción declarativa: p. 305
+López Camelo, María Cristina c/ Mº J y DDHH
+- art. 3 ley 24.043 (resol. 979/06) s/ Recurso 
+directo: p. 824
+López Serrot, Oscar c/ Colegio Público de
+Abogados de Capital Federal s/ Ejercicio de 
+la abogacia - ley 23.187 - art. 47: p. 812
+Lorenzano, Viviana Inés c/ EN - Mº Justicia y
+DDHH s/ Indemnizaciones - ley 24.043 - art. 
+3: p. 533
+M
+M., M. H. s/ Artículo 152 ter. Código Civil -
+incidente familia: p. 599
+
+NOMBRES DE LAS PARTES
+(IV)
+M. Royo SACIIF y F c/ EN - AFIP - resol. 3/08
+(REGN) s/ Dirección General Impositiva: 
+p. 897
+Maguiale SRL s/ Recurso directo de organismo
+externo: p. 272
+Malla, Alfredo Juan c/ Agua y Energía Eléctrica
+y Otro s/ Daños y perjuicios: p. 508
+Maldonado, Holga Matilde s/ Su presentación:
+p. 183
+Mantero, Alejandro c/ P.A.M.I. Instituto
+Nacional de Servicios Sociales para 
+Jubilados y Pensionados s/ Despido: p. 536
+Manzo, Nelly c/ El Progreso Astro Compañia de
+Seguros S.A. s/ Cobro de pesos: p. 845
+Martínez, Sergio Raúl c/ Agua Rica LLC Suc
+Argentina y su propietaria Yamana Gold Inc. 
+y Otros s/ Acción de amparo: p. 201
+Mata, Roberto Pedro c/ Mata y Payas, Delia
+Elena y Otros s/ División de condominio: 
+p. 315
+Medela, Leticia y Otra c/ Herederos de María
+Antonia Abril s/ Prescripción adquisitiva: 
+p. 367
+Melleretzky, Rubén c/ AFIP s/ Expedientes
+civiles - sumarísimo: p. 846
+Ministerio de Cultura y Educación de la Nación
+c/ Universidad Nacional de La Plata s/ Inf. 
+ley 24.521 art. 34: p. 115
+N
+N.N. s/ Averiguación de delito: p. 477
+N.N. s/ Infracción ley 22.421: p. 168
+N.N. s/ Infracción ley 24.051 (art. 55): p. 111
+N.N. s/ Robo: p. 888
+Nación Fideicomisos S.A. c/ Salta, provincia de
+s/ Beneficio de litigar sin gastos: p. 758
+Nidera S.A. c/ Dirección General Impositiva
+s/ Recurso directo de organismo externo: 
+p. 260
+Nidera S.A. c/ Municipalidad de Bahía Blanca s/
+Pretensión anulatoria: p. 633
+Noble Argentina SA c/ EN - ONCAA - resol.
+2463/09 s/ Proceso de conocimiento: 
+p. 921
+O
+Obra Social para la Actividad Docente c/
+Chubut, Provincia de s/ Ejecución fiscal: 
+p. 267
+Obra Social para la Actividad Docente c/ San
+Juan, Provincia de s/ Ejecutivo - ejecución 
+fiscal: p. 230
+Obra Social para la Actividad Docente
+(OSPLAD) c/ Jujuy, Provincia de s/ Ejecución 
+fiscal: p. 452
+Oiene, Pablo Luis c/ Google Inc. s/ Daños y
+perjuicios: p. 727
+Orellano, Francisco Daniel c/ Correo Oficial
+de la República Argentina S.A. s/ Juicio 
+sumarísimo: p. 760
+Oropeza Omonte, Mariel Andrea y Otros
+c/ Solanas Country y Otros s/ Daños y 
+perjuicios (accidente de trabajo): p. 646
+Ortellado, Fernando Ariel c/ Cardiología Global
+S.A. y Otros s/ Despido: p. 583
+P
+P., E. G. y Otra c/ Centro de Educación Médica
+e Investigaciones Clínicas Norberto Quirno 
+s/ Amparo: p. 423
+P., V. A. s/ Art. 152 ter. Código Civil: p. 676
+Pace, César Armando y Otros s/ Homicidio
+calificado: p. 656
+Papaleo, Lidia Elba c/ Graiver, María del Sol y
+Otro s/ Autorización: p. 852
+Pardo Cabrera, Tyrone s/ Legajo nº 1: p. 841
+Pastor, Gustavo Manuel c/ Cooperativa de
+Trabajo Transporte Automotor Cuyo s/ 
+Daños y perjuicios: p. 561
+Pineda, Ángel Antonio c/ Provincia ART SA y
+Otro s/ Accidente - acción civil: p. 854
+Pluna Líneas Aéreas Uruguayas S.A. (sucursal
+Argentina) s/ Su propia quiebra: p. 252
+Provincia del Chubut y Otro s/ Infracción ley
+24.144: p. 506
+Proyecto del Atlantico S.A. c/ Ganger, Enrique
+Rodolfo s/ Ordinario: p. 273
+Q
+Quispe Caso, Oswaldo Ceferino s/ Extradición -
+art. 54: p. 551
+
+R
+R., M. A. c/ F., M. B. s/ Reintegro de hijo: p. 270
+Racagni, Marco Aurelio c/ Grutzmacher, Nora
+Silvina y Otros s/ Amparo ley 16.986: p. 889
+Ramos Martínez, Gustavo Antonio c/
+Universidad Nacional de Córdoba s/ Recurso 
+directo - Ley de Educación Superior ley 
+24.521: p. 680
+Rau, Alejandro Oscar s/ Causa nº 16.400: p. 480
+Re Dress S.A. y Otro s/ Infracción ley 24.144:
+p. 662
+Rodríguez, Horacio Alberto c/ E.N. - M° de
+Just., Seg. y DD.HH - S.P.F s/ Personal 
+Militar y Civil de las FFAA y de Seg.: p. 930
+S
+S., D. c/ Centro de Educación Médica e
+Investigaciones Clínicas Norberto Quirno 
+s/ Sumarísimo: p. 290
+S. M., A. E. c/ Obra Social Conductores de
+Transporte Colectivo Pasajeros s/ Amparo 
+de salud: p. 648
+```
+
+
+---
+
+## 341_p223 — Maggioni, Roberto s/ Extradición
+
+**Localización**
+- Archivo: `LibroVol341.1.md`
+- Páginas catálogo: 223–235 | Página consultada: 235
+- Líneas catálogo: 8358–8828 | Línea fin real: 8841 (status_fin=`fin_extendido_pag_compartida`, pista=`caratula_siguiente`)
+- Status localización: `ok`
+
+**Resumen de spans**
+
+| # | Tipo | Líneas (abs) | Líneas |
+|---|------|--------------|-------:|
+| 1 | header_pagina | 8358–8358 | 1 |
+| 2 | sumario [1] | 8359–8376 | 18 |
+| 3 | dictamen | 8377–8592 | 216 |
+| 4 | header_pagina | 8383–8383 | 1 |
+| 5 | header_pagina | 8384–8384 | 1 |
+| 6 | header_pagina | 8385–8385 | 1 |
+| 7 | header_pagina | 8423–8423 | 1 |
+| 8 | header_pagina | 8424–8424 | 1 |
+| 9 | header_pagina | 8425–8425 | 1 |
+| 10 | header_pagina | 8466–8466 | 1 |
+| 11 | header_pagina | 8467–8467 | 1 |
+| 12 | header_pagina | 8468–8468 | 1 |
+| 13 | header_pagina | 8510–8510 | 1 |
+| 14 | header_pagina | 8511–8511 | 1 |
+| 15 | header_pagina | 8512–8512 | 1 |
+| 16 | header_pagina | 8553–8553 | 1 |
+| 17 | header_pagina | 8554–8554 | 1 |
+| 18 | header_pagina | 8555–8555 | 1 |
+| 19 | catch_all | 8593–8593 | 1 |
+| 20 | header_pagina | 8594–8594 | 1 |
+| 21 | header_pagina | 8595–8595 | 1 |
+| 22 | header_pagina | 8596–8596 | 1 |
+| 23 | cuerpo_mayoria | 8597–8680 | 84 |
+| 24 | header_pagina | 8629–8629 | 1 |
+| 25 | header_pagina | 8630–8630 | 1 |
+| 26 | header_pagina | 8631–8631 | 1 |
+| 27 | header_pagina | 8670–8670 | 1 |
+| 28 | header_pagina | 8671–8671 | 1 |
+| 29 | header_pagina | 8672–8672 | 1 |
+| 30 | firma | 8681–8682 | 2 |
+| 31 | voto | 8683–8841 | 159 |
+| 32 | header_pagina | 8705–8705 | 1 |
+| 33 | header_pagina | 8706–8706 | 1 |
+| 34 | header_pagina | 8707–8707 | 1 |
+| 35 | header_pagina | 8745–8745 | 1 |
+| 36 | header_pagina | 8746–8746 | 1 |
+| 37 | header_pagina | 8747–8747 | 1 |
+| 38 | header_pagina | 8787–8787 | 1 |
+| 39 | header_pagina | 8788–8788 | 1 |
+| 40 | header_pagina | 8789–8789 | 1 |
+| 41 | header_pagina | 8827–8827 | 1 |
+| 42 | header_pagina | 8828–8828 | 1 |
+| 43 | header_pagina | 8829–8829 | 1 |
+
+**Invariantes**: cobertura=OK, disjunción=OK, líneas_residuo=1 (0.21% del bloque, n=484)
+
+---
+
+### [span 1] header_pagina (8358–8358)
+```
+341
+```
+
+### [span 2] sumario [1] (8359–8376)
+**Header**: MAGGIONI, ROBERTO s/ Extradición
+**Atribución**: (Voto del Dr. Juan Carlos Maqueda).
+```
+MAGGIONI, ROBERTO s/ Extradición
+El art. 245 del Código Procesal Civil y Comercial de la Nación, de 
+aplicación en atención a lo dispuesto por el art. 254 del mismo cuer­
+po legal, no resulta repugnante a la naturaleza del procedimiento 
+de extradición.
+La decisión del a quo de declarar procedente el pedido de extradición, 
+sujeto a la condición resolutoria impuesta con sustento en lo resuelto 
+en Fallos: 319:2557 (“Nardelli”) no tuvo en cuenta las circunstancias que 
+allí confluían para resover de ese modo.
+Más allá de la distinción que introduce el país requirente al calificar 
+la situación del requerido como la de “contumaz” distinguiéndola 
+de la de “ausencia”, en definitiva esa distinción no incide en la so­
+lución del caso si se tiene en cuenta que los términos de la nota de 
+la justicia italiana no difieren, desde un punto de vista material, de 
+cuanto ya había sido manifestado por el país requirente en la do­
+cumentación acompañada con el pedido de extradición con invoca­
+ción, incluso, del mismo art. 175 del Código Procesal Penal italiano 
+(Voto del Dr. Juan Carlos Maqueda).
+```
+
+### [span 3] dictamen (8377–8592)
+```
+Dictamen de la Procuración General
+-I-
+El Juzgado Federal n° 3 de Rosario, provincia de Santa Fe, conce­
+dió la extradición de Roberto M. solicitada por las autoridades de la 
+República de Italia, bajo la condición que el país requirente asegure
+
+341
+224
+FALLOS DE LA CORTE SUPREMA
+-en el plazo de cuarenta y cinco días- que reabrirá el caso para oír al 
+nombrado, que fue condenado en ausencia, permitirle el ejercicio del 
+derecho de defensa y dictar una nueva sentencia (fs. 274/77).
+Contra ese pronunciamiento la defensa y la fiscalía interpusieron 
+sendos recursos ordinarios de apelación, que fueron concedidos (fs. 
+303 y 293, respectivamente). Ya en esta instancia, el Defensor Oficial 
+ante la Corte presentó su memorial y V.E. corrió vista a esta Procura­
+ción General (fs. 314/20 y 321).
+-II-
+El representante del Ministerio Público Fiscal dedujo recurso de 
+aclaratoria, que fue denegado. Subsidiariamente, planteó el previsto 
+en el artículo 33 de la ley 24.767 y sostuvo que la concesión de la ex­
+tradición resuelta por el a quo no debía estar sujeta al compromiso 
+del Estado solicitante de asegurar la reapertura de las causas en que 
+se condenó al nombrado en ausencia, para garantizar su derecho a 
+ser oído, su defensa y el dictado de una nueva sentencia; pues estimó 
+que la evaluación de la respuesta a ese requerimiento debía realizarse 
+previo a resolver sobre el fondo del asunto.
+Además, consideró que en dos de las condenas por las cuales se lo 
+requiere no se verificarían los supuestos que, conforme la doctrina de 
+la Corte, acarrearían la sanción de nulidad por haber sido dictadas en 
+ausencia de la persona cuya entrega se reclama, pues en esos proce­
+sos fue asistido por abogados de su confianza y concluyeron mediante 
+“acuerdos de condena” en los que habría intervenido el imputado de 
+modo personal. Por esa razón, sostuvo que resulta arbitraria la suje­
+ción de esos dos casos a la condición fijada en el fallo.
+-III-
+Por su parte, la defensa basó su impugnación en los siguientes 
+agravios: (i) las condenas habrían sido dictadas en ausencia del reque­
+rido; (ii) no se remitieron las normas relativas a la prescripción de la 
+acción; (iii) la totalidad de las condenas no formaron parte de la inicial 
+orden europea de detención; (iv) subsidiariamente, la falta de acredi­
+tación del requisito de la doble subsunción en dos de las condenas.
+Además, el defensor ante V.E. incluyó un hecho nuevo, referido a 
+que habría transcurrido el plazo de cuarenta y cinco días fijado por el 
+a quo en la sentencia para que Italia envíe las garantías ya aludidas.
+
+225
+DE JUSTICIA DE LA NACIÓN
+341
+-IV-
+Al ingresar al tratamiento del asunto, corresponde en primer lugar 
+y en relación a lo reseñado en el párrafo precedente, hacer mención 
+a cuanto surge de la respuesta brindada por la justicia italiana a la 
+condición bajo la cual fue concedida la extradición. La documentación 
+respectiva -emanada de la Fiscalía ante el Tribunal de Apelación de 
+Milán el 14 de junio de 2016 y que fue remitida por V.E. a esta sede el día 
+3 del corriente mes- informa: (i) que el derecho de defensa es un prin­
+cipio cardinal de la legislación procesal de ese país y está garantizado 
+siempre, en cualquier estado y grado del procedimiento penal; (ii) que 
+en cualquier fase, el procesado que permanezca eventualmente contu­
+maz está siempre representado y defendido por un defensor nombra­
+do para él, de tal manera que se garantiza en todo momento procesal 
+la protección de su posición; (iii) que el procesado que luego decida 
+presentarse ante el juez italiano, en cualquier estado y grado del juicio, 
+siempre puede pedir ser sometido a examen u otorgar declaraciones 
+espontáneas en su propia defensa; (iv) que si, en cambio, el procesado 
+prueba no haber tenido nunca conocimiento del procedimiento penal a 
+su cargo y de la condena intervenida, puede pedir ser restituido en los 
+plazos para impugnar la resolución condenatoria, según los principios 
+generales de la restitución en los plazos a que se refiere el artículo 175 
+del Código Procesal Penal.
+Si bien ese informe debería ser evaluado –como sostuvo el fiscal- 
+por el juez federal a los fines que indicó en su sentencia, estimo que 
+con arreglo al criterio de V.E. en cuanto a que sus pronunciamientos 
+deben atender a la situación vigente al momento de su dictado aunque 
+sea sobreviniente a la interposición del recurso (conf. Fallos: 325:2275 
+y 2979; 327:4198, entre otros) y por razones de economía procesal, 
+máxime ante la condición de detenido que registra M. es pertinente 
+proseguir el trámite recursivo en curso.
+-V-
+Aun cuando los términos del informe no difieren sustancialmente 
+de cuanto surge de la documentación acompañada con el pedido de 
+extradición, incluso con invocación de la misma norma procesal (ver 
+fs. 167), y ello podría determinar -como planteó el defensor- el “decai­
+miento de aquello que se declara procedente”, a fin de ejercer fundada­
+mente la representación del interés por la extradición que encomien­
+da a este Ministerio Público la ley 24.767 (art. 25), al mismo tiempo que 
+cumplir con el deber funcional de promover la actuación de la justicia
+
+341
+226
+FALLOS DE LA CORTE SUPREMA
+en defensa de la legalidad (art. 120 de la Constitución Nacional), habré 
+de desarrollar las razones por las cuales entiendo que la extradición 
+solicitada no puede prosperar.
+En esa inteligencia advierto, en primer lugar, con arreglo al or­
+den público internacional argentino y tal como lo consideró el juez, 
+que en casos de condenas dictadas in absentia la extradición sólo 
+procede si se ofrecen garantías de que el requerido será sometido a 
+un nuevo juicio en su presencia (precedente “Nardelli”, publicado en 
+Fallos: 319:2557; asimismo, 321:1928; 323:892, 3356 y 3699; 328:3193, en­
+tre otros). En virtud de ello, la acreditación de ese compromiso debía 
+preceder -como se dijo- al dictado de la sentencia, pues constituye un 
+requisito dirimente cuyo alcance debería evaluar el juez antes de re­
+solver, máxime porque en el sub judice la Disposición de Ejecución de 
+Penas Concurrentes n° 45/2013 (fs. 83/7) en cuya virtud se formuló el 
+pedido, comprende seis condenas anteriores que presentan matices 
+en su trámite que permitirían formular distinciones relevantes, como 
+sugirió el fiscal.
+Ahora bien, los términos de la respuesta del Estado requirente, im­
+piden considerar acreditada la garantía de juicio presencial que exige 
+nuestro orden público, pues la mera posibilidad de prestar declaración 
+o de impugnar la condena dictada en rebeldía una vez efectuada la en­
+trega del afectado a la justicia italiana -que ya constaba en la solicitud 
+de extradición (fs. 167)- no asegura las garantías de defensa en juicio 
+y el debido proceso, ya que para ello resulta indispensable que quien 
+sea acusado de un delito se encuentre presente en el proceso, tenga 
+la posibilidad de defenderse personalmente o de ser asistido por un 
+defensor de confianza, y de comunicarse libre y privadamente con él 
+(considerando 8° de Fallos: 323:3356, recién citado).
+Por lo demás, al considerarse inválidas para el derecho argenti­
+no las condenas dictadas en ausencia y aun de juzgarse acreditado el 
+compromiso aludido, sería indispensable contar con las normas refe­
+ridas a la extinción de la acción penal -que no han sido acompañadas 
+con la solicitud (ver fs. 73/82 y 199/210)- pues al carecer de efectos la 
+condena así dictada, surgiría la necesidad de acreditar la subsistencia 
+de aquélla, tal como lo prevé el acuerdo bilateral aplicable -ley 23.719- 
+en sus artículos 7, inciso “b”, y 12, inciso “e”.
+No obstante que lo hasta aquí señalado bastaría para considerar 
+ausentes, de acuerdo al orden público internacional argentino, los re­
+quisitos que autorizan la extradición, en aras de dotar de mayor sufi­
+ciencia a este criterio, habré de referirme a las sentencias individual­
+
+227
+DE JUSTICIA DE LA NACIÓN
+341
+mente dictadas respecto del extraditurus, las cuales fueron abarcadas 
+por la Disposición de Ejecución de Penas Concurrentes n° 45/2013 ya 
+citada, en cuya virtud se formuló el pedido.
+-VI-
+En esa inteligencia, de modo similar al planteado por el fiscal recu­
+rrente, cabe formular las siguientes distinciones:
+l. En primer término, la aplicación de la doctrina “Nardelli” obs­
+ta a la procedencia de la entreayuda en relación a las sentencias n° 
+246/2009, 369/2011 y 318/2012 (ver fs. 156/63, 104/14 y 115/28, respectiva­
+mente), pues se trata de procesos en los cuales M. fue juzgado y con­
+denado en ausencia y su asistencia técnica no fue ejercida por aboga­
+dos de su confianza sino por defensores de oficio. Estas circunstancias 
+impiden reconocer la observancia de las garantías que nuestro orden 
+público exige para autorizar la extradición, pues -como se dijo- la sola 
+posibilidad de ser oído o impugnar la condena que contempla el régi­
+men procesal penal italiano no alcanza a satisfacer la amplitud con 
+que sus garantías fundamentales deben asegurarse.
+2. En cuanto a la sentencia n° 506/2010 (ver fs. 88/95) observo que si 
+bien la condena también fue dictada en ausencia, consta que el nom­
+brado fue asistido por un abogado de su confianza durante el proceso, 
+quien solicitó su absolución y, subsidiariamente, el mínimo de la pena. 
+Sin embargo, esas circunstancias, aun cuando permitan afirmar que 
+conoció la imputación y que optó por ejercer exclusivamente a través 
+de su letrado su derecho de defensa en el juicio, tampoco cubren la 
+observancia de las garantías fundamentales con el alcance aludido.
+3. Por último, corresponde considerar los dos casos en los que 
+el fiscal apelante ha basado su agravio. Se trata de las sentencias 
+n° 567/2009 y 809/2009 de la justicia italiana (ver fs. 129/34 y 143/47), 
+que si bien también fueron dictadas en contumacia, en cada una de 
+esas causas el imputado designó y fue representado por dos aboga­
+dos de su confianza, quienes con el respectivo acuerdo del Minis­
+terio Público Fiscal solicitaron la definición anticipada de los pro­
+cesos mediante la aplicación de la pena con arreglo a los artículos 
+444 y ss. del Código Procesal Penal italiano, que implica admisión 
+de culpabilidad, los cuales fueron homologados judicialmente. Pasar 
+por alto esta relevante circunstancia para no hacer excepción al 
+estándar «Nardelli», importaría -en principio- desconocer la facultad 
+legal de las partes de llegar a un acuerdo de esa naturaleza y llevaría 
+a desvirtuar los efectos de esa herramienta procesal al posibilitar su
+
+341
+228
+FALLOS DE LA CORTE SUPREMA
+ulterior invocación como impedimento cuando -como en el sub judi­
+ce- se reclama a la República Argentina la extradición de quien ha 
+sido condenado por esa vía abreviada.
+Empero y apartándome del criterio del fiscal recurrente, advierto 
+que otros motivos obstan a su planteo. En primer lugar, porque de con­
+siderar firmes y aisladamente estas condenas, los montos de las penas 
+respectivamente aplicadas -cuatro meses de prisión en la n° 567/09, y 
+diez meses y quince días de prisión en la n° 809/09- no superan el um­
+bral de un año de pena pendiente que contempla el artículo 2°, segundo 
+párrafo, del tratado bilateral, para la procedencia de la extradición. 
+Por las razones expuestas en los puntos 1 y 2 de este apartado, ese im­
+pedimento no puede soslayarse acudiendo a la facultad que reconoce 
+al Estado requerido el párrafo siguiente de esa norma, esto es, con­
+cederla si se trata de penas que no alcancen el año cuando el pedido 
+se refiere a varios hechos y respecto de alguno se supere ese umbral, 
+pues tal hipótesis no se presenta en el caso.
+Por otro lado y de modo subsidiario, porque sin perjuicio del tiempo 
+transcurrido desde el dictado de esos pronunciamientos -11 de marzo 
+y 7 de abril de 2009, respectivamente- y desde su fecha de irrevocabili­
+dad -29 de mayo y 5 de julio de 2009, ídem- (ver fojas 129 y 143), el mero 
+cotejo de las fechas de la Disposición de Ejecución de Penas Concu­
+rrentes (25 de enero de 2013, fs. 83/7) y de la solicitud de extradición 
+(18 de diciembre de 2014, fs. 68/82)- permite concluir que esas penas 
+han prescripto en virtud de lo previsto en el artículo 172 del Código 
+Penal italiano (ver fs. 209), lo cual también constituye impedimento 
+para la procedencia de la extradición (art. 7°, inciso “b”, del tratado 
+aplicable). Demás está decir que por las razones supra desarrolladas, 
+el quantum de pena determinado en la citada Disposición no puede 
+ser considerado a estos fines.
+-VII-
+Resta expresar que el sentido en que me expido hace innecesario 
+abordar el tratamiento de los agravios de la defensa.
+-VIII-
+Por ello, desisto del recurso ordinario de apelación interpuesto por 
+la Fiscalía Federal n° 3 de Rosario contra la sentencia de fojas 274/77 y 
+solicito a V.E. que declare improcedente la extradición de Roberto M. 
+Buenos Aires, 4 de agosto de 2016. Eduardo Ezequiel Casal.
+```
+
+### [span 4] header_pagina (8383–8383)
+```
+341
+```
+
+### [span 5] header_pagina (8384–8384)
+```
+224
+```
+
+### [span 6] header_pagina (8385–8385)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 7] header_pagina (8423–8423)
+```
+225
+```
+
+### [span 8] header_pagina (8424–8424)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 9] header_pagina (8425–8425)
+```
+341
+```
+
+### [span 10] header_pagina (8466–8466)
+```
+341
+```
+
+### [span 11] header_pagina (8467–8467)
+```
+226
+```
+
+### [span 12] header_pagina (8468–8468)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 13] header_pagina (8510–8510)
+```
+227
+```
+
+### [span 14] header_pagina (8511–8511)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 15] header_pagina (8512–8512)
+```
+341
+```
+
+### [span 16] header_pagina (8553–8553)
+```
+341
+```
+
+### [span 17] header_pagina (8554–8554)
+```
+228
+```
+
+### [span 18] header_pagina (8555–8555)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 19] catch_all (8593–8593)
+```
+
+```
+
+### [span 20] header_pagina (8594–8594)
+```
+229
+```
+
+### [span 21] header_pagina (8595–8595)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 22] header_pagina (8596–8596)
+```
+341
+```
+
+### [span 23] cuerpo_mayoria (8597–8680)
+```
+FALLO DE LA CORTE SUPREMA
+Buenos Aires, 13 de marzo de 2018.
+Vistos los autos: “Maggioni, Roberto s/ extradición”.
+Considerando:
+1°) Que el juez a cargo del Juzgado Federal n° 3 de Rosario, Provin­
+cia de Santa Fe declaró que correspondía hacer lugar a la extradición 
+de Roberto Maggioni por los hechos en que se sustentaba el pedido 
+de extradición presentado por la República Italiana, bajo condición de 
+que ese país, en el plazo de 45 días, asegurara que obtenida la extradi­
+ción se reabriría el caso para oír al condenado, permitirle el ejercicio 
+del derecho de defensa y dictar en consecuencia una nueva sentencia 
+(fs. 273 y fundamentos de fs. 274/277).
+2°) Que contra esa resolución, tanto la defensa oficial del requeri­
+do como el representante del Ministerio Público Fiscal interpusieron 
+sendos recursos ordinarios de apelación (fs. 281/292 y 297/302, respec­
+tivamente) que fueron concedidos (fs. 293 y 303, respectivamente).
+3°) Que mientras que el señor Defensor General Adjunto fundó la 
+apelación a fs. 314/320 y solicitó la declaración de improcedencia del 
+pedido de extradición, el señor Procurador Fiscal propició lo propio 
+en el dictamen obrante a fs. 333/337 al par que desistió de la apelación 
+interpuesta por esa parte. A fs. 339/340 la señora Defensora General de 
+la Nación tomó nueva intervención y reforzó los argumentos esgrimi­
+dos en el sentido expuesto.
+4°) Que, por ende, cabe tener por desistida la apelación fiscal con­
+cedida a fs. 303.
+5º) Que, sentado ello, según el artículo 245 del Código Procesal Ci­
+vil y Comercial de la Nación, “El apelante deberá limitarse a la mera 
+interposición del recurso y si esta regla fuere infringida se mandará 
+devolver el escrito, previa anotación que el secretario o el oficial pri­
+mero pondrá en el expediente, con indicación de la fecha de interposi­
+ción del recurso y del domicilio que se hubiese constituido, en su caso”.
+
+341
+230
+FALLOS DE LA CORTE SUPREMA
+6°) Que ese precepto legal es de aplicación al sub lite en atención 
+a lo dispuesto por el artículo 254 del mismo cuerpo legal sin que sea 
+repugnante ni a la naturaleza del procedimiento de extradición ni a 
+las leyes que lo rigen (conf. mutatis mutandi “Ayala, Ceber”, Fallos: 
+328:3284, considerando 5°, primer párrafo).
+7°) Que, sobre la base de lo antes expuesto, en la causa “Callir­
+gos Chávez, José Luis”, Fallos: 339:906, el Tribunal señaló que se abs­
+tendría de entrar en la consideración de aquellos agravios que apa­
+recieran fundados por remisión al contenido de escritos de apelación 
+presentados, como en el sub lite, en contravención al artículo 245 del 
+Código Procesal Civil y Comercial de la Nación antes referido. Asimis­
+mo, fijó que ese criterio entraría a regir a partir de la notificación de 
+la decisión dictada en ese caso al señor Defensor General Adjunto de 
+la Nación.
+8°) Que, toda vez que el memorial bajo examen fue interpuesto con 
+anterioridad a esa decisión, con el fin de evitar la demora que acarrea­
+ría, a esta altura del trámite, encauzar la situación como es debido, el 
+Tribunal ha de limitarse a exhortar al juez de la causa para que, en lo 
+sucesivo, ajuste el trámite a las pautas legales que rigen el procedi­
+miento según lo antes señalado (conf. en ese sentido, FLP 40460/2014/
+CS1 “Villalba Ramírez, Claudio Érico s/ extradición”, sentencia del 13 
+de septiembre de 2016, considerandos 3° a 7° y “Altamiranda Bianccio­
+tti, Jorge David”, Fallos: 339:1357, considerandos 3° a 7°).
+9°) Que la decisión del a quo de declarar procedente el pedido de 
+extradición, sujeto a la condición resolutoria impuesta con sustento 
+en lo resuelto en Fallos: 319:2557 (“Nardelli”), no tuvo en cuenta las 
+circunstancias que allí confluían para resolver de ese modo. Así lo 
+señaló el Tribunal en Fallos: 320:1835 (“Martínez Rodríguez”) (1997), 
+oportunidad esta última en la cual no admitió la pretensión de modifi­
+car una declaración de improcedencia por una de procedencia “sujeta 
+a condición” destacando que, a diferencia de las circunstancias que 
+concurrían en aquel precedente, en este último –tal como sucede en el 
+sub lite– el tribunal apelado ya se había pronunciado “…en el sentido 
+de que la legislación italiana no permite advertir la posibilidad de que 
+el país solicitante celebre un nuevo juzgamiento con intervención per­
+sonal del extradido con el fin de hacer valer las defensas y excepciones 
+que pudieran hacer a su derecho” (considerando 3°).
+
+231
+DE JUSTICIA DE LA NACIÓN
+341
+10) Que, por ende, deviene inoficioso el tratamiento de los demás 
+agravios incluidos en la apelación ordinaria de la defensa oficial.
+Por lo expuesto, oído el señor Procurador Fiscal, el Tribunal 
+resuelve: I) Tener por desistido el recurso de apelación ordinario 
+interpuesto por el Ministerio Público Fiscal y II) Declarar improce­
+dente el pedido de extradición solicitado por la República Italiana 
+respecto de Roberto Maggioni. Notifíquese, tómese razón y devuél­
+vase al juez de la causa.
+```
+
+### [span 24] header_pagina (8629–8629)
+```
+341
+```
+
+### [span 25] header_pagina (8630–8630)
+```
+230
+```
+
+### [span 26] header_pagina (8631–8631)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 27] header_pagina (8670–8670)
+```
+231
+```
+
+### [span 28] header_pagina (8671–8671)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 29] header_pagina (8672–8672)
+```
+341
+```
+
+### [span 30] firma (8681–8682)
+```
+Elena I. Highton de Nolasco — Juan Carlos Maqueda (según su 
+voto)— Carlos Fernando Rosenkrantz.
+```
+
+### [span 31] voto (8683–8841)
+**Header**: Voto del señor ministro doctor don Juan Carlos Maqueda
+```
+Voto del señor ministro doctor don Juan Carlos Maqueda
+Considerando:
+1°) Que el juez a cargo del Juzgado Federal n° 3 de Rosario, Provin­
+cia de Santa Fe declaró que correspondía hacer lugar a la extradición 
+de Roberto Maggioni por los hechos en que se sustentaba el pedido 
+de extradición presentado por la República Italiana, bajo condición de 
+que ese país, en el plazo de 45 días, asegurara que obtenida la extradi­
+ción se reabriría el caso para oír al condenado, permitirle el ejercicio 
+del derecho de defensa y dictar en consecuencia una nueva sentencia 
+(fs. 273 y fundamentos de fs. 274/277).
+2°) Que contra esa resolución, tanto la defensa oficial del requeri­
+do como el representante del Ministerio Público Fiscal interpusieron 
+sendos recursos ordinarios de apelación (fs. 281/292 y 297/302, respec­
+tivamente) que fueron concedidos (fs. 293 y 303, respectivamente).
+3°) Que mientras que el señor Defensor General Adjunto fundó la 
+apelación a fs. 314/320 y solicitó la declaración de improcedencia del 
+pedido de extradición, el señor Procurador Fiscal propició lo propio 
+en el dictamen obrante a fs. 333/337 al par que desistió de la apelación 
+interpuesta por esa parte. A fs. 339/340 la señora Defensora General de 
+la Nación tomó nueva intervención y reforzó los argumentos esgrimi­
+dos en el sentido expuesto.
+
+341
+232
+FALLOS DE LA CORTE SUPREMA
+4°) Que, por ende, cabe tener por desistida la apelación fiscal con­
+cedida a fs. 303.
+5º) Que, sentado ello, según el artículo 245 del Código Procesal Ci­
+vil y Comercial de la Nación, “El apelante deberá limitarse a la mera 
+interposición del recurso y si esta regla fuere infringida se mandará 
+devolver el escrito, previa anotación que el secretario o el oficial pri­
+mero pondrá en el expediente, con indicación de la fecha de interposi­
+ción del recurso y del domicilio que se hubiese constituido, en su caso”.
+6°) Que ese precepto legal es de aplicación al sub lite en atención 
+a lo dispuesto por el artículo 254 del mismo cuerpo legal sin que sea 
+repugnante ni a la naturaleza del procedimiento de extradición ni a 
+las leyes que lo rigen (conf. mutatis mutandi “Ayala, Ceber”, Fallos: 
+328:3284, considerando 5°, primer párrafo).
+7°) Que, sobre la base de lo antes expuesto, en la causa “Callirgos 
+Chávez, José Luis”, Fallos: 339:906, el Tribunal señaló que se absten­
+dría de entrar en la consideración de aquellos agravios que apare­
+cieran fundados por remisión al contenido de escritos de apelación 
+presentados, como en el sub lite, en contravención al artículo 245 del 
+Código Procesal Civil y Comercial de la Nación antes referido. Asi­
+mismo, fijó que ese criterio entraría a regir a partir de la notificación 
+de la decisión dictada en ese caso al señor Defensor General Adjunto 
+de la Nación.
+8°) Que, toda vez que el memorial bajo examen fue interpuesto con 
+anterioridad a esa decisión, con el fin de evitar la demora que acarrea­
+ría, a esta altura del trámite, encauzar la situación como es debido, el 
+Tribunal ha de limitarse a exhortar al juez de la causa para que, en lo 
+sucesivo, ajuste el trámite a las pautas legales que rigen el procedi­
+miento según lo antes señalado (conf. en ese sentido, FLP 40460/2014/
+CS1 “Villalba Ramírez, Claudio Érico s/ extradición”, sentencia del 13 
+de septiembre de 2016, considerandos 3° a 7° y “Altamiranda Bianccio­
+tti, Jorge David”, Fallos: 339:1357, considerandos 3° a 7°).
+9°) Que, sentado ello, cabe señalar que mientras se sustanciaban 
+sendas apelaciones, el juez de la causa informó que había recibido la 
+respuesta brindada por la justicia italiana, en el marco de la condición 
+impuesta en la sentencia apelada, mediante nota verbal nº 1593 de fe­
+cha 11 de julio de 2016 que en fax luce a fs. 323/327.
+
+233
+DE JUSTICIA DE LA NACIÓN
+341
+10) Que tanto el señor Defensor Oficial Adjunto como el Ministerio 
+Público Fiscal se pronunciaron en relación al contenido de la misma 
+en las ya referidas presentaciones en esta instancia. Mientras que el 
+primero planteó –en definitiva– que los términos de esa comunicación 
+eran insuficientes para ajustarse a la jurisprudencia del Tribunal a los 
+fines de la procedencia de pedidos de extradición en materia de con­
+denados in absentia en el país requirente, aquella expuso sus reparos 
+también con base en su intempestividad y el consecuente decaimiento 
+de la competencia estatal extranjera para cumplir con esa condición.
+11) Que, según coinciden las partes en el sub lite, las condenas nº 
+567/2009 (fs. 129/142) y nº 809/2009 (fs. 143/155) difieren con las de las 
+restantes cuatro (las n° 246/09, n° 506/10, n° 318/12 y n° 369/11 que en 
+copia fueron acompañadas y cuyas traducciones obran a fs. 156/163, 
+88/103, 115/128 y 104/113) en tanto aquellas fueron “pactadas” (conf. 
+referencias de fs. 167) bajo la modalidad de un acuerdo entre el impu­
+tado y el Ministerio Público Fiscal de definición anticipada del proceso 
+mediante aplicación de la pena de conformidad con los artículos 444 y 
+siguientes del Código Procesal Penal italiano (fs. cit.).
+12) Que, en una oportunidad previa, el Tribunal hizo hincapié en 
+el especial celo que ha de guiar la actividad jurisdiccional en hipótesis 
+como las de autos para que, previo a resolver, se efectúe un pormeno­
+rizado examen de las circunstancias de hecho y de derecho que culmi­
+naron en la condena que se aduce como dictada in absentia. Ello fren­
+te a supuestos en que el dictado de la condena en que se sustenta el 
+pedido de extradición es producto de un procedimiento que no respon­
+de al juicio común tenido en cuenta en la línea de precedentes de esta 
+Corte Suprema en la materia (Fallos: 332:351, “Greco”, considerandos 
+7° y 8°) según la decisión publicada en Fallos: 319:2557 (“Nardelli”) y la 
+jurisprudencia elaborada en consecuencia.
+13) Que, pese a que un examen de esa índole estuvo ausente en 
+el sub lite, lo cierto es que, tal como señaló el señor Procurador Fis­
+cal en el acápite VI de su dictamen, tampoco las dos condenas que 
+se señalan como “pactadas” en el considerando 11 superan el umbral 
+de gravedad que fija el artículo 2° del Tratado de Extradición entre la 
+República Italiana y la República Argentina aplicado en el caso, apro­
+bado por ley 23.719, en cuanto exige que “Para la extradición de una 
+persona ya condenada la pena que aún faltase cumplir no deberá ser, 
+además, inferior a un año” (párrafo 2°), si se tiene en cuenta que fue­
+
+341
+234
+FALLOS DE LA CORTE SUPREMA
+ron de cuatro meses de prisión y diez meses y quince días de prisión, 
+respectivamente (fs. cit.).
+14) Que el óbice que lo expuesto representa solo podría verse su­
+perado si se configurara el supuesto del párrafo 3° de ese mismo pre­
+cepto convencional en función del cual “Cuando el pedido se refiriera 
+a varios hechos y no concurriesen en alguno de ellos las condiciones 
+relativas al monto de la pena, la Parte requerida podrá conceder tam­
+bién la extradición por estos últimos”.
+15) Que, sobre el particular y más allá de la distinción que intro­
+duce el país requirente a fs. 324 al calificar la situación del requerido 
+como la de “contumaz” distinguiéndola de la de “ausencia”, lo cierto 
+es que, en definitiva, esa distinción no incide en la solución del sub lite 
+si se tiene en cuenta que los términos de la nota verbal nº 1593 de que 
+da cuenta el considerando 9° no difieren, desde un punto de vista ma­
+terial, de cuanto ya había sido manifestado por el país requirente en la 
+documentación acompañada con el pedido de extradición con invoca­
+ción, incluso, del mismo artículo 175 del Código Procesal Penal de ese 
+país (conf. informe del señor Procurador General del país requirente 
+obrante a fs. 166/168), tal como explica el señor Procurador Fiscal en 
+el acápite V del dictamen que antecede, en coincidencia con la posición 
+de la defensa oficial de Maggioni.
+16) Que, en tales condiciones, no surge que se haya modificado la 
+situación ya valorada por el juez de la causa como insuficiente para 
+tornar viable la extradición sin que, por ende, se constaten circunstan­
+cias sobrevinientes que aconsejen un reenvío a la instancia de grado.
+17) Que tampoco puede, entonces, considerarse cumplida la con­
+dición impuesta en la resolución apelada ni, ante la ausencia de apela­
+ción fiscal, corresponde el reexamen de su aplicación al sub lite.
+18) Que, como conclusión de todo lo expuesto, cabe pronunciar­
+se por la improcedencia del pedido de extradición al no confluir 
+circunstancias que habiliten a asignarle efectos jurídicos en juris­
+dicción argentina a los cuatro actos extranjeros de condena (las n° 
+246/09, n° 506/10, n° 318/12 y n° 369/11) en que se sustenta este pedi­
+do de extradición ni, por las razones señaladas en el considerando 
+13, las condenas nº 567/2009 y nº 809/2009 se ajustan a las exigencias 
+del tratado bilateral.
+
+235
+DE JUSTICIA DE LA NACIÓN
+341
+Por lo expuesto, de conformidad en lo pertinente con lo dictamina­
+do por el señor Procurador Fiscal, el Tribunal resuelve: I) Tener por 
+desistido el recurso de apelación ordinario interpuesto por el Ministe­
+rio Público Fiscal y II) Declarar improcedente el pedido de extradición 
+solicitado por la República Italiana respecto de Roberto Maggioni. No­
+tifíquese, tómese razón y devuélvase al juez de la causa.
+Juan Carlos Maqueda.
+Recurso ordinario de apelación interpuesto por Roberto Maggioni, asistido por el Dr. 
+Enrique María Comellas, Defensor Público Oficial y por el Dr. Mario J. Gambacor­
+ta, Fiscal General.
+Tribunal de origen: Juzgado Federal n° 4 de Rosario, Provincia de Santa Fe.
+Tribunal que intervino con anterioridad: Juzgado Federal n° 3 de Rosario.
+```
+
+### [span 32] header_pagina (8705–8705)
+```
+341
+```
+
+### [span 33] header_pagina (8706–8706)
+```
+232
+```
+
+### [span 34] header_pagina (8707–8707)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 35] header_pagina (8745–8745)
+```
+233
+```
+
+### [span 36] header_pagina (8746–8746)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 37] header_pagina (8747–8747)
+```
+341
+```
+
+### [span 38] header_pagina (8787–8787)
+```
+341
+```
+
+### [span 39] header_pagina (8788–8788)
+```
+234
+```
+
+### [span 40] header_pagina (8789–8789)
+```
+FALLOS DE LA CORTE SUPREMA
+```
+
+### [span 41] header_pagina (8827–8827)
+```
+235
+```
+
+### [span 42] header_pagina (8828–8828)
+```
+DE JUSTICIA DE LA NACIÓN
+```
+
+### [span 43] header_pagina (8829–8829)
+```
+341
+```
+
+### Borde inferior (transición al próximo caso)
+**Estado**: `solapado_con_proximo` | linea_fin_real=8841 | linea_inicio_proximo_caso=8829 | delta=-13
+**Alertas**: `solapado_con_proximo`
+
+
+---
+
