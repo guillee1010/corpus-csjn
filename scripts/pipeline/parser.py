@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.04"  # H079: procedente regex fix + outcome deja_sin_efecto
+__version__ = "18.05"  # H079: +deja_sin_efecto, +4 minor outcomes (desierto/inadmisible/improcedente/caducidad)
 
 import re
 import csv
@@ -368,6 +368,14 @@ OUTCOME_PATTERNS_DISPOSITIVO = [
     ("deja_sin_efecto", re.compile(
         r"(?:se\s+)?deja(?:r|n)?\s+sin\s+efecto|"
         r"corresponde\s+dejar\s+sin\s+efecto", re.I)),
+    # ── H079 2E: categorías menores — solo rescatan de "otro" ───────────────
+    # Posición final (antes de catch-all): la cascada primero-que-matchea
+    # garantiza que estos solo se aplican a casos sin outcome previo.
+    # Ninguno es MERIT_OUTCOME: 280/ac4 del considerando puede sobreescribir.
+    ("desierto",        re.compile(r"\bdesiert[oa]\b", re.I)),
+    ("inadmisible",     re.compile(r"\binadmisible\b", re.I)),
+    ("improcedente",    re.compile(r"\bimprocedente\b", re.I)),
+    ("caducidad",       re.compile(r"\bcaducidad\b|\bcaduc[oó]\b", re.I)),
     # ── fin H079 ──────────────────────────────────────────────────────────────
     # catch-all
     ("otro",            re.compile(r".*")),
@@ -3148,7 +3156,8 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         MERIT_OUTCOMES    = {"hace_lugar", "procedente", "revoca", "nulidad",
                               "confirma", "deja_sin_efecto"}
         GATEKEEP_OUTCOMES = {"desestima", "inadmisible_280", "inadmisible_acordada_4",
-                             "abstracto", "desistimiento", "mal_concedido"}
+                             "abstracto", "desistimiento", "mal_concedido",
+                             "desierto", "inadmisible", "improcedente", "caducidad"}
         is_merit = int(outcome in MERIT_OUTCOMES)
 
         jueces_nombres     = [j["nombre"] for j in firma_parsed["jueces"]]
