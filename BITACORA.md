@@ -7299,3 +7299,27 @@ deja_sin_efecto agregado a ambos MERIT_OUTCOMES (classify_outcome e is_merit_dec
 - `output/parser/csjn_casos_editorial.csv` — 151 secciones.
 
 **Distribución de outcomes (H079, classify_outcome v14 + deja_sin_efecto):**
+
+## H080 — Diagnóstico de tomos 335/336 y ruta de catálogo 336 (parqueada) (2026-05-28)
+
+**Objetivo:** decidir cómo tratar los tomos 335/336 (digitalizados con Tesseract) y, si correspondía, incorporar 336.
+
+### H080-01 — Diagnóstico refinado de 335/336
+La prosa del cuerpo de ambos tomos está limpia (considerandos, "por ello", resúmenes editoriales, carátulas-en-cuerpo). El daño está localizado en el bloque de cierre de cada fallo (fecha + firmas), que en el PDF es imagen embebida (firma digital) y no texto. Esto explica sin_firma alto (62/207 en 335) y cuerpos vacíos (el parser usa fecha/firma como anclas). La hipótesis inicial de columnas entreveradas por Tesseract quedó refutada con datos: los índices entran en orden de lectura correcto.
+
+### H080-02 — Ruta de índice 336 en construir_catalogo (v1.01)
+336 no tiene índice de nombres canónico; solo un índice general alfabético por carátula, con header "Índice"/"Indice" suelto y sin ancla ": p.". Dos sub-formatos: 336.1 trailing ("Carátula. 448"), 336.2 con líderes de puntos ("Carátula s/ tipo. ... 1477"). Se diseñó y validó una ruta de fallback (detección de header title-case + dos extractores, guarda "canónico primero"). Validación: 336 = 138 entradas (62 vol.1 + 76 vol.2), 329-349 idénticos al baseline, catálogo 6117→6255. Sin trampa de números embebidos (TF/dto/resol).
+
+### H080-03 — Decisión: parquear 335/336
+Se decidió no perseguir la corrupción de Tesseract con el parser (las firmas son imagen, no hay texto que recuperar). Vía de solución: re-escanear solo las páginas de cierre del tomo papel para los fallos rotos. Worklist generado: 335_firmas_a_escanear.csv (62 fallos, página inicio/cierre). main revertido al baseline limpio pre-335/336 (056c31e); la ruta 336 queda como archivo y en branch tomos-335-336, sin mergear.
+
+### H080-04 — Infra: Google Drive corrompía el repo
+El repo estaba sincronizado por Google Drive, que lockeaba .git/objects y disparaba el flood de gc (deletion failed y/n) más miles de temporales .tmp.driveupload trackeados. Se cerró Drive, se puso exclusión de Defender, gc.auto 0, se limpió .tmp.driveupload y se agregó al .gitignore. Repo verificado sano (fsck limpio, count 0). Pendiente ideal: mover el repo fuera de toda carpeta sincronizada.
+
+### H080 — Estado final
+- **main:** baseline limpio pre-tomos 335/336 (056c31e). Corpus ~5862, sin_firma 16, parser v18.05.
+- **Parqueado:** construir_catalogo v1.01 (ruta 336, validada) como archivo + branch tomos-335-336; worklist de firmas 335 (62 fallos).
+
+**Versiones:** parser.py v18.05 (sin cambios). construir_catalogo.py v1.01 (parqueado, no en main).
+
+**Commits:** snapshot pre-H080, branch tomos-335-336 (experimento 336), reset de main a 056c31e, housekeeping gitignore/Drive.

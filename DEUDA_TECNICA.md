@@ -6,15 +6,12 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-27 (H079: outcome `deja_sin_efecto` nuevo
-(87 casos), procedente regex expandido (56 casos rescatados de "otro"),
-otro 893→757. Diagnóstico tipo_cuestion_federal validado: 50.1% cobertura
-confirmada, 0 falsos positivos en muestreo de 30. parser.py v18.04.
-H078: `es_queja` + `queja_resultado` +
-`tipo_cuestion_federal` — tres columnas nuevas aditivas. es_queja: 1993/5669
-(35.2%), queja_resultado 98.2% cobertura. tipo_cuestion_federal: detección
-en dos capas (sumario editorial + fallback considerando), 2843/5669 (50.1%)
-detectados. parser.py v18.03.
+**Última actualización:** 2026-05-28 (H080: diagnóstico refinado de tomos 335/336 (Tesseract); ruta de índice 336 diseñada y VALIDADA en construir_catalogo v1.01 (138 entradas, 0 regresión) pero PARQUEADA pendiente tomos papel; main revertido a baseline limpio pre-335 (056c31e); worklist de 62 firmas a escanear generado; infra: repo sacado del sync de Google Drive que corrompía .git. | H079 cont.: 4 minor outcomes
+(desierto/inadmisible/improcedente/caducidad) — otro 757→688. Tomo 335
+incorporado (+255 fallos, corpus 5862→6117). detectar_paginas.py v1.01
+(exclusión 335-336 removida). Tomo 336 pendiente: construir_catalogo
+no detecta su índice editorial. 335 con problemas de calidad: sin_firma
+16→78, votos fragmentados por formato OCR distinto. parser.py v18.05.
 H073: B091 aplicado — fallback
 "revocar" en classify_outcome v13, revoca 208→359. B093 aplicado —
 primer_token_de_caratula con búsqueda profunda de tokens no-genéricos
@@ -145,38 +142,28 @@ a las hipótesis de la tesis (H1-H5).
 
 ## Estado del corpus
 
-- **Catálogo:** 5862 entradas (v15).
-- **Universo procesable:** 19 tomos (329-349, exclusión metodológica de 335-336).
-- **Output parser productivo:** 5862 casos en `output/parser/csjn_casos.csv`.
-  Desglose por tipo_entrada: 5668 `fallo` + 34 `sumario_editorial` +
-  160 `sumario_con_link`.
-- **Cobertura sobre catálogo:** 5862 / 5862 = **100%** (todos en CSV).
+- **Catálogo:** 6117 entradas (v15 + tomo 335).
+- **Universo procesable:** 20 tomos (329-335, 337-349; 336 pendiente).
+- **Output parser productivo:** 6117 casos en `output/parser/csjn_casos.csv`.
+  Desglose por tipo_entrada: 5876 `fallo` + 34 `sumario_editorial` +
+  207 `sumario_con_link`.
+- **Cobertura sobre catálogo:** 6117 / 6117 = **100%** (todos en CSV).
   Catálogo validado contra corpus: 0 fallos no catalogados (H051).
-  Cobertura de firma sobre fallos: 5653/5669 = **99,7%**.
-- **Sin firma:** 16 casos (post-H076). Desglose residual:
-  - Citas in extenso ("Dicha sentencia dice así:") donde el token del
-    caso siguiente aparece en el texto citado (~5 casos).
-  - Bloques cortos (wc < 200) por delimitación errónea (~4 casos).
-  - Firma en formato atípico o token en línea de firma (~3 casos).
-  - Otros (sumario truncado, estructura atípica) (~5 casos).
-  Concentración: tomos 329-330 (10/17).
-  Trayectoria sin_firma: 813→782→503→481→449→438→425→422→406→148→114→113→76→74→69→38→35→34→33→31→17→15→16.
-- **Votos:** 27463 filas (post-H076).
+  Cobertura de firma sobre fallos: 5798/5876 = **98.7%**.
+- **Sin firma:** 78 casos (post-H079). 62 nuevos del tomo 335 por
+  formato OCR fragmentado de encabezados de voto. Residual pre-335: 16.
+  Trayectoria sin_firma: 813→...→16→78.
+- **Votos:** 27774 filas (post-H079).
 - **Arquitectura:** `zonificar_bloque()` integrado en parser.py (H051-H052,
   Refacción C). Retorna `(list[str], list[tuple])` con zonas por línea y
   anclas. `extraer_segmentos()` genera CSV zona-centered (H053).
   Uso actual: clasificación sumario_editorial + lineas_dictamen +
   CSV zona-centered canónico. Uso futuro: firma zonificada (descartado
   por ROI insuficiente, ver diagnóstico H053-B).
-- **Zonas:** 140956 segmentos en `output/parser/csjn_casos_zonas.csv` (post-H076,
-  −99 por residuo eliminado por Tier 4).
+- **Zonas:** 146145 segmentos en `output/parser/csjn_casos_zonas.csv` (post-H079).
   Schema: caso_id_canonico, tomo, zona, segmento, linea_ini, linea_fin,
   n_lineas, wc.
-- **Editorial:** 135 secciones en `output/parser/csjn_casos_editorial.csv`
-  (46 indice_general, 45 indice_partes, 20 indice_legislacion,
-  18 indice_materias, 5 acordadas, 1 discurso). Columna `subtipo`
-  (H061, reemplaza `seccion` genérica). Clasificador en
-  `parser_editorial.py`. Parseo de entries: `catalogo.csv` (canónico).
+- **Editorial:** 160 secciones en `output/parser/csjn_casos_editorial.csv`.
 - **Jueces conocidos:** 56 entradas en JUECES_CONOCIDOS (28 titulares/previos +
   13 conjueces B063 + 15 conjueces B072).
 - **Fixes aplicados:**
@@ -2329,7 +2316,16 @@ canónicos actuales B0NN.
 
 ## Resumen ejecutivo
 
-*Actualizado H079 (2026-05-27).*
+*Actualizado H080 (2026-05-28).*
+
+**Estado de main (H080):** main revertido al baseline limpio pre-tomos 335/336
+(`056c31e`): corpus ~5862, sin_firma 16, parser v18.05, detectar_paginas con
+exclusión 335/336. Los tomos 335 y 336 quedan PARQUEADOS hasta conseguir los
+tomos papel (B098/B099). La ruta de catálogo 336 (validada) queda como archivo
+y en branch `tomos-335-336`, sin mergear. Los conteos del snapshot H079 cont.
+abajo (corpus 6117, sin_firma 78) describen el estado parqueado, no main.
+
+*Snapshot H079 cont. (referencia histórica, parqueado):*
 
 - **Bugs cerrados:** ~39 (B001-B008, B013, B029, B030, B032, B039, B046,
   B055, B060, B063-B064, B066-B074, B076-B077, B079, A001,
@@ -2337,12 +2333,14 @@ canónicos actuales B0NN.
   B086 fix parcial.
 - **Bugs en validación:** 1 (B009 parcialmente resuelto por Fase F).
   B010 cerrado (H064).
-- **Bugs activos del pipeline (catálogo + cruzador + parser):** ~28.
+- **Bugs activos del pipeline (catálogo + cruzador + parser):** ~30.
   Catálogo: B011, B045.
   Cruzador: B012.
   Parser: B014-B022, B023-B028, B031, B033-B038, B043-B044, B048,
-  B053-B054, B082 (residual), B086 (residual), B089-B091.
+  B053-B054, B082 (residual), B086 (residual), B089-B091, B098, B099.
   De ellos:
+  - B098 (335 firma fragmentada): 62 sin_firma nuevos por OCR.
+  - B099 (336 catálogo): construir_catalogo no detecta índice editorial.
   - B025 (falsos unánime): re-medido H068. 414→72 (14-20 falsos reales).
   - B018, B024: sustancialmente mitigados por fixes colaterales (H046-H055).
   - B028 (cosmético), B033 (cosmético), B036 (cosmético), B037 (cosmético).
@@ -2350,36 +2348,32 @@ canónicos actuales B0NN.
   - B089 (residuo pre-carátula): 96% de bloques, prioridad pre-publicación.
   - B090 (Tier 5): diseñado, PoC pendiente.
   - B091 (classify_outcome revoca): 2 casos testigo.
-- **Bugs activos del auditor:** ~10 (B040-B042, B047, B049-B051, B052,
-  B056-B058, B061-B062, B065, VIS001-VIS004).
-- **Pendientes metodológicos:** 8 (M01 cerrado, M02-M04, M05 cerrado,
-  M06-M09, M10).
-- **Detectores (H079, parser v18.04):**
-  - outcome "otro": 757 (era 893). classify_outcome v14 + deja_sin_efecto.
-  - deja_sin_efecto: 87 (outcome nuevo H079).
-  - procedente: 753 (era 697, +56 por regex expandido H079).
-  - es_queja: 1993/5669 (35.2%). queja_resultado 98.2% cobertura.
-  - tipo_cuestion_federal: 2843/5669 detectados (50.1%). Validado H079:
-    0 FP en muestreo 30, cobertura per-tomo estable, mixto genuino.
-    cuestion_federal 1291, arbitrariedad 882, mixto 670, sin_dato 2826.
-  - sin_dispositivo: 25. sin_firma: 16. ancla_catalogo: 64.
+- **Detectores (H079 cont., parser v18.05):**
+  - outcome "otro": 712 (era 757, 4 minor outcomes: desierto 13,
+    inadmisible 25, improcedente 21, caducidad 11).
+  - deja_sin_efecto: 92. procedente: 780.
+  - es_queja: 2055/5876 (35.0%). queja_resultado 98.2% cobertura.
+  - tipo_cuestion_federal: 2949/5876 detectados (50.2%).
+    cuestion_federal 1354, arbitrariedad 904, mixto 691, sin_dato 2927.
+  - sin_dispositivo: 33. sin_firma: 78 (62 de tomo 335). ancla_catalogo: ~35.
 
-**Próximo trabajo priorizado (orden sugerido, H079):**
+**Próximo trabajo priorizado (orden sugerido, H080 — línea limpia, 335/336 parqueados):**
 
-1. **Track 2 taxonómico: categorías menores.** "caducidad" (23),
-   "desierto" (12), "improcedente" (15), "inadmisible genérico" (21).
-2. **Variable `materia` (inferida desde tribunal_origen).** Depende de
-   normalizar tribunal_origen (1316 sin_marcador).
-3. **B090 — Tier 5 dispositivo embebido.** 16 sin_dispositivo con firma.
-4. **Codebook dataset (inglés).** Documentación de variables para
-   publicación en Harvard Dataverse (incluir deja_sin_efecto,
-   es_queja, queja_resultado, tipo_cuestion_federal).
-5. **sin_firma (16 casos)** — auditar residuo por causa raíz.
-6. **Normalizar tribunal_origen** (1316 sin_marcador).
-7. **Diseño taxonómico: outcome como par gate+action.** Pregunta
-   abierta H079: "se declara procedente y se revoca" tiene dos
-   dimensiones (puerta procesal + acción sobre sentencia). Evaluar
-   si descomponer outcome en dos columnas para la tesis.
+*335/336 quedan fuera de esta lista: parqueados pendiente tomos papel (B098/B099).*
+
+1. **Variable `materia` (inferida desde tribunal_origen).** Normalizar
+   tribunal_origen (limpiar OCR, unificar variantes provinciales), mapear a
+   materia por keywords. ~1454 sin_marcador. Habilita análisis temático.
+2. **B090 — Tier 5 dispositivo embebido.** 33 sin_dispositivo con firma. PoC pendiente.
+3. **Recalibrar `is_originaria` (art.117) / `inadmisible_280` (art.280) / art.4.**
+   Regexes dependían de considerando_text con editorial pre-B010; recalibrar
+   contra texto limpio. Toca variables centrales de las hipótesis.
+4. **sin_firma residual (16 casos pre-335)** — auditar residuo.
+5. **Análisis para hipótesis:** H2 red de citas, secretaría letrada, expansión H3, dashboard.
+6. **Diseño taxonómico: outcome como par gate+action.**
+
+*Al desparquear 335/336: incorporar ruta 336 (construir_catalogo v1.01, validada)
++ re-escaneo de páginas de cierre del papel para firmas/fechas (worklist listo).*
 
 
 ### Referencia: taxonomía oficial CSJN (Anuario Estadístico 2025)
@@ -3596,6 +3590,58 @@ firma. El contenido del voto no se captura completo en la zona.
 **Estado de verificación:** `confirmado_caso_testigo`.
 **Estado del fix:** no diseñado.
 **Referencias cruzadas:** H075.
+
+### B098 — Tomo 335: encabezados de voto fragmentados por OCR
+
+**Componente:** parser (detectar_fin_real / firma).
+**Origen / fuente del diagnóstico:** H079, incorporación tomo 335.
+**Causa raíz:** el OCR de tomo 335 fragmenta los encabezados de voto
+individual en múltiples líneas cortas: "TO DEL SEÑOR MINISTRO",
+"DENCIA DE LA SEÑORA", "MINISTRA DOCTORA DOÑA CARMEN", etc. El parser
+no reconoce estos fragmentos como marcadores de voto → sin_firma masivo.
+**Diagnóstico / evidencia:** sin_firma salta de 16 a 78 (+62, todos de
+tomo 335). Ratio votos/fallos en 335: 311/255 = 1.2 (normal ~5).
+Top desconocidos en firma: fragmentos de encabezados de voto.
+**Estado de verificación:** `confirmado_cuantificado`.
+**Diagnóstico refinado (H080):** la prosa del cuerpo (considerandos, "por ello",
+resúmenes editoriales, carátulas-en-cuerpo) está LIMPIA. El daño está localizado
+en el bloque de cierre de cada fallo (fecha + firmas), que en el PDF es imagen
+embebida (firma digital) y no texto. Eso rompe la detección de firma y arrastra
+los cuerpos vacíos, porque el parser usa fecha/firma como anclas estructurales.
+62 fallos sin firma / 207 (30%). No recuperable por parser: no hay texto.
+**Estado del fix (H080):** vía decidida — re-escanear SOLO las páginas de cierre
+del tomo papel (nombres tipeados, OCR limpio) de los 62 fallos rotos. Worklist
+generado: `335_firmas_a_escanear.csv` (62 filas, página inicio/cierre estimado).
+PARQUEADO: pendiente conseguir tomo papel.
+**Referencias cruzadas:** H079, H080.
+
+### B099 — Tomo 336: construir_catalogo no detecta índice editorial
+
+**Componente:** construir_catalogo.
+**Origen / fuente del diagnóstico:** H079, incorporación tomo 336.
+**Causa raíz:** el formato del índice editorial en tomo 336 difiere de
+los tomos existentes. `construir_catalogo.py` no detecta entradas →
+0 filas en catálogo → 0 en fallos_localizados → parser no procesa 336.
+El OCR de 336 también tenía formato distinto (page numbers inline con
+tomo: "336 29" / "80 336"), corregido con preprocesamiento.
+**Diagnóstico / evidencia:** `Select-String "^336" catalogo.csv` = 0.
+detectar_paginas sí procesa 336 correctamente (843+1582 headers).
+**Estado de verificación:** `confirmado_cuantificado`.
+**Diagnóstico refinado (H080):** la hipótesis de columnas entreveradas por
+Tesseract quedó REFUTADA con datos. Causa real: 336 no tiene índice de nombres
+canónico; solo un índice general alfabético por carátula, con header
+"Índice"/"Indice" suelto (title case) y SIN ancla ": p.". Dos sub-formatos:
+336.1 trailing ("Carátula. 448"), 336.2 con líderes de puntos
+("Carátula s/ tipo. ... 1477"). El cuerpo de 336 arrastra el mismo daño de
+bloque de cierre que 335 (ver B098).
+**Estado del fix (H080):** DISEÑADO Y VALIDADO, PARQUEADO. construir_catalogo
+v1.01 agrega ruta 336 (header title-case + dos extractores, guarda "canónico
+primero" = cero regresión). Validado: 336 = 138 entradas (62 vol.1 + 76 vol.2),
+329-349 idénticos al baseline (catálogo 6117→6255). El patch NO está mergeado a
+main: vive como archivo (`construir_catalogo.py` patcheado) y en branch
+`tomos-335-336`. Se incorpora junto con el re-escaneo de firmas (B098) cuando
+llegue el papel.
+**Referencias cruzadas:** H079, H080.
 
 ### M11 — Versionar scripts canónicos con __version__ — CERRADO H076
 
