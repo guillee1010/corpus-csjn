@@ -6,7 +6,7 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-29 (H083: módulo `estadisticas/` nuevo — extractor Playwright de los tableros Tableau del Anuario CSJN (sortea el AWS WAF vía navegador real); CSV de referencia 2024/2025 (secretaría, materia, admitidos); cruce voto×ministro 2025 extraído; HALLAZGO: voto propio de Lorenzetti 2025 = 12.899 ≈ total art. 280 (12.546), repartido transversalmente entre secretarías → suscripción individual del 280, no fragmentación doctrinaria (material H1/H3). Sesión de frente analítico, NO toca pipeline ni outputs canónicos. Decisión de fondo de H082 (variable materia) sigue postergada. | H080: diagnóstico refinado de tomos 335/336 (Tesseract); ruta de índice 336 diseñada y VALIDADA en construir_catalogo v1.01 (138 entradas, 0 regresión) pero PARQUEADA pendiente tomos papel; main revertido a baseline limpio pre-335 (056c31e); worklist de 62 firmas a escanear generado; infra: repo sacado del sync de Google Drive que corrompía .git. | H079 cont.: 4 minor outcomes
+**Última actualización:** 2026-05-29 (H084: diagnóstico de deuda estructural sobre parser v18.05 (set mínimo: parser + DEUDA + BITACORA + csjn_casos.csv + árbol). Recomendación: frente A (refacción REE), primer paso obligado = red de regresión (no había). Construido `scripts/tests/check_regresion.py` + golden de los 4 CSV del parser (casos/votos/zonas/editorial); verificado [CLEAN] (el golden se reproduce a sí mismo). Cierra el agujero "refactor sin red" (ver M12). Hallazgos de datos: dictamen_presente con 3 valores True/False/'0' (B037); 58 outcome=originaria con is_originaria=0 (valida frente D); outcome=otro 688/5862. NO toca pipeline ni outputs. | H083: módulo `estadisticas/` nuevo — extractor Playwright de los tableros Tableau del Anuario CSJN (sortea el AWS WAF vía navegador real); CSV de referencia 2024/2025 (secretaría, materia, admitidos); cruce voto×ministro 2025 extraído; HALLAZGO: voto propio de Lorenzetti 2025 = 12.899 ≈ total art. 280 (12.546), repartido transversalmente entre secretarías → suscripción individual del 280, no fragmentación doctrinaria (material H1/H3). Sesión de frente analítico, NO toca pipeline ni outputs canónicos. Decisión de fondo de H082 (variable materia) sigue postergada. | H080: diagnóstico refinado de tomos 335/336 (Tesseract); ruta de índice 336 diseñada y VALIDADA en construir_catalogo v1.01 (138 entradas, 0 regresión) pero PARQUEADA pendiente tomos papel; main revertido a baseline limpio pre-335 (056c31e); worklist de 62 firmas a escanear generado; infra: repo sacado del sync de Google Drive que corrompía .git. | H079 cont.: 4 minor outcomes
 (desierto/inadmisible/improcedente/caducidad) — otro 757→688. Tomo 335
 incorporado (+255 fallos, corpus 5862→6117). detectar_paginas.py v1.01
 (exclusión 335-336 removida). Tomo 336 pendiente: construir_catalogo
@@ -2361,6 +2361,8 @@ abajo (corpus 6117, sin_firma 78) describen el estado parqueado, no main.
 
 *335/336 quedan fuera de esta lista: parqueados pendiente tomos papel (B098/B099).*
 
+*H084: hay red de regresión del parser (M12). Todo refactor del parser se gatea a que `scripts/tests/check_regresion.py` dé [CLEAN]. La refacción REE (frente A) es ahora trabajo seguro: candidatos M03 (unidad por línea), M07 (dedup parser↔auditor), M08, classify_outcome como gate+action (ítem 6), colapso de la cascada de tiers 1→4 en procesar_archivo (757 líneas).*
+
 1. **Variable `materia` (inferida desde tribunal_origen).** Normalizar
    tribunal_origen (limpiar OCR, unificar variantes provinciales), mapear a
    materia por keywords. ~1454 sin_marcador. Habilita análisis temático.
@@ -3683,3 +3685,37 @@ cruzar_catalogo_y_mapa.py (v1.0), detectar_paginas.py (v1.0),
 auditar_fallo.py (v1.0.0, ya lo tenía). Print de versión en output del parser.
 Convención: minor sube .01 por sesión, major por cambio de arquitectura.
 **Referencias cruzadas:** H076.
+
+### M12 — Harness de regresión del parser (red para refactor) — APLICADO H084
+
+**Componente:** infra / tests.
+**Origen / fuente del diagnóstico:** H084. Restricción REE innegociable del
+frente A: ningún refactor se mergea sin demostrar outputs idénticos (diff de los
+CSV canónicos pre/post sobre el corpus completo). El diagnóstico encontró que esa
+condición no se podía ejecutar: no había red.
+**Descripción:** el parser de 3638 líneas (procesar_archivo 757 líneas;
+classify_outcome; cascada de dispositivo Tier 1→2→3→3b→4; es_originaria 212
+líneas) producía los 4 CSV canónicos sin ningún test de regresión.
+`scripts/tests/` cubría los scripts chicos (clasificador, construir_catalogo,
+cruzar_catalogo_y_mapa, detectar_paginas) pero NO parser.py ni auditar_fallo.py.
+Existía `csjn_casos_BASELINE_H079.csv` suelto, sin harness que lo usara.
+Refactorizar bajo esa condición violaba la propia regla REE ("refactor sin red").
+**Fix aplicado (H084):** `scripts/tests/check_regresion.py`, harness de dos modos.
+`--make-golden` corre el parser a un dir temporal y congela los 4 CSV
+(casos/votos/zonas/editorial) en `scripts/tests/golden/`. Modo default corre el
+parser a otro temporal y diffea contra el golden: SHA256 por archivo (pasada
+rápida) + diff posicional fila-a-fila celda por celda en caso de mismatch
+(reporta fila, caso_id, columna). Sale con código 1 si cambia una sola celda.
+Nunca pisa `output/parser/` productivo (corre a tempdir). Invoca con
+`cwd=scripts/pipeline` para resolver el import de `parser_editorial`.
+**Validación:** golden congelado sobre main `bcc143f`; `check` inmediato dio
+[CLEAN] (4/4 CSV idénticos; el golden se reproduce a sí mismo).
+**Alcance:** cubre los 4 CSV de parser.py. NO cubre
+`csjn_editorial_indice_partes.csv` (lo emite parser_editorial.py aparte) ni el
+pipeline upstream (catálogo/localización/cruce), tratados como inputs congelados.
+Extender a esos es otro golden con otra invocación.
+**Habilita:** refactor seguro de M03 (unidad por línea), M07 (dedup
+parser↔auditor), M08 (`_ordenar_y_validar`), classify_outcome gate+action, y el
+colapso de la cascada de tiers en procesar_archivo. Cada refactor se gatea a
+[CLEAN]: si cambia un número, es bug, no refactor.
+**Referencias cruzadas:** H084. M03, M07, M08.
