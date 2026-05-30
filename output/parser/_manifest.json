@@ -1,0 +1,84 @@
+{
+  "schema_version": 2,
+  "manifest_generator_version": "1.0",
+  "generated_at": "2026-05-30T05:27:01.492602+00:00",
+  "git": {
+    "commit": "c9138956ffdf00838ed1921b6064a2c1d3eee123",
+    "dirty": true
+  },
+  "pipeline_scripts": {
+    "detectar_paginas.py": "1.0",
+    "construir_catalogo.py": "1.0",
+    "cruzar_catalogo_y_mapa.py": "1.0",
+    "parser.py": "18.07",
+    "parser_editorial.py": "1.0"
+  },
+  "inputs": {
+    "mapa_paginas.csv": {
+      "path": "output/mapa/mapa_paginas.csv",
+      "generated_by": "detectar_paginas.py",
+      "generator_version": "1.0",
+      "sha256": "dee880faf44b294278cf981f24b118d9962113db5ef8c0d274e3fb1cbe60c712",
+      "n_rows": 46936,
+      "n_bytes": 1468796
+    },
+    "catalogo.csv": {
+      "path": "output/catalogo/catalogo.csv",
+      "generated_by": "construir_catalogo.py",
+      "generator_version": "1.0",
+      "sha256": "1a19c5c58157a7b3f24244df55af93669ab2ad532849fcd6da42441faa409450",
+      "n_rows": 5862,
+      "n_bytes": 649509
+    },
+    "fallos_localizados.csv": {
+      "path": "output/localizacion/fallos_localizados.csv",
+      "generated_by": "cruzar_catalogo_y_mapa.py",
+      "generator_version": "1.0",
+      "sha256": "76980afc371f8706dcd3244c9210748d35e4c74fce12a4ea8ba8fef05164bef1",
+      "n_rows": 5862,
+      "n_bytes": 822898
+    }
+  },
+  "outputs": {
+    "csjn_casos.csv": {
+      "path": "output/parser/csjn_casos.csv",
+      "generated_by": "parser.py",
+      "generator_version": "18.07",
+      "sha256": "d37d3adebf8641c7023632363aa1efbfd713320989cf8f471b79e7316912f532",
+      "n_rows": 5862,
+      "n_bytes": 13994128
+    },
+    "csjn_casos_votos.csv": {
+      "path": "output/parser/csjn_casos_votos.csv",
+      "generated_by": "parser.py",
+      "generator_version": "18.07",
+      "sha256": "37c38b1ddc152f12092312470fed55aac1119b014239a66fdb3e820578d3e1bf",
+      "n_rows": 27463,
+      "n_bytes": 10659464
+    },
+    "csjn_casos_zonas.csv": {
+      "path": "output/parser/csjn_casos_zonas.csv",
+      "generated_by": "parser.py",
+      "generator_version": "18.07",
+      "sha256": "169c4ddcdcf7208aa49f8f707c750dbf8af8039c67d007661f8b19ba11b4e21c",
+      "n_rows": 140956,
+      "n_bytes": 5552078
+    },
+    "csjn_casos_editorial.csv": {
+      "path": "output/parser/csjn_casos_editorial.csv",
+      "generated_by": "parser.py",
+      "generator_version": "18.07",
+      "sha256": "c57f66fdf6af284c413bbdb75b117030c5d44ca1b438f025789f0b4208bb0d7f",
+      "n_rows": 151,
+      "n_bytes": 8501
+    },
+    "csjn_editorial_indice_partes.csv": {
+      "path": "output/parser/csjn_editorial_indice_partes.csv",
+      "generated_by": "parser_editorial.py",
+      "generator_version": "1.0",
+      "sha256": "cba0dcf509a64babdc8dc4cb389a874062e8d10b92fe13f95ffed4117b12185a",
+      "n_rows": 11445,
+      "n_bytes": 1206651
+    }
+  }
+}
