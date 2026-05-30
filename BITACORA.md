@@ -7532,3 +7532,44 @@ outputs 5862 / 27463 / 140956 / 151 / 11445; inputs 46936 / 5862 / 5862.
 **Pendiente:** digest del corpus crudo (`LibroVol*.md`), único eslabón sin fijar.
 
 **Commits:** 2 (feature M14 + docs).
+
+## H088 — M14 ext: sellado del corpus crudo en el manifiesto (2026-05-30)
+
+**Objetivo:** cerrar el último eslabón de trazabilidad de la cadena —el corpus crudo (`LibroVol*.md`)— en el manifiesto de procedencia, sin tocar ningún CSV.
+
+### H088-01 — Decisión de candidato
+
+Sobre el set del prompt H088 se eligió M14 ext (digest del corpus crudo): único eslabón que el manifiesto todavía no fijaba, riesgo cero (no toca CSV → golden [CLEAN] por construcción) y cierre elegante de la trazabilidad. Diferidos: M13 cont. (detector de sumarios) y R2 (refactor); frente D/B (cambio de comportamiento). En el camino se relevó el frente datos sin aplicar nada (ver H088-04).
+
+### H088-02 — Decisión de diseño: corpus derivado de source_file, no glob
+
+El listado real de `corpus/` mostró 50 `.md` con nomenclatura inconsistente de la CSJN (separadores `.`, `_`, `-`: `LibroVol329.1.md`, `LibroVol340_2.md`, `LibroVol342-1.md`) — nombres que se preservan tal cual para poder re-bajar/linkear desde la fuente. El dato decidió el diseño: el corpus actual NO incluye 335/336 (parqueados, B098/B099), y `csjn_casos.csv` tiene exactamente 46 `source_file` distintos = 50 − 4 parqueados. Se descartó el glob `LibroVol*.md` (sellaría los parqueados) y la allow-list a mano (50 nombres, 3 convenciones, frágil). El set se DERIVA de la columna `source_file` que el parser ya escribe por caso: auto-descriptivo, auto-corrige al desparquear (source_file crece solo) y es verificación de integridad (fuente declarada ausente en disco → falla ruidoso). Verificado que los 46 source_file mapean 1-a-1 con archivos de `corpus/`, sin huecos.
+
+### H088-03 — Implementación y validación
+
+`generar_manifiesto.py` v1.0→1.1, `schema_version` 2→3. Nueva capa C `corpus`: por archivo `sha256`+`n_bytes`, más un `digest` rolled-up (sha256 de las líneas `nombre:sha256` ordenadas) como huella única — smoke detector que dice "cambió algo" mientras el chequeo por-archivo localiza CUÁL. `entrada_artefacto()` generalizada a raíz del repo (sirve `output/` y `corpus/`; las entradas de inputs/outputs quedan byte-idénticas). `--verify` extendido al corpus + digest contra disco. PoC de la lógica nueva sobre el CSV real (46 archivos, excluye parqueados, digest estable y cambia al tocar 1 archivo localizándolo) + smoke test en repo de juguete (generar/verify/detección de cambio/detección de falta/fail-loud, todos OK). En máquina real: generar OK (corpus 46, digest `9fdd4726ce6d…`), `check_regresion` [CLEAN] 4/4, `--verify` [CLEAN] 54 artefactos (46 corpus + 3 inputs + 5 outputs).
+
+### H088-04 — Frente datos relevado (sin aplicar)
+
+- **B037 reclasificado no-bug.** `dictamen_presente=='0'` son 193 filas = todos los sumarios (160 con_link + 33 editorial), nunca un fallo. Centinela N/A deliberado, no defecto; forzarlo a `False` perdería información. Fix no recomendado.
+- **`is_originaria` descartada** del frente de recalibración: marginal a la tesis (~1%, no toca H1–H5). Los 58 `outcome=originaria` con `is_originaria=0` quedan como testigos.
+- **`inadmisible_280` no apto para recalibración simple.** Señal de art.280 contaminada (montos, fojas, citas de Fallos t.280) y casos de **280 parcial** (voltea algunas pretensiones, el caso sigue al fondo); requiere decisión taxonómica antes que regex. Sesión de diseño, no patch.
+
+### H088 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 160 sumario_con_link + 33 sumario_editorial). Sin cambios (M14 ext no toca CSV).
+- **Parser:** v18.07, sin cambios.
+- **Trazabilidad:** cadena completa — corpus crudo (46 `.md`) → 3 intermedios → 5 outputs, todo sellado en `_manifest.json`.
+- **M13:** sigue EN PROGRESO (resta detector de sumarios).
+
+**Outputs canónicos (sin cambios, [CLEAN] contra golden):**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27463 filas.
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+- `output/parser/csjn_editorial_indice_partes.csv` — 11445 filas.
+
+**Artefacto actualizado:** `output/parser/_manifest.json` (schema 3: corpus 46 + inputs 3 + outputs 5).
+**Scripts modificados:** `scripts/pipeline/generar_manifiesto.py` v1.1.
+**Versiones canónicas:** generar_manifiesto.py v1.1; resto sin cambios (parser.py v18.07).
+**Commits:** 1 — `feat(manifiesto): sellar corpus crudo derivado de source_file + digest (M14 ext)` (`f8233ff`). Pendiente el commit de docs.

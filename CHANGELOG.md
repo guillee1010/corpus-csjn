@@ -2,6 +2,11 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H088 (2026-05-30)
+
+- `generar_manifiesto.py`: v1.0→1.1, `schema_version` 2→3. Nueva capa `corpus` derivada de `source_file` (46 `.md`, sha256+n_bytes por archivo + digest rolled-up); fail-loud si falta una fuente declarada; `entrada_artefacto()` generalizada a raíz del repo; `--verify` extendido al corpus. No toca CSV.
+- `output/parser/_manifest.json`: schema 3 — corpus (46) + inputs (3) + outputs (5). Sin delta en los CSV canónicos.
+
 ## H087 (2026-05-30)
 
 - `scripts/pipeline/generar_manifiesto.py`: nuevo, v1.0. Manifiesto de procedencia
