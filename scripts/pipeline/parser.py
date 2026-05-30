@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.09"  # H090 R2: classify_outcome sede única del fallback 280/ac4 (dedup)
+__version__ = "18.10"  # H091: cierre M13 — bucle de votos y status_localizacion extraidos (procesar_archivo = orquestador)
 
 import re
 import csv
@@ -972,6 +972,62 @@ def detectar_juez_en_voto_header(linea):
         if pat.search(linea):
             return nombre
     return None
+
+def detectar_votos_disidencias(bloque, lineas_excluir):
+    """
+    Recorre el bloque buscando headers de votos y disidencias individuales.
+
+    Devuelve (n_votos_svoto, n_disidencias, inicio_votos_indiv, marcadores_votos):
+      n_votos_svoto      cantidad de headers "Voto del ..."
+      n_disidencias      cantidad de headers "Disidencia (parcial) del ..."
+      inicio_votos_indiv índice (en el bloque) del primer header individual, o None
+      marcadores_votos   lista [(k, juez, tipo), ...] con el juez detectado por header
+
+    lineas_excluir: índices del bloque fuera de zona de fallo (máscara M09:
+    dictamen, residuo_caso_anterior, sumario, epílogo, header_pagina) que se
+    saltan para no contar headers espurios. El juez se busca en el propio header
+    y, si no aparece, en hasta 3 líneas siguientes (saltando vacías, cortando en
+    "Considerando:").
+    """
+    n_votos_svoto      = 0
+    n_disidencias      = 0
+    inicio_votos_indiv = None
+    marcadores_votos   = []
+
+    for k, bl in enumerate(bloque):
+        stripped = bl.strip()
+        if not stripped:
+            continue
+
+        # M09: saltar líneas fuera de zona de fallo (dictamen,
+        # residuo_caso_anterior, sumario, epilogo, header_pagina).
+        if k in lineas_excluir:
+            continue
+
+        if RE_VOTO_HDR.match(stripped) or RE_DISID_HDR.match(stripped):
+            tipo = "voto" if RE_VOTO_HDR.match(stripped) else "disidencia"
+            if tipo == "voto":
+                n_votos_svoto += 1
+            else:
+                n_disidencias += 1
+            if inicio_votos_indiv is None:
+                inicio_votos_indiv = k
+            header_completo = stripped
+            for offset in range(1, 4):
+                juez = detectar_juez_en_voto_header(header_completo)
+                if juez:
+                    marcadores_votos.append((k, juez, tipo))
+                    break
+                if k + offset < len(bloque):
+                    sig = bloque[k + offset].strip()
+                    if not sig:
+                        continue
+                    if RE_CONSIDERANDO.search(sig):
+                        break
+                    header_completo += " " + sig
+            continue
+
+    return n_votos_svoto, n_disidencias, inicio_votos_indiv, marcadores_votos
 
 # ── NUEVO v11: detección positiva de competencia originaria ──────────────────
 
@@ -2749,6 +2805,27 @@ def resolver_dispositivo(bloque, apertura_rel, lineas_dictamen, inicio_votos_ind
     return por_ello_idx, por_ello_text
 
 
+def refinar_status_localizacion(status_loc, apertura_rel, ancla_inicio):
+    """
+    Refina el status de localización del catálogo con dos sufijos de auditoría:
+
+      - falta de marcador clásico de apertura (apertura_rel is None):
+        "ok" → "ok_sin_marcador_apertura"; otro → "<status>_sin_marcador".
+      - ancla de inicio (v18 Fase F), registrada para auditoría posterior:
+        'titulo'   → sin cambio (caso limpio, ancló por token del título)
+        'vistos'   → sufijo "_ancla_vistos" (ancló por "Vistos los autos")
+        'catalogo' → sufijo "_ancla_catalogo" (sin refinamiento, linea del catálogo)
+    """
+    s = status_loc
+    if apertura_rel is None:
+        s = "ok_sin_marcador_apertura" if status_loc == "ok" else status_loc + "_sin_marcador"
+    if ancla_inicio == 'vistos':
+        s += "_ancla_vistos"
+    elif ancla_inicio == 'catalogo':
+        s += "_ancla_catalogo"
+    return s
+
+
 def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token_por_caso, siguiente_caso):
     """
     v15: procesa un archivo .md y devuelve (casos, votos, zonas, editorial, descon).
@@ -2856,29 +2933,9 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             apertura_idx = int(linea_inicio)
             apertura_tipo = ""
 
-        # ── status_localizacion: refinamiento ────────────────────────────────
-        status_loc_final = status_loc
-        if apertura_rel is None:
-            # Bloque procesado pero sin marcador clásico de apertura
-            if status_loc == "ok":
-                status_loc_final = "ok_sin_marcador_apertura"
-            else:
-                status_loc_final = status_loc + "_sin_marcador"
-        # v18 Fase F: registrar ancla de inicio para auditoría posterior.
-        # 'titulo'  → ancló por token del título (caso limpio, no modifica status)
-        # 'vistos'  → ancló por "Vistos los autos" (título no detectado en bloque)
-        # 'catalogo'→ sin refinamiento, usa linea_inicio del catálogo
-        if ancla_inicio == 'vistos':
-            if status_loc_final in ("ok", "ok_sin_marcador_apertura"):
-                status_loc_final = status_loc_final + "_ancla_vistos"
-            else:
-                status_loc_final = status_loc_final + "_ancla_vistos"
-        elif ancla_inicio == 'catalogo':
-            if status_loc_final in ("ok", "ok_sin_marcador_apertura"):
-                status_loc_final = status_loc_final + "_ancla_catalogo"
-            else:
-                status_loc_final = status_loc_final + "_ancla_catalogo"
-        # ancla_inicio == 'titulo': status_loc_final no cambia (caso limpio)
+        # ── status_localizacion: refinamiento (→ refinar_status_localizacion) ─
+        status_loc_final = refinar_status_localizacion(
+            status_loc, apertura_rel, ancla_inicio)
 
         # ── M13 (H089): zonificar primero ────────────────────────────────────
         # zonificar_bloque es pura y su resultado se reutiliza río abajo
@@ -3000,45 +3057,10 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
 
         por_ello_idx       = None
         por_ello_text      = ""
-        n_votos_svoto      = 0
-        n_disidencias      = 0
-        inicio_votos_indiv = None
-        marcadores_votos   = []
 
-        for k, bl in enumerate(bloque):
-            stripped = bl.strip()
-            if not stripped:
-                continue
-
-            # M09: saltar líneas fuera de zona de fallo (dictamen,
-            # residuo_caso_anterior, sumario, epilogo, header_pagina).
-            if k in lineas_excluir:
-                continue
-
-            if RE_VOTO_HDR.match(stripped) or RE_DISID_HDR.match(stripped):
-                tipo = "voto" if RE_VOTO_HDR.match(stripped) else "disidencia"
-                if tipo == "voto":
-                    n_votos_svoto += 1
-                else:
-                    n_disidencias += 1
-                if inicio_votos_indiv is None:
-                    inicio_votos_indiv = k
-                header_completo = stripped
-                for offset in range(1, 4):
-                    juez = detectar_juez_en_voto_header(header_completo)
-                    if juez:
-                        marcadores_votos.append((k, juez, tipo))
-                        break
-                    if k + offset < len(bloque):
-                        sig = bloque[k + offset].strip()
-                        if not sig:
-                            continue
-                        if RE_CONSIDERANDO.search(sig):
-                            break
-                        header_completo += " " + sig
-                continue
-
-            pass  # dispositivo detection moved to anchored search below
+        (n_votos_svoto, n_disidencias,
+         inicio_votos_indiv, marcadores_votos) = detectar_votos_disidencias(
+            bloque, lineas_excluir)
 
         # ── Dispositivo: cascada Tier 1→4 (extraída H085 R1) ───────────────
         por_ello_idx, por_ello_text = resolver_dispositivo(
