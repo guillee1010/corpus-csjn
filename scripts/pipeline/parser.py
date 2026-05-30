@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.05"  # H079: +deja_sin_efecto, +4 minor outcomes (desierto/inadmisible/improcedente/caducidad)
+__version__ = "18.07"  # H086 R5: cascada dispositivo colapsada a motor _barrer + 5 llamadas
 
 import re
 import csv
@@ -2539,6 +2539,182 @@ def extraer_segmentos(zonas, bloque):
 
 # ── Procesamiento de un archivo ───────────────────────────────────────────────
 
+# ── H086 R5: detección del dispositivo — motor parametrizado ──────────────────
+# Las 5 capas (Tier 1→2→3→3b→4) eran el mismo bucle copiado, difiriendo solo en
+# 4 perillas: rango, exclusión de dictamen, detector (es_candidato) y fallback.
+# Colapsadas a un motor _barrer() único + 5 llamadas configuradas en cascada.
+# Patrones que antes se compilaban en cada llamada, ahora a nivel de módulo.
+
+# Tier 2: patrones .search() mid-line (la fórmula viene pegada al final de la
+# oración anterior, no arranca línea). Restringidos a fórmulas seguras + guardas.
+_T2_PATS = [
+    re.compile(r"Por ello[,.]?\s", re.I),
+    re.compile(r"Por lo expuesto\b", re.I),
+    re.compile(r"Por las razones\b", re.I),
+    re.compile(r"Por lo expresado\b", re.I),
+    re.compile(r"Por las consideraciones\b", re.I),
+    re.compile(r"Que[,]?\s+por\s+ello\b", re.I),
+    re.compile(r"O[íi]dos?\s+(el|la|los|las)\b", re.I),
+]
+
+# Tier 3b: recorta el prefijo "Por ello/..." para mirar la palabra siguiente y
+# distinguir dispositivo del Tribunal ("se confirma") de conclusión del
+# Procurador ("opino") dentro de la zona del dictamen.
+_T3B_ARG_RE = re.compile(
+    r"^(?:Por\s+(?:ello|lo\s+expuesto|todo\s+lo\s+expuesto|"
+    r"todo\s+ello|lo\s+expresado|las\s+razones|las\s+consideraciones|"
+    r"estos?\s+razones|los\s+fundamentos)[,.]?\s*)",
+    re.I,
+)
+
+# Tier 4: fórmulas de cierre alternativas (fallos que no abren con "Por ello").
+_RE_ASI = re.compile(
+    r"[Aa]sí se resuelve"
+    r"|[Ee]l\s+[Tt]ribunal\s+resuelve",
+    re.I,
+)
+
+
+def _cand_estructural(stripped):
+    """Tiers 1 y 3: apertura estructural (detectar_apertura_dispositivo)."""
+    es_disp, _ = detectar_apertura_dispositivo(stripped)
+    return es_disp
+
+
+def _cand_t2(stripped):
+    """Tier 2: .search() mid-line + start>0 + fin de oración/'Que' + argumental.
+    Replica la semántica per-patrón con `continue` del bucle original."""
+    for pat in _T2_PATS:
+        m = pat.search(stripped)
+        if m and m.start() > 0:
+            pre = stripped[:m.start()].rstrip()
+            if not (pre.endswith(".") or pre.endswith(")")
+                    or stripped.lstrip().startswith("Que")):
+                continue
+            rest = stripped[m.end():].strip()
+            fw = rest.split()[0].lower().rstrip(",;") if rest.split() else ""
+            if fw in POR_ELLO_ARGUMENTAL:
+                continue
+            return True
+    return False
+
+
+def _cand_t3b(stripped):
+    """Tier 3b: apertura estructural + guarda argumental propia (_T3B_ARG_RE)."""
+    es_disp, _ = detectar_apertura_dispositivo(stripped)
+    if not es_disp:
+        return False
+    rest = _T3B_ARG_RE.sub("", stripped).strip()
+    fw = rest.split()[0].lower().rstrip(",;") if rest.split() else ""
+    if fw in POR_ELLO_ARGUMENTAL:
+        return False
+    return True
+
+
+def _cand_t4(stripped):
+    """Tier 4: fórmulas de cierre alternativas (_RE_ASI)."""
+    return bool(_RE_ASI.search(stripped))
+
+
+def _barrer(bloque, rango, lineas_dictamen, *,
+            excluye_dictamen, es_candidato, permite_fallback):
+    """
+    Motor único de las 5 capas. Barre rango=(inicio, fin) sobre bloque. En cada
+    línea no vacía (y no excluida, si excluye_dictamen) evalúa es_candidato. Si
+    es candidata: arma el chunk (hasta 6 líneas o hasta el primer '.') y valida
+    firma de juez en k+1..k+41. Devuelve el primer hit CON firma. Si
+    permite_fallback, recuerda el primer candidato sin firma y lo devuelve si
+    ninguno tuvo firma (= comportamiento pre-fix B059, sin regresión).
+    """
+    inicio, fin = rango
+    _fb_idx, _fb_text = None, None
+    for k in range(inicio, fin):
+        if excluye_dictamen and k in lineas_dictamen:
+            continue
+        stripped = bloque[k].strip()
+        if not stripped:
+            continue
+        if not es_candidato(stripped):
+            continue
+        chunk = []
+        for m2 in range(k, min(k + 6, len(bloque))):
+            chunk.append(bloque[m2])
+            if bloque[m2].strip().endswith("."):
+                break
+        candidate_text = " ".join(chunk).strip()
+        if permite_fallback and _fb_idx is None:
+            _fb_idx, _fb_text = k, candidate_text
+        if any(linea_es_firma_de_juez(bloque[j])
+               for j in range(k + 1, min(k + 41, len(bloque)))):
+            return k, candidate_text
+    if permite_fallback and _fb_idx is not None:
+        return _fb_idx, _fb_text
+    return None, ""
+
+
+def resolver_dispositivo(bloque, apertura_rel, lineas_dictamen, inicio_votos_indiv):
+    """
+    Cascada Tier 1→2→3→3b→4 de detección del dispositivo. Devuelve
+    (por_ello_idx, por_ello_text).
+
+    H085 (R1): extraída de procesar_archivo sin cambios de comportamiento.
+    H086 (R5): los 5 tiers (el mismo bucle copiado) colapsados a 5 llamadas a
+    _barrer() configuradas por 4 perillas. Equivalencia exacta verificada; ver
+    _barrer y los detectores _cand_* arriba.
+    """
+    # Cascada de inicio: apertura_rel → dictamen_end+1 → 0.
+    # Techo: inicio_votos_indiv (no buscar dentro de votos separados) solo si
+    # los votos están después de la apertura (B013, 302 casos).
+    dictamen_end = max(lineas_dictamen) if lineas_dictamen else None
+    if apertura_rel is not None:
+        inicio_busqueda = apertura_rel
+    elif dictamen_end is not None:
+        inicio_busqueda = dictamen_end + 1
+    else:
+        inicio_busqueda = 0
+    if (inicio_votos_indiv is not None
+            and (apertura_rel is None or inicio_votos_indiv > apertura_rel)):
+        fin_busqueda = inicio_votos_indiv
+    else:
+        fin_busqueda = len(bloque)
+
+    # Tier 1: estructural, rango base, excluye dictamen, con fallback (B059).
+    por_ello_idx, por_ello_text = _barrer(
+        bloque, (inicio_busqueda, fin_busqueda), lineas_dictamen,
+        excluye_dictamen=True, es_candidato=_cand_estructural,
+        permite_fallback=True)
+
+    # Tier 2 (H041): .search() mid-line, rango base, excluye dictamen, sin fallback.
+    if por_ello_idx is None:
+        por_ello_idx, por_ello_text = _barrer(
+            bloque, (inicio_busqueda, fin_busqueda), lineas_dictamen,
+            excluye_dictamen=True, es_candidato=_cand_t2,
+            permite_fallback=False)
+
+    # Tier 3 (B067): estructural, rango sin techo, excluye dictamen, con fallback.
+    if por_ello_idx is None:
+        por_ello_idx, por_ello_text = _barrer(
+            bloque, (inicio_busqueda, len(bloque)), lineas_dictamen,
+            excluye_dictamen=True, es_candidato=_cand_estructural,
+            permite_fallback=True)
+
+    # Tier 3b (B085): estructural+arg, rango 0→len, NO excluye dictamen, sin fallback.
+    if por_ello_idx is None:
+        por_ello_idx, por_ello_text = _barrer(
+            bloque, (0, len(bloque)), lineas_dictamen,
+            excluye_dictamen=False, es_candidato=_cand_t3b,
+            permite_fallback=False)
+
+    # Tier 4 (B084+B086): fórmulas alternativas, rango sin techo, excluye dictamen.
+    if por_ello_idx is None:
+        por_ello_idx, por_ello_text = _barrer(
+            bloque, (inicio_busqueda, len(bloque)), lineas_dictamen,
+            excluye_dictamen=True, es_candidato=_cand_t4,
+            permite_fallback=False)
+
+    return por_ello_idx, por_ello_text
+
+
 def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token_por_caso, siguiente_caso):
     """
     v15: procesa un archivo .md y devuelve (casos, votos, zonas, editorial, descon).
@@ -2854,220 +3030,9 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
 
             pass  # dispositivo detection moved to anchored search below
 
-        # ── Dispositivo: búsqueda anclada (emula auditor) ─────────────
-        # Cascada de inicio: apertura_rel → dictamen_end+1 → 0.
-        # Techo: inicio_votos_indiv (no buscar dentro de votos separados).
-        # Motivación: evita matchear dispositivos prematuros en residuo del
-        # fallo anterior o en el dictamen embebido (B013, 302 casos).
-        dictamen_end = max(lineas_dictamen) if lineas_dictamen else None
-        if apertura_rel is not None:
-            inicio_busqueda = apertura_rel
-        elif dictamen_end is not None:
-            inicio_busqueda = dictamen_end + 1
-        else:
-            inicio_busqueda = 0
-        # Techo: solo usar inicio_votos_indiv si los votos están después
-        # de la apertura (= son del fallo actual, no de residuo previo).
-        if (inicio_votos_indiv is not None
-                and (apertura_rel is None or inicio_votos_indiv > apertura_rel)):
-            fin_busqueda = inicio_votos_indiv
-        else:
-            fin_busqueda = len(bloque)
-
-        # ── Fix B059: forward con validación de firma ─────────────
-        # Busca el primer dispositivo que tenga firma de juez en las
-        # 40 líneas siguientes. Si ninguno tiene firma, usa el primero
-        # como fallback (= comportamiento pre-fix, sin regresión).
-        # Motivación: variantes como "en consecuencia", "de conformidad"
-        # matchean texto argumental antes del dispositivo real. El
-        # dispositivo real siempre tiene firma después.
-        por_ello_idx = None
-        por_ello_text = ""
-        _fallback_idx = None
-        _fallback_text = ""
-        for k in range(inicio_busqueda, fin_busqueda):
-            if k in lineas_dictamen:
-                continue
-            stripped = bloque[k].strip()
-            if not stripped:
-                continue
-            es_disp, tipo_disp = detectar_apertura_dispositivo(stripped)
-            if es_disp:
-                chunk = []
-                for m2 in range(k, min(k + 6, len(bloque))):
-                    chunk.append(bloque[m2])
-                    if bloque[m2].strip().endswith("."):
-                        break
-                candidate_text = " ".join(chunk).strip()
-                if _fallback_idx is None:
-                    _fallback_idx = k
-                    _fallback_text = candidate_text
-                if any(linea_es_firma_de_juez(bloque[j])
-                       for j in range(k + 1, min(k + 41, len(bloque)))):
-                    por_ello_idx = k
-                    por_ello_text = candidate_text
-                    break
-        if por_ello_idx is None and _fallback_idx is not None:
-            por_ello_idx = _fallback_idx
-            por_ello_text = _fallback_text
-
-        # -- H041 Tier 2: .search() mid-line para patrones seguros -----
-        # Solo se activa si Tier 1 no encontro NADA (ni validado ni fallback).
-        # Guardas: (a) patrones seguros, (b) fin de oracion antes del match,
-        #          (c) filtro argumental, (d) firma validada sin fallback.
-        if por_ello_idx is None:
-            _t2_pats = [
-                re.compile(r"Por ello[,.]?\s", re.I),
-                re.compile(r"Por lo expuesto\b", re.I),
-                re.compile(r"Por las razones\b", re.I),
-                re.compile(r"Por lo expresado\b", re.I),
-                re.compile(r"Por las consideraciones\b", re.I),
-                re.compile(r"Que[,]?\s+por\s+ello\b", re.I),
-                re.compile(r"O[íi]dos?\s+(el|la|los|las)\b", re.I),
-            ]
-            for k in range(inicio_busqueda, fin_busqueda):
-                if k in lineas_dictamen:
-                    continue
-                stripped = bloque[k].strip()
-                if not stripped:
-                    continue
-                _t2_hit = False
-                for _t2_pat in _t2_pats:
-                    _t2_m = _t2_pat.search(stripped)
-                    if _t2_m and _t2_m.start() > 0:
-                        # Guarda: fin de oracion antes del match
-                        _t2_pre = stripped[:_t2_m.start()].rstrip()
-                        if not (_t2_pre.endswith(".") or _t2_pre.endswith(")")
-                                or stripped.lstrip().startswith("Que")):
-                            continue
-                        # Guarda argumental
-                        _t2_rest = stripped[_t2_m.end():].strip()
-                        _t2_fw = _t2_rest.split()[0].lower().rstrip(",;") if _t2_rest.split() else ""
-                        if _t2_fw in POR_ELLO_ARGUMENTAL:
-                            continue
-                        # Firma validada obligatoria
-                        if any(linea_es_firma_de_juez(bloque[j])
-                               for j in range(k + 1, min(k + 41, len(bloque)))):
-                            chunk = []
-                            for m2 in range(k, min(k + 6, len(bloque))):
-                                chunk.append(bloque[m2])
-                                if bloque[m2].strip().endswith("."):
-                                    break
-                            por_ello_idx = k
-                            por_ello_text = " ".join(chunk).strip()
-                            _t2_hit = True
-                            break
-                if _t2_hit:
-                    break
-
-        # ── Tier 3: retry sin techo (B067) ─────────────────────────────
-        # Si Tier 1+2 con techo no encontraron NADA, repetir sin techo.
-        # Solo se activa para casos que producirían sin_dispositivo.
-        # Motivación: 17 casos donde inicio_votos_indiv cae antes del
-        # dispositivo real (votos-antes-de-dispositivo o residuo no
-        # recortado). El techo deja el rango de búsqueda vacío.
-        # Validado: PoC B067, 0 regresiones, 17 mejoras, 16 sin_firma
-        # recuperados (422 → 406).
-        if por_ello_idx is None:
-            _t3_fb_idx = None
-            _t3_fb_text = ""
-            for k in range(inicio_busqueda, len(bloque)):
-                if k in lineas_dictamen:
-                    continue
-                stripped = bloque[k].strip()
-                if not stripped:
-                    continue
-                es_disp, tipo_disp = detectar_apertura_dispositivo(stripped)
-                if es_disp:
-                    chunk = []
-                    for m2 in range(k, min(k + 6, len(bloque))):
-                        chunk.append(bloque[m2])
-                        if bloque[m2].strip().endswith("."):
-                            break
-                    candidate_text = " ".join(chunk).strip()
-                    if _t3_fb_idx is None:
-                        _t3_fb_idx = k
-                        _t3_fb_text = candidate_text
-                    if any(linea_es_firma_de_juez(bloque[j])
-                           for j in range(k + 1, min(k + 41, len(bloque)))):
-                        por_ello_idx = k
-                        por_ello_text = candidate_text
-                        break
-            if por_ello_idx is None and _t3_fb_idx is not None:
-                por_ello_idx = _t3_fb_idx
-                por_ello_text = _t3_fb_text
-
-        # ── B085 Tier 3b: retry sin exclusión de dictamen ni rango ────
-        # Si Tier 1+2+3 no encontraron NADA, repetir búsqueda forward
-        # desde línea 0, sin excluir lineas_dictamen, sin restricción de
-        # rango (inicio_busqueda/fin_busqueda).
-        # Motivación: 7 casos donde el dictamen embebido desborda y el
-        # zonificador clasifica el dispositivo real como "dictamen"
-        # (5 casos), o el rango queda vacío/desplazado por residuo del
-        # caso siguiente (2 casos). Firma validada obligatoria, SIN
-        # fallback — zona no protegida, solo aceptar hits con firma.
-        # Validado: 7/7 mejoras, 0 FP del dictamen (el Procurador usa
-        # "Opino"/"mantengo" y no tiene firma de juez en 40 líneas).
-        if por_ello_idx is None:
-            _t3b_arg_re = re.compile(
-                r"^(?:Por\s+(?:ello|lo\s+expuesto|todo\s+lo\s+expuesto|"
-                r"todo\s+ello|lo\s+expresado|las\s+razones|las\s+consideraciones|"
-                r"estos?\s+razones|los\s+fundamentos)[,.]?\s*)",
-                re.I,
-            )
-            for k in range(len(bloque)):
-                stripped = bloque[k].strip()
-                if not stripped:
-                    continue
-                es_disp, tipo_disp = detectar_apertura_dispositivo(stripped)
-                if es_disp:
-                    # Guarda argumental (extendida a variantes):
-                    # si la primera palabra después del patrón es
-                    # argumental (opino, sostiene, etc.), es conclusión
-                    # del Procurador, no dispositivo del Tribunal.
-                    _t3b_rest = _t3b_arg_re.sub("", stripped).strip()
-                    _t3b_fw = (_t3b_rest.split()[0].lower().rstrip(",;")
-                               if _t3b_rest.split() else "")
-                    if _t3b_fw in POR_ELLO_ARGUMENTAL:
-                        continue
-                    chunk = []
-                    for m2 in range(k, min(k + 6, len(bloque))):
-                        chunk.append(bloque[m2])
-                        if bloque[m2].strip().endswith("."):
-                            break
-                    candidate_text = " ".join(chunk).strip()
-                    if any(linea_es_firma_de_juez(bloque[j])
-                           for j in range(k + 1, min(k + 41, len(bloque)))):
-                        por_ello_idx = k
-                        por_ello_text = candidate_text
-                        break
-
-        # ── B084+B086 Tier 4: cierres dispositivos alternativos ────────
-        # Último recurso: solo si Tier 1+2+3 no encontraron nada.
-        # Fórmulas que no son "Por ello" pero son inequívocamente
-        # dispositivas: "así se resuelve" (B084), "el tribunal resuelve"
-        # (B086). Requieren firma validada.
-        if por_ello_idx is None:
-            _re_asi = re.compile(
-                r"[Aa]sí se resuelve"
-                r"|[Ee]l\s+[Tt]ribunal\s+resuelve",
-                re.I,
-            )
-            for k in range(inicio_busqueda, len(bloque)):
-                if k in lineas_dictamen:
-                    continue
-                stripped = bloque[k].strip()
-                if _re_asi.search(stripped):
-                    if any(linea_es_firma_de_juez(bloque[j])
-                           for j in range(k + 1, min(k + 41, len(bloque)))):
-                        chunk = []
-                        for m2 in range(k, min(k + 6, len(bloque))):
-                            chunk.append(bloque[m2])
-                            if bloque[m2].strip().endswith("."):
-                                break
-                        por_ello_idx = k
-                        por_ello_text = " ".join(chunk).strip()
-                        break
+        # ── Dispositivo: cascada Tier 1→4 (extraída H085 R1) ───────────────
+        por_ello_idx, por_ello_text = resolver_dispositivo(
+            bloque, apertura_rel, lineas_dictamen, inicio_votos_indiv)
 
         # B082: excluir líneas de votos individuales del considerando
         # B083: excluir también residuo_caso_anterior (consistencia con wc_mayoria)
