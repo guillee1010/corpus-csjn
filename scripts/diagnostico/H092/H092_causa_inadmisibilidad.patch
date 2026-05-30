@@ -1,0 +1,151 @@
+--- a/scripts/pipeline/parser.py	2026-05-30 17:46:56.488780951 +0000
++++ b/scripts/pipeline/parser.py	2026-05-30 17:46:56.491855974 +0000
+@@ -44,7 +44,7 @@
+ semántica.
+ """
+ 
+-__version__ = "18.10"  # H091: cierre M13 — bucle de votos y status_localizacion extraidos (procesar_archivo = orquestador)
++__version__ = "18.11"  # H092: campo nuevo causa_inadmisibilidad (gate de admisibilidad, aditivo); rename MERIT_OUTCOMES->OUTCOMES_NO_FALLBACK_280 en classify_outcome
+ 
+ import re
+ import csv
+@@ -408,7 +408,11 @@
+          concede otro — el outcome relevante es la concesión.
+       3. Si el dispositivo NO da merit outcome, buscar 280/ac4 en considerando.
+     """
+-    MERIT_OUTCOMES = {"hace_lugar", "procedente", "revoca", "confirma", "rechaza",
++    # H092: renombrado desde MERIT_OUTCOMES. Su rol NO es "merit" sino "el
++    # dispositivo ya resolvio algo, no sobreescribir con el 280 del considerando"
++    # (incluye abstracto/desistimiento, que son gate). El set de merito real
++    # (is_merit) es el MERIT_OUTCOMES de procesar_archivo (~3147), mas chico.
++    OUTCOMES_NO_FALLBACK_280 = {"hace_lugar", "procedente", "revoca", "confirma", "rechaza",
+                       "nulidad", "competencia", "abstracto", "originaria",
+                       "desistimiento", "deja_sin_efecto"}
+ 
+@@ -429,7 +433,7 @@
+                 outcome_disp = label
+                 break
+         # Paso 2: si es merit, no sobreescribir
+-        if outcome_disp in MERIT_OUTCOMES:
++        if outcome_disp in OUTCOMES_NO_FALLBACK_280:
+             return outcome_disp
+         base = outcome_disp
+ 
+@@ -446,6 +450,97 @@
+ 
+     return base
+ 
++# ── H092: gate de admisibilidad — causa_inadmisibilidad ──────────────────────
++# Campo NUEVO y ADITIVO al outcome de merito (NO relabel). Vocabulario controlado
++# de la Corte. La causal se ata al recurso decidido (cada termino es polisemico,
++# como lo fue el art.280: una mencion suelta != causal). Solo causales VALIDADAS a
++# mano en H092; las candidatas (salto de instancia, falta de denegacion del REX,
++# relacion directa, introduccion oportuna de la CF, tribunal superior de la causa)
++# viven en el PoC scripts/diagnostico/H092/sub_gate.py hasta validarse.
++#
++# Invariante: causa_inadmisibilidad != "" <=> el caso es gatekeeping (no llego al
++# fondo). Vacio => merito / competencia / originaria / rechaza / sin_dispositivo /
++# catch-all 'otro' sin causal explicita.
++
++OUTCOME_A_CAUSA = {
++    "inadmisible_280":         "ART_280",
++    "inadmisible_acordada_4":  "ACORDADA_4_2007",
++    "abstracto":               "CUESTION_ABSTRACTA",
++    "desistimiento":           "DESISTIMIENTO",
++    "caducidad":               "CADUCIDAD_INSTANCIA",
++}
++# Universo gate-generico a sub-clasificar = GATEKEEP_OUTCOMES (ver ~3149) menos las
++# nativas. 'otro' NO entra al residual (catch-all heterogeneo): solo recibe causal
++# si aparece explicita en el texto.
++OUTCOMES_GATE_GENERICO = {"desestima", "mal_concedido", "desierto",
++                          "inadmisible", "improcedente"}
++
++# Cola validada (anclada al recurso). Sin solapes (verificado en PoC H092).
++RE_CAUSA_SENTENCIA_DEFINITIVA = re.compile(
++    r"no\s+se\s+dirige\s+contra\s+(?:una\s+|la\s+)?sentencia\s+definitiva"
++    r"(?:\s+o\s+equiparable)?|"
++    r"no\s+(?:constituye|reviste\s+(?:el\s+)?car[aá]cter\s+de|es)\s+"
++    r"(?:la\s+|una\s+)?sentencia\s+definitiva|"
++    r"recurso\s+extraordinario.{0,60}?no.{0,20}?sentencia\s+definitiva", re.I)
++RE_CAUSA_FUNDAMENTACION = re.compile(
++    r"(?:no\s+cumple\s+con\s+el\s+requisito\s+de|carece\s+de|sin|"
++    r"defectuosa|insuficiente|deficiente)\s+(?:la\s+)?"
++    r"fundamentaci[oó]n\s+aut[oó]noma|"
++    r"fundamentaci[oó]n\s+aut[oó]noma\s+(?:exigid|que\s+exige|requerid)", re.I)
++RE_CAUSA_DEPOSITO = re.compile(
++    r"no\s+(?:ha(?:berse)?\s+|se\s+ha\s+)?"
++    r"(?:integrad|efectuad|abonad|acreditad|cumplid)\w+\s+(?:con\s+)?el\s+dep[oó]sito|"
++    r"intimad\w+\s+a\s+(?:efectuar|integrar|abonar)\s+el\s+dep[oó]sito"
++    r".{0,120}?(?:no\s+|sin\s+)", re.I)
++RE_CAUSA_FUERA_TERMINO = re.compile(
++    r"(?:recurso|queja|apelaci[oó]n|remedio|presentaci[oó]n)\s+\w*\s*"
++    r"(?:fue\s+|ha\s+sido\s+|resulta\s+|es\s+|deducid[ao]\s+)?"
++    r"(?:interpuest|deducid|present)?\w*\s+(?:de\s+manera\s+|en\s+forma\s+)?"
++    r"extempor[aá]ne|"
++    r"(?:recurso|queja|apelaci[oó]n)\s+\w*\s*(?:fue\s+|ha\s+sido\s+)?"
++    r"(?:interpuest|deducid)\w+\s+fuera\s+del?\s+(?:plazo|t[eé]rmino)", re.I)
++# Excluye 'extemporaneo' referido a algo que no es el recurso de esta causa.
++RE_CAUSA_FUERA_TERMINO_EXCL = re.compile(
++    r"declar[oó]\s+extempor|"
++    r"constancia\s+\w+\s+(?:resulta\s+|es\s+)?extempor|"
++    r"(?:declaraci[oó]n\s+de\s+incompetencia|demanda)\s+\w*\s*"
++    r"(?:resulta\s+|fue\s+|es\s+)?extempor", re.I)
++# Residual: remision al dictamen del Procurador (la causal vive alli, no aca).
++RE_CAUSA_REMITE_DICTAMEN = re.compile(
++    r"se\s+remite|comparte\s+(?:los\s+)?(?:sus\s+)?fundamentos|"
++    r"adecuado\s+tratamiento\s+en\s+el\s+dictamen|"
++    r"dictamen\s+(?:de|del|de\s+la)\s+(?:se[ñn]or|se[ñn]ora)\s+[Pp]rocurador", re.I)
++
++
++def clasificar_causa_inadmisibilidad(outcome, considerando_text, por_ello_text,
++                                     dictamen_presente):
++    """H092: causa de inadmisibilidad (vocabulario controlado de la Corte).
++    Nivel caso, aditivo al outcome de merito (no lo toca). "" => no gatekeeping.
++    Solo emite causales validadas; las candidatas no se emiten todavia."""
++    if outcome in OUTCOME_A_CAUSA:
++        return OUTCOME_A_CAUSA[outcome]
++    if outcome not in OUTCOMES_GATE_GENERICO and outcome != "otro":
++        return ""
++    co = re.sub(r"\s+", " ", _unhyphenate(considerando_text)).strip()
++    pe = re.sub(r"\s+", " ", _unhyphenate(por_ello_text)).strip()
++    txt = co + " || " + pe
++    if RE_CAUSA_SENTENCIA_DEFINITIVA.search(txt):
++        return "FALTA_SENTENCIA_DEFINITIVA"
++    if RE_CAUSA_FUNDAMENTACION.search(txt):
++        return "FALTA_FUNDAMENTACION_AUTONOMA"
++    if RE_CAUSA_DEPOSITO.search(txt):
++        return "DEPOSITO_PREVIO"
++    if (outcome in OUTCOMES_GATE_GENERICO
++            and RE_CAUSA_FUERA_TERMINO.search(txt)
++            and not RE_CAUSA_FUERA_TERMINO_EXCL.search(txt)):
++        return "FUERA_DE_TERMINO"
++    if outcome == "otro":
++        return ""   # catch-all sin causal explicita: no afirmar gatekeeping
++    if (RE_CAUSA_REMITE_DICTAMEN.search(co)
++            and str(dictamen_presente).strip().lower() in ("true", "1", "presente")):
++        return "INADMISIBLE_REMITE_DICTAMEN"
++    return "INADMISIBLE_SIN_CAUSAL_EXPLICITA"
++
+ # ── H078: es_queja + queja_resultado ─────────────────────────────────────────
+ # "Queja" = recurso de hecho = presentación directa. Tres sinónimos para la
+ # misma vía de acceso: el recurso que se interpone ante la CSJN cuando la
+@@ -3077,6 +3172,11 @@
+         # incluido el caso sin dispositivo (por_ello_text vacío → "sin_dispositivo").
+         outcome = classify_outcome(por_ello_text, considerando_text)
+ 
++        # H092: gate de admisibilidad — causa de inadmisibilidad (campo nuevo,
++        # aditivo; "" si el caso llego al fondo / no es gatekeeping).
++        causa_inadmisibilidad = clasificar_causa_inadmisibilidad(
++            outcome, considerando_text, por_ello_text, dictamen_presente)
++
+         # H078: queja + cuestion federal (sobre textos completos, pre-truncamiento)
+         es_queja, queja_resultado = classify_queja(por_ello_text)
+         # Sumario editorial = texto del bloque antes de la apertura.
+@@ -3189,6 +3289,7 @@
+             "date":                   fecha_str,
+             "apertura_tipo":          apertura_tipo,
+             "outcome":                outcome,
++            "causa_inadmisibilidad":  causa_inadmisibilidad,
+             "voting_pattern":         firma_parsed["voting_pattern"],
+             "n_jueces":               len(firma_parsed["jueces"]),
+             "n_titulares":            n_titulares,

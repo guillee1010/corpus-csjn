@@ -2426,6 +2426,47 @@ abajo (corpus 6117, sin_firma 78) describen el estado parqueado, no main.
    con el ítem 3 (el 280 a nivel agravio).
 
 *Pendientes del módulo `estadisticas/` (H083, frente analítico, fuera del pipeline):*
+- **Taxonomía oficial de inadmisibilidad de la Corte (vocabulario controlado para el
+  campo gate, ítems 3 y 6).** Archivo:
+  `estadisticas/output_tableau/resueltos_2025/Recursos_según_cumplimiento_de_requisitos__causa_inad.csv`
+  (hermanas: `__causa_inad_3.csv` con porcentajes; `__tipo_des_causas.csv` con el split
+  admisible/inadmisible por tipo de recurso). NO son solo 280 + ac4: son ~22 causales.
+  Conteos de la fila `%all%` (docket completo 2025, NO joineable caso a caso con nuestro
+  corpus publicado — sirven como **vocabulario** y como **techo de validación** por
+  causal cuando parseemos nuestro 2025: perforar el techo = bug):
+
+  | causal (lengua de la Corte) | n 2025 |
+  |---|---|
+  | ART. 280 CPCCN | 12.546 |
+  | ACORDADA 4/2007 | 4.549 |
+  | FALTA DE SENTENCIA DEFINITIVA | 1.193 |
+  | FALTA DE FUNDAMENTACIÓN | 590 |
+  | DEPÓSITO PREVIO | 467 |
+  | CUESTIÓN ABSTRACTA | 411 |
+  | DESISTIMIENTO | 385 |
+  | FUERA DE TÉRMINO | 287 |
+  | FALTA DENEGACIÓN DEL REC. EXTRAORDINARIO | 144 |
+  | CADUCIDAD DE LA INSTANCIA | 92 |
+  | SALTO DE INSTANCIA | 29 |
+  | AUTO DE CONCESIÓN (art. 257) | 25 |
+  | FALTA DE FIRMA | 23 |
+  | OTRAS CAUSALES | 21 |
+  | PROCEDIMIENTO | 18 |
+  | TRASLADO (art. 257) | 17 |
+  | SIN FÓRMULA | 12 |
+  | N/C | 9 |
+  | TRIBUNAL SUPERIOR DE LA CAUSA | 9 |
+  | MAL PRESENTADO | 9 |
+  | PRESENTACIONES VARIAS | 5 |
+  | FALTA DE INTRODUCCIÓN OPORTUNA DE LA CUESTIÓN FEDERAL | 2 |
+  | FALTA DE RELACIÓN DIRECTA | 1 |
+
+  Total inadmisibles 20.823 / 24.545 resueltos (84,8% del docket); 280+ac4 = 82% de los
+  inadmisibles, cola larga el resto. Hoy el parser resuelve limpio 5 (280, ac4, abstracto,
+  desistimiento, caducidad); la cola (falta de sentencia definitiva, falta de fundamentación,
+  depósito previo, fuera de término, falta de denegación del REX…) cae a `desestima` genérico
+  (541 casos) o `inadmisible`/`otro` → blanco de sub-clasificación del campo gate. Salvedad:
+  verificar desfase tomo/año-calendario antes de usar el techo como cota dura.
 - **Correr el extractor de los 4 tableros completo.** `export_tableau_playwright.py` quedó
   armado para ingresos/resueltos × 2024/2025 pero solo se corrió resueltos 2025. Un comando.
 - **Procesar el tab voto × materia** (`Hoja 66 (2)`, ya bajado en resueltos 2025): confirma

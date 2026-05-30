@@ -1,0 +1,31 @@
+﻿Desc Tipo Caso-value,Desc Tipo Caso-alias,REC(casos con fallos 2025.sav)-alias,DESC MATERIA SEC OK (casos con fallos 2025.sav)-value,DESC MATERIA SEC OK (casos con fallos 2025.sav)-alias
+%all%,Todo,3722,%all%,%all%
+RECURSO ORDINARIO,RECURSO ORDINARIO,16,%all%,%all%
+QUEJA REC. EXTRAORD. DENEGADO,QUEJA REC. EXTRAORD. DENEGADO,1422,%all%,%all%
+REC. EXTRAORD. ,REC. EXTRAORD. ,2284,%all%,%all%
+%all%,Todo,1,Salud,Salud
+QUEJA REC. EXTRAORD. DENEGADO,QUEJA REC. EXTRAORD. DENEGADO,1,Salud,Salud
+%all%,Todo,2,DDHH- Institucional,DDHH- Institucional
+QUEJA REC. EXTRAORD. DENEGADO,QUEJA REC. EXTRAORD. DENEGADO,2,DDHH- Institucional,DDHH- Institucional
+%all%,Todo,53,Consumo,Consumo
+QUEJA REC. EXTRAORD. DENEGADO,QUEJA REC. EXTRAORD. DENEGADO,29,Consumo,Consumo
+REC. EXTRAORD. ,REC. EXTRAORD. ,24,Consumo,Consumo
+%all%,Todo,84,Penal,Penal
+RECURSO ORDINARIO,RECURSO ORDINARIO,16,Penal,Penal
+QUEJA REC. EXTRAORD. DENEGADO,QUEJA REC. EXTRAORD. DENEGADO,62,Penal,Penal
+REC. EXTRAORD. ,REC. EXTRAORD. ,6,Penal,Penal
+%all%,Todo,98,Tributario - Bancario,Tributario - Bancario
+QUEJA REC. EXTRAORD. DENEGADO,QUEJA REC. EXTRAORD. DENEGADO,16,Tributario - Bancario,Tributario - Bancario
+REC. EXTRAORD. ,REC. EXTRAORD. ,82,Tributario - Bancario,Tributario - Bancario
+%all%,Todo,136,Civil - Comercial,Civil - Comercial
+QUEJA REC. EXTRAORD. DENEGADO,QUEJA REC. EXTRAORD. DENEGADO,125,Civil - Comercial,Civil - Comercial
+REC. EXTRAORD. ,REC. EXTRAORD. ,11,Civil - Comercial,Civil - Comercial
+%all%,Todo,250,Administrativo,Administ.
+QUEJA REC. EXTRAORD. DENEGADO,QUEJA REC. EXTRAORD. DENEGADO,115,Administrativo,Administ.
+REC. EXTRAORD. ,REC. EXTRAORD. ,135,Administrativo,Administ.
+%all%,Todo,1124,Laboral,Laboral
+QUEJA REC. EXTRAORD. DENEGADO,QUEJA REC. EXTRAORD. DENEGADO,877,Laboral,Laboral
+REC. EXTRAORD. ,REC. EXTRAORD. ,247,Laboral,Laboral
+%all%,Todo,1974,Previsional,Previsional
+QUEJA REC. EXTRAORD. DENEGADO,QUEJA REC. EXTRAORD. DENEGADO,195,Previsional,Previsional
+REC. EXTRAORD. ,REC. EXTRAORD. ,1779,Previsional,Previsional
