@@ -7353,3 +7353,32 @@ Para el cruce voto × juez × secretaría (que el tablero no publica como hoja) 
 **Versiones:** sin cambios en scripts canónicos del pipeline.
 
 **Commits:** módulo estadisticas/ nuevo (extractor + CSV de referencia + cruce). Sin commits al pipeline.
+
+## H084 — Diagnóstico de deuda estructural + harness de regresión del parser (2026-05-29)
+
+**Objetivo:** diagnóstico-primero sobre el corpus estable (parser v18.05, baseline bcc143f); recomendar frente fundado en lectura de código y datos reales, y —si correspondía— dar el primer paso del frente elegido sin tocar lógica.
+
+### H084-01 — Diagnóstico (set mínimo: parser + DEUDA + BITACORA + csjn_casos.csv + árbol)
+Lectura de parser.py (3638 líneas) y del CSV real (5862 casos). Deuda estructural confirmada: procesar_archivo es la función monstruo (757 líneas, 2542–3299: localización + sumarios + dictamen + cascada de dispositivo Tier 1→2→3→3b→4, cada tier de una sesión distinta); es_originaria 212 líneas; duplicación parser↔auditor sin resolver (M07/M08). El parser core no tenía tests: scripts/tests/ cubría los scripts chicos, no parser.py ni auditar_fallo.py; csjn_casos_BASELINE_H079.csv existía suelto, sin harness. Hallazgos de datos: dictamen_presente con 3 valores True/False/'0' (3400/2269/193, los '0' son los 193 sumarios → B037); 58 outcome=originaria con is_originaria=0 (50 sin_marcador, 8 apelado_detectado → valida frente D); outcome=otro 688 (11.7%). Confirmado main = 5862 / 4 CSV de parser.py.
+
+### H084-02 — Recomendación: frente A (refacción REE), primer paso = red de regresión
+Con el corpus estable, consolidar deuda estructural antes de seguir sumando variables. Restricción REE innegociable: ningún refactor se mergea sin outputs idénticos. Como no había red, el primer paso obligado es construirla, no tocar lógica. A y B (materia) no compiten a largo plazo: refactorizar primero abarata agregar materia sobre código limpio.
+
+### H084-03 — Harness de regresión (M12)
+`scripts/tests/check_regresion.py`, dos modos. `--make-golden`: corre el parser a un temporal y congela los 4 CSV (casos/votos/zonas/editorial) en scripts/tests/golden/. Default: corre a otro temporal y diffea contra golden (SHA256 + diff posicional celda por celda; reporta fila/caso_id/columna), sale 1 si cambia una celda. Nunca pisa output/parser/ productivo. Invoca con cwd=scripts/pipeline para resolver el import de parser_editorial. Validación: golden congelado sobre bcc143f, check inmediato = [CLEAN] (4/4 idénticos, el golden se reproduce a sí mismo). Alcance: 4 CSV de parser.py; indice_partes (parser_editorial) y el pipeline upstream quedan fuera (inputs congelados).
+
+### H084-04 — Housekeeping (snapshots M02)
+De los tres snapshots pendientes de M02, dos ya no existen; queda solo archivo/snapshots_ad_hoc/pre_fix_xii_20260503_1308 (72 archivos, 23.71 MB, estado pre-B013/"Bug XII"). Untracked (git ls-files = 0). NO borrado: al no estar en git requiere verificar que su contenido sea copia de algo commiteado antes de eliminar. Parqueado.
+
+### H084 — Estado final
+- **Corpus:** 5862 casos (5669 fallos + 160 sumario_con_link + 33 sumario_editorial). Sin firma: 16/5669. Pipeline intacto.
+- **Parser:** v18.05 (sin cambios).
+- **Votos / zonas / editorial:** sin cambios (no se tocó pipeline).
+
+**Outputs canónicos:** sin cambios. El harness corre a temporal; el golden los duplica byte-a-byte (git deduplica blobs idénticos).
+
+**Scripts creados:** `scripts/tests/check_regresion.py` (+ `scripts/tests/golden/` con los 4 CSV).
+
+**Commits:** H084 — harness + golden (red para refactor); docs (BITACORA + DEUDA M12). Push de bcc143f (H083) pendiente desde H083.
+
+**Versiones:** sin cambios en scripts canónicos del pipeline (parser.py v18.05). Nuevo: check_regresion.py (infra de tests, no canónico).
