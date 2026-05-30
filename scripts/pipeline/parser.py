@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.07"  # H086 R5: cascada dispositivo colapsada a motor _barrer + 5 llamadas
+__version__ = "18.08"  # H089 M13: detector de sumarios extraído a clasificar_tipo_entrada
 
 import re
 import csv
@@ -2484,6 +2484,35 @@ def zonificar_bloque(bloque):
     return zonas, anclas
 
 
+def clasificar_tipo_entrada(bloque, zonas_linea):
+    """
+    M13 (H089): clasifica el tipo de entrada de un bloque a partir de su
+    contenido y su zonificación. Extraído del detector inline de
+    procesar_archivo (v17/H051-H052) sin cambio de comportamiento.
+
+    Devuelve:
+      "sumario_con_link"   — el bloque contiene el patrón editorial
+                             "(*) Sentencia del ... Ver ..." (RE_SUMARIO_LINK).
+                             Señal suficiente: las firmas que arrastre por
+                             solapamiento de páginas son del fallo previo.
+      "sumario_editorial"  — el bloque no tiene zonas de cuerpo, dispositivo
+                             ni firma → contenido editorial puro (H051/H052).
+      None                 — es un fallo parseable (sigue el flujo normal).
+
+    Prioridad: sumario_con_link se evalúa primero (no depende de zonas).
+    """
+    if any(RE_SUMARIO_LINK.match(ln.strip()) for ln in bloque):
+        return "sumario_con_link"
+    _zonas_set = set(zonas_linea)
+    if (
+        "cuerpo" not in _zonas_set
+        and "dispositivo" not in _zonas_set
+        and "firma" not in _zonas_set
+    ):
+        return "sumario_editorial"
+    return None
+
+
 def extraer_segmentos(zonas, bloque):
     """
     Extrae segmentos contiguos de zonas con sus fronteras y word count.
@@ -2846,49 +2875,23 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                 status_loc_final = status_loc_final + "_ancla_catalogo"
         # ancla_inicio == 'titulo': status_loc_final no cambia (caso limpio)
 
-        # ── v17: detector de sumarios-con-link ───────────────────────────────
-        # Si el bloque contiene el patrón "(*) Sentencia del ... Ver ...",
-        # es una nota editorial sin fallo parseable. Se carga como tipo_entrada
-        # = "sumario_con_link" con campos analíticos vacíos y se salta el
-        # resto del procesamiento.
-        #
-        # IMPORTANTE: la detección no depende de si el parser detectaría
-        # firma o no. En casos de solapamiento de páginas (típico cuando un
-        # fallo termina y un sumario empieza en la misma página), el bloque
-        # del sumario arrastra firma del fallo anterior. La presencia del
-        # patrón sumario-con-link es señal suficiente: las firmas que pueda
-        # haber en el bloque pertenecen al fallo previo, no a este caso.
-        es_sumario_con_link = any(
-            RE_SUMARIO_LINK.match(ln.strip()) for ln in bloque
-        )
-        if es_sumario_con_link:
-            casos_out.append(construir_caso_sumario_link(
-                caso_id_canonico=caso_id_canonico,
-                tomo=tomo,
-                nombres_indice=nombres_indice,
-                source_file=filepath.name,
-                linea_inicio=linea_inicio,
-                linea_fin=linea_fin,
-                linea_fin_real=linea_fin_real,
-                status_loc_final=status_loc_final,
-                status_fin=status_fin,
-                pista_fin=pista_fin,
-            ))
-            continue
-
-        # ── H051/H052: detector de sumario_editorial ─────────────────────
-        # Usa el zonificador para clasificar el bloque. Si no tiene zonas
-        # de cuerpo, dispositivo ni firma, es contenido editorial puro.
-        # H052: zonificar_bloque ahora devuelve (list, anclas). La lista
-        # por línea se reutiliza después para derivar lineas_dictamen.
+        # ── M13 (H089): zonificar primero ────────────────────────────────────
+        # zonificar_bloque es pura y su resultado se reutiliza río abajo
+        # (lineas_dictamen, residuo, M09, extraer_segmentos), así que
+        # adelantarla respecto del detector sumario_con_link no cambia
+        # comportamiento. H052: devuelve (zonas_por_linea, anclas); _anclas
+        # no se usa.
         _zonas_linea, _anclas = zonificar_bloque(bloque)
-        _zonas_set = set(_zonas_linea)
-        _es_sumario_editorial = (
-            "cuerpo" not in _zonas_set
-            and "dispositivo" not in _zonas_set
-            and "firma" not in _zonas_set
-        )
-        if _es_sumario_editorial:
+
+        # ── v17/H051/H052: detector de sumarios (→ clasificar_tipo_entrada) ───
+        # sumario_con_link: patrón "(*) Sentencia del ... Ver ..." → nota
+        # editorial con link, campos analíticos vacíos. La detección no depende
+        # de si el parser hallaría firma: en solapamiento de páginas el bloque
+        # arrastra firma del fallo previo, pero el patrón es señal suficiente.
+        # sumario_editorial: bloque sin zonas de cuerpo/dispositivo/firma.
+        # En ambos casos se carga el caso y se salta el resto del procesamiento.
+        _tipo_entrada = clasificar_tipo_entrada(bloque, _zonas_linea)
+        if _tipo_entrada is not None:
             casos_out.append(construir_caso_sumario_link(
                 caso_id_canonico=caso_id_canonico,
                 tomo=tomo,
@@ -2901,8 +2904,10 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
                 status_fin=status_fin,
                 pista_fin=pista_fin,
             ))
-            # Reclasificar tipo_entrada en el dict ya creado
-            casos_out[-1]["tipo_entrada"] = "sumario_editorial"
+            # construir_caso_sumario_link deja tipo_entrada="sumario_con_link"
+            # por default; reclasificar si el zonificador lo marcó editorial.
+            if _tipo_entrada == "sumario_editorial":
+                casos_out[-1]["tipo_entrada"] = "sumario_editorial"
             continue
 
         # Fecha del fallo. v16: cambio respecto a v15.
