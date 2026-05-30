@@ -7741,3 +7741,40 @@ Universo gate-genérico = 1326 (desestima 541 + otro 688 + inadmisible 24 + impr
 **Commits:** ee0a62d (parser + outputs + golden + diagnósticos H092; arrastró también `estadisticas/output_estadistica/` y `arbol.txt` que estaban untracked).
 
 **Pendiente:** validar la cola contra `.md` reales (eyeball de los ~58 hits + recall); habilitar candidatas de cola (SALTO_DE_INSTANCIA, FALTA_DENEGACION_REX, FALTA_RELACION_DIRECTA, FALTA_INTRODUCCION_OPORTUNA_CF, TRIBUNAL_SUPERIOR_CAUSA); columna `causa_inadmisibilidad_parcial` (frontera 280, ítem 3); reclasificación de `is_merit` (rechaza/competencia/originaria).
+
+## H093 — Fix FP FUERA_DE_TERMINO + extractor de casos canónico (2026-05-30)
+
+**Objetivo:** validar la cola de `causa_inadmisibilidad` contra `.md` reales (pendiente de H092), arrancando por `FUERA_DE_TERMINO`.
+
+### H093-01 — El "58 validadas" de H092 era el piso del PoC, no producción
+
+Al ir a eyeballear los hits de cola se descubrió que `sub_gate.py` (y la tabla de H092) reportan sobre `considerando_text` truncado a 2000 chars: 58 hits (FUERA 10). Producción corre sobre texto completo y emitía 72 (FUERA 12). La diferencia son 14 «delta» cuya frase causal cae pasada el corte; los 14 nunca se eyeballearon. Verificado: los 14 tienen `len(considerando_text)==2000`, 0 casos al revés (producción ⊇ PoC).
+
+### H093-02 — FUERA validado completo: 10 TP / 2 FP
+
+Los 12 FUERA juzgados a mano sobre `.md` completos: 10 TP, 2 FP. Los 2 FP (`329_p5138`, `329_p5316`) son reposiciones contra una resolución de la Corte: el holding es "se desestima la reposición" (no susceptible de recurso, Fallos 316:1706) y el `extempor` describe el antecedente, no el recurso decidido. Discriminador: FUERA es correcto cuando el recurso/queja PRESENTE es el tardío. Dos verdictos míos se corrigieron al leer texto completo (`341_p2027` parecía FP truncado, es TP por considerando subsidiario art. 282) → M15.
+
+### H093-03 — Herramienta canónica `extraer_caso.py`
+
+`scripts/diagnostico/extraer_caso.py` (no ligada a sesión): dado un `caso_id`, ancla en el prefijo del considerando del CSV y extrae considerando+por_ello completos del `.md` (auto-escanea volúmenes), reusa `_unhyphenate`, autodetecta raíz por marcador, `--out RUTA` escribe un `.md` autocontenido. Resuelve la validación de hits truncados.
+
+### H093-04 — Fix B100
+
+`RE_CAUSA_FUERA_TERMINO_EXCL_DISP` anclado al `por_ello` (dispositivo de reposición/revocatoria/aclaratoria), inmune al truncado; condición extra en el bloque FUERA de `clasificar_causa_inadmisibilidad`. PoC `scripts/diagnostico/H093/poc_excl_reposicion.py` (drop 2 / keep 10, 0 TP falso-excluido). Validación column-aware: A/B old↔new sobre texto idéntico = 2 diffs exactos; check_regresion [FAIL] con exactamente fila 871/897 col `causa_inadmisibilidad`, votos/zonas/editorial [OK]; re-golden consciente.
+
+### H093 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 160 sumario_con_link + 33 sumario_editorial).
+- **causa_inadmisibilidad:** `FUERA_DE_TERMINO` 12→10, `INADMISIBLE_SIN_CAUSAL_EXPLICITA` 441→443.
+- **Sin firma:** 16 / 5669 fallos.
+- **Votos:** 27463.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas (2 celdas modificadas, sin cambio de cardinalidad).
+- `output/parser/csjn_casos_votos.csv` — 27463 filas (byte-idéntico).
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos (byte-idéntico).
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones (byte-idéntico).
+
+**Scripts creados:** `scripts/diagnostico/extraer_caso.py` (canónico), `scripts/diagnostico/H093/poc_excl_reposicion.py` (PoC).
+
+**Commits:** 9c7fa7d (tooling), 7bcac83 (fix B100, parser v18.12). golden re-congelado (csjn_casos.csv sha256 c171b3c2690d).

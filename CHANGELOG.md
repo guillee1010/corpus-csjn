@@ -2,6 +2,14 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H093 (2026-05-30)
+
+- `parser.py`: v18.11→18.12. Nuevo `RE_CAUSA_FUERA_TERMINO_EXCL_DISP` (excluye FUERA cuando el dispositivo desestima una reposición/revocatoria/aclaratoria). Fix FP B100.
+- `output/parser/csjn_casos.csv`: 2 casos `FUERA_DE_TERMINO`→`INADMISIBLE_SIN_CAUSAL_EXPLICITA` (329_p5138, 329_p5316). 5862 filas (sin cambio de cardinalidad).
+- `scripts/diagnostico/extraer_caso.py`: nuevo (extractor de casos, herramienta canónica de diagnóstico).
+- `scripts/diagnostico/H093/poc_excl_reposicion.py`: nuevo (PoC del fix).
+- golden re-congelado (csjn_casos.csv sha256 c171b3c2690d).
+
 ## H092 (2026-05-30)
 
 - `parser.py` v18.10→v18.11: campo nuevo `causa_inadmisibilidad` (gate de admisibilidad, aditivo; vocabulario controlado de la Corte). Función `clasificar_causa_inadmisibilidad` + detectores anclados de cola + residual bipartido (remite_dictamen / sin_causal_explicita). Rename `MERIT_OUTCOMES`→`OUTCOMES_NO_FALLBACK_280` en `classify_outcome` (cosmético, sin cambio de valores).
