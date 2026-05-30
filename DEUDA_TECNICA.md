@@ -6,7 +6,7 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-28 (H080: diagnóstico refinado de tomos 335/336 (Tesseract); ruta de índice 336 diseñada y VALIDADA en construir_catalogo v1.01 (138 entradas, 0 regresión) pero PARQUEADA pendiente tomos papel; main revertido a baseline limpio pre-335 (056c31e); worklist de 62 firmas a escanear generado; infra: repo sacado del sync de Google Drive que corrompía .git. | H079 cont.: 4 minor outcomes
+**Última actualización:** 2026-05-29 (H083: módulo `estadisticas/` nuevo — extractor Playwright de los tableros Tableau del Anuario CSJN (sortea el AWS WAF vía navegador real); CSV de referencia 2024/2025 (secretaría, materia, admitidos); cruce voto×ministro 2025 extraído; HALLAZGO: voto propio de Lorenzetti 2025 = 12.899 ≈ total art. 280 (12.546), repartido transversalmente entre secretarías → suscripción individual del 280, no fragmentación doctrinaria (material H1/H3). Sesión de frente analítico, NO toca pipeline ni outputs canónicos. Decisión de fondo de H082 (variable materia) sigue postergada. | H080: diagnóstico refinado de tomos 335/336 (Tesseract); ruta de índice 336 diseñada y VALIDADA en construir_catalogo v1.01 (138 entradas, 0 regresión) pero PARQUEADA pendiente tomos papel; main revertido a baseline limpio pre-335 (056c31e); worklist de 62 firmas a escanear generado; infra: repo sacado del sync de Google Drive que corrompía .git. | H079 cont.: 4 minor outcomes
 (desierto/inadmisible/improcedente/caducidad) — otro 757→688. Tomo 335
 incorporado (+255 fallos, corpus 5862→6117). detectar_paginas.py v1.01
 (exclusión 335-336 removida). Tomo 336 pendiente: construir_catalogo
@@ -2372,6 +2372,20 @@ abajo (corpus 6117, sin_firma 78) describen el estado parqueado, no main.
 5. **Análisis para hipótesis:** H2 red de citas, secretaría letrada, expansión H3, dashboard.
 6. **Diseño taxonómico: outcome como par gate+action.**
 
+*Pendientes del módulo `estadisticas/` (H083, frente analítico, fuera del pipeline):*
+- **Correr el extractor de los 4 tableros completo.** `export_tableau_playwright.py` quedó
+  armado para ingresos/resueltos × 2024/2025 pero solo se corrió resueltos 2025. Un comando.
+- **Procesar el tab voto × materia** (`Hoja 66 (2)`, ya bajado en resueltos 2025): confirma
+  por materia el hallazgo del 280 de Lorenzetti.
+- **Etiquetar por secretaría las capturas del cruce voto×juez.** El capturador pasivo bajó
+  16 capturas filtradas pero el `filtersJson` de la respuesta no expone qué secretaría estaba
+  seleccionada (los `tuples` vienen con `s:false`); falta cruzar por totales o por orden de
+  clic para asignar nombre a cada captura. Tarea acotada, no cerrada en H083.
+- **Limitación estructural del motor de filtros por API:** lanzar `categorical-filter` desde
+  Python da 410 (sesión consumida); solo funciona el clic real en la UI capturado pasivamente.
+  El capturador pasivo (`capturador_pasivo.py`) fue el camino que funcionó; el motor automático
+  (`motor_voto_x_secretaria.py`) quedó descartado. Ambos scripts se borraron en limpieza H083.
+
 *Al desparquear 335/336: incorporar ruta 336 (construir_catalogo v1.01, validada)
 + re-escaneo de páginas de cierre del papel para firmas/fechas (worklist listo).*
 
@@ -2433,6 +2447,22 @@ disidencia propia 0.11%, disidencia conjunta 0.03%, disidencia parcial
 propia 0.001%. → Nuestro parser captura voting_pattern (unanime,
 disidencia, segun_su_voto, mixed). "Voto conjunto" vs "voto propio"
 requeriría análisis del texto de cada voto individual.
+
+**Cruce voto × ministro 2025 (extraído del tablero en H083; conformación de ministros, sin conjueces):**
+Total firmas por ministro ~26.380 (Rosatti, Lorenzetti, Rosenkrantz; García-Mansilla 208,
+asunción tardía). Unanimidad casi idéntica entre los tres (~12.960). La bifurcación es el
+dato: en el tramo no-unánime, Rosatti y Rosenkrantz votan en CONJUNTO (13.345 / 12.893),
+Lorenzetti vota PROPIO (12.899, solo 513 conjunto). Reparto del voto propio total (13.486):
+Lorenzetti 95.6%, Rosenkrantz 3.8%, Rosatti 0.5%, García-Mansilla 0.0%. → HALLAZGO: voto
+propio de Lorenzetti (12.899) ≈ total art. 280 (12.546, de la tabla de causales). Las
+capturas filtradas por secretaría muestran ese voto propio repartido transversalmente
+(~10-11% en las secretarías grandes), no concentrado en previsional. Lectura: Lorenzetti
+emite su versión individual de la desestimación 280 a lo largo de las materias, mientras
+Rosatti y Rosenkrantz la suscriben en conjunto. Es diferencia de forma de suscripción sobre
+un acto impersonal (280), no fragmentación doctrinaria. Para H1: la postura frente al
+proyecto de secretaría es disposición estable del ministro, no asignación institucional.
+Para H3: matiza a la baja la lectura de "proliferación de votos propios" (artefacto de cómo
+un ministro suscribe el 280). CSV: `estadisticas/cruce_voto_x_ministro_2025.csv`.
 
 
 ### B052 — `detectar_caratula` del auditor: carátula partida entre catch_all y span carátula

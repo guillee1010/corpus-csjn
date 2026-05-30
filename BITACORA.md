@@ -7323,3 +7323,33 @@ El repo estaba sincronizado por Google Drive, que lockeaba .git/objects y dispar
 **Versiones:** parser.py v18.05 (sin cambios). construir_catalogo.py v1.01 (parqueado, no en main).
 
 **Commits:** snapshot pre-H080, branch tomos-335-336 (experimento 336), reset de main a 056c31e, housekeeping gitignore/Drive.
+
+## H083 — Módulo estadisticas/: extractor de tableros Tableau del Anuario CSJN (2026-05-29)
+
+**Objetivo:** acceder a los datos del Anuario Estadístico de la CSJN (publicados solo como tableros Tableau, sin exportación de datos) para comparar contra el corpus y explorar el cruce voto × juez. Frente analítico: NO toca pipeline, parser ni outputs canónicos.
+
+### H083-01 — Tablas de referencia del Anuario (PDF)
+
+Los PDF de los Anuarios 2024 y 2025 sí traen las marginales. Se extrajeron tres CSV de referencia a `estadisticas/`: `anuario_csjn_por_secretaria.csv` (ingresos+resueltos, 10 secretarías, 2024-25), `anuario_csjn_por_materia.csv` (resueltos, 2024-25), `anuario_csjn_admitidos_por_materia.csv` (2024-25). Hallazgo de los tres universos: la composición cambia drásticamente según se mire ingresos (previsional ~70%), resueltos (~35-54%) o admitidos (laboral 48.7% en 2024, previsional 53% en 2025 — la composición de admitidos es volátil año a año). El universo más comparable al corpus (fallos publicados) es admitidos, pero no anclar a un solo año.
+
+### H083-02 — Extractor Playwright de los tableros (sortea el AWS WAF)
+
+Tableau Public de la CSJN está detrás de AWS WAF (CAPTCHA): requests/python no pasa (410/CAPTCHA), exportación de datos deshabilitada (solo PDF/imagen). Solución: `estadisticas/export_tableau_playwright.py` — navegador real (Playwright Chromium) que pasa el WAF al renderizar; captura el bootstrap real en vuelo (evita el 410 de re-disparar sesión); recorre los story points clickeando cada tab y captura la respuesta de `set-active-story-point`; parsea entrando al story point activo dentro del flipboard y tomando los `dataSegments` de la respuesta del comando (no del bootstrap, que viene con secondaryInfo vacío). Reescrito a loop sobre 4 tableros (ingresos/resueltos × 2024/2025), salida a `estadisticas/output_tableau/<viz>/`. Resueltos 2025 extraído completo: 57 hojas reales. Los otros 3 tableros quedan pendientes de correr (un comando).
+
+### H083-03 — Cruce voto × ministro 2025 y hallazgo del 280 de Lorenzetti
+
+Del tab "Tipos de voto según Juez" se extrajo el cruce (`estadisticas/cruce_voto_x_ministro_2025.csv`). Conformación de ministros: unanimidad casi idéntica entre los tres estables (~12.960), pero el tramo no-unánime se bifurca: Rosatti y Rosenkrantz votan conjunto (13.345 / 12.893), Lorenzetti vota propio (12.899). Lorenzetti concentra 95.6% de los votos propios de ministros. Su voto propio (12.899) ≈ total art. 280 (12.546). Las capturas filtradas por secretaría muestran ese voto propio repartido transversalmente, no concentrado en previsional. Lectura: Lorenzetti suscribe su versión individual del 280 a lo largo de las materias; los otros dos lo firman conjunto. Diferencia de forma de suscripción sobre acto impersonal, no fragmentación doctrinaria. Material para H1 (postura estable del ministro, no asignación) y H3 (matiza la "proliferación de votos propios" como artefacto del 280).
+
+### H083-04 — Motor de filtros: capturador pasivo
+
+Para el cruce voto × juez × secretaría (que el tablero no publica como hoja) se necesita filtrar. Lanzar `categorical-filter` por API desde Python da 410 (sesión consumida); solo funciona el clic real en la UI. Se descartó el motor automático y se usó un capturador pasivo (`capturador_pasivo.py`): el navegador escucha mientras el usuario navega y toca filtros a mano, y graba cada respuesta. Funcionó: 162 acciones capturadas, 16 con el cruce filtrado por secretaría. Pendiente: etiquetar qué secretaría es cada captura (el filtersJson de la respuesta no expone el estado de selección). Scripts de sonda/motor borrados en limpieza.
+
+### H083 — Estado final
+
+- **Pipeline:** sin cambios. main sigue en baseline H080 (056c31e), corpus ~5862, parser v18.05.
+- **Módulo nuevo `estadisticas/`:** `export_tableau_playwright.py` (extractor 4 tableros), 3 CSV de referencia del Anuario, `cruce_voto_x_ministro_2025.csv`, `output_tableau/resueltos_2025/` (57 hojas).
+- **Decisión H082 (variable materia) sigue postergada.** Esta sesión fue de acceso a datos externos, no del frente del corpus.
+
+**Versiones:** sin cambios en scripts canónicos del pipeline.
+
+**Commits:** módulo estadisticas/ nuevo (extractor + CSV de referencia + cruce). Sin commits al pipeline.

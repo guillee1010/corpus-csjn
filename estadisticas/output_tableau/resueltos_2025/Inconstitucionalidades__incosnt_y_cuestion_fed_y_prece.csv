@@ -1,0 +1,9 @@
+﻿DESC TIPO RECURSO OKfromFALLOS (grupo) 3-value,DESC TIPO RECURSO OKfromFALLOS (grupo) 3-alias,Remisión-value,Remisión-alias,REC(casos con fallos 2025.sav)-alias,Tipoderemisión-value,Tipoderemisión-alias,ATRIB(CLAVE (casos con fallos 2025.sav))-alias
+%all%,Todo,CON REMISIÓN,CON REMISIÓN,22,PRECEDENTES CSJN,PRECEDENTES CSJN,%many-values%
+QUEJA REC. EXTRAORD. DENEGADO,QUEJA REC. EXTRAORD. DENEGADO,CON REMISIÓN,CON REMISIÓN,4,PRECEDENTES CSJN,PRECEDENTES CSJN,CSJ 006066/2014/RH001
+ORIGINARIO,ORIGINARIO,CON REMISIÓN,CON REMISIÓN,18,PRECEDENTES CSJN,PRECEDENTES CSJN,%many-values%
+%all%,Todo,SIN REMISIÓN,SIN REMISIÓN,2,%null%,-,%many-values%
+ORIGINARIO,ORIGINARIO,SIN REMISIÓN,SIN REMISIÓN,2,%null%,-,%many-values%
+%all%,Todo,%all%,Todo,24,%all%,%all%,%many-values%
+QUEJA REC. EXTRAORD. DENEGADO,QUEJA REC. EXTRAORD. DENEGADO,%all%,Todo,4,%all%,%all%,CSJ 006066/2014/RH001
+ORIGINARIO,ORIGINARIO,%all%,Todo,20,%all%,%all%,%many-values%
