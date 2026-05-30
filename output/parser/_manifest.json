@@ -1,9 +1,9 @@
 {
-  "schema_version": 2,
-  "manifest_generator_version": "1.0",
-  "generated_at": "2026-05-30T05:27:01.492602+00:00",
+  "schema_version": 3,
+  "manifest_generator_version": "1.1",
+  "generated_at": "2026-05-30T06:10:13.025567+00:00",
   "git": {
-    "commit": "c9138956ffdf00838ed1921b6064a2c1d3eee123",
+    "commit": "2dcd3f171f636f974cc8393109f05511d65f04d3",
     "dirty": true
   },
   "pipeline_scripts": {
@@ -12,6 +12,242 @@
     "cruzar_catalogo_y_mapa.py": "1.0",
     "parser.py": "18.07",
     "parser_editorial.py": "1.0"
+  },
+  "corpus": {
+    "n_files": 46,
+    "digest": "9fdd4726ce6d54f2a8cb7a8bc169e26fa66de23a68cdee83901f1f73466d99f5",
+    "files": {
+      "LibroVol329.1.md": {
+        "path": "corpus/LibroVol329.1.md",
+        "sha256": "63afbbf246b90ca79f1bf762d092c1dba2ca34b932ee25c3c6893e1a7316a792",
+        "n_bytes": 3641639
+      },
+      "LibroVol329.2.md": {
+        "path": "corpus/LibroVol329.2.md",
+        "sha256": "6a7c01ab18a6b8929f23b3c0f41da6c1f5bdcba265bd9c2c49b4a234241b8086",
+        "n_bytes": 4185816
+      },
+      "LibroVol329.3.md": {
+        "path": "corpus/LibroVol329.3.md",
+        "sha256": "2bd9b6bdb0e65290d9803b15ff4d3ca0335beaeef2b3a38b985f406f46bc2d2b",
+        "n_bytes": 5128927
+      },
+      "LibroVol329.4.md": {
+        "path": "corpus/LibroVol329.4.md",
+        "sha256": "a61f07f0a7ba6e53fef19b7b36e2f864a8d59e7e67a67c2270992d978cc5a28b",
+        "n_bytes": 4607473
+      },
+      "LibroVol330.1.md": {
+        "path": "corpus/LibroVol330.1.md",
+        "sha256": "01c9709f473bc6934d52526d2e3f355ccc1d440bb2fd7a0b03d7a1a54641bd96",
+        "n_bytes": 3529081
+      },
+      "LibroVol330.2.md": {
+        "path": "corpus/LibroVol330.2.md",
+        "sha256": "5c1343a650d1b17e928d6e523d0104be38caee75097318fba7eadba688848fa0",
+        "n_bytes": 4233031
+      },
+      "LibroVol330.3.md": {
+        "path": "corpus/LibroVol330.3.md",
+        "sha256": "184ee3896cd8d09cdb3c2cde3c5fe9376e67b819d4c18dca13425dcda82af830",
+        "n_bytes": 3947029
+      },
+      "LibroVol330.4.md": {
+        "path": "corpus/LibroVol330.4.md",
+        "sha256": "f92505459e507a465bc2f663494faddc0452ec5ac77e710fd0f6d5137d3727ef",
+        "n_bytes": 3165008
+      },
+      "LibroVol331.1.md": {
+        "path": "corpus/LibroVol331.1.md",
+        "sha256": "82f6fea462bf1e2c470246ca72c36d1af5aa7ad3b5eb527046728ed9adbea9ff",
+        "n_bytes": 2738951
+      },
+      "LibroVol331.2.md": {
+        "path": "corpus/LibroVol331.2.md",
+        "sha256": "6cec887873b016ce9221c1ffa1e0ce7f1db0f23ebfac27ff0a9c284e7b9069f3",
+        "n_bytes": 2712231
+      },
+      "LibroVol331.3.md": {
+        "path": "corpus/LibroVol331.3.md",
+        "sha256": "c72f30dbd96d1ec077401f8e139a4fae11a61afab39546f18094994c3a22b585",
+        "n_bytes": 2612176
+      },
+      "LibroVol332.1.md": {
+        "path": "corpus/LibroVol332.1.md",
+        "sha256": "72ad91ddd393a9fd2c6e1905ad143dce70d6fef58ae7e4f51e072d5f8989d091",
+        "n_bytes": 2470192
+      },
+      "LibroVol332.2.md": {
+        "path": "corpus/LibroVol332.2.md",
+        "sha256": "de916540f8e99be1b64d5a3076629214dc7ca07ee11752e5780d303f968b036a",
+        "n_bytes": 2923084
+      },
+      "LibroVol332.3.md": {
+        "path": "corpus/LibroVol332.3.md",
+        "sha256": "3da312a88894579120a40244ce9438de80c0f926e8a3295830833f3b7a2e7ce7",
+        "n_bytes": 2337376
+      },
+      "LibroVol333.1.md": {
+        "path": "corpus/LibroVol333.1.md",
+        "sha256": "2222d17a01c4084fb401d7ba4e39116f6d299f7474e2c66b02a360a70e9b69f0",
+        "n_bytes": 2033173
+      },
+      "LibroVol333.2.md": {
+        "path": "corpus/LibroVol333.2.md",
+        "sha256": "37267e08928f9257073bb867996c74f435a1431b49457092a9f48c5846d60f59",
+        "n_bytes": 2883037
+      },
+      "LibroVol333.3.md": {
+        "path": "corpus/LibroVol333.3.md",
+        "sha256": "5f9dea91d5ff5a110058b38bb4d63f44d99f980f2765603e4af36cbfb9ad854f",
+        "n_bytes": 1524659
+      },
+      "LibroVol334.1.md": {
+        "path": "corpus/LibroVol334.1.md",
+        "sha256": "441dbac2c8fc472f322efdddaa1d757bdb4e58fbbe24a45734ea1c3d0e8108d2",
+        "n_bytes": 1872361
+      },
+      "LibroVol334.2.md": {
+        "path": "corpus/LibroVol334.2.md",
+        "sha256": "66f3c5b2767392bb0b648e991586500c2d64ac7d2e16618f59989b055bfbd12d",
+        "n_bytes": 916532
+      },
+      "LibroVol334.3.md": {
+        "path": "corpus/LibroVol334.3.md",
+        "sha256": "522f81b80ed4f52861fbe17508fb81be9f313f537197574f074e8911088b5f11",
+        "n_bytes": 2313847
+      },
+      "LibroVol337.1.md": {
+        "path": "corpus/LibroVol337.1.md",
+        "sha256": "cdc3578f748f95bd081111b5047cc7a656f6f970efa794d72ed2e073c3accb64",
+        "n_bytes": 2162793
+      },
+      "LibroVol337.2.md": {
+        "path": "corpus/LibroVol337.2.md",
+        "sha256": "207bc7deccfcb74a4f37e14adbc92b395b61df62d59ed374ffec31da26bc0cea",
+        "n_bytes": 1698888
+      },
+      "LibroVol338.1.md": {
+        "path": "corpus/LibroVol338.1.md",
+        "sha256": "cd2e267e5921894656dc3f865fbb32aaf9d04a4b0c8f49744443fcfe89c83695",
+        "n_bytes": 1603288
+      },
+      "LibroVol338.2.md": {
+        "path": "corpus/LibroVol338.2.md",
+        "sha256": "cc88e243cc33c45ced2047a2a43f76df830a07ecc3a44fd9329b8edfe71aada5",
+        "n_bytes": 2148219
+      },
+      "LibroVol339.1.md": {
+        "path": "corpus/LibroVol339.1.md",
+        "sha256": "4d920fde7e4ef8b2b75a5f5f4e8b141ab267b6e25a79e99fc654e8c793cbbb2c",
+        "n_bytes": 2107389
+      },
+      "LibroVol339.2.md": {
+        "path": "corpus/LibroVol339.2.md",
+        "sha256": "f5c1f6f7792120b40191951058edc088d58eec0f10bfcb4b01cd869fba55ecf5",
+        "n_bytes": 2016821
+      },
+      "LibroVol340.1.md": {
+        "path": "corpus/LibroVol340.1.md",
+        "sha256": "2ac1ade8a1e7e9004d4a290646b2b0a7eba1ba09d4951aa4d2004492ab2651bd",
+        "n_bytes": 2179358
+      },
+      "LibroVol340_2.md": {
+        "path": "corpus/LibroVol340_2.md",
+        "sha256": "449250a1eb18c25e7ee523d602bfa0c7dfac80557a9938f160fbd4b2a95182e8",
+        "n_bytes": 2614764
+      },
+      "LibroVol341.1.md": {
+        "path": "corpus/LibroVol341.1.md",
+        "sha256": "0b132cb80b8819c26470bf0cc20235ca85c95b1d6b65b8b958e998361494151d",
+        "n_bytes": 1952170
+      },
+      "LibroVol341.2.md": {
+        "path": "corpus/LibroVol341.2.md",
+        "sha256": "87b80ec5a46d3e8a311b332edc491fbea4523b0324338b1ba373dd9201a52a91",
+        "n_bytes": 2885498
+      },
+      "LibroVol342-1.md": {
+        "path": "corpus/LibroVol342-1.md",
+        "sha256": "de49a58ca804f1335b9b7e4d66a8098fde23e78426266dd80e7a71313bf06522",
+        "n_bytes": 3098472
+      },
+      "LibroVol342-2.md": {
+        "path": "corpus/LibroVol342-2.md",
+        "sha256": "37d8d8f1bc2f6a1889182c50224849168f7a605c36989d538c73b4490b07264b",
+        "n_bytes": 2660782
+      },
+      "LibroVol343-1.md": {
+        "path": "corpus/LibroVol343-1.md",
+        "sha256": "ebb2a60c617a9b8c9ee9a347417328e6ecc691a8dba66e54d6d84d17e3960a0f",
+        "n_bytes": 1549420
+      },
+      "LibroVol343-2.md": {
+        "path": "corpus/LibroVol343-2.md",
+        "sha256": "0f319fca5606d9dc2ba06a8674f016855003055ee177d09848d3dde88395689c",
+        "n_bytes": 1836293
+      },
+      "LibroVol343-3.md": {
+        "path": "corpus/LibroVol343-3.md",
+        "sha256": "1db729d949ed2bc3dc02cd9bcc78de81871cec539a9c9813d75201566e0702f5",
+        "n_bytes": 2102354
+      },
+      "LibroVol344-1.md": {
+        "path": "corpus/LibroVol344-1.md",
+        "sha256": "64f7b333f6fbeb498da5956c762f3d19dffbf1dda3009fb636c112983797ca33",
+        "n_bytes": 2991691
+      },
+      "LibroVol344-2.md": {
+        "path": "corpus/LibroVol344-2.md",
+        "sha256": "9bbe463f4dcee98cc2ee82f1a037216e7b5ee3be17dd00a7328a710c02a29032",
+        "n_bytes": 3297606
+      },
+      "LibroVol344-3.md": {
+        "path": "corpus/LibroVol344-3.md",
+        "sha256": "5ae815da04ac3a0414a3393eca4ba87593d78adad956ac236e6c1799951897c1",
+        "n_bytes": 2836286
+      },
+      "LibroVol345-1.md": {
+        "path": "corpus/LibroVol345-1.md",
+        "sha256": "b0c17d77e87c7d1048a743c41167df68b1de4b113a68e6f6242c66f7aba1f014",
+        "n_bytes": 2083048
+      },
+      "LibroVol345-2.md": {
+        "path": "corpus/LibroVol345-2.md",
+        "sha256": "4db1e5dcd50a514942921506be6eb64e21e76bfc5aa9e256d98d88e671b4da23",
+        "n_bytes": 1604788
+      },
+      "LibroVol346-1.md": {
+        "path": "corpus/LibroVol346-1.md",
+        "sha256": "47a5495d84d620db6fd0fe793dbbbbe9350f701a0683978b8646250d5b92fbcc",
+        "n_bytes": 1827165
+      },
+      "LibroVol346-2.md": {
+        "path": "corpus/LibroVol346-2.md",
+        "sha256": "0875cb1f67cf72ae052c80adb78a60c740936ca4265ea9a953f85fe45343fd5f",
+        "n_bytes": 1921630
+      },
+      "LibroVol347-1.md": {
+        "path": "corpus/LibroVol347-1.md",
+        "sha256": "d7bd244f8b384a25cc3f34a9fb36346c3d076e37f2a5d82cdd1a620113bc23ec",
+        "n_bytes": 2786156
+      },
+      "LibroVol347-2.md": {
+        "path": "corpus/LibroVol347-2.md",
+        "sha256": "592ade0dc2881245be8700002f9ef441437768211c9fe7afb896c03cddde223a",
+        "n_bytes": 2862950
+      },
+      "LibroVol348-1.md": {
+        "path": "corpus/LibroVol348-1.md",
+        "sha256": "778d70038f8a81f662d473e8a0fd64f4c2bcb74787df2fae078c995bba1d32b4",
+        "n_bytes": 4285699
+      },
+      "LibroVol349-1.md": {
+        "path": "corpus/LibroVol349-1.md",
+        "sha256": "db0f263bfc7487e11b771918d235179bafeddb87a44d02ec9e4db636b62659d9",
+        "n_bytes": 727269
+      }
+    }
   },
   "inputs": {
     "mapa_paginas.csv": {
