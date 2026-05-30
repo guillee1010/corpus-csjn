@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.11"  # H092: campo nuevo causa_inadmisibilidad (gate de admisibilidad, aditivo); rename MERIT_OUTCOMES->OUTCOMES_NO_FALLBACK_280 en classify_outcome
+__version__ = "18.12"  # H093: fix FP FUERA_DE_TERMINO (exclusion por dispositivo de reposicion/revocatoria/aclaratoria; el extempor del considerando era del antecedente)
 
 import re
 import csv
@@ -505,6 +505,14 @@ RE_CAUSA_FUERA_TERMINO_EXCL = re.compile(
     r"constancia\s+\w+\s+(?:resulta\s+|es\s+)?extempor|"
     r"(?:declaraci[oó]n\s+de\s+incompetencia|demanda)\s+\w*\s*"
     r"(?:resulta\s+|fue\s+|es\s+)?extempor", re.I)
+# H093: dispositivo de reposicion/revocatoria/aclaratoria. Si el fallo desestima
+# una reposicion (el recurso PRESENTE), el "extempor" del considerando pertenece
+# al antecedente atacado, no al recurso decidido -> FUERA_DE_TERMINO seria FP.
+# Se ancla al por_ello (dispositivo), inmune al truncado del considerando.
+RE_CAUSA_FUERA_TERMINO_EXCL_DISP = re.compile(
+    r"(?:se\s+)?(?:desestima\w*|rechaza\w*|no\s+ha\s+lugar\s+a)\s+"
+    r"(?:el\s+|la\s+|los\s+|las\s+)?(?:recurso\s+de\s+)?"
+    r"(?:reposici[oó]n|revocatoria|aclaratoria)", re.I)
 # Residual: remision al dictamen del Procurador (la causal vive alli, no aca).
 RE_CAUSA_REMITE_DICTAMEN = re.compile(
     r"se\s+remite|comparte\s+(?:los\s+)?(?:sus\s+)?fundamentos|"
@@ -532,7 +540,8 @@ def clasificar_causa_inadmisibilidad(outcome, considerando_text, por_ello_text,
         return "DEPOSITO_PREVIO"
     if (outcome in OUTCOMES_GATE_GENERICO
             and RE_CAUSA_FUERA_TERMINO.search(txt)
-            and not RE_CAUSA_FUERA_TERMINO_EXCL.search(txt)):
+            and not RE_CAUSA_FUERA_TERMINO_EXCL.search(txt)
+            and not RE_CAUSA_FUERA_TERMINO_EXCL_DISP.search(pe)):
         return "FUERA_DE_TERMINO"
     if outcome == "otro":
         return ""   # catch-all sin causal explicita: no afirmar gatekeeping
