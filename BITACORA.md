@@ -7793,7 +7793,7 @@ Al validar 338_p830 (ACUMAR/Mendoza, queja del GCBA contra la ejecución del Juz
 
 ### H094-03 — Fix FP FALTA_SENTENCIA_DEFINITIVA en outcome `otro` (B101)
 
-Único FP de los 12 delta: 334_p419 (outcome `otro`). Los 2 matches caen en la resolución denegatoria de la Cámara citada y en el dictamen del Defensor Oficial; el holding real es la NULIDAD de la sentencia de grado (favorable), no un gate. Causa raíz: en `clasificar_causa_inadmisibilidad` las 3 causales de cola se chequeaban antes del guard `outcome == "otro" → ""`, mientras FUERA ya exigía `outcome in OUTCOMES_GATE_GENERICO`. Fix: gatear las 4 causales de cola bajo `if outcome in OUTCOMES_GATE_GENERICO:`. PoC `scripts/auditoria/H094/poc_cola_gate.py` (dirección sobre el CSV = 1 fila). A/B old↔new sobre texto idéntico (M15) = exactamente 1 fila (334_p419: FALTA_SENTENCIA_DEFINITIVA → ""). Re-golden consciente; check_regresion [CLEAN] 4/4. parser v18.12→18.13.
+Único FP de los 12 delta: 334_p419 (outcome `otro`). Los 2 matches caen en la resolución denegatoria de la Cámara citada y en el dictamen del Defensor Oficial; el holding real es la NULIDAD de la sentencia de grado (favorable), no un gate. Causa raíz: en `clasificar_causa_inadmisibilidad` las 3 causales de cola se chequeaban antes del guard `outcome == "otro" → ""`, mientras FUERA ya exigía `outcome in OUTCOMES_GATE_GENERICO`. Fix: gatear las 4 causales de cola bajo `if outcome in OUTCOMES_GATE_GENERICO:`. PoC `scripts/diagnostico/H094/poc_cola_gate.py` (dirección sobre el CSV = 1 fila). A/B old↔new sobre texto idéntico (M15) = exactamente 1 fila (334_p419: FALTA_SENTENCIA_DEFINITIVA → ""). Re-golden consciente; check_regresion [CLEAN] 4/4. parser v18.12→18.13.
 
 ### H094 — Estado final
 
@@ -7804,6 +7804,6 @@ Al validar 338_p830 (ACUMAR/Mendoza, queja del GCBA contra la ejecución del Juz
 
 **Outputs canónicos:** `csjn_casos.csv` 5862 (1 celda de causa cambiada), `csjn_casos_votos.csv` 27463, `csjn_casos_zonas.csv` 140956, `csjn_casos_editorial.csv` 151.
 
-**Scripts:** `scripts/auditoria/H094/poc_cola_gate.py` (nuevo); `scripts/diagnostico/extraer_caso.py` v1.01→v2.0.
+**Scripts:** `scripts/diagnostico/H094/poc_cola_gate.py` (nuevo); `scripts/diagnostico/extraer_caso.py` v1.01→v2.0.
 
 **Commits:** 2 (extraer_caso v2.0; parser v18.13 + re-golden + PoC + docs).
