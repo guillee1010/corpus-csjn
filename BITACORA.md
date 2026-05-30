@@ -7660,3 +7660,45 @@ Diagnóstico con `scripts/diagnostico/H090/extraer_por_outcome.py` (extractor pa
 **Artefacto actualizado:** `output/parser/_manifest.json` (parser 18.09, sha256 sin cambios).
 **Versiones canónicas:** parser.py v18.09; resto sin cambios.
 **Commits:** 2 — `refactor(parser): unificar fallback 280/ac4 en classify_outcome como sede única (H090 R2)` (d0ced2b) + `chore(manifiesto): registrar parser v18.09 (H090 R2, sha256 sin cambios)`. Pendiente el commit de docs + el script de diagnóstico.
+
+## H091 — Cierre de M13: bucle de votos y status_localizacion extraídos (2026-05-30)
+
+**Objetivo:** terminar el desmonte de `procesar_archivo` extrayendo las dos últimas piezas inline (bucle de votos/disidencias y refinamiento de `status_localizacion`), dejándola como orquestador puro.
+
+### H091-01 — `detectar_votos_disidencias` (extracción pura del bucle de votos)
+
+El bucle que recorre el bloque detectando headers de voto/disidencia (`marcadores_votos`) se extrajo a `detectar_votos_disidencias(bloque, lineas_excluir) → (n_votos_svoto, n_disidencias, inicio_votos_indiv, marcadores_votos)`. Dependencias: solo `RE_VOTO_HDR`/`RE_DISID_HDR`/`RE_CONSIDERANDO` (module-level) y `detectar_juez_en_voto_header` (top-level puro); lo único que cruza la frontera son `bloque`/`lineas_excluir` (entrada) y los cuatro acumuladores (salida). Movimiento verbatim; se descartó el `pass` muerto que dejó H085 al sacar la detección de dispositivo del bucle. El `continue` interno sigue el `for k` igual que antes.
+
+Validación: `poc_votos.py` — reproducción fiel del inline (old) vs función extraída (new) sobre 13 casos dirigidos × 4 máscaras de exclusión (juez en misma línea / look-ahead 1–3 / salto de vacías / corte en "Considerando" / header al final del bloque con k+offset fuera de rango / línea excluida / falsos amigos "Votos…") + 80.000 bloques fuzz aleatorios → **0 discrepancias**.
+
+### H091-02 — `refinar_status_localizacion` (extracción + colapso de branching muerto)
+
+El refinamiento de `status_loc_final` (sufijo `_sin_marcador*` por falta de apertura + sufijo `_ancla_vistos`/`_ancla_catalogo` de la Fase F) se extrajo a `refinar_status_localizacion(status_loc, apertura_rel, ancla_inicio) → status_loc_final`. El bloque inline tenía branching muerto: las dos ramas de cada `if/else` (`ancla_inicio == 'vistos'` y `'catalogo'`) producían el mismo string; la versión limpia lo colapsa a un `+=`. Behavior-preserving.
+
+Validación: `poc_status.py` — old (con branching muerto) vs new (colapsado) exhaustivo sobre 105 combinaciones (7 valores de status × 3 aperturas × 5 anclas) → **0 discrepancias**.
+
+### H091-03 — Validación integral y estado de M13
+
+`procesar_archivo` pasó de **513 → 458 líneas** (−55); con esto queda como orquestador puro de funciones nombradas. `check_regresion` **[CLEAN] 4/4**, los 4 CSV byte-idénticos al golden (5862/27463/140956/151), 0-delta. Manifiesto regenerado a 18.10 (sha256 de los CSV sin cambios), `--verify` **[CLEAN] 54**. parser v18.09→**v18.10**.
+
+**M13 CERRADO.** `es_originaria` quedó fuera de alcance (ya era top-level desde antes de M13; candidata de recalibración art. 117, no de extracción). Termina el desmonte de la función monstruo iniciado en H085.
+
+### H091 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 160 sumario_con_link + 33 sumario_editorial).
+- **Sin firma:** 16 / 5669 fallos.
+- **Votos:** 27463 filas.
+
+**Outputs canónicos:** sin cambios (refactor puro).
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27463 filas.
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+
+**Scripts creados:** `scripts/auditoria/H091/` — `poc_votos.py`, `poc_status.py`.
+
+**Scripts modificados:** `scripts/pipeline/parser.py` v18.09→18.10.
+
+**Versiones canónicas:** parser.py v18.10; resto sin cambios.
+
+**Commits:** 2 — `refactor(parser): cerrar M13 - extraer detectar_votos_disidencias + refinar_status_localizacion (H091)` ([hash]) + `chore(manifiesto): registrar parser v18.10 (H091, sha256 sin cambios)` ([hash]).

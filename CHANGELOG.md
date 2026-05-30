@@ -2,6 +2,11 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H091 (2026-05-30)
+
+- `parser.py` v18.09→v18.10: cierre de M13. Bucle de votos/disidencias extraído a `detectar_votos_disidencias()` y refinamiento de status a `refinar_status_localizacion()`. `procesar_archivo` 513→458 líneas, orquestador puro. Extracción pura, 0 casos afectados (check_regresion [CLEAN] 4/4, 0-delta).
+- `output/parser/_manifest.json`: registra parser v18.10 (sha256 de los CSV sin cambios).
+
 ## H090 (2026-05-30)
 
 - `parser.py` v18.08→18.09: unificar el fallback 280/ac4 en `classify_outcome` como sede única (R2, dedup). El bloque inline de `procesar_archivo` (caso `sin_dispositivo`) colapsa a una línea. Refactor behavior-preserving — check_regresion [CLEAN] 4/4, outputs 0-delta. Commit d0ced2b.
