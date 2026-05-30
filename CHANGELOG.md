@@ -2,6 +2,14 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H087 (2026-05-30)
+
+- `scripts/pipeline/generar_manifiesto.py`: nuevo, v1.0. Manifiesto de procedencia
+  de tres capas (git commit + dirty; `__version__` de los 5 scripts vía ast;
+  sha256 + filas + bytes de 3 intermedios + 5 outputs). Standalone + modo `--verify`.
+- `output/parser/_manifest.json`: artefacto nuevo. No modifica ningún CSV.
+- `parser.py`: sin cambios (sigue v18.07). check_regresion [CLEAN] 4/4.
+
 ## H086 (2026-05-30)
 
 - `parser.py` v18.06→18.07: cascada de dispositivo Tier 1→2→3→3b→4 colapsada a motor `_barrer()` único + 4 detectores `_cand_*` + 5 llamadas configuradas (R5/M13). `_T2_PATS`/`_T3B_ARG_RE`/`_RE_ASI` a nivel de módulo. `resolver_dispositivo` 223→63 líneas; archivo −47. Sin cambio de comportamiento: check_regresion [CLEAN].

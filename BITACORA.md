@@ -7464,3 +7464,71 @@ Ciclo: check de partida [CLEAN] (golden sano) → branch `h086-r5-barrer` → re
 **Versiones canónicas:** parser.py v18.07; resto sin cambios.
 
 **Commits:** 1 — `refactor(parser): colapsar cascada dispositivo a motor _barrer parametrizado (H086 R5)`. Pendiente el commit de docs.
+
+## H087 — M14: manifiesto de procedencia del pipeline (2026-05-30)
+
+**Objetivo:** cerrar el agujero de trazabilidad de versión del dataset sin tocar
+los CSV ni romper el golden.
+
+### H087-01 — Decisión: manifiesto sidecar, no versión adentro del CSV
+
+Se descartó meter la versión en el CSV, tanto como columna por fila como línea de
+encabezado: ambas hacen que los bytes del archivo dependan de `__version__`, con lo
+que cada bump dispararía una [REGRESION] espuria y el golden dejaría de distinguir
+cambio de lógica de cambio de etiqueta. Además cambiaría el esquema de lo ya
+publicado en Dataverse. La procedencia va afuera, en `_manifest.json`.
+
+### H087-02 — Diseño: script standalone de tres capas
+
+`scripts/pipeline/generar_manifiesto.py` v1.0, último paso del pipeline, NO hook en
+parser.py. Razones del standalone: cubre el 5º CSV que escribe `parser_editorial.py`
+(un hook en el parser solo vería sus 4), se re-corre sobre outputs ya publicados sin
+reparsear, y no engrosa la función monstruo en pleno desmonte (M13). Tres capas:
+(A) git commit + flag dirty —fija todo el código del repo cuando dirty=false—;
+(B) `__version__` de los 5 scripts de la cadena; (C) sha256 + filas + bytes de los
+3 intermedios y 5 outputs canónicos. Allow-list explícita en vez de glob: excluye
+`csjn_casos_BASELINE_H079.csv` y el propio `_manifest.json`, y falla ruidoso si
+falta un canónico.
+
+### H087-03 — PoC: corrección de diseño (lectura estática de versión)
+
+El PoC mostró que `import parser` dispara su cadena de imports completa
+(`from parser_editorial import clasificar_editorial`, compilación de regex de
+módulo). Leer una versión no debe depender de que ese grafo importe limpio: se pasó
+a extracción estática de `__version__` vía `ast`, sin importar el módulo. Cero
+efectos colaterales.
+
+### H087-04 — Cobertura completa de la cadena (capa C / inputs)
+
+El diseño inicial solo registraba los 2 generadores de los CSV finales. Se corrigió
+a la cadena entera: además de los 5 outputs, el manifiesto hashea los 3 intermedios
+(mapa → catálogo → localizados). Los 3 se confirmaron contra BITACORA, no se
+adivinaron: `fallos_localizados.csv` = output de etapa 3 / frontera arquitectónica;
+`catalogo.csv` = fuente de `linea_inicio`; `mapa_paginas.csv` = mapa que consume el
+parser (`--mapa` confirmado en el log de invocación).
+
+### H087-05 — Validación en máquina real
+
+`generar` OK; `check_regresion` [CLEAN] 4/4 (golden intacto por construcción, el
+manifiesto no toca CSV); `--verify` [CLEAN] 8/8 artefactos. Conteos sellados:
+outputs 5862 / 27463 / 140956 / 151 / 11445; inputs 46936 / 5862 / 5862.
+
+### H087 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 160 sumario_con_link + 33 sumario_editorial).
+- **Parser:** v18.07, sin cambios esta sesión. Esta sesión corta la racha de bumps
+  sin procedencia agregando el mecanismo, sin bumpear ella misma.
+- **M13:** sigue EN PROGRESO (resta es_originaria + detector de sumarios).
+
+**Outputs canónicos (sin cambios):**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27463 filas.
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+- `output/parser/csjn_editorial_indice_partes.csv` — 11445 filas.
+
+**Artefacto nuevo:** `output/parser/_manifest.json` (3 inputs + 5 outputs).
+**Scripts creados:** `scripts/pipeline/generar_manifiesto.py` v1.0.
+**Pendiente:** digest del corpus crudo (`LibroVol*.md`), único eslabón sin fijar.
+
+**Commits:** 2 (feature M14 + docs).
