@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.12"  # H093: fix FP FUERA_DE_TERMINO (exclusion por dispositivo de reposicion/revocatoria/aclaratoria; el extempor del considerando era del antecedente)
+__version__ = "18.13"  # H094: causales de cola solo con outcome de rechazo (gate-generico); fix FP FALTA_SENTENCIA_DEFINITIVA en outcome 'otro' (334_p419, match en dictamen/antecedente)
 
 import re
 import csv
@@ -532,17 +532,21 @@ def clasificar_causa_inadmisibilidad(outcome, considerando_text, por_ello_text,
     co = re.sub(r"\s+", " ", _unhyphenate(considerando_text)).strip()
     pe = re.sub(r"\s+", " ", _unhyphenate(por_ello_text)).strip()
     txt = co + " || " + pe
-    if RE_CAUSA_SENTENCIA_DEFINITIVA.search(txt):
-        return "FALTA_SENTENCIA_DEFINITIVA"
-    if RE_CAUSA_FUNDAMENTACION.search(txt):
-        return "FALTA_FUNDAMENTACION_AUTONOMA"
-    if RE_CAUSA_DEPOSITO.search(txt):
-        return "DEPOSITO_PREVIO"
-    if (outcome in OUTCOMES_GATE_GENERICO
-            and RE_CAUSA_FUERA_TERMINO.search(txt)
-            and not RE_CAUSA_FUERA_TERMINO_EXCL.search(txt)
-            and not RE_CAUSA_FUERA_TERMINO_EXCL_DISP.search(pe)):
-        return "FUERA_DE_TERMINO"
+    # H094: las 4 causales de cola solo se afirman con outcome de rechazo
+    # (gate-generico). Para 'otro' el parser no determino dispositivo de gate,
+    # asi que la frase causal puede venir de un antecedente citado o de un
+    # dictamen embebido, no del holding -> FP (334_p419). FUERA ya lo exigia.
+    if outcome in OUTCOMES_GATE_GENERICO:
+        if RE_CAUSA_SENTENCIA_DEFINITIVA.search(txt):
+            return "FALTA_SENTENCIA_DEFINITIVA"
+        if RE_CAUSA_FUNDAMENTACION.search(txt):
+            return "FALTA_FUNDAMENTACION_AUTONOMA"
+        if RE_CAUSA_DEPOSITO.search(txt):
+            return "DEPOSITO_PREVIO"
+        if (RE_CAUSA_FUERA_TERMINO.search(txt)
+                and not RE_CAUSA_FUERA_TERMINO_EXCL.search(txt)
+                and not RE_CAUSA_FUERA_TERMINO_EXCL_DISP.search(pe)):
+            return "FUERA_DE_TERMINO"
     if outcome == "otro":
         return ""   # catch-all sin causal explicita: no afirmar gatekeeping
     if (RE_CAUSA_REMITE_DICTAMEN.search(co)

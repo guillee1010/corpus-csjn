@@ -7778,3 +7778,32 @@ Los 12 FUERA juzgados a mano sobre `.md` completos: 10 TP, 2 FP. Los 2 FP (`329_
 **Scripts creados:** `scripts/diagnostico/extraer_caso.py` (canónico), `scripts/diagnostico/H093/poc_excl_reposicion.py` (PoC).
 
 **Commits:** 9c7fa7d (tooling), 7bcac83 (fix B100, parser v18.12). golden re-congelado (csjn_casos.csv sha256 c171b3c2690d).
+
+## H094 — Validación de la cola de causa_inadmisibilidad (delta) + fix FP FALTA_SENTENCIA_DEFINITIVA en outcome `otro` (2026-05-30)
+
+**Objetivo:** cerrar la calidad de la cola de `causa_inadmisibilidad` validando a fondo los hits «delta» (frase causal pasada el truncado a 2000 del CSV) de SENTENCIA_DEFINITIVA / FUNDAMENTACION / DEPOSITO. Continuación directa de H093.
+
+### H094-01 — Triage y validación de la cola delta (12 hits)
+
+Triage de los 60 hits de cola (FALTA_SENTENCIA_DEFINITIVA 44, FALTA_FUNDAMENTACION_AUTONOMA 12, DEPOSITO_PREVIO 4): 12 son **delta** (el regex no dispara sobre el `considerando_text` truncado a 2000; el match cae más allá) y 48 VISIBLE. Los 12 delta se validaron a mano contra los `.md` reales: **11 TP + 1 FP**. Los 48 VISIBLE quedan sin triar (a H095).
+
+### H094-02 — Bug en extraer_caso.py: volumen equivocado en tomos partidos → v2.0 (B102)
+
+Al validar 338_p830 (ACUMAR/Mendoza, queja del GCBA contra la ejecución del Juzgado de Quilmes), la herramienta daba 0 matches y aparentaba un «label fantasma». Causa: `extraer_caso.py` v1.01 resolvía el `.md` por `glob(LibroVol{tomo}*.md)` + primer match del ancla de 80 chars; en tomos partidos (338.1/338.2) con fallos hermanos de considerando casi idéntico anclaba en el volumen equivocado. El `source_file` real es 338.2 (leía 338.1). Re-validado en el volumen correcto: el holding está presente («la prohibición... no constituye la sentencia definitiva que exige el art. 14») → **338_p830 es TP**. Fix: v1.01→**v2.0**, resuelve por `source_file` + rango `[linea_inicio, linea_fin_real]` reusando `construir_bloque_desde_localizacion` del parser; `--md` override; fallback glob+ancla con aviso; sanity check de ancla en bloque. De los 12 delta, solo 338_p830 fue volumen equivocado (los otros 11 leyeron bien). Diagnóstico, no toca pipeline ni golden.
+
+### H094-03 — Fix FP FALTA_SENTENCIA_DEFINITIVA en outcome `otro` (B101)
+
+Único FP de los 12 delta: 334_p419 (outcome `otro`). Los 2 matches caen en la resolución denegatoria de la Cámara citada y en el dictamen del Defensor Oficial; el holding real es la NULIDAD de la sentencia de grado (favorable), no un gate. Causa raíz: en `clasificar_causa_inadmisibilidad` las 3 causales de cola se chequeaban antes del guard `outcome == "otro" → ""`, mientras FUERA ya exigía `outcome in OUTCOMES_GATE_GENERICO`. Fix: gatear las 4 causales de cola bajo `if outcome in OUTCOMES_GATE_GENERICO:`. PoC `scripts/auditoria/H094/poc_cola_gate.py` (dirección sobre el CSV = 1 fila). A/B old↔new sobre texto idéntico (M15) = exactamente 1 fila (334_p419: FALTA_SENTENCIA_DEFINITIVA → ""). Re-golden consciente; check_regresion [CLEAN] 4/4. parser v18.12→18.13.
+
+### H094 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 160 sumario_con_link + 33 sumario_editorial).
+- **Sin firma:** 16 / 5669 fallos (0.28%). Cobertura firma 99.72%.
+- **Votos:** 27463 filas. **Zonas:** 140956 segmentos. **Editorial:** 151 secciones.
+- **causa_inadmisibilidad:** FALTA_SENTENCIA_DEFINITIVA 44→43; (vacío) 4632→4633. Resto sin cambios.
+
+**Outputs canónicos:** `csjn_casos.csv` 5862 (1 celda de causa cambiada), `csjn_casos_votos.csv` 27463, `csjn_casos_zonas.csv` 140956, `csjn_casos_editorial.csv` 151.
+
+**Scripts:** `scripts/auditoria/H094/poc_cola_gate.py` (nuevo); `scripts/diagnostico/extraer_caso.py` v1.01→v2.0.
+
+**Commits:** 2 (extraer_caso v2.0; parser v18.13 + re-golden + PoC + docs).

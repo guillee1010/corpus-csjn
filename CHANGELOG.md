@@ -2,6 +2,13 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H094 (2026-05-30)
+
+- `parser.py` v18.12→18.13: las 4 causales de cola (SENTENCIA_DEFINITIVA, FUNDAMENTACION_AUTONOMA, DEPOSITO_PREVIO, FUERA_DE_TERMINO) solo se emiten con `outcome in OUTCOMES_GATE_GENERICO`. Fix FP en outcome `otro` (B101, 334_p419).
+- `output/parser/csjn_casos.csv`: 5862 filas, 1 celda (334_p419 `causa_inadmisibilidad`: FALTA_SENTENCIA_DEFINITIVA → ""). Golden re-congelado.
+- `scripts/diagnostico/extraer_caso.py` v1.01→v2.0: resuelve volumen por `source_file` + rango de líneas (B102, fix volumen equivocado en tomos partidos). Diagnóstico, no toca outputs.
+- `scripts/auditoria/H094/poc_cola_gate.py`: nuevo.
+
 ## H093 (2026-05-30)
 
 - `parser.py`: v18.11→18.12. Nuevo `RE_CAUSA_FUERA_TERMINO_EXCL_DISP` (excluye FUERA cuando el dispositivo desestima una reposición/revocatoria/aclaratoria). Fix FP B100.
