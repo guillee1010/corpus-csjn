@@ -6,7 +6,7 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-05-29 (H084: diagnóstico de deuda estructural sobre parser v18.05 (set mínimo: parser + DEUDA + BITACORA + csjn_casos.csv + árbol). Recomendación: frente A (refacción REE), primer paso obligado = red de regresión (no había). Construido `scripts/tests/check_regresion.py` + golden de los 4 CSV del parser (casos/votos/zonas/editorial); verificado [CLEAN] (el golden se reproduce a sí mismo). Cierra el agujero "refactor sin red" (ver M12). Hallazgos de datos: dictamen_presente con 3 valores True/False/'0' (B037); 58 outcome=originaria con is_originaria=0 (valida frente D); outcome=otro 688/5862. NO toca pipeline ni outputs. | H083: módulo `estadisticas/` nuevo — extractor Playwright de los tableros Tableau del Anuario CSJN (sortea el AWS WAF vía navegador real); CSV de referencia 2024/2025 (secretaría, materia, admitidos); cruce voto×ministro 2025 extraído; HALLAZGO: voto propio de Lorenzetti 2025 = 12.899 ≈ total art. 280 (12.546), repartido transversalmente entre secretarías → suscripción individual del 280, no fragmentación doctrinaria (material H1/H3). Sesión de frente analítico, NO toca pipeline ni outputs canónicos. Decisión de fondo de H082 (variable materia) sigue postergada. | H080: diagnóstico refinado de tomos 335/336 (Tesseract); ruta de índice 336 diseñada y VALIDADA en construir_catalogo v1.01 (138 entradas, 0 regresión) pero PARQUEADA pendiente tomos papel; main revertido a baseline limpio pre-335 (056c31e); worklist de 62 firmas a escanear generado; infra: repo sacado del sync de Google Drive que corrompía .git. | H079 cont.: 4 minor outcomes
+**Última actualización:** 2026-05-30 (H086: R5 — colapso de la cascada de dispositivo Tier 1→2→3→3b→4 a un motor `_barrer()` único + 4 detectores `_cand_*` + 5 llamadas configuradas (M13). NO es extracción pura: reescribe la lógica de las 5 capas (el mismo bucle ×5, difería solo en rango/exclusión de dictamen/detector/fallback); riesgo medio, sobre función ya aislada por R1 con red M12. `_T2_PATS`/`_T3B_ARG_RE`/`_RE_ASI` subidos a nivel de módulo (compilaban en cada llamada); los 12 literales raw quedan byte-idénticos. La cascada de 5 llamadas NO se data-ificó (rangos dependen de runtime, el orden codifica prioridad). resolver_dispositivo 223→63 líneas; archivo 3650→3603. Validación: PoC de equivalencia original↔parcheado (21 dirigidos + 9 adversariales + 60k fuzz idénticos; 5644/5644 dispositivos reales reconocidos por las closures) → check_regresion [CLEAN] (4/4 CSV idénticos al golden); parser v18.06→18.07. M14 (manifiesto sidecar) sigue diferido. | H085: primer refactor del parser bajo la red (M12). R1 — cascada de dispositivo Tier 1→2→3→3b→4 extraída de procesar_archivo a `resolver_dispositivo(bloque, apertura_rel, lineas_dictamen, inicio_votos_indiv) → (por_ello_idx, por_ello_text)` (M13). Extracción pura: 0 cambios de heurística; procesar_archivo 757→543 líneas. check_regresion [CLEAN] (4/4 CSV idénticos al golden); parser v18.05→18.06. Decisión de diseño: trazabilidad de versión NO va en columna de los CSV (rompería el golden y cada bump daría regresión espuria) sino en manifiesto sidecar — diferido a H086 (M14). | H084: diagnóstico de deuda estructural sobre parser v18.05 (set mínimo: parser + DEUDA + BITACORA + csjn_casos.csv + árbol). Recomendación: frente A (refacción REE), primer paso obligado = red de regresión (no había). Construido `scripts/tests/check_regresion.py` + golden de los 4 CSV del parser (casos/votos/zonas/editorial); verificado [CLEAN] (el golden se reproduce a sí mismo). Cierra el agujero "refactor sin red" (ver M12). Hallazgos de datos: dictamen_presente con 3 valores True/False/'0' (B037); 58 outcome=originaria con is_originaria=0 (valida frente D); outcome=otro 688/5862. NO toca pipeline ni outputs. | H083: módulo `estadisticas/` nuevo — extractor Playwright de los tableros Tableau del Anuario CSJN (sortea el AWS WAF vía navegador real); CSV de referencia 2024/2025 (secretaría, materia, admitidos); cruce voto×ministro 2025 extraído; HALLAZGO: voto propio de Lorenzetti 2025 = 12.899 ≈ total art. 280 (12.546), repartido transversalmente entre secretarías → suscripción individual del 280, no fragmentación doctrinaria (material H1/H3). Sesión de frente analítico, NO toca pipeline ni outputs canónicos. Decisión de fondo de H082 (variable materia) sigue postergada. | H080: diagnóstico refinado de tomos 335/336 (Tesseract); ruta de índice 336 diseñada y VALIDADA en construir_catalogo v1.01 (138 entradas, 0 regresión) pero PARQUEADA pendiente tomos papel; main revertido a baseline limpio pre-335 (056c31e); worklist de 62 firmas a escanear generado; infra: repo sacado del sync de Google Drive que corrompía .git. | H079 cont.: 4 minor outcomes
 (desierto/inadmisible/improcedente/caducidad) — otro 757→688. Tomo 335
 incorporado (+255 fallos, corpus 5862→6117). detectar_paginas.py v1.01
 (exclusión 335-336 removida). Tomo 336 pendiente: construir_catalogo
@@ -2363,6 +2363,10 @@ abajo (corpus 6117, sin_firma 78) describen el estado parqueado, no main.
 
 *H084: hay red de regresión del parser (M12). Todo refactor del parser se gatea a que `scripts/tests/check_regresion.py` dé [CLEAN]. La refacción REE (frente A) es ahora trabajo seguro: candidatos M03 (unidad por línea), M07 (dedup parser↔auditor), M08, classify_outcome como gate+action (ítem 6), colapso de la cascada de tiers 1→4 en procesar_archivo (757 líneas).*
 
+*H085: R1 aplicado — cascada extraída a `resolver_dispositivo()` (M13). procesar_archivo 757→543. Sucesor inmediato sugerido: colapso de los 5 tiers a barrido parametrizado (M13; ya NO es refactor puro). El manifiesto de trazabilidad de versión es M14, diferido a H086.*
+
+*H086: R5 aplicado — cascada de dispositivo colapsada a `_barrer()` + 4 detectores `_cand_*` + 5 llamadas (M13; reescritura de lógica, no extracción pura). resolver_dispositivo 223→63; archivo 3650→3603; patrones a nivel de módulo. check_regresion [CLEAN], parser v18.07. M13 sigue EN PROGRESO (resta es_originaria + detector de sumarios). Candidatos inmediatos: M14 (manifiesto sidecar, diseñado), R2 (classify_outcome como gate+action, ojo con la lógica 280/ac4 duplicada), o frente D/B (cambio de comportamiento sobre código ya limpio).*
+
 1. **Variable `materia` (inferida desde tribunal_origen).** Normalizar
    tribunal_origen (limpiar OCR, unificar variantes provinciales), mapear a
    materia por keywords. ~1454 sin_marcador. Habilita análisis temático.
@@ -3719,3 +3723,67 @@ parser↔auditor), M08 (`_ordenar_y_validar`), classify_outcome gate+action, y e
 colapso de la cascada de tiers en procesar_archivo. Cada refactor se gatea a
 [CLEAN]: si cambia un número, es bug, no refactor.
 **Referencias cruzadas:** H084. M03, M07, M08.
+
+### M13 — Descomposición de procesar_archivo (función monstruo) — EN PROGRESO
+
+**Componente:** parser.
+**Origen / fuente del diagnóstico:** H084 (diagnóstico de deuda estructural).
+**Diagnóstico:** procesar_archivo concentraba 757 líneas mezclando localización,
+detección de sumarios, dictamen zonificado y la cascada de dispositivo Tier
+1→2→3→3b→4. Acumulación incremental pura: cada tier agregado en sesión distinta
+(B067, B084, B085, B086) con la misma forma "si los anteriores no encontraron
+nada, repetir con menos guardas".
+**Plan:** descomponer en pasos de extracción pura (cada uno gateado a [CLEAN]
+por M12) y, recién después, refactor de la lógica de las piezas ya aisladas.
+Mover primero, reescribir después: más barato de depurar que las dos cosas a la vez.
+**Progreso:**
+- **R1 (H085) — APLICADO.** Cascada Tier 1→4 extraída a
+  `resolver_dispositivo(bloque, apertura_rel, lineas_dictamen, inicio_votos_indiv)
+  → (por_ello_idx, por_ello_text)`. Extracción pura, 0 cambios de heurística.
+  Contrato verificado leyendo el código: las internas (inicio_busqueda,
+  fin_busqueda, dictamen_end) no escapan; los únicos valores que cruzan la
+  frontera son por_ello_idx y por_ello_text. procesar_archivo 757→543 líneas.
+  check_regresion [CLEAN] (4/4 CSV idénticos al golden). parser v18.06.
+  Commit en branch `refactor/h085-r1-resolver-dispositivo`.
+- **R5 (H086) — APLICADO.** Cascada Tier 1→2→3→3b→4 colapsada a un motor
+  `_barrer(bloque, rango, lineas_dictamen, *, excluye_dictamen, es_candidato,
+  permite_fallback)` único + 4 detectores `_cand_*` + 5 llamadas en cascada. NO
+  es extracción pura: reescribe la lógica de las 5 capas (el mismo bucle ×5, que
+  difería solo en rango / exclusión de dictamen / detector / fallback). Lo común
+  (skip de vacías, armado del chunk, validación de firma) pasa de 5 copias a 1.
+  Decisión de diseño: `_T2_PATS`/`_T3B_ARG_RE`/`_RE_ASI` subidos a nivel de módulo
+  (antes se compilaban en cada una de las ~5862 llamadas); los 12 literales raw
+  quedan byte-idénticos (solo se mudan + renombran). La cascada de 5 llamadas en
+  orden NO se data-ificó: los rangos dependen de valores de runtime y el orden
+  codifica prioridad de dominio (elegante ≠ máximamente comprimido). Equivalencia
+  no solo empírica: chunk y firma están anclados a `k` (independientes del
+  detector), y la única reescritura real —Tier 2 chequeaba firma per-patrón, ahora
+  una vez tras "algún patrón pasó la guarda"— es equivalente porque firma(k) no
+  depende del patrón. resolver_dispositivo 223→63 líneas; archivo 3650→3603.
+  Validación: PoC de equivalencia original↔parcheado (21 dirigidos + 9
+  adversariales + 60k fuzz, todos idénticos; 5644/5644 dispositivos reales
+  reconocidos por las closures → 0 bugs de transcripción) → check_regresion
+  [CLEAN] (4/4 CSV idénticos al golden). parser v18.06→18.07. B090 (Tier 5)
+  entraría como sexta configuración, no como otra copia.
+**Pendiente:**
+- Extraer es_originaria (212 líneas) y el detector de sumarios.
+**Referencias cruzadas:** H084, H085. M12. B090.
+
+### M14 — Manifiesto de procedencia del parser (trazabilidad de versión) — DISEÑADO
+
+**Componente:** parser / outputs.
+**Origen / fuente del diagnóstico:** H085 (propuesta de Guillermo).
+**Diagnóstico:** los 4 CSV canónicos no registran con qué versión del parser
+fueron generados. No hay trazabilidad de procedencia del dataset.
+**Decisión de diseño:** NO agregar columna de versión a los CSV. Motivos:
+(a) rompería el golden de M12 y, peor, cada bump de `__version__` dispararía una
+[REGRESION] espuria — el harness dejaría de distinguir cambio de lógica de
+cambio de etiqueta, que es justo la propiedad que lo hace útil; (b) redundancia
+de una string repetida en 175k+ filas; (c) cambiaría el esquema de datasets ya
+publicados en Dataverse (doi:10.7910/DVN/TJTVKW). En su lugar, manifiesto
+sidecar (`_meta/` o `output/parser/_manifest.json`) con parser_version,
+git_commit, fecha, conteos y sha256 de cada CSV. No toca los CSV → golden
+intacto → harness [CLEAN]. De paso, los hashes son una segunda red de
+integridad.
+**Estado del fix:** diseñado, no implementado. H086 priorizó R5 (M13); M14 sigue diferido, candidato inmediato.
+**Referencias cruzadas:** H085, H086. M12.

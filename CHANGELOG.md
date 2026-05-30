@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H086 (2026-05-30)
+
+- `parser.py` v18.06→18.07: cascada de dispositivo Tier 1→2→3→3b→4 colapsada a motor `_barrer()` único + 4 detectores `_cand_*` + 5 llamadas configuradas (R5/M13). `_T2_PATS`/`_T3B_ARG_RE`/`_RE_ASI` a nivel de módulo. `resolver_dispositivo` 223→63 líneas; archivo −47. Sin cambio de comportamiento: check_regresion [CLEAN].
+- `output/parser/*.csv`: sin cambios (0 delta, idénticos al golden).
+
+## H085 (2026-05-30)
+
+- `parser.py` v18.05→18.06: cascada de dispositivo Tier 1→4 extraída de `procesar_archivo` a `resolver_dispositivo()`. Refactor de extracción pura, 0 cambios de comportamiento. `procesar_archivo` 757→543 líneas. check_regresion [CLEAN], 4/4 CSV idénticos al golden.
+- Outputs canónicos: sin cambios (0 delta vs golden).
+
 ## H079 (2026-05-27)
 
 - `parser.py` v18.03→v18.04: outcome `deja_sin_efecto` nuevo (87 casos de "otro"). Procedente regex expandido a zona fallback: "se declara formalmente/parcialmente procedente" + "procedente el recurso" en aposición (56 casos de "otro", 7 de inadmisible_280). otro 893→757. 0 regresiones en revoca/confirma.

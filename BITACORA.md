@@ -7382,3 +7382,85 @@ De los tres snapshots pendientes de M02, dos ya no existen; queda solo archivo/s
 **Commits:** H084 — harness + golden (red para refactor); docs (BITACORA + DEUDA M12). Push de bcc143f (H083) pendiente desde H083.
 
 **Versiones:** sin cambios en scripts canónicos del pipeline (parser.py v18.05). Nuevo: check_regresion.py (infra de tests, no canónico).
+
+## H085 — Primer refactor del parser bajo la red: extracción de la cascada de dispositivo (2026-05-30)
+
+**Objetivo:** estrenar la red de regresión (M12) con un refactor de extracción pura — sacar la cascada de dispositivo Tier 1→4 de `procesar_archivo` a una función nombrada, sin cambiar comportamiento.
+
+### H085-01 — Decisión de candidato (R1)
+
+Sobre el diagnóstico de deuda estructural de H084 se evaluaron los candidatos por impacto/REE/riesgo/ganancia. R3 (M07/M08) requería `auditar_fallo.py` (no disponible esta sesión); R4 (M03, unidad por línea) está parqueado post-tesis. Quedó R1 (extracción de la cascada) como estreno: contrato contenido, validación binaria, riesgo bajo, y habilita el refactor posterior de la lógica de la cascada.
+
+### H085-02 — Verificación del contrato de extracción
+
+Lectura del código real antes de cortar: la cascada ocupa las líneas 2857–3070. Sus variables internas (`inicio_busqueda`, `fin_busqueda`, `dictamen_end`) y las temporales no se usan aguas abajo; los únicos valores que cruzan la frontera son `por_ello_idx` y `por_ello_text`. Entradas: `bloque`, `apertura_rel`, `lineas_dictamen`, `inicio_votos_indiv`, todas calculadas antes. Contrato confirmado con grep, no asumido.
+
+### H085-03 — Refactor aplicado y validación
+
+Cascada movida tal cual (dedent, 0 cambios de heurística) a `resolver_dispositivo(bloque, apertura_rel, lineas_dictamen, inicio_votos_indiv) → (por_ello_idx, por_ello_text)`, insertada antes de `procesar_archivo`; el bloque original reemplazado por la llamada de 3 líneas. `procesar_archivo` 757→543 líneas.
+
+Validación: check de partida [CLEAN] (golden sano) → branch `refactor/h085-r1-resolver-dispositivo` → check post-refactor [CLEAN] (4/4 CSV idénticos al golden). Falsa alarma resuelta en el camino: un primer run validó el parser sin patchear (archivo no entregado todavía); confirmado con `Select-String "def resolver_dispositivo" scripts\pipeline\parser.py` + `git status` (modified) que el [CLEAN] definitivo corre sobre el refactor real.
+
+### H085-04 — Versionado y decisión de trazabilidad
+
+`parser.py` v18.05→18.06 (minor, refactor estructural). Verificado que `__version__` solo se imprime (líneas 47 y 3592), no entra en ningún CSV → el bump no afecta el [CLEAN].
+
+Propuesta de registrar la versión generadora dentro de los CSV: rechazada por diseño. Meter la versión en columna rompería el golden y convertiría cada bump en regresión espuria, inutilizando el harness para distinguir lógica de etiqueta; además cambia el esquema de datasets ya publicados (Dataverse). Se adoptó manifiesto sidecar como diseño (M14), diferido a H086.
+
+### H085 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 193 sumario: 160 con_link + 33 editorial). Idéntico al golden (refactor puro, 0 delta).
+- **Sin firma:** 16 / 5669 fallos (0.28%). Cobertura firma 99.72%.
+- **Votos:** 27463 filas.
+- **Outcomes / voting patterns / status de localización:** idénticos al golden, sin cambios.
+
+**Outputs canónicos (idénticos al golden, [CLEAN]):**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27463 filas.
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+
+**Scripts modificados:** `scripts/pipeline/parser.py` v18.06 (+`resolver_dispositivo`, `procesar_archivo` 757→543).
+
+**Versiones canónicas:** parser.py v18.06; resto sin cambios.
+
+**Commits:** 1 — `refactor(parser): extraer cascada dispositivo a resolver_dispositivo() (H085 R1)`. Pendiente el commit de docs.
+
+## H086 — Colapso de la cascada de dispositivo a motor parametrizado (R5/M13) (2026-05-30)
+
+**Objetivo:** sobre la cascada ya aislada por R1 (H085), colapsar las 5 capas Tier 1→2→3→3b→4 —el mismo bucle copiado 5 veces— a un motor `_barrer()` único parametrizado, sin cambiar comportamiento. Primer refactor de *lógica* (no extracción pura) bajo la red M12.
+
+### H086-01 — Decisión de candidato (R5)
+
+Sobre el set del prompt H086 se eligió R5 (colapso de los 5 tiers) por estar la cascada fresca y la función ya chica con red. Descartados para esta sesión: M14 (manifiesto sidecar, cambio acotado pero de otro frente), R2 (classify_outcome gate+action, arrastra la duplicación 280/ac4) y frente D/B (cambio de comportamiento). R5 difiere de R1 en que NO es extracción pura: reescribe lógica, riesgo medio.
+
+### H086-02 — PoC del motor `_barrer` aislado (equivalencia)
+
+Las 5 capas difieren solo en 4 perillas (rango, exclusión de dictamen, detector, fallback); todo lo demás —skip de vacías, armado del chunk (≤6 líneas o hasta el primer `.`), validación de firma en k+1..k+41— era idéntico verbatim. Motor único `_barrer(bloque, rango, lineas_dictamen, *, excluye_dictamen, es_candidato, permite_fallback)` + 4 detectores `_cand_*` (las closures reusan los helpers reales del parser, no reimplementan). Equivalencia verificada como oráculo contra la `resolver_dispositivo` original: 21 casos dirigidos (cada tier y cada rama) + 9 adversariales (preempción T1>T3, rango vacío `inicio>fin`, T2-sin-firma, borde de ventana k+40/k+41) + 60.000 fuzz aleatorios (seed 15052026), todos idénticos. Sobre datos reales: 5644/5644 dispositivos del corpus reconocidos por las closures (0 bugs de transcripción). Argumento estructural además del empírico: chunk y firma están anclados a `k` (independientes del detector), y la única reescritura real —Tier 2 validaba firma per-patrón, ahora una vez tras "algún patrón pasó la guarda"— es equivalente porque firma(k) no depende del patrón.
+
+### H086-03 — Refactor aplicado y decisiones de diseño
+
+Dos decisiones de diseño: (a) `_T2_PATS`/`_T3B_ARG_RE`/`_RE_ASI` subidos a nivel de módulo (antes se compilaban en cada una de las ~5862 llamadas) — los 12 literales raw quedan byte-idénticos, solo se mudan y renombran, verificado byte a byte; (b) la cascada de 5 llamadas en orden NO se data-ificó en una lista de configs: los rangos dependen de valores de runtime y el orden codifica prioridad de dominio, las 5 llamadas explícitas con `if idx is None` se leen mejor (elegante ≠ máximamente comprimido). `resolver_dispositivo` 223→63 líneas; `_barrer` 36; archivo 3650→3603 (−47).
+
+### H086-04 — Validación de producción y versionado
+
+Ciclo: check de partida [CLEAN] (golden sano) → branch `h086-r5-barrer` → reemplazo de `parser.py` → check_regresion post-refactor [CLEAN] (4/4 CSV idénticos al golden, 5862 reparseados). `parser.py` v18.06→18.07 (minor, refactor estructural). El bump no afecta el [CLEAN]: `__version__` solo se imprime, no entra en ningún CSV.
+
+### H086 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 193 sumario: 160 con_link + 33 editorial). Idéntico al golden (refactor sin cambio de comportamiento, 0 delta).
+- **Sin firma:** 16 / 5669 fallos (0.28%). Cobertura firma 99.72%.
+- **Votos:** 27463 filas.
+- **Outcomes / voting patterns / status de localización:** idénticos al golden, sin cambios.
+
+**Outputs canónicos (idénticos al golden, [CLEAN]):**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27463 filas.
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+
+**Scripts modificados:** `scripts/pipeline/parser.py` v18.07 (+`_barrer`, +`_cand_estructural/_cand_t2/_cand_t3b/_cand_t4`, +constantes de módulo `_T2_PATS/_T3B_ARG_RE/_RE_ASI`; `resolver_dispositivo` 223→63).
+
+**Versiones canónicas:** parser.py v18.07; resto sin cambios.
+
+**Commits:** 1 — `refactor(parser): colapsar cascada dispositivo a motor _barrer parametrizado (H086 R5)`. Pendiente el commit de docs.
