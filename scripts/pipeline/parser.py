@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.08"  # H089 M13: detector de sumarios extraído a clasificar_tipo_entrada
+__version__ = "18.09"  # H090 R2: classify_outcome sede única del fallback 280/ac4 (dedup)
 
 import re
 import csv
@@ -398,7 +398,9 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     610 "otro" reclasificados, 0 regresiones.
 
       0. Normalizar textos: _unhyphenate + whitespace.
-      1. Determinar outcome del dispositivo (por_ello_text)
+      1. Determinar outcome del dispositivo (por_ello_text). Si por_ello_text
+         está vacío → base "sin_dispositivo" (R2 H090: sede única del fallback
+         280/ac4, antes duplicada en un bloque inline de procesar_archivo).
       2. Si el dispositivo da merit outcome (hace_lugar, procedente, revoca,
          confirma, rechaza, nulidad, competencia, abstracto, originaria,
          desistimiento), NO sobreescribir con 280/ac4 del considerando.
@@ -417,18 +419,21 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     por_ello_text = re.sub(r"\s+", " ", por_ello_text).strip()
     considerando_text = re.sub(r"\s+", " ", considerando_text).strip()
 
-    # Paso 1: outcome del dispositivo
-    outcome_disp = "otro"
-    for label, pat in OUTCOME_PATTERNS_DISPOSITIVO:
-        if pat.search(por_ello_text):
-            outcome_disp = label
-            break
+    # Paso 1: outcome del dispositivo (centinela si no hay por_ello)
+    if not por_ello_text:
+        base = "sin_dispositivo"
+    else:
+        outcome_disp = "otro"
+        for label, pat in OUTCOME_PATTERNS_DISPOSITIVO:
+            if pat.search(por_ello_text):
+                outcome_disp = label
+                break
+        # Paso 2: si es merit, no sobreescribir
+        if outcome_disp in MERIT_OUTCOMES:
+            return outcome_disp
+        base = outcome_disp
 
-    # Paso 2: si es merit, no sobreescribir
-    if outcome_disp in MERIT_OUTCOMES:
-        return outcome_disp
-
-    # Paso 3: buscar 280 / acordada 4 en considerando
+    # Paso 3: buscar 280 / acordada 4 en considerando (sede única, R2 H090)
     if considerando_text:
         if RE_280_CONSIDERANDO.search(considerando_text):
             return "inadmisible_280"
@@ -439,7 +444,7 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
                 or RE_ACORDADA_4_DIRECTA.search(considerando_text)):
             return "inadmisible_acordada_4"
 
-    return outcome_disp
+    return base
 
 # ── H078: es_queja + queja_resultado ─────────────────────────────────────────
 # "Queja" = recurso de hecho = presentación directa. Tres sinónimos para la
@@ -3046,15 +3051,9 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             _lineas_no_cons |= set(range(inicio_votos_indiv, len(bloque)))
         considerando_text = extraer_considerando(bloque, por_ello_idx, _lineas_no_cons)
 
-        outcome = classify_outcome(por_ello_text, considerando_text) if por_ello_text else "sin_dispositivo"
-        if outcome == "sin_dispositivo" and considerando_text:
-            _ct = _unhyphenate(considerando_text)
-            if RE_280_CONSIDERANDO.search(_ct) or RE_280_LIBRE.search(_ct):
-                outcome = "inadmisible_280"
-            elif (RE_ACORDADA_4_CONSIDERANDO.search(_ct)
-                  or RE_ACORDADA_4_REGLAMENTO.search(_ct)
-                  or RE_ACORDADA_4_DIRECTA.search(_ct)):
-                outcome = "inadmisible_acordada_4"
+        # R2 (H090): classify_outcome es la sede única del fallback 280/ac4,
+        # incluido el caso sin dispositivo (por_ello_text vacío → "sin_dispositivo").
+        outcome = classify_outcome(por_ello_text, considerando_text)
 
         # H078: queja + cuestion federal (sobre textos completos, pre-truncamiento)
         es_queja, queja_resultado = classify_queja(por_ello_text)
