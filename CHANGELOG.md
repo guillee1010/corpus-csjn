@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H092 (2026-05-30)
+
+- `parser.py` v18.10→v18.11: campo nuevo `causa_inadmisibilidad` (gate de admisibilidad, aditivo; vocabulario controlado de la Corte). Función `clasificar_causa_inadmisibilidad` + detectores anclados de cola + residual bipartido (remite_dictamen / sin_causal_explicita). Rename `MERIT_OUTCOMES`→`OUTCOMES_NO_FALLBACK_280` en `classify_outcome` (cosmético, sin cambio de valores).
+- `output/parser/csjn_casos.csv`: +1 columna `causa_inadmisibilidad` tras `outcome` (5862 filas, sin cambio de conteo). votos/zonas/editorial sin cambio. Re-golden consciente de `casos`.
+- `scripts/diagnostico/H092/`: `sub_gate.py` (PoC), `check_columna.py` (validador column-aware).
+
 ## H091 (2026-05-30)
 
 - `parser.py` v18.09→v18.10: cierre de M13. Bucle de votos/disidencias extraído a `detectar_votos_disidencias()` y refinamiento de status a `refinar_status_localizacion()`. `procesar_archivo` 513→458 líneas, orquestador puro. Extracción pura, 0 casos afectados (check_regresion [CLEAN] 4/4, 0-delta).

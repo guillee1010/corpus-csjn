@@ -7702,3 +7702,42 @@ Validación: `poc_status.py` — old (con branching muerto) vs new (colapsado) e
 **Versiones canónicas:** parser.py v18.10; resto sin cambios.
 
 **Commits:** 2 — `refactor(parser): cerrar M13 - extraer detectar_votos_disidencias + refinar_status_localizacion (H091)` ([hash]) + `chore(manifiesto): registrar parser v18.10 (H091, sha256 sin cambios)` ([hash]).
+
+## H092 — Gate de admisibilidad: campo nuevo causa_inadmisibilidad (2026-05-30)
+
+**Objetivo:** implementar la mitad de fondo del ítem 6 del roadmap (outcome como par gate+action): un campo nuevo y ADITIVO de causa de inadmisibilidad con vocabulario controlado de la Corte, sin relabel del outcome de mérito.
+
+### H092-01 — Diseño (cuatro decisiones cerradas)
+
+(1) Es modelado aditivo, NO relabel: la frontera 280 no es bug — el short-circuit de merit en `classify_outcome` deja los 70 mixtos como merit a propósito. El gate es campo NUEVO al lado del outcome. (2) Vocabulario controlado = la propia taxonomía de la Corte (~22 causales del tablero `resueltos_2025`). (3) Los números del tablero NO se joinean (docket completo 24.545 vs nuestro publicado): sirven como vocabulario y techo de validación por causal. (4) Reconciliar los dos `MERIT_OUTCOMES`: el de `classify_outcome` (~411) significa "no me pises con el 280", el de `procesar_archivo` (~3147) significa "qué es fondo" (alimenta `is_merit`).
+
+### H092-02 — PoC sub_gate.py + hallazgo estructural
+
+Universo gate-genérico = 1326 (desestima 541 + otro 688 + inadmisible 24 + improcedente 21 + mal_concedido + desierto). Hallazgo: la cola de la taxonomía rinde poco en lo publicado y es estructural — 320/541 desestima son quejas, 119 remiten al dictamen del Procurador (la causal vive ahí), y cada término es polisémico como lo fue el art.280 (mención cruda ≠ causal). Solución: detección ANCLADA al recurso decidido. Tras anclar y muestrear a mano: `FALTA_SENTENCIA_DEFINITIVA` 34 y `FALTA_FUNDAMENTACION_AUTONOMA` 10 limpias (sacar "no basta" eliminó los FP de competencia originaria); `FUERA_DE_TERMINO` 17→10 al restringir a outcomes gate + excluir "constancia/declaración/demanda extemporánea"; `DEPOSITO_PREVIO` 4 (la causa real es la intimación incumplida, NO los 97 "perdido el depósito" que son efecto). Sin solapes, todo bajo el techo del tablero. Hallazgo H1/H4: el residual `INADMISIBLE_REMITE_DICTAMEN` (139) documenta la delegación de la fundamentación en la Procuración.
+
+### H092-03 — Implementación en parser + rename
+
+`clasificar_causa_inadmisibilidad(outcome, considerando, por_ello, dictamen_presente)`: 5 nativas vía `OUTCOME_A_CAUSA` (280/ac4/abstracto/desistimiento/caducidad) + 4 de cola ancladas sobre `OUTCOMES_GATE_GENERICO` (GATEKEEP menos nativas; `otro` NO entra al residual, queda `""` salvo causal explícita) + residual bipartido. Wiring tras `outcome`; columna nueva tras `outcome` en el dict, en la lista `fieldnames` del writer y en el template de sumarios (schema idéntico). Rename `MERIT_OUTCOMES`→`OUTCOMES_NO_FALLBACK_280` en `classify_outcome` (sin cambio de valores; desambigua del set de `procesar_archivo`).
+
+### H092-04 — Validación y re-golden consciente
+
+`check_columna.py` (column-aware): `resto idéntico: True` — `casos` igual al golden salvo la columna nueva tras `outcome`. `check_regresion`: votos/zonas/editorial `[OK]` byte-idénticos, `casos` re-goldeado conscientemente (cambio de comportamiento, no refactor). `--verify [CLEAN] 54` (csjn_casos.csv sha256 4cd12105cf30, corpus digest sin cambios 9fdd4726ce6d). Invariante verificado: 0 fugas de mérito/`otro` entre `causa != ""`.
+
+### H092 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 160 sumario_con_link + 33 sumario_editorial). Sin cambio de conteo.
+- **Distribución `causa_inadmisibilidad`:** vacío/no-gate 4633 · INADMISIBLE_SIN_CAUSAL_EXPLICITA 441 · ART_280 238 · INADMISIBLE_REMITE_DICTAMEN 139 · CUESTION_ABSTRACTA 89 · ACORDADA_4_2007 50 · FALTA_SENTENCIA_DEFINITIVA 34 · CADUCIDAD_INSTANCIA 11 · FALTA_FUNDAMENTACION_AUTONOMA 10 · DESISTIMIENTO 10 · FUERA_DE_TERMINO 10 · DEPOSITO_PREVIO 4 (gateados 1036).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas (+1 columna `causa_inadmisibilidad`).
+- `output/parser/csjn_casos_votos.csv` — 27463 filas (byte-idéntico).
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos (byte-idéntico).
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones (byte-idéntico).
+
+**Scripts creados:** `scripts/diagnostico/H092/` — `sub_gate.py` (PoC), `check_columna.py` (validador column-aware), `H092_causa_inadmisibilidad.patch`.
+
+**Parser:** v18.10 → v18.11.
+
+**Commits:** ee0a62d (parser + outputs + golden + diagnósticos H092; arrastró también `estadisticas/output_estadistica/` y `arbol.txt` que estaban untracked).
+
+**Pendiente:** validar la cola contra `.md` reales (eyeball de los ~58 hits + recall); habilitar candidatas de cola (SALTO_DE_INSTANCIA, FALTA_DENEGACION_REX, FALTA_RELACION_DIRECTA, FALTA_INTRODUCCION_OPORTUNA_CF, TRIBUNAL_SUPERIOR_CAUSA); columna `causa_inadmisibilidad_parcial` (frontera 280, ítem 3); reclasificación de `is_merit` (rechaza/competencia/originaria).
