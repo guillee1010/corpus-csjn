@@ -2,6 +2,13 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H090 (2026-05-30)
+
+- `parser.py` v18.08→18.09: unificar el fallback 280/ac4 en `classify_outcome` como sede única (R2, dedup). El bloque inline de `procesar_archivo` (caso `sin_dispositivo`) colapsa a una línea. Refactor behavior-preserving — check_regresion [CLEAN] 4/4, outputs 0-delta. Commit d0ced2b.
+- `output/parser/_manifest.json`: regenerado, registra parser 18.09 (sha256 de los CSV sin cambios).
+- `scripts/diagnostico/H090/extraer_por_outcome.py`: nuevo extractor de diagnóstico (no toca el pipeline).
+- Outputs canónicos: sin cambios (5862 / 27463 / 140956 / 151 / 11445).
+
 ## H088 (2026-05-30)
 
 - `generar_manifiesto.py`: v1.0→1.1, `schema_version` 2→3. Nueva capa `corpus` derivada de `source_file` (46 `.md`, sha256+n_bytes por archivo + digest rolled-up); fail-loud si falta una fuente declarada; `entrada_artefacto()` generalizada a raíz del repo; `--verify` extendido al corpus. No toca CSV.

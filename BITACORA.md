@@ -7573,3 +7573,90 @@ El listado real de `corpus/` mostró 50 `.md` con nomenclatura inconsistente de 
 **Scripts modificados:** `scripts/pipeline/generar_manifiesto.py` v1.1.
 **Versiones canónicas:** generar_manifiesto.py v1.1; resto sin cambios (parser.py v18.07).
 **Commits:** 1 — `feat(manifiesto): sellar corpus crudo derivado de source_file + digest (M14 ext)` (`f8233ff`). Pendiente el commit de docs.
+
+## H089 — M13 cont.: detector de sumarios extraído a clasificar_tipo_entrada (2026-05-30)
+
+**Objetivo:** seguir el desmonte de `procesar_archivo` con la red puesta — extraer el detector de sumarios a una función nombrada, sin cambio de comportamiento (golden [CLEAN]).
+
+### H089-01 — Decisión de candidato
+
+Del set del prompt H089 se eligió **M13 cont. (detector de sumarios)**: el desmonte más limpio, refactor de extracción gateado a `check_regresion`. Diferidos: R2 (classify_outcome gate+action, arrastra la duplicación 280/ac4), frente B (materia) y frente 280 (taxonomía del 280 parcial) por ser cambio de comportamiento, B090 (Tier 5). En la lectura previa se relevó una costura que el prompt subestimaba: `zonificar_bloque` se computaba en medio del detector editorial y su `_zonas_linea` se reutiliza río abajo (lineas_dictamen, residuo, M09, extraer_segmentos), así que la extracción no era trivialmente pura.
+
+### H089-02 — Implementación
+
+Detector extraído a la función top-level `clasificar_tipo_entrada(bloque, zonas_linea) → "sumario_con_link" | "sumario_editorial" | None`, ubicada tras `zonificar_bloque`. En `procesar_archivo`: `zonificar_bloque` hoisteada arriba del detector (un solo cómputo, antes enterrado en el bloque editorial) y los dos bloques inline con `continue` (sumario_con_link vía RE_SUMARIO_LINK + sumario_editorial vía zonas) colapsados a una rama única. Decisión de diseño: `zonificar_bloque` es pura, así que adelantarla respecto del check sumario_con_link no cambia comportamiento; con_link mantiene prioridad por el return temprano dentro de la función. Extracción casi pura: la única costura es el reorden del zonificador (ahora corre también para los 160 sumario_con_link, costo marginal, sin efecto en outputs), cero reescritura de heurística. `procesar_archivo` −23 líneas; +29 por la función con docstring. parser v18.07→18.08.
+
+### H089-03 — Validación
+
+PoC de equivalencia old↔new (lógica inline original reproducida vs función extraída) sobre 2009 bloques cubriendo las tres ramas (sumario_con_link 245 / sumario_editorial 1754 / fallo None 10) y el borde crítico (bloque con link + cuerpo → gana sumario_con_link en ambas versiones): **0 discrepancias**. En máquina real: `check_regresion` **[CLEAN] 4/4**, los 4 CSV byte-idénticos al golden (5862 casos / 27463 votos / 140956 zonas / 151 editoriales), parser v18.08.
+
+### H089-04 — Estado de M13 tras la extracción
+
+- Detector de sumarios: **HECHO**.
+- `es_originaria` (L1000): confirmada YA top-level → sale del alcance de M13, queda como candidata de **recalibración** (art. 117), no de extracción. (El "Pendiente: extraer es_originaria" del texto viejo de DEUDA estaba desactualizado; corregido.)
+- `classify_queja` / `classify_cuestion_federal` / `find_tribunal_origen` / `extraer_caratula_v1`: ya son funciones nombradas que el cuerpo solo orquesta.
+- Resto de lógica sustantiva aún inline: el bucle de detección de votos/disidencias (`marcadores_votos`) y el refinamiento de `status_localizacion` por anclas.
+
+### H089 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 160 sumario_con_link + 33 sumario_editorial). Sin cambios (refactor 0-delta).
+- **Parser:** v18.08.
+- **Sin firma:** 16 / 5669 fallos (sin cambios). **Votos:** 27463 filas.
+- **Trazabilidad:** sin cambios en datos; pendiente de cierre regenerar `_manifest.json` (registra parser 18.08 vía ast; sha256 de los CSV intactos).
+
+**Outputs canónicos (sin cambios, [CLEAN] contra golden):**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27463 filas.
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+
+**Scripts modificados:** `scripts/pipeline/parser.py` v18.08.
+**Commits:** 1 (parser v18.08 — detector de sumarios → clasificar_tipo_entrada).
+
+## H090 — R2: dedup de la lógica 280/ac4 (sede única en classify_outcome) (2026-05-30)
+
+**Objetivo:** cerrar la duplicación de la cascada 280/ac4 entre `classify_outcome` y el bloque inline de `procesar_archivo`, con la red puesta (golden [CLEAN], sin re-golden).
+
+### H090-01 — Decisión de candidato
+
+Del set del prompt H090 se eligió **R2** (dedup 280/ac4 = ítem 6 del roadmap, "outcome como par gate+action"): refactor con red, riesgo bajo, cierra algo validado y commiteado en una sesión. Diferidos: scoping por zonas y frentes 280/B (cambio de comportamiento, re-golden), B090 (Tier 5), y el resto de M13 (bucle de votos + `status_localizacion`). En el camino se relevó la solidez del 280 y la frontera del parcial (H090-04), sin aplicar nada al pipeline.
+
+### H090-02 — La duplicación y el refactor
+
+La lógica 280/ac4 vivía en dos sedes con condición mutuamente excluyente pero cuerpo idéntico: (sede 1) `classify_outcome` —cuando hay `por_ello_text` y el dispositivo no da merit—; (sede 2) inline en `procesar_archivo` —cuando `por_ello_text` está vacío (`sin_dispositivo`)—. R2 unifica en `classify_outcome`: maneja el caso vacío con un guard explícito `if not por_ello_text: base = "sin_dispositivo"` (necesario porque el catch-all `("otro", r".*")` matchearía el string vacío) y corre el fallback 280/ac4 una sola vez; el call site colapsa a `outcome = classify_outcome(...)`. Única costura medida: la rama vacía pasa a correr las regexes sobre el considerando whitespace-normalizado (antes solo des-guionado), asimetría que solo puede agregar matches.
+
+### H090-03 — Validación (equivalencia por triplicado + golden)
+
+1. Probe de whitespace sobre los 25 `sin_dispositivo` con considerando no vacío: 0 flips del verdicto 280/ac4 (la sede 2 hoy nunca reclasifica positivamente).
+2. Equivalencia old↔new (pipeline de dos sedes vs `classify_outcome` unificada) sobre los 5862 casos, con los 30 patrones del dispositivo + 5 regexes 280/ac4 cargados verbatim del parser: 0 discrepancias.
+3. Equivalencia contra la `classify_outcome` realmente escrita en el archivo (extraída vía `ast`): 0 discrepancias sobre los 5862.
+
+En máquina real: `check_regresion` **[CLEAN] 4/4** (5862/27463/140956/151 byte-idénticos al golden), parser v18.09. Manifiesto regenerado: registra `parser` 18.09, sha256 de los CSV sin cambios (0-delta), `--verify` [CLEAN] 54 artefactos.
+
+### H090-04 — Frente 280 relevado (NO aplicado)
+
+Diagnóstico con `scripts/diagnostico/H090/extraer_por_outcome.py` (extractor parametrizado: `--outcome` / `--exclude-outcome` / `--considerando-regex`). Recortes: 280 (238), ac4 (50), frontera_280 (70).
+
+- **Solidez del 280 (sin contaminación):** de los 238 `inadmisible_280`, 165 tienen disidencia, pero 0 filtran texto de disidencia al `considerando_text` — el corte en `por_ello_idx` deja la disidencia (posterior al dispositivo de la mayoría) fuera del rango. La inversa también está cubierta: si la mayoría resuelve el fondo, el dispositivo da merit y el gate ni mira el considerando. Residuo: 4 casos arrancan con encabezado propio por fallback `inicio_cons=0`, no residuo ajeno, sin misclasificar.
+- **Frontera del 280 parcial:** 70 casos mencionan `art.280` en el considerando pero quedan con outcome merit. 28 con 'parcial' explícito en el dispositivo (concede parte + 280 al resto, mixto genuino); 42 sin 'parcial', y dentro de estos `art.280` es polisémico (referencias al 2º/último párrafo = memorial/traslado, distinto del rechazo discrecional del 1er párrafo). El short-circuit de merit los mantiene bien como merit. Decisión de fondo para el Frente 280: el 280 opera a nivel agravio, no caso; la columna `outcome` (case-level) no puede representar gatekeeping parcial. (DEUDA ítem 3.)
+
+### H090 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 160 sumario_con_link + 33 sumario_editorial). Sin cambios (refactor 0-delta).
+- **Parser:** v18.09.
+- **Sin firma:** 16 / 5669 fallos (sin cambios). **Votos:** 27463 filas.
+- **M13:** sigue EN PROGRESO (resta el bucle de detección de votos/disidencias y el refinamiento de `status_localizacion`).
+- **Trazabilidad:** `_manifest.json` regenerado a parser 18.09 (sha256 intactos), `--verify` [CLEAN] 54.
+
+**Outputs canónicos (sin cambios, [CLEAN] contra golden):**
+- `output/parser/csjn_casos.csv` — 5862 filas.
+- `output/parser/csjn_casos_votos.csv` — 27463 filas.
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones.
+- `output/parser/csjn_editorial_indice_partes.csv` — 11445 filas.
+
+**Scripts modificados:** `scripts/pipeline/parser.py` v18.08→18.09.
+**Scripts creados:** `scripts/diagnostico/H090/extraer_por_outcome.py` (+ recortes `casos_inadmisible_280.csv` / `casos_inadmisible_acordada_4.csv` / `casos_frontera_280.csv`).
+**Artefacto actualizado:** `output/parser/_manifest.json` (parser 18.09, sha256 sin cambios).
+**Versiones canónicas:** parser.py v18.09; resto sin cambios.
+**Commits:** 2 — `refactor(parser): unificar fallback 280/ac4 en classify_outcome como sede única (H090 R2)` (d0ced2b) + `chore(manifiesto): registrar parser v18.09 (H090 R2, sha256 sin cambios)`. Pendiente el commit de docs + el script de diagnóstico.
