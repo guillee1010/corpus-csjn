@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.14"  # H095: causal nueva RESOLUCION_NO_RECURRIBLE (irrecurribilidad de las decisiones propias de la Corte, Fallos 316:1706); chequeada ultima en gate-generico
+__version__ = "18.15"  # H096: guard EXCL en bloque DEPOSITO (B103); DEPOSITO_PREVIO 4->2, SIN_CAUSAL 413->415, gate total sin cambio
 
 import re
 import csv
@@ -492,6 +492,16 @@ RE_CAUSA_DEPOSITO = re.compile(
     r"(?:integrad|efectuad|abonad|acreditad|cumplid)\w+\s+(?:con\s+)?el\s+dep[oó]sito|"
     r"intimad\w+\s+a\s+(?:efectuar|integrar|abonar)\s+el\s+dep[oó]sito"
     r".{0,120}?(?:no\s+|sin\s+)", re.I)
+# H096 (B103): el deposito describe una resolucion ANTERIOR de la Corte ("la
+# resolucion de fs. X que desestimo la queja ... no haberse ... el deposito");
+# lo decidido es una revocatoria/planteo CONTRA esa resolucion, no un gate sobre
+# el recurso presente -> DEPOSITO_PREVIO seria FP. Mismo discriminador holding-
+# vs-antecedente que B100/B101, de nivel considerando (343_p166 dice "planteo",
+# no "revocatoria"). Anclado al considerando (co), inmune al truncado.
+RE_CAUSA_DEPOSITO_EXCL = re.compile(
+    r"la\s+resoluci[oó]n\s+de\s+fs\.?\s*\d+[\s,]+que\s+desestim[oó]\b"
+    r".{0,80}?no\s+haberse\s+(?:efectuad|integrad|abonad|acreditad|cumplid)\w*"
+    r"\s+(?:con\s+)?el\s+dep[oó]sito", re.I)
 RE_CAUSA_FUERA_TERMINO = re.compile(
     r"(?:recurso|queja|apelaci[oó]n|remedio|presentaci[oó]n)\s+\w*\s*"
     r"(?:fue\s+|ha\s+sido\s+|resulta\s+|es\s+|deducid[ao]\s+)?"
@@ -557,7 +567,7 @@ def clasificar_causa_inadmisibilidad(outcome, considerando_text, por_ello_text,
             return "FALTA_SENTENCIA_DEFINITIVA"
         if RE_CAUSA_FUNDAMENTACION.search(txt):
             return "FALTA_FUNDAMENTACION_AUTONOMA"
-        if RE_CAUSA_DEPOSITO.search(txt):
+        if RE_CAUSA_DEPOSITO.search(txt) and not RE_CAUSA_DEPOSITO_EXCL.search(co):
             return "DEPOSITO_PREVIO"
         if (RE_CAUSA_FUERA_TERMINO.search(txt)
                 and not RE_CAUSA_FUERA_TERMINO_EXCL.search(txt)
