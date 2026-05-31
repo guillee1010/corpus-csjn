@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.13"  # H094: causales de cola solo con outcome de rechazo (gate-generico); fix FP FALTA_SENTENCIA_DEFINITIVA en outcome 'otro' (334_p419, match en dictamen/antecedente)
+__version__ = "18.14"  # H095: causal nueva RESOLUCION_NO_RECURRIBLE (irrecurribilidad de las decisiones propias de la Corte, Fallos 316:1706); chequeada ultima en gate-generico
 
 import re
 import csv
@@ -518,6 +518,22 @@ RE_CAUSA_REMITE_DICTAMEN = re.compile(
     r"se\s+remite|comparte\s+(?:los\s+)?(?:sus\s+)?fundamentos|"
     r"adecuado\s+tratamiento\s+en\s+el\s+dictamen|"
     r"dictamen\s+(?:de|del|de\s+la)\s+(?:se[ñn]or|se[ñn]ora)\s+[Pp]rocurador", re.I)
+# H095: irrecurribilidad de las decisiones propias de la Corte (Fallos 316:1706).
+# Reposicion/revocatoria/aclaratoria/nulidad contra una decision del propio
+# Tribunal, rechazada porque sus decisiones no son susceptibles de recurso.
+# Anclada al FUNDAMENTO del considerando (el dispositivo generico "se desestima
+# lo solicitado" no alcanza; el ancla del por_ello sobre/sub-captura). Captura
+# "doctrina invocada", NO distingue holding de obiter (limite del regex sobre
+# OCR; ver DEUDA M/B running-heads). EXCL: el caso donde la Corte HACE LUGAR por
+# excepcion (344_p1904: queda en su causal de merito).
+RE_CAUSA_NO_RECURRIBLE = re.compile(
+    r"(?:las\s+(?:decisiones|sentencias|resoluciones)\s+(?:dictadas?\s+)?"
+    r"(?:de|por)\s+(?:esta\s+|la\s+)?corte|las\s+sentencias\s+del\s+tribunal)"
+    r".{0,130}?no\s+son,?\s*(?:como\s+principio,?\s*)?suscepti\w*\s+de\s+"
+    r"(?:recurso|reposici[oó]n|revocatoria|nulidad)", re.I)
+RE_CAUSA_NO_RECURRIBLE_EXCL = re.compile(
+    r"(?:se\s+resuelve\s+)?hac(?:er|e)\s+lugar\s+(?:a\s+)?(?:al?\s+|la\s+)?"
+    r"(?:recurso\s+de\s+)?(?:reposici[oó]n|revocatoria)", re.I)
 
 
 def clasificar_causa_inadmisibilidad(outcome, considerando_text, por_ello_text,
@@ -547,6 +563,12 @@ def clasificar_causa_inadmisibilidad(outcome, considerando_text, por_ello_text,
                 and not RE_CAUSA_FUERA_TERMINO_EXCL.search(txt)
                 and not RE_CAUSA_FUERA_TERMINO_EXCL_DISP.search(pe)):
             return "FUERA_DE_TERMINO"
+        # H095: ULTIMA del bloque gate -> solo convierte lo que seria SIN_CAUSAL;
+        # por construccion no le roba a SD/FUND/DEPOSITO/FUERA. Ancla en el
+        # considerando (co); EXCL sobre el dispositivo (pe).
+        if (RE_CAUSA_NO_RECURRIBLE.search(co)
+                and not RE_CAUSA_NO_RECURRIBLE_EXCL.search(pe)):
+            return "RESOLUCION_NO_RECURRIBLE"
     if outcome == "otro":
         return ""   # catch-all sin causal explicita: no afirmar gatekeeping
     if (RE_CAUSA_REMITE_DICTAMEN.search(co)

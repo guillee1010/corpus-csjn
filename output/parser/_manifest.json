@@ -1,16 +1,16 @@
 {
   "schema_version": 3,
   "manifest_generator_version": "1.1",
-  "generated_at": "2026-05-30T18:59:32.511996+00:00",
+  "generated_at": "2026-05-31T04:52:15.218176+00:00",
   "git": {
-    "commit": "fa2f7a5fa4fa6c013c894cfab47e1a78a976aac1",
+    "commit": "fc8a9fd9e2969c50c5144246c8f48ca0b1c6a5ce",
     "dirty": true
   },
   "pipeline_scripts": {
     "detectar_paginas.py": "1.0",
     "construir_catalogo.py": "1.0",
     "cruzar_catalogo_y_mapa.py": "1.0",
-    "parser.py": "18.11",
+    "parser.py": "18.14",
     "parser_editorial.py": "1.0"
   },
   "corpus": {
@@ -279,15 +279,15 @@
     "csjn_casos.csv": {
       "path": "output/parser/csjn_casos.csv",
       "generated_by": "parser.py",
-      "generator_version": "18.11",
-      "sha256": "4cd12105cf3068b60b648084a0fffaacb833e2e061ec56cb8416cafda2943570",
+      "generator_version": "18.14",
+      "sha256": "e6000b588deb7455e31911420f8af8eeaa38e024395018e7da0630a29741f96f",
       "n_rows": 5862,
-      "n_bytes": 14029400
+      "n_bytes": 14029310
     },
     "csjn_casos_votos.csv": {
       "path": "output/parser/csjn_casos_votos.csv",
       "generated_by": "parser.py",
-      "generator_version": "18.11",
+      "generator_version": "18.14",
       "sha256": "16790218a2fcc1bac8bacf942a14e56ff6017996342bb85aeef907f684fa2464",
       "n_rows": 27463,
       "n_bytes": 10686928
@@ -295,7 +295,7 @@
     "csjn_casos_zonas.csv": {
       "path": "output/parser/csjn_casos_zonas.csv",
       "generated_by": "parser.py",
-      "generator_version": "18.11",
+      "generator_version": "18.14",
       "sha256": "5f4949c93a88510dc3a10f3647723286cfbe082764e547eb06c729d76fddd303",
       "n_rows": 140956,
       "n_bytes": 5693035
@@ -303,7 +303,7 @@
     "csjn_casos_editorial.csv": {
       "path": "output/parser/csjn_casos_editorial.csv",
       "generated_by": "parser.py",
-      "generator_version": "18.11",
+      "generator_version": "18.14",
       "sha256": "e8fa2ccf1e8e156704b68a63ff2fa2da464e619bb933230f2ce549783f5d8228",
       "n_rows": 151,
       "n_bytes": 8653
