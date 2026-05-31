@@ -2,6 +2,11 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H095 (2026-05-30)
+
+- `parser.py` v18.13→18.14: causal nueva `RESOLUCION_NO_RECURRIBLE` en `clasificar_causa_inadmisibilidad` (irrecurribilidad de las decisiones propias de la Corte, Fallos 316:1706). `RE_CAUSA_NO_RECURRIBLE` + `RE_CAUSA_NO_RECURRIBLE_EXCL`, anclada al fundamento del considerando, chequeada última en el bloque gate-genérico. 12 casos afectados.
+- `output/parser/csjn_casos.csv`: 5862 filas (12 celdas `causa_inadmisibilidad`: SIN_CAUSAL→RESOLUCION_NO_RECURRIBLE). Votos/zonas/editorial sin cambios.
+
 ## H094 (2026-05-30)
 
 - `parser.py` v18.12→18.13: las 4 causales de cola (SENTENCIA_DEFINITIVA, FUNDAMENTACION_AUTONOMA, DEPOSITO_PREVIO, FUERA_DE_TERMINO) solo se emiten con `outcome in OUTCOMES_GATE_GENERICO`. Fix FP en outcome `otro` (B101, 334_p419).
