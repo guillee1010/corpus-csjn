@@ -7945,3 +7945,32 @@ parser v18.14→v18.15. check_regresion [FAIL] solo 2 celdas de `csjn_casos.csv`
 **Scripts creados:** `scripts/diagnostico/H096/poc_b103_guard_deposito.py`.
 
 **Commits:** c593e77 (parser v18.15 + golden); manifiesto y docs en commits siguientes.
+
+### H096-05 — M16 parcial: explorador v6
+
+`scripts/explorador/exploradorv6.py` (sucede a v5). Agrega filtros para las
+categorías nuevas del gate y del proceso: `causa_inadmisibilidad`,
+`es_queja`/`queja_resultado`, `tipo_cuestion_federal`, `apertura_tipo`,
+`tribunal_origen_status`, flags is_originaria/is_full_bench/is_merit_decision/
+dictamen_presente (tri-estado), filtro por juez (desde `jueces_conocidos`,
+44 jueces) y rangos numéricos (n_jueces, n_disidencias, word_count). Todos los
+categóricos se autopoblan del CSV (sin listas hardcodeadas → robusto a drift
+del parser). Rediseño: sidebar en grupos colapsables (Búsqueda / Clasificación /
+Proceso / Panel / Métricas) + contador de selección + limpiar filtros; toggles
+de zona movidos del sidebar al panel de fuente del detalle (único lugar donde
+aplican). Vista principal con tabs Tabla / Resumen (distribuciones de la
+selección filtrada: outcome, causal, voting, queja, por tomo + indicadores) y
+descarga del subconjunto a CSV. Validación: compila; toda columna referenciada
+existe en el golden v18.15; lógica de cada filtro nuevo probada headless contra
+el CSV (conteos cuadran: queja 1993, con causal 1036, dictamen 3400). NO se
+levantó la app en vivo (sin zonas/votos/corpus en el entorno de armado). M16
+queda PARCIAL: falta separación explícita modo masivo / modo auditoría y panel
+inline de considerando+por_ello completos (hoy vía bloque `.md`).
+
+### H096-06 — CODEBOOK sincronizado a v1.1
+
+CODEBOOK.md → v1.1 (ref parser v18.01 → v18.15). Documentadas las 4 columnas
+que faltaban (`csjn_casos.csv` 39 → 43 cols): `causa_inadmisibilidad` (dict +
+Coded Values con las 12 causales + null), `es_queja`, `queja_resultado` (Coded
+Values), `tipo_cuestion_federal` (Coded Values). Tabl
+
