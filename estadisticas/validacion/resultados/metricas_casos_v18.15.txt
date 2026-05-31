@@ -1,0 +1,4 @@
+analizar_validacion.py v1.0  |  casos_v18.15
+planilla 653 filas | clave 653 filas | columnas: causa_inadmisibilidad, es_queja, outcome, queja_resultado, tipo_cuestion_federal
+
+>> Sin filas codificadas todavia. Estructura OK, esperando codificacion.
