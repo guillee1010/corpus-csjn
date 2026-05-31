@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H096 (2026-05-31)
+
+- `parser.py`: v18.14→v18.15. Guard `RE_CAUSA_DEPOSITO_EXCL` en el bloque DEPOSITO de `clasificar_causa_inadmisibilidad` (B103). 2 casos afectados.
+- `output/parser/csjn_casos.csv`: 5862 filas (cardinalidad sin cambio); 2 celdas `causa_inadmisibilidad` DEPOSITO_PREVIO→INADMISIBLE_SIN_CAUSAL_EXPLICITA (330_p1025, 343_p166).
+
+## H095 (2026-05-30)
+
+- `parser.py` v18.13→18.14: causal nueva `RESOLUCION_NO_RECURRIBLE` en `clasificar_causa_inadmisibilidad` (irrecurribilidad de las decisiones propias de la Corte, Fallos 316:1706). `RE_CAUSA_NO_RECURRIBLE` + `RE_CAUSA_NO_RECURRIBLE_EXCL`, anclada al fundamento del considerando, chequeada última en el bloque gate-genérico. 12 casos afectados.
+- `output/parser/csjn_casos.csv`: 5862 filas (12 celdas `causa_inadmisibilidad`: SIN_CAUSAL→RESOLUCION_NO_RECURRIBLE). Votos/zonas/editorial sin cambios.
+
+
 ## H095 (2026-05-30)
 
 - `parser.py` v18.13→18.14: causal nueva `RESOLUCION_NO_RECURRIBLE` en `clasificar_causa_inadmisibilidad` (irrecurribilidad de las decisiones propias de la Corte, Fallos 316:1706). `RE_CAUSA_NO_RECURRIBLE` + `RE_CAUSA_NO_RECURRIBLE_EXCL`, anclada al fundamento del considerando, chequeada última en el bloque gate-genérico. 12 casos afectados.

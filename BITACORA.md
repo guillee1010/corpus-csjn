@@ -7857,4 +7857,91 @@ Decisiones taxonómicas registradas: recusación NO es gatekeeping del recurso (
 
 **Commits:** 2 (RNR + re-golden; housekeeping .gitignore).
 
+## H095 — Causal nueva RESOLUCION_NO_RECURRIBLE + cierre de validación de la cola (2026-05-30)
 
+**Objetivo:** terminar la validación de la cola de `causa_inadmisibilidad` (los 44 hits VISIBLE que dejó H094) y emitir la causal `RESOLUCION_NO_RECURRIBLE` para las decisiones que la Corte rechaza invocando la irrecurribilidad de sus propios pronunciamientos (Fallos 316:1706).
+
+### H095-01 — Validación de los 44 hits VISIBLE de la cola
+
+Triados contra `.md` reales con `extraer_caso.py` v2.0:
+- **FALTA_SENTENCIA_DEFINITIVA:** 32/32 TP.
+- **FALTA_FUNDAMENTACION_AUTONOMA:** 9/9 TP.
+- **DEPOSITO_PREVIO:** 1 TP (340_p225) + 2 FP (330_p1025, 343_p166) → **B103 abierto**. Los 2 FP son revocatorias/planteos contra una resolución previa de la Corte rechazados por el mérito del depósito; la frase del depósito está en el antecedente narrado, no en el holding. NO los absorbe RNR (no enuncian la doctrina 316:1706); fix futuro = guard en el bloque DEPOSITO de nivel considerando.
+
+Saneamiento M17 para FUERA_DE_TERMINO: los 10 (todos en tomos partidos) tienen ancla de considerando única intra-tomo → el glob+ancla pre-v2.0 resolvía el volumen correcto, sin contaminación B102. Chequeo desde el CSV, sin re-extracción.
+
+### H095-02 — Diseño de la causal RESOLUCION_NO_RECURRIBLE
+
+Primer ancla candidato (dispositivo / por_ello, 29 casos) descartado: la lectura de 16 `.md` mostró que ~80% se rechazan por mérito del depósito/recusación/competencia, no por irrecurribilidad. Re-anclada al **fundamento del considerando**: «las decisiones/sentencias/resoluciones de la Corte… no son susceptibles de recurso/reposición/revocatoria/nulidad».
+
+- Chequeada **última** dentro de `if outcome in OUTCOMES_GATE_GENERICO:` → por construcción no le roba a SD/FUND/DEPOSITO/FUERA.
+- Guard de hace-lugar (`RE_CAUSA_NO_RECURRIBLE_EXCL`) excluye 344_p1904 (la Corte concede la reposición por excepción).
+- Captura «doctrina invocada»; **NO** distingue holding de obiter (límite del regex sobre OCR → M18).
+
+Decisiones taxonómicas registradas: recusación NO es gatekeeping del recurso (incidente → residual); depósito-mérito ya vive en DEPOSITO_PREVIO (lo residual es revocatoria-sobre-intimación → B103); competencia es eje materia (Frente B; `outcome=competencia` 603 ya la captura), no causal de inadmisibilidad. 339_p1218 entra a RNR (la competencia es obiter/sin legitimación; la no-recurribilidad es operativa).
+
+### H095-03 — Hallazgo OCR (B104 nuevo)
+
+`329_p5316` enuncia la doctrina pero no es detectado: el OCR insertó el running-head de página en medio de la palabra («no son suscepti**5317 DE JUSTICIA DE LA NACION 329**bles»). Su hermano 329_p5138 (OCR limpio) sí entra. Se descartó forzar el guard «sin perjuicio» (también frágil al OCR: typo «prejuicio» en 329_p5138). Fix correcto = strip de running-heads en normalización, transversal, con A/B sobre todas las columnas (B104).
+
+### H095 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallos + 193 sumarios). Sin cambios de cardinalidad.
+- **Sin firma:** 16 / 5669 fallos.
+- **Votos:** 27463 filas (byte-idénticas al golden).
+- **`causa_inadmisibilidad`:** RESOLUCION_NO_RECURRIBLE 0→12; INADMISIBLE_SIN_CAUSAL_EXPLICITA 425→413. Gate total sin cambio (1036): RNR es una re-partición interna del gate, no lo agranda. SD 43, FUND 12, DEPOSITO 4, FUERA 10 sin cambios.
+- Los 12 RNR: 329_p383, 329_p4098, 329_p5138, 339_p126, 339_p304, 339_p487, 339_p1218, 340_p1110, 342_p2317, 344_p1442, 345_p1098, 347_p903. (329_p5316 correctamente afuera, B104.)
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas (12 celdas `causa_inadmisibilidad` cambiadas).
+- `output/parser/csjn_casos_votos.csv` — 27463 filas (sin cambios).
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos (sin cambios).
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones (sin cambios).
+
+**Validación:** PoC A/B (OLD=parser real, NEW=RNR último) = 12 transiciones SIN_CAUSAL→RNR, cero robo. check_regresion column-aware: exactamente esas 12 celdas, votos/zonas/editorial [OK] byte-idénticos; producción = 12 (la watch-list de 26 no sumó nada). Re-golden consciente, [CLEAN] 4/4 (csjn_casos sha256 e6000b588deb).
+
+**Scripts creados:** `scripts/diagnostico/H095/poc_resolucion_no_recurrible.py`.
+
+**Deuda:** B103 abierto (2 FP DEPOSITO), B104 nuevo (running-heads OCR), M17 saneado para FUERA, M18 nuevo (capa LLM holding/obiter, futuro).
+
+**Commits:** 3 (RNR + re-golden + manifiesto; bitacora + changelog; housekeeping .gitignore).
+
+## H096 — B103: guard EXCL en bloque DEPOSITO (2026-05-31)
+
+**Objetivo:** cerrar B103 — los 2 FP de `DEPOSITO_PREVIO` (330_p1025, 343_p166), última inconsistencia conocida de la cola de `causa_inadmisibilidad`.
+
+### H096-01 — Diagnóstico
+
+Los 2 casos son revocatorias/planteos contra una resolución ANTERIOR de la Corte: la frase del depósito en el considerando describe el antecedente atacado («la resolución de fs. X que desestimó la queja en razón de no haberse efectuado el depósito»), no un gate de depósito sobre el recurso decidido. Mismo discriminador holding-vs-antecedente que B100/B101, pero el bloque DEPOSITO no tenía guard. El guard de B100 (anclado al por_ello) no alcanza: 343_p166 dice «planteo», no «revocatoria» → discriminador de nivel considerando.
+
+### H096-02 — Guard
+
+`RE_CAUSA_DEPOSITO_EXCL` anclado al considerando (`co`, inmune al truncado), sumado como `and not RE_CAUSA_DEPOSITO_EXCL.search(co)` a la condición del bloque DEPOSITO de `clasificar_causa_inadmisibilidad`. Patrón: «la resolución de fs. \d+ que desestimó … no haberse … el depósito». El guard solo saca de DEPOSITO, nunca agrega → su universo de efecto ⊆ DEPOSITO del golden.
+
+### H096-03 — Validación (PoC con anti-M15)
+
+PoC `scripts/diagnostico/H096/poc_b103_guard_deposito.py`, dos capas: (1) A/B OLD↔NEW sobre texto idéntico (CSV) = 2 flips exactos, universo de cambios ⊆ DEPOSITO del golden; (2) anti-M15: reconstruye el bloque completo del `.md` por `source_file` + `[linea_inicio, linea_fin_real]` (reusa `construir_bloque_desde_localizacion`) y exige EXCL solo en los 2 FP — `348_p805` (TP con considerando truncado a 2000 en el CSV) da `EXCL_full=False`, no se flipea.
+
+Hallazgo metodológico: correr `clasificar_causa_inadmisibilidad` sobre el `considerando_text` del CSV NO reproduce el golden para causales con ancla pasada el truncado a 2000 (p.ej. 329_p440, REMITE_DICTAMEN). Por eso el A/B es OLD↔NEW sobre el mismo texto (aísla el guard) y el delta de conteos se deriva del golden, no de re-correr sobre CSV.
+
+### H096-04 — Aplicación y sellado
+
+parser v18.14→v18.15. check_regresion [FAIL] solo 2 celdas de `csjn_casos.csv` (verificado por `git diff`: 2 filas, resto byte-idéntico; votos/zonas/editorial [OK]). re-golden consciente. Manifiesto regenerado, `--verify [CLEAN]` 54 artefactos. Delta: DEPOSITO_PREVIO 4→2, INADMISIBLE_SIN_CAUSAL_EXPLICITA 413→415; gate total 1036 sin cambio.
+
+### H096 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallos + 193 sumarios).
+- **Sin firma:** 16 / 5669 fallos (0,28%).
+- **Votos:** 27463 filas. **Zonas:** 140956 segmentos. **Editorial:** 151 secciones.
+- **Gate (`causa_inadmisibilidad ≠ ""`):** 1036.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas — sha256 8d6360599442.
+- `output/parser/csjn_casos_votos.csv` — 27463 filas — sha256 16790218a2fc.
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos — sha256 5f4949c93a88.
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones — sha256 e8fa2ccf1e8e.
+- Manifiesto: corpus digest 9fdd4726ce6d (sin cambios), `--verify [CLEAN]` 54.
+
+**Scripts creados:** `scripts/diagnostico/H096/poc_b103_guard_deposito.py`.
+
+**Commits:** c593e77 (parser v18.15 + golden); manifiesto y docs en commits siguientes.
