@@ -7974,3 +7974,27 @@ que faltaban (`csjn_casos.csv` 39 → 43 cols): `causa_inadmisibilidad` (dict +
 Coded Values con las 12 causales + null), `es_queja`, `queja_resultado` (Coded
 Values), `tipo_cuestion_federal` (Coded Values). Tabl
 
+## H097 — Publicación del dataset v2.0 a Harvard Dataverse (2026-05-31)
+
+**Objetivo:** publicar la versión 2.0 del dataset en Harvard Dataverse (doi:10.7910/DVN/TJTVKW) sobre el golden v18.15 y dejar agendado el estudio de validación de exactitud.
+
+### H097-01 — Publicación
+
+Subidos al dataset (en review): los 5 CSV del golden v18.15, `CODEBOOK.md` v1.1, `README.md` publicable, `_manifest.json` regenerado y los scripts de pipeline + mapa. Limpieza del upload anterior: removidos archivos de test/auditoría y los `.tab` que generaba el ingest tabular de Dataverse. README del Dataverse subido. Sesión sin cambios de pipeline, parser ni outputs canónicos.
+
+### H097-02 — Solidez estadística y decisión de validación
+
+Discusión metodológica sobre el error del dataset para uso empírico. El pipeline es un censo determinístico, así que no hay error de muestreo; el error es sistemático (sesgo de extracción/clasificación) y no está cuantificado. Lo verificado hasta H096 es regresión, no exactitud. Decisión: ejecutar un estudio de validación contra ground truth en H098 (entrada M19 nueva en DEUDA_TECNICA).
+
+### H097 — Estado final
+
+- **Corpus:** sin cambios, golden v18.15 (`csjn_casos.csv` sha256 8d6360599442).
+- **Outputs canónicos (sin cambios):** casos 5862, votos 27463, zonas 140956, editorial 151, indice_partes 11445.
+- **Parser:** v18.15 (sin bump).
+
+**DEUDA_TECNICA:** M19 nueva; encabezado y "Próximo trabajo priorizado" actualizados (H098 = M19 + retomar frentes abiertos).
+
+**Pendientes de la publicación (no de pipeline):** confirmar ingest de los CSV en Dataverse (el `.tab` no matchea el sha256 del manifiesto, verificación contra «original format»); release note 1.x→2.0 y versión previa publicada (pestaña Versions sin leer).
+
+**Commits:** 1 (docs).
+
