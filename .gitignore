@@ -27,4 +27,6 @@ desktop.ini
 .idea/
 .tmp.driveupload/
 .tmp.driveupload/
-*.tmp
+*.tmpdiagnostico/_extraidos/
+scripts/diagnostico/_extraidos/
+output/_tmp_*/
