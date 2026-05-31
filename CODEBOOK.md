@@ -331,9 +331,9 @@ Classification of separate votes by their structural relationship to the majorit
 
 | Value | N | Description |
 |---|---|---|
-| `indeterminado` | 1,342 | Could not be classified into a defined category. |
+| `indeterminado` | 1,330 | Could not be classified into a defined category. |
 | `B` | 550 | *To be documented.* |
-| `D` | 524 | *To be documented.* |
+| `D` | 536 | *To be documented.* |
 | `A` | 161 | *To be documented.* |
 | `C` | 114 | *To be documented.* |
 | `E` | 58 | *To be documented.* |
@@ -432,7 +432,7 @@ Specific textual clue used for end detection:
 
 9. **OCR-dependent source text.** The source markdown files were produced by OCR digitization of printed volumes. While generally high quality, OCR errors in case names, judge names, and legal text persist and may affect extraction accuracy.
 
-10. **Separate vote typology (A–E) under development.** The `tipo_voto_sep` classification in `csjn_casos_votos.csv` uses a provisional schema. 1,342 of 2,749 separate votes (48.8%) are classified as `indeterminado`.
+10. **Separate vote typology (A–E) under development.** The `tipo_voto_sep` classification in `csjn_casos_votos.csv` uses a provisional schema. 1,330 of 2,749 separate votes (48.4%) are classified as `indeterminado`.
 
 11. **`sumario_con_link` and `sumario_editorial` entries.** 193 entries (160 + 33) are not full rulings but editorial summaries or cross-references. These entries have null values for most analytical fields (outcome, voting_pattern, word counts). They are included for completeness but should typically be filtered out in analyses. They can be identified via `tipo_entrada != 'fallo'`.
 
