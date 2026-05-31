@@ -34,7 +34,7 @@ The dataset consists of five CSV files. All files are UTF-8 encoded with comma s
 
 | File | Unit of observation | Rows | Columns | Description |
 |---|---|---|---|---|
-| `csjn_casos.csv` | Case | 5,862 | 39 | Case-level metadata: parties, date, outcome, voting configuration, word counts, judge panel, and localization within source files. |
+| `csjn_casos.csv` | Case | 5,862 | 43 | Case-level metadata: parties, date, outcome, admissibility ground, voting configuration, word counts, judge panel, and localization within source files. |
 | `csjn_casos_votos.csv` | Judge × Case | 27,463 | 19 | One row per judge per case. Records each justice's voting position and, where applicable, the text and classification of their separate opinion. Includes denormalized case-level fields for analytical convenience. |
 | `csjn_casos_zonas.csv` | Text zone × Case | 140,956 | 8 | Fine-grained segmentation of each ruling into structural zones (summary, opinion body, dictamen, signature block, etc.) with line references and word counts. |
 
@@ -71,13 +71,17 @@ The dataset consists of five CSV files. All files are UTF-8 encoded with comma s
 | `tribunal_origen` | string | Name of the lower court whose decision is being reviewed. Null for original jurisdiction cases and entries where detection failed. Free text; not normalized. |
 | `tribunal_origen_status` | string | Detection status for lower court. See [Coded Values](#tribunal_origen_status). |
 | `is_originaria` | integer (0/1) | Whether the case falls under the Court's original jurisdiction (*competencia originaria*, Art. 117 of the Constitution). |
+| `es_queja` | integer (0/1) | Whether the case arises from a *recurso de queja* (complaint appeal filed after a denied extraordinary appeal). |
+| `queja_resultado` | string | Outcome of the *queja*, where applicable. See [Coded Values](#queja_resultado). Null for non-queja cases and quejas with no recorded result. |
+| `tipo_cuestion_federal` | string | Type of federal question raised in the extraordinary appeal. See [Coded Values](#tipo_cuestion_federal). Null where none was detected. |
 
 ### Outcome and voting
 
 | Variable | Type | Description |
 |---|---|---|
 | `apertura_tipo` | string | Type of ruling opening marker detected: `fallo`, `sentencia`, or null. |
-| `outcome` | string | Dispositional outcome of the ruling, extracted from the *por ello* clause. See [Coded Values](#outcome). 26.6% of cases are classified as `otro` (not yet subcategorized). |
+| `outcome` | string | Dispositional outcome of the ruling, extracted from the *por ello* clause. See [Coded Values](#outcome). 11.7% of cases are classified as `otro` (not yet subcategorized). |
+| `causa_inadmisibilidad` | string | Specific ground for inadmissibility or dismissal, refining `outcome`. See [Coded Values](#causa_inadmisibilidad). Populated for 1,036 cases; null otherwise. |
 | `voting_pattern` | string | Voting configuration of the panel. See [Coded Values](#voting_pattern). |
 | `n_jueces` | integer | Total number of judges who signed the ruling. |
 | `n_titulares` | integer | Number of permanent (*titular*) justices among the signatories. |
@@ -218,21 +222,80 @@ Dispositional outcome extracted from the *por ello* clause. Distribution across 
 
 | Value | N | Description |
 |---|---|---|
-| `otro` | 1,562 | Unclassified outcome. Residual category pending further subdivision (see Limitations). |
-| `hace_lugar` | 1,102 | Complaint or appeal granted (*hace lugar al recurso*). |
-| `procedente` | 656 | Appeal declared procedurally admissible and granted on the merits. |
-| `competencia` | 571 | Jurisdictional competence ruling (*declárase competente* or assigns competence). |
-| `desestima` | 476 | Appeal dismissed on procedural or substantive grounds. |
-| `revoca` | 360 | Lower court decision reversed (*revoca la sentencia*). |
-| `inadmisible_280` | 267 | Appeal declared inadmissible under Art. 280 of the CPCCN (discretionary certiorari). |
-| `confirma` | 237 | Lower court decision affirmed. |
-| `originaria` | 162 | Decision in original jurisdiction proceedings. |
-| `abstracto` | 90 | Case declared moot (*abstracto*). |
-| `nulidad` | 60 | Lower court decision annulled. |
-| `inadmisible_acordada_4` | 52 | Appeal declared inadmissible under *Acordada* 4/2007 (formal requirements). |
+| `hace_lugar` | 1,367 | Complaint or appeal granted (*hace lugar al recurso*). |
+| `procedente` | 753 | Appeal declared procedurally admissible and granted on the merits. |
+| `otro` | 688 | Unclassified outcome. Residual category pending further subdivision (see Limitations). |
+| `competencia` | 603 | Jurisdictional competence ruling (*declárase competente* or assigns competence). |
+| `desestima` | 541 | Appeal dismissed on procedural or substantive grounds. |
+| `revoca` | 340 | Lower court decision reversed (*revoca la sentencia*). |
+| `confirma` | 327 | Lower court decision affirmed. |
+| `inadmisible_280` | 238 | Appeal declared inadmissible under Art. 280 of the CPCCN (discretionary certiorari). |
+| `rechaza` | 216 | Petition or appeal rejected (*rechaza*). |
+| *(null)* | 193 | Outcome not available (typically `sumario_con_link` or `sumario_editorial` entries). |
+| `originaria` | 166 | Decision in original jurisdiction proceedings. |
+| `abstracto` | 89 | Case declared moot (*abstracto*). |
+| `deja_sin_efecto` | 87 | Prior decision set aside (*deja sin efecto*). |
+| `nulidad` | 61 | Lower court decision annulled. |
+| `inadmisible_acordada_4` | 50 | Appeal declared inadmissible under *Acordada* 4/2007 (formal requirements). |
 | `mal_concedido` | 39 | Appeal declared improperly granted by the lower court. |
 | `sin_dispositivo` | 25 | No dispositional clause could be extracted. |
-| *(null)* | 193 | Outcome not available (typically `sumario_con_link` or `sumario_editorial` entries). |
+| `inadmisible` | 24 | Declared inadmissible on grounds other than Art. 280 or Acordada 4/2007. |
+| `improcedente` | 21 | Appeal declared procedurally improper (*improcedente*). |
+| `desierto` | 13 | Appeal declared abandoned for failure to substantiate (*recurso desierto*). |
+| `caducidad` | 11 | Dismissed for lapse of instance (*caducidad de instancia*). |
+| `desistimiento` | 10 | Proceeding terminated by voluntary withdrawal (*desistimiento*). |
+
+> **Note:** The `outcome` taxonomy was refined after codebook v1.0: the residual `otro` category was reduced from 1,562 (26.6%) to 688 (11.7%) by adding the `procedente`, `rechaza`, `deja_sin_efecto`, `inadmisible`, `improcedente`, `desierto`, `caducidad`, and `desistimiento` categories.
+
+### `causa_inadmisibilidad`
+
+Specific ground for inadmissibility or dismissal, refining the `outcome` field. Populated for 1,036 cases where the Court declared the appeal inadmissible or dismissed it on a defined procedural ground; null for the remaining 4,826 cases. Introduced during the H092–H095 development cycle.
+
+| Value | N | Description |
+|---|---|---|
+| `INADMISIBLE_SIN_CAUSAL_EXPLICITA` | 415 | Inadmissibility declared without an explicit stated ground in the *por ello* clause. |
+| `ART_280` | 238 | Rejected under Art. 280 of the CPCCN (discretionary certiorari). |
+| `INADMISIBLE_REMITE_DICTAMEN` | 144 | Inadmissibility resolved by reference to the Procurador General's *dictamen*. |
+| `CUESTION_ABSTRACTA` | 89 | Appeal rejected because the question became moot (*abstracta*). |
+| `ACORDADA_4_2007` | 50 | Rejected for non-compliance with the formal requirements of *Acordada* 4/2007. |
+| `FALTA_SENTENCIA_DEFINITIVA` | 43 | Rejected for absence of a final judgment (a prerequisite for the extraordinary appeal). |
+| `RESOLUCION_NO_RECURRIBLE` | 12 | The challenged resolution is not subject to appeal. |
+| `FALTA_FUNDAMENTACION_AUTONOMA` | 12 | The appeal lacks the required autonomous grounds. |
+| `CADUCIDAD_INSTANCIA` | 11 | Dismissed for lapse of instance (*caducidad de instancia*). |
+| `DESISTIMIENTO` | 10 | Terminated by voluntary withdrawal. |
+| `FUERA_DE_TERMINO` | 10 | Appeal filed out of time. |
+| `DEPOSITO_PREVIO` | 2 | Rejected in connection with the prior-deposit requirement. |
+| *(null)* | 4,826 | Not an inadmissibility/dismissal case, or no specific ground recorded. |
+
+### `tipo_cuestion_federal`
+
+Type of federal question raised in the extraordinary appeal.
+
+| Value | N | Description |
+|---|---|---|
+| `cuestion_federal` | 1,291 | Ordinary federal question (*cuestión federal* in the strict sense). |
+| `arbitrariedad` | 882 | Arbitrariness doctrine invoked (*arbitrariedad de sentencia*). |
+| `mixto` | 670 | Both an ordinary federal question and arbitrariness. |
+| *(null)* | 3,019 | No federal-question type detected. |
+
+### `queja_resultado`
+
+Outcome of the *recurso de queja*, where the case is a queja (`es_queja = 1`).
+
+| Value | N | Description |
+|---|---|---|
+| `hace_lugar` | 1,122 | Queja granted. |
+| `desestima` | 506 | Queja dismissed. |
+| `procedente` | 157 | Queja declared admissible and granted. |
+| `admisible` | 91 | Queja admitted. |
+| `agreguese` | 24 | *Agréguese* order (attach to the main file). |
+| `rechaza` | 19 | Queja rejected. |
+| `abstracta` | 14 | Queja declared moot. |
+| `suspendida` | 12 | Proceeding suspended. |
+| `desistida` | 10 | Queja withdrawn. |
+| `inadmisible` | 1 | Queja declared inadmissible. |
+| `nula` | 1 | Queja annulled. |
+| *(null)* | 3,905 | Not a queja, or result not recorded (36 quejas have no recorded result). |
 
 ### `voting_pattern`
 
@@ -347,7 +410,7 @@ Specific textual clue used for end detection:
 
 ### Data quality
 
-1. **Outcome classification (`otro`: 26.6%).** 1,562 cases have an unclassified outcome. The *por ello* clauses of these cases contain dispositional formulas not yet captured by the extraction patterns. This is the largest remaining data quality gap and affects any analysis of case outcomes.
+1. **Outcome classification (`otro`: 11.7%).** 688 cases have an unclassified outcome. The *por ello* clauses of these cases contain dispositional formulas not yet captured by the extraction patterns. This remains the largest single data-quality gap for outcome analysis, though it was reduced from 26.6% (codebook v1.0) by the refined taxonomy.
 
 2. **Missing signatures (`sin_firma`: 16 cases, 0.3%).** Sixteen cases could not have their judicial signatures extracted, typically due to OCR artifacts or non-standard formatting.
 
@@ -393,7 +456,7 @@ Validation is performed by **`auditar_fallo.py`**, which audits individual cases
 
 ### Versioning
 
-All pipeline scripts are version-controlled with embedded `__version__` strings. The dataset documented here was produced with parser.py v18.01. The full version history and bug registry are maintained in the repository's `BITACORA.md` (session journal) and `DEUDA_TECNICA.md` (technical debt and bug tracker).
+All pipeline scripts are version-controlled with embedded `__version__` strings. The dataset documented here was produced with parser.py v18.15. This codebook revision (v1.1) adds the `causa_inadmisibilidad`, `es_queja`, `queja_resultado`, and `tipo_cuestion_federal` variables and reflects the refined `outcome` taxonomy (residual `otro` reduced from 26.6% to 11.7%). The full version history and bug registry are maintained in the repository's `BITACORA.md` (session journal) and `DEUDA_TECNICA.md` (technical debt and bug tracker).
 
 ---
 
@@ -429,4 +492,4 @@ BibTeX:
 
 ---
 
-*Codebook version: 1.0 — Generated for corpus-csjn parser v18.01.*
+*Codebook version: 1.1 — Generated for corpus-csjn parser v18.15.*
