@@ -30,3 +30,5 @@ desktop.ini
 *.tmpdiagnostico/_extraidos/
 scripts/diagnostico/_extraidos/
 output/_tmp_*/
+
+estadisticas/validacion/_blind/

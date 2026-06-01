@@ -29,7 +29,13 @@
 # source_file/lineas, con aviso explicito.
 # -----------------------------------------------------------------------------
 
-__version__ = "2.0"
+# v2.1 (H099): agrega --blind para codificacion ciega de M19. Suprime los campos
+# que son la RESPUESTA del parser (outcome, causa_inadmisibilidad, dictamen_presente
+# y el largo/trunc del considerando) tanto en consola como en --out. Deja caratula,
+# POR_ELLO y el BLOQUE, que son texto fuente y el codificador necesita leer. Cambio
+# aditivo: sin --blind el comportamiento es identico a v2.0.
+
+__version__ = "2.1"
 
 import argparse
 import ast
@@ -90,6 +96,10 @@ def main():
     ap.add_argument("--out", default="",
                     help="si se da, escribe un .md autocontenido en esa ruta "
                          "(crea el directorio si no existe) en vez de volcar a consola")
+    ap.add_argument("--blind", action="store_true",
+                    help="codificacion ciega (M19): omite outcome / causa_inadmisibilidad "
+                         "/ dictamen_presente / largo del considerando, que son la "
+                         "respuesta del parser. Deja caratula, POR_ELLO y el BLOQUE.")
     args = ap.parse_args()
 
     unhyphenate, construir_bloque, modo_import = cargar_parser_funcs()
@@ -196,10 +206,11 @@ def main():
         print(f"rango lineas      : [{li_raw}, {lfr_raw}]  (linea_fin={fila.get('linea_fin','')})")
         print(f"status_localizac. : {fila.get('status_localizacion','')}")
         print(f"status_fin        : {fila.get('status_fin','')}")
-    print(f"outcome           : {fila.get('outcome','')}")
-    print(f"causa_inadmisibil.: {fila.get('causa_inadmisibilidad','')}")
-    print(f"dictamen_presente : {fila.get('dictamen_presente','')}")
-    print(f"considerando_csv  : {len(fila.get('considerando_text',''))} chars ({trunc})")
+    if not args.blind:
+        print(f"outcome           : {fila.get('outcome','')}")
+        print(f"causa_inadmisibil.: {fila.get('causa_inadmisibilidad','')}")
+        print(f"dictamen_presente : {fila.get('dictamen_presente','')}")
+        print(f"considerando_csv  : {len(fila.get('considerando_text',''))} chars ({trunc})")
     print(f"POR_ELLO          : {pe}")
     if aviso:
         print(aviso)
@@ -212,15 +223,19 @@ def main():
             f"- status_fin: {fila.get('status_fin','')}\n"
             if canon else ""
         )
+        meta_respuesta = (
+            f"- outcome: {fila.get('outcome','')}\n"
+            f"- causa_inadmisibilidad: {fila.get('causa_inadmisibilidad','')}\n"
+            f"- dictamen_presente: {fila.get('dictamen_presente','')}\n"
+            f"- considerando_csv: {len(fila.get('considerando_text',''))} chars ({trunc})\n"
+            if not args.blind else ""
+        )
         md_text = (
             f"# {fila['caso_id_canonico']}\n\n"
             f"- metodo: {metodo}\n"
             f"- fuente: {md_file.name}\n"
             f"{meta_lineas}"
-            f"- outcome: {fila.get('outcome','')}\n"
-            f"- causa_inadmisibilidad: {fila.get('causa_inadmisibilidad','')}\n"
-            f"- dictamen_presente: {fila.get('dictamen_presente','')}\n"
-            f"- considerando_csv: {len(fila.get('considerando_text',''))} chars ({trunc})\n"
+            f"{meta_respuesta}"
             f"{('> ' + aviso + chr(10)) if aviso else ''}"
             f"\n## POR_ELLO\n\n{pe}\n\n"
             f"## BLOQUE (extraido del .md)\n\n{span}\n"
