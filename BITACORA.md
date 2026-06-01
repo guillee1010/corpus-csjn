@@ -7998,3 +7998,72 @@ Discusión metodológica sobre el error del dataset para uso empírico. El pipel
 
 **Commits:** 1 (docs).
 
+
+## H098 -- Consolidacion del modulo estadistico + scaffold de M19 (2026-05-31)
+
+**Objetivo:** concentrar toda la estadistica en `estadisticas/` y dejar implementado el scaffold de M19 (validacion contra ground truth) para empezar a cuantificar el error de medicion del dataset.
+
+### H098-01 -- Cierre del trabajo colgado de H096
+
+El working tree tenia sin commitear el golden v18.15 (`output/parser/csjn_casos.csv`, sha256 8d6360...), `CODEBOOK.md` v1.1 y el PoC `scripts/diagnostico/H096/`. Commiteado antes de cualquier reorg (6a8275a). El punto de retorno previo (76bef3b) no contenia el golden v18.15.
+
+### H098-02 -- Consolidacion del modulo estadistico
+
+La estadistica estaba dispersa (scripts en `scripts/auxiliares/` y `scripts/analisis/`, outputs en `output/analisis/`, referencia/scrape en `estadisticas/`). Consolidada en `estadisticas/` (renames 100%, commit 33aab67): `estadisticas/analisis/` (analisis_descriptivo, cruce_anuarios, csjn_analisis_v3/v4, clasificador_tipo_caso, detector_templates, README), `estadisticas/resultados/` (las 11 tablas + xlsx + figs), `estadisticas/referencia/` (anuarios + cruce_voto_x_ministro). Triage: `csjn_analisis_v4.py` (v4.0, ya sobre `output/parser/`) = base de analisis futuros; `analisis_descriptivo.py`/`cruce_anuarios.py` = legacy v16-era (leen `csjn_casos_v16.csv` inexistente), parqueados sin rework. Marco conceptual: `estadisticas/analisis/` calcula ASUMIENDO el dataset correcto; M19 mide cuan correcto es.
+
+### H098-03 -- Scaffold de M19
+
+Sub-modulo `estadisticas/validacion/`. `muestrear_validacion.py` v1.1: dos marcos, seed 20260531 -- Marco A aleatorio simple + Marco B oversample min(20, N_valor) por valor (chicos censados). Codificacion CIEGA contra el `.md`; AMBIGUO fuera del denominador; 50 doble-codificadas (kappa); 50 spot-check estructural. Casos: 653 unicos (Marco A 300 + B 353; outcome/causa_inadmisibilidad/es_queja/queja_resultado/tipo_cuestion_federal). Votos: 3845 en 779 casos, ANCLADOS al caso (se lee cada `.md` una sola vez; +153 sobre los 653 -> 806 totales; posicion/tipo_voto_sep/fragmenta_ratio/punto_divergencia + juez/completitud; cubre valores raros). `analizar_validacion.py` v1.0 (agnostico de tabla): exactitud + IC de Wilson, precision/recall por valor, falso-residual, kappa de Cohen, regla de tres. Verificado con planilla vacia y codificacion sintetica. Codificacion a mano PENDIENTE (proxima sesion; arrancar por Marco A de casos).
+
+### H098 -- Estado final
+
+- **Corpus:** 5862 casos. Golden v18.15 sin cambios (parser v18.15).
+- **Votos:** 27463 filas.
+- **NO toca pipeline/parser/outputs.**
+
+**Outputs canonicos:** sin cambios (casos 5862, votos 27463, zonas 140956, editorial 151).
+
+**Scripts nuevos:** `estadisticas/validacion/muestrear_validacion.py` v1.1, `estadisticas/validacion/analizar_validacion.py` v1.0.
+
+**Pendiente:** codificacion manual de M19; housekeeping de duplicados (extractor `(1)`, scrape `output_estadistica` vs `output_tableau`, xlsx huerfano, archivar v3, `__version__`); README de `estadisticas/` + entrada MAPA; CRLF/LF del golden (sha 8d6360 es CRLF, git guarda LF).
+
+**Commits:** 6a8275a (golden v18.15 + CODEBOOK + PoC H096), 33aab67 (reorg estadistica), + scaffold M19.
+
+## H099 — Codificación ciega del Marco A para validación del parser v18.15 (2026-06-01)
+
+**Objetivo:** codificar a ciego los 292 fallos del Marco A en 7 campos `cod_*` y medir la exactitud del parser v18.15 por campo.
+
+### H099-01 — Método de codificación
+
+Codificación ciega contra el bloque de cada caso (sin mirar la clave del parser), 7 campos: `cod_outcome`, `cod_causa_inadmisibilidad`, `cod_es_queja`, `cod_queja_resultado`, `cod_tipo_cuestion_federal`, `cod_caratula_ok`, `cod_fecha_ok`. Valor `AMBIGUO` donde el texto no permite decidir. Reglas firmes: outcome por cascada del parser como desempate en multi-verbo (semántica codificada y anotada donde choca con la cascada); `tipo_cuestion_federal` solo aplica a REX/queja; `causa` solo a dismissals y leída del considerando; `caratula_ok`: cnc vacío→1, coincide→1, fragmento/cita/expediente/caso distinto→0.
+
+Hallazgo de método: el atajo mecánico (regex `Vistos los autos` + `Buenos Aires, fecha`) solo funciona limpio en el tomo 329; del 330 en adelante el formato deriva y todo se leyó caso por caso. Los scans de keyword para `causa` y `tipo_cf` se descartaron (falsos positivos por citas/votos de minoría; falsos negativos por arbitrariedad sin la palabra).
+
+### H099-02 — Cobertura y distribuciones
+
+292/292 codificados (8 lotes: 40 c/u salvo lote 08 = 12). Cruce 1-a-1 con los bundles, sin huecos.
+
+- `cod_outcome`: hace_lugar 60, competencia 55, procedente 42, desestima 41, revoca 19, confirma 15, rechaza 15, originaria 11, abstracto 6, deja_sin_efecto 6, otro 4, nulidad 3, desierto 2, desistimiento 2, inadmisible_280 1, mal_concedido 1, AMBIGUO 9.
+- `cod_es_queja=1`: 113.
+- `cod_tipo_cuestion_federal`: arbitrariedad 57, cuestion_federal 27, mixto 8, AMBIGUO 1, null 199.
+- `cod_causa_inadmisibilidad`: CUESTION_ABSTRACTA 6, DEPOSITO_PREVIO 6, ART_280 3, FUERA_DE_TERMINO 1, FALTA_SENTENCIA_DEFINITIVA 1, AMBIGUO 31, null 244.
+- `cod_caratula_ok`: 1→243, 0→48 (≈16,4%), AMBIGUO 1.
+- `cod_fecha_ok`: 1→281, AMBIGUO 11.
+
+### H099-03 — Frentes detectados (cargados en DEUDA_TECNICA)
+
+- **A — `por_ello` mal extraído (9):** el parser capturó considerando / habilitación de feria / orden de oficio / remisión a precedentes en lugar del dispositivo (332_p2625, 334_p1081, 334_p941, 343_p412, 343_p580, 344_p2393, 345_p583, 347_p412, 348_p405). Frente nuevo.
+- **B.1 — carátula vacía con caption presente (2):** `case_name_cuerpo` vacío teniendo "Vistos los autos: '…'" en el cuerpo (332_p2797 Autolatina, 346_p1241 C.J.M. c/ Swiss Medical). Falla de extracción del caption, distinta de M12.
+- **B — `caratula_ok=0` (48, ≈16,4%):** grueso atribuible a M12 (residuo/cita/fragmento/expediente/caso distinto).
+- **C — fecha no extraída (11):** `date` vacío en la planilla, concentrado en tomos 344-349 y 2 bloques degenerados (329_p472, 345_p154).
+- **D — cascada vs. semántica del outcome:** casos donde la cascada primer-match-gana difiere del verbo dominante (329_p53, 348_p61, 330_p4592, 338_p40, 349_p280).
+
+### H099 — Estado final
+
+- Sesión de validación: sin cambios en `parser.py` ni en los outputs canónicos.
+- Productos: 8 `cod_marco_A_lote_01..08.csv`, `planilla_codificacion_v18_15_MARCO_A_codificado.csv` (292 filas Marco A llenas), `HALLAZGOS_validacion_Marco_A_v18_15.md`.
+- Pendiente: titular de exactitud (exactitud global + IC de Wilson + P/R por valor) con `analizar_validacion.py` + `csjn_casos.csv`; resolver los AMBIGUO (9 outcome, 31 causa, 11 fecha, 1 tipo_cf, 1 carátula, 7 queja_resultado).
+
+**Scripts creados:** ninguno canónico (codificación con scripts ad-hoc de sesión).
+
+**Commits:** sin commits de pipeline. A definir ubicación de los productos de validación (¿`output/validacion/` o carpeta de tesis?).
