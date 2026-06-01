@@ -8067,3 +8067,52 @@ Hallazgo de método: el atajo mecánico (regex `Vistos los autos` + `Buenos Aire
 **Scripts creados:** ninguno canónico (codificación con scripts ad-hoc de sesión).
 
 **Commits:** sin commits de pipeline. A definir ubicación de los productos de validación (¿`output/validacion/` o carpeta de tesis?).
+
+## H100 — M19: titular de exactitud del Marco A, n=292 (2026-06-01)
+
+**Objetivo:** correr el titular (exactitud global + IC de Wilson + P/R por valor)
+de la codificación ciega del Marco A contra la salida del parser v18.15.
+
+### H100-01 — Universo y verificación de la muestra
+La población de la validación son los 5669 `fallo` del golden v18.15 (no los 5862:
+160 `sumario_con_link` + 33 `sumario_editorial` no son fallos; todos los scl en
+tomos 345-349). Réplica del sorteo seed 20260531: el Marco A de 300 sobre los 5862
+contiene exactamente 292 fallos (== el set codificado) + 8 sumario_con_link
+descartados. Confirma que los 292 son SRS de los 5669 fallos → el titular estima
+el corpus de fallos, no solo el Marco A.
+
+### H100-02 — Titular (n=292, AMBIGUO fuera del denominador)
+es_queja 92,1% [88,5–94,7] (n=292); outcome 86,6% [82,1–90,1] (n=283);
+queja_resultado 84,0% [75,8–89,7] (n=106); tipo_cuestion_federal 71,7%
+[61,8–79,9] (n=92); causa_inadmisibilidad 47,1% [26,2–69,0] (n=17, ralo, no
+concluyente). Carátula 83,5% fiel (243/291); fecha 100% (281/281, cota ≤1,1%).
+
+### H100-03 — Modos de falla (B108–B111 nuevos)
+(a) competencia/incompetencia originaria tirada a `otro`: 21 de 26 `otro` mal
+clasificados, recall competencia 65,5% (B108). (b) sobre-trigger 280/acordada_4 en
+outcome de quejas desestimadas, precision 280 14% / ac4 0% (B109). (c) es_queja
+sub-detectado, recall 82,3%, 20 FN con cascada a queja_resultado vacío (B110).
+(d) tipo_cf sobre-usa `mixto` (precision 38%) y pierde arbitrariedad (recall 65%)
+(B111). Las divergencias de outcome reprodujeron B105 (frente A) y B107 (cascada).
+
+### H100-04 — Incidente metodológico
+La completación del Marco A a 300 (8 fallos suplementarios, seed 20260531 sobre el
+pool de 5377) se codificó NO-ciega: se consultó la salida del parser de los 8 antes
+de fijar los códigos. Viola el ciego que sostiene el estudio. Los 8 quedan inválidos;
+el titular vigente es n=292. Completar a 300 limpio exige recodificar los 8 en
+ventana fresca con los `.md --blind` y sin la clave.
+
+### H100-05 — Tooling de validación (fixes pendientes, no tocan el parser)
+`analizar_validacion.py`: el bloque estructural cuenta `N`/`NO` pero la
+codificación usa `1`/`0` → reporta 0 errores de carátula/fecha falsamente (la
+fidelidad real de carátula, 83,5%, se calculó a mano). `muestrear_validacion.py`:
+filtrar `tipo_entrada=='fallo'` antes del `sample` (hoy sortea sobre los 5862).
+
+### H100 — Estado final
+- **Pipeline:** sin cambios. Parser v18.15, golden sin cambios.
+- **Outputs canónicos:** sin cambios.
+- **Validación:** M19 titular ejecutado, n=292; B108–B111 cargados en DEUDA.
+
+**Scripts creados:** ninguno en `scripts/`. Análisis en sandbox (no versionado).
+
+**Commits:** 1 (DEUDA) + 1 (BITACORA tras pegar). Sin commits de pipeline.
