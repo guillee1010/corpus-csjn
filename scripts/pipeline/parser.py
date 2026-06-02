@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.17"  # H103: B108 competencia originaria (declina) rescatada de "otro" en classify_outcome
+__version__ = "18.18"  # H104: B108 decline-gap — "no es de la competencia originaria" sumada al core
 
 import re
 import csv
@@ -356,7 +356,8 @@ OUTCOME_PATTERNS_DISPOSITIVO = [
     ("competencia",     re.compile(
         r"\bdeclara(?:r|se)?\s+(?:la\s+)?incompetencia\b|"
         r"\b(?:es\s+)?ajena\s+a\s+(?:su\s+|la\s+)?competencia\s+originaria\b|"
-        r"\bno\s+corresponde\s+a\s+(?:su\s+|la\s+)?competencia\s+originaria\b", re.I)),
+        r"\bno\s+corresponde\s+a\s+(?:su\s+|la\s+)?competencia\s+originaria\b|"
+        r"\bno\s+es\s+de\s+(?:la\s+)?competencia\s+originaria\b", re.I)),   # B108 frontera H104
     # ── fin zona fallback H077 ───────────────────────────────────────────────
     # ── H079: procedente expandido + aposición + deja_sin_efecto ──────────────
     # Fix A1: "se declara formalmente/parcialmente procedente". Posición en
