@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.18"  # H104: B108 decline-gap — "no es de la competencia originaria" sumada al core
+__version__ = "18.19"  # H104: deprecado outcome=originaria (category error); estructural→accept competencia
 
 import re
 import csv
@@ -315,8 +315,17 @@ OUTCOME_PATTERNS_DISPOSITIVO = [
         r"\bse declara (que (debe|resulta|deberá)|la competencia|incompetente)\b|"
         r"\bdeberá entender\b|\bresulta competente\b|\bdeclara su (in)?competencia\b",
         re.I)),
-    ("originaria",      re.compile(
-        r"^Por ello,.*se resuelve:\s*(I\.|1°|Primero)", re.I)),
+    # H104: outcome=originaria DEPRECADO — era category error (tipo de proceso,
+    # NO disposición). El estructural enumeración-"I." robaba disposiciones de
+    # mérito: "Por ello, se resuelve: I. Desestimar/Rechazar/Hacer lugar" caía acá
+    # ANTES de los patterns en infinitivo (líneas ~335-346). La dimensión proceso
+    # vive completa en is_originaria / tribunal_origen_status (no se pierde nada).
+    # En su lugar: aceptación de competencia originaria → competencia (simétrico
+    # con la declinación de B108). Lookbehind 'no ' para no comerse "no corresponde".
+    ("competencia",     re.compile(
+        r"(?<!no )\bcorresponde\s+a\s+(?:la\s+|su\s+)?competencia\s+originaria\b|"
+        r"(?<!no )\bes\s+de\s+la\s+competencia\s+originaria\b|"
+        r"\bdeclarar\s+la\s+competencia\s+originaria\b", re.I)),  # H104: forma "declarar la comp. orig. de la Corte"
     ("abstracto",       re.compile(
         r"\binoficioso\b|\babstracto\b|\bse declara abstracta?\b", re.I)),
     ("nulidad",         re.compile(r"\bse declara la nulidad\b", re.I)),
