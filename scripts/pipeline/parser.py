@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.19"  # H104: deprecado outcome=originaria (category error); estructural→accept competencia
+__version__ = "18.20"  # H105: B113 declarar-abstracta/o infinitivo (fallback) → 12 otro→abstracto
 
 import re
 import csv
@@ -396,6 +396,21 @@ OUTCOME_PATTERNS_DISPOSITIVO = [
     ("improcedente",    re.compile(r"\bimprocedente\b", re.I)),
     ("caducidad",       re.compile(r"\bcaducidad\b|\bcaduc[oó]\b", re.I)),
     # ── fin H079 ──────────────────────────────────────────────────────────────
+    # B113 (H105): forma infinitiva "Declarar abstracta/o la cuestión/pretensión".
+    # Origen: deprecación de outcome=originaria (B112, H104) — estos casos estaban
+    # enmascarados como originaria por el estructural enumeración-"I." y al caerse
+    # ese pattern quedaron en "otro". El pattern alto de abstracto (~329) solo cubre
+    # "abstracto" (masc. suelto) y "se declara abstracta?"; NO la forma en infinitivo
+    # del dispositivo ("Por ello se resuelve: Declarar abstracta la cuestión").
+    # POSICIÓN FALLBACK (no se extiende el pattern alto) a propósito: "declarar
+    # abstracta" aparece en dispositivos MIXTOS donde no domina — 329_p753 (I.
+    # declarar abstracta una cuestión incidental, II. rechazar la impugnación de
+    # liquidación -> rechaza) y 344_p3070 (I. competencia originaria, II. declarar
+    # abstracta -> competencia). Subirlo a zona alta los robaria; aca solo rescata
+    # de "otro" (cascada primero-que-matchea). abstracto in OUTCOMES_NO_FALLBACK_280
+    # -> no lo pisa el 280/ac4 del considerando; NO in MERIT_OUTCOMES -> is_merit no
+    # se mueve. Adjetivo ANTES del sustantivo (forma real de los 12 testigo).
+    ("abstracto",       re.compile(r"\bdeclarar\s+abstract[oa]\b", re.I)),
     # catch-all
     ("otro",            re.compile(r".*")),
 ]
