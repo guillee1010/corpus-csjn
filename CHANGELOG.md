@@ -2,6 +2,13 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H103 (2026-06-02)
+
+- `parser.py` v18.15→18.16: B107 — guards de negación y excepción de incompetencia en `classify_outcome`. 29 casos `outcome` reclasificados.
+- `parser.py` v18.16→18.17: B108 core — competencia originaria (declina) rescatada de `otro`. 157 casos `outcome` (`otro`→`competencia`).
+- `output/parser/csjn_casos.csv` (golden): otro 688→530, competencia 603→765. Productivo + manifiesto pendientes del batch M19.
+- `scripts/diagnostico/analizar_validacion.py` v1.0→1.1: fix del conteo estructural (excluye AMBIGUO, suma `0` a errores). Tooling M19, no toca pipeline.
+
 ## H096 (2026-05-31)
 
 - `parser.py`: v18.14→v18.15. Guard `RE_CAUSA_DEPOSITO_EXCL` en el bloque DEPOSITO de `clasificar_causa_inadmisibilidad` (B103). 2 casos afectados.
