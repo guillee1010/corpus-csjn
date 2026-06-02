@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H104 (2026-06-02)
+
+- `parser.py` v18.17→18.18: B108 decline-gap — alternativa `no es de la competencia originaria` al pattern de competencia. 16 casos `otro`→`competencia`.
+- `parser.py` v18.18→18.19: B112 — deprecado `outcome=originaria` (category error: tipo de proceso, no disposición). Removido el pattern estructural enumeración-I; aceptación de competencia originaria → `competencia`. 165 `originaria`→0 redistribuidos a su disposición real.
+- `output/parser/csjn_casos.csv`: `originaria` 165→0, `competencia` 765→863, `otro` 530→541, `rechaza` 237→267, `hace_lugar` 1340→1355, `desestima` 543→547; `is_merit_decision`/`tipo_voto` de ~22 casos actualizados.
+
 ## H103 (2026-06-02)
 
 - `parser.py` v18.15→18.16: B107 — guards de negación y excepción de incompetencia en `classify_outcome`. 29 casos `outcome` reclasificados.

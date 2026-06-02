@@ -16315,3 +16315,31 @@ Se reconfirma el bug de tooling ya documentado en H100 (no es nuevo, no lleva n�
 **Scripts creados:** ninguno canónico (merge con script ad-hoc de sesión).
 
 **Commits:** sin commits de pipeline. DEUDA_TECNICA editada (Estado H102 en M19 + encabezado + Pendiente actualizado; B108–B111 confirmados, sin bugs nuevos). Ubicación de productos de validación, a definir (igual que H098).
+
+## H104 — B108 cerrado (decline-gap) + deprecación de outcome=originaria (2026-06-02)
+
+**Objetivo:** cerrar la frontera de B108 y, a partir de la observación de que `originaria` es un tipo de proceso y no una disposición, deprecar `outcome=originaria` dejando que cada caso caiga a su disposición real.
+
+### H104-01 — B108 decline-gap (parser v18.17→18.18)
+
+El core de B108 (H103) cubría `no corresponde a` / `ajena a` / `incompetencia` pero le faltaba `no es de la competencia originaria`. Sumada esa alternativa al pattern de competencia (zona fallback). Incidencia: 16 `otro`→`competencia` (15 a ojo sobre la columna truncada + 339_p876, que el parser rescató sobre texto completo vía `_unhyphenate` y el scan truncado no veía). check_regresion [FAIL] solo esas 16 (+ votos denormalizado), zonas/editorial [OK]; re-golden consciente. `competencia` 765→781, `otro` 530→514.
+
+### H104-02 — Deprecación de outcome=originaria (B112, parser v18.18→18.19)
+
+`originaria` es un tipo de proceso (ya capturado en `is_originaria` y `tribunal_origen_status`), no una disposición. El pattern estructural `^Por ello,...se resuelve: I.` etiquetaba `originaria` por formato y, posicionado antes de los patterns de verbo en infinitivo, robaba disposiciones de mérito («se resuelve: I. Desestimar/Rechazar/Hacer lugar» caía en originaria). Diagnóstico de los 165: ~47 aceptación de competencia originaria, ~67 méritos secuestrados, 16 traslado/apertura, resto cautelar/oficio/declina.
+
+Fix: removido el pattern estructural; en su lugar aceptación de competencia originaria → `competencia` (simétrico con la declinación de B108), cubriendo «corresponde a», «es de la» y «declarar la competencia originaria» (lookbehind 'no' para no comerse la declinación). Los 165 caen a su disposición real: `originaria` 165→0, aceptaciones a `competencia`, méritos rescatados, ~52 aperturas/procesales a `otro`. Cascada: `is_merit_decision` 0→1 en ~22 + ripple en `tipo_voto`. Lossless: la dimensión proceso queda íntegra en `is_originaria` (477).
+
+Validación diff fino caso por caso: proxy v19 = outcome real del parser 182/188; los 6 diffs son override 280/ac4 del considerando + guard B107, donde el parser es el correcto (330_p5158 «Desestimar el REX» con 280 → inadmisible_280; 331_p1302 «hacer lugar a la excepción de incompetencia» → competencia). check_regresion [FAIL] esperado; re-golden consciente.
+
+B113 NUEVO expuesto: «Declarar abstracta» (infinitivo) cae a `otro` en vez de `abstracto` (12 casos), antes enmascarado como `originaria`. Cambio atómico aparte. Cola larga (no pertenece / prima facie / deferimientos, ~4-5) logueada en DEUDA, no perseguida.
+
+### H104 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 193 sumario). Sin firma 16. Votos 27463, zonas 140956, editorial 151.
+- **Outcome:** `originaria` 165→**0** (deprecado); `competencia` 765→**863**; `otro` 530→**541**; `rechaza` 237→**267**; `hace_lugar` 1340→**1355**; `desestima` 543→**547**.
+- **Pendiente de la sesión:** B113 (abstracto infinitivo); CODEBOOK + manifiesto + republicación Dataverse → batch M19.
+
+**Outputs canónicos (v18.19):** csjn_casos 5862 · votos 27463 · zonas 140956 · editorial 151.
+
+**Commits:** B108 decline-gap (v18.18); deprecación originaria (v18.19) + DEUDA.
