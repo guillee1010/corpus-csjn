@@ -16343,3 +16343,27 @@ B113 NUEVO expuesto: «Declarar abstracta» (infinitivo) cae a `otro` en vez de 
 **Outputs canónicos (v18.19):** csjn_casos 5862 · votos 27463 · zonas 140956 · editorial 151.
 
 **Commits:** B108 decline-gap (v18.18); deprecación originaria (v18.19) + DEUDA.
+
+## H105 — B113 cerrado (Declarar abstracta/o infinitivo → abstracto) (2026-06-02)
+
+**Objetivo:** cerrar B113, el último resto de la deprecación de `originaria` (H104): los 12 «Declarar abstracta la cuestión» que estaban enmascarados como `originaria` y al caer afloraron en `otro`.
+
+### H105-01 — B113 (parser v18.19→18.20)
+
+El pattern alto de `abstracto` (`inoficioso` | `abstracto` | `se declara abstracta?`) no cubre la forma en infinitivo del dispositivo. Leídos los 12 a ojo: la forma real lleva el ADJETIVO ANTES del sustantivo («Por ello se resuelve: Declarar abstracta la cuestión planteada»), no después — el validador teed up en H104 (`declarar (la)?(cuestión|pretensión)?abstract[oa]`) habría andado igual de casualidad (los grupos del medio son opcionales), pero eran ruido; se usó la forma mínima `\bdeclarar\s+abstract[oa]\b`.
+
+Decisión de diseño: NO se extendió el pattern alto. «Declarar abstracta» aparece en dispositivos MIXTOS donde no domina — 329_p753 (I. declarar abstracta una cuestión incidental, II. rechazar la impugnación de liquidación → `rechaza`) y 344_p3070 (I. competencia originaria, II. declarar abstracta → `competencia`). Subir el adjetivo a zona alta los robaría. Se sumó como ZONA FALLBACK (posición final, antes del catch-all), idéntico al patrón H077/H079: solo rescata de `otro`. PoC A/B sobre `classify_outcome` real = 12 flips exactos `otro`→`abstracto`, los tres mixtos (329_p753, 344_p3070, 343_p2098) intactos.
+
+Flanco M15: el A/B de diseño se hizo sobre el `por_ello_text` truncado a 300 (la frase está en char ~20-70 en los 12, alcanza). Quedaban 4 candidatos que el truncado no dejaba descartar (330_p5070, 343_p1096, 344_p159, 345_p123: `otro` con dispositivo cortado >300 y «abstract/inoficioso» en el considerando). El check_regresion sobre el `.md` completo los descartó: conteo real = 12, sin residuales.
+
+`abstracto` ∈ `OUTCOMES_NO_FALLBACK_280` → no lo pisa el 280/ac4 del considerando; NO ∈ `MERIT_OUTCOMES` → `is_merit_decision` no se mueve. Los 12 arrastran `causa_inadmisibilidad` ""→`CUESTION_ABSTRACTA` (vía `OUTCOME_A_CAUSA`). check_regresion [FAIL] esperado: `csjn_casos.csv` 12 casos × {outcome, causa_inadmisibilidad}; `csjn_casos_votos.csv` espeja `outcome` en las filas de voto de los 12 (denormalización, línea 3460); zonas/editorial [OK]; re-golden consciente.
+
+### H105 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 193 sumario). Sin firma 16. Votos 27463, zonas 140956, editorial 151.
+- **Outcome:** `otro` 541→**529**; `abstracto` 89→**101**. Resto sin cambio.
+- **Pendiente:** CODEBOOK (recuento de `outcome` + baja de `originaria` de H104) + manifiesto + republicación Dataverse → batch M19, junto con re-titular post-fixes.
+
+**Outputs canónicos (v18.20):** csjn_casos 5862 · votos 27463 · zonas 140956 · editorial 151.
+
+**Commits:** B113 abstracto-infinitivo (v18.20) + DEUDA.

@@ -2,6 +2,14 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## [parser v18.20] — 2026-06-02 (H105)
+
+### Fixed
+- **B113** — la forma en infinitivo «Declarar abstracta/o la cuestión/pretensión» caía a `outcome=otro` en vez de `abstracto` (12 casos, antes enmascarados como `originaria` hasta H104). Nueva alternativa `\bdeclarar\s+abstract[oa]\b` en zona fallback de la cascada de dispositivo (no se extendió el pattern alto, para no robar dispositivos mixtos como 329_p753/344_p3070). 12 `otro`→`abstracto`; los 12 arrastran `causa_inadmisibilidad` ""→`CUESTION_ABSTRACTA`. `is_merit_decision` sin cambio. `csjn_casos_votos.csv` espeja el outcome por denormalización. Re-golden consciente.
+
+### Counts
+- `otro` 541→529 · `abstracto` 89→101.
+
 ## H104 (2026-06-02)
 
 - `parser.py` v18.17→18.18: B108 decline-gap — alternativa `no es de la competencia originaria` al pattern de competencia. 16 casos `otro`→`competencia`.
