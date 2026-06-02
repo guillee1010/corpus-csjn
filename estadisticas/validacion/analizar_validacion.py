@@ -22,7 +22,7 @@ error del parser; se cuenta aparte, fuera del denominador de exactitud.
 import argparse, csv, math
 from collections import Counter, defaultdict
 
-__version__ = "1.0"
+__version__ = "1.1"
 
 RESIDUALES = {"", "otro", "indeterminado"}
 AMB = "AMBIGUO"
@@ -138,9 +138,10 @@ def main():
 
     for ec, etiq in (("cod_caratula_ok", "caratula"), ("cod_fecha_ok", "fecha")):
         if ec in plan[0]:
-            vals = [r[ec].strip().upper() for r in plan if r[ec].strip()]
+            vals = [r[ec].strip().upper() for r in plan
+                    if r[ec].strip() and r[ec].strip().upper() != AMB]
             if vals:
-                err = sum(1 for v in vals if v in ("N", "NO"))
+                err = sum(1 for v in vals if v in ("N", "NO", "0"))
                 w("\n  estructural [%s]: %d revisadas, %d errores" % (etiq, len(vals), err))
                 if err == 0:
                     w("    regla de tres: cota superior del error ~%.1f%% (95%%)"
