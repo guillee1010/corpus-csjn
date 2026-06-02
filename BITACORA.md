@@ -8116,3 +8116,43 @@ filtrar `tipo_entrada=='fallo'` antes del `sample` (hoy sortea sobre los 5862).
 **Scripts creados:** ninguno en `scripts/`. Análisis en sandbox (no versionado).
 
 **Commits:** 1 (DEUDA) + 1 (BITACORA tras pegar). Sin commits de pipeline.
+
+## H102 — Cierre de validación: titular del Marco A sobre n=300 (2026-06-01)
+
+**Objetivo:** integrar los 8 suplementarios recodificados a ciego en H101 con los 292 ya validados y recalcular el titular de exactitud del parser v18.15 sobre n=300. La validación mide; no toca el parser. Supera el incidente metodológico de H100 (los 8 codificados no-ciego → n=300 contaminado, titular vigente n=292).
+
+### H102-01 — Merge 292 + 8
+
+Cruce de `planilla_codificacion_supl_8_CODIFICADA.csv` (8 filas `cod_*`, recodificadas a ciego en H101) con `clave_supl_8.csv` (8 filas `parser_*`) por `caso_id_canonico`: 8/8, sin faltantes ni duplicados, sin colisión con los 292. El cruce con la clave se hizo POSTERIOR a la codificación (el ciego de H101 se preserva). La regla de `ok_` inferida de la consolidada (1 si `cod==parser`; 0 si difieren; vacío si `cod` vacío o `AMBIGUO`) reproduce los 292 con **0 discrepancias**. Consolidada resultante: `planilla_consolidada_MARCO_A_v18_15_n300.csv` (300 filas, esquema `cod_`+`parser_`+`ok_`).
+
+Tres desempates documentados en H101, resueltos: `329_p4150` (rechaza) y `329_p4503` (confirma) **coinciden con el parser** → no son error; `341_p560` es `caratula_ok=0` real por `case_name_cuerpo` truncada ('...PROVINCIA de s/'). El AMBIGUO de `329_p4356` (causa) se excluye del denominador, criterio consistente con los 31 AMBIGUO de causa en los 292.
+
+### H102-02 — Titular n=300 (analizar_validacion.py)
+
+Cinco campos sustantivos (parser v18.15), exactitud con IC95 de Wilson; AMBIGUO fuera del denominador:
+
+- `es_queja`: 92,3% [88,8–94,8] (300 eval, 0 amb).
+- `outcome`: 86,6% [82,2–90,0] (291 eval, 9 amb).
+- `queja_resultado`: 84,3% [76,2–89,9] (108 eval, 7 amb).
+- `tipo_cuestion_federal`: 70,8% [61,1–79,0] (96 eval, 1 amb).
+- `causa_inadmisibilidad`: 50,0% [29,0–71,0] (18 eval, 32 amb).
+
+Estructural recomputado a mano (el bloque nativo del script no aplica, ver H102-03): carátula 83,6% [79,0–87,4] (250/299, 49 erradas, 1 AMBIGUO); fecha 100% [98,7–100] (289/289, 11 AMBIGUO, cota regla de tres ~1,0%).
+
+**El titular vigente pasa de n=292 a n=300.** Deltas vs n=292 no significativos (IC solapados en los cinco campos). Único error nuevo de `outcome`: `343_p595` (`procedente` vs `otro`), POR_ELLO truncado en el `.md`.
+
+### H102-03 — Confirmación de bugs sobre n=300 (sin hallazgos nuevos)
+
+El titular n=300 **confirma B108–B111** (los cuatro modos de falla cuantificados en H100 sobre n=292): `otro` precision 14,8% / `competencia` recall 65,5% (B108); `inadmisible_280` precision 25% / `inadmisible_acordada_4` 0% (B109); `es_queja` recall 82,6% (B110); `mixto` precision 33,3% / `arbitrariedad` recall 64,4% (B111). Los dos errores nuevos de `tipo_cf` de los 8 (`329_p4356` mixto↔arbitrariedad, `331_p978` arbitrariedad↔mixto) son los "defendibles" anotados en la codificación.
+
+Se reconfirma el bug de tooling ya documentado en H100 (no es nuevo, no lleva número B): el bloque estructural de `analizar_validacion.py` detecta error con `v in ("N","NO")` pero la planilla codifica `1/0/AMBIGUO` → reporta "0 errores" de carátula habiendo 49. Por eso la carátula se recomputó a mano (83,6%). Sigue como fix de tooling pendiente dentro de M19, junto con `muestrear_validacion.py`.
+
+### H102 — Estado final
+
+- Sesión de validación: **sin cambios en `parser.py` ni en outputs canónicos** (parser v18.15, golden sin cambios; corpus 5862 casos según H096).
+- Producto: `planilla_consolidada_MARCO_A_v18_15_n300.csv` (300 filas) + `metricas_n300.txt` (con la salvedad del bloque estructural).
+- **M19 — titular CERRADO** sobre n=300, válido (recodificación ciega H101). Pendiente del estudio: doble codificación / inter-coder reliability (kappa); sección «Reliability / known limitations» del CODEBOOK con el titular n=300; los 2 fixes de tooling de validación.
+
+**Scripts creados:** ninguno canónico (merge con script ad-hoc de sesión).
+
+**Commits:** sin commits de pipeline. DEUDA_TECNICA editada (Estado H102 en M19 + encabezado + Pendiente actualizado; B108–B111 confirmados, sin bugs nuevos). Ubicación de productos de validación, a definir (igual que H098).
