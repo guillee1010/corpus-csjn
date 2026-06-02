@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.15"  # H096: guard EXCL en bloque DEPOSITO (B103); DEPOSITO_PREVIO 4->2, SIN_CAUSAL 413->415, gate total sin cambio
+__version__ = "18.16"  # H103: B107 guards en classify_outcome (negacion "no hacer lugar" -> rechaza/cascada; "hacer lugar a la excepcion de incompetencia" -> competencia)
 
 import re
 import csv
@@ -390,6 +390,20 @@ def _unhyphenate(text: str) -> str:
     return re.sub(r"(\w)[­\u00ad-]\s+(\w)", r"\1\2", text)
 
 
+# ── B107 (H103): guards de la cascada de outcome ─────────────────────────────
+# Origen: M19 (codificacion ciega del Marco A). La cascada matcheaba "hacer lugar"
+# por substring dentro de "no hacer lugar" (negacion: la semantica es rechaza/
+# desestima/etc.) y dentro de "hacer lugar a la excepcion de incompetencia"
+# (la semantica es competencia). Ambas regex operan sobre texto YA pasado por
+# _unhyphenate (Paso 0 de classify_outcome), por eso no necesitan tolerar el
+# guion de corte del OCR ("in- competencia" ya viene unido a "incompetencia").
+RE_B107_LUGAR_EXCEP_INCOMP = re.compile(
+    r"\b(?:se\s+hace|hacer)\s+lugar\s+a\s+la\s+excepci[oó]n\s+de\s+incompetencia\b",
+    re.I)
+RE_B107_NEG_HACER_LUGAR = re.compile(
+    r"\bno\s+(?:se\s+)?(?:corresponde\s+)?(?:hacer?|ha|hace|hacen)\s+lugar\b", re.I)
+
+
 def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     """
     v14 (H077): zona fallback con outcome "rechaza" + infinitivos (confirmar,
@@ -427,15 +441,34 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     if not por_ello_text:
         base = "sin_dispositivo"
     else:
+        # B107.1: "hacer/se hace lugar a la excepcion de incompetencia" es una
+        # decision de competencia, no un hace_lugar. Escopado a la frase exacta
+        # (no a cualquier mencion de "incompetencia") para no pisar rechaza/
+        # originaria de casos que solo la nombran.
+        if RE_B107_LUGAR_EXCEP_INCOMP.search(por_ello_text):
+            return "competencia"
+        # B107.2: enmascarar "no (se) hace(r) lugar" para que la negacion no
+        # dispare hace_lugar; el dispositivo real lo resuelve la cascada sobre el
+        # texto enmascarado (un "hacer lugar a X" NO negado, como en dispositivos
+        # mixtos, sobrevive y sigue clasificando bien).
+        hubo_negacion = bool(RE_B107_NEG_HACER_LUGAR.search(por_ello_text))
+        texto_disp = (RE_B107_NEG_HACER_LUGAR.sub(" ", por_ello_text)
+                      if hubo_negacion else por_ello_text)
         outcome_disp = "otro"
         for label, pat in OUTCOME_PATTERNS_DISPOSITIVO:
-            if pat.search(por_ello_text):
+            if pat.search(texto_disp):
                 outcome_disp = label
                 break
+        # B107.3: negacion pura (sin otro verbo dispositivo) -> rechaza, pero como
+        # base DEBIL: cae al Paso 3 para que el 280/ac4 del considerando aun pueda
+        # ganar (evita pisar inadmisible_acordada_4 en quejas "no ha lugar").
+        if hubo_negacion and outcome_disp == "otro":
+            base = "rechaza"
         # Paso 2: si es merit, no sobreescribir
-        if outcome_disp in OUTCOMES_NO_FALLBACK_280:
+        elif outcome_disp in OUTCOMES_NO_FALLBACK_280:
             return outcome_disp
-        base = outcome_disp
+        else:
+            base = outcome_disp
 
     # Paso 3: buscar 280 / acordada 4 en considerando (sede única, R2 H090)
     if considerando_text:
