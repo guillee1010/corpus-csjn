@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.16"  # H103: B107 guards en classify_outcome (negacion "no hacer lugar" -> rechaza/cascada; "hacer lugar a la excepcion de incompetencia" -> competencia)
+__version__ = "18.17"  # H103: B108 competencia originaria (declina) rescatada de "otro" en classify_outcome
 
 import re
 import csv
@@ -348,6 +348,15 @@ OUTCOME_PATTERNS_DISPOSITIVO = [
     ("competencia",     re.compile(
         r"\bse declara competente\b|\bdeclarar(?:se)? (?:la )?(?:in)?competente\b|"
         r"\bdeclarar que .{0,20}(?:debe|deberá|resulta)\b", re.I)),
+    # B108 (H103): competencia originaria que la cascada dejaba en "otro".
+    # Origen M19. La Corte DECLINA su competencia originaria. Formas que los
+    # patterns previos no cubren (el adjetivo "incompetente" ya estaba; faltaba
+    # el sustantivo "incompetencia" y las formas "ajena a"/"no corresponde a la
+    # competencia originaria"). Zona fallback: solo rescata de "otro".
+    ("competencia",     re.compile(
+        r"\bdeclara(?:r|se)?\s+(?:la\s+)?incompetencia\b|"
+        r"\b(?:es\s+)?ajena\s+a\s+(?:su\s+|la\s+)?competencia\s+originaria\b|"
+        r"\bno\s+corresponde\s+a\s+(?:su\s+|la\s+)?competencia\s+originaria\b", re.I)),
     # ── fin zona fallback H077 ───────────────────────────────────────────────
     # ── H079: procedente expandido + aposición + deja_sin_efecto ──────────────
     # Fix A1: "se declara formalmente/parcialmente procedente". Posición en
