@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.20"  # H105: B113 declarar-abstracta/o infinitivo (fallback) → 12 otro→abstracto
+__version__ = "18.21"  # H106: B109 desestima-de-via no la pisa 280/ac4 (verbo manda); 229 inadmisible_280/ac4→desestima, causa preservada via deteccion textual en gate
 
 import re
 import csv
@@ -460,9 +460,18 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     # dispositivo ya resolvio algo, no sobreescribir con el 280 del considerando"
     # (incluye abstracto/desistimiento, que son gate). El set de merito real
     # (is_merit) es el MERIT_OUTCOMES de procesar_archivo (~3147), mas chico.
+    # B109 (H106): "desestima" suma al set. Cuando el dispositivo desestima la via
+    # (la queja / presentacion directa / recurso), el verbo dispositivo manda: el
+    # 280/ac4 del considerando es la CAUSAL del rechazo, no el outcome. La causal
+    # se preserva en causa_inadmisibilidad (deteccion textual de 280/ac4 anadida al
+    # bloque gate-generico de clasificar_causa_inadmisibilidad). Antes "desestima"
+    # caia al Paso 3 y el 280/ac4 lo pisaba con inadmisible_280/ac4 (229 casos).
+    # Los mixtos de resultados opuestos (342_p1017: desestima queja + procedente
+    # otro REX) quedan en "desestima" como mejor aproximacion disponible hasta el
+    # refactor etapa/disposicion+parte (M20); logueados en DEUDA.
     OUTCOMES_NO_FALLBACK_280 = {"hace_lugar", "procedente", "revoca", "confirma", "rechaza",
                       "nulidad", "competencia", "abstracto", "originaria",
-                      "desistimiento", "deja_sin_efecto"}
+                      "desistimiento", "deja_sin_efecto", "desestima"}
 
     # Paso 0 (H066): normalizar quiebres tipográficos
     por_ello_text = _unhyphenate(por_ello_text)
@@ -630,6 +639,22 @@ def clasificar_causa_inadmisibilidad(outcome, considerando_text, por_ello_text,
     # asi que la frase causal puede venir de un antecedente citado o de un
     # dictamen embebido, no del holding -> FP (334_p419). FUERA ya lo exigia.
     if outcome in OUTCOMES_GATE_GENERICO:
+        # B109 (H106): 280/ac4 detectado TEXTUALMENTE. Antes la causal ART_280/
+        # ACORDADA_4_2007 venia "gratis" del mapa OUTCOME_A_CAUSA cuando el outcome
+        # era inadmisible_280/ac4; al pasar esos casos a outcome="desestima" (verbo
+        # dispositivo manda, ver classify_outcome), la senal de gate se perderia.
+        # Se reusan las MISMAS regex que classify_outcome (no se reimplementa).
+        # Va PRIMERO en el bloque: el 280/ac4 es la formula explicita y literal del
+        # rechazo (art. 280 CPCCN); las causales de cola son inferencias sobre el
+        # fundamento. Ante coexistencia (1 caso, 329_p510: 280 + extempor en el
+        # considerando), la formula explicita gana y preserva la causa historica.
+        # Anclado al considerando (co), igual que classify_outcome.
+        if RE_280_CONSIDERANDO.search(co) or RE_280_LIBRE.search(co):
+            return "ART_280"
+        if (RE_ACORDADA_4_CONSIDERANDO.search(co)
+                or RE_ACORDADA_4_REGLAMENTO.search(co)
+                or RE_ACORDADA_4_DIRECTA.search(co)):
+            return "ACORDADA_4_2007"
         if RE_CAUSA_SENTENCIA_DEFINITIVA.search(txt):
             return "FALTA_SENTENCIA_DEFINITIVA"
         if RE_CAUSA_FUNDAMENTACION.search(txt):
