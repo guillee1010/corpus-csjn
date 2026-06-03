@@ -16539,3 +16539,42 @@ Catálogo 5862→6145 ids: +283 = **28 recuperados por B115** (331:12, 332:8, 33
 **Scripts modificados:** `scripts/pipeline/construir_catalogo.py` v1.0→**1.01**.
 
 **Commits:** `[PEND]`.
+
+## H110 — B116 CERRADO: headers de páginas-apertura-de-sección (2026-06-03)
+
+**Objetivo:** cerrar B116 (lado cuerpo de la familia B009) — recuperar las entradas de catálogo marcadas `pagina_no_en_mapa` en 331-334, localizándolas en el cuerpo.
+
+### H110-01 — Causa raíz (leída en la fuente, no asumida)
+
+Las 11 `pagina_no_en_mapa` por tomo (44 en 331-334) son **páginas de apertura de sección** (cada mes + Acordadas/Resoluciones). En esas páginas la imprenta **suprime el running-head superior** `NNNN / DE JUSTICIA DE LA NACION / 33X`: el cuerpo arranca con un banner de sección en mayúsculas seguido del título del primer fallo. `detectar_paginas` keya exclusivamente en una línea `== tomo` con entero vecino → no emite header → cruce marca `pagina_no_en_mapa` → parser descarta. Verificado en `LibroVol334.3.md`: páginas 1063 (Octubre, además inicio de chunk), 1143 (Noviembre), 1659 (Diciembre) sin el triple, con banner. Corrección a la fuente del prompt: 1143 es NOVIEMBRE (el TOC del tomo venía con OCR sucio). Blast radius simulado (mapa+catálogo): 44 candidatos, todos en 331-334, 0 fuera; los 15 tomos restantes sin páginas de catálogo faltantes → intactos por construcción.
+
+### H110-02 — Fix detectar_paginas v1.0→v1.01 + validación
+
+Interpolación de headers sintéticos con tres guardas: (1) guiada por catálogo (`cargar_paginas_catalogo`, solo `pagina_inicio` esperadas — descarta colaterales como 334_p1658 y aperturas de índice como 1923); (2) anclada al banner de sección (`RE_BANNER_SECCION` = 12 meses + ACORDADAS/RESOLUCIONES; `linea_header`=banner ⇒ `linea_inicio==header`, título en +1, igual que los `ok`); (3) región file-local (`interpolar_secciones`: hueco interior o abridor de chunk `P==min_detectado−1`). Trazabilidad en `mapa_paginas_inferidas.csv` y `mapa_paginas_sin_banner.csv` (red de cobertura). Schema del mapa intacto → `cruzar` sin tocar.
+
+Validación: detectar_paginas → 44 inferidas [331:11/332:11/333:11/334:11], sin_banner=0 (las 41 no vistas en diagnóstico también tenían banner). Cruce: `pagina_no_en_mapa` 299→255 (44 de 331-334 a 0; 335 intacto en 255). Astiz `334_p1063` → `status_localizacion=ok`, `linea_inicio=54` (banner OCTUBRE idx 53, título 54), `outcome=improcedente` preservado, unánime 4 jueces, por_ello/considerando completos. check_regresion perímetro por clave golden↔nuevo: 0 nuevos / 0 desaparecidos / 84 modificados = 21/tomo (11 recuperados `pagina_no_en_mapa*`→`ok` + ~10 vecinos con `linea_fin` corregida al aparecer el borde de sección — se arregló el bleed-through, p.ej. 331_p373 dejaba de sangrar a la sección siguiente), 0 fuera de 331-334, 15 tomos byte-idénticos. Editorial +1 solo en 331 (14→15) = afloramiento de B115 (golden pre-B115; `331.1` recupera su sección `acordadas`), coherente. Re-golden consciente + baseline re-sellado → **salda de paso la deuda del re-sello de H109**; check_regresion [CLEAN] 4/4 con el estado combinado B115+B116.
+
+**Decisiones / hallazgos:**
+- 343_p1987 NO era B116: tomo 343 tiene 0 `pagina_no_en_mapa`; el prompt lo había mis-scopeado. Su FP de `es_queja` tiene causa distinta → pendiente aparte.
+- 335-336 NO se tocaron (excluidos por `descubrir_archivos` hasta tener fuente confiable/legible). Siguen como gap conocido.
+
+### H110 — Estado final
+
+- **Corpus:** 5890 casos (5697 `fallo` + 193 sumario [160 `sumario_con_link` + 33 `sumario_editorial`]).
+- **Sin firma:** 16 / 5697 fallos (sin cambio vs H109 — los 44 recuperados tienen firma).
+- **Votos:** 27639 filas.
+- **Trayectoria sin_firma:** … 406 → 148 → 78 (335) → 16.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5890 filas (84 modificadas vs golden previo).
+- `output/parser/csjn_casos_votos.csv` — 27639 filas (+24).
+- `output/parser/csjn_casos_zonas.csv` — 141451 segmentos (+397).
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones (+1).
+- `output/mapa/mapa_paginas.csv` — 46980 filas (+44). Nuevos: `mapa_paginas_inferidas.csv` (44), `mapa_paginas_sin_banner.csv` (0).
+- `output/localizacion/fallos_localizados.csv` — `pagina_no_en_mapa` 299→255.
+
+**Scripts modificados:** `scripts/pipeline/detectar_paginas.py` v1.0→v1.01. (Diagnóstico y PoC se hicieron en sandbox; no se commitearon scripts en `scripts/diagnostico/H110/`.)
+
+**Versiones de canónicos:** parser.py v18.23, construir_catalogo.py v1.01, **detectar_paginas.py v1.01**, cruzar_catalogo_y_mapa.py v1.0, parser_editorial.py v1.0, auditar_fallo.py v1.0.0.
+
+**Commits:** 4 (fix detectar_paginas; regenera outputs; re-golden + manifiesto; docs).

@@ -30,10 +30,11 @@ Asume que construir_catalogo.py está en la misma carpeta que este script
 (usa su función extraer_tomo_de_filename).
 """
 
-__version__ = "1.0"  # H076
+__version__ = "1.01"  # H110 — B116: interpolacion de headers en paginas-apertura-de-seccion
 
 
 import csv
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -131,6 +132,116 @@ def detectar_en_lineas(lineas, tomo, ventana=(3, 2)):
         detecciones.append((i, pagina))
 
     return detecciones
+
+
+# ---------------------------------------------------------------------------
+# B116: interpolacion de headers en paginas-apertura-de-seccion
+# ---------------------------------------------------------------------------
+#
+# En las paginas que abren una seccion del tomo (cada mes, "Acordadas y
+# Resoluciones", etc.) la imprenta SUPRIME el running-head superior
+# `NNNN / DE JUSTICIA DE LA NACION / 33X`: la pagina arranca directamente con
+# un banner de seccion en mayusculas seguido del titulo del primer fallo. El
+# detector principal keya en una linea == tomo con entero vecino, por lo que no
+# emite header para esas paginas -> no entran al mapa -> `cruzar` las marca
+# `pagina_no_en_mapa` (familia B009, lado cuerpo). Empiricamente ~11/tomo en
+# 331-334.
+#
+# Recuperacion (REE: quirurgica, anclada a la fuente):
+#   1) Guiada por catalogo: solo se interpola una pagina que el catalogo espera
+#      como `pagina_inicio` (descarta colaterales sin caso, como la ultima
+#      pagina de una seccion, o el inicio del Indice).
+#   2) Anclada al banner: el `linea_header` sintetico apunta a la linea del
+#      banner de seccion, que cumple el mismo rol estructural que la linea-tomo
+#      en una pagina normal (ultima linea antes del titulo) -> el titulo queda
+#      en banner+1, igual que los casos `ok`.
+#   3) Region file-local: hueco interior (entre dos headers del mismo archivo)
+#      o abridor de chunk (P == min_detectado - 1). Nunca toma paginas de otros
+#      archivos.
+
+_MESES = (r'ENERO|FEBRERO|MARZO|ABRIL|MAYO|JUNIO|JULIO|AGOSTO|'
+          r'SEPTIEMBRE|OCTUBRE|NOVIEMBRE|DICIEMBRE')
+RE_BANNER_SECCION = re.compile(
+    rf'^({_MESES}|ACORDADAS Y RESOLUCIONES|ACORDADAS|RESOLUCIONES)$')
+
+
+def cargar_paginas_catalogo(ruta_catalogo):
+    """
+    Devuelve {tomo: set(pagina_inicio)} a partir del catalogo.
+    Si el catalogo no existe, devuelve {}.
+    """
+    p = Path(ruta_catalogo)
+    if not p.exists():
+        return {}
+    paginas = {}
+    with open(p, encoding='utf-8') as f:
+        for row in csv.DictReader(f):
+            t = int(row['tomo'])
+            pg = int(row['pagina_inicio'])
+            paginas.setdefault(t, set()).add(pg)
+    return paginas
+
+
+def _banner_en_rango(lineas, lo, hi):
+    """Indice (0-based) de la ultima linea-banner en [lo, hi). None si no hay."""
+    hit = None
+    for k in range(max(0, lo), min(len(lineas), hi)):
+        if RE_BANNER_SECCION.match(_norm(lineas[k])):
+            hit = k
+    return hit
+
+
+def interpolar_secciones(detecciones, lineas, paginas_cat_tomo):
+    """
+    Emite headers sinteticos para paginas-apertura-de-seccion que el catalogo
+    espera pero que no tienen running-head (suprimido por la imprenta).
+
+    Parametros
+    ----------
+    detecciones : list de (linea_header, pagina) ya limpias para este archivo.
+    lineas      : lineas del .md (para buscar el banner de seccion).
+    paginas_cat_tomo : set de paginas-inicio que el catalogo espera para el tomo.
+
+    Devuelve
+    --------
+    tuple (detecciones_aumentadas, inferidas, sin_banner)
+      - detecciones_aumentadas: detecciones + sinteticas, ordenadas por linea.
+      - inferidas: list de (linea_header, pagina) sinteticas emitidas.
+      - sin_banner: list de (region_lo, region_hi, pagina) — paginas de catalogo
+        en una region resoluble (hueco interior o abridor de chunk) para las que
+        NO se hallo banner. Red de cobertura REE: no se interpolan, se loguean
+        para inspeccion manual.
+    """
+    if not detecciones or not paginas_cat_tomo:
+        return detecciones, [], []
+    det = sorted(detecciones)
+    detectadas = {p for _, p in det}
+    inferidas = []
+    sin_banner = []
+
+    # (a) huecos interiores: catalogo espera P pero no esta entre dos headers.
+    for (l0, p0), (l1, p1) in zip(det, det[1:]):
+        if p1 - p0 > 1:
+            for P in range(p0 + 1, p1):
+                if P in paginas_cat_tomo and P not in detectadas:
+                    bl = _banner_en_rango(lineas, l0 + 1, l1)
+                    if bl is not None:
+                        inferidas.append((bl, P))
+                        detectadas.add(P)
+                    else:
+                        sin_banner.append((l0 + 1, l1, P))
+
+    # (b) abridor de chunk: la primera pagina del archivo (P = min_detectado - 1).
+    P = min(detectadas) - 1
+    if P in paginas_cat_tomo and P not in detectadas:
+        bl = _banner_en_rango(lineas, 0, det[0][0])
+        if bl is not None:
+            inferidas.append((bl, P))
+            detectadas.add(P)
+        else:
+            sin_banner.append((0, det[0][0], P))
+
+    return sorted(det + inferidas), inferidas, sin_banner
 
 
 # ---------------------------------------------------------------------------
@@ -390,18 +501,23 @@ def procesar_corpus(carpeta_corpus, salida_csv, ruta_catalogo=None):
     emit()
 
     rangos_catalogo = cargar_rangos_catalogo(ruta_catalogo) if ruta_catalogo else {}
+    paginas_catalogo = cargar_paginas_catalogo(ruta_catalogo) if ruta_catalogo else {}
     if rangos_catalogo:
-        emit(f"Catalogo cargado: rangos para {len(rangos_catalogo)} tomos")
+        emit(f"Catalogo cargado: rangos para {len(rangos_catalogo)} tomos, "
+             f"paginas-inicio para {len(paginas_catalogo)} tomos")
     else:
-        emit("(catalogo no disponible: sin validacion cruzada)")
+        emit("(catalogo no disponible: sin validacion cruzada ni interpolacion B116)")
     emit()
 
     filas_csv = []
     filas_filtradas = []  # registro de detecciones eliminadas en post-procesamiento
+    filas_inferidas = []  # B116: headers sinteticos emitidos por interpolacion
+    filas_sin_banner = []  # B116: paginas de catalogo sin banner (cobertura)
     diagnosticos = []
     archivos_con_anomalias = []
     total_dup = 0
     total_out = 0
+    total_inf = 0
 
     for ruta, tomo in archivos:
         # Detectar crudas y filtrar para tener visibilidad de qué se descartó
@@ -430,6 +546,22 @@ def procesar_corpus(carpeta_corpus, salida_csv, ruta_catalogo=None):
         detecciones = d_sin_out
         total_dup += n_dup
         total_out += n_out
+
+        # B116: interpolar headers de paginas-apertura-de-seccion (suprimidos
+        # por la imprenta). Guiado por catalogo + anclado al banner de seccion.
+        detecciones, inferidas, sin_banner = interpolar_secciones(
+            detecciones, lineas, paginas_catalogo.get(tomo, set()))
+        for ln, pg in inferidas:
+            filas_inferidas.append({
+                'tomo': tomo, 'archivo': ruta.name,
+                'linea_header': ln, 'pagina': pg,
+            })
+        for lo, hi, pg in sin_banner:
+            filas_sin_banner.append({
+                'tomo': tomo, 'archivo': ruta.name,
+                'pagina': pg, 'region_lo': lo, 'region_hi': hi,
+            })
+        total_inf += len(inferidas)
 
         diag = diagnosticar(detecciones, ruta.name, tomo)
 
@@ -466,6 +598,12 @@ def procesar_corpus(carpeta_corpus, salida_csv, ruta_catalogo=None):
     emit("=" * 70)
     emit(f"Total: {len(archivos)} archivos, {total_headers} headers detectados")
     emit(f"Filtrados en post-procesamiento: {total_dup} duplicados, {total_out} outliers")
+    emit(f"Interpolados (B116, apertura-de-seccion): {total_inf} headers sinteticos")
+    if filas_sin_banner:
+        emit(f"  ! paginas de catalogo sin banner (no interpoladas): {len(filas_sin_banner)}")
+        for r in filas_sin_banner:
+            emit(f"    tomo {r['tomo']} {r['archivo']} pag {r['pagina']} "
+                 f"(region L{r['region_lo']}-{r['region_hi']})")
     if archivos_con_anomalias:
         emit(f"Archivos con anomalias ({len(archivos_con_anomalias)}):")
         for a in archivos_con_anomalias:
@@ -522,6 +660,24 @@ def procesar_corpus(carpeta_corpus, salida_csv, ruta_catalogo=None):
         writer.writeheader()
         writer.writerows(filas_filtradas)
     emit(f"Filtradas escritas: {filtradas_path}  ({len(filas_filtradas)} filas)")
+
+    # B116: escribir inferidas (headers sinteticos) para trazabilidad
+    inferidas_path = salida_csv_path.with_name(salida_csv_path.stem + '_inferidas.csv')
+    with open(inferidas_path, 'w', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=[
+            'tomo', 'archivo', 'linea_header', 'pagina'])
+        writer.writeheader()
+        writer.writerows(filas_inferidas)
+    emit(f"Inferidas escritas: {inferidas_path}  ({len(filas_inferidas)} filas)")
+
+    # B116: paginas de catalogo en region resoluble pero sin banner (cobertura)
+    sin_banner_path = salida_csv_path.with_name(salida_csv_path.stem + '_sin_banner.csv')
+    with open(sin_banner_path, 'w', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=[
+            'tomo', 'archivo', 'pagina', 'region_lo', 'region_hi'])
+        writer.writeheader()
+        writer.writerows(filas_sin_banner)
+    emit(f"Sin-banner escritas: {sin_banner_path}  ({len(filas_sin_banner)} filas)")
 
     # Escribir log
     with open(log_path, 'w', encoding='utf-8') as f:

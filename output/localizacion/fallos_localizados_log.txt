@@ -1,10 +1,10 @@
 Catálogo: output\catalogo\catalogo.csv
 Mapa:     output\mapa\mapa_paginas.csv
-Corpus:   corpus\
+Corpus:   corpus
 Secciones índices: output\catalogo\secciones_indices.csv
 
 Filas en catálogo: 6145
-Páginas únicas en mapa: 46933
+Páginas únicas en mapa: 46977
 Duplicados (tomo,pagina) resueltos: 3
   Tomo 338 pag 338: usado LibroVol338.1.md, descartado(s) LibroVol338.2.md
   Tomo 343 pag 1457: usado LibroVol343-3.md, descartado(s) LibroVol343-2.md
@@ -16,19 +16,19 @@ Archivos con índice de nombres detectado: 48
 Resumen del cruce
 ======================================================================
 Total de fallos:                 6145
-  ok                            5768  (93.9%)
-  ok_cortado_en_indice            27  (0.4%)
-  pagina_no_en_mapa              299  (4.9%)
-  fallo_cruza_archivos            19  (0.3%)
+  ok                            5844  (95.1%)
+  ok_cortado_en_indice            19  (0.3%)
+  pagina_no_en_mapa              255  (4.1%)
+  fallo_cruza_archivos            27  (0.4%)
 
 Por tomo:
    tomo   total      ok   sin_mapa   ult_tomo   pg_fin_nm   cruza_arch
     329    1063    1059          0          0           0            3
     330     757     753          0          0           0            3
-    331     388     366         11          0           0            0
-    332     338     316         11          0           0            0
-    333     254     232         11          0           0            0
-    334     205     183         11          0           0            0
+    331     388     385          0          0           0            2
+    332     338     335          0          0           0            2
+    333     254     251          0          0           0            2
+    334     205     202          0          0           0            2
     335     255       0        255          0           0            0
     337     130     128          0          0           0            1
     338     167     165          0          0           0            1
@@ -47,4 +47,4 @@ Por tomo:
 
 CSV principal: output\localizacion\fallos_localizados.csv  (6145 filas)
 Resumen por tomo: output\localizacion\fallos_localizados_resumen.csv  (20 filas)
-Huérfanos (status != ok): output\localizacion\fallos_localizados_huerfanos.csv  (350 filas)
+Huérfanos (status != ok): output\localizacion\fallos_localizados_huerfanos.csv  (282 filas)

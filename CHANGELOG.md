@@ -2,6 +2,14 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H110 (2026-06-03)
+
+- `detectar_paginas.py` v1.0→v1.01: interpola headers de páginas-apertura-de-sección (B116) — guiado por catálogo + anclado al banner + región file-local. +44 headers sintéticos en 331-334.
+- `output/mapa/mapa_paginas.csv`: 46936→46980 (+44). Nuevos sidecar: `mapa_paginas_inferidas.csv` (44), `mapa_paginas_sin_banner.csv` (0).
+- `output/localizacion/fallos_localizados.csv`: `pagina_no_en_mapa` 299→255 (44 de 331-334 localizados; 335 intacto).
+- `output/parser/csjn_casos.csv`: 84 casos modificados (21/tomo en 331-334; resto byte-idéntico). votos +24, zonas +397, editorial +1.
+- golden re-sellado (estado combinado B115+B116; salda la deuda de re-sello de H109); check_regresion [CLEAN] 4/4.
+
 ## H109 (2026-06-03)
 
 - `construir_catalogo.py` v1.0→1.01: B115 — Validación 1 de `extender_inicio_indice_nombres` acepta el header de subsección «Por nombre del actor/demandado» antes de la «A» (antes exigía línea en blanco y recortaba el inicio del índice en tomos 331-334); + `RE_SUBSECCION_NOMBRES` y filtro anti-polución en `parsear_indice_nombres`.
