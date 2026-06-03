@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.22"  # H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
+__version__ = "18.23"  # H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
 
 import re
 import csv
@@ -732,13 +732,43 @@ QUEJA_RESULTADO_PATTERNS = [
 ]
 
 
-def classify_queja(por_ello_text: str):
-    """H078: detecta si el fallo es una queja y clasifica su resultado.
+# ── H108: capa-fuente de es_queja — detección por carátula ───────────────────
+# classify_queja miraba SOLO el por_ello (dispositivo): perdía las quejas cuya
+# vía se nombra en la carátula y no se repite en el dispositivo. La carátula usa
+# la fórmula ritual "recurso de hecho deducido/interpuesto por <PARTE>", que
+# además nombra la parte recurrente (gancho M20: cod_parte a nivel parte×recurso).
+# Capa 1 (esta): ancla FUERTE de carátula -> ~225 flips, alta precisión.
+# Guard RE_CARAT_CITA: la carátula a veces arrastra una CITA de otro fallo
+# ("(Fallos: 328:4059)", "...publicado...") -> no es la vía del caso propio.
+# DIFERIDO a DEUDA (requieren lectura sobre .md antes de habilitarse):
+#   - capa débil de carátula ("s/ queja" suelto, presentación directa): ~11
+#     casos ambiguos, TP limpios mezclados con fragmentos/residuo;
+#   - capa considerando (ancla fuerte sobre el considerando completo).
+RE_CARAT_QUEJA = re.compile(
+    r"recursos?\s+de\s+hecho\s+(?:deducidos?|interpuestos?)\s+por", re.I)
+RE_CARAT_CITA = re.compile(r"\(Fallos?:|publi[­\-]?cad", re.I)
+
+
+def _es_queja_por_caratula(caratula: str) -> bool:
+    """Capa 1: ancla fuerte de carátula. Guard de cita primero (la carátula puede
+    arrastrar un fallo citado, no la vía propia)."""
+    if not caratula:
+        return False
+    if RE_CARAT_CITA.search(caratula):
+        return False
+    return bool(RE_CARAT_QUEJA.search(caratula))
+
+
+def classify_queja(por_ello_text: str, caratula_text: str = ""):
+    """H078 + H108: detecta si el fallo es una queja y clasifica su resultado.
+    es_queja: capa carátula (ancla fuerte, alta precisión) OR por_ello (RE_ES_QUEJA).
+    queja_resultado: SIEMPRE del por_ello (el resultado vive en el dispositivo).
     Retorna (es_queja: bool, queja_resultado: str).
     queja_resultado es "" si es_queja=False o si no se pudo clasificar."""
     text = _unhyphenate(por_ello_text)
     text = re.sub(r"\s+", " ", text).strip()
-    if not RE_ES_QUEJA.search(text):
+    es_queja = _es_queja_por_caratula(caratula_text) or bool(RE_ES_QUEJA.search(text))
+    if not es_queja:
         return False, ""
     for label, pat in QUEJA_RESULTADO_PATTERNS:
         if pat.search(text):
@@ -3316,7 +3346,7 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             outcome, considerando_text, por_ello_text, dictamen_presente)
 
         # H078: queja + cuestion federal (sobre textos completos, pre-truncamiento)
-        es_queja, queja_resultado = classify_queja(por_ello_text)
+        es_queja, queja_resultado = classify_queja(por_ello_text, case_name_cuerpo)
         # Sumario editorial = texto del bloque antes de la apertura.
         # Contiene los headers de la Secretaría de Jurisprudencia
         # ("SENTENCIA ARBITRARIA", "Cuestión federal", etc.).
