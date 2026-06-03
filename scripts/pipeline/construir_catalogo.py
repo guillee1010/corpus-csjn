@@ -86,7 +86,7 @@ USO
       --verbose
 """
 
-__version__ = "1.0"  # H076
+__version__ = "1.01"  # H109 (B115)
 
 
 import argparse
@@ -128,6 +128,15 @@ RE_NOMBRES_PARTES_HDR = re.compile(r'^NOMBRES DE LAS PARTES')
 # del header "NOMBRES DE LAS PARTES" en algunos tomos (ej. 348), en línea
 # separada.
 RE_ROMANO_PARENT = re.compile(r'^\([IVXLCDM]+\)$')
+
+# Header de subseccion dentro del indice de nombres: "Por nombre del actor" /
+# "Por nombre del demandado". En tomos 331-334 la portadilla repetida
+# "INDICE POR LOS NOMBRES DE LAS PARTES" aparece a mitad de la "A", y el
+# verdadero inicio del listado esta marcado por estos headers (B115/H109).
+RE_SUBSECCION_NOMBRES = re.compile(
+    r'^Por\s+nombre\s+del\s+(?:actor|demandado)\s*$',
+    re.IGNORECASE
+)
 
 # Filename → tomo. El filename matchea LibroVol{tomo}{sufijo}.md donde sufijo
 # puede ser ".1", "-1", "_1", o vacío.
@@ -262,10 +271,15 @@ def extender_inicio_indice_nombres(lines, linea_inicio_1, linea_fin_1,
     if candidato_a is None:
         return (linea_inicio_1, linea_fin_1)
 
-    # Validación 1: la línea anterior a "A" debería ser vacía (separación
-    # visual entre fin de fallo y arranque del índice). Si no, abortar.
-    if candidato_a > 0 and lines[candidato_a - 1].strip() != '':
-        return (linea_inicio_1, linea_fin_1)
+    # Validación 1 (H109/B115): la línea anterior a "A" debe ser vacía
+    # (separación visual) O un header de subsección "Por nombre del
+    # actor/demandado". En tomos 331-334 el listado arranca con ese header
+    # justo encima de la "A", sin línea en blanco; la versión anterior
+    # abortaba y recortaba las entradas tempranas de la "A" (incl. Arriola).
+    if candidato_a > 0:
+        prev = lines[candidato_a - 1].strip()
+        if prev != '' and not RE_SUBSECCION_NOMBRES.match(prev):
+            return (linea_inicio_1, linea_fin_1)
 
     # Validación 2: contar anclas ": p. N" entre la "A" (exclusive) y
     # linea_inicio_1 (exclusive — es el header). Si hay al menos N, es un
@@ -322,6 +336,8 @@ def parsear_indice_nombres(lines, linea_inicio_1, linea_fin_1):
         if RE_NOMBRES_PARTES_HDR.match(l):
             continue
         if RE_ROMANO_PARENT.match(l):
+            continue
+        if RE_SUBSECCION_NOMBRES.match(l):
             continue
         # Otra defensa: si por error agarramos un header de sección, lo saltamos
         if any(rx.match(l) for rx in RE_HEADERS_SECCION.values()):
