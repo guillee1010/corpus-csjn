@@ -16502,3 +16502,40 @@ Detector limpio (zonas): apertura≥2. Dimensión: 103 casos apertura≥2 → 71
 **Versiones:** parser.py v18.23; resto sin cambios.
 
 **Commits:** 2 (parser+golden; docs) — pendientes.
+
+## H109 — B115: recorte del inicio del índice de partes, familia B009 (2026-06-03)
+
+**Objetivo:** cerrar B115 (merge/caso-perdido por hueco en el índice de partes) con Arriola 332:1963 como caso testigo, y dimensionar cuántos más hay.
+
+### H109-01 — Localización del drop (descartando hipótesis previas)
+
+Tres descartes con datos: (1) el cruce es inocente — `cruzar_catalogo_y_mapa` cruza por `(tomo,página)`, nunca por carátula, y nunca dropea filas del catálogo; (2) `332_p1963` ausente de `fallos_localizados.csv` (que contiene todo el catálogo) → el drop es en `construir_catalogo`, no aguas abajo; (3) leído el `.md` fuente, la entrada `Arriola, Sebastián y otros: p. 1963.` está limpia con ancla `: p.` — el «s/ causa 9080» del prompt era reconstrucción (reincidencia de la lección H108: verificar contra la fuente, no contra el output ni contra una cita idealizada).
+
+### H109-02 — Causa raíz y fix en construir_catalogo
+
+La portadilla repetida `INDICE POR LOS NOMBRES DE LAS PARTES` cae a mitad del listado «A» (L34087); `detectar_secciones` la toma como inicio del bloque y `extender_inicio_indice_nombres` no lo rescata porque su Validación 1 exigía línea en blanco antes de la «A» sola, cuando en 331-334 el listado arranca con el header `Por nombre del actor` encima. Se recortaban las entradas tempranas de la «A». Métrica diagnóstica: A-fracción del catálogo 1-4% en 331-334 vs 8-19% normal. Fix `construir_catalogo` v1.0→1.01: `RE_SUBSECCION_NOMBRES` + Validación 1 acepta el header de subsección + filtro anti-polución en `parsear_indice_nombres`. A/B con código real sobre LibroVol332.3: 481→515 entradas, 1963 capturado, 0 pérdidas, A-fracción 331-334 → 12.9/10.4/7.9/12.7%.
+
+### H109-03 — Re-golden y validación
+
+Catálogo 5862→6145 ids: +283 = **28 recuperados por B115** (331:12, 332:8, 333:2, 334:6) + 255 del tomo 335 (incorporado al corpus, NO atribuible a B115; cae aguas abajo por `pagina_no_en_mapa`). `csjn_casos` 5862→5890 (+28 netos, puro B115). Swallow Massuh/Arriola roto: `332_p1960` apertura 2→1, dispositivo 2→1, `case_name_cuerpo` deja de ser Arriola; `332_p1963` Arriola caso propio 1/1, dueño de su carátula; `332_p2043` Pérez intacto. QA de los 28: 27 localizados `ok` (apertura=1), 0 swallow residual, 1 (Astiz 334_p1063) `sin_mapa`. FP de `es_queja`: 332_p1960 y 331_p856 → 0 (caídos); 343_p1987 sigue =1 (tomo no recortado → B116). check_regresion [FAIL] consciente (+28 casos, rangos cambiados, tomo 335).
+
+### H109-04 — Hallazgos / bugs nuevos
+
+- **B116 NUEVO** (lado cuerpo de la familia B009): `pagina_no_en_mapa` — entradas del catálogo sin header de página en el mapa. Cluster sistemático: 11 por tomo en 331-334 (44), más los 255 de 335 (el mapa nunca corrió sobre 335-336). Incluye Astiz (334_p1063) y el Pérez de 343_p1987.
+- **335-336:** el índice de 335 ahora parsea (255 entradas, vía el fix), pero el mapa no cubre 335-336 → no localizables. Pendiente: detectar_paginas/mapa sobre esos tomos.
+
+### H109 — Estado final
+
+- **Corpus:** 5890 casos (5697 `fallo` + 160 `sumario_con_link` + 33 `sumario_editorial`).
+- **Sin firma:** 16 / 5697 fallos.
+- **Votos:** 27615 filas. **Zonas:** 141054 segmentos. **Editorial:** 151 secciones.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5890 filas (sha256 `[PEND]`).
+- `output/parser/csjn_casos_votos.csv` — 27615 filas (sha256 `[PEND]`).
+- `output/parser/csjn_casos_zonas.csv` — 141054 segmentos (sha256 `[PEND]`).
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones (sha256 `[PEND]`).
+
+**Scripts modificados:** `scripts/pipeline/construir_catalogo.py` v1.0→**1.01**.
+
+**Commits:** `[PEND]`.

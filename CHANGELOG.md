@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H109 (2026-06-03)
+
+- `construir_catalogo.py` v1.0→1.01: B115 — Validación 1 de `extender_inicio_indice_nombres` acepta el header de subsección «Por nombre del actor/demandado» antes de la «A» (antes exigía línea en blanco y recortaba el inicio del índice en tomos 331-334); + `RE_SUBSECCION_NOMBRES` y filtro anti-polución en `parsear_indice_nombres`.
+- `output/catalogo/catalogo.csv`: 5862→6145 ids (+28 B115 en 331-334, +255 tomo 335 incorporado).
+- `output/parser/csjn_casos.csv`: 5862→5890 filas (+28). Swallow Massuh/Arriola (332:1960/1963) resuelto.
+
 ## H108 (2026-06-03)
 
 - `parser.py` v18.22→v18.23: capa-fuente es_queja por carátula (RE_CARAT_QUEJA + guard de cita; classify_queja recibe caratula_text). es_queja 2056→2281 (+225); queja_resultado sin_clasificar 38→263.
