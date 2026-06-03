@@ -1,7 +1,12 @@
-Carpeta corpus: ../../corpus
+Carpeta corpus: corpus
 Archivos a procesar: 46
+Archivos descartados (4):
+  LibroVol335.1.md: tomo 335 excluido (problemas conocidos)
+  LibroVol335.2.md: tomo 335 excluido (problemas conocidos)
+  LibroVol336.1.md: tomo 336 excluido (problemas conocidos)
+  LibroVol336.2.md: tomo 336 excluido (problemas conocidos)
 
-Catalogo cargado: rangos para 19 tomos
+Catalogo cargado: rangos para 20 tomos, paginas-inicio para 20 tomos
 
   LibroVol329.1.md               1366 headers, p.5-1373, monot.100.0%   [1 dup filtrado]
   LibroVol329.2.md               1585 headers, p.1375-2963, monot.100.0%
@@ -11,18 +16,18 @@ Catalogo cargado: rangos para 19 tomos
   LibroVol330.2.md               1547 headers, p.1325-2875, monot.100.0%
   LibroVol330.3.md               1429 headers, p.2877-4310, monot.100.0%   ! 1 gap(s) > 3p (mayores: 4289->4294 (d5))
   LibroVol330.4.md               1148 headers, p.4313-5461, monot.100.0%   ! rango detectado 4313-5461 excede el del catalogo (5-5435)
-  LibroVol331.1.md                999 headers, p.8-1009, monot.100.0%   [1 dup filtrado]
-  LibroVol331.2.md                966 headers, p.1014-1984, monot.100.0%
-  LibroVol331.3.md                945 headers, p.1986-2937, monot.100.0%   ! rango detectado 1986-2937 excede el del catalogo (7-2925)
-  LibroVol332.1.md                911 headers, p.6-920, monot.100.0%   [1 dup filtrado]
-  LibroVol332.2.md               1104 headers, p.922-2031, monot.100.0%
-  LibroVol332.3.md                864 headers, p.2034-2904, monot.100.0%   ! rango detectado 2034-2904 excede el del catalogo (5-2898)
-  LibroVol333.1.md                764 headers, p.6-774, monot.100.0%   [1 dup filtrado]
-  LibroVol333.2.md               1100 headers, p.778-1882, monot.100.0%
-  LibroVol333.3.md                577 headers, p.1886-2468, monot.100.0%   ! rango detectado 1886-2468 excede el del catalogo (5-2445)
-  LibroVol334.1.md                703 headers, p.6-714, monot.100.0%   [1 dup filtrado]
-  LibroVol334.2.md                341 headers, p.716-1062, monot.100.0%
-  LibroVol334.3.md                857 headers, p.1064-1924, monot.100.0%
+  LibroVol331.1.md               1002 headers, p.7-1009, monot.100.0%   [1 dup filtrado]
+  LibroVol331.2.md                970 headers, p.1013-1984, monot.100.0%
+  LibroVol331.3.md                949 headers, p.1985-2937, monot.100.0%   ! rango detectado 1985-2937 excede el del catalogo (7-2925)
+  LibroVol332.1.md                914 headers, p.5-920, monot.100.0%   [1 dup filtrado]
+  LibroVol332.2.md               1108 headers, p.921-2031, monot.100.0%
+  LibroVol332.3.md                868 headers, p.2033-2904, monot.100.0%   ! rango detectado 2033-2904 excede el del catalogo (5-2898)
+  LibroVol333.1.md                768 headers, p.5-774, monot.100.0%   [1 dup filtrado]
+  LibroVol333.2.md               1104 headers, p.777-1882, monot.100.0%
+  LibroVol333.3.md                580 headers, p.1885-2468, monot.100.0%   ! rango detectado 1885-2468 excede el del catalogo (5-2445)
+  LibroVol334.1.md                707 headers, p.5-714, monot.100.0%   [1 dup filtrado]
+  LibroVol334.2.md                345 headers, p.715-1062, monot.100.0%
+  LibroVol334.3.md                860 headers, p.1063-1924, monot.100.0%
   LibroVol337.1.md                882 headers, p.5-887, monot.100.0%   [1 dup filtrado]   ! rango detectado 5-887 excede el del catalogo (23-1581)
   LibroVol337.2.md                696 headers, p.895-1591, monot.100.0%   [1 outlier(s) filtrado]   ! rango detectado 895-1591 excede el del catalogo (23-1581)
   LibroVol338.1.md                676 headers, p.5-681, monot.100.0%   [1 dup filtrado]   ! rango detectado 5-681 excede el del catalogo (29-1583)
@@ -51,8 +56,9 @@ Catalogo cargado: rangos para 19 tomos
   LibroVol349-1.md                310 headers, p.1-310, monot.100.0%
 
 ======================================================================
-Total: 46 archivos, 46936 headers detectados
+Total: 46 archivos, 46980 headers detectados
 Filtrados en post-procesamiento: 18 duplicados, 21 outliers
+Interpolados (B116, apertura-de-seccion): 44 headers sinteticos
 Archivos con anomalias (21):
   - LibroVol329.4.md
   - LibroVol330.3.md
@@ -77,6 +83,8 @@ Archivos con anomalias (21):
   - LibroVol348-1.md
 ======================================================================
 
-CSV escrito: ..\..\output\mapa\mapa_paginas.csv  (46936 filas)
-Resumen escrito: ..\..\output\mapa\mapa_paginas_resumen.csv  (46 filas)
-Filtradas escritas: ..\..\output\mapa\mapa_paginas_filtradas.csv  (39 filas)
+CSV escrito: output\mapa\mapa_paginas.csv  (46980 filas)
+Resumen escrito: output\mapa\mapa_paginas_resumen.csv  (46 filas)
+Filtradas escritas: output\mapa\mapa_paginas_filtradas.csv  (39 filas)
+Inferidas escritas: output\mapa\mapa_paginas_inferidas.csv  (44 filas)
+Sin-banner escritas: output\mapa\mapa_paginas_sin_banner.csv  (0 filas)
