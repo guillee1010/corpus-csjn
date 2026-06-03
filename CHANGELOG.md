@@ -2,6 +2,35 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H107 (2026-06-02)
+
+- `parser.py` v18.21→18.22: B110 parcial — pluralización de `RE_ES_QUEJA`, `_SYN_Q` y `QUEJA_RESULTADO_PATTERNS` (`\bqueja\b`→`\bquejas?\b`, etc.). Captura las quejas multi-recurrente. 63 casos afectados.
+- `output/parser/csjn_casos.csv`: 5862 filas; `es_queja` 1993→2056 (+63), `queja_resultado` ~+59 celdas pobladas. 1 FP residual conocido (329_p1703). Cambio aditivo (0 flips 1→0).
+- Golden re-sellado (casos 904bfdedeadc; votos/zonas/editorial sin cambio).
+
+## [parser 18.21] — 2026-06-02 (H106)
+
+### Fixed
+- **B109** — Sobre-trigger de `inadmisible_280`/`inadmisible_acordada_4` en el `outcome` de quejas desestimadas. Cuando el dispositivo desestima la vía (queja / presentación directa / recurso) y el considerando motiva con art. 280 CPCCN o Acordada 4/2007, el verbo dispositivo ahora manda: `outcome=desestima` y el 280/ac4 se registra en `causa_inadmisibilidad`. Antes el 280/ac4 del considerando sobreescribía el outcome. 246 casos corregidos (`inadmisible_280`/`ac4` → `desestima`).
+
+### Changed
+- `classify_outcome`: `desestima` agregado a `OUTCOMES_NO_FALLBACK_280` (el dispositivo ya resolvió, no lo pisa el fallback 280/ac4 del considerando).
+- `clasificar_causa_inadmisibilidad`: detección textual de art. 280 / Acordada 4 al inicio del bloque gate-genérico (reusa las regex de `classify_outcome`). Preserva la causal que antes se derivaba del `outcome` vía `OUTCOME_A_CAUSA`.
+
+### Counts (v18.20 → v18.21)
+- `outcome`: `desestima` 547 → 793 (+246); `inadmisible_280` 240 → 38 (−202); `inadmisible_acordada_4` 50 → 6 (−44). Conservación exacta.
+- `causa_inadmisibilidad`: sin cambio neto. `causa != ""` = 1056; `ART_280` = 240; `ACORDADA_4_2007` = 50 (idénticos a v18.20). Los 246 casos preservan su causal.
+
+### Validation
+- A/B sobre texto completo (M15) con parsers reales v18.20 ↔ v18.21 sobre 20 `.md` extraídos: 20/20 correctos.
+- `check_regresion`: [FAIL] solo en `csjn_casos.csv` + `csjn_casos_votos.csv` (246 celdas + espejo denormalizado), `csjn_casos_zonas.csv` / `csjn_casos_editorial.csv` [CLEAN]. Re-golden consciente; golden sellado.
+- golden sha256: casos `f79679fe2ba1`, votos `5f5bc5171fe2`, zonas `5f4949c93a88`, editorial `e8fa2ccf1e8e`.
+
+### Notes
+- Pendiente del batch M19: actualizar CODEBOOK con conteos de outcome v18.21, regenerar `_manifest.json`, republicar Dataverse.
+- Cola del refactor M20 (outcome → disposición + parte, unidad parte×recurso): casos mixtos 342_p1017, 331_p530.
+
+
 ## [parser v18.20] — 2026-06-02 (H105)
 
 ### Fixed

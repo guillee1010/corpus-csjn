@@ -16379,3 +16379,85 @@ Cierre de sesión con dos discusiones de diseño que conviene no perder.
 **3. Deshyphenate — descartado «a todo».** Conclusión: no es un switch global. Criterio = matching vs contenido persistido. Donde se matchea sobre OCR, normalizar antes ayuda (varios sitios ya lo hacen); donde se persiste contenido, `\w-\s+\w` une guiones legítimos con espacio espurio → caso por caso con guard. Diferencia entre normalizar para parsear (transitorio, lo que el parser hace hoy a propósito) y persistir normalizado (cambia contenido, rompe golden masivo, no atómico). El bug accionable concreto es B114 (tribunal_origen cortado por OCR, que además puede no resolverse solo con `_unhyphenate` si la continuación quedó fuera del span).
 
 **Implicancias / candidatos:** B114 es pre-requisito del Frente B. Orden sugerido tras el re-titular M19: B114 → Frente B capa 1 (PoC barato: normalizar tribunal_origen y medir qué % cubre la capa 1 sola) → capas 2-3. NO toca pipeline esta sesión (solo DEUDA + BITÁCORA).
+
+---
+
+## H106 — B109 cerrado (sobre-trigger 280/ac4 en quejas desestimadas) + diseño M20 (2026-06-02)
+
+Sesión de cierre de B109, el bug de outcome de la cola post-M19. Arrancó con re-titular y terminó con un fix de dos partes + un hallazgo de diseño sobre la unidad de análisis.
+
+### H106-00 — Re-titular post-fixes (B107/B108/B112/B113) sobre v18.20
+
+Antes del bug, se recorrió `analizar_validacion.py` contra el `csjn_casos.csv` v18.20 (gold standard `planilla_consolidada_MARCO_A_v18_15_n300` sin cambios). Titular nuevo: es_queja 92,3% [88,8–94,8], **outcome 87,6% [83,3–90,9]** (era 86,6% en v18.15), queja_resultado 84,3%, tipo_cf 70,8%, causa 50,0% (n=18 ralo). El +1,0 pp de outcome NO es significativo en el agregado (ICs solapan), pero a nivel valor el rédito es fuerte: `competencia` recall 65,5%→89,1% (B108), `originaria` 11→0 (B112 deprecado correctamente), `otro` falso-residual 85,2%→78,9%. Lección: la exactitud global subestima mejoras por valor cuando el fix mueve categorías de baja frecuencia en la muestra. CODEBOOK v1.2 actualizado con la tabla de reliability + recuento outcome v18.20 + baja de originaria.
+
+### H106-01 — B109: el verbo dispositivo manda (parser v18.20→18.21)
+
+**Hipótesis (de la convención acordada):** cuando el dispositivo dice «se desestima la queja» y el considerando motiva con art.280/acordada 4, el outcome correcto es `desestima` (verbo dispositivo) y el 280/ac4 es la CAUSAL, no el outcome. Confirmada leyendo 20 `.md` completos.
+
+**Evidencia / escala:** Marco A reportaba 12 casos. El A/B sobre corpus completo reveló **246** — la patología afectaba todo el corpus, no la muestra. La causa raíz: `desestima` no estaba en `OUTCOMES_NO_FALLBACK_280`, caía al Paso 3 de `classify_outcome` y el 280/ac4 del considerando lo pisaba.
+
+**Fix de DOS partes (no una).** Al cambiar outcome a `desestima`, la causa dejaba de venir del mapa `OUTCOME_A_CAUSA` (que daba ART_280/ACORDADA_4 gratis) y caía al bloque gate-genérico, que NO tenía detección textual de 280/ac4 (nunca la necesitó porque venía del outcome). Sin la parte 2, B109 arreglaba outcome pero rompía causa en 222 casos (→ SIN_CAUSAL). Partes: (1) `desestima` ∈ `OUTCOMES_NO_FALLBACK_280`; (2) detección textual de 280/ac4 al inicio del bloque gate de `clasificar_causa_inadmisibilidad`, reusando las mismas regex de classify_outcome. El 280/ac4 va PRIMERO en el bloque (fórmula explícita y literal; ante coexistencia con causal de cola gana — 1 caso 329_p510: 280 + extempor → preserva ART_280, su causa histórica).
+
+**Decisión amplio vs quirúrgico.** Se evaluó un approach quirúrgico (regex de «desestima la vía» + guard de fondo) contra el amplio (`desestima` al set). Matriz REE: el amplio gana en impacto/riesgo/robustez/escalabilidad/valor-tesis. El quirúrgico preservaba 4 mixtos como `inadmisible_280`, pero 3 de esos 4 eran FP del propio guard (enumerados con infinitivo `Desestimar` que `se desestima` no matchea), y el único mixto real (342_p1017) no quedaba mejor en `inadmisible_280` que en `desestima` — ambos esperan M20. Principio aplicado: no agregar regex defensiva para un problema (mixtos) que un frente posterior resuelve estructuralmente.
+
+**Validación M15 (clave de la sesión):** el PoC A/B sobre el CSV daba 229 flips; el parser real dio **246**. La diferencia (17) son casos con el 280/ac4 pasado el corte de 2000 del `considerando_text` del CSV — el PoC leía el truncado, el parser clasifica sobre el `.md` completo (parser.py líneas 3307→3311, pre-truncamiento; confirmado leyendo el código: el `[:2000]` está SOLO en el dict que se escribe, línea 3456). Esto reconfirma M15 y, de paso, descartó subir el límite de truncado: el parser NUNCA tuvo el problema de subdetección, solo las herramientas que leen el CSV. A/B final con parsers reales v18.20↔v18.21 sobre 20 `.md` = 20/20 correctos.
+
+**Conteos (conservación exacta):** desestima 547→793 (+246), inadmisible_280 240→38 (−202), inadmisible_acordada_4 50→6 (−44). Causa preservada en los 246, **0 caídas**; invariante de gate intacto (`causa != ""` = 1056, ART_280=240, ACORDADA_4=50 idénticos a v18.20). Ningún otro outcome se movió. check_regresion [FAIL] solo casos+votos (246 + espejo denormalizado línea 3460), zonas/editorial [CLEAN]; re-golden consciente; golden sellado (sha256 casos f79679fe2ba1, votos 5f5bc5171fe2). Residual inadmisible_280=38/ac4=6 = dispositivos que declaran inadmisible directamente (legítimos).
+
+### H106-02 — Hallazgo de diseño: la unidad de análisis del outcome es parte×recurso, no caso (→ M20)
+
+Discusión que destrabó el encuadre del refactor de outcome. Queja y recurso concedido NO se autoexcluyen a nivel caso, solo respecto de la MISMA parte: una parte cuyo REX fue denegado va por queja, otra parte del mismo expediente cuyo REX fue concedido va por el recurso concedido, y la Corte puede resolverlos en sentido opuesto. Evidencia (mixtos de B109): 342_p1017 (dos quejas, desestima una por 280 + procedente la otra → revoca sentencia); 331_p530 (REX concedidos inadmisibles + queja desestimada, distintas partes). `outcome` único fuerza a elegir un ganador del campo (B109 los deja en `desestima`, mejor aproximación a nivel caso). Consecuencia: la unidad correcta del eje disposición/parte es **(parte recurrente × recurso × caso)**, análoga a `csjn_casos_votos` (juez × caso). M20 = refactor SCDB con tabla candidata `csjn_casos_recursos`; "mixto" deja de existir porque se deriva, no se codifica. Descartado explícitamente el atajo `es_mixto`/`outcome=mixto`: trata el síntoma (multiplicidad) sin representar la información (qué le pasó a cada parte). Registrado en DISENO_SCDB §1.
+
+### H106-03 — Infraestructura: peso del CSV (relevado, NO accionado)
+
+Medición: `considerando_text` = 55% del CSV (7 MB de 13,4), las 4 columnas de texto pesado = 76%. 47,6% de los considerandos tocan el tope de 2000 (truncados). Proyección lineal: ~40 tomos → ~27 MB (manejable, no es límite técnico). Evaluación REE: lo más REE ahora = no tocar (el problema de tamaño no existe aún); frente futuro = separar texto pesado a tabla aparte `csjn_casos_textos` (resuelve truncado actual + tamaño futuro de un saque, atómico en su scope, coherente con la arquitectura de separación por unidad). Parquet = nota futura ligada a publicación. Anti-patrón confirmado y evitado: subir el truncado de a poco (cambio masivo de comportamiento, re-golden de 2791 filas, no resuelve la raíz). Aclaración técnica: comprimir el CSV NO ahorra ventana de contexto (hay que descomprimir a texto para procesar); lo que ahorra es procesar en disco e imprimir resúmenes, que es como ya se trabaja.
+
+### H106 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallo + 193 sumario). Sin firma 16. Votos 27463, zonas 140956, editorial 151.
+- **Outcome:** desestima 547→**793**, inadmisible_280 240→**38**, inadmisible_acordada_4 50→**6**. Resto sin cambio.
+- **Outputs canónicos (v18.21):** csjn_casos 5862 · votos 27463 · zonas 140956 · editorial 151. Golden sellado.
+- **Pendiente (batch M19):** CODEBOOK (recuento outcome v18.21) + manifiesto + republicación Dataverse. CODEBOOK v1.2 ya tiene la tabla de reliability del re-titular pero hay que actualizar los conteos de outcome a v18.21.
+- **Cola:** M20 (refactor etapa/disposición+parte, unidad parte×recurso); B105/B106/B110/B111 abiertos; ítem infraestructura texto pesado; residual 280/ac4 a revisar.
+
+**Commits:** B109 fix dos partes (v18.21) + golden + DEUDA + DISENO_SCDB.
+
+## H107 — B110 parcial: es_queja plural (2026-06-02)
+
+**Objetivo:** cerrar la sub-causa de plural de B110 (es_queja sub-detectado) como paso atómico previo a la capa-fuente y al refactor M20.
+
+### H107-01 — Re-diagnóstico de B110 (la causa raíz no era única)
+
+La DEUDA traía B110 como "causa raíz única" (recall 82,3%, 20 FN del Marco A). Lectura de los 20 FN sobre datos reales: son TRES mecanismos, no uno. `classify_queja` clasifica mirando solo `por_ello_text`. (1) Carátula/encabezado nombra la queja y el dispositivo no — 12/20. (2) Considerando la nombra y el `por_ello` no — 9/20 (solapan). (3) Plural: `\bqueja\b` no matchea «quejas» — 330_p2445, 338_p40, 348_p1378. La sospecha de "soft-hyphen" se descartó: `_unhyphenate` ya une «que­ ja»→«queja» (los 3 casos eran plural limpio). Dos FN sin señal en el CSV truncado: 329_p1487, 348_p1717.
+
+### H107-02 — Dimensionamiento y decisión de scope
+
+Flip potencial medido sobre el corpus entero: plural = puñado (atómico); capa-fuente (carátula ritual ~219, considerando ~316) = cambio masivo tipo B112, no atómico (rompe golden grande, re-titular, riesgo residuo). Decisión: cerrar PLURAL ahora (A), dejar la capa-fuente diseñada como frente propio (B).
+
+### H107-03 — Fix plural (parser v18.21→18.22)
+
+Pluralización estricta (solo número, sin cobertura nueva): `RE_ES_QUEJA` y `_SYN_Q` (`queja`→`quejas?`, `recurso de hecho`→`recursos?\s+de\s+hecho`, `presentación directa`→`presentaci[oó]n(?:es)?\s+directas?`); en `QUEJA_RESULTADO_PATTERNS` `la\s+`→`la[s]?\s+`, `hace\s+`→`hace[n]?\s+`, `agréguese`→`agr[ée]guese[n]?`, `esta?`→`esta?s?`. PoC A/B sobre el `classify_queja` real (no réplica): el PoC sobre réplica daba 0 regresión, el real cazó 2 toques en `queja_resultado` de casos ya-queja (332_p2441 desestima→hace_lugar mixto multi-parte; 343_p637 ''→hace_lugar) — ambos quedan consistentes con su `outcome`. Resultado sobre `.md` completo: **es_queja 1993→2056 (+63), puramente aditivo (0 flips 1→0)**, ~59 celdas de `queja_resultado` pobladas (hace_lugar 31, desestima 9, procedente 8, admisible 7, +2). M15 al revés: PoC sobre `por_ello` truncado a 300 dio 60; parser real sobre `.md` dio 63 (3 escondidos por el truncado, p. ej. 330_p3055).
+
+### H107-04 — FP residual aceptado (329_p1703), sin guard
+
+329_p1703 («Estado Nacional c/ Ingenio San Martín del Tabacal s/ expropiación»): el `por_ello` dice «las quejas de las partes resultan inhábiles» = agravios (sustantivo común), no recurso de hecho. FP confirmado, 1/63 (precisión del flip 98,4% > 96,9% global). Decisión REE: aceptar y loguear, no guard. Verificado: «inhábil» es ancla ruidosa (40 apariciones en `por_ello`, ~38 «días inhábiles»/feria —tanda tomo 343—, 1 sola queja-agravio); «queja…inhábil» es hapax=1. Aprendizaje: el discriminador recurso-vs-agravio es estructural (queja-recurso = objeto de verbo de admisibilidad; queja-agravio = sujeto de verbo de mérito), se resuelve en la capa-fuente con contexto completo.
+
+### H107 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallos + 193 sumarios).
+- **es_queja:** 2056 / 5669 fallos (36,3%). Antes 1993 (35,2%). Delta +63.
+- **Sin firma:** 16 / 5669 fallos. Sin cambio.
+- **Votos:** 27463 filas. **Zonas:** 140956. **Editorial:** 151.
+- **Trayectoria sin_firma:** 813 → … → 16 (sin cambio en H107).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas (es_queja +63, queja_resultado ~+59).
+- `output/parser/csjn_casos_votos.csv` — 27463 filas (sin cambio, byte-idéntico a H106).
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos (sin cambio).
+- `output/parser/csjn_casos_editorial.csv` — 151 secciones (sin cambio).
+
+**Golden re-sellado:** casos 904bfdedeadc, votos 5f5bc5171fe2 (=H106), zonas 5f4949c93a88, editorial e8fa2ccf1e8e.
+
+**Scripts:** sin scripts nuevos (diagnóstico vía `extraer_caso.py` existente).
+
+**Commits:** 2 (parser v18.22 + golden; DEUDA/BITÁCORA/CHANGELOG).
