@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.21"  # H106: B109 desestima-de-via no la pisa 280/ac4 (verbo manda); 229 inadmisible_280/ac4→desestima, causa preservada via deteccion textual en gate
+__version__ = "18.22"  # H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
 
 import re
 import csv
@@ -684,39 +684,39 @@ def clasificar_causa_inadmisibilidad(outcome, considerando_text, por_ello_text,
 # Cámara deniega el REF.
 
 RE_ES_QUEJA = re.compile(
-    r"\bqueja\b|\brecurso de hecho\b|\bpresentaci[oó]n directa\b", re.I)
+    r"\bquejas?\b|\brecursos?\s+de\s+hecho\b|\bpresentaci[oó]n(?:es)?\s+directas?\b", re.I)
 
-_SYN_Q = r"(?:queja|presentaci[oó]n directa|recurso de hecho)"
+_SYN_Q = r"(?:quejas?|presentaci[oó]n(?:es)?\s+directas?|recursos?\s+de\s+hecho)"
 
 QUEJA_RESULTADO_PATTERNS = [
     ("hace_lugar", re.compile(
-        rf"(?:se\s+)?(?:re)?hace\s+lugar\s+(?:\w+\s+)?(?:a\s+)?la\s+{_SYN_Q}|"
+        rf"(?:se\s+)?(?:re)?hace[n]?\s+lugar\s+(?:\w+\s+)?(?:a\s+)?la[s]?\s+{_SYN_Q}|"
         rf"(?:se\s+resuelve|resuelve)\s*:?\s*(?:I\.\s*)?[Hh]acer\s+lugar\s+"
-        rf"(?:\w+\s+)?a\s+la\s+{_SYN_Q}|"
-        rf"hacer\s+lugar\s+(?:a\s+)?la\s+{_SYN_Q}", re.I)),
+        rf"(?:\w+\s+)?a\s+la[s]?\s+{_SYN_Q}|"
+        rf"hacer\s+lugar\s+(?:a\s+)?la[s]?\s+{_SYN_Q}", re.I)),
     ("admisible", re.compile(
         rf"se\s+declara[n]?\s+(?:formalmente\s+)?admisibles?\s+"
-        rf"(?:la\s+|el\s+)?{_SYN_Q}|"
-        rf"se\s+admite[n]?\s+(?:la\s+|el\s+)?{_SYN_Q}|"
-        rf"[Dd]eclarar\s+admisibles?\s+(?:la\s+|el\s+)?{_SYN_Q}|"
-        rf"admitir\s+(?:la\s+|el\s+)?{_SYN_Q}|"
-        rf"se\s+decide\s+admitir\s+(?:la\s+)?{_SYN_Q}", re.I)),
+        rf"(?:la[s]?\s+|el\s+)?{_SYN_Q}|"
+        rf"se\s+admite[n]?\s+(?:la[s]?\s+|el\s+)?{_SYN_Q}|"
+        rf"[Dd]eclarar\s+admisibles?\s+(?:la[s]?\s+|el\s+)?{_SYN_Q}|"
+        rf"admitir\s+(?:la[s]?\s+|el\s+)?{_SYN_Q}|"
+        rf"se\s+decide\s+admitir\s+(?:la[s]?\s+)?{_SYN_Q}", re.I)),
     ("procedente", re.compile(
         rf"se\s+declara[n]?\s+(?:formalmente\s+)?procedentes?\s+"
-        rf"(?:la\s+|el\s+)?{_SYN_Q}|"
-        rf"procedentes?\s+(?:la\s+|el\s+){_SYN_Q}|"
+        rf"(?:la[s]?\s+|el\s+)?{_SYN_Q}|"
+        rf"procedentes?\s+(?:la[s]?\s+|el\s+){_SYN_Q}|"
         rf"procedentes?\s+(?:el\s+recurso|los\s+recursos).*{_SYN_Q}", re.I)),
     ("desestima", re.compile(
         rf"se\s+desestima[n]?\s+.*?\b{_SYN_Q}\b|"
-        rf"[Dd]esestimar\s+(?:la\s+|el\s+|esta?\s+)?{_SYN_Q}", re.I)),
+        rf"[Dd]esestimar\s+(?:la[s]?\s+|el\s+|esta?s?\s+)?{_SYN_Q}", re.I)),
     ("rechaza", re.compile(
         rf"se\s+rechaza[n]?\s+.*?\b{_SYN_Q}\b|"
         rf"rechaz[áa]ndose\s+.*?\b{_SYN_Q}\b|"
-        rf"rechaza\s+(?:la\s+|el\s+){_SYN_Q}|"
-        rf"rechazar\s+la\s+{_SYN_Q}", re.I)),
+        rf"rechaza\s+(?:la[s]?\s+|el\s+){_SYN_Q}|"
+        rf"rechazar\s+la[s]?\s+{_SYN_Q}", re.I)),
     ("inadmisible", re.compile(
-        rf"se\s+declara[n]?\s+inadmisibles?\s+(?:la\s+|el\s+)?{_SYN_Q}", re.I)),
-    ("agreguese", re.compile(rf"agr[ée]guese\s+la\s+{_SYN_Q}", re.I)),
+        rf"se\s+declara[n]?\s+inadmisibles?\s+(?:la[s]?\s+|el\s+)?{_SYN_Q}", re.I)),
+    ("agreguese", re.compile(rf"agr[ée]guese[n]?\s+la[s]?\s+{_SYN_Q}", re.I)),
     ("desistida", re.compile(
         rf"se\s+tiene\s+por\s+desistid[ao]\s+.*?\b{_SYN_Q}\b", re.I)),
     ("abstracta", re.compile(
