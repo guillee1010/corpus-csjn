@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H108 (2026-06-03)
+
+- `parser.py` v18.22→v18.23: capa-fuente es_queja por carátula (RE_CARAT_QUEJA + guard de cita; classify_queja recibe caratula_text). es_queja 2056→2281 (+225); queja_resultado sin_clasificar 38→263.
+- `output/parser/csjn_casos.csv`: 5862 filas (sin cambio de filas; columna es_queja). golden sha256 904bfde→e7e59ca.
+- votos / zonas / editorial: sin cambios (byte-idénticos).
+
 ## H107 (2026-06-02)
 
 - `parser.py` v18.21→18.22: B110 parcial — pluralización de `RE_ES_QUEJA`, `_SYN_Q` y `QUEJA_RESULTADO_PATTERNS` (`\bqueja\b`→`\bquejas?\b`, etc.). Captura las quejas multi-recurrente. 63 casos afectados.

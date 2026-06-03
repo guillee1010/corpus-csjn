@@ -16461,3 +16461,44 @@ Pluralización estricta (solo número, sin cobertura nueva): `RE_ES_QUEJA` y `_S
 **Scripts:** sin scripts nuevos (diagnóstico vía `extraer_caso.py` existente).
 
 **Commits:** 2 (parser v18.22 + golden; DEUDA/BITÁCORA/CHANGELOG).
+
+## H108 — Capa-fuente es_queja + descubrimiento bug merge/caso-perdido (2026-06-03)
+
+**Objetivo:** mejorar el recall de es_queja detectando la vía en la carátula (no solo en el dispositivo); validar, sellar golden y documentar.
+
+### H108-01 — Decisión de camino y CODEBOOK v1.3 (no publicado)
+
+Auditoría del CODEBOOK publicado: error de 6x en inadmisible_280 (240 publicado vs 38 real). Producido CODEBOOK v1.3 corrigiendo outcome (desestima 547→793, inadmisible_280 240→38, inadmisible_acordada_4 50→6), refresh de queja_resultado, causa_inadmisibilidad 1036→1056, y nota nueva del deslinde outcome (disposición dominante) vs causa_inadmisibilidad (fundamento del gate). Decisión: NO publicar a Dataverse (no hay script de push); CODEBOOK v1.3 queda local.
+
+### H108-02 — Capa-fuente es_queja por carátula (v18.22→v18.23)
+
+Diagnóstico: classify_queja miraba solo el por_ello, perdía quejas cuya vía se nombra únicamente en carátula. PoC sobre casos.csv: 241 candidatos carátula-ritual con es_queja=0; split 224 ancla fuerte + 17 débil. Patch conservador (solo ancla fuerte + guard de cita): RE_CARAT_QUEJA, RE_CARAT_CITA, helper _es_queja_por_caratula(), classify_queja(por_ello_text, caratula_text=""), call-site pasa case_name_cuerpo. Tail débil y capa considerando diferidos a DEUDA.
+
+Resultado (check_regresion): es_queja 2056→2281 (+225), 0 flips 1→0; queja_resultado sin_clasificar 38→263; votos/zonas/editorial CLEAN; casos FAIL solo en es_queja (esperado). Golden re-sellado: casos sha256 904bfde→e7e59ca; votos/zonas/editorial byte-idénticos.
+
+### H108-03 — Validación de precisión de flips
+
+Cross-check índice vs carátula sobre los 225 flips: 218 limpios + 7 a leer. Leídos los 7 completos: 4 TP (quejas de tercero donde recurrente≠parte del índice: 338_p1277 Comunidad Mapuche, 329_p1487 corralito, 333_p329 Fisco/AFIP, 337_p291 CNV) + 3 FP. Precisión flip = 222/225 = 98,7% (> 96,9% global). Los 3 FP se aceptan como residual logueado; no se pone guard (mataría los 4 TP de tercero).
+
+### H108-04 — Descubrimiento: bug de merge/caso-perdido (B114, familia B009)
+
+Los 3 FP resultaron síntoma de un bug mayor. Diagnóstico corregido en el camino: NO es el fin-de-bloque del parser. set-diff catalog vs casos = 0/0; el catálogo MISMO define rangos fundidos (332_p1960 = pg 1960-2033 "Massuh", traga Arriola; 331_p856 traga Acosta). Arriola y Acosta ausentes del índice de partes. El parser extrae fielmente el rango del catálogo. Causa raíz aguas arriba: hueco en el índice → el rango de la entrada anterior se estira y funde los fallos intermedios.
+
+Detector limpio (zonas): apertura≥2. Dimensión: 103 casos apertura≥2 → 71 con dispositivo≥2 (merge real) + 32 con dispositivo≤1 (probable acumulación). ~70 fallos perdidos (~1,2%), incluye landmarks (Arriola, Acosta). Descartado el span de páginas como detector (conflaciona fallos largos legítimos —Boggiano, Mazzeo, Schiffrin, Bertuzzi— y se le escapan swallows chicos como 331_p856 span=10). Fix no diseñado; fork pendiente (parseo de índice vs body-scan) requiere el índice fuente.
+
+### H108 — Estado final
+
+- **Corpus:** 5862 casos (5669 fallos + 160 sumario_con_link + 33 sumario_editorial).
+- **es_queja:** 2281. **queja_resultado sin_clasificar:** 263.
+- **Sin firma (firma_raw vacío):** 16 / 5669 (0,3%) — sin cambios (H108 no tocó firma).
+- **Votos / zonas / editorial:** sin cambios (golden byte-idéntico). Zonas: 140956 segmentos.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5862 filas. golden sha256 e7e59ca.
+- `output/parser/csjn_casos_votos.csv` — sin cambios (5f5bc51).
+- `output/parser/csjn_casos_zonas.csv` — 140956 segmentos (5f4949c9).
+- `output/parser/csjn_casos_editorial.csv` — sin cambios (e8fa2cee).
+
+**Versiones:** parser.py v18.23; resto sin cambios.
+
+**Commits:** 2 (parser+golden; docs) — pendientes.
