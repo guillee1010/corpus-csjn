@@ -14,9 +14,9 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 331_p1364,331,LibroVol331.2.md,1364,1369,13776,13975,"Zatloukal, Jorge | Estado Nacional (Ministerio de Economía y Producción)",2,ok_pg_fin_redirigida
 331_p1369,331,,1369,1382,,,Camuzzi Gas Pampeana S.A.,1,pagina_no_en_mapa
 331_p1530,331,LibroVol331.2.md,1530,1581,20072,22093,"Patitó, José Ángel y otro | Diario La Nación y otros",2,ok_pg_fin_redirigida
-331_p1581,331,,1581,1583,,,"ANSeS | Bianchi, Olga",2,pagina_no_en_mapa
+331_p1581,331,,1581,1583,,,"Bianchi, Olga | ANSeS",2,pagina_no_en_mapa
 331_p1676,331,LibroVol331.2.md,1676,1679,25660,25797,"Mendoza, Beatriz Silvia y otros | Estado Nacional y otros",2,ok_pg_fin_redirigida
-331_p1679,331,,1679,1690,,,"Buenos Aires, Provincia de y otros | Asociación Ecológica Social de Pesca, Caza y Náutica",2,pagina_no_en_mapa
+331_p1679,331,,1679,1690,,,"Asociación Ecológica Social de Pesca, Caza y Náutica | Buenos Aires, Provincia de y otros",2,pagina_no_en_mapa
 331_p1985,331,,1985,1987,,,"Bassano, Mario Marcelo | Estado Nacional (Comité Federal de Radiodifusión)",2,pagina_no_en_mapa
 331_p2166,331,LibroVol331.3.md,2166,2169,7143,7264,"Neuberger, Erico | ANSeS",2,ok_pg_fin_redirigida
 331_p2169,331,,2169,2174,,,"Torrez, Tráncito y otro | Supermercados Norte S.A. y otro",2,pagina_no_en_mapa
@@ -26,31 +26,31 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 331_p2649,331,,2649,2652,,,DGI (en autos BBVA TF-19.323-I),1,pagina_no_en_mapa
 332_p5,332,,5,12,,,"Lemes, Mauro Ismael",1,pagina_no_en_mapa
 332_p249,332,LibroVol332.1.md,249,253,9714,9850,"Dalmonte, Eduardo",1,ok_pg_fin_redirigida
-332_p253,332,,253,271,,,Siembra Seguros de Retiro,1,pagina_no_en_mapa
+332_p253,332,,253,271,,,"Álvarez, Raquel | Siembra Seguros de Retiro",2,pagina_no_en_mapa
 332_p731,332,LibroVol332.1.md,731,737,28472,28722,"Chimondeguy, Alfredo | ANSeS",2,ok_pg_fin_redirigida
 332_p737,332,,737,752,,,Curi Hnos. S.A.,1,pagina_no_en_mapa
-332_p921,332,,921,930,,,Transportes Línea 104 S.A.,1,pagina_no_en_mapa
+332_p921,332,,921,930,,,"Abdurraman, Martín | Transportes Línea 104 S.A.",2,pagina_no_en_mapa
 332_p1304,332,LibroVol332.2.md,1304,1309,14877,15039,"Cirillo, Rafael | ANSeS",2,ok_pg_fin_redirigida
 332_p1309,332,,1309,1322,,,"Foye, Hernán Fernando",1,pagina_no_en_mapa
 332_p1564,332,LibroVol332.2.md,1564,1571,24804,25032,"Catalano, Hugo Norberto y otros | Estado Nacional - Poder Ejecutivo Nacional",2,ok_pg_fin_redirigida
-332_p1571,332,,1571,1598,,,AFIP y otro | Candy S.A.,2,pagina_no_en_mapa
+332_p1571,332,,1571,1598,,,Candy S.A. | AFIP y otro,2,pagina_no_en_mapa
 332_p1624,332,LibroVol332.2.md,1624,1629,27102,27304,"Compañía Micrómnibus La Colorada S.A.C.I. | Buenos Aires, Provincia de",2,ok_pg_fin_redirigida
 332_p1629,332,,1629,1633,,,E.D.E.M.S.A. | E.N.A. y M.E.O.S.P.N.,2,pagina_no_en_mapa
 332_p2033,332,,2033,2043,,,"Fiscal | Ferreyra, José; Almeida, Alberto y Díaz, Jorge.",2,pagina_no_en_mapa
 332_p2153,332,LibroVol332.3.md,2153,2159,4723,4912,"Roux, María Estela | Administración Nacional de la Seguridad Social",2,ok_pg_fin_redirigida
-332_p2159,332,,2159,2203,,,E.N. (Min. de Educación y Justicia de la Nación),1,pagina_no_en_mapa
+332_p2159,332,,2159,2203,,,"Arisnabarreta, Rubén J. | E.N. (Min. de Educación y Justicia de la Nación)",2,pagina_no_en_mapa
 332_p2425,332,LibroVol332.3.md,2425,2435,15559,15951,"Sosa, Eduardo Emilio | Provincia de Santa Cruz",2,ok_pg_fin_redirigida
 332_p2435,332,,2435,2441,,,Cri Holding Inc. | Compañía Argentina de Comodoro Rivadavia S.A.,2,pagina_no_en_mapa
 332_p2633,332,LibroVol332.3.md,2633,2657,23621,24551,"Trejo, Jorge Elías | Stema S.A. y otros",2,ok_pg_fin_redirigida
 332_p2657,332,,2657,2659,,,Fiszman y Compañía S.C.A. | Dirección General Impositiva,2,pagina_no_en_mapa
 333_p5,333,,5,9,,,"Barreiro, Angel",1,pagina_no_en_mapa
-333_p123,333,LibroVol333.1.md,123,133,4605,4991,"ANSeS | Bidau, Sara Margarita y otros",2,ok_pg_fin_redirigida
-333_p133,333,,133,138,,,Textil Pegaso S.R.L. | Banco de la Nación Argentina,2,pagina_no_en_mapa
-333_p300,333,LibroVol333.1.md,300,311,11452,11852,Frimetal S.A. y otros | Por nombre del demandado Administración Federal de Ingresos Públicos - Dirección General Impositiva | Administración Federal de Ingresos Públicos - Dirección General Impositiva,3,ok_pg_fin_redirigida
+333_p123,333,LibroVol333.1.md,123,133,4605,4991,"Bidau, Sara Margarita y otros | ANSeS",2,ok_pg_fin_redirigida
+333_p133,333,,133,138,,,Banco de la Nación Argentina | Textil Pegaso S.R.L.,2,pagina_no_en_mapa
+333_p300,333,LibroVol333.1.md,300,311,11452,11852,Frimetal S.A. y otros | Administración Federal de Ingresos Públicos - Dirección General Impositiva,2,ok_pg_fin_redirigida
 333_p311,333,,311,327,,,"Ramos, José Luis | Estado Nacional (Min. de Defensa - A.R.A.)",2,pagina_no_en_mapa
 333_p538,333,LibroVol333.1.md,538,561,20720,21621,"Línea 22 S.A. | Buenos Aires, Provincia de",2,ok_pg_fin_redirigida
 333_p561,333,,561,563,,,Grumenco Developers S.A. | Banco Hipotecario Sociedad Anónima | Banco Hipotecario S.A.,3,pagina_no_en_mapa
-333_p777,333,,777,792,,,EN Mº Planificación dto. 118/06 (ST),1,pagina_no_en_mapa
+333_p777,333,,777,792,,,"EN Mº Planificación dto. 118/06 (ST) | A., M. B. y otro",2,pagina_no_en_mapa
 333_p1143,333,LibroVol333.2.md,1143,1147,14552,14711,"P., C. J.",1,ok_pg_fin_redirigida
 333_p1147,333,,1147,1152,,,"Quiroga, Gabriela Beatriz | Universidad Nac. de Córdoba (Fac. de Cs. Agropecuarias)",2,pagina_no_en_mapa
 333_p1192,333,LibroVol333.2.md,1192,1205,16385,16867,(3) Estado Nacional y Obr. y Serv. Publ. | Centrales Térmicas Patagónicas S.A. | Estado Nacional y Obr. y Serv. Publ.,3,ok_pg_fin_redirigida
@@ -60,27 +60,282 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 333_p1885,333,,1885,1891,,,Grupo Clarín y otros S.A.,1,pagina_no_en_mapa
 333_p2055,333,LibroVol333.3.md,2055,2061,6582,6784,Fiscalía General Cámara Nac. Apel. Comercial | Gobierno de la Ciudad de Buenos Aires,2,ok_pg_fin_redirigida
 333_p2061,333,,2061,2065,,,"Sandobal, Juan Luis | Ferrocarriles Metropolitanos S.A.",2,pagina_no_en_mapa
-333_p2251,333,LibroVol333.3.md,2251,2261,14220,14574,Superior Gobierno de la Provincia de Córdoba,1,ok_pg_fin_redirigida
+333_p2251,333,LibroVol333.3.md,2251,2261,14220,14574,Asesores Industriales S.R.L. Empresa de Servicios Eventuales | Superior Gobierno de la Provincia de Córdoba,2,ok_pg_fin_redirigida
 333_p2261,333,,2261,2271,,,Banco Sidesa S.A.,1,pagina_no_en_mapa
 334_p5,334,,5,9,,,Prodecom S.A. (TF 20.862-I) | D.G.I. | (3) Prodecom S.A. (TF 20.862-I),3,pagina_no_en_mapa
 334_p44,334,LibroVol334.1.md,44,53,1581,1914,"Peña, Orlando | Dirección General Impositiva",2,ok_pg_fin_redirigida
-334_p53,334,,53,62,,,D.G.I.,1,pagina_no_en_mapa
+334_p53,334,,53,62,,,Astra CAPSA (TF 19.173-I) | D.G.I.,2,pagina_no_en_mapa
 334_p343,334,LibroVol334.1.md,343,349,13446,13645,"Fleita, Nilda Ester | Administración Nacional de la Seguridad Social",2,ok_pg_fin_redirigida
 334_p349,334,,349,357,,,Sindicato de Trabajadores de Correos y Telecomunicaciones de Bs. As. | Ministerio de Trabajo de la Nación,2,pagina_no_en_mapa
 334_p468,334,LibroVol334.1.md,468,471,18249,18368,"Organbide, Pedro Antonio",1,ok_pg_fin_redirigida
 334_p471,334,,471,474,,,Morán Juan Carlos,1,pagina_no_en_mapa
-334_p715,334,,715,725,,,Estado Nacional | Barrick Exploraciones Argentinas S.A. y otro,2,pagina_no_en_mapa
+334_p715,334,,715,725,,,Barrick Exploraciones Argentinas S.A. y Otro | Estado Nacional | Barrick Exploraciones Argentinas S.A. y otro,3,pagina_no_en_mapa
 334_p829,334,LibroVol334.2.md,829,837,4474,4801,"P., A. | ANSeS",2,ok_pg_fin_redirigida
 334_p837,334,,837,842,,,JP Morgan Chase Bank NA (Sucursal Bs. As.) | Banco Central de la Republica Argentina,2,pagina_no_en_mapa
-334_p875,334,LibroVol334.2.md,875,885,6256,6611,Rectificaciones Rivadavia S.A. | A.F.I.P. | Por nombre del demandado A.F.I.P.,3,ok_pg_fin_redirigida
-334_p885,334,,885,891,,,"Embajada de la Federación Rusa y Otros | Clementi, Edgar Omar y otro | Embajada de la Federación Rusa y otros",3,pagina_no_en_mapa
+334_p875,334,LibroVol334.2.md,875,885,6256,6611,Rectificaciones Rivadavia S.A. | A.F.I.P.,2,ok_pg_fin_redirigida
+334_p885,334,,885,891,,,"Clementi, Edgar Omar y Otro | Embajada de la Federación Rusa y Otros | Clementi, Edgar Omar y otro | Embajada de la Federación Rusa y otros",4,pagina_no_en_mapa
 334_p972,334,LibroVol334.2.md,972,983,9963,10374,Oscar Melendez Construcciones y Otro | A.N.A. | Oscar Meléndez Construcciones y otro,3,ok_pg_fin_redirigida
 334_p983,334,,983,988,,,"Mara, Hugo Jorge | E.N. M° Defensa SSI GN Resol 1219/96 y 1307/97 SS",2,pagina_no_en_mapa
-334_p1054,334,LibroVol334.2.md,1054,1070,13079,15263,"Zeballos, José Luis",1,fallo_cruza_archivos
+334_p1063,334,,1063,1070,,,"Astiz, Alfredo Ignacio",1,pagina_no_en_mapa
 334_p1139,334,LibroVol334.3.md,1139,1143,3016,3170,"Suárez, Carlos Alberto | Representaciones S.R.L. y otros",2,ok_pg_fin_redirigida
-334_p1143,334,,1143,1162,,,"Buenos Aires, Provincia de y otros",1,pagina_no_en_mapa
+334_p1143,334,,1143,1162,,,"Asociación Argentina de Abogados Ambientalistas | Buenos Aires, Provincia de y otros",2,pagina_no_en_mapa
 334_p1644,334,LibroVol334.3.md,1644,1659,23156,23719,"Vecchi, Amado Alejandro",1,ok_pg_fin_redirigida
 334_p1659,334,,1659,1673,,,"Calafell, Roque Esteban",1,pagina_no_en_mapa
+335_p5,335,,5,6,,,Bayer S.A. (TF 19655-I) | D.G.I.,2,pagina_no_en_mapa
+335_p6,335,,6,11,,,"Beaudean, Ricardo",1,pagina_no_en_mapa
+335_p11,335,,11,16,,,"Parada, Lylia y Otro | PEN Ley 25561 Dtos. 1570/01 214/02 471/02",2,pagina_no_en_mapa
+335_p16,335,,16,23,,,ADM Argentina S.A. (TF 21394-A) | D.G.A.,2,pagina_no_en_mapa
+335_p23,335,,23,30,,,"Colegio de Escribanos de la Ciudad de Buenos Aires | Buenos Aires, Provincia de",2,pagina_no_en_mapa
+335_p30,335,,30,34,,,E.J.E.,1,pagina_no_en_mapa
+335_p34,335,,34,38,,,"Garrido, Juan Alberto | PEN Mº de Trabajo y Seguridad Social",2,pagina_no_en_mapa
+335_p38,335,,38,44,,,"(2) Germano, Karina Dana | Germano, Karina Dana",2,pagina_no_en_mapa
+335_p44,335,,44,49,,,"Koch, Lilian Mercedes | PEN Ley 25.561 Dtos. 1570/01 214/02 Boston Citi",2,pagina_no_en_mapa
+335_p49,335,,49,58,,,"Logística La Serenísima S.A. y Otros | Mendoza, Provincia de",2,pagina_no_en_mapa
+335_p58,335,,58,68,,,"Mierez, Alfredo Rubén y Otros",1,pagina_no_en_mapa
+335_p68,335,,68,76,,,Telefónica de Argentina S.A. (TF 22099-I) | D.G.I.,2,pagina_no_en_mapa
+335_p76,335,,76,85,,,"Quinteros, Virginia",1,pagina_no_en_mapa
+335_p85,335,,85,89,,,"Rosales, Víctor Aldo y Otro | Estado Nacional (Ministerio de Defensa)",2,pagina_no_en_mapa
+335_p89,335,,89,98,,,Shell Compañía Argentina de Petróleo S.A.,1,pagina_no_en_mapa
+335_p98,335,,98,115,,,Frente Cívico y Social,1,pagina_no_en_mapa
+335_p115,335,,115,123,,,Petrobras Energía S.A. (TF 24098-A) | D.G.A.,2,pagina_no_en_mapa
+335_p123,335,,123,131,,,BJ Services S.R.L. (TF 22368-I) | D.G.I.,2,pagina_no_en_mapa
+335_p131,335,,131,144,,,Fiat Concord S.A. (TF 16778-I) | D.G.I.,2,pagina_no_en_mapa
+335_p144,335,,144,146,,,"La Pampa, Provincia de | Estado Nacional",2,pagina_no_en_mapa
+335_p146,335,,146,168,,,"Molina, Miguel Horacio y Otros | Policía Federal Argentina",2,pagina_no_en_mapa
+335_p168,335,,168,180,,,"P. de C., M. | Instituto de Seguros de Jujuy y Estado Provincial",2,pagina_no_en_mapa
+335_p180,335,,180,190,,,"Ponce, Cristian Leandro | ANACRI S.A. y Otro",2,pagina_no_en_mapa
+335_p190,335,,190,193,,,"Zurita, Luis Angel | ANSeS",2,pagina_no_en_mapa
+335_p193,335,,193,197,,,"Crova, Maria Gabriela y Otro | Organización de Servicios Directos Empr. O.S.D.E.",2,pagina_no_en_mapa
+335_p197,335,,197,239,,,"F., A. L.",1,pagina_no_en_mapa
+335_p239,335,,239,246,,,Luján Williams Automotores S.A. Conc. Prev. | Volkswagen Argentina S.A. y Volkswagen S.A. de Ahorro para Fines Determ. y Volkswagen Cía. Financiera S.A.,2,pagina_no_en_mapa
+335_p246,335,,246,252,,,"Mercado, Florentino | ENTEL Residual",2,pagina_no_en_mapa
+335_p252,335,,252,258,,,"Villegas, Marcela Alejandra | Prefectura Naval Argentina",2,pagina_no_en_mapa
+335_p258,335,,258,266,,,Yacimientos Petrolíferos Fiscales S.A. | Administración Federal de Ingresos Públicos – Dirección General Impositiva,2,pagina_no_en_mapa
+335_p266,335,,266,277,,,"Agri, Susana Josefa | Estado Nacional – Ministerio de Defensa – Fuerza Aérea Argentina",2,pagina_no_en_mapa
+335_p277,335,,277,292,,,ASSUPA | Alianza Petrolera Argentina S.A. y Otros,2,pagina_no_en_mapa
+335_p292,335,,292,310,,,Grupo República S.A. (TF 19394-I) | D.G.I.,2,pagina_no_en_mapa
+335_p310,335,,310,323,,,Industrias Metalúrgicas Pescarmona S.A. | Banco Central de la República Argentina,2,pagina_no_en_mapa
+335_p323,335,,323,344,,,"Lago Espejo Resort S.A. | Neuquén, Provincia de y Otro (Estado Nacional)",2,pagina_no_en_mapa
+335_p344,335,,344,346,,,"Langan, Carlos María | ANSeS",2,pagina_no_en_mapa
+335_p346,335,,346,353,,,"Saldaña, Ricardo Roberto | ANSeS",2,pagina_no_en_mapa
+335_p353,335,,353,358,,,"Brugo, Marcela Lucila | Eskenazi, Sebastián y Otros",2,pagina_no_en_mapa
+335_p358,335,,358,361,,,"Cingolani, Francisco Florencio | Administración Nacional de la Seguridad Social",2,pagina_no_en_mapa
+335_p361,335,,361,369,,,Federación Argentina de Colegios de Abogados | EN – PJN – Consejo Magist. Jurado Enjuicia. Resol. 317/06 | E.N. – PJN – Consejo Magist. Jurado Enjuicia. Resol. 317/06,3,pagina_no_en_mapa
+335_p369,335,,369,371,,,"Flores, Raúl Alberto | Policía Federal Argentina (Registro Datos)",2,pagina_no_en_mapa
+335_p371,335,,371,374,,,General Motors de Argentina S.R.L. | Municipalidad de Villa María,2,pagina_no_en_mapa
+335_p374,335,,374,378,,,Oracle Argentina S.A. | (4) Municipalidad de General Deheza | Municipalidad de General Deheza,3,pagina_no_en_mapa
+335_p378,335,,378,387,,,"Anaut, Roberto Javier | Estado Nacional – Armada Argentina",2,pagina_no_en_mapa
+335_p387,335,,387,404,,,"Comunidad del Pueblo Diaguita de Andalgalá | Catamarca, Provincia de y Otros",2,pagina_no_en_mapa
+335_p404,335,,404,410,,,"González, Margarita | Administración Nacional de la Seguridad Social",2,pagina_no_en_mapa
+335_p410,335,,410,424,,,"Pena, Indiana Elsa y Otros | Estado Nacional – Ministerio Público – Defensoría General de la Nación",2,pagina_no_en_mapa
+335_p424,335,,424,430,,,"Rodríguez, Jorge Omar | Estado Nacional – Armada Argentina",2,pagina_no_en_mapa
+335_p430,335,,430,439,,,"(3) Zanotti, Oscar Alberto | EN – Mº Defensa Dto. 871/07 | Zanotti, Oscar Alberto | E.N. – Mº Defensa Dto. 871/07",4,pagina_no_en_mapa
+335_p439,335,,439,450,,,"Celotto, Julio Cesar | LAN Airlines S.A.",2,pagina_no_en_mapa
+335_p450,335,,450,452,,,"Estado Nacional (Prefectura Naval Argentina) | Buenos Aires, Provincia de",2,pagina_no_en_mapa
+335_p452,335,,452,499,,,"Q. C., S. Y. | Gobierno de la Ciudad de Buenos Aires",2,pagina_no_en_mapa
+335_p499,335,,499,519,,,"Texam Corp. S.A. | San Luis, Provincia de y Otro – Estado Nacional",2,pagina_no_en_mapa
+335_p519,335,,519,527,,,AKAPOL S.A. (TF 20985-I) | D.G.I. | Akapol S.A. (TF 20985-I),3,pagina_no_en_mapa
+335_p527,335,,527,533,,,"Montaña, Jorge Luis | Transportes Metropolitanos General San Martín | (7) Transportes Metropolitanos General San Martín",3,pagina_no_en_mapa
+335_p533,335,,533,585,,,"Acosta, Jorge Eduardo y Otro",1,pagina_no_en_mapa
+335_p585,335,,585,591,,,"Acosta Torres, Eulogio | Estado Nacional –Ministerio de Justicia– y Otros",2,pagina_no_en_mapa
+335_p591,335,,591,600,,,"Borda, Guillermo Julio y Otro | Colegio Público de Abogados de la Capital Federal",2,pagina_no_en_mapa
+335_p600,335,,600,608,,,"Gómez, Miguel Oscar | Consejo Federal de Radiocomunicaciones – Comisión Nacional de Comunicaciones",2,pagina_no_en_mapa
+335_p608,335,,608,613,,,"Leguizamón, Heriberta | EN – Mº Interior Resol. 970/07 PFA Dto. 1441/04 | E.N. – Mº Interior Resol. 970/07 PFA Dto. 1441/04",3,pagina_no_en_mapa
+335_p613,335,,613,622,,,"Meza, Jorge Alejandro | Caja de Retiros Jubilaciones y Pensiones de la Policía Federal Argentina",2,pagina_no_en_mapa
+335_p622,335,,622,636,,,"Moreno, Guillermo",1,pagina_no_en_mapa
+335_p636,335,,636,646,,,"Moshe, Ben Ivgy",1,pagina_no_en_mapa
+335_p646,335,,646,650,,,"Cortez, Jesús Florentino y Otros | Ferrocarriles Argentinos",2,pagina_no_en_mapa
+335_p650,335,,650,656,,,"Telefónica Móviles Argentina S.A. | Misiones, Provincia de",2,pagina_no_en_mapa
+335_p656,335,,656,661,,,"Mansilla, Carlos Alberto | Prefectura Naval Argentina",2,pagina_no_en_mapa
+335_p661,335,,661,664,,,Banco Bradesco Argentina S.A. | Estado Nacional Administración Federal de Ingresos Públicos – DGI Resol. 48/07,2,pagina_no_en_mapa
+335_p664,335,,664,671,,,"Cavia, Víctor Daniel | SAB S.A.",2,pagina_no_en_mapa
+335_p671,335,,671,680,,,"Damiano, Alberto y Otro | Universidad de Buenos Aires – Facultad de Medicina – Hospital de Clínicas",2,pagina_no_en_mapa
+335_p680,335,,680,686,,,DGI (en autos Telec. Int. Telintar S.A.) TF 20343-I,1,pagina_no_en_mapa
+335_p686,335,,686,705,,,"Faggionatto Marquez, Federico Efraín",1,pagina_no_en_mapa
+335_p705,335,,705,729,,,Grupo Clarin S.A. y Otros,1,pagina_no_en_mapa
+335_p729,335,,729,735,,,"Iribarne, Rodolfo Antonio | Estado Nacional (Honorable Senado de la Nación)",2,pagina_no_en_mapa
+335_p735,335,,735,742,,,Mides S.A. Algodonera del Chaco,1,pagina_no_en_mapa
+335_p742,335,,742,762,,,"Sánchez Granel, Eduardo Alberto y Otros | BCRA",2,pagina_no_en_mapa
+335_p762,335,,762,765,,,"Altieri, Fabiana Alejandra | Consejo Interuniversitario Nacional",2,pagina_no_en_mapa
+335_p765,335,,765,770,,,"Autoridad Federal de Servicios de Comunicación Audiovisual | San Luis, Provincia de",2,pagina_no_en_mapa
+335_p770,335,,770,790,,,"Ferrocarriles Argentinos (E.L.) | Río Negro, Provincia de",2,pagina_no_en_mapa
+335_p790,335,,790,794,,,"San Luis, Provincia de | Estado Nacional",2,pagina_no_en_mapa
+335_p794,335,,794,799,,,"Toloza, Raúl Omar | Administración Nacional de la Seguridad Social",2,pagina_no_en_mapa
+335_p799,335,,799,813,,,"Albarracini Nieves, Jorge Washington",1,pagina_no_en_mapa
+335_p813,335,,813,817,,,"Bravo Herrera, Félix Horacio | Administración Nacional de la Seguridad Social",2,pagina_no_en_mapa
+335_p817,335,,817,854,,,"Carrera, Fernando Ariel",1,pagina_no_en_mapa
+335_p854,335,,854,863,,,"B., J. M.",1,pagina_no_en_mapa
+335_p863,335,,863,868,,,"Banco de la Provincia de Buenos Aires | Cohen, Rafael y Otro",2,pagina_no_en_mapa
+335_p868,335,,868,871,,,"D., S. D. | (2) D., S. D.",2,pagina_no_en_mapa
+335_p871,335,,871,880,,,"Gerard, María Raquel y Otro | IOSPER",2,pagina_no_en_mapa
+335_p880,335,,880,884,,,"López Rossi, Servando Jaime | Administración Nacional de la Seguridad Social",2,pagina_no_en_mapa
+335_p884,335,,884,888,,,"Mendoza, Marcos Nicolás | ANSeS",2,pagina_no_en_mapa
+335_p888,335,,888,905,,,"N.N. o U., V.",1,pagina_no_en_mapa
+335_p905,335,,905,923,,,"Rodríguez Ruiz, Alberto | Diario Clarin Arte Gráfico Editorial Argentino S.A. y Otros",2,pagina_no_en_mapa
+335_p923,335,,923,934,,,"Rodríguez Ruiz, Alberto | Diario Clarin Arte Gráfico Editorial Argentino S.A. y Otros",2,pagina_no_en_mapa
+335_p934,335,,934,942,,,"Vieites Piñeiro, José (TF 16148-I) | D.G.I.",2,pagina_no_en_mapa
+335_p942,335,,942,954,,,"Bortolotti, Cesar Omar",1,pagina_no_en_mapa
+335_p954,335,,954,962,,,"Iwaszewicz, Alejandro",1,pagina_no_en_mapa
+335_p962,335,,962,989,,,"Miere, Pablo Juan y Otros",1,pagina_no_en_mapa
+335_p989,335,,989,996,,,"Obra Social para la Actividad Docente | Chubut, Provincia del",2,pagina_no_en_mapa
+335_p996,335,,996,1022,,,"Pan American Energy LLC Sucursal Argentina | Chubut, Provincia del y Otro (Estado Nacional) | Pan American Energy LLC Suc. Arg.",3,pagina_no_en_mapa
+335_p1022,335,,1022,1031,,,Buenos Aires Tur S.R.L.,1,pagina_no_en_mapa
+335_p1031,335,,1031,1036,,,"Cammera de Cabañez, Eva Virginia | Multicanal y Otros",2,pagina_no_en_mapa
+335_p1036,335,,1036,1053,,,"Cargill S.A.C.I. | EN - AFIP DGI (GC) Resols. 9, 10 y 13/04 | E.N. - AFIP DGI (GC) Resols. 9, 10 y 13/04",3,pagina_no_en_mapa
+335_p1053,335,,1053,1080,,,"Carlos, Jorge y Otro | LS 83 TV Canal 9",2,pagina_no_en_mapa
+335_p1080,335,,1080,1089,,,"Cavalieri, Jorge y Otro | Swiss Medical S.A.",2,pagina_no_en_mapa
+335_p1089,335,,1089,1101,,,Comisión Nacional de Valores | Telefónica Holding de Argentina S.A.,2,pagina_no_en_mapa
+335_p1101,335,,1101,1110,,,"Defino, Carlos Humberto | Ministerio del Interior y Otro",2,pagina_no_en_mapa
+335_p1110,335,,1110,1119,,,"Gaitán, María Carolina y Otros | Estado Nacional",2,pagina_no_en_mapa
+335_p1119,335,,1119,1126,,,Grupo Clarin S.A. y Otros | Poder Ejecutivo Nacional y Otro,2,pagina_no_en_mapa
+335_p1126,335,,1126,1136,,,"Losicer, Jorge Alberto y Otros | BCRA Resol. 169/05 (Exp. 105666/86 SUM FIN 708)",2,pagina_no_en_mapa
+335_p1136,335,,1136,1157,,,"M., G. | P., C. A.",2,pagina_no_en_mapa
+335_p1157,335,,1157,1180,,,"Porchetto, Marcelo Patricio | Aerovías Nacionales de Colombia S.A. y Otros",2,pagina_no_en_mapa
+335_p1180,335,,1180,1189,,,"Ramos, Alfredo Eduardo (TF 21785-A) y Acum. | Dirección General de Aduanas",2,pagina_no_en_mapa
+335_p1189,335,,1189,1200,,,"Vega, Juan Carlos | Estado Nacional PEN | Estado Nacional P.E.N.",3,pagina_no_en_mapa
+335_p1200,335,,1200,1208,,,"Petrobras Argentina S.A. | Neuquén, Provincia del",2,pagina_no_en_mapa
+335_p1208,335,,1208,1213,,,"Tecpetrol S.A. | Neuquén, Provincia del y Otro (Estado Nacional citado como tercero)",2,pagina_no_en_mapa
+335_p1213,335,,1213,1220,,,Barrick Exploraciones Argentinas S.A. y Otro | Estado Nacional,2,pagina_no_en_mapa
+335_p1220,335,,1220,1222,,,"Del Gizzo, Mario | ANSeS",2,pagina_no_en_mapa
+335_p1222,335,,1222,1227,,,"José Nucete e Hijos S.C.P.A. | La Rioja, Provincia de",2,pagina_no_en_mapa
+335_p1227,335,,1227,1251,,,Y.P.F. S.E. | ESSO S.A.P.A.,2,pagina_no_en_mapa
+335_p1251,335,,1251,1258,,,"Ambrogio, José Nazario Ramón y Otros | Estado de la Provincia de Corrientes",2,pagina_no_en_mapa
+335_p1258,335,,1258,1264,,,Banco de la Nación Argentina | Giambenedetti Hnos.,2,pagina_no_en_mapa
+335_p1264,335,,1264,1274,,,Delta Compresion S.R.L. | E.N. Mº Economía – AFIP – DGA – Dto. 1043/03,2,pagina_no_en_mapa
+335_p1274,335,,1274,1288,,,"Estado Nacional –Estado Mayor General del Ejército– | Cordoba, Provincia de",2,pagina_no_en_mapa
+335_p1288,335,,1288,1301,,,"García, Julio Héctor y Otros | Estado Nacional – Estado Mayor General del Ejército y Otros",2,pagina_no_en_mapa
+335_p1301,335,,1301,1305,,,Loma Negra Compañía Industrial S.A. y Otros,1,pagina_no_en_mapa
+335_p1305,335,,1305,1315,,,"Menéndez, Luciano Benjamín",1,pagina_no_en_mapa
+335_p1315,335,,1315,1325,,,Minera del Altiplano S.A. | Estado Nacional P.E.N. y Otra,2,pagina_no_en_mapa
+335_p1325,335,,1325,1334,,,"Ruiz, Rafael Anacleto | Ferreiro, Alberto",2,pagina_no_en_mapa
+335_p1334,335,,1334,1340,,,"Villanueva de Green, Maria Matilde | Richards, Juan Miguel y Otros",2,pagina_no_en_mapa
+335_p1340,335,,1340,1348,,,"Barbat, Cecilia | Universidad de Buenos Aires",2,pagina_no_en_mapa
+335_p1348,335,,1348,1368,,,Banco Español del Río de La Plata S.A.,1,pagina_no_en_mapa
+335_p1368,335,,1368,1379,,,Empresa Nacional de Telecomunicaciones en liquidación | Telefónica de Argentina S.A.,2,pagina_no_en_mapa
+335_p1379,335,,1379,1385,,,Gobierno de la Ciudad de Buenos Aires | Poder Ejecutivo Nacional – Dto. 679/99,2,pagina_no_en_mapa
+335_p1385,335,,1385,1397,,,Lix Klett S.A.I.C. | Biblioteca Nacional - Secretaría de Cultura de la Nación,2,pagina_no_en_mapa
+335_p1397,335,,1397,1407,,,Los Cipreses S.A. | Administración Federal de Ingresos Públicos – Dirección General de Aduanas,2,pagina_no_en_mapa
+335_p1407,335,,1407,1412,,,Maltería Pampa S.A. (TF 22821-I) | D.G.I.,2,pagina_no_en_mapa
+335_p1412,335,,1412,1417,,,"Ruarte Bazán, Roque Carlos | Universidad Nacional de Córdoba",2,pagina_no_en_mapa
+335_p1417,335,,1417,1425,,,"Alvarez, Washington | A.F.I.P.",2,pagina_no_en_mapa
+335_p1425,335,,1425,1430,,,"Bruno Pérez, Aldo",1,pagina_no_en_mapa
+335_p1430,335,,1430,1433,,,Cablevisión SA | DNCI – Disp. 739/10 (Expte S01:248.077/09),2,pagina_no_en_mapa
+335_p1433,335,,1433,1442,,,Establecimiento Metalúrgicos Ochoteco S.A.I.C. | Banco Central de la República Argentina,2,pagina_no_en_mapa
+335_p1442,335,,1442,1447,,,"Manazza, Carlos Alberto | Universidad Nacional de La Plata",2,pagina_no_en_mapa
+335_p1447,335,,1447,1459,,,"Molina, Honorio Hugo | Administración Nacional de la Seguridad Social y Estado Provincial",2,pagina_no_en_mapa
+335_p1459,335,,1459,1467,,,Municipalidad de Mercedes | Arcor S.A.I.C.,2,pagina_no_en_mapa
+335_p1467,335,,1467,1470,,,"Olima, Juan Carlos",1,pagina_no_en_mapa
+335_p1470,335,,1470,1473,,,Pan American Energy LLC Suc. Arg.,1,pagina_no_en_mapa
+335_p1473,335,,1473,1480,,,"Prado, Noemí | Universidad Nacional de Rosario",2,pagina_no_en_mapa
+335_p1480,335,,1480,1489,,,"Rodríguez, Daniel Germán",1,pagina_no_en_mapa
+335_p1489,335,,1489,1496,,,"Roldan, Germán Esteban | Giomon S.R.L. y Otro",2,pagina_no_en_mapa
+335_p1496,335,,1496,1502,,,(4) Servicios de Aguas de Misiones S.A. (TF 19.309-I) | D.G.I.,2,pagina_no_en_mapa
+335_p1502,335,,1502,1507,,,"Suarez, Julio Everto | Mº J. y DDHH – Art. 6 Ley 24.411 Resol. 1305/07 (ex 142.195/04)",2,pagina_no_en_mapa
+335_p1507,335,,1507,1512,,,Telefónica de Argentina S.A. y Otro (TF 22.098-A) | Dirección General de Aduanas,2,pagina_no_en_mapa
+335_p1512,335,,1512,1521,,,"Blanco, Sara y Otro | Fernández, Horacio Ramón y Otro",2,pagina_no_en_mapa
+335_p1521,335,,1521,1523,,,"Córdoba, Provincia de | Estado Nacional",2,pagina_no_en_mapa
+335_p1523,335,,1523,1529,,,"Granillo Fernández, Alejandro José | Mº de Justicia y Derechos Humanos – P.E.N.",2,pagina_no_en_mapa
+335_p1529,335,,1529,1531,,,"(3) Malini Verdu, Francisco José | América TV S.A.",2,pagina_no_en_mapa
+335_p1531,335,,1531,1539,,,"Monasterolo, Jorge Raúl | E.N.R.E.",2,pagina_no_en_mapa
+335_p1539,335,,1539,1546,,,"Novello, Rafael Víctor – Apoderado de la Unión Cívica Radical y Otros",1,pagina_no_en_mapa
+335_p1546,335,,1546,1550,,,"Persoglia, Raúl Antonio – Homicidio culposo agravado por la conducción de un vehículo automotor (Expte. 597/97)",1,pagina_no_en_mapa
+335_p1550,335,,1550,1559,,,"F., S. E. | (5) Centro de Educación Médica e Investigaciones Clínicas Dr. Norberto Quirno",2,pagina_no_en_mapa
+335_p1559,335,,1559,1616,,,"G., P. C. | H., S. M.",2,pagina_no_en_mapa
+335_p1616,335,,1616,1635,,,"Veniero, Bruce Vito",1,pagina_no_en_mapa
+335_p1635,335,,1635,1645,,,Biagio Cereales S.A. | Bolsa de Cereales B.A. y Otro,2,pagina_no_en_mapa
+335_p1645,335,,1645,1650,,,Compañía Industrial Cervecera S.A.,1,pagina_no_en_mapa
+335_p1650,335,,1650,1655,,,El Brujo S.R.L. | E.N. Mº Economía – AFIP – DGA – Resol. 485/05,2,pagina_no_en_mapa
+335_p1655,335,,1655,1663,,,"Franchini, Rafael Luis –Hoy Jerosimich, Margarita– | Resol. Nº320/03 del Consejo Superior de la U.N.N.E.",2,pagina_no_en_mapa
+335_p1663,335,,1663,1666,,,"García, José Pablo y Otros",1,pagina_no_en_mapa
+335_p1666,335,,1666,1673,,,Ingenio La Esperanza S.A. | Estado Nacional – Sec. de Energía,2,pagina_no_en_mapa
+335_p1673,335,,1673,1676,,,Multicanal S.A. | COMFER,2,pagina_no_en_mapa
+335_p1676,335,,1676,1684,,,"Musillario, Héctor Salvador | E.N. – Ley 25.967 Dto. 1735/04",2,pagina_no_en_mapa
+335_p1684,335,,1684,1691,,,"Pognante, Raúl Matías | Banco de la Nación Argentina",2,pagina_no_en_mapa
+335_p1691,335,,1691,1703,,,Rossi y Vilapreño S.A. | Volkswagen Argentina S.A. y Otro,2,pagina_no_en_mapa
+335_p1703,335,,1703,1709,,,"Wolcoff, Jorge Alberto y Otro | Amarilla Automotores Sociedad Anónima y/o Amarilla Gas Sociedad Anónima y/o Quien resulte responsable",2,pagina_no_en_mapa
+335_p1709,335,,1709,1716,,,Yoma S.A. y Otros,1,pagina_no_en_mapa
+335_p1716,335,,1716,1728,,,Y.P.F. S.A. | E.N. – Mº Economía Resol. 776/06 AFIP – DGA NT 56/06,2,pagina_no_en_mapa
+335_p1728,335,,1728,1732,,,"Olmos, Juan Manuel y Otro",1,pagina_no_en_mapa
+335_p1732,335,,1732,1739,,,"Santiago del Estero, Provincia de | Superintendencia de Riesgos del Trabajo",2,pagina_no_en_mapa
+335_p1739,335,,1739,1771,,,"Antonio Barillari S.A. | Buenos Aires, Provincia de",2,pagina_no_en_mapa
+335_p1771,335,,1771,1777,,,Guilford Argentina S.A. | E.N. – Mº Economía Dtos. 2000/92 y 541/00,2,pagina_no_en_mapa
+335_p1777,335,,1777,1779,,,"Mendoza, Beatriz Silvia y Otros | Estado Nacional y Otros",2,pagina_no_en_mapa
+335_p1779,335,,1779,1794,,,"Parrilli, Rosa Elsa",1,pagina_no_en_mapa
+335_p1794,335,,1794,1822,,,"Pescargen S.A. y Otra | Chubut, Provincia del",2,pagina_no_en_mapa
+335_p1822,335,,1822,1832,,,"Vila, Alfredo Luis | (6) Gobierno Nacional – Poder Ejecutivo Nacional",2,pagina_no_en_mapa
+335_p1832,335,,1832,1838,,,"Alfonsín, Maria Celia y Otros | Estado Nacional – Mº de Economía y Producción",2,pagina_no_en_mapa
+335_p1838,335,,1838,1876,,,"M. d. S., R. y Otra",1,pagina_no_en_mapa
+335_p1876,335,,1876,1885,,,"Menéndez, Luciano Benjamín y Otros",1,pagina_no_en_mapa
+335_p1885,335,,1885,1891,,,"Olivera, Julia Patricia | Res. 400/07 U.N.E.R.",2,pagina_no_en_mapa
+335_p1891,335,,1891,1895,,,"Barbeito, Guiomar y Otro | Estado Nacional – Ministerio de Economía",2,pagina_no_en_mapa
+335_p1895,335,,1895,1901,,,"Bernardez Araujo, Patricia Elena | BankBoston N.A.",2,pagina_no_en_mapa
+335_p1901,335,,1901,1906,,,"Cagni, Carlos Alberto | Ministerio de Justicia y Derechos Humanos",2,pagina_no_en_mapa
+335_p1906,335,,1906,1911,,,"Camino de Velázquez, Zoila Leonor | Administración Nacional de la Seguridad Social",2,pagina_no_en_mapa
+335_p1911,335,,1911,1923,,,"Distefano, Cristina | Instituto Médico de Diagnóstico y Tratamiento S.A. y Otro – Indemnización daños y perjuicios",2,pagina_no_en_mapa
+335_p1923,335,,1923,1933,,,Estancias Argentinas El Hornero S.A. | E.N. – AFIP-DGI – Ley 24.073,2,pagina_no_en_mapa
+335_p1933,335,,1933,1939,,,"García, Elida | Administración Nacional de la Seguridad Social",2,pagina_no_en_mapa
+335_p1939,335,,1939,1948,,,"Gutiérrez, Heldo | Superintendencia de Seguros de la Nación",2,pagina_no_en_mapa
+335_p1948,335,,1948,1957,,,"Mulleady, Juan Benito | Sociedad Anónima de Tenis Argentino CIF y Otros",2,pagina_no_en_mapa
+335_p1957,335,,1957,1966,,,"Siniscalchi, Jorge Armando | Balseiro de De Benedetti, Ana Maria y Otro",2,pagina_no_en_mapa
+335_p1966,335,,1966,1972,,,CONAPA Compañía Naviera Paraná S.A. | Banco Nacional de Desarrollo,2,pagina_no_en_mapa
+335_p1972,335,,1972,1987,,,"Del Río, Jorge | Banco de la Nación Argentina",2,pagina_no_en_mapa
+335_p1987,335,,1987,1996,,,Quilpe S.A.,1,pagina_no_en_mapa
+335_p1996,335,,1996,2007,,,Registro Nacional de Trabajadores Rurales y Empleadores | Federación de Obreros y Empleados Vitivinícolas y Afines y Otros,2,pagina_no_en_mapa
+335_p2007,335,,2007,2019,,,"Romano Duffau, Gustavo Cesar | Diarios y Noticias S.A. y Otros",2,pagina_no_en_mapa
+335_p2019,335,,2019,2023,,,"Sullivan, Silvia Mónica y Otros | Ultracomb Puntana S.R.L.",2,pagina_no_en_mapa
+335_p2023,335,,2023,2028,,,Pro Familia Asociación Civil | GCBA y Otros,2,pagina_no_en_mapa
+335_p2028,335,,2028,2033,,,"Estivill, Federico Guillermo | Administración Nacional de la Seguridad Social",2,pagina_no_en_mapa
+335_p2033,335,,2033,2046,,,"López, Eduardo Roberto | Sindicato de Seguros de la República Argentina",2,pagina_no_en_mapa
+335_p2046,335,,2046,2066,,,"Lozano, Roque Juan y Otra | Supermercados Norte S.A.",2,pagina_no_en_mapa
+335_p2066,335,,2066,2075,,,"Rodríguez, Nelson Gustavo | E.N. – Mº Interior – PFA Dto. 2744/93",2,pagina_no_en_mapa
+335_p2075,335,,2075,2082,,,Sersider S.A.M.I.C.F.I.A. | Aceros Zapla S.A.,2,pagina_no_en_mapa
+335_p2082,335,,2082,2084,,,"Tsolokian, Rubén",1,pagina_no_en_mapa
+335_p2084,335,,2084,2090,,,Ace Seguros S.A. | Air France y Otro,2,pagina_no_en_mapa
+335_p2090,335,,2090,2103,,,"De Reyes Balboa, Manuel | Editorial Río Negro S.A.",2,pagina_no_en_mapa
+335_p2103,335,,2103,2111,,,DGI (Autos Whirlpool Argentina S.A. TF 17569-I),1,pagina_no_en_mapa
+335_p2111,335,,2111,2117,,,"Messina, Cecilia Patricia y Otros | Estado Nacional - Ministerio Interior Resol. 496/04 – Ac. 56/91 CSJN",2,pagina_no_en_mapa
+335_p2117,335,,2117,2137,,,Municipalidad de Monte Cristo (TF 18706-I) | D.G.I.,2,pagina_no_en_mapa
+335_p2137,335,,2137,2150,,,Patria Compañía de Seguros Generales S.A. en liquidación | INDER,2,pagina_no_en_mapa
+335_p2150,335,,2150,2172,,,"Quantin, Norberto Julio | Benedetti, Jorge Enrique y Otros",2,pagina_no_en_mapa
+335_p2172,335,,2172,2185,,,"Sosa de Basso, Maria Angélica y Otro | Buenos Aires, Provincia de y Otro",2,pagina_no_en_mapa
+335_p2185,335,,2185,2195,,,Telecom Argentina Stet France Telecom S.A. | E.N.A. – Comisión Nacional de Comunicaciones,2,pagina_no_en_mapa
+335_p2195,335,,2195,2203,,,Terminal del Tucumán S.A. | Poder Ejecutivo Nacional,2,pagina_no_en_mapa
+335_p2203,335,,2203,2209,,,"Becerro, Demetrio | Instituto de Seguridad Social Seguros y Préstamos de la Provincia del Chaco",2,pagina_no_en_mapa
+335_p2209,335,,2209,2211,,,Ceteco Argentina S.A.,1,pagina_no_en_mapa
+335_p2211,335,,2211,2219,,,Comunidad El Traslado Cacique Roberto Sánchez y Comunidades de Zopota | Estado Nacional,2,pagina_no_en_mapa
+335_p2219,335,,2219,2228,,,"Martínez, Adrián Omar | Universidad Nacional de Quilmes",2,pagina_no_en_mapa
+335_p2228,335,,2228,2238,,,"Antuña, Guillermo Javier",1,pagina_no_en_mapa
+335_p2238,335,,2238,2242,,,"Fleitas, Daniel Anibal y Otros | Estado Nacional – Ministerio de Economía y Obras y Servicios Públicos",2,pagina_no_en_mapa
+335_p2242,335,,2242,2272,,,"B. S., J. G. | Unión Cordobesa de Rugby y Otros",2,pagina_no_en_mapa
+335_p2272,335,,2272,2275,,,"Caimi, Gabriela Beatriz | República Argentina – Estado Nacional – PJN",2,pagina_no_en_mapa
+335_p2275,335,,2275,2283,,,"Ramírez, Dante Darío | E.N. – Mº de Justicia y DD.HH. – SPF",2,pagina_no_en_mapa
+335_p2283,335,,2283,2294,,,"E., R. G. | Editorial La Capital S.A.",2,pagina_no_en_mapa
+335_p2294,335,,2294,2301,,,"Gómez, Jorge Gustavo | Administración Nacional de la Seguridad Social",2,pagina_no_en_mapa
+335_p2301,335,,2301,2307,,,"Núñez, Fulgencio Francisco | Poder Ejecutivo Nacional",2,pagina_no_en_mapa
+335_p2307,335,,2307,2326,,,"P., G. M. y P., C. L.",1,pagina_no_en_mapa
+335_p2326,335,,2326,2333,,,"Rodríguez, Antonio Horacio",1,pagina_no_en_mapa
+335_p2333,335,,2333,2360,,,"Rodríguez Pereyra, Jorge Luis y Otra | Ejército Argentino",2,pagina_no_en_mapa
+335_p2360,335,,2360,2379,,,"Sotelo, Cesar Pedro – Fiscal General del Poder Judicial de la Provincia de Corrientes | Estado de la Provincia de Corrientes",2,pagina_no_en_mapa
+335_p2379,335,,2379,2393,,,"Aguilera, Grueso Emilio | ANSeS y Otro",2,pagina_no_en_mapa
+335_p2393,335,,2393,2418,,,Asociación Derechos Civiles | E.N. – PAMI – Dto. 1172/03,2,pagina_no_en_mapa
+335_p2418,335,,2418,2445,,,Asociación Magistrados y Funcionarios | E.N. Ley 26.372 Art. 2º,2,pagina_no_en_mapa
+335_p2445,335,,2445,2452,,,"Balestrelli, Juan Domingo y Otra | Estado Nacional – Ministerio de Economía",2,pagina_no_en_mapa
+335_p2452,335,,2452,2457,,,Exolgan S.A. | Municipalidad de Avellaneda,2,pagina_no_en_mapa
+335_p2457,335,,2457,2478,,,"Lamuraglia, Raúl Eduardo y Otros | Estado Nacional Argentino y Otro",2,pagina_no_en_mapa
+335_p2478,335,,2478,2505,,,"Monserrat, Jose Higinio | Buenos Aires, Provincia de",2,pagina_no_en_mapa
+335_p2505,335,,2505,2524,,,"OSIAD Salud (Obra Social para el Personal de la Industria Aceitera, Desmotadora y Afines) | Chaco, Provincia del",2,pagina_no_en_mapa
+335_p2524,335,,2524,2528,,,San Isidro Textil Argentina S.A.,1,pagina_no_en_mapa
+335_p2528,335,,2528,2535,,,"Torrico Becerra, Raúl",1,pagina_no_en_mapa
+335_p2535,335,,2535,2542,,,Alpesca S.A. | Estado Nacional – Ministerio de Economía Dto. 2000/92,2,pagina_no_en_mapa
+335_p2542,335,,2542,2549,,,"Brasa, Ana Karina | García Morato, Eduardo Joaquín y Otro",2,pagina_no_en_mapa
+335_p2549,335,,2549,2565,,,Tevelam S.R.L. (TF 22.427-A) | D.G.A.,2,pagina_no_en_mapa
+335_p2565,335,,2565,2569,,,"Moreno, Zulma Vilma | Cuello, Carlos y Otros",2,pagina_no_en_mapa
+335_p2569,335,,2569,2574,,,Multicanal S.A. (TF 22.764-I) | D.G.I.,2,pagina_no_en_mapa
+335_p2574,335,,2574,2583,,,"Seco, Rafael Ramón",1,pagina_no_en_mapa
+335_p2583,335,,2583,2600,,,"Derudder Hnos. S.R.L. | Catamarca, Provincia de",2,pagina_no_en_mapa
+335_p2600,335,,2600,2636,,,Grupo Clarin S.A. y Otros,1,pagina_no_en_mapa
+335_p2636,335,,2636,2644,,,"Sociedad del Estado Casa de Moneda | Misiones, Provincia de –Secretaría de Estado de Hacienda, Finanzas, Obras y Servicios Públicos–",2,pagina_no_en_mapa
+335_p2644,335,,2644,,,,"Torres, Ana Maria | Ministerio Publico Proc. Gral. de la Nación",2,pagina_no_en_mapa
 337_p877,337,LibroVol337.1.md,877,901,34673,35363,"Soldano, Domingo c/ EN ley 26.095 M° Planificación resol 2008/06 y Otro s/ amparo ley 16.986",1,fallo_cruza_archivos
 338_p652,338,LibroVol338.1.md,652,693,25213,26553,"Meza, Dora c/ Estado Nacional (Ministerio de Salud y Acción Social) y otros s/ daños y perjuicios",1,fallo_cruza_archivos
 339_p933,339,LibroVol339.1.md,933,1027,35083,35607,"Sode, Margarita Segunda Carlota y Suñer, Raúl Andrés s/ Ssucesiones ab intestato",1,fallo_cruza_archivos

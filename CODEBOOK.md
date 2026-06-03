@@ -80,8 +80,8 @@ The dataset consists of five CSV files. All files are UTF-8 encoded with comma s
 | Variable | Type | Description |
 |---|---|---|
 | `apertura_tipo` | string | Type of ruling opening marker detected: `fallo`, `sentencia`, or null. |
-| `outcome` | string | Dispositional outcome of the ruling, extracted from the *por ello* clause. See [Coded Values](#outcome). 11.7% of cases are classified as `otro` (not yet subcategorized). |
-| `causa_inadmisibilidad` | string | Specific ground for inadmissibility or dismissal, refining `outcome`. See [Coded Values](#causa_inadmisibilidad). Populated for 1,036 cases; null otherwise. |
+| `outcome` | string | Dispositional outcome of the ruling, extracted from the *por ello* clause. See [Coded Values](#outcome). 9.3% of cases are classified as `otro` (not yet subcategorized). |
+| `causa_inadmisibilidad` | string | Specific ground for inadmissibility or dismissal, refining `outcome`. See [Coded Values](#causa_inadmisibilidad). Populated for 1,056 cases; null otherwise. |
 | `voting_pattern` | string | Voting configuration of the panel. See [Coded Values](#voting_pattern). |
 | `n_jueces` | integer | Total number of judges who signed the ruling. |
 | `n_titulares` | integer | Number of permanent (*titular*) justices among the signatories. |
@@ -224,27 +224,27 @@ Dispositional outcome extracted from the *por ello* clause. Distribution across 
 |---|---|---|
 | `hace_lugar` | 1,355 | Complaint or appeal granted (*hace lugar al recurso*). |
 | `competencia` | 863 | Jurisdictional competence ruling (*declárase competente* or assigns competence). |
+| `desestima` | 793 | Appeal or *queja* dismissed on procedural or substantive grounds. Also the dominant case-level outcome for appeals rejected on an Art. 280 or Acordada 4/2007 ground when the operative result is the dismissal of the appeal/queja (see the note on `outcome` vs `causa_inadmisibilidad` below). |
 | `procedente` | 754 | Appeal declared procedurally admissible and granted on the merits. |
-| `desestima` | 547 | Appeal dismissed on procedural or substantive grounds. |
 | `otro` | 529 | Unclassified outcome. Residual category pending further subdivision (see Limitations). |
 | `revoca` | 343 | Lower court decision reversed (*revoca la sentencia*). |
 | `confirma` | 327 | Lower court decision affirmed. |
 | `rechaza` | 267 | Petition or appeal rejected (*rechaza*). |
-| `inadmisible_280` | 240 | Appeal declared inadmissible under Art. 280 of the CPCCN (discretionary certiorari). |
 | *(null)* | 193 | Outcome not available (typically `sumario_con_link` or `sumario_editorial` entries). |
 | `abstracto` | 101 | Case declared moot (*abstracto*). |
 | `deja_sin_efecto` | 89 | Prior decision set aside (*deja sin efecto*). |
 | `nulidad` | 61 | Lower court decision annulled. |
-| `inadmisible_acordada_4` | 50 | Appeal declared inadmissible under *Acordada* 4/2007 (formal requirements). |
 | `mal_concedido` | 39 | Appeal declared improperly granted by the lower court. |
+| `inadmisible_280` | 38 | Art. 280 of the CPCCN (discretionary certiorari) is the dominant case-level disposition. The Art. 280 *ground* applies to 240 cases overall; the other 202 have `desestima` as their dominant outcome (see the note below). |
 | `sin_dispositivo` | 25 | No dispositional clause could be extracted. |
 | `inadmisible` | 24 | Declared inadmissible on grounds other than Art. 280 or Acordada 4/2007. |
 | `improcedente` | 21 | Appeal declared procedurally improper (*improcedente*). |
 | `desierto` | 13 | Appeal declared abandoned for failure to substantiate (*recurso desierto*). |
 | `caducidad` | 11 | Dismissed for lapse of instance (*caducidad de instancia*). |
 | `desistimiento` | 10 | Proceeding terminated by voluntary withdrawal (*desistimiento*). |
+| `inadmisible_acordada_4` | 6 | *Acordada* 4/2007 (formal requirements) is the dominant case-level disposition. The ground applies to 50 cases overall; the other 44 have `desestima` as their dominant outcome (see the note below). |
 
-> **Note on taxonomy evolution.** The `outcome` taxonomy has been refined across successive parser versions. The residual `otro` category was reduced from 1,562 (26.6%) in codebook v1.0 to 529 (9.3% of all cases; 9.0% of the full 5,862-entry dataset) in the current version, by progressively adding named outcome categories. The `originaria` value (previously used for original-jurisdiction rulings) was deprecated in parser v18.20 (H104): original jurisdiction is now captured exclusively in the binary `is_originaria` field. The `competencia` value covers all jurisdictional-competence rulings regardless of whether the case is originaria. `abstracto` was expanded from 89 to 101 cases by parser v18.20 (B113).
+> **Note on taxonomy evolution.** The `outcome` taxonomy has been refined across successive parser versions. The residual `otro` category was reduced from 1,562 (26.6%) in codebook v1.0 to 529 (9.3% of all cases; 9.0% of the full 5,862-entry dataset) in the current version, by progressively adding named outcome categories. The `originaria` value (previously used for original-jurisdiction rulings) was deprecated in parser v18.20 (H104): original jurisdiction is now captured exclusively in the binary `is_originaria` field. The `competencia` value covers all jurisdictional-competence rulings regardless of whether the case is originaria. `abstracto` was expanded from 89 to 101 cases by parser v18.20 (B113). In parser v18.21–v18.22, appeals rejected on an Art. 280 or Acordada 4/2007 ground were reclassified to `desestima` at the case level when the operative result is the dismissal of the appeal or *queja* (B109): 202 cases moved from `inadmisible_280` and 44 from `inadmisible_acordada_4` into `desestima`. The gatekeeping ground itself remains recorded in `causa_inadmisibilidad`; see the note in that section on the relationship between the two fields.
 
 ### `causa_inadmisibilidad`
 
@@ -266,6 +266,8 @@ Specific ground for inadmissibility or dismissal, refining the `outcome` field. 
 | `DEPOSITO_PREVIO` | 2 | Rejected in connection with the prior-deposit requirement. |
 | *(null)* | 4,806 | Not an inadmissibility/dismissal case, or no specific ground recorded. |
 
+> **Relationship between `outcome` and `causa_inadmisibilidad`.** These two fields encode different dimensions and are not expected to coincide. `outcome` records the **dominant case-level disposition**; `causa_inadmisibilidad` records the **specific gatekeeping ground** whenever one applies, independently of the dominant outcome. As a result, a ground appears more often in `causa_inadmisibilidad` than as the matching `outcome` value. For Art. 280: 240 cases carry `causa_inadmisibilidad = ART_280`, but only 38 have `outcome = inadmisible_280`; the other 202 (155 of them *quejas*) have `outcome = desestima`, because at case level the operative result is the dismissal of the appeal or queja. The same holds for Acordada 4/2007 (50 grounds; 6 as `outcome`, 44 as `desestima`). `CUESTION_ABSTRACTA` is the exception, mapping 1:1 to `outcome = abstracto` (101 of 101). This separation reflects a deliberate decoupling of the gatekeeping axis (`causa_inadmisibilidad`) from the dispositional axis (`outcome`). **Analyses of Art. 280 or Acordada 4/2007 incidence should use `causa_inadmisibilidad`, not `outcome`.**
+
 ### `tipo_cuestion_federal`
 
 Type of federal question raised in the extraordinary appeal.
@@ -279,22 +281,22 @@ Type of federal question raised in the extraordinary appeal.
 
 ### `queja_resultado`
 
-Outcome of the *recurso de queja*, where the case is a queja (`es_queja = 1`).
+Outcome of the *recurso de queja*, where the case is a queja (`es_queja = 1`). Of the 5,669 full rulings, 2,056 (36.3%) are quejas; 2,018 of these have a recorded result.
 
 | Value | N | Description |
 |---|---|---|
-| `hace_lugar` | 1,122 | Queja granted. |
-| `desestima` | 506 | Queja dismissed. |
-| `procedente` | 157 | Queja declared admissible and granted. |
-| `admisible` | 91 | Queja admitted. |
+| `hace_lugar` | 1,157 | Queja granted. |
+| `desestima` | 514 | Queja dismissed. |
+| `procedente` | 166 | Queja declared admissible and granted. |
+| `admisible` | 98 | Queja admitted. |
 | `agreguese` | 24 | *Agréguese* order (attach to the main file). |
 | `rechaza` | 19 | Queja rejected. |
-| `abstracta` | 14 | Queja declared moot. |
-| `suspendida` | 12 | Proceeding suspended. |
+| `abstracta` | 15 | Queja declared moot. |
+| `suspendida` | 13 | Proceeding suspended. |
 | `desistida` | 10 | Queja withdrawn. |
 | `inadmisible` | 1 | Queja declared inadmissible. |
 | `nula` | 1 | Queja annulled. |
-| *(null)* | 3,905 | Not a queja, or result not recorded (36 quejas have no recorded result). |
+| *(null)* | 3,844 | Not a queja, or result not recorded (38 quejas have no recorded result). |
 
 ### `voting_pattern`
 
@@ -409,7 +411,7 @@ Specific textual clue used for end detection:
 
 ### Data quality
 
-1. **Outcome classification (`otro`: 9.3%).** 529 cases (out of 5,669 full rulings) have an unclassified outcome. The *por ello* clauses of these cases contain dispositional formulas not yet captured by the extraction patterns. This remains the largest single data-quality gap for outcome analysis, though it was reduced from 26.6% (codebook v1.0) and 11.7% (codebook v1.1) by the continued refinement of the taxonomy across parser versions v18.15–v18.20.
+1. **Outcome classification (`otro`: 9.3%).** 529 cases (out of 5,669 full rulings) have an unclassified outcome. The *por ello* clauses of these cases contain dispositional formulas not yet captured by the extraction patterns. This remains the largest single data-quality gap for outcome analysis, though it was reduced from 26.6% (codebook v1.0) and 11.7% (codebook v1.1) by the continued refinement of the taxonomy across parser versions v18.15–v18.22.
 
 2. **Missing signatures (`sin_firma`: 16 cases, 0.3%).** Sixteen cases could not have their judicial signatures extracted, typically due to OCR artifacts or non-standard formatting.
 
@@ -455,11 +457,13 @@ Validation is performed by **`auditar_fallo.py`**, which audits individual cases
 
 ### Versioning
 
-All pipeline scripts are version-controlled with embedded `__version__` strings. The dataset documented here was produced with parser.py v18.20. This codebook revision (v1.2) updates outcome counts to parser v18.20, removes the deprecated `originaria` value from the `outcome` taxonomy (now captured exclusively by `is_originaria`; see H104), corrects `abstracto` from 89 to 101 (B113), updates `causa_inadmisibilidad` counts accordingly, and adds the extraction reliability metrics from the M19 re-titling exercise. The full version history and bug registry are maintained in the repository's `BITACORA.md` (session journal) and `DEUDA_TECNICA.md` (technical debt and bug tracker).
+All pipeline scripts are version-controlled with embedded `__version__` strings. The dataset documented here was produced with parser.py v18.22. This codebook revision (v1.3) updates the `outcome` and `queja_resultado` counts to parser v18.22 — reflecting the reclassification of Art. 280 / Acordada 4/2007 dismissals to `desestima` at the case level (B109, parser v18.21) and the expanded `es_queja` detection for multi-recurrent quejas (B110, parser v18.22; `es_queja` 1,993 → 2,056) — documents the relationship between `outcome` and `causa_inadmisibilidad`, corrects the populated count of `causa_inadmisibilidad` to 1,056, and retains the v18.20 extraction-reliability metrics (see Extraction Reliability for their scope). The previous revision (v1.2) updated outcome counts to parser v18.20, removed the deprecated `originaria` value from the `outcome` taxonomy (now captured exclusively by `is_originaria`; see H104), corrected `abstracto` from 89 to 101 (B113), and added the M19 reliability metrics. The full version history and bug registry are maintained in the repository's `BITACORA.md` (session journal) and `DEUDA_TECNICA.md` (technical debt and bug tracker).
 
 ### Extraction Reliability
 
 Reliability was assessed against a hand-coded validation sample of 300 full rulings (*fallos*), stratified by volume (validation set `MARCO_A_v18_15_n300`; gold standard fixed at parser v18.15, re-evaluated against parser v18.20 output). Agreement is reported as simple accuracy with 95% Wilson confidence intervals.
+
+> **Scope of these figures.** The metrics below were computed against parser **v18.20** output, whereas this dataset is **v18.22**. Two of the fields changed between those versions: `outcome` (the Art. 280 / Acordada 4/2007 reclassification to `desestima`, B109) and `es_queja` (the multi-recurrent queja expansion, B110; `es_queja` rose from 1,993 to 2,056, an additive change with no 1→0 flips). Both changes were corrections, so the figures below are conservative for the published version rather than inflated. A full re-scoring of the n=300 gold against v18.22 output, together with an intra-coder agreement (Cohen's kappa) estimate, is planned for a subsequent release.
 
 | Variable | Accuracy | 95% CI (Wilson) | N evaluable |
 |---|---|---|---|
@@ -505,4 +509,4 @@ BibTeX:
 
 ---
 
-*Codebook version: 1.2 — Generated for corpus-csjn parser v18.20.*
+*Codebook version: 1.3 — Generated for corpus-csjn parser v18.22.*
