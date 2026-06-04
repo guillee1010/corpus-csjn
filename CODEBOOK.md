@@ -44,6 +44,7 @@ The dataset consists of five CSV files. All files are UTF-8 encoded with comma s
 |---|---|---|---|---|
 | `csjn_casos_editorial.csv` | Editorial section | 151 | 7 | Non-judicial editorial content in the volumes: indexes (by parties, by subject, by legislation), *acordadas* (administrative resolutions), and miscellaneous texts. |
 | `csjn_editorial_indice_partes.csv` | Index entry | 11,445 | 7 | Individual entries from the alphabetical party index (*índice de partes*) in each volume. Used during pipeline construction for cross-referencing and validation. |
+| `csjn_casos_materia.csv` | Case | 5,890 | 4 | Subject-matter (*materia*) derivation sidecar, keyed 1:1 to `csjn_casos.csv` by `caso_id_canonico`. Produced by `derivar_materia.py` (a standalone post-parser stage, not part of the sealed manifest chain). Under active development; see §8. |
 
 ---
 
@@ -404,6 +405,29 @@ Specific textual clue used for end detection:
 | `firma_actual` | 114 | Current ruling's own signature block used. |
 | `editorial_siguiente` | 45 | Start of editorial content found. |
 | `fallback_catalogo` | 17 | Catalog-based fallback used. |
+
+---
+
+### `materia`, `materia_capa`, `materia_fuente` (in `csjn_casos_materia.csv`) {#materia}
+
+> **Under active development.** Subject-matter (*materia*) is derived from `csjn_casos` and `csjn_casos_textos` by a standalone, deterministic, layered stage (`derivar_materia.py`), re-runnable without re-parsing. Coverage as of v3.2 (H115): **77.3%** of the *classifiable universe* (4,037 / 5,220), where the classifiable universe excludes original-jurisdiction cases. The taxonomy and coverage will continue to change; counts below are a snapshot.
+
+`materia_capa` records *how* a case was classified (the confidence tier):
+
+| Value | N | Description |
+|---|---|---|
+| `capa1` | 2,315 | Derived from the specialized national/federal court of origin (`tribunal_origen` → fuero → materia). Highest precision; ground-truth-grade. |
+| `capa2` | 1,563 | Derived from secondary signals on the full *considerando*/caption: cited statutes, parties, case object, keywords, and the co-occurrence engine. |
+| `capa1_refinado` | 159 | A `capa1` label overridden by a tax-authority signal (CA → `tributario`). |
+| `pendiente_capa2` | 1,169 | Not classifiable with available signals: no anchor (`sin_ancla`, 1,104) or an unresolved tie (`conflicto_capa2`, 65). |
+| `originaria` | 477 | Original-jurisdiction case (Art. 117). A **terminal** category with its own Court secretariat — not a *materia* to be derived — and therefore excluded from the coverage denominator. |
+| `no_aplica` | 193 | Editorial-summary entries (`tipo_entrada` ≠ *fallo*). |
+| `sui_generis` | 8 | Impeachment juries and judicial councils. |
+| `residual` | 6 | Arbitral tribunals and OCR/anaphora artifacts. |
+
+`materia` values (when classified): `civil_comercial` (1,020; includes family/minors matters, which fall under the civil-commercial secretariat), `contencioso_administrativo` (964), `penal` (687), `laboral` (460), `tributario` (366), `previsional` (358), `ambiental` (59), `constitucional` (44), `electoral` (30), `salud` (20), `consumo` (18), `cambiario` (8), `lesa_humanidad` (3). Note: `tributario` is not derivable from the court of origin (tax appeals arrive via the Federal Administrative Court of Appeals) and is recovered only in `capa2`.
+
+`materia_fuente` records the specific signal(s) that fired (e.g. `regla` for capa1; `objeto`, `norma`, `parte`, `kw`, and combinations for capa2; `coocur:{rule}` and `coocur:{rule}(desempate)` for the co-occurrence engine; `sin_ancla` / `conflicto_capa2:{m1}/{m2}` for the residual).
 
 ---
 
