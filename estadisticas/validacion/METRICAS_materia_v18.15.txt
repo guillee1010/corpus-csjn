@@ -1,0 +1,95 @@
+======================================================================
+GOLD materia v18.15 — codificacion ciega (Claude), parser derivar_materia v3.2
+======================================================================
+Casos en muestra (union 300+B): 406 | AMBIGUO (fuera del denominador): 104 | utiles: 302
+  Tasa AMBIGUO: 25.6%
+
+--- MARCO A (SRS, estimador corpus) (n=224) ---
+  Cobertura (parser emite materia): 74.1% [68.0-79.4]  (166/224)
+  Exactitud | emite        : 81.3% [74.7-86.5]  (135/166)
+  Exactitud global (vacio=err): 60.3% [53.7-66.5]  (135/224)
+
+--- CAPA 1 (tribunal->fuero) [union] (n=126) ---
+  Cobertura (parser emite materia): 100.0% [97.0-100.0]  (126/126)
+  Exactitud | emite        : 82.5% [75.0-88.2]  (104/126)
+  Exactitud global (vacio=err): 82.5% [75.0-88.2]  (104/126)
+
+--- CAPA 2 (cascada) [union] (n=118) ---
+  Cobertura (parser emite materia): 100.0% [96.8-100.0]  (118/118)
+  Exactitud | emite        : 66.1% [57.2-74.0]  (78/118)
+  Exactitud global (vacio=err): 66.1% [57.2-74.0]  (78/118)
+
+======================================================================
+PRECISION / RECALL POR VALOR (union 406, AMBIGUO excluido)
+  precision = de los que el parser dijo V, %% que coinciden con codigo
+  recall    = de los que codifique V, %% que el parser tambien dijo V
+======================================================================
+  valor                      n_cod  precision           recall            
+  civil_comercial               48  71% (30/42)         62% (30/48)       
+  contencioso_administrativo    65  68% (27/40)         42% (27/65)       
+  penal                         58  94% (29/31)         50% (29/58)       
+  laboral                       19  89% (16/18)         84% (16/19)       
+  tributario                    21  87% (13/15)         62% (13/21)       
+  previsional                   18  95% (18/19)         100% (18/18)      
+  ambiental                     13  65% (11/17)         85% (11/13)       
+  constitucional                 7  0% (0/5)            0% (0/7)          
+  electoral                     14  80% (12/15)         86% (12/14)       
+  salud                         30  95% (19/20)         63% (19/30)       
+  consumo                        6  33% (5/15)          83% (5/6)         
+  cambiario                      1  25% (1/4)           100% (1/1)        
+  lesa_humanidad                 2  33% (1/3)           50% (1/2)         
+
+======================================================================
+DESACUERDOS donde el parser EMITE (capa1/2) — parser != cod
+======================================================================
+  parser=consumo                    cod=civil_comercial        [capa2] x6
+  parser=ambiental                  cod=penal                  [capa2] x5
+  parser=civil_comercial            cod=salud                  [capa1] x4
+  parser=consumo                    cod=contencioso_administrativo [capa2] x4
+  parser=constitucional             cod=tributario             [capa2] x3
+  parser=contencioso_administrativo cod=constitucional         [capa1] x3
+  parser=constitucional             cod=contencioso_administrativo [capa2] x2
+  parser=civil_comercial            cod=tributario             [capa2] x2
+  parser=civil_comercial            cod=contencioso_administrativo [capa1] x2
+  parser=electoral                  cod=constitucional         [capa1] x2
+  parser=contencioso_administrativo cod=salud                  [capa2] x2
+  parser=contencioso_administrativo cod=tributario             [capa1] x2
+  parser=tributario                 cod=contencioso_administrativo [capa1_refinado] x2
+  parser=cambiario                  cod=contencioso_administrativo [capa2] x1
+  parser=penal                      cod=contencioso_administrativo [capa2] x1
+  parser=previsional                cod=contencioso_administrativo [capa1] x1
+  parser=contencioso_administrativo cod=penal                  [capa2] x1
+  parser=laboral                    cod=contencioso_administrativo [capa1] x1
+  parser=contencioso_administrativo cod=civil_comercial        [capa2] x1
+  parser=electoral                  cod=contencioso_administrativo [capa1] x1
+  parser=contencioso_administrativo cod=constitucional         [capa2] x1
+  parser=ambiental                  cod=contencioso_administrativo [capa2] x1
+  parser=civil_comercial            cod=contencioso_administrativo [capa2] x1
+  parser=lesa_humanidad             cod=penal                  [capa2] x1
+  parser=contencioso_administrativo cod=laboral                [capa1] x1
+  parser=contencioso_administrativo cod=penal                  [capa1] x1
+  parser=lesa_humanidad             cod=constitucional         [capa2] x1
+  parser=contencioso_administrativo cod=ambiental              [capa2] x1
+  parser=cambiario                  cod=penal                  [capa2] x1
+  parser=salud                      cod=civil_comercial        [capa2] x1
+  parser=laboral                    cod=civil_comercial        [capa2] x1
+  parser=civil_comercial            cod=salud                  [capa2] x1
+  parser=cambiario                  cod=laboral                [capa2] x1
+  parser=penal                      cod=lesa_humanidad         [capa1] x1
+  parser=civil_comercial            cod=penal                  [capa2] x1
+  parser=civil_comercial            cod=consumo                [capa1] x1
+
+======================================================================
+PARSER ABSTUVO (vacio) pero el caso TIENE materia (capa perdida)
+======================================================================
+  capa=pendiente_capa2  cod=penal                      x16
+  capa=pendiente_capa2  cod=contencioso_administrativo x11
+  capa=originaria       cod=contencioso_administrativo x10
+  capa=pendiente_capa2  cod=civil_comercial            x9
+  capa=pendiente_capa2  cod=salud                      x4
+  capa=originaria       cod=penal                      x3
+  capa=originaria       cod=tributario                 x1
+  capa=pendiente_capa2  cod=electoral                  x1
+  capa=pendiente_capa2  cod=laboral                    x1
+  capa=pendiente_capa2  cod=ambiental                  x1
+  capa=originaria       cod=electoral                  x1

@@ -1,0 +1,407 @@
+caso_id_canonico,marco,origen_b,doble_cod,materia_capa,materia_fuente,parser_materia
+329_p1033,B,materia=cambiario,0,capa2,parte(1),cambiario
+329_p1045,B,materia=constitucional,0,capa2,objeto(1),constitucional
+329_p1336,A,,0,pendiente_capa2,sin_ancla,
+329_p1447,A,,0,capa2,objeto(1),penal
+329_p1473,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+329_p1487,A,,0,pendiente_capa2,sin_ancla,
+329_p1541,A,,0,capa1,regla:casacion penal,penal
+329_p1626,A,,0,pendiente_capa2,sin_ancla,
+329_p167,A,,0,capa2,kw+objeto(2),civil_comercial
+329_p1693,A,,0,pendiente_capa2,sin_ancla,
+329_p171,A,,0,capa2,kw(1),penal
+329_p1762,B,materia=cambiario,0,capa2,parte(1),cambiario
+329_p1767,B,materia=cambiario,0,capa2,parte(1),cambiario
+329_p184,B,materia=constitucional,0,capa2,objeto(1),constitucional
+329_p1862,A,,1,capa2,kw(1),penal
+329_p187,B,materia=electoral,0,capa1,regla:electoral,electoral
+329_p1908,A,,0,pendiente_capa2,sin_ancla,
+329_p1917,A,,0,pendiente_capa2,sin_ancla,
+329_p1936,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+329_p1963,A,,1,pendiente_capa2,sin_ancla,
+329_p2111,A,,0,originaria,originaria,
+329_p2265,A,,0,capa1,regla:casacion penal,penal
+329_p2356,B,materia=electoral,0,capa1,regla:electoral,electoral
+329_p2358,B,materia=ambiental,0,capa2,norma:24051(1),ambiental
+329_p239,A,,0,capa1,regla:seguridad social,previsional
+329_p2496,B,materia=ambiental,0,capa2,norma:24051(1),ambiental
+329_p2569,A,,0,capa1,regla:casacion penal,penal
+329_p2588,A,,0,capa1,regla:\bdel trabajo\b,laboral
+329_p2645,A,,0,pendiente_capa2,sin_ancla,
+329_p2856,A,,0,capa1,regla:seguridad social,previsional
+329_p2911,A,,0,originaria,originaria,
+329_p3129,A,,0,capa2,objeto(1),penal
+329_p3203,A,,0,capa1,regla:seguridad social,previsional
+329_p3213,A,,0,capa1,regla:seguridad social,previsional
+329_p3388,A,,1,capa1,regla:contencioso administrativo,contencioso_administrativo
+329_p3445,B,materia=ambiental,0,capa2,kw+norma:25675(2),ambiental
+329_p3528,B,materia=ambiental,0,capa2,kw+norma:25675(2),ambiental
+329_p3757,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+329_p381,A,,0,capa1,regla:seguridad social,previsional
+329_p3834,A,,0,originaria,originaria,
+329_p3846,A,,0,capa2,objeto(1),civil_comercial
+329_p3931,A,,0,capa2,kw+norma:24522(2),civil_comercial
+329_p3956,A,,0,capa1,regla:seguridad social,previsional
+329_p4007,A,,0,capa2,coocur:tributario_disfrazado(desempate),tributario
+329_p4094,A,,0,pendiente_capa2,sin_ancla,
+329_p4150,A,,0,capa2,kw+norma:10397(2),tributario
+329_p4161,A,,0,capa2,norma:23548(1),tributario
+329_p4178,A,,0,originaria,originaria,
+329_p4337,A,,0,pendiente_capa2,sin_ancla,
+329_p4342,A,,0,pendiente_capa2,sin_ancla,
+329_p4352,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+329_p4355,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+329_p4356,A,,0,pendiente_capa2,sin_ancla,
+329_p4403,B,materia=consumo,0,capa2,norma:24240(1),consumo
+329_p4447,A,,0,capa2,provincia:ca,contencioso_administrativo
+329_p4481,A,,1,pendiente_capa2,sin_ancla,
+329_p4503,A,,0,capa1,regla:seguridad social,previsional
+329_p4524,A,,0,capa1,regla:\bdel trabajo\b,laboral
+329_p4535,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+329_p4717,A,,0,capa1,regla:criminal y correccional,penal
+329_p472,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+329_p473,A,,0,capa1,regla:\bdel trabajo\b,laboral
+329_p4741,A,,0,pendiente_capa2,sin_ancla,
+329_p4762,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+329_p4822,A,,0,originaria,originaria,
+329_p4843,B,materia=cambiario,1,capa2,parte(1),cambiario
+329_p4845,A,,0,capa2,provincia:ca,contencioso_administrativo
+329_p4902,A,,0,capa2,provincia:ca,contencioso_administrativo
+329_p4944,B,materia=consumo,0,capa2,kw+norma:24240(2),consumo
+329_p4990,A,,0,pendiente_capa2,sin_ancla,
+329_p5007,A,,1,capa1,regla:seguridad social,previsional
+329_p5064,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+329_p5115,A,,0,capa2,objeto(1),penal
+329_p5198,A,,0,capa1,regla:civil y comercial federal,civil_comercial
+329_p5227,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+329_p5234,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+329_p53,A,,0,originaria,originaria,
+329_p5310,A,,0,pendiente_capa2,sin_ancla,
+329_p5336,A,,0,originaria,originaria,
+329_p5361,B,materia=consumo,0,capa2,kw(1),consumo
+329_p5368,A,,0,pendiente_capa2,sin_ancla,
+329_p5670,A,,1,originaria,originaria,
+329_p5728,A,,0,pendiente_capa2,sin_ancla,
+329_p5789,A,,0,capa1,regla:\bdel trabajo\b,laboral
+329_p5848,A,,0,capa2,kw+objeto(2),penal
+329_p5871,A,,0,capa1,regla:criminal y correccional,penal
+329_p5994,A,,0,capa1,regla:casacion penal,penal
+329_p6050,A,,1,capa2,objeto(1),penal
+329_p6068,A,,0,capa1,regla:seguridad social,previsional
+329_p963,B,materia=tributario,0,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d),tributario
+330_p1043,A,,0,capa1,regla:casacion penal,penal
+330_p1179,A,,1,pendiente_capa2,sin_ancla,
+330_p1303,A,,0,pendiente_capa2,sin_ancla,
+330_p1465,A,,0,capa1,regla:casacion penal,penal
+330_p182,A,,0,capa2,provincia:ca,contencioso_administrativo
+330_p1907,A,,0,pendiente_capa2,sin_ancla,
+330_p2014,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+330_p2081,A,,0,pendiente_capa2,sin_ancla,
+330_p2345,A,,0,pendiente_capa2,sin_ancla,
+330_p238,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+330_p24,A,,1,pendiente_capa2,sin_ancla,
+330_p2445,A,,0,pendiente_capa2,sin_ancla,
+330_p246,A,,0,capa2,norma:24522(1),civil_comercial
+330_p2470,A,,0,originaria,originaria,
+330_p2478,B,materia=tributario,0,capa2,parte(1),tributario
+330_p2520,A,,0,pendiente_capa2,sin_ancla,
+330_p2746,B,materia=ambiental,0,capa2,norma:25675(1),ambiental
+330_p2849,B,materia=constitucional,1,capa2,objeto(1),constitucional
+330_p2900,A,,0,pendiente_capa2,sin_ancla,
+330_p2915,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+330_p304,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+330_p3098,B,materia=constitucional,0,capa2,objeto(1),constitucional
+330_p3160,B,materia=electoral,1,capa1,regla:electoral,electoral
+330_p3519,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+330_p3565,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+330_p3609,A,,1,originaria,originaria,
+330_p3764,A,,0,pendiente_capa2,sin_ancla,
+330_p3777,A,,0,capa2,provincia:ca,contencioso_administrativo
+330_p4211,A,,1,sui_generis,Jurado de Enjuiciamiento de Magistrados y Funcionarios de la Provincia del Neuqu,
+330_p4252,A,,0,capa2,provincia:ca,contencioso_administrativo
+330_p4526,B,materia=constitucional,0,capa2,objeto(1),constitucional
+330_p4564,B,materia=electoral,0,capa1,regla:electoral,electoral
+330_p4587,B,materia=electoral,0,capa1,regla:electoral,electoral
+330_p4592,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+330_p4632,A,,0,pendiente_capa2,sin_ancla,
+330_p4690,A,,0,capa1,regla:seguridad social,previsional
+330_p4797,A,,0,pendiente_capa2,sin_ancla,
+330_p50,A,,1,pendiente_capa2,sin_ancla,
+330_p5010,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+330_p5064,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+330_p5131,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+330_p5197,A,,0,capa1,regla:seguridad social,previsional
+330_p5435,A,,0,capa2,kw+norma:24557(2),laboral
+330_p610,A,,0,originaria,originaria,
+330_p619,A,,0,capa2,provincia:ca,contencioso_administrativo
+330_p803,B,materia=consumo,0,capa2,kw(1),consumo
+331_p116,A,,0,capa1,regla:seguridad social,previsional
+331_p123,A,,0,capa1,regla:seguridad social,previsional
+331_p1651,A,,0,capa1,regla:seguridad social,previsional
+331_p194,A,,0,originaria,originaria,
+331_p2166,A,,0,capa2,norma:24463+objeto+parte(3),previsional
+331_p2257,A,,0,pendiente_capa2,sin_ancla,
+331_p2266,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+331_p2283,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+331_p2608,A,,0,capa1,regla:seguridad social,previsional
+331_p2621,A,,0,pendiente_capa2,sin_ancla,
+331_p2839,A,,0,capa1,regla:\bdel trabajo\b,laboral
+331_p2910,A,,0,originaria,originaria,
+331_p2913,A,,1,originaria,originaria,
+331_p355,A,,0,capa2,provincia:ca,contencioso_administrativo
+331_p499,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+331_p536,A,,1,capa2,objeto(1),contencioso_administrativo
+331_p549,B,materia=electoral,0,capa1,regla:electoral,electoral
+331_p58,B,materia=ambiental,0,capa2,norma:24051(1),ambiental
+331_p68,A,,0,pendiente_capa2,sin_ancla,
+331_p748,B,materia=consumo,0,capa2,norma:24240(1),consumo
+331_p846,A,,0,capa2,provincia:ca,contencioso_administrativo
+331_p978,A,,0,pendiente_capa2,sin_ancla,
+331_p989,A,,0,pendiente_capa2,sin_ancla,
+332_p102,B,materia=consumo,0,capa2,kw(1),consumo
+332_p1029,A,,0,capa2,kw(1),lesa_humanidad
+332_p1035,A,,1,capa1,regla:contencioso administrativo,contencioso_administrativo
+332_p105,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+332_p1190,B,materia=electoral,0,capa1,regla:electoral,electoral
+332_p1280,A,,0,originaria,originaria,
+332_p1338,A,,0,capa2,provincia:ca,contencioso_administrativo
+332_p1382,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+332_p1600,B,materia=ambiental,0,capa2,norma:25675(1),ambiental
+332_p1629,A,,0,capa2,objeto(1),civil_comercial
+332_p1704,A,,0,capa2,objeto(1),constitucional
+332_p1741,A,,0,capa2,norma:24241(1),previsional
+332_p1823,B,materia=consumo,0,capa2,norma:24240(1),consumo
+332_p2043,A,,0,capa1,regla:\bdel trabajo\b,laboral
+332_p2208,A,,0,pendiente_capa2,sin_ancla,
+332_p2502,A,,0,capa2,provincia:ca,contencioso_administrativo
+332_p2604,A,,0,capa2,kw+objeto(2),penal
+332_p2625,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+332_p2797,A,,1,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d),tributario
+332_p2806,B,materia=tributario,0,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d),tributario
+332_p324,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+332_p399,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+332_p433,B,materia=electoral,0,capa1,regla:electoral,electoral
+332_p548,A,,1,originaria,originaria,
+332_p582,A,,0,capa2,kw+norma:25675(2),ambiental
+332_p595,A,,0,capa2,objeto(1),civil_comercial
+332_p810,A,,0,pendiente_capa2,sin_ancla,
+332_p850,A,,0,capa1,regla:seguridad social,previsional
+332_p962,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+332_p979,A,,1,capa2,parte(1),cambiario
+333_p1235,A,,1,capa1,regla:casacion penal,penal
+333_p1639,A,,1,capa2,kw(1),penal
+333_p2010,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+333_p215,A,,0,originaria,originaria,
+333_p241,A,,0,sui_generis,Consejo de la Magistratura de la Nación,
+333_p290,A,,1,capa2,kw(1),civil_comercial
+333_p300,A,,1,capa2,kw+parte(2),tributario
+333_p447,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+333_p508,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+333_p570,B,materia=ambiental,0,capa2,kw+norma:25675(2),ambiental
+333_p60,A,,0,originaria,originaria,
+333_p9,A,,0,originaria,originaria,
+334_p1070,A,,0,originaria,originaria,
+334_p1074,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+334_p1081,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+334_p1204,A,,0,capa2,objeto(1),penal
+334_p1276,A,,1,capa1,regla:contencioso administrativo,contencioso_administrativo
+334_p144,B,materia=electoral,0,capa1,regla:electoral,electoral
+334_p376,A,,0,pendiente_capa2,conflicto_capa2:civil_comercial/laboral,
+334_p44,A,,0,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d),tributario
+334_p474,B,materia=constitucional,0,capa2,objeto(1),constitucional
+334_p490,A,,0,pendiente_capa2,sin_ancla,
+334_p941,A,,0,pendiente_capa2,sin_ancla,
+337_p1024,B,materia=consumo,0,capa2,kw+norma:24240(2),consumo
+337_p1095,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+337_p1142,A,,0,pendiente_capa2,conflicto_capa2:cambiario/laboral,
+337_p1234,A,,1,capa1,regla:\ben lo comercial\b,civil_comercial
+337_p1581,A,,0,capa1,regla:seguridad social,previsional
+337_p222,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+337_p234,B,materia=constitucional,0,capa2,objeto(1),constitucional
+337_p329,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+337_p373,A,,0,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d),tributario
+337_p45,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+337_p481,A,,0,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d),tributario
+337_p505,A,,0,capa2,norma:24660+objeto(2),penal
+337_p654,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+337_p735,A,,0,pendiente_capa2,sin_ancla,
+337_p771,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+338_p102,A,,0,capa1,regla:civil y comercial federal,civil_comercial
+338_p1252,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+338_p148,A,,0,capa1,regla:seguridad social,previsional
+338_p1517,B,materia=lesa_humanidad,0,capa2,kw(1),lesa_humanidad
+338_p155,A,,0,pendiente_capa2,sin_ancla,
+338_p249,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+338_p280,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+338_p40,A,,0,capa2,kw(1),consumo
+338_p419,A,,0,pendiente_capa2,sin_ancla,
+338_p463,B,materia=ambiental,0,capa2,kw+norma:24051(2),ambiental
+338_p539,B,materia=constitucional,0,capa2,objeto(1),constitucional
+338_p628,B,materia=electoral,0,capa1,regla:electoral,electoral
+338_p868,B,materia=constitucional,1,capa2,objeto(1),constitucional
+339_p1048,A,,0,pendiente_capa2,sin_ancla,
+339_p1077,B,materia=consumo,0,capa2,kw(1),consumo
+339_p1171,A,,0,pendiente_capa2,sin_ancla,
+339_p1530,A,,0,pendiente_capa2,sin_ancla,
+339_p155,A,,0,capa2,norma:23551(1),laboral
+339_p1567,A,,0,capa1,regla:\bdel trabajo\b,laboral
+339_p1621,A,,1,capa2,objeto+parte(2),laboral
+339_p1760,B,materia=salud,1,capa2,coocur:salud_amparo,salud
+339_p183,A,,0,pendiente_capa2,sin_ancla,
+339_p1831,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+339_p1834,A,,0,capa2,objeto(1),civil_comercial
+339_p274,A,,0,capa2,kw+norma:20744(2),laboral
+339_p434,A,,0,capa2,norma:11683+norma:20628+parte(3),tributario
+339_p490,A,,0,capa2,objeto(1),civil_comercial
+339_p506,A,,0,originaria,originaria,
+339_p597,A,,0,capa2,parte(1),tributario
+339_p602,B,materia=ambiental,0,capa2,norma:24051(1),ambiental
+339_p704,B,materia=consumo,0,capa2,kw+norma:24240(2),consumo
+339_p824,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+339_p846,B,materia=tributario,0,capa2,parte(1),tributario
+340_p1025,B,materia=constitucional,0,capa2,objeto(1),constitucional
+340_p1383,B,materia=electoral,1,capa1,regla:electoral,electoral
+340_p1395,A,,1,pendiente_capa2,sin_ancla,
+340_p1398,A,,0,capa1,regla:\bdel trabajo\b,laboral
+340_p1441,A,,0,capa1,regla:\bdel trabajo\b,laboral
+340_p1450,A,,0,pendiente_capa2,sin_ancla,
+340_p1551,A,,1,capa1,regla:contencioso administrativo,contencioso_administrativo
+340_p1554,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+340_p257,B,materia=lesa_humanidad,0,capa2,kw(1),lesa_humanidad
+340_p397,A,,0,pendiente_capa2,sin_ancla,
+340_p431,A,,0,capa2,provincia:ca,contencioso_administrativo
+340_p628,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+340_p708,A,,0,capa2,objeto(1),penal
+340_p732,A,,0,pendiente_capa2,sin_ancla,
+340_p786,A,,1,capa2,norma:23737(1),penal
+340_p822,A,,1,capa2,objeto(1),laboral
+340_p88,B,materia=consumo,0,capa2,norma:24240(1),consumo
+340_p900,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+340_p905,B,materia=consumo,0,capa2,kw+norma:24240(2),consumo
+340_p95,A,,0,capa2,objeto(1),civil_comercial
+340_p991,B,materia=constitucional,0,capa2,objeto(1),constitucional
+341_p127,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+341_p1338,A,,0,originaria,originaria,
+341_p1355,B,materia=electoral,0,capa1,regla:electoral,electoral
+341_p1649,A,,0,capa2,provincia:ca,contencioso_administrativo
+341_p289,B,materia=constitucional,0,capa2,objeto(1),constitucional
+341_p32,B,materia=consumo,0,capa2,norma:24240(1),consumo
+341_p324,A,,0,capa2,norma:25675(1),ambiental
+341_p335,A,,0,pendiente_capa2,sin_ancla,
+341_p500,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+341_p560,A,,0,capa2,provincia:ca,contencioso_administrativo
+341_p566,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+341_p600,A,,0,capa1,regla:casacion penal,penal
+341_p619,B,materia=ambiental,0,capa2,norma:25675(1),ambiental
+342_p1028,B,materia=cambiario,0,capa2,parte(1),cambiario
+342_p1061,B,materia=ambiental,0,capa2,norma:25675(1),ambiental
+342_p1358,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+342_p1393,A,,0,capa2,provincia:ca,contencioso_administrativo
+342_p1456,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+342_p1483,A,,0,pendiente_capa2,sin_ancla,
+342_p2083,A,,0,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d),tributario
+342_p2399,A,,0,capa1,regla:civil y comercial federal,civil_comercial
+342_p266,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+342_p507,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+342_p58,B,materia=constitucional,0,capa2,objeto(1),constitucional
+342_p692,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+342_p824,A,,1,capa2,provincia:ca,contencioso_administrativo
+342_p969,A,,0,capa2,provincia:ca,contencioso_administrativo
+343_p1233,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+343_p1319,A,,0,originaria,originaria,
+343_p140,B,materia=consumo,0,capa2,kw(1),consumo
+343_p1620,A,,0,capa1,regla:casacion penal,penal
+343_p1688,A,,0,capa2,objeto(1),constitucional
+343_p1718,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+343_p1944,A,,0,originaria,originaria,
+343_p2176,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+343_p33,B,materia=constitucional,0,capa2,objeto(1),constitucional
+343_p365,B,materia=constitucional,0,capa2,objeto(1),constitucional
+343_p373,B,materia=ambiental,0,capa2,norma:24051+norma:25675(2),ambiental
+343_p396,B,materia=ambiental,0,capa2,norma:24051+norma:25675(2),ambiental
+343_p412,A,,0,pendiente_capa2,sin_ancla,
+343_p42,B,materia=electoral,0,capa1,regla:electoral,electoral
+343_p580,A,,0,capa2,objeto(1),civil_comercial
+343_p595,A,,1,capa1,regla:civil y comercial federal,civil_comercial
+343_p646,A,,0,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d),tributario
+344_p1253,B,materia=salud,1,capa2,objeto(1),salud
+344_p1260,B,materia=electoral,0,capa1,regla:electoral,electoral
+344_p1283,A,,0,capa1,regla:\bdel trabajo\b,laboral
+344_p1438,A,,0,pendiente_capa2,sin_ancla,
+344_p1835,A,,0,capa2,provincia:ca,contencioso_administrativo
+344_p1843,B,materia=electoral,0,capa1,regla:electoral,electoral
+344_p2080,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+344_p2172,A,,0,capa2,coocur:indemniz_despido(desempate),laboral
+344_p2339,B,materia=electoral,0,capa1,regla:electoral,electoral
+344_p2393,A,,0,capa1,regla:casacion penal,penal
+344_p251,B,materia=constitucional,0,capa2,objeto(1),constitucional
+344_p2669,A,,0,pendiente_capa2,sin_ancla,
+344_p2868,A,,0,capa2,norma:24901(1),civil_comercial
+344_p2955,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+344_p3095,B,materia=consumo,1,capa2,kw+norma:24240(2),consumo
+344_p3394,A,,0,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d),tributario
+344_p344,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+344_p3469,A,,1,pendiente_capa2,sin_ancla,
+344_p575,B,materia=consumo,0,capa2,kw+norma:24240(2),consumo
+344_p684,B,materia=consumo,0,capa2,norma:24240(1),consumo
+344_p701,A,,0,capa2,objeto(1),contencioso_administrativo
+345_p12,A,,0,capa2,objeto(1),contencioso_administrativo
+345_p1238,A,,0,capa1,regla:\bdel trabajo\b,laboral
+345_p1266,B,materia=cambiario,0,capa2,parte(1),cambiario
+345_p1421,A,,1,capa2,kw(1),penal
+345_p154,A,,0,pendiente_capa2,sin_ancla,
+345_p241,A,,1,capa1,regla:\bdel trabajo\b,laboral
+345_p37,B,materia=ambiental,1,capa2,norma:24051+norma:25675(2),ambiental
+345_p50,B,materia=electoral,0,capa1,regla:electoral,electoral
+345_p523,A,,0,capa1,regla:\ben lo comercial\b,civil_comercial
+345_p583,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+345_p670,A,,0,pendiente_capa2,sin_ancla,
+345_p683,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+345_p938,B,materia=salud,1,capa2,coocur:salud_amparo,salud
+346_p1234,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+346_p1241,A,,0,capa2,provincia:ca,contencioso_administrativo
+346_p1339,A,,0,capa1,regla:casacion penal,penal
+346_p1377,B,materia=cambiario,1,capa2,parte(1),cambiario
+346_p1426,B,materia=constitucional,0,capa2,objeto(1),constitucional
+346_p439,A,,1,capa2,kw+norma:24557+parte(3),laboral
+346_p44,A,,0,capa2,coocur:tributario_disfrazado(desempate),tributario
+346_p646,A,,0,capa1,regla:\bdel trabajo\b,laboral
+346_p658,A,,0,capa2,objeto(1),penal
+346_p675,A,,0,capa2,norma:25871(1),contencioso_administrativo
+346_p730,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+346_p821,B,materia=ambiental,1,capa2,kw+norma:25675(2),ambiental
+346_p866,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+347_p1022,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+347_p1031,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+347_p1046,A,,0,pendiente_capa2,sin_ancla,
+347_p1134,B,materia=salud,0,capa2,coocur:salud_amparo,salud
+347_p1137,A,,0,capa1,regla:casacion penal,penal
+347_p1191,A,,0,capa1,regla:seguridad social,previsional
+347_p1215,A,,0,pendiente_capa2,sin_ancla,
+347_p1932,B,materia=constitucional,0,capa2,objeto(1),constitucional
+347_p2001,A,,0,pendiente_capa2,sin_ancla,
+347_p2025,A,,0,originaria,originaria,
+347_p360,A,,0,capa2,kw(1),civil_comercial
+347_p412,A,,0,capa2,objeto(1),civil_comercial
+347_p43,B,materia=electoral,0,capa1,regla:electoral,electoral
+347_p606,A,,0,capa1,regla:civil y comercial federal,civil_comercial
+347_p768,B,materia=electoral,1,capa1,regla:electoral,electoral
+347_p833,A,,1,originaria,originaria,
+348_p113,A,,0,capa2,kw+norma:23737(2),penal
+348_p1316,B,materia=tributario,0,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d),tributario
+348_p1347,A,,0,capa2,kw+norma:24522(2),civil_comercial
+348_p1378,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+348_p1499,A,,0,capa1,regla:contencioso administrativo,contencioso_administrativo
+348_p1540,B,materia=tributario,0,capa2,norma:20628+parte(2),tributario
+348_p1576,A,,0,originaria,originaria,
+348_p169,A,,0,pendiente_capa2,sin_ancla,
+348_p1717,A,,0,pendiente_capa2,sin_ancla,
+348_p296,A,,1,pendiente_capa2,sin_ancla,
+348_p405,A,,0,originaria,originaria,
+348_p61,A,,0,capa1,regla:electoral,electoral
+348_p708,A,,0,capa2,kw(1),ambiental
+348_p92,A,,0,pendiente_capa2,sin_ancla,
+348_p983,B,materia=ambiental,0,capa2,kw(1),ambiental
+349_p148,A,,0,capa1,regla:\ben lo civil\b,civil_comercial
+349_p280,A,,0,capa1,regla:\bdel trabajo\b,laboral
+349_p95,A,,0,capa1,regla:criminal y correccional,penal
