@@ -2,6 +2,14 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H111 (2026-06-03)
+
+- `parser.py` v18.23→v18.24: `find_tribunal_origen` v11→v12 + helper `_parece_caratula` — une el nombre del tribunal cortado por el fin de línea del OCR (B114). 1129 celdas `tribunal_origen` recuperadas, 0 violaciones de invariante.
+- `parser.py`: `lineterminator="\n"` en los 4 `DictWriter` — escritura CSV en LF determinística (antes CRLF por default, chocaba con el golden LF normalizado por git → FAIL espurio).
+- `output/parser/csjn_casos.csv`: 5890 filas, 1129 celdas `tribunal_origen` mod.
+- `output/parser/{votos,zonas,editorial}.csv`: contenido sin cambio (re-escritos en LF).
+- `scripts/tests/golden/`: re-sellado consciente (B114 + LF).
+
 ## H110 (2026-06-03)
 
 - `detectar_paginas.py` v1.0→v1.01: interpola headers de páginas-apertura-de-sección (B116) — guiado por catálogo + anclado al banner + región file-local. +44 headers sintéticos en 331-334.

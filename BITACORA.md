@@ -16578,3 +16578,36 @@ Validación: detectar_paginas → 44 inferidas [331:11/332:11/333:11/334:11], si
 **Versiones de canónicos:** parser.py v18.23, construir_catalogo.py v1.01, **detectar_paginas.py v1.01**, cruzar_catalogo_y_mapa.py v1.0, parser_editorial.py v1.0, auditar_fallo.py v1.0.0.
 
 **Commits:** 4 (fix detectar_paginas; regenera outputs; re-golden + manifiesto; docs).
+
+## H111 — B114: normalización de tribunal_origen + saneo del harness (2026-06-03)
+
+**Objetivo:** cerrar B114 (tribunal_origen fragmentado por OCR), pre-requisito de la capa 1 del Frente B/materia.
+
+### H111-01 — Decisión de ruta
+
+Inventario de frentes abiertos y matriz impacto/riesgo/esfuerzo. Elegida la ruta A (profundizar, cara-tesis) entrando por B114 como primer entregable acotado. Orden de fondo acordado: B114 → materia capa 1 → csjn_casos_textos (mata el truncado, antes de la capa 2 que lee el considerando) → materia capa 2/3 → validación+publicación (M19 kappa) una sola vez al final, con el set de variables estable.
+
+### H111-02 — B114 CERRADO (find_tribunal_origen v11→v12)
+
+Leído el OCR fuente: el nombre del tribunal se corta en el fin de línea, en dos sub-patrones — intra-palabra (guión/soft-hyphen al final, continuación en minúscula que cierra en «.») e inter-palabra (corte en preposición sin guión, continuación en MAYÚS). La regla v11 («unir si la siguiente empieza en minúscula y no termina en ".») fallaba en ambos. v12: une hasta la línea que cierra en «.», breaks estructurales (vacío, running-head, «Tribunal(es) que…»/«Intervino…»/«Ministerio…»/«Recurso…», carátula vía `_parece_caratula` ≥60% tokens MAYÚS) + `_unhyphenate` al persistir. PoC A/B sobre `.md` completo (M15): 0 violaciones de invariante, residual real 0, FP de carátula L1144 resuelto. **1129 celdas tribunal_origen recuperadas** (column-aware: 0 en otras columnas, 5890/5890, tribunal_origen_status intacto 3889/1331/477). Colapso a fuero demostrado (contencioso-adm 634, civil-comercial 769, penal 448, laboral 375, previsional 279, electoral 28; bolsón otro/provincial 1348 = capa 2). Habilita la capa 1 del Frente B.
+
+### H111-03 — Addendum infra: harness LF determinístico
+
+Al re-sellar saltó que check_regresion daba [FAIL] espurio en los 4 CSV (byte-diff, 0 diffs de celda): `csv.DictWriter`+`newline=""` escribía CRLF, pero golden/prod estaban en LF (normalizados por git) desde un checkout post-H110. Fix: `lineterminator="\n"` en los 4 DictWriter → escritura LF, idéntica al golden, contrato de regresión estable e independiente del entorno.
+
+### H111 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos + 193 sumario). Sin cambio de conteos vs H110.
+- **Sin firma:** 16 / 5697.
+- **Votos:** 27639 filas.
+- **Cambio de contenido:** 1129 celdas tribunal_origen (solo esa columna).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5890 filas (1129 celdas tribunal_origen mod).
+- `output/parser/csjn_casos_votos.csv` — 27639 filas (byte-idéntico salvo LF).
+- `output/parser/csjn_casos_zonas.csv` — 141451 segmentos (íd.).
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones (íd.).
+
+**parser:** v18.23 → v18.24 (find_tribunal_origen v12 + _parece_caratula + lineterminator LF).
+
+**Commits:** 3 (fix+outputs+golden; DEUDA; bitácora+changelog).
