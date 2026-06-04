@@ -6,7 +6,7 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-06-04 (H115). Frente B / materia: TIER 3 motor de co-ocurrencia implementado (`derivar_materia.py` v3.2). Cobertura **77,3%** sobre universo clasificable (4037/5220 = fallos − originaria). Relabel `pendiente_capa3`→`originaria` (categoría terminal). Familia→civil_comercial vía objeto-anclas. 6 reglas (A,B)→materia validadas. **NUEVOS pendientes:** procedencia de la cadena de materia fuera del manifiesto (derivar_materia.py + csjn_casos_materia.csv + `_meta/vocab_materia/`); fuga `is_originaria` en const/tributario (parser miss); lever penal-objeto diferido (86-87%, bajo el piso de precisión).
+**Última actualización:** 2026-06-04 (H116). Frente B / materia: **validación held-out de capa 2** (capa 1 como silver-GT; señales ortogonales tribunal vs carátula). NO toca pipeline ni outputs (parser y `derivar_materia.py` v3.2 intactos; harness ad-hoc `heldout.py`). Resultados: cobertura capa2 59,7%, accuracy|emite 75,8% (78,4% colapsado), **precisión 88–93% en civil/laboral/previsional/penal, CA 68,8%** (sumidero); recall bajo por diseño (abstención REE). Dos fugas cuantificadas, NO aplicadas: **sobre-ruteo Estado→CA (282 FP)** y **`salud_amparo` 19/19 misfire**. Aclarado: **M19 NO codifica materia** → validar materia ≠ M19; camino = held-out (hecho) + GOLD nuevo. Decisión de diseño: `materia` queda sustantiva; `secretaria` = variable DERIVADA (foto actual, no time-indexed); constitucional→`transversal`, electoral→`fuero_externo`/pendiente. **Próximo:** GOLD `cod_materia` sobre los 300 (SRS M19) + oversample Marco B; refinamiento fuga CA condicionado al gold. **Pendientes previos vigentes:** procedencia de la cadena de materia fuera del manifiesto; fuga `is_originaria` en const/tributario (parser miss); lever penal-objeto diferido (86-87%, bajo el piso).
 
 > El detalle cronológico por sesión vive en `BITACORA.md` / `CHANGELOG.md`; este encabezado registra solo la sesión vigente. El estado ABIERTO de un vistazo está en el **Tablero de estado** (abajo). El cuerpo conserva las cerradas como referencia (se reabren: B045, familia B009, is_originaria/B010, etc.).
 
@@ -154,7 +154,7 @@ las cerradas como referencia). La entrada completa de cada ítem está más abaj
 
 | ID | Qué | Estado |
 |----|-----|--------|
-| Frente B — materia | capa 1 HECHA (H112); capa 2 (normas+partes, bloqueada por `csjn_casos_textos`) + capa 3 (originaria) + validación | en curso |
+| Frente B — materia | capas 1-2-3 HECHAS (v3.2, cobertura 77,3%); **held-out de capa 2 HECHO (H116)** — precisión 88–93% en clases grandes, fuga CA + salud_amparo cuantificadas; falta GOLD (`cod_materia` sobre 300 + oversample Marco B) | en curso |
 | csjn_casos_textos | separar texto pesado (desbloquea materia capa 2) | pendiente, PRIORITARIO |
 | M20 | refactor `outcome`→disposición+parte (molde SCDB, unidad parte×recurso) | diseñado, no hecho |
 | M19 | kappa / doble codificación + sección reliability del CODEBOOK | titular n=300 hecho; kappa pendiente |
@@ -558,6 +558,30 @@ exclusión de firmas, calificadores, headers de página, marcadores de apertura.
 - **Fuga `is_originaria` en const/tributario:** algunos casos dicen «competencia originaria art. 116/117» en el considerando pero `tribunal_origen_status = sin_marcador` → el parser no los marcó originaria y caen al universo clasificable. Cardinalidad chica (~2-6, no cuantificada). Componente: parser. Estado: hipótesis no verificada. Relacionado con la deuda is_originaria post-B010.
 - **Lever penal-objeto DIFERIDO:** anclas de objeto→penal evaluadas y descartadas por precisión: extradición (GT 86%), delitos nominados estafa/defraudación/hurto/robo/homicidio/lesiones/abuso (GT 87%), denuncia/averiguación pelada (GT 62%). Las dos primeras quedan por debajo del piso ~90-95% que sostienen salud/tributario/familia. ~62 candidatos en residual. Reabrir solo si se baja conscientemente el piso de precisión penal. Estado: evaluado, no aplicado.
 - **Conflicto nuevo `332_p908`** («alonso s/ curatela», causa de competencia): la ancla `curatela`→civil empata con un kw penal preexistente (penal por el conflicto de fuero) → pasó de penal-confiado (H114) a `conflicto_capa2:civil_comercial/penal`. Es más honesto, no menos; efecto colateral aceptado de sumar anclas civiles de objeto.
+
+#### Avance H116 — validación held-out de capa 2 + diseño de la proyección `secretaria`
+
+**Validación held-out (capa 1 como silver-GT de capa 2).** Señales ORTOGONALES: capa1 clasifica por `tribunal_origen`, capa2 por carátula+considerando → capa2 no ve la señal de capa1, no hay leakage. Se corrió `clasificar_capa2` sobre los 2315 casos capa1 y se comparó contra su etiqueta de tribunal (harness ad-hoc `heldout.py`, NO canónico; MIDE, no muta — parser y `derivar_materia.py` v3.2 intactos).
+- Cobertura capa2 (emite materia): 1383/2315 = **59,7%** [57,7–61,7]; se abstiene en ~40% (sin_ancla 848 + conflicto 84).
+- Accuracy | emite (pred==tribunal): **75,8%** [73,5–78,0]; colapsando predicciones más finas que el tribunal (lesa_humanidad→penal, consumo/cambiario→civil): **78,4%** [76,1–80,5] (granularidad explica solo +2,6pp → el disenso es REAL, no artefacto de la vara gruesa).
+- Precisión por valor (cuando capa2 se compromete): previsional 93,3%, civil_comercial 90,4%, laboral 90,1%, penal 87,6%, **CA 68,8%**. Recall: laboral 63,4, previsional 67,1, CA 42,3, civil 37,7, penal 34,1, electoral 0 (capa2 no tiene vía electoral).
+- Lectura: capa2 es **alta precisión / bajo recall POR DISEÑO** (la abstención es la política REE de H115 — el residual `sin_ancla` es irreducible, forzarlo = adivinar).
+
+**Dos fugas de precisión cuantificadas (candidatas a refinar, NO aplicadas):**
+- **Sobre-ruteo Estado→CA:** 282 casos no-CA de capa1 terminaron etiquetados CA por el trigger genérico. Es el sumidero de precisión de CA (68,8%). Candidato #1 de refinamiento (exigir corroboración antes del genérico). Riesgo ALTO: roza originaria + refinamiento fiscal + co-ocurrencia → exige re-validación completa. Componente: `derivar_materia.py`. Estado: no diseñado.
+- **`salud_amparo` desborda:** las 19 veces que predijo `salud` sobre capa1, las 19 estaban mal (18 civil, 1 CA). Misfire chico pero 100% en held-out → apretar la regla. Estado: no diseñado.
+
+**Frontera AFIP/DGI (NO es bug — ambigüedad real):** las confusiones previsional↔tributario (24) y previsional↔CA (25) son el límite verdadero: AFIP/DGI recauda impuestos Y aportes. Verificado con datos: aduana/ANA 48/67→tributario (NO seguridad social, corrige un recuerdo del usuario); AFIP 98/128→tributario + 8→previsional; DGI 111/170→tributario + 16→previsional. El silver-GT grueso no las adjudica; las resuelve solo el gold humano.
+
+**Límite estructural del held-out:** la vara capa1 NO contiene tributario/consumo/salud/ambiental/cambiario/lesa_humanidad (materias EXCLUSIVAS de capa2) → el ejercicio valida el SOLAPAMIENTO, es CIEGO a las materias finas. Por eso el gold (`cod_materia` sobre los 300, ya planeado en este frente, ver arriba) es el ÚNICO modo de medirlas.
+
+**M19 NO codifica materia (aclaración):** los 7 campos `cod_*` de `planilla_consolidada_MARCO_A_v18_15_n300.csv` son outcome/estructurales; no hay `cod_materia`. "Validar materia contra M19" NO existe como opción. El camino real: held-out (HECHO) + GOLD nuevo reusando la SRS de los 300.
+
+**Diseño de la proyección `secretaria` (decisión usuario, refina/precisa el párrafo "Proyección a secretaría" de arriba):** el organigrama de secretarías es una **capa de agrupamiento administrativo MUTABLE**, no una ontología de temas (Nº5 suprimida→Consejo de la Magistratura; Consumo Ac.36/2015, Ambiental 8/2015, Penal Especial Ac.18-19/2024 POSTDATAN buena parte del corpus 2006–2026). Decisión: `materia` queda **sustantiva e intacta**; `secretaria` = variable DERIVADA (materia→secretaría actual vía organigrama), foto ACTUAL, NO time-indexed (la versión temporal del párrafo de arriba se descartó por costo, opción B rechazada). previsional ≡ Seguridad Social (solo naming). Mapeo: Nº1 civil_comercial · Nº2 previsional · Nº3 penal · Nº4 CA · Nº6 laboral+**salud** · Nº7 tributario+cambiario · Ambiental · Consumo · Penal Especial=lesa_humanidad · Originarios. Sin hogar (transversales): **constitucional→`transversal`** (todas las secretarías tratan lo constitucional; es competencia de la Corte, salvo arbitrariedad); **electoral→`fuero_externo` / PENDIENTE_VERIFICAR** (28/30 vienen de la Cámara Nacional Electoral, fuero especializado externo sin secretaría interna; el usuario chequea el ruteo interno). `secretaria` es DERIVADA, no observada — el corpus tiene `tribunal_origen` (inferior), no la secretaría interna de la Corte; documentarlo así en el CODEBOOK.
+
+**FP detectado al pasar:** `Edenor S.A. / Provincia de Buenos Aires` clasificado `electoral` por `regla:electoral` (capa1) — huele a falso positivo de la regla; revisar al armar el gold.
+
+**Próximo (frente materia), elegido para H117:** (b) **GOLD** — `cod_materia` a ciego sobre los 300 (SRS de M19) + oversample tipo Marco B (`muestrear_validacion.py`, min(20,N) por valor raro: consumo/salud/ambiental/cambiario/lesa) → titular de materia con precision/recall por valor e IC de Wilson, igual que el titular M19. (a) refinamiento de la fuga CA queda CONDICIONADO a lo que diga el gold (medir bien antes de tocar = REE; refinar contra la vara gruesa sería optimizar a ciegas).
 
 ## Deuda EN VALIDACIÓN
 
