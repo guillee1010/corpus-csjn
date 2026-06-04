@@ -1,0 +1,16 @@
+patron,materia,tier,precision_capa1,fuente,nota
+despido|accidente|cobro de (salarios|haberes)|diferencias? salariales,laboral,ancla,,poc,objeto 's/' de caratula
+reajuste|\bpension|prestaciones (varias|previsionales)|haberes (previsionales|jubilatorios)|movilidad,previsional,ancla,,poc,
+ejecucion fiscal|determinacion de (oficio|impuesto)|apremio,tributario,ancla,,poc,
+danos y perjuicios|ejecucion hipotecaria|\bconcurso|\bquiebra|incumplimiento de contrato|escrituracion|desalojo|cobro (ejecutivo|de pesos)|prescripcion adquisitiva,civil_comercial,ancla,,poc,
+extradicion|\bestafa|homicidio|robo|\bhurto|defraudacion|encubrimiento|tenencia de,penal,ancla,,poc,
+empleo publico|impugnacion de acto administrativo|demanda contencioso|accion (procesal|contencioso) administrativa|proceso de conocimiento|recurso directo,contencioso_administrativo,ancla,,poc,
+accion declarativa de (inconstitucionalidad|certeza)|accion de inconstitucionalidad,constitucional,ancla,,poc,materia nueva (acc. declarativa); ojo: solapa con originaria
+amparo de salud,salud,ancla,,poc,objeto explicito de salud
+EXCLUIR_procesales,,excluida,,poc,"objetos procesales polisemicos NO usar solos: amparo (pelado), ordinario, ejecutivo, incidente, sumarisimo, recurso extraordinario -> no determinan materia"
+\balimentos\b,civil_comercial,ancla,,H115,familia->secretaria civil; objeto-scoped 100% gt (n=4)
+restitucion internacional|reintegro de hijo,civil_comercial,ancla,,H115,familia/niñez->civil; objeto-scoped (n=12) gt 83-100%
+filiacion|\badopcion\b|guarda (con fines|preadopt),civil_comercial,ancla,,H115,familia->civil; objeto-scoped 100% gt (n=3)
+determinacion de la capacidad|\binsania\b|curatela|declaracion de incapacidad|proteccion de persona,civil_comercial,ancla,,H115,familia/capacidad->civil; objeto-scoped 100% gt (n=7)
+divorcio|regimen de (visitas|comunicacion)|cuidado personal|violencia familiar,civil_comercial,ancla,,H115,familia->civil; objeto-scoped 100% gt (n=5)
+\bsucesion|sucesorio,civil_comercial,ancla,,H115,familia/sucesorio->civil; objeto-scoped 83% gt (n=6)

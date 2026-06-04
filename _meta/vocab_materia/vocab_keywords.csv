@@ -1,0 +1,21 @@
+patron,materia,tier,pureza_train,n_train,fuente,nota
+contrato de trabajo|l\.?c\.?t\.?\b,laboral,ancla,0.90,67,poc,la senal laboral vive en el nombre (67) no en la 20744 (3)
+accidentes? de trabajo|riesgos del trabajo,laboral,ancla,0.82,88,poc,
+codigo penal|cod\.? penal,penal,ancla,0.80,100,poc,
+concurso (preventivo|de acreedores)|\bquiebra,civil_comercial,ancla,0.70,44,poc,comercial
+ley de seguros|contrato de seguro,civil_comercial,ancla,,,guillermo,comercial (Guillermo); ver tambien norma 17418
+aduaner,tributario,ancla,0.68,38,poc,override CA->tributario SALVO co-ocurrencia penal (contrabando: 10/38 eran penal)
+regimen de cambios|mercado (unico y )?libre de cambios|comunicacion a del bcra,cambiario,ancla,,,guillermo,cambiario REGULATORIO (distinto de penal cambiario = ley 19359); verificar patron BCRA
+despido,laboral,desambiguador,0.71,59,poc,fuga a CA = empleo publico; confirmar con co-ocurrencia LCT y ausencia de empleo publico
+indemnizacion,,desambiguador,0.44,205,poc,generico (labo/civi/CA); NO disparar solo
+accion civil,,desambiguador,0.29,21,poc+guillermo,polisemico laboral/civil (Guillermo); resolver por co-ocurrencia (accidente de trabajo -> laboral)
+danos y perjuicios|danos materiales,civil_comercial,desambiguador,0.58,137,poc,debil; fuga a CA (responsabilidad estatal) y laboral
+defensa del consumidor|relacion de consumo,consumo,ancla,,31,poc+organigrama,materia fina propia (Secretaria Relaciones de Consumo); en train 58% civi/cont era routing no materia; ver norma 24240
+responsabilidad (del estado|estatal),contencioso_administrativo,desambiguador,0.50,56,poc,debil
+ley de sociedades|sociedad(es)? (anonima|comercial|de responsab),EXCLUIDA,excluida,0.42,36,guillermo,citada para responsabilizar socios en cualquier materia; NO ancla
+lesa humanidad|delitos de lesa humanidad,lesa_humanidad,ancla,,,organigrama,Secretaria Penal Especial; rama doctrinal=penal pero NO secretaria Penal(3)
+dano ambiental|recomposicion (del )?ambiente|presupuestos minimos ambientales,ambiental,ancla,,,organigrama,Secretaria Juicios Ambientales; ver norma 25675
+art\.? 75 inc\.? 22|jerarquia constitucional|tratados de derechos humanos,EXCLUIDA,excluida,,,guillermo,DDHH transversal: cualquier secretaria lo trata; ubicuo como la 1285. NO es flag de materia
+ingresos brutos|\biibb\b,tributario,ancla,,21,H114+guillermo,tributario provincial; gt CA:3 civil:2 limpio
+impuesto de sellos,tributario,ancla,,9,H114+guillermo,tributario provincial limpio
+impuesto inmobiliario,tributario,ancla,,1,H114+guillermo,bajo soporte limpio

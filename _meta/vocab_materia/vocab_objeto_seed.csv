@@ -1,0 +1,10 @@
+patron,materia,tier,precision_capa1,fuente,nota
+despido|accidente|cobro de (salarios|haberes)|diferencias? salariales,laboral,ancla,,poc,objeto 's/' de caratula
+reajuste|\bpension|prestaciones (varias|previsionales)|haberes (previsionales|jubilatorios)|movilidad,previsional,ancla,,poc,
+ejecucion fiscal|determinacion de (oficio|impuesto)|apremio,tributario,ancla,,poc,
+danos y perjuicios|ejecucion hipotecaria|\bconcurso|\bquiebra|incumplimiento de contrato|escrituracion|desalojo|cobro (ejecutivo|de pesos)|prescripcion adquisitiva,civil_comercial,ancla,,poc,
+extradicion|\bestafa|homicidio|robo|\bhurto|defraudacion|encubrimiento|tenencia de,penal,ancla,,poc,
+empleo publico|impugnacion de acto administrativo|demanda contencioso|accion (procesal|contencioso) administrativa|proceso de conocimiento|recurso directo,contencioso_administrativo,ancla,,poc,
+accion declarativa de (inconstitucionalidad|certeza)|accion de inconstitucionalidad,constitucional,ancla,,poc,materia nueva (acc. declarativa); ojo: solapa con originaria
+amparo de salud,salud,ancla,,poc,objeto explicito de salud
+EXCLUIR_procesales,,excluida,,poc,"objetos procesales polisemicos NO usar solos: amparo (pelado), ordinario, ejecutivo, incidente, sumarisimo, recurso extraordinario -> no determinan materia"

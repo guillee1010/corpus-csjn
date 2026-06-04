@@ -1,0 +1,8 @@
+patron,materia,tier,precision_capa1,fuente,nota
+\banses\b|administracion nacional de (la )?seguridad social,previsional,ancla,0.93,poc,limpio
+\bpami\b|inssjp|instituto nacional de servicios sociales,previsional,ancla,,poc,PAMI: previsional/salud -> verificar
+\bafip\b|\bdgi\b|direccion general impositiva|administracion federal de ingresos|\bdga\b|direccion general de aduanas|administracion nacional de aduanas,tributario,ancla,,poc,REFINAMIENTO fuerte: 165 casos CA en capa1 son tributario; override CA->tributario
+banco central|\bbcra\b,cambiario,ancla,,poc,verificar cambiario vs bancario
+a\.r\.t\.|aseguradora de riesgos|superintendencia de riesgos del trabajo|\bsrt\b,laboral,ancla,0.81,poc,señal chica (los laborales anclan mas por norma/keyword); exigir a.r.t. con puntos (NO 'art.' de articulo)
+provincia de|estado nacional|gobierno nacional|municipalidad,,trigger_ca_originaria,,poc,NO ancla fina: dispara capa CA/originaria. particular c/ provincia = CA ; provincia c/ provincia o c/ Estado Nacional = originaria (capa3). 625 casos en el residual
+\bagip\b|\barba\b|direccion (general |provincial )?de rentas|\bdgr\b|direccion provincial de ingresos|administracion (gubernamental|provincial) de ingresos,tributario,ancla,,H114,rentas provinciales/CABA por nombre (~10 casos); corre antes del router CA

@@ -1,0 +1,38 @@
+numero,nombre,materia,tier,pureza_train,n_train,fuente,nota
+24463,Solidaridad Previsional,previsional,ancla,0.95,115,poc,
+24241,Sistema Integrado de Jubilaciones y Pensiones,previsional,ancla,0.91,70,poc,
+18037,Jubilaciones relacion de dependencia (regimen anterior),previsional,ancla,0.98,63,poc,verificar nombre
+17562,(completar),previsional,ancla,1.00,10,poc,completar nombre
+22955,(completar),previsional,ancla,1.00,9,poc,completar nombre
+26153,(completar),previsional,ancla,1.00,8,poc,completar nombre
+24018,Regimen previsional de privilegio,previsional,ancla,0.89,9,poc,verificar nombre
+24557,Riesgos del Trabajo (LRT),laboral,ancla,0.88,59,poc,accidentes de trabajo
+26773,Riesgos del Trabajo (reforma 2012),laboral,ancla,1.00,24,poc,
+23551,Asociaciones Sindicales,laboral,ancla,0.86,14,poc,laboral colectivo
+11683,Procedimiento Tributario,tributario,ancla,0.95,58,poc+guillermo,override CA->tributario (en train cae en CA: tributario sube por CNACAF)
+24660,Ejecucion de la Pena Privativa de la Libertad,penal,ancla,0.92,13,poc,
+23737,Estupefacientes,penal,ancla,0.81,21,poc,
+24769,Regimen Penal Tributario,penal_tributario,ancla,,11,poc+guillermo,en train salio 55% cont/pena: NO era polisemia de materia sino routing del tribunal; la norma lo ancla limpio. Secretaria economico-financiero NO penal
+19359,Regimen Penal Cambiario,penal_cambiario,ancla,,,guillermo,Secretaria economico-financiero NO penal; rama doctrinal=penal
+24522,Concursos y Quiebras,civil_comercial,ancla,0.86,29,poc,comercial
+17418,Seguros,civil_comercial,ancla,0.88,16,poc+guillermo,comercial (Guillermo)
+25798,(completar),civil_comercial,ancla,1.00,26,poc,completar nombre
+26167,(completar),civil_comercial,ancla,1.00,26,poc,completar nombre
+24901,Prestaciones para personas con discapacidad,civil_comercial,ancla,1.00,17,poc,verificar materia/nombre
+26994,Codigo Civil y Comercial de la Nacion,EXCLUIDA,excluida,0.90,10,guillermo,codigo de fondo transversal (civil/comercial/laboral/otras); NO ancla. El 90% en train era artefacto del fuero especializado (n=10)
+25820,(completar),civil_comercial,ancla,0.85,13,poc,completar nombre
+24043,Reparacion detenidos PEN / estado de sitio,contencioso_administrativo,ancla,1.00,23,poc,verificar nombre
+25871,Migraciones,contencioso_administrativo,ancla,1.00,23,poc,verificar nombre
+23349,(completar - posible IVA?),contencioso_administrativo,ancla,1.00,10,poc,verificar: si es IVA -> tributario
+20628,Impuesto a las Ganancias (verificar),tributario,ancla,0.86,22,poc,verificar numero: si es Ganancias -> tributario (en train cae en CA)
+19550,Sociedades,EXCLUIDA,excluida,0.61,18,guillermo,citada en cualquier materia para responsabilizar socios; NO es senal de materia
+24240,Defensa del Consumidor,consumo,ancla,,26,poc+organigrama,en train 58% civi/cont era routing; tiene secretaria propia -> materia fina
+25675,Ley General del Ambiente (presupuestos minimos),ambiental,ancla,,,organigrama,Secretaria Juicios Ambientales; verificar
+20744,Ley de Contrato de Trabajo (LCT),laboral,ancla,,,obvio,complementa el keyword LCT (la senal vive mas en el nombre)
+25561,Emergencia Publica / pesificacion,EXCLUIDA,excluida,,,obvio,transversal post-2002 aplicada en todas las ramas; NO flag de materia
+24051,Residuos Peligrosos,ambiental,ancla,,10,H114,limpio 0 contam capa1 (Secretaria Ambiental)
+24767,Cooperacion Penal Internacional (extradicion),penal,ancla,,8,H114,gt capa1 35/44 penal; confirmado prompt
+23548,Coparticipacion Federal,tributario,ancla,,11,H114,baja contam (civil:2); coparticipacion
+21499,Expropiaciones,contencioso_administrativo,ancla,,7,H114,expropiacion; algo de civil en gt
+10397,Codigo Fiscal PBA,tributario,ancla,,8,H114,limpio 0 contam (tributario provincial)
+11723,Propiedad Intelectual / Derechos de Autor,civil_comercial,ancla,1.00,6,H115,gt 6/6 civil limpio; frente norma agotado (resto disperso: 19549 58pct CA, 24065 33pct, 1285 ubicua=ruido)
