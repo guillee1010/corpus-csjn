@@ -1,17 +1,18 @@
 {
   "schema_version": 3,
-  "manifest_generator_version": "1.1",
-  "generated_at": "2026-06-04T02:26:32.608364+00:00",
+  "manifest_generator_version": "1.2",
+  "generated_at": "2026-06-04T03:03:01.420594+00:00",
   "git": {
-    "commit": "838bb58adbf814d4ece2ec5a2e4113876d98e1f5",
-    "dirty": false
+    "commit": "f93f097d9bcfc2c721b2e34baa513d364a6f5241",
+    "dirty": true
   },
   "pipeline_scripts": {
     "detectar_paginas.py": "1.01",
     "construir_catalogo.py": "1.01",
     "cruzar_catalogo_y_mapa.py": "1.0",
     "parser.py": "18.24",
-    "parser_editorial.py": "1.0"
+    "parser_editorial.py": "1.0",
+    "derivar_materia.py": "1.0"
   },
   "corpus": {
     "n_files": 46,
@@ -315,6 +316,14 @@
       "sha256": "cba0dcf509a64babdc8dc4cb389a874062e8d10b92fe13f95ffed4117b12185a",
       "n_rows": 11445,
       "n_bytes": 1206651
+    },
+    "csjn_casos_materia.csv": {
+      "path": "output/parser/csjn_casos_materia.csv",
+      "generated_by": "derivar_materia.py",
+      "generator_version": "1.0",
+      "sha256": "9889c18a05f9e65b3a035134c588305f8833120301d878e4b987ed684a154c1b",
+      "n_rows": 5890,
+      "n_bytes": 288181
     }
   }
 }
