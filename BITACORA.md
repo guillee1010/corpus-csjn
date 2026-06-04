@@ -16611,3 +16611,44 @@ Al re-sellar saltó que check_regresion daba [FAIL] espurio en los 4 CSV (byte-d
 **parser:** v18.23 → v18.24 (find_tribunal_origen v12 + _parece_caratula + lineterminator LF).
 
 **Commits:** 3 (fix+outputs+golden; DEUDA; bitácora+changelog).
+
+## H112 — Frente B: materia capa 1 (sidecar) + saldo de la deuda de procedencia de H111 (2026-06-03)
+
+**Objetivo:** abrir el Frente B implementando la capa 1 de `materia` (lookup tribunal→fuero), y cerrar de paso la regeneración del `_manifest.json` que H111 dejó pendiente.
+
+### H112-01 — Saldo de procedencia de H111 + paso de manifest al protocolo de cierre
+
+H111 commiteó parser 18.23→18.24 y 1129 celdas `tribunal_origen` (+ reescritura LF de los 4 CSV) sin regenerar `_manifest.json` → quedaba stale (versión vía ast en 18.23, sha256 de `csjn_casos.csv` movido, los 4 CSV con bytes CRLF→LF) y `--verify` daría [FAIL] sobre un commit cerrado, con el dataset publicado en Dataverse. Regenerado el manifest (parser 18.24) + fixup commit. Causa de raíz: el protocolo de cierre no tenía paso de manifest → se agregó como **Paso 2 — Re-sellar procedencia** al skill `cierre-sesion-corpus`, con precondición `check_regresion` [CLEAN] y los sha256/versión sellados alimentando la sección Estado final de BITACORA.
+
+### H112-02 — Materia capa 1: `derivar_materia.py` v1.0 (sidecar `csjn_casos_materia.csv`)
+
+Decisión de arquitectura (REE): la derivación NO muta `csjn_casos.csv` ni vive en el parser. Módulo standalone que lee la tabla primaria read-only y escribe un sidecar keyed por `caso_id_canonico`, mismo patrón que votos/zonas/editorial — el parser sigue dueño único de su schema; materia se refina por capa sin reparsear ni ensuciar el golden de la primaria; el análisis hace left-join 1:1. Reglas ordenadas (primera que matchea gana) sobre `tribunal_origen` normalizado, solo fuero nacional/federal especializado.
+
+PoC sobre el corpus vivo + dos refinamientos verificados con datos antes de cerrar: (1) `status==originaria` corta a capa 3 ANTES de las reglas — capa 3 es dueña de la originaria por regla (art. 117 no tiene tribunal apelado; el `tribunal_origen` de un originaria suele ser citado), 31 casos mal ruteados a capa1 corregidos → `pendiente_capa3` = 477 = originaria exacto, `capa1 ∩ originaria = 0`; (2) ensanche del marcador de jurisdicción general (`corte suprema` cualquier orden, `cámara del crimen`) → el residual cayó de 183→12→**6**.
+
+**Cobertura (5697 fallos):** capa1 **2474 (43,4%)** [civil_comercial 746, contencioso_administrativo 618, penal 414, laboral 374, previsional 292, electoral 30]; pendiente_capa2 2732 (48,0%); pendiente_capa3 477 (8,4%); sui_generis 8; residual 6; no_aplica 193 (sumarios).
+
+**Hallazgos de diseño:** `tributario` = 0 en capa 1 (confirma la advertencia del SCDB): sube por la Cám. Cont. Adm. Federal → cae en `contencioso_administrativo`; NO es derivable de tribunal, es capa 2 por norma (11.683 / aduanero), y capa 2 podrá reclasificar un subconjunto de CA→tributario. Residual 6 = tribunales arbitrales (Bolsa de Comercio, Obras Públicas) + 1 typo OCR (`Superior Tribual`) + 1 anáfora (`Sala D de la referida Cámara`) — no es hueco de clasificación.
+
+**Decisión (sui_generis):** los 8 (Jurado de Enjuiciamiento + Consejo de la Magistratura, nación y provincias) se agrupan como categoría terminal SIN label — agrupar no contamina. Pendiente leerlos caso por caso (cuestión federal / cómo se decidieron) antes de darles taxonomía.
+
+Verificado reproducible en la máquina del usuario: idéntico al de referencia (capa1 2474, mismo desglose, mismos conteos).
+
+### H112 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos + 193 sumario). Sin cambio vs H111.
+- **Parser:** v18.24, SIN cambios esta sesión (la derivación es post-parse).
+- **Sidecar nuevo:** `output/parser/csjn_casos_materia.csv` — 5890 filas (join 1:1 con casos).
+
+**Outputs canónicos (los 5 previos sin cambios):**
+- `output/parser/csjn_casos.csv` — 5890 filas (intacto).
+- `output/parser/csjn_casos_votos.csv` — 27639 filas (intacto).
+- `output/parser/csjn_casos_zonas.csv` — 141451 segmentos (intacto).
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones (intacto).
+- **`output/parser/csjn_casos_materia.csv` — 5890 filas (NUEVO).**
+
+**Scripts creados:** `scripts/pipeline/derivar_materia.py` v1.0.
+
+**Pendiente de integración:** allow-list de `generar_manifiesto.py` + 6º output (bump v1.1); CODEBOOK (3 columnas nuevas); left-join en `csjn_analisis_v4.py`.
+
+**Commits:** 2 (fixup manifest H111; derivar_materia + sidecar).

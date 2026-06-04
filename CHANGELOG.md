@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H112 (2026-06-03)
+
+- `scripts/pipeline/derivar_materia.py`: NUEVO v1.0 — deriva `materia` capa 1 (tribunal→fuero) como sidecar.
+- `output/parser/csjn_casos_materia.csv`: NUEVO — 5890 filas, keyed por `caso_id_canonico` (materia/materia_capa/materia_fuente). Cobertura capa1 2474/5697 fallos (43,4%).
+- `output/parser/_manifest.json`: regenerado (fixup H111 — parser 18.24, sha256 post-B114 + LF).
+
 ## H111 (2026-06-03)
 
 - `parser.py` v18.23→v18.24: `find_tribunal_origen` v11→v12 + helper `_parece_caratula` — une el nombre del tribunal cortado por el fin de línea del OCR (B114). 1129 celdas `tribunal_origen` recuperadas, 0 violaciones de invariante.
