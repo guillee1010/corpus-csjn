@@ -16749,3 +16749,39 @@ Hallazgo honesto: la meta ~92-94% NO es alcanzable con precisión. El residual `
 **Scripts:** `derivar_materia.py` v3.2.
 
 **Pendientes nuevos (a DEUDA):** procedencia de la cadena de materia fuera del manifiesto; fuga is_originaria en const/tributario; lever penal-objeto diferido (86-87%); conflicto nuevo 332_p908.
+
+## H116 — Validación held-out de capa 2 (materia) + diseño de la proyección `secretaria` (2026-06-04)
+
+**Objetivo:** medir la confiabilidad de capa 2 del frente materia sin tocar el pipeline, y resolver el diseño de la variable `secretaria`. Sesión de medición y diseño: NO toca parser ni outputs (parser y `derivar_materia.py` v3.2 intactos).
+
+### H116-01 — Reencuadre materia vs secretaría (organigrama como capa administrativa mutable)
+
+El organigrama de secretarías de la CSJN NO es una ontología de temas: es una capa de **agrupamiento administrativo, muchos-a-uno y mutable**. Evidencia con datos: Nº5 suprimida (superintendencia/sumarios → Consejo de la Magistratura); Relaciones de Consumo (Ac. 36/2015), Juicios Ambientales (Ac. 8/2015) y Penal Especial (Ac. 18-19/2024) POSTDATAN buena parte del corpus (2006–2026). Decisión: `materia` queda **sustantiva e intacta**; `secretaria` = variable DERIVADA (materia→secretaría actual vía organigrama), foto ACTUAL, NO time-indexed (opción temporal descartada por costo). previsional ≡ Seguridad Social (naming). Mapeo: Nº1 civil_comercial · Nº2 previsional · Nº3 penal · Nº4 CA · Nº6 laboral+salud · Nº7 tributario+cambiario · Ambiental · Consumo · Penal Especial=lesa_humanidad · Originarios. Transversales sin hogar: **constitucional→`transversal`** (es competencia de la Corte, no un tema); **electoral→`fuero_externo`/PENDIENTE** (28/30 desde la Cámara Nacional Electoral; el usuario verifica el ruteo interno). `secretaria` es derivada, no observada (el corpus tiene `tribunal_origen`, no la secretaría interna) — documentar así en CODEBOOK.
+
+### H116-02 — Aclaración M19 (no codifica materia) + frontera AFIP/DGI
+
+`planilla_consolidada_MARCO_A_v18_15_n300.csv` (M19) codifica 7 campos `cod_*` outcome/estructurales; **no hay `cod_materia`**. "Validar materia contra M19" no existe; el camino es held-out + gold nuevo reusando la SRS de los 300. Verificación de la frontera fiscal (con datos): aduana/ANA 48/67→tributario (NO seguridad social); AFIP 98/128→tributario + 8→previsional; DGI 111/170→tributario + 16→previsional. AFIP/DGI recauda impuestos Y aportes → previsional↔tributario es ambigüedad real, no bug.
+
+### H116-03 — Validación held-out de capa 2 (capa 1 como silver-GT)
+
+Señales ortogonales (capa1=tribunal, capa2=carátula+considerando → sin leakage). Harness ad-hoc `heldout.py` (no canónico) corre `clasificar_capa2` sobre los 2315 casos capa1 y compara contra la etiqueta de tribunal. Resultados (IC95 de Wilson):
+- Cobertura capa2 (emite materia): 1383/2315 = **59,7%** [57,7–61,7]; abstención ~40% (sin_ancla 848 + conflicto 84).
+- Accuracy | emite: **75,8%** [73,5–78,0]; colapsado por granularidad (lesa→penal, consumo/cambiario→civil): **78,4%** [76,1–80,5] (+2,6pp → disenso real, no artefacto).
+- Precisión por valor: previsional 93,3 · civil 90,4 · laboral 90,1 · penal 87,6 · **CA 68,8**. Recall: laboral 63,4 · previsional 67,1 · CA 42,3 · civil 37,7 · penal 34,1 · electoral 0.
+- Lectura: capa2 = **alta precisión / bajo recall por diseño** (abstención REE de H115, residual irreducible).
+
+Dos fugas cuantificadas (NO aplicadas): **Estado→CA sobre-rutea 282 casos no-CA** (sumidero de precisión de CA); **`salud_amparo` 19/19 misfire** (18 civil, 1 CA). Límite estructural: el silver-GT capa1 NO contiene las materias exclusivas de capa2 (tributario/consumo/salud/ambiental/cambiario/lesa) → el held-out es CIEGO a ellas; solo el gold las mide. FP al pasar: `Edenor S.A. / Provincia de Bs As`→electoral (regla:electoral, revisar).
+
+### H116 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos + 193 sumario_con_link) — SIN cambios.
+- **Materia (`csjn_casos_materia.csv`, v3.2):** SIN cambios (4037/5220 clasificados, 77,3%).
+- **Validación materia:** held-out de capa 2 HECHO; GOLD pendiente (próximo).
+
+**Outputs canónicos:** sin cambios (sesión de medición; parser v18.x y `derivar_materia.py` v3.2 intactos). Manifiesto NO re-sellado (no cambió la cadena).
+
+**Scripts creados:** `heldout.py` (harness ad-hoc de validación, NO canónico; ubicación a definir — candidato `estadisticas/validacion/` junto a M19).
+
+**Commits:** sin commits de pipeline. DEUDA_TECNICA editada (header H116 + tablero Frente B + subsección `Avance H116`). BITACORA append (este bloque).
+
+**Próximo (H117):** GOLD del frente materia — `cod_materia` a ciego sobre los 300 (SRS M19) + oversample Marco B de materias raras → titular de materia (precision/recall por valor, IC Wilson). Fuga CA condicionada al gold.
