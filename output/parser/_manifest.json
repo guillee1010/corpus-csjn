@@ -1,10 +1,10 @@
 {
   "schema_version": 3,
   "manifest_generator_version": "1.2",
-  "generated_at": "2026-06-04T03:03:01.420594+00:00",
+  "generated_at": "2026-06-04T03:03:33.722220+00:00",
   "git": {
-    "commit": "f93f097d9bcfc2c721b2e34baa513d364a6f5241",
-    "dirty": true
+    "commit": "8848401c548052bc79b22c1350c5627076393bdb",
+    "dirty": false
   },
   "pipeline_scripts": {
     "detectar_paginas.py": "1.01",
