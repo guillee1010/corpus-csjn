@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.24"  # H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
+__version__ = "18.25"  # H113: split csjn_casos_textos — considerando_text/por_ello_text/firma_raw salen de csjn_casos.csv a output/parser/csjn_casos_textos.csv (5º CSV del parser, keyed por caso_id_canonico, espejo 1:1 5890 filas, SIN truncado; antes considerando[:2000] 47,6% cortado / por_ello[:300]); habilita materia capa 2 (lee el considerando completo). Escritura por proyección de fieldnames (patrón zonas), texto full ya estaba en memoria → relocaliza al escribir, sin cambio de lógica de parseo. Re-golden consciente + 7º output al manifest (generar_manifiesto v1.3). // H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
 
 import re
 import csv
@@ -3519,8 +3519,8 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             "posiciones":             json.dumps(posiciones, ensure_ascii=False),
             "tribunal_origen":        tribunal_str,
             "tribunal_origen_status": tribunal_origen_status,
-            "por_ello_text":          por_ello_text[:300],
-            "considerando_text":      considerando_text[:2000],
+            "por_ello_text":          por_ello_text,
+            "considerando_text":      considerando_text,
             "source_file":            filepath.name,
             "linea_inicio":           int(linea_inicio),
             "linea_fin":              int(linea_fin) if linea_fin not in ("", None) else "",
@@ -3807,9 +3807,8 @@ def main():
             "es_queja", "queja_resultado", "tipo_cuestion_federal",
             "word_count", "wc_mayoria", "wc_votos", "wc_considerando",
             "wc_dictamen",
-            "firma_raw", "jueces", "jueces_conocidos", "jueces_desconocidos",
+            "jueces", "jueces_conocidos", "jueces_desconocidos",
             "posiciones", "tribunal_origen", "tribunal_origen_status",
-            "por_ello_text", "considerando_text",
             "source_file", "linea_inicio", "linea_fin", "linea_fin_real",
             "status_localizacion", "status_fin", "pista_fin",
             "tipo_entrada",
@@ -3818,8 +3817,25 @@ def main():
             writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
             writer.writeheader()
             for c in all_casos:
-                writer.writerow(c)
+                writer.writerow({k: c[k] for k in fieldnames})
         print(f"\n[OK] {output_path}: {len(all_casos)} casos")
+
+    # ── Output: textos (H113: blobs crudos fuera del analítico) ───────────────
+    # considerando_text / por_ello_text / firma_raw: texto pesado SIN truncar,
+    # keyed por caso_id_canonico, espejo 1:1 de csjn_casos.csv (sumarios con
+    # texto vacío). Saca el blob del analítico y da el considerando completo que
+    # necesita materia capa 2. Misma proyección por fieldnames que zonas.
+    output_textos_path = (output_path.parent /
+                          (output_path.stem + "_textos" + output_path.suffix))
+    if all_casos:
+        fieldnames_t = ["caso_id_canonico",
+                        "considerando_text", "por_ello_text", "firma_raw"]
+        with output_textos_path.open("w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames_t, lineterminator="\n")
+            writer.writeheader()
+            for c in all_casos:
+                writer.writerow({k: c[k] for k in fieldnames_t})
+        print(f"[OK] {output_textos_path}: {len(all_casos)} filas (textos)")
 
     # ── Output: vote-centered ─────────────────────────────────────────────────
     output_votos_path = (Path(args.output_votos) if args.output_votos

@@ -3,13 +3,13 @@
 Harness de regresion del parser (corpus-csjn).
 ==============================================
 
-Congela los 4 CSV que produce scripts/pipeline/parser.py como GOLDEN output
+Congela los 5 CSV que produce scripts/pipeline/parser.py como GOLDEN output
 y verifica que una corrida nueva los reproduzca byte-a-byte.
 
 Pensado para refactor seguro (REE): refactor = misma salida, mejor estructura.
 Si una sola celda cambia, el runner falla con codigo 1.
 
-NOTA: parser.py emite 4 CSV (casos, votos, zonas, editorial). El 5o canonico
+NOTA: parser.py emite 5 CSV (casos, textos, votos, zonas, editorial). El 6o canonico
 (csjn_editorial_indice_partes.csv) lo produce parser_editorial.py aparte: NO
 esta cubierto por este harness.
 
@@ -45,6 +45,7 @@ GOLDEN_DIR  = REPO_ROOT / "scripts" / "tests" / "golden"
 # Los 4 CSV que emite parser.py (derivados del stem de --output).
 OUTPUTS = [
     "csjn_casos.csv",
+    "csjn_casos_textos.csv",
     "csjn_casos_votos.csv",
     "csjn_casos_zonas.csv",
     "csjn_casos_editorial.csv",
