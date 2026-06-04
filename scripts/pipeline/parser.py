@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.23"  # H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
+__version__ = "18.24"  # H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
 
 import re
 import csv
@@ -983,35 +983,72 @@ RE_TRIB_INTERVINIENTE = re.compile(
     re.I,
 )
 
+def _parece_caratula(s):
+    """B114 (H111): True si la línea parece carátula/sumario y NO continuación
+    del nombre de un tribunal. Heurística por proporción: ≥60% de los tokens
+    alfabéticos largos (>2 chars) en MAYÚSCULAS. Atrapa carátulas con conectores
+    en minúscula ('MARIA EUGENIA CIRILO y Otro' → 3/4) que un test all-caps puro
+    (s == s.upper()) dejaba pasar; no toca continuaciones reales del nombre
+    ('Administrativo Federal', 'Mendoza', 'Provincia de Buenos Aires' → 0)."""
+    toks = [t for t in re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñ]+", s) if len(t) > 2]
+    if not toks:
+        return False
+    return sum(1 for t in toks if t == t.upper()) / len(toks) >= 0.6
+
+
 def find_tribunal_origen(lines, idx_inicio, idx_fin):
     """
-    v11: además de la línea con 'Tribunal de origen:', si la línea no tiene
-    contenido después del ':' (marcador suelto, contenido en la línea
-    siguiente), tomar la siguiente línea como tribunal.
+    v12 (B114, H111): el nombre del tribunal de origen viene partido por el corte
+    de línea del OCR. Dos sub-patrones: (a) intra-palabra, el valor termina en
+    guión/soft-hyphen ('…Contencioso Admi-' / '…Administra\xad') y la continuación
+    arranca en minúscula ('nistrativo Federal, Sala IV.'); (b) inter-palabra, el
+    valor corta en una preposición sin guión ('…en lo Contencioso ') y la
+    continuación arranca en mayúscula ('Administrativo Federal.'). La regla v11
+    ('unir si la siguiente empieza en minúscula y NO termina en ".") fallaba en
+    los dos: la continuación legítima del NOMBRE casi siempre cierra en '.', y la
+    inter-palabra arranca en mayúscula. v12: unir líneas siguientes hasta la que
+    cierra en '.', parando antes en breaks estructurales (vacío, running-head,
+    'Tribunal(es) que…', 'Intervino…', 'Ministerio…', 'Recurso…', carátula);
+    _unhyphenate al final colapsa el corte intra-palabra ('Admi- nistrativo' →
+    'Administrativo'). Seguro contra separadores legítimos ('La Plata - Sala II':
+    espacio antes del guión, no matchea \\w-). Invariante: los nombres que ya
+    cierran en '.' en su primera línea no entran al bloque → quedan idénticos.
+
+    v11 (preservado): si el marcador está vacío ('Tribunal de origen:' sin
+    contenido en la misma línea), el contenido está en la línea siguiente.
     """
-    for k in range(idx_inicio, min(idx_fin, len(lines))):
+    tope = min(idx_fin, len(lines))
+    for k in range(idx_inicio, tope):
         m = RE_TRIB_ORIG.match(lines[k].strip())
-        if m:
-            tribunal = m.group(1).strip().rstrip(".")
-            # v11: si el marcador está vacío (ej: 'Tribunal de origen:' sin
-            # contenido en la misma línea), tomar la línea siguiente entera.
-            if not tribunal and k + 1 < len(lines):
-                next_line = lines[k + 1].strip()
-                if next_line and not RE_PAGE_HEADER.match(next_line):
-                    tribunal = next_line.rstrip(".")
-                    return tribunal
-            # Comportamiento original: continuación natural en línea siguiente
-            if k + 1 < len(lines):
-                next_line = lines[k + 1].strip()
-                if (next_line and not next_line.startswith("Tribunal")
-                    and not next_line.startswith("Juzgado")
-                    and not next_line.startswith("Cámara")
-                    and not RE_PAGE_HEADER.match(next_line)
-                    and len(next_line) < 100
-                    and not next_line.endswith(".")
-                    and next_line[0].islower()):
-                    tribunal += " " + next_line.rstrip(".")
-            return tribunal
+        if not m:
+            continue
+        tribunal = m.group(1).strip()
+        base = k
+        # v11: marcador suelto → el nombre arranca en la línea siguiente.
+        if not tribunal and k + 1 < tope:
+            next_line = lines[k + 1].strip()
+            if next_line and not RE_PAGE_HEADER.match(next_line):
+                tribunal = next_line
+                base = k + 1
+        # v12: traer la continuación del nombre partido por OCR.
+        if not tribunal.endswith("."):
+            k2 = base + 1
+            unidas = 0
+            while k2 < tope and unidas < 2:
+                next_line = lines[k2].strip()
+                if (not next_line
+                        or RE_PAGE_HEADER.match(next_line)
+                        or RE_TRIB_INTERVINIENTE.match(next_line)
+                        or next_line.startswith(("Tribunal", "Juzgado", "Intervino",
+                                                 "Ministerio", "Recurso"))
+                        or _parece_caratula(next_line)):
+                    break
+                tribunal += " " + next_line
+                unidas += 1
+                if next_line.endswith("."):
+                    break
+                k2 += 1
+        return _unhyphenate(tribunal).rstrip(".").strip()
     return "SIN_TRIBUNAL_ORIGEN"
 
 def hay_tribunal_interviniente(lines, idx_inicio, idx_fin):
@@ -3778,7 +3815,7 @@ def main():
             "tipo_entrada",
         ]
         with output_path.open("w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
             writer.writeheader()
             for c in all_casos:
                 writer.writerow(c)
@@ -3799,7 +3836,7 @@ def main():
             "tipo_voto_sep", "fragmenta_ratio", "punto_divergencia",
         ]
         with output_votos_path.open("w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames_v)
+            writer = csv.DictWriter(f, fieldnames=fieldnames_v, lineterminator="\n")
             writer.writeheader()
             for v in all_votos:
                 writer.writerow(v)
@@ -3815,7 +3852,7 @@ def main():
             "linea_ini", "linea_fin", "n_lineas", "wc",
         ]
         with output_zonas_path.open("w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames_z)
+            writer = csv.DictWriter(f, fieldnames=fieldnames_z, lineterminator="\n")
             writer.writeheader()
             for z in all_zonas:
                 writer.writerow({k: z[k] for k in fieldnames_z})
@@ -3830,7 +3867,7 @@ def main():
             "linea_ini", "linea_fin", "n_lineas", "wc",
         ]
         with output_editorial_path.open("w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames_e)
+            writer = csv.DictWriter(f, fieldnames=fieldnames_e, lineterminator="\n")
             writer.writeheader()
             for e in all_editorial:
                 writer.writerow(e)
