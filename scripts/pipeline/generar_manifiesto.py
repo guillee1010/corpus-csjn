@@ -6,9 +6,9 @@ Escribe `output/parser/_manifest.json` con la procedencia COMPLETA de la cadena:
 
   A) git: commit HEAD + si el árbol estaba sucio  -> fija TODO el código del repo
      (todos los scripts del pipeline, transitivamente) cuando dirty=false.
-  B) pipeline_scripts: __version__ de los cinco scripts de la cadena, en orden
-     (detectar_paginas -> construir_catalogo -> cruzar -> parser/_editorial).
-     Capa legible, redundante con el commit.
+  B) pipeline_scripts: __version__ de los seis scripts de la cadena, en orden
+     (detectar_paginas -> construir_catalogo -> cruzar -> parser/_editorial ->
+     derivar_materia). Capa legible, redundante con el commit.
   C) corpus / inputs / outputs: hash + bytes (+ filas en CSV) de los artefactos,
      de la fuente cruda a los finales. Captura el DATO (cambios de corpus /
      intermedios que el commit no distingue). Cada artefacto del pipeline registra
@@ -49,7 +49,7 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
-__version__ = "1.1"
+__version__ = "1.2"
 
 # csjn_casos.csv tiene campos de texto grandes (considerando_text). Subimos el
 # límite de campo de csv a un valor amplio pero seguro en Windows (sys.maxsize
@@ -72,10 +72,11 @@ PIPELINE_SCRIPTS = [
     "cruzar_catalogo_y_mapa.py",
     "parser.py",
     "parser_editorial.py",
+    "derivar_materia.py",
 ]
 
 # ── Capa C: artefactos del pipeline. (ruta relativa a output/, generador) ────
-# inputs = intermedios de la cadena; outputs = los cinco CSV canónicos finales.
+# inputs = intermedios de la cadena; outputs = los seis CSV canónicos finales.
 # Allow-list explícita a propósito (no glob): excluye BASELINE/_manifest.json,
 # y si falta un canónico el script grita en vez de manifestar parcial en silencio.
 # El corpus crudo NO va acá: se deriva de source_file (ver fuentes_corpus()).
@@ -90,6 +91,7 @@ OUTPUTS = [
     ("parser/csjn_casos_zonas.csv",             "parser.py"),
     ("parser/csjn_casos_editorial.csv",         "parser.py"),
     ("parser/csjn_editorial_indice_partes.csv", "parser_editorial.py"),
+    ("parser/csjn_casos_materia.csv",           "derivar_materia.py"),
 ]
 
 # CSV del que se derivan los archivos crudos del corpus (columna source_file).
