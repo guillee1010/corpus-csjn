@@ -2,6 +2,31 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H115 (2026-06-04)
+
+- `derivar_materia.py` v3.1→v3.2: motor de co-ocurrencia (Tier 3). `desambiguar_co_ocurrencia` con ámbito por señal; desempata `conflicto_capa2` y rescata `sin_ancla` antes del trigger CA. Relabel `pendiente_capa3`→`originaria`. Cobertura sobre universo clasificable.
+- `_meta/vocab_materia/vocab_coocurrencia.csv`: NUEVO. 6 reglas (A,B)→materia.
+- `_meta/vocab_materia/vocab_objeto.csv`: +6 anclas familia→civil_comercial.
+- `_meta/vocab_materia/indice_normas.csv`: +11.723 (Propiedad Intelectual)→civil_comercial.
+- `output/parser/csjn_casos_materia.csv`: cobertura 75,3%→77,3% (+104 clasificados). Conflictos 83→64.
+
+## [derivar_materia v3.1] — H114
+### Added
+- Router Tier 1 de relación de partes → contencioso_administrativo (apoyado en is_originaria del parser para originaria).
+- Refinamiento capa1: override CA→tributario por autoridad fiscal; nuevo valor materia_capa='capa1_refinado'.
+- Anclas: normas 24051/24767/23548/21499/10397; keywords tributario provincial; parte rentas prov/CABA.
+### Changed
+- Cobertura materia 60,7% → 69,0%. Tributario 145 → 349.
+### Notes
+- capa1 puro sin cambios (refinamiento marcado aparte y contable).
+
+## materia (sidecar csjn_casos_materia.csv)
+
+- `materia`: rama fina sustantiva. Valores: laboral, previsional, penal, civil_comercial, contencioso_administrativo, electoral (capa 1); + tributario, penal_tributario, penal_cambiario, cambiario, consumo, ambiental, lesa_humanidad, constitucional, salud (capa 2). Vacío si no resuelto.
+- `materia_capa`: capa1 (tribunal_origen) | capa2 (vocabularios) | pendiente_capa2 | pendiente_capa3 (originaria) | sui_generis | residual | no_aplica (sumarios).
+- `materia_fuente`: regla/ancla que resolvió (auditable). En pendiente_capa2: sin_ancla | provincia:... | conflicto_capa2:...
+- Derivado por `derivar_materia.py` leyendo `_meta/vocab_materia/` (4 vocabularios autorados). Join 1:1 con csjn_casos.csv por caso_id_canonico. tributario = capa 2 (sube por CNACAF, no derivable de tribunal_origen).
+
 ## H112 (2026-06-03)
 
 - `scripts/pipeline/derivar_materia.py`: NUEVO v1.0 — deriva `materia` capa 1 (tribunal→fuero) como sidecar.

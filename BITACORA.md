@@ -16652,3 +16652,100 @@ Verificado reproducible en la máquina del usuario: idéntico al de referencia (
 **Pendiente de integración:** allow-list de `generar_manifiesto.py` + 6º output (bump v1.1); CODEBOOK (3 columnas nuevas); left-join en `csjn_analisis_v4.py`.
 
 **Commits:** 2 (fixup manifest H111; derivar_materia + sidecar).
+
+### M — Refinamiento de capa 1 (CA→tributario/consumo por norma/parte) — DISEÑADO, no aplicado
+Origen: H113. Norma 11.683/aduanero (+77) y parte AFIP (+165) revelan tributario etiquetado CA por el tribunal; 24.240+secretaría revelan consumo (+31). Reclasificar capa 1 cambia resultados → decisión deliberada + re-validación. Hoy capa 2 es aditiva y NO toca capa 1.
+
+### B — tipo_cuestion_federal ~50% en blanco
+Componente: parser (classify_cuestion_federal). 2836/5697 fallos sin clasificar. Limita el eje común/federal. Confirmado_cuantificado.
+
+### M — Eje de acceso común/federal (arbitrariedad)
+arbitrariedad = vía pretoriana, marcador de derecho común (laboral 39%, civil 22% vs CA 10%, consumo 5%). NO es materia: es eje de acceso (familia es_queja / SCDB certReason) + rollup común/federal + flag de auditoría (tributario/CA con arbitrariedad = revisar). Arrastrar tipo_cuestion_federal al análisis, fuera de la cascada.
+
+### M — Capa provincia → CA/originaria
+464 casos del residual con provincia/Estado. Regla: particular c/ provincia = CA ; provincia c/ provincia o c/ Estado Nacional = originaria (capa 3). Sin implementar.
+
+### M — Desambiguadores con co-ocurrencia
+vocab_keywords tier=desambiguador (despido/daños/acción civil) cargado pero NO aplicado. Faltan reglas de co-ocurrencia (ej: acción civil + accidente de trabajo → laboral).
+
+### M — Consumidores de texto a migrar a join (post-#1)
+csjn_analisis_v4, exploradorv7, auditar_fallo/extraer_caso leían texto de csjn_casos.csv → ahora join con csjn_casos_textos.csv por caso_id_canonico.
+
+### M — Sellar vocabularios en el manifest
+_meta/vocab_materia/*.csv son inputs autorados de los que depende csjn_casos_materia.csv. Hoy solo cubiertos por git; opcional agregarlos a INPUTS del manifest (hash explícito).
+
+### M — Curaduría de vocabularios de materia (worklist del diagnóstico H113)
+
+**Normas a ANCLAR (agregar a indice_normas):**
+- 24.051 residuos peligrosos → ambiental
+- 23.660 / 23.661 obras sociales / seguro de salud → salud
+- 24.767 cooperación penal internacional (extradición) → penal  [confirmado: objeto "extradicion" n=36, 83%→penal]
+- 23.548 coparticipación federal → tributario (federal)
+- 21.499 expropiaciones → contencioso_administrativo
+- 10.397 código fiscal PBA → tributario
+- A DECIDIR: 23.592 (antidiscriminación) → ¿civil/DDHH?; 26.061 (protección integral niñez) → ¿materia nueva niñez/familia o civil?; 24.521 (educación superior) → ¿CA? (bajo soporte)
+
+**Normas a EXCLUIR como transversales (NO anclar, confirmar):**
+- 1.285 (org. justicia), 16.986 (amparo = vía procesal), 23.898 (tasas), 21.839/24.432 (honorarios/aranceles), 25.561/25.344/23.982/23.928 (emergencia/consolidación/convertibilidad)
+
+**Objetos "s/" a AGREGAR a vocab_objeto (soporte≥10, pureza 100% en capa1, no polisémicos):**
+- proceso de conocimiento → CA (n=87) · recurso directo de organismo externo / recurso directo dnm → CA · amparo ley 16.986 (string completa) → CA
+- accidente ley especial / accidente accion civil → laboral
+- pensiones / prestaciones varias / amparos y sumarisimos / personal militar y civil ff.aa. → previsional
+- ejecucion hipotecaria / incumplimiento de contrato → civil
+- legajo de casacion → penal · incidente de → penal (cuidado con "incidente" pelado)
+
+**Objetos a NO agregar (polisémicos pese a alta pureza en capa1 — el residual mismo los marca ambiguos):**
+- amparo, accion de amparo, ordinario, sumarisimo, ejecutivo, recurso de casacion, recurso extraordinario, casacion, medida cautelar
+
+**Verificar dudosos ya cargados:** 20.628 (Ganancias), 23.349 (IVA), 24.769, 19.359.
+
+### M — Capa de consulta (DB derivada) — PARKEADO H113
+Vista SQLite/DuckDB derivada read-only sobre los CSV (FTS para minado). Fork SQLite+FTS5 vs DuckDB abierto. NO ahora.
+
+## H114 — Rescate residual de materia + refinamiento capa1 AFIP
+
+- TIER 1 (router de partes): provincia/Estado litigante en carátula → contencioso_administrativo. Decisión de diseño con datos: is_originaria coincide 1:1 con capa3 (477/477), el parser ya determina originaria por texto (art. 117), ningún pendiente_capa2 es originaria → el router NO parsea "X c/ Y" ni reclasifica a capa3. Resolvió el bucket provincia (464→0), +425 a CA. Spot-check 35: ~88-91% CA.
+- TIER 2 (vocab, set validado): normas 24051(ambiental), 24767(penal), 23548/10397(tributario), 21499(CA); keywords tributario provincial (ingresos brutos/iibb, impuesto de sellos, impuesto inmobiliario); parte rentas prov/CABA (AGIP/ARBA/DGR). Descartados por contaminación: "seguridad e higiene"(→laboral 12/13), automotor/contribución de mejoras (0 hits). La mayoría de los objetos del prompt ya estaban en vocab_objeto → 0 rescate neto.
+- REFINAMIENTO CAPA1 (decisión del usuario, anula "fuera de alcance"): override CA→tributario por autoridad fiscal (AFIP/DGI/DGA/ARBA/AGIP/DGR), materia_capa='capa1_refinado', excluye co-ocurrencia penal. 159 casos. Validado: 0 capa1 no-CA tocados, 0 contaminación desde capa2.
+- Cobertura: 60,7% → 69,0%. Tributario total 349. capa1 puro intacto (additive).
+- Versión: derivar_materia.py v3.1.
+
+## H115 — Tier 3: motor de co-ocurrencia para `materia` (2026-06-04)
+
+**Objetivo:** activar los desambiguadores (cargados pero no aplicados) condicionados por co-ocurrencia de señales; cerrar conflictos de capa 2 y rescatar `sin_ancla` con doble señal limpia.
+
+### H115-01 — Motor de co-ocurrencia (derivar_materia v3.1→v3.2)
+
+`_meta/vocab_materia/vocab_coocurrencia.csv` (NUEVO): reglas como dato (signal_a, signal_b, excluye, materia, prioridad, ambito_a, ambito_b). Función `desambiguar_co_ocurrencia(caratula, considerando, vocab)`: dispara si A y B co-ocurren en su ámbito y no matchea `excluye`. Insertada en `clasificar_capa2` (a) en la rama EMPATE antes de devolver conflicto (desempate) y (b) en `sin_ancla` ANTES del trigger Estado→CA. Fuente marcada `coocur:{regla}` / `coocur:{regla}(desempate)`.
+
+6 reglas validadas: `tributario_disfrazado` (acc. declarativa en CARÁTULA + tributo en texto; GT mudo → spot-check ~95%), `corralito_emergencia`→CA (decretos 1570/01·214/02·1606/01 o ley 25.561 + PEN, ambos en carátula; GT 14/14 CA), `accion_civil`+accidente→laboral (GT 93%), `indemniz`+despido excl. empleo público→laboral (GT 90%), `danos`+tránsito excl. resp. estatal→civil (GT 89%), `salud_amparo` (entidad de salud litigante en carátula + amparo, excl. obra social cobrando aportes; GT mudo → spot-check 20/20).
+
+Lección de diseño (REE): la señal de materia vive en la CARÁTULA, no en el considerando completo. Buscar señales débiles en el considerando entero contamina vía menciones al pasar y CITAS DE PRECEDENTES (el considerando cita carátulas ajenas). Por eso `ambito` es POR SEÑAL. Esto eliminó misfires reales (bazan→penal, spreafico→tasa de justicia, abarca→tarifas, kersich→agua, escribanos→previsional).
+
+### H115-02 — Familia→civil_comercial y relabel originaria
+
+Familia (decisión usuario): NO materia nueva, es secretaría civil y comercial. Anclas de objeto en `vocab_objeto.csv` (alimentos, restitución/reintegro de hijo, filiación/adopción/guarda, capacidad/insania/curatela, divorcio/visitas, sucesión; objeto-scoped, GT 83-100%). `tenencia` pelado descartado (se fuga a penal=tenencia de armas). +58 a civil.
+
+Relabel `pendiente_capa3`→`originaria` (categoría TERMINAL con secretaría propia, no universo de derivación). Cobertura se reporta sobre universo clasificable = fallos − originaria = 5220, no sobre fallos. n=477, relabel 1:1.
+
+Norma: frente AGOTADO. Solo 11.723 (Propiedad Intelectual, GT 6/6 civil) añadida a `indice_normas.csv`. 19.549 (58% CA), 24.065 (33%), 25.156 (mixto) no llegan al piso; ley 1.285 es ruido ubicuo.
+
+### H115-03 — Validación REE
+
+Aditividad ESTRICTA confirmada: 0 casos capa1/capa1_refinado cambiaron de materia; originaria relabel 1:1. 1 caso (`332_p908`, "alonso s/ curatela", causa de competencia) pasó de penal-confiado a `conflicto:civil/penal` por la nueva ancla curatela — más honesto, efecto colateral aceptado. Auditorías a mano: salud 20/20 limpio, tributario_disfrazado 18/18 acc. declarativa fiscal, corralito 4/4 CA, familia 57 limpios. Reproducibilidad determinística confirmada (dos corridas idénticas).
+
+Hallazgo honesto: la meta ~92-94% NO es alcanzable con precisión. El residual `sin_ancla` (~1.100) es mayormente irreducible (amparos genéricos vs PEN, objetos procesales puros sin segunda señal). Clasificarlo = adivinar = viola REE.
+
+### H115 — Estado final
+
+- **Corpus:** 5.890 casos (5.697 fallos + 193 sumario_con_link). Parser SIN cambios.
+- **Materia:** cobertura 75,3%→77,3% (+104 netos). capa1 2.315 + capa1_refinado 159 + capa2 1.563 = 4.037 / 5.220 clasificable. pendiente_capa2 1.169 (sin_ancla 1.104 + conflicto_capa2 65). originaria 477. Conflictos 83→64.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos_materia.csv` — 5.890 filas (materia/materia_capa/materia_fuente).
+- Resto del parser sin cambios.
+
+**Scripts:** `derivar_materia.py` v3.2.
+
+**Pendientes nuevos (a DEUDA):** procedencia de la cadena de materia fuera del manifiesto; fuga is_originaria en const/tributario; lever penal-objeto diferido (86-87%); conflicto nuevo 332_p908.
