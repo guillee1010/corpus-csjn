@@ -16785,3 +16785,49 @@ Dos fugas cuantificadas (NO aplicadas): **Estado→CA sobre-rutea 282 casos no-C
 **Commits:** sin commits de pipeline. DEUDA_TECNICA editada (header H116 + tablero Frente B + subsección `Avance H116`). BITACORA append (este bloque).
 
 **Próximo (H117):** GOLD del frente materia — `cod_materia` a ciego sobre los 300 (SRS M19) + oversample Marco B de materias raras → titular de materia (precision/recall por valor, IC Wilson). Fuga CA condicionada al gold.
+
+## H117 — GOLD de la variable `materia` (codificación ciega) (2026-06-04)
+
+**Objetivo:** construir el gold de validación de `derivar_materia.py` v3.2 por codificación ciega, y medir exactitud + precisión/recall por valor y por capa, sin tocar el pipeline.
+
+### H117-01 — Diseño y muestreo
+
+- Sampler `muestrear_materia.py` (modo materia, candidato a mergearse en `muestrear_validacion.py` → v1.2). Marco A = los 300 ids de la planilla consolidada M19 (SRS → estimador del corpus de fallos); Marco B = oversample por valor de `materia`, `min(20, N_corpus)` anclado en los 300 → +106. **Unión 406.** `doble_cod` 50. Seed 20260531.
+- Bundles ciegos: carátula + `considerando_text` + `por_ello_text`. **Se excluyó `tribunal_origen`** del bundle a propósito (señal de capa1 → evita circularidad). Codificación desde la sustancia del litigio.
+- Metodología idéntica a M19: codificación a ciego por Claude contra el corpus (mismo coder, misma ceguera). Regla: materia solo si el objeto del litigio está en el texto; trámite puro sin objeto → `AMBIGUO` (fuera del denominador). No se infiere materia por tipo de parte.
+
+### H117-02 — Codificación y métricas
+
+- **406/406 codificados a ciego.** AMBIGUO 104 (25,6 %), fuera del denominador — concentrado en originaria/provincia con considerando de trámite. Útiles: 302.
+- **Titular Marco A (SRS):** cobertura 74,1 % [68,0–79,4]; exactitud | emite 81,3 % [74,7–86,5]; exactitud global 60,3 % [53,7–66,5].
+- **Por capa (unión):** capa 1 (tribunal→fuero) exactitud | emite 82,5 % [75,0–88,2]; capa 2 (cascada) 66,1 % [57,2–74,0].
+- **Precisión / recall por valor:** previsional 95/100, salud 95/63, penal 94/50, laboral 89/84, tributario 87/62, electoral 80/86, civil_comercial 71/62, contencioso_administrativo 68/42, ambiental 65/85, consumo 33/83, lesa_humanidad 33/50, cambiario 25/100, constitucional 0/0.
+- **Silver del held-out (H116) confirmado:** CA precisión gold 68 % ≈ 68,8 % silver.
+
+### H117-03 — Hallazgos (frentes candidatos; NO se tocó el pipeline)
+
+- `constitucional` plano roto (0/0): valor transversal; parser↔cod en desacuerdo total (parser=constitucional → cod tributario/CA; cod=constitucional → parser CA/electoral/lesa).
+- `consumo` sobre-dispara (precisión 33 %): capa2 consumo→civil_comercial ×6, consumo→CA ×4.
+- `cambiario` (25 %) y `lesa_humanidad` (33 %) sobre-aplicados (n chico).
+- Frontera `ambiental`/`penal` en ley 24.051 (residuos peligrosos): parser ambiental por la norma, cod penal por competencia criminal — desacuerdo legítimo.
+- Recall CA bajo (42 %) por abstención: 10 originaria + 11 pendiente_capa2 codificados CA con parser vacío.
+- Capa 2 es el frente débil (66 % vs 82,5 % capa1).
+
+(Registrados en DEUDA_TECNICA.)
+
+### H117 — Estado final
+
+- Sesión de **validación**: sin cambios en `derivar_materia.py` (v3.2), `parser.py` (v18.20) ni en outputs canónicos. Golden sin cambios. `_manifest.json` no regenerado (no aplica). CHANGELOG no tocado (no aplica).
+- Gold `materia`: 406 casos codificados a ciego, 302 útiles, seed 20260531.
+
+**Productos** (`estadisticas/validacion/`):
+- `muestrear_materia.py` — sampler (candidato a modo materia de `muestrear_validacion.py` → v1.2).
+- `muestra_clave_materia_v18.15.csv` — clave (parser_materia, materia_capa, materia_fuente, marco, doble_cod).
+- `cod_claude.csv` — códigos crudos del gold.
+- `planilla_codificacion_materia_v18.15_CODIFICADA.csv` — planilla + cod_materia.
+- `METRICAS_materia_v18.15.txt` — salida cuantitativa completa.
+- `HALLAZGOS_validacion_materia_v18.15.md` — informe.
+
+**Scripts creados:** `estadisticas/validacion/muestrear_materia.py`.
+
+**Commits:** sin commits de pipeline. Productos de validación + DEUDA_TECNICA editado.
