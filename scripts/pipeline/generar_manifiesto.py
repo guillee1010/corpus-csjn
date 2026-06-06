@@ -9,10 +9,12 @@ Escribe `output/parser/_manifest.json` con la procedencia COMPLETA de la cadena:
   B) pipeline_scripts: __version__ de los seis scripts de la cadena, en orden
      (detectar_paginas -> construir_catalogo -> cruzar -> parser/_editorial ->
      derivar_materia). Capa legible, redundante con el commit.
-  C) corpus / inputs / outputs: hash + bytes (+ filas en CSV) de los artefactos,
-     de la fuente cruda a los finales. Captura el DATO (cambios de corpus /
-     intermedios que el commit no distingue). Cada artefacto del pipeline registra
-     qué script lo generó; el corpus crudo no tiene generador (es fuente CSJN).
+  C) corpus / vocabularios / inputs / outputs: hash + bytes (+ filas en CSV) de
+     los artefactos, de la fuente cruda a los finales. Captura el DATO (cambios de
+     corpus / vocabularios / intermedios que el commit no distingue). Cada
+     artefacto generado por el pipeline registra qué script lo generó; el corpus
+     crudo y los vocabularios no tienen generador de pipeline (no se regeneran al
+     correr la cadena: se leen fijos).
 
      El set del corpus NO se globea ni se hardcodea: se DERIVA de la columna
      `source_file` de csjn_casos.csv (el parser ya anota, por caso, de qué archivo
@@ -23,16 +25,21 @@ Escribe `output/parser/_manifest.json` con la procedencia COMPLETA de la cadena:
      (335/336), entran solos al re-correr el pipeline: source_file crece y el
      manifiesto los sella, sin tocar código ni conteos.
 
-     Por archivo: sha256 + n_bytes. Arriba, un `digest` único (sha256 de las
-     líneas `nombre:sha256` ordenadas) que resume los N hashes: detecta "cambió
-     algo" de un vistazo, mientras el detalle por archivo localiza CUÁL.
+     Los vocabularios SÍ son allow-list explícita: el directorio _meta/vocab_materia/
+     tiene además archivos que el pipeline NO lee (ver VOCABULARIOS), así que un
+     glob sellaría procedencia falsa.
+
+     Por archivo: sha256 + n_bytes (+ n_rows en CSV). En corpus y vocabularios,
+     arriba, un `digest` único (sha256 de las líneas `nombre:sha256` ordenadas)
+     que resume los N hashes: detecta "cambió algo" de un vistazo, mientras el
+     detalle por archivo localiza CUÁL.
 
 No toca ningún CSV -> golden intacto -> check_regresion [CLEAN] por construcción.
 
 Modos:
   (sin flag)  genera / sobreescribe el manifiesto.
-  --verify    re-hashea corpus+inputs+outputs y los compara contra el manifiesto;
-              sale con código != 0 si algo no coincide (red de integridad).
+  --verify    re-hashea corpus+vocabularios+inputs+outputs y los compara contra el
+              manifiesto; sale con código != 0 si algo no coincide (red de integridad).
 
 Uso:
     python scripts/pipeline/generar_manifiesto.py
@@ -49,7 +56,7 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
-__version__ = "1.3"
+__version__ = "1.4"
 
 # csjn_casos.csv tiene campos de texto grandes (considerando_text). Subimos el
 # límite de campo de csv a un valor amplio pero seguro en Windows (sys.maxsize
@@ -61,9 +68,10 @@ SCRIPT_DIR = Path(__file__).resolve().parent          # .../scripts/pipeline
 REPO_ROOT  = SCRIPT_DIR.parent.parent                 # raíz del repo
 OUTPUT_DIR = REPO_ROOT / "output"
 CORPUS_DIR = REPO_ROOT / "corpus"
+VOCAB_DIR  = REPO_ROOT / "_meta" / "vocab_materia"
 MANIFEST_PATH = OUTPUT_DIR / "parser" / "_manifest.json"
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 
 # ── Capa B: scripts del pipeline, en orden de la cadena ──────────────────────
 PIPELINE_SCRIPTS = [
@@ -93,6 +101,20 @@ OUTPUTS = [
     ("parser/csjn_casos_editorial.csv",         "parser.py"),
     ("parser/csjn_editorial_indice_partes.csv", "parser_editorial.py"),
     ("parser/csjn_casos_materia.csv",           "derivar_materia.py"),
+]
+
+# ── Capa C': vocabularios controlados que lee derivar_materia.py ─────────────
+# Inputs de la capa materia (los lee cargar_vocabularios()); sin generador de
+# pipeline: la cadena los lee fijos, no los reescribe al correr. Allow-list
+# explícita: el directorio _meta/vocab_materia/ contiene además archivos que el
+# pipeline NO lee (vocab_objeto_seed.csv, residual_diagnostico.csv) -> quedan
+# fuera a propósito; un glob sellaría algo que no es input.
+VOCABULARIOS = [
+    "indice_normas.csv",
+    "vocab_keywords.csv",
+    "vocab_partes.csv",
+    "vocab_objeto.csv",
+    "vocab_coocurrencia.csv",
 ]
 
 # CSV del que se derivan los archivos crudos del corpus (columna source_file).
@@ -149,9 +171,9 @@ def info_git() -> dict:
 
 
 def entrada_artefacto(abs_path: Path, generado_por: str | None) -> tuple[str, dict]:
-    """Entrada de manifiesto para un archivo, raíz-agnóstica (sirve a output/ y
-    corpus/). `generado_por=None` para fuente cruda (sin generador). El path se
-    guarda relativo a la raíz del repo. n_rows solo para CSV."""
+    """Entrada de manifiesto para un archivo, raíz-agnóstica (sirve a output/,
+    corpus/ y _meta/). `generado_por=None` para fuente / vocabulario sin generador
+    de pipeline. El path se guarda relativo a la raíz del repo. n_rows solo para CSV."""
     if not abs_path.exists():
         raise FileNotFoundError(
             f"Falta artefacto: {abs_path.relative_to(REPO_ROOT).as_posix()}")
@@ -184,30 +206,44 @@ def fuentes_corpus() -> list[str]:
     return sorted(nombres)
 
 
-def digest_corpus(hashes: dict[str, str]) -> str:
-    """Huella única del corpus: sha256 de las líneas `nombre:sha256` ordenadas.
-    Resume los N hashes en uno (smoke detector); el detalle por archivo localiza."""
+def digest_conjunto(hashes: dict[str, str]) -> str:
+    """Huella única de un conjunto de archivos: sha256 de las líneas
+    `nombre:sha256` ordenadas. Resume los N hashes en uno (smoke detector); el
+    detalle por archivo localiza CUÁL. Lo usan corpus y vocabularios."""
     h = hashlib.sha256()
     for nombre in sorted(hashes):
         h.update(f"{nombre}:{hashes[nombre]}\n".encode("utf-8"))
     return h.hexdigest()
 
 
-def entradas_corpus() -> dict:
-    files = dict(entrada_artefacto(CORPUS_DIR / nombre, None)
-                 for nombre in fuentes_corpus())
+def _seccion_autorada(files: dict) -> dict:
+    """Arma una sección de fuente sin generador (corpus / vocabularios):
+    n_files + digest único + detalle por archivo."""
     return {
         "n_files": len(files),
-        "digest": digest_corpus({n: info["sha256"] for n, info in files.items()}),
+        "digest": digest_conjunto({n: info["sha256"] for n, info in files.items()}),
         "files": files,
     }
 
 
+def entradas_corpus() -> dict:
+    files = dict(entrada_artefacto(CORPUS_DIR / nombre, None)
+                 for nombre in fuentes_corpus())
+    return _seccion_autorada(files)
+
+
+def entradas_vocabularios() -> dict:
+    files = dict(entrada_artefacto(VOCAB_DIR / nombre, None)
+                 for nombre in VOCABULARIOS)
+    return _seccion_autorada(files)
+
+
 # ── Construcción / escritura / verificación ──────────────────────────────────
 def construir_manifiesto() -> dict:
-    corpus  = entradas_corpus()
-    inputs  = dict(entrada_artefacto(OUTPUT_DIR / p, g) for p, g in INPUTS)
-    outputs = dict(entrada_artefacto(OUTPUT_DIR / p, g) for p, g in OUTPUTS)
+    corpus       = entradas_corpus()
+    vocabularios = entradas_vocabularios()
+    inputs       = dict(entrada_artefacto(OUTPUT_DIR / p, g) for p, g in INPUTS)
+    outputs      = dict(entrada_artefacto(OUTPUT_DIR / p, g) for p, g in OUTPUTS)
     return {
         "schema_version": SCHEMA_VERSION,
         "manifest_generator_version": __version__,
@@ -215,6 +251,7 @@ def construir_manifiesto() -> dict:
         "git": info_git(),
         "pipeline_scripts": versiones_pipeline(),
         "corpus": corpus,
+        "vocabularios": vocabularios,
         "inputs": inputs,
         "outputs": outputs,
     }
@@ -224,8 +261,9 @@ def escribir(m: dict) -> None:
     MANIFEST_PATH.write_text(
         json.dumps(m, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"[OK] {MANIFEST_PATH}")
-    c = m["corpus"]
-    print(f"  -- corpus --   {c['n_files']} archivos   digest {c['digest'][:12]}…")
+    for clave in ("corpus", "vocabularios"):
+        s = m[clave]
+        print(f"  -- {clave} --   {s['n_files']} archivos   digest {s['digest'][:12]}…")
     for seccion in ("inputs", "outputs"):
         print(f"  -- {seccion} --")
         for nombre, info in m[seccion].items():
@@ -233,19 +271,13 @@ def escribir(m: dict) -> None:
                   f"{info['sha256'][:12]}…  v{info['generator_version']}")
 
 
-def verificar() -> int:
-    if not MANIFEST_PATH.exists():
-        print(f"[ERROR] no existe {MANIFEST_PATH}; corré sin --verify primero.")
-        return 2
-    g = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-    problemas, n = [], 0
-
-    # corpus: hash por archivo (localiza CUÁL) + huella única (detecta "cambió algo")
-    corpus = g.get("corpus", {})
-    files = corpus.get("files", {})
+def _verificar_seccion_digest(seccion: dict, etiqueta: str) -> list[str]:
+    """Verifica una sección autorada (corpus / vocabularios): sha256 por archivo
+    (localiza CUÁL cambió) + huella única (detecta "cambió algo")."""
+    problemas: list[str] = []
+    files = seccion.get("files", {})
     disco: dict[str, str] = {}
     for nombre, info in files.items():
-        n += 1
         path = REPO_ROOT / info["path"]
         if not path.exists():
             problemas.append(f"{nombre}: falta en disco"); continue
@@ -256,13 +288,28 @@ def verificar() -> int:
                 f"{nombre}: sha256 no coincide "
                 f"(manifiesto {info['sha256'][:12]}… / disco {h[:12]}…)")
     if files and len(disco) == len(files):
-        recalc = digest_corpus(disco)
-        if recalc != corpus.get("digest"):
+        recalc = digest_conjunto(disco)
+        if recalc != seccion.get("digest"):
             problemas.append(
-                f"corpus digest no coincide con disco "
-                f"(manifiesto {str(corpus.get('digest'))[:12]}… / recalculado {recalc[:12]}…)")
+                f"{etiqueta} digest no coincide con disco "
+                f"(manifiesto {str(seccion.get('digest'))[:12]}… / recalculado {recalc[:12]}…)")
+    return problemas
 
-    # inputs + outputs
+
+def verificar() -> int:
+    if not MANIFEST_PATH.exists():
+        print(f"[ERROR] no existe {MANIFEST_PATH}; corré sin --verify primero.")
+        return 2
+    g = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    problemas, n = [], 0
+
+    # secciones autoradas: corpus + vocabularios (hash por archivo + digest único)
+    for clave in ("corpus", "vocabularios"):
+        seccion = g.get(clave, {})
+        n += len(seccion.get("files", {}))
+        problemas += _verificar_seccion_digest(seccion, clave)
+
+    # inputs + outputs (artefactos generados por la cadena)
     for seccion in ("inputs", "outputs"):
         for nombre, info in g.get(seccion, {}).items():
             n += 1
