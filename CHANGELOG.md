@@ -2,6 +2,10 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H118 (2026-06-06)
+
+- `generar_manifiesto.py`: 1.3→1.4, schema 3→4. Sección nueva `vocabularios` (5 CSV de `_meta/vocab_materia/` que lee `derivar_materia`, con digest). `--verify` [CLEAN] 61. No toca outputs.
+
 ## H115 (2026-06-04)
 
 - `derivar_materia.py` v3.1→v3.2: motor de co-ocurrencia (Tier 3). `desambiguar_co_ocurrencia` con ámbito por señal; desempata `conflicto_capa2` y rescata `sin_ancla` antes del trigger CA. Relabel `pendiente_capa3`→`originaria`. Cobertura sobre universo clasificable.

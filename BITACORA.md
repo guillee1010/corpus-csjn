@@ -16831,3 +16831,30 @@ Dos fugas cuantificadas (NO aplicadas): **Estado→CA sobre-rutea 282 casos no-C
 **Scripts creados:** `estadisticas/validacion/muestrear_materia.py`.
 
 **Commits:** sin commits de pipeline. Productos de validación + DEUDA_TECNICA editado.
+
+## H118 — C1 (sellado de vocabularios) + M20 diseño y PoC de disposición (2026-06-06)
+
+**Objetivo:** cerrar la procedencia de la cadena de materia en el manifiesto (C1) y arrancar M20 fijando el diseño del refactor outcome→disposición+parte contra dato real, con PoC del extractor de disposición.
+
+### H118-01 — C1: sellar vocabularios de materia en el manifiesto
+
+`generar_manifiesto.py` 1.3→1.4, `schema_version` 3→4. Sección nueva `vocabularios` (gemela de `corpus`, sin generador, con digest propio) que sella los 5 CSV que lee `derivar_materia.cargar_vocabularios`: indice_normas, vocab_keywords, vocab_partes, vocab_objeto, vocab_coocurrencia. Allow-list explícita (verificada por grep sobre `derivar_materia.py`): `vocab_objeto_seed.csv` y `residual_diagnostico.csv` quedan FUERA (el pipeline no los lee). Refactor sin cambio de conducta: `_seccion_autorada()` y `_verificar_seccion_digest()` extraídos; `digest_corpus`→`digest_conjunto`. Validado: `--verify` [CLEAN] **61** artefactos (46 corpus + 5 vocab + 3 inputs + 7 outputs); hashes de corpus/inputs/outputs idénticos al sello del 04/06 (nada se movió). Cierra el pendiente "procedencia de la cadena de materia fuera del manifiesto".
+
+### H118-02 — M20: diseño fijado contra dato real (v18.25)
+
+GATE ya migró casi entero a `causa_inadmisibilidad` (1.060 casos, 13 causales); `inadmisible_280` cayó 240→38 (el 280 vive en la causa). Lo que sigue mezclado en `outcome` es **disposición** (revoca/confirma/deja_sin_efecto/nulidad) vs **parte** (hace_lugar/procedente/desestima/rechaza). B110 (`es_queja`+`queja_resultado`) es CASE-level, NO el parte×recurso. M19 es CASE-level (`cod_outcome` mismo vocabulario) → valida el agregado, no la disposición nueva. Población multi-recurrente dimensionada: **~117 (2,1%)** → la tabla `csjn_casos_recursos` es 1-fila-por-caso en el 98%, cola del 2%. Decisión confirmada: unidad = parte×recurso.
+
+### H118-03 — M20: PoC del extractor de disposición (paso-3)
+
+Hallazgo central: el `outcome` actual captura la capa de ACCESO, no la disposición. `hace_lugar` (1.360, #1) es 84% quejas y el 93% de esas esconde el verbo de fondo aguas abajo en el mismo por_ello ("se hace lugar a la queja, procedente el REX **y se revoca/deja sin efecto**"). ~72% de los 2.941 de fondo mal-etiquetados en acceso. Leyendo el verbo atado al objeto "la sentencia de abajo", la disposición colapsa a 4 valores SCDB: **deja_sin_efecto 1.211 (41%) / revoca 772 (26%) / confirma 459 (16%) / nulidad 73 (2,5%)** + flag `reenvía`. Cobertura object-bound **91,9%** del universo de revisión (94,2% si `grant_remand_implícito`=vacate). Auditoría de muestra: redistribuciones del universo apelado correctas; los ya-disposición (revoca/confirma/deja/nulidad) estables 95-100%. Rotura del 10% descompuesta: ~149 NO-revisión (demanda 1ªinst/procesal/competencia → otros ejes), **33 por_ello cortado por running-head → B118**, 62 grant+reenvío sin verbo (decisión de codificación pendiente: ¿= vacate implícito?), ~160 residual duro. Hallazgo sustantivo (tesis): dejar-sin-efecto-y-reenviar es la acción modal de la Corte. PoC: `scripts/diagnostico/H118/poc_disposicion_v3.py`. NO toca el parser.
+
+### H118 — Estado final
+
+- **Corpus:** 5.890 casos (5.697 fallos + 160 sumario_con_link + 33 sumario_editorial). Sin cambios (sesión MIDE/diseño, no toca outputs).
+- **Outputs canónicos:** intactos (csjn_casos 5.890, votos 27.639, zonas 141.451, editorial 152, indice_partes 11.445, materia 5.890, textos 5.890).
+- **Manifest:** re-sellado en C1 — `--verify` [CLEAN] 61.
+
+**Scripts creados:** `scripts/diagnostico/H118/poc_disposicion_v3.py`.
+**Scripts modificados (pipeline):** `generar_manifiesto.py` 1.3→1.4.
+
+**Commits:** C1 (`generar_manifiesto.py` + `_manifest.json`, ya commiteado); + PoC H118; + DEUDA; + docs.
