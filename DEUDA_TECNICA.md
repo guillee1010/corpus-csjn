@@ -6,7 +6,7 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-06-04 (H117). Frente B / materia: **GOLD de `materia` por codificación ciega** (Claude, misma metodología que M19; 406 casos = 300 SRS de M19 + 106 oversample Marco B; seed 20260531; bundles ciegos SIN `tribunal_origen` → evita circularidad de capa1). MIDE, no toca pipeline (`derivar_materia.py` v3.2 y outputs intactos). Titular Marco A (SRS): cobertura 74,1%, **exactitud|emite 81,3%** [74,7–86,5]; **capa1 82,5% vs capa2 66,1%** (capa2 = frente débil). Precisión/recall por valor: previsional 95/100, salud 95/63, penal 94/50, laboral 89/84, tributario 87/62, electoral 80/86, civil 71/62, **CA 68/42** (silver held-out 68,8% CONFIRMADO), ambiental 65/85, **consumo 33/83**, lesa_humanidad 33/50, cambiario 25/100, **constitucional 0/0**. AMBIGUO 104/406 (fuera del denominador). Hallazgos nuevos: constitucional plano inservible; consumo/cambiario/lesa sobre-disparan; recall CA bajo por abstención (originaria + cola pendiente_capa2 esconden CA). El gold **REFUTA** la alarma held-out `salud_amparo` 19/19 (artefacto capa1-only: salud real 95%) y **confirma** el FP Edenor→electoral. **Próximo:** refinamiento fuga CA (ahora con vara fina) + repensar constitucional/consumo; test-retest Claude-Claude sobre los 50 `doble_cod`; mergear modo materia → `muestrear_validacion.py` v1.2. **Pendientes previos vigentes:** procedencia de la cadena de materia fuera del manifiesto; CODEBOOK materia; csjn_analisis_v4 left-join.
+**Última actualización:** 2026-06-06 (H118). **C1** — sellada la procedencia de los vocabularios de materia en `_manifest.json` (`generar_manifiesto.py` 1.3→1.4, schema 3→4: sección nueva `vocabularios` con los 5 CSV que lee `derivar_materia` + digest propio; `--verify` [CLEAN] 61). MIDE/infra, no toca outputs. **M20** — fijado el diseño del refactor `outcome`→disposición+parte contra dato real (v18.25) + PoC del extractor de disposición (paso-3 de la cadena ritual). Hallazgo central: el `outcome` actual captura la capa de ACCESO, no la disposición — `hace_lugar` (1360, #1) es 84% quejas y el 93% esconde el verbo de fondo aguas abajo; ~72% de los 2941 de fondo mal-etiquetados en acceso. La disposición colapsa a 4 valores SCDB (`deja_sin_efecto` 41% / `revoca` 26% / `confirma` 16% / `nulidad` 2,5%) + flag `reenvía`; cobertura object-bound **91,9%** del universo de revisión (94,2% si `grant_remand_implícito`=vacate). La "rotura" del 10% se descompuso: ~149 NO-revisión (demanda 1ªinst/procesal/competencia → otros ejes), 33 por_ello cortado por running-head (**B118**), 62 grant+reenvío sin verbo (decisión de codificación), ~160 residual. Unidad **parte×recurso confirmada** (cola ~2,1%, 117 casos); M19 es CASE-level → valida el agregado, NO la disposición nueva (requiere `cod_disposicion` sobre el frame n=300). PoC en `scripts/diagnostico/H118/poc_disposicion_v3.py`. **Pendientes previos vigentes:** CODEBOOK materia; csjn_analisis_v4 left-join; refinamiento CA; test-retest/kappa (en pausa).
 
 > El detalle cronológico por sesión vive en `BITACORA.md` / `CHANGELOG.md`; este encabezado registra solo la sesión vigente. El estado ABIERTO de un vistazo está en el **Tablero de estado** (abajo). El cuerpo conserva las cerradas como referencia (se reabren: B045, familia B009, is_originaria/B010, etc.).
 
@@ -140,6 +140,7 @@ las cerradas como referencia). La entrada completa de cada ítem está más abaj
 | B110 | `es_queja` capa-fuente (carátula hecha; tail débil + considerando abiertos) | parcial (H107) |
 | B111 | `tipo_cuestion_federal` sobre-usa `mixto` / pierde `arbitrariedad` | abierto |
 | B117 | zona `epilogo` absorbe la cola del considerando (testigo 329_p595) | abierto, generalidad sin verificar |
+| B118 | `por_ello`/dispositivo truncado por running-head de página (pierde el verbo de fondo) | confirmado H118 (~33 fondo) |
 
 **Catálogo / cruzador (abierto):**
 
@@ -156,7 +157,7 @@ las cerradas como referencia). La entrada completa de cada ítem está más abaj
 |----|-----|--------|
 | Frente B — materia | capas 1-2-3 HECHAS (v3.2); held-out capa 2 (H116) + **GOLD codificación ciega HECHO (H117)** — exactitud|emite 81,3% (capa1 82,5% / capa2 66,1%); CA silver 68,8% confirmado; finas medidas: salud/previsional/penal altas, **constitucional 0/0**, consumo 33% precisión | medido; refinamientos pendientes |
 | csjn_casos_textos | separar texto pesado (desbloquea materia capa 2) | pendiente, PRIORITARIO |
-| M20 | refactor `outcome`→disposición+parte (molde SCDB, unidad parte×recurso) | diseñado, no hecho |
+| M20 | refactor `outcome`→disposición+parte (molde SCDB, unidad parte×recurso) | **diseño fijado + PoC disposición (H118)**: vocab 4 valores (deja_sin_efecto/revoca/confirma/nulidad) + flag reenvía, cobertura 92% univ. revisión; falta `parte_ganadora` + cola ×recurso |
 | M19 | kappa / doble codificación + sección reliability del CODEBOOK | titular n=300 hecho; kappa pendiente |
 | post-B010 | recalibrar `is_originaria` / `inadmisible_280` / art. 4 sobre el considerando más preciso | pendiente |
 
@@ -518,6 +519,18 @@ exclusión de firmas, calificadores, headers de página, marcadores de apertura.
 **Estado del fix:** no diseñado.
 **Referencias cruzadas:** H112. Posible familia con B045 (arrastre) / B077 (cola editorial absorbida) / el outlier de epilogo. Sin ID histórico.
 
+### B118 — `por_ello`/dispositivo truncado por running-head de página (pierde la disposición de fondo)
+
+**Componente:** parser (extracción de `por_ello_text` / borde de página).
+**Origen / fuente del diagnóstico:** H118 (PoC de disposición M20: casos de fondo sin verbo dispositivo legible).
+**Causa raíz:** `hipotesis_no_verificada` (probable familia B104, running-heads). El `por_ello` se corta en el salto de página: el running-head editorial («1049 DE JUSTICIA DE LA NACION 329» / «FALLOS DE LA CORTE SUPREMA») queda pegado al final del texto capturado y el verbo de disposición que sigue en la página siguiente se pierde. Testigos: `329_p1045` (`por_ello` termina en «…recurso extraordinario 1049 DE JUSTICIA DE LA NACION 329»); `329_p1480` («dejándose sin efecto la sentencia» seguida de «1484 FALLOS DE LA CORTE SUP…»).
+**Diagnóstico / evidencia:** `confirmado_cuantificado` — sobre el universo de fondo (`is_merit_decision=1`, 2941), el PoC de disposición (v3) marca **33** casos `por_ello_cortado` (regex de header al final del texto). Límite superior de los que pierden disposición por borde de página; la mayoría tiene la disposición ANTES del header (recuperable corriendo el borde).
+**Estado de verificación:** `confirmado_cuantificado` (33 sobre fondo; testigos 329_p1045 / 329_p1480).
+**Validador propuesto:** dimensionar `por_ello` que terminan en running-head (`(DE JUSTICIA DE LA NACION|FALLOS DE LA CORTE)\s*\d*\s*$`); leer muestra con `extraer_caso.py`; arreglar el borde para arrastrar el texto post-header hasta el fin real del dispositivo (regla M15: validar sobre `.md` completo).
+**Impacto:** subcuenta la disposición de fondo en M20 (queda fuera del `por_ello`) y puede truncar `outcome` en página compartida. Acotado (~33 de fondo), pero toca el campo de mayor valor del refactor.
+**Estado del fix:** no diseñado.
+**Referencias cruzadas:** H118. Familia probable B104 (running-heads), B117 (borde de zona). M20 (disposición). DISENO_SCDB_corpus §1. Sin ID histórico.
+
 ### Capa-fuente `es_queja` — tail débil y capa considerando DIFERIDOS (H108)
 
 **Componente:** parser (`classify_queja`).
@@ -605,7 +618,7 @@ Ejecutado el GOLD planeado (opción b): `cod_materia` a ciego por Claude (misma 
 - **Test-retest Claude-vs-Claude** sobre los 50 `doble_cod` (ventana fresca) → confiabilidad intra-coder; **kappa humano opcional** si el usuario codifica los 50. Estado: pendiente.
 - **`muestrear_validacion.py` → v1.2:** mergear `muestrear_materia.py` como modo materia (hoy standalone en `estadisticas/validacion/`, con la constante de paths a ajustar a `output/parser/`). Estado: candidato.
 - **Reducir AMBIGUO** en originaria/provincia leyendo el considerando completo vía `extraer_caso` (sube n útil). Estado: opcional.
-- (Vigentes de H115: procedencia de la cadena de materia fuera del manifiesto; CODEBOOK materia; csjn_analisis_v4 left-join.)
+- (Vigentes: CODEBOOK materia; csjn_analisis_v4 left-join. ~~procedencia de la cadena de materia fuera del manifiesto~~ → CERRADO C1/H118.)
 
 ## Deuda EN VALIDACIÓN
 
