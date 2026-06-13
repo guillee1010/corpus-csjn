@@ -17116,6 +17116,32 @@ Recall-safety n300: **0 disparos sobre gold=sí** (no crea FN). Gate **0,907→0
 
 Los 5 FP residuales se difieren a sus arcos (gold-edge / cumplimiento / reenvío / duro / dictamen). La merit-recall de los 3 FN de detector se evaluó (guard de precedencia-mérito, FP-safe en n300, proyecta 0,963) pero se difirió como **B120**: es un cambio ancho de precedencia de cascada (126/300 hits) con superficie de regresión corpus-wide no validable con el gold de n=300. B119 cierra disposición-solo, limpio.
 
+## H121 — B119 PASO 2: capa disposición M20 (2026-06-13)
+
+**Objetivo:** aplicar y cerrar el set B119 — la capa de disposición que separa las disposiciones procesales (competencia / cautelar / nulidad del REX / inoficioso) del fondo sustantivo, reduciendo los FP del gate `is_merit` validado en M20.
+
+### H121-01 — Triage FP/FN (zona vs detector)
+
+Sobre los 19 FP / 9 FN del gate sellado (0,907), se separó qué es falla de detector y qué es artefacto aguas arriba, leyendo el `por_ello` real (`textos_n300.csv`) + las 63 notas del gold. Resultado: los FN son 6 de zona (dispositivo cortado/ausente, frontera de captura — `334_p1081` reclasificado de "limpio" a zona) y 3 de detector (merit-recall). El reframe de B119 quedó confirmado: la queja NO es familia excluible (69/114 quejas en n=300 son merit gold=sí); el gate se arregla en la capa de disposición, no excluyendo familias.
+
+### H121-02 — PASO 2: detectores de disposición (parser v18.26)
+
+Cuatro detectores pre-cascada en `classify_outcome` (corren ANTES de `OUTCOME_PATTERNS_DISPOSITIVO`, donde el verbo de merit ganaba por posición en dispositivos mixtos):
+- `RE_DISP_NULIDAD_CONCESION` → label nuevo `nulidad_concesion` (nulidad/auto de concesión + denegatoria del REX; distinto de la `nulidad` de fondo).
+- `RE_DISP_CAUTELAR` → label nuevo `cautelar`.
+- `RE_DISP_COMPETENCIA` → `competencia` (gana al verbo de merit que la precede).
+- `RE_DISP_INOFICIOSO` → `abstracto`.
+
+`cautelar` y `nulidad_concesion` agregados a `OUTCOMES_NO_FALLBACK_280`; ninguno entra a `MERIT_OUTCOMES`. Más #1 (`is_merit = outcome in MERIT and not is_originaria`) y #2 (`_unhyphenate` sobre el cuerpo de `es_originaria` — «Corte Su- prema» rompía `RE_COMPETENCIA_ORIGINARIA`).
+
+### H121-03 — Validación end-to-end
+
+Recall-safety n300: **0 disparos sobre gold=sí** (no crea FN). Gate **0,907→0,953** (FP 19→5, FN=9 sin cambios). Recupera 11 FP: competencia(5), cautelar(1), nulidad_concesion(4), inoficioso→abstracto(1). **Proyección sandbox == corrida real** (medido sobre `csjn_casos.csv` post-fix). `check_regresion`: cambian solo `csjn_casos.csv` y `csjn_casos_votos.csv` (outcome/is_merit/is_originaria/tribunal_origen_status/causa); textos/zonas/editorial intactos — el footprint confirma que B119 no tocó segmentación ni texto. Corpus completo: `competencia` 877, `abstracto` 146, `nulidad_concesion` 30, `cautelar` 4.
+
+### H121-04 — Decisión: cerrar disposición-solo; merit-recall → B120
+
+Los 5 FP residuales se difieren a sus arcos (gold-edge / cumplimiento / reenvío / duro / dictamen). La merit-recall de los 3 FN de detector se evaluó (guard de precedencia-mérito, FP-safe en n300, proyecta 0,963) pero se difirió como **B120**: es un cambio ancho de precedencia de cascada (126/300 hits) con superficie de regresión corpus-wide no validable con el gold de n=300. B119 cierra disposición-solo, limpio.
+
 ### H121 — Estado final
 
 - **Corpus:** 5890 casos.
@@ -17127,10 +17153,105 @@ Los 5 FP residuales se difieren a sus arcos (gold-edge / cumplimiento / reenvío
 - `output/parser/csjn_casos_zonas.csv` — 141451 segmentos · `0fdbbb031603…` · v18.26
 - `output/parser/csjn_casos_editorial.csv` — 152 secciones · `30a6da652e3a…` · v18.26
 - `output/parser/csjn_editorial_indice_partes.csv` — 11445 filas · `cba0dcf509a6…` · v1.0
-- `output/parser/csjn_casos_materia.csv` — 5890 filas · `6fb50b703bb9…` · v3.2 (stale: pendiente regenerar tras los flips de originaria de #2)
+- `output/parser/csjn_casos_materia.csv` — 5890 filas · `8703f49ff1e4…` · v3.2 (regenerada por consistencia con los flips de originaria de #2: cobertura 77,2%; capa1 2307, capa2 1508, originaria 546)
 
-**Scripts modificados:** `parser.py` v18.25 → **v18.26**.
+**Scripts modificados:** `parser.py` v18.25 → **v18.26**. `derivar_materia.py` v3.2 re-corrido (sin cambio de código) para re-sellar materia consistente con los flips de originaria.
 
 **Bugs:** B119 **CERRADO**. B120 **NUEVO** (merit-recall, diseñado/FP-safe en n300, diferido). B122 (zonificador) referenciado para los 6 FN de zona.
 
 **Commits:** 2 (checkpoint pre-B119; set B119 = parser + outputs + golden + manifest + DEUDA).
+
+## H122 — Validación formal M20 + productivización de disposición (2026-06-13)
+
+**Objetivo:** sellar la validación formal del codebook M20 (item 4) y arrancar el deriver de recursos sobre la capa de disposición ya validada.
+
+### H122-01 — Recuperación del generador de la clave + validación formal
+
+La clave subida (`M20_clave_parser_n300.csv`) era la **vieja, pre-B119** (gate 0,907, FP=19): 14 flips de gate + 12 de outcome correspondían exactamente a los casos B119. El generador estaba **perdido** (nunca versionado) — causa raíz del enredo.
+
+Se identificó vía búsqueda en chats: el generador es `build_m20.py` (sesión 9/jun), y la disposición sale de `disposicion(por_ello_text)`, función PURA del texto (no del outcome ni del gate), idéntica al PoC v3 (H118). Se trajo el clasificador verbatim y se **probó que reproduce la clave previa 300/300** (disposición + reenvía + parte_ganadora) → recuperación fiel, no reconstrucción especulativa.
+
+Clave regenerada del `csjn_casos.csv` actual (B119 no tocó textos → disposición idéntica; solo se mueve el gate en 14 filas). `validar_H120.py` corrido sin tocar lógica (solo rutas):
+
+- **Gate (es_revision_fondo):** 0,953 (FP=5, FN=9) — **in-sample post-B119** (B119 se tuneó sobre el n300). Número limpio: **0,907 pre-B119**.
+- **Disposición:** 0,857 (n=140; dse 0,87 / rev 0,85 / conf 0,85) — **blind limpio** (regex congelada pre-gold).
+- **Parte ganadora:** 0,794 (n=136) — blind.
+- **Reenvía:** 0,773 (n=75) — blind.
+- **Cuestión federal:** 0,676 (n=136; arbitrariedad recall 50%) — held-out (B111 pendiente).
+- **Dictamen presencia:** 0,930 (n=128); adhesión 71% (n=90) — held-out.
+- **Certiorari criollo (H1):** queja gana 95% (n=65) vs concedido 68% (n=63).
+
+### H122-02 — Productivización: derivar_recursos v0.1 + módulo fuente-única
+
+Diseño contra proliferación/drift: el clasificador vive en **un solo módulo** importado por validador y producción.
+
+- `scripts/pipeline/clasificador_disposicion.py` **v1.0** (NUEVO) — fuente única (regex H118 congeladas).
+- `scripts/pipeline/derivar_recursos.py` **v0.1** (NUEVO) — lee `csjn_casos.csv` + `csjn_casos_textos.csv`, emite `csjn_casos_recursos.csv` (1 fila/caso): disposicion + reenvia + parte_ganadora + es_revision_fondo + es_queja.
+- `scripts/diagnostico/H120/build_m20.py` (recuperado) — refactorizado para **importar** el módulo (sin regex embebida); `--verify` → 300/300 [CLEAN].
+
+Corrida real sobre corpus completo: `csjn_casos_recursos.csv` **5890 filas**. Cobertura disposición sobre universo de revisión (is_merit=1): **2436/2625 = 92,8%** — clavado al H118. `grant_remand_implicito`=62 (idéntico al H118). Consistencia deriver vs clave validada: 300/300.
+
+### H122-03 — Hallazgos
+
+- **Candidatos gate-FN (banco para B120):** de 2602 casos con verbo de disposición corpus-wide, 2436 son merit y **166 son no-merit** (gate=no pero el texto dispone). Banco directo para B120 (merit-recall), cuantificado.
+- **Contaminación del gold (DEUDA metodológica):** el n300 se usó como set de ajuste para el gate (B119) y se usaría para B120/B122 — no puede ser dev y validación de la misma variable. Decisión pendiente: split dev/test + ledger de uso. Verificar si materia/B118 se calibraron contra el gold.
+- **Disposición advisory fuera de merit:** el deriver clasifica todos los casos, pero 0,857 solo valida el subconjunto merit. `es_revision_fondo` filtra; la estadística de fondo se restringe a `='si'`.
+
+### H122 — Estado final
+
+- **Corpus:** 5890 casos (parser v18.26, sin cambios). Los 5 CSV canónicos **intactos** — golden sin tocar.
+- **Output nuevo (no canónico aún):** `output/parser/csjn_casos_recursos.csv` — 5890 filas. NO sellado en `_manifest.json` (pendiente hasta estabilizar deriver + merge).
+
+**Scripts nuevos:** `scripts/pipeline/clasificador_disposicion.py` v1.0, `scripts/pipeline/derivar_recursos.py` v0.1. Recuperado+refactor: `scripts/diagnostico/H120/build_m20.py`.
+
+**Manifest:** NO re-sellado (no cambió `parser.py` ni los 5 scripts de la cadena ni los outputs canónicos).
+
+**Commits:** (ver Paso 6) — todo aditivo sobre `refactor/m20-disposicion`, sin merge a main.
+
+## H123 — Diagnóstico zona/normalización + verificación de contaminación del gold (2026-06-13)
+
+**Objetivo:** triar bancos de defectos texto-driven, verificar la contaminación del gold (item bloqueante), y decidir la arquitectura de limpieza del sustrato del parser. Sesión sin cambios de pipeline.
+
+### H123-01 — Verificación de contaminación del gold (resuelve el item bloqueante)
+
+Ledger por variable: **único contaminado el gate** (B119 se tuneó sobre el n300 → 0,953 in-sample / 0,907 pre-B119; no hay held-out limpio del gate post-B119 dentro del n300). Limpios: disposición 0,857 / parte 0,794 / reenvía 0,773 (regex congelada pre-gold), cuestión federal 0,676 y dictamen 0,930 (medidos, fix no aplicado), materia v3.2 (medida contra `cod_materia`, refinamientos nunca aplicados). El split dev/test queda pendiente solo para tuneo FUTURO (B120, B111, refinamientos materia), no para lo congelado.
+
+### H123-02 — Triage de bancos texto-driven; B122 re-diagnosticado
+
+Dos bancos sospechados se desinflaron contra el dato: los **194 "sin cuerpo"** son sumario_con_link (160) + sumario_editorial (33) + 1 fallo (bodyless por diseño); **B118-merit** no pierde fondo (el verbo sobrevive antes del banner, outcome correcto). El banco real es el que marcó la revisión a mano: **42 casos no-merit** con `por_ello` truncado por running-head + señal jurisdiccional en el considerando, caídos a `otro` en vez de competencia/originaria. Causa raíz confirmada en `_barrer` (~3091): el chunk topa a 6 líneas/`.`; el running-head intercalado gasta presupuesto y corta antes del `.` real. `RE_PAGE_HEADER` (línea 204) no lo agarra (anclada frase/número-solo; el banner real es número+frase+número). Cruce gold: 3/42 en n300, gate parser==gold 3/3 (el gate no se equivoca — se pierde la disposición específica), 2/3 marcados `ZONA` a mano. Confirma que es regex/parser, no `extraer_caso`. Banco exportado: `B122_banco_truncado_jurisdiccional_n42.csv`.
+
+### H123-03 — Decisión: pre-pasada `normalizar_bloque` (M21)
+
+La deshifenación/saltado de headers es hoy per-función; la extracción (`_barrer`, zona) ve texto sucio, solo la clasificación limpia → familia B122/B118. Decisión: pasada `normalizar_bloque` post-localización (localizar→limpiar→extraer), vista limpia para match (running-heads enmascarados in-place + deshifenado), crudo para persistidos. Distinto de lo que rechazó B114 (eso era PERSISTIR). Método: por pasos para atribución (medir headers/guión por separado + interacción), big-bang en la implementación si ambos son ganancia; PoC-mide-primero, sin re-golden hasta pasar la compuerta contra el gold. Subsume B122/B118 → el parche local no se shippea. Blueprint: `BLUEPRINT_normalizar_bloque.md`. Clase B112, bump parser MAJOR al aplicar.
+
+### H123 — Estado final
+
+- **Sin cambios de pipeline.** Parser **v18.26 intacto**, 5 CSV canónicos sin tocar, golden sin tocar, manifest NO re-sellado.
+- **Outputs canónicos:** sin cambios (`csjn_casos.csv` 5890, `csjn_casos_textos.csv` 5890, `csjn_casos_recursos.csv` 5890, votos/zonas/editorial intactos).
+- **DEUDA:** B122 enriquecido (mecanismo + banco 42 + cruce gold), M21 creado, ledger metodológico marcado VERIFICADO.
+- **Scripts creados:** ninguno canónico (CSV de banco + blueprint como diagnóstico).
+- **Commits:** 0 de código. Pendiente: docs sobre la rama.
+
+## H123 — Diagnóstico zona/normalización + verificación de contaminación del gold (2026-06-13)
+
+**Objetivo:** triar bancos de defectos texto-driven, verificar la contaminación del gold (item bloqueante), y decidir la arquitectura de limpieza del sustrato del parser. Sesión sin cambios de pipeline.
+
+### H123-01 — Verificación de contaminación del gold (resuelve el item bloqueante)
+
+Ledger por variable: **único contaminado el gate** (B119 se tuneó sobre el n300 → 0,953 in-sample / 0,907 pre-B119; no hay held-out limpio del gate post-B119 dentro del n300). Limpios: disposición 0,857 / parte 0,794 / reenvía 0,773 (regex congelada pre-gold), cuestión federal 0,676 y dictamen 0,930 (medidos, fix no aplicado), materia v3.2 (medida contra `cod_materia`, refinamientos nunca aplicados). El split dev/test queda pendiente solo para tuneo FUTURO (B120, B111, refinamientos materia), no para lo congelado.
+
+### H123-02 — Triage de bancos texto-driven; B122 re-diagnosticado
+
+Dos bancos sospechados se desinflaron contra el dato: los **194 "sin cuerpo"** son sumario_con_link (160) + sumario_editorial (33) + 1 fallo (bodyless por diseño); **B118-merit** no pierde fondo (el verbo sobrevive antes del banner, outcome correcto). El banco real es el que marcó la revisión a mano: **42 casos no-merit** con `por_ello` truncado por running-head + señal jurisdiccional en el considerando, caídos a `otro` en vez de competencia/originaria. Causa raíz confirmada en `_barrer` (~3091): el chunk topa a 6 líneas/`.`; el running-head intercalado gasta presupuesto y corta antes del `.` real. `RE_PAGE_HEADER` (línea 204) no lo agarra (anclada frase/número-solo; el banner real es número+frase+número). Cruce gold: 3/42 en n300, gate parser==gold 3/3 (el gate no se equivoca — se pierde la disposición específica), 2/3 marcados `ZONA` a mano. Confirma que es regex/parser, no `extraer_caso`. Banco exportado: `B122_banco_truncado_jurisdiccional_n42.csv`.
+
+### H123-03 — Decisión: pre-pasada `normalizar_bloque` (M21)
+
+La deshifenación/saltado de headers es hoy per-función; la extracción (`_barrer`, zona) ve texto sucio, solo la clasificación limpia → familia B122/B118. Decisión: pasada `normalizar_bloque` post-localización (localizar→limpiar→extraer), vista limpia para match (running-heads enmascarados in-place + deshifenado), crudo para persistidos. Distinto de lo que rechazó B114 (eso era PERSISTIR). Método: por pasos para atribución (medir headers/guión por separado + interacción), big-bang en la implementación si ambos son ganancia; PoC-mide-primero, sin re-golden hasta pasar la compuerta contra el gold. Subsume B122/B118 → el parche local no se shippea. Blueprint: `BLUEPRINT_normalizar_bloque.md`. Clase B112, bump parser MAJOR al aplicar.
+
+### H123 — Estado final
+
+- **Sin cambios de pipeline.** Parser **v18.26 intacto**, 5 CSV canónicos sin tocar, golden sin tocar, manifest NO re-sellado.
+- **Outputs canónicos:** sin cambios (`csjn_casos.csv` 5890, `csjn_casos_textos.csv` 5890, `csjn_casos_recursos.csv` 5890, votos/zonas/editorial intactos).
+- **DEUDA:** B122 enriquecido (mecanismo + banco 42 + cruce gold), M21 creado, ledger metodológico marcado VERIFICADO.
+- **Scripts creados:** ninguno canónico (CSV de banco + blueprint como diagnóstico).
+- **Commits:** 0 de código. Pendiente: docs sobre la rama.
