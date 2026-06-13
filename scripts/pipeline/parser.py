@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.25"  # H113: split csjn_casos_textos — considerando_text/por_ello_text/firma_raw salen de csjn_casos.csv a output/parser/csjn_casos_textos.csv (5º CSV del parser, keyed por caso_id_canonico, espejo 1:1 5890 filas, SIN truncado; antes considerando[:2000] 47,6% cortado / por_ello[:300]); habilita materia capa 2 (lee el considerando completo). Escritura por proyección de fieldnames (patrón zonas), texto full ya estaba en memoria → relocaliza al escribir, sin cambio de lógica de parseo. Re-golden consciente + 7º output al manifest (generar_manifiesto v1.3). // H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
+__version__ = "18.26"  # B119: capa disposicion M20 (PASO 2) — detectores competencia/cautelar/nulidad_concesion/inoficioso pre-cascada + #1 originaria-no-merit + #2 des-hifenado es_originaria. Gate 0,907→0,953 (FP 19→5, 0 FN nuevos). // H113: split csjn_casos_textos — considerando_text/por_ello_text/firma_raw salen de csjn_casos.csv a output/parser/csjn_casos_textos.csv (5º CSV del parser, keyed por caso_id_canonico, espejo 1:1 5890 filas, SIN truncado; antes considerando[:2000] 47,6% cortado / por_ello[:300]); habilita materia capa 2 (lee el considerando completo). Escritura por proyección de fieldnames (patrón zonas), texto full ya estaba en memoria → relocaliza al escribir, sin cambio de lógica de parseo. Re-golden consciente + 7º output al manifest (generar_manifiesto v1.3). // H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
 
 import re
 import csv
@@ -438,6 +438,55 @@ RE_B107_NEG_HACER_LUGAR = re.compile(
     r"\bno\s+(?:se\s+)?(?:corresponde\s+)?(?:hacer?|ha|hace|hacen)\s+lugar\b", re.I)
 
 
+# ── B119 (PASO 2 M20): detectores de disposición ─────────────────────────────
+# Capa de DISPOSICIÓN, NO exclusión de familia (la queja no es familia excluible:
+# 69/114 quejas en n=300 son merit gold=sí). Pre-cascada: corren ANTES de
+# OUTCOME_PATTERNS_DISPOSITIVO porque el verbo de merit (hace_lugar/revoca/
+# deja_sin_efecto) aparece primero en el por_ello y ganaría la cascada por
+# posición, enmascarando que la disposición REAL es procesal (competencia /
+# cautelar / nulidad del auto de concesión / inoficioso). Operan sobre por_ello YA
+# _unhyphenate'd + whitespace-normalizado (Paso 0/0b de classify_outcome).
+# Recall-safety n300: 0 disparos sobre gold=sí (no crean FN). Recupera 11 FP:
+# competencia(5) 339_p490·347_p360·329_p2645·331_p989·340_p431, cautelar(1)
+# 342_p2399, nulidad_concesion(4) 329_p1626·348_p1717·329_p472·346_p439,
+# inoficioso→abstracto(1) 348_p1499.
+
+# Nulidad/dejar sin efecto del auto de concesión o de la denegatoria del REX: la
+# disposición ataca la VÍA (concesión/denegación del recurso), no el fondo. El
+# label "nulidad" sería merit; "nulidad_concesion" es disposición procesal.
+RE_DISP_NULIDAD_CONCESION = re.compile(
+    r"auto\s+de\s+concesi[oó]n\s+del\s+recurso\s+extraordinario|"
+    r"nulidad\s+de\s+(?:la\s+resoluci[oó]n|las\s+resoluciones)\b"
+    r".{0,90}?conced\w+\b.{0,30}?recursos?\s+extraordinarios?|"
+    r"(?:resoluci[oó]n|auto)\s+\w*\s*que\s+conced\w+\s+(?:el|los)\s+recursos?\s+extraordinarios?|"
+    r"resoluci[oó]n\s+denegatoria\s+del\s+remedio\s+federal|"
+    r"denegatoria\s+del\s+remedio\s+federal", re.I)
+
+# Disposición que revoca/deja sin efecto/confirma/modifica una MEDIDA CAUTELAR:
+# el dispositivo no resuelve el fondo del litigio.
+RE_DISP_CAUTELAR = re.compile(
+    r"\b(?:revoca|deja\s+sin\s+efecto|confirma|modifica|hace\s+lugar\s+a)\b"
+    r"[^.]{0,40}?\bmedida\s+cautelar\b|"
+    r"\bmedida\s+cautelar\s+(?:decretada|dispuesta|ordenada)\b", re.I)
+
+# Competencia resuelta como disposición aun cuando un verbo de merit la precede
+# ("se hace lugar... se revoca... resulta competente para conocer"). Anclas fuertes
+# de competencia DISPOSITIVA, no la mera mención de incompetencia en el cuerpo.
+RE_DISP_COMPETENCIA = re.compile(
+    r"resulta\s+competente\s+para\s+conocer|"
+    r"tomar\s+intervenci[oó]n\s+en\s+el\s+conflicto|"
+    r"conflicto\s+(?:positivo|negativo)\s+de\s+competencia", re.I)
+
+# Inoficioso/abstracto: la Corte declina pronunciarse por falta de utilidad.
+# Anclado a "inoficioso ... pronunciamiento" / "abstracta la cuestión"; NO basta la
+# mera mención de "abstracto". DEUDA: mixto inoficioso+merit en puntos separados
+# (332_p2208 tipo) sería FN si el inoficioso cayera en el por_ello — 0 en n300.
+RE_DISP_INOFICIOSO = re.compile(
+    r"inoficioso\s+(?:emitir|expedirse|(?:un\s+)?pronunciamiento|pronunciarse)|"
+    r"(?:deviene|torna\w*|result\w+)\s+(?:inoficioso|abstract\w+)|"
+    r"declara\w*\s+abstract\w+\s+la\s+cuesti[oó]n", re.I)
+
+
 def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     """
     v14 (H077): zona fallback con outcome "rechaza" + infinitivos (confirmar,
@@ -471,7 +520,8 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     # refactor etapa/disposicion+parte (M20); logueados en DEUDA.
     OUTCOMES_NO_FALLBACK_280 = {"hace_lugar", "procedente", "revoca", "confirma", "rechaza",
                       "nulidad", "competencia", "abstracto", "originaria",
-                      "desistimiento", "deja_sin_efecto", "desestima"}
+                      "desistimiento", "deja_sin_efecto", "desestima",
+                      "cautelar", "nulidad_concesion"}  # B119 (PASO 2 M20)
 
     # Paso 0 (H066): normalizar quiebres tipográficos
     por_ello_text = _unhyphenate(por_ello_text)
@@ -490,6 +540,18 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
         # originaria de casos que solo la nombran.
         if RE_B107_LUGAR_EXCEP_INCOMP.search(por_ello_text):
             return "competencia"
+        # B119 (PASO 2 M20): disposición procesal pre-cascada. El verbo de merit
+        # aparece antes en el por_ello y ganaría la cascada por posición; estos
+        # guards capturan la disposición REAL (procesal, no de fondo) y devuelven
+        # un label no-merit. Orden: del ancla más específica a la más general.
+        if RE_DISP_NULIDAD_CONCESION.search(por_ello_text):
+            return "nulidad_concesion"
+        if RE_DISP_CAUTELAR.search(por_ello_text):
+            return "cautelar"
+        if RE_DISP_COMPETENCIA.search(por_ello_text):
+            return "competencia"
+        if RE_DISP_INOFICIOSO.search(por_ello_text):
+            return "abstracto"
         # B107.2: enmascarar "no (se) hace(r) lugar" para que la negacion no
         # dispare hace_lugar; el dispositivo real lo resuelve la cascada sobre el
         # texto enmascarado (un "hacer lugar a X" NO negado, como en dispositivos
@@ -1376,7 +1438,7 @@ def es_originaria(case_name, considerando_text, por_ello_text):
     no garantiza originaria: hay quejas contra provincias que llegan en
     apelación y NO son originarios.
     """
-    cuerpo = (considerando_text or "") + " " + (por_ello_text or "")
+    cuerpo = _unhyphenate((considerando_text or "") + " " + (por_ello_text or ""))
 
     # Señal fuerte 1: competencia originaria mencionada explícitamente
     if RE_COMPETENCIA_ORIGINARIA.search(cuerpo):
@@ -3454,7 +3516,7 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         GATEKEEP_OUTCOMES = {"desestima", "inadmisible_280", "inadmisible_acordada_4",
                              "abstracto", "desistimiento", "mal_concedido",
                              "desierto", "inadmisible", "improcedente", "caducidad"}
-        is_merit = int(outcome in MERIT_OUTCOMES)
+        is_merit = int(outcome in MERIT_OUTCOMES and not is_originaria)  # B119 #1: originaria no es merit
 
         jueces_nombres     = [j["nombre"] for j in firma_parsed["jueces"]]
         jueces_conocidos_l = [j["nombre"] for j in firma_parsed["jueces"] if j["conocido"]]

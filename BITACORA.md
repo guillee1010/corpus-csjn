@@ -17089,3 +17089,48 @@ Reordenamiento conceptual clave, con testimonio de campo (secretario letrado):
 
 ### H121-05 — Hallazgo: artefactos de zona en el gold (notas_m20)
 Revisión tardía de `notas_m20` (gatillada por el usuario): 25 casos zona-flagged. Cruce contra el gate: 1 FP (340_p431) y 5 de 9 FN (330_p1907, 332_p2625, 334_p941, 344_p2393, 345_p583) son artefactos de segmentación (dispositivo cortado/ausente/contaminado), NO fallas de detector. El gate 0,907 tiene piso de artefactos de zona. 334_p941 muestra contaminación entre fallos. Decisión: paso 2 corre sobre FP no-zona; abrir work stream Z (zonificador) aparte.
+
+## H121 — B119 PASO 2: capa disposición M20 (2026-06-13)
+
+**Objetivo:** aplicar y cerrar el set B119 — la capa de disposición que separa las disposiciones procesales (competencia / cautelar / nulidad del REX / inoficioso) del fondo sustantivo, reduciendo los FP del gate `is_merit` validado en M20.
+
+### H121-01 — Triage FP/FN (zona vs detector)
+
+Sobre los 19 FP / 9 FN del gate sellado (0,907), se separó qué es falla de detector y qué es artefacto aguas arriba, leyendo el `por_ello` real (`textos_n300.csv`) + las 63 notas del gold. Resultado: los FN son 6 de zona (dispositivo cortado/ausente, frontera de captura — `334_p1081` reclasificado de "limpio" a zona) y 3 de detector (merit-recall). El reframe de B119 quedó confirmado: la queja NO es familia excluible (69/114 quejas en n=300 son merit gold=sí); el gate se arregla en la capa de disposición, no excluyendo familias.
+
+### H121-02 — PASO 2: detectores de disposición (parser v18.26)
+
+Cuatro detectores pre-cascada en `classify_outcome` (corren ANTES de `OUTCOME_PATTERNS_DISPOSITIVO`, donde el verbo de merit ganaba por posición en dispositivos mixtos):
+- `RE_DISP_NULIDAD_CONCESION` → label nuevo `nulidad_concesion` (nulidad/auto de concesión + denegatoria del REX; distinto de la `nulidad` de fondo).
+- `RE_DISP_CAUTELAR` → label nuevo `cautelar`.
+- `RE_DISP_COMPETENCIA` → `competencia` (gana al verbo de merit que la precede).
+- `RE_DISP_INOFICIOSO` → `abstracto`.
+
+`cautelar` y `nulidad_concesion` agregados a `OUTCOMES_NO_FALLBACK_280`; ninguno entra a `MERIT_OUTCOMES`. Más #1 (`is_merit = outcome in MERIT and not is_originaria`) y #2 (`_unhyphenate` sobre el cuerpo de `es_originaria` — «Corte Su- prema» rompía `RE_COMPETENCIA_ORIGINARIA`).
+
+### H121-03 — Validación end-to-end
+
+Recall-safety n300: **0 disparos sobre gold=sí** (no crea FN). Gate **0,907→0,953** (FP 19→5, FN=9 sin cambios). Recupera 11 FP: competencia(5), cautelar(1), nulidad_concesion(4), inoficioso→abstracto(1). **Proyección sandbox == corrida real** (medido sobre `csjn_casos.csv` post-fix). `check_regresion`: cambian solo `csjn_casos.csv` y `csjn_casos_votos.csv` (outcome/is_merit/is_originaria/tribunal_origen_status/causa); textos/zonas/editorial intactos — el footprint confirma que B119 no tocó segmentación ni texto. Corpus completo: `competencia` 877, `abstracto` 146, `nulidad_concesion` 30, `cautelar` 4.
+
+### H121-04 — Decisión: cerrar disposición-solo; merit-recall → B120
+
+Los 5 FP residuales se difieren a sus arcos (gold-edge / cumplimiento / reenvío / duro / dictamen). La merit-recall de los 3 FN de detector se evaluó (guard de precedencia-mérito, FP-safe en n300, proyecta 0,963) pero se difirió como **B120**: es un cambio ancho de precedencia de cascada (126/300 hits) con superficie de regresión corpus-wide no validable con el gold de n=300. B119 cierra disposición-solo, limpio.
+
+### H121 — Estado final
+
+- **Corpus:** 5890 casos.
+
+**Outputs canónicos (manifest `_manifest.json` re-sellado, `--verify` [CLEAN] 61 artefactos):**
+- `output/parser/csjn_casos.csv` — 5890 filas · sha256 `c71a7ff5a672…` · v18.26
+- `output/parser/csjn_casos_textos.csv` — 5890 filas · `2df3fce0f8af…` · v18.26
+- `output/parser/csjn_casos_votos.csv` — 27639 filas · `d01c779e15ce…` · v18.26
+- `output/parser/csjn_casos_zonas.csv` — 141451 segmentos · `0fdbbb031603…` · v18.26
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones · `30a6da652e3a…` · v18.26
+- `output/parser/csjn_editorial_indice_partes.csv` — 11445 filas · `cba0dcf509a6…` · v1.0
+- `output/parser/csjn_casos_materia.csv` — 5890 filas · `6fb50b703bb9…` · v3.2 (stale: pendiente regenerar tras los flips de originaria de #2)
+
+**Scripts modificados:** `parser.py` v18.25 → **v18.26**.
+
+**Bugs:** B119 **CERRADO**. B120 **NUEVO** (merit-recall, diseñado/FP-safe en n300, diferido). B122 (zonificador) referenciado para los 6 FN de zona.
+
+**Commits:** 2 (checkpoint pre-B119; set B119 = parser + outputs + golden + manifest + DEUDA).

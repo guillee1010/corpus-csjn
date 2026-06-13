@@ -2,6 +2,14 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H121 (2026-06-13)
+
+- `parser.py` v18.25→v18.26: capa disposición M20 (B119 PASO 2). 4 detectores pre-cascada en `classify_outcome` (`RE_DISP_NULIDAD_CONCESION`/`_CAUTELAR`/`_COMPETENCIA`/`_INOFICIOSO`) → labels no-merit `nulidad_concesion`/`cautelar`/`competencia`/`abstracto`; `cautelar`+`nulidad_concesion` agregados a `OUTCOMES_NO_FALLBACK_280`. + #1 (`is_merit and not is_originaria`) + #2 (`_unhyphenate` en cuerpo de `es_originaria`). Gate M20 0,907→0,953 (FP 19→5, 0 FN nuevos).
+- `output/parser/csjn_casos.csv`: 5890 filas (re-golden consciente; cambian outcome/is_merit_decision/is_originaria/tribunal_origen_status/causa_inadmisibilidad).
+- `output/parser/csjn_casos_votos.csv`: 27639 filas (propagación de is_originaria/is_merit a votos).
+- `scripts/tests/golden/`: re-sellado (5 CSV).
+- `output/parser/_manifest.json`: re-sellado, v18.26, [CLEAN] 61 artefactos.
+
 ## H118 (2026-06-06)
 
 - `generar_manifiesto.py`: 1.3→1.4, schema 3→4. Sección nueva `vocabularios` (5 CSV de `_meta/vocab_materia/` que lee `derivar_materia`, con digest). `--verify` [CLEAN] 61. No toca outputs.
