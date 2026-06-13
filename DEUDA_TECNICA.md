@@ -6,7 +6,7 @@ referencia §X.Y apuntan a `archivo/docs/PIPELINE_v1.md` (deprecado H062) para
 contexto histórico del diagnóstico original; el estado vivo de cada bug está
 en este archivo.
 
-**Última actualización:** 2026-06-06 (H118). **C1** — sellada la procedencia de los vocabularios de materia en `_manifest.json` (`generar_manifiesto.py` 1.3→1.4, schema 3→4: sección nueva `vocabularios` con los 5 CSV que lee `derivar_materia` + digest propio; `--verify` [CLEAN] 61). MIDE/infra, no toca outputs. **M20** — fijado el diseño del refactor `outcome`→disposición+parte contra dato real (v18.25) + PoC del extractor de disposición (paso-3 de la cadena ritual). Hallazgo central: el `outcome` actual captura la capa de ACCESO, no la disposición — `hace_lugar` (1360, #1) es 84% quejas y el 93% esconde el verbo de fondo aguas abajo; ~72% de los 2941 de fondo mal-etiquetados en acceso. La disposición colapsa a 4 valores SCDB (`deja_sin_efecto` 41% / `revoca` 26% / `confirma` 16% / `nulidad` 2,5%) + flag `reenvía`; cobertura object-bound **91,9%** del universo de revisión (94,2% si `grant_remand_implícito`=vacate). La "rotura" del 10% se descompuso: ~149 NO-revisión (demanda 1ªinst/procesal/competencia → otros ejes), 33 por_ello cortado por running-head (**B118**), 62 grant+reenvío sin verbo (decisión de codificación), ~160 residual. Unidad **parte×recurso confirmada** (cola ~2,1%, 117 casos); M19 es CASE-level → valida el agregado, NO la disposición nueva (requiere `cod_disposicion` sobre el frame n=300). PoC en `scripts/diagnostico/H118/poc_disposicion_v3.py`. **Pendientes previos vigentes:** CODEBOOK materia; csjn_analisis_v4 left-join; refinamiento CA; test-retest/kappa (en pausa).
+**Última actualización:** 2026-06-12 (H119→H120). **M20 — validación ciega COMPLETA (n=300, codificación cerrada y limpia)** (branch `refactor/m20-disposicion`, sin merge). Números finales citables: **gate 0,907** (19 FP / 9 FN); **disposición 0,857** (deja_sin_efecto ~45% / revoca ~34% / confirma ~19%) → **confirma la tesis de M20**; **reenvía 0,773** + el cruce reenvía×disposición valida el codebook (deja_sin_efecto reenvía 71% vs revoca 44% → no fusionar); **parte_ganadora 0,788**; **certiorari criollo: queja gana 95% vs concedido 68%** (queja vía `es_queja`, material H1); **cuestión federal 0,676** (arbitrariedad recall 50%); **dictamen presencia 0,930**, adhesión 71%. **Bugs cuantificados desde el gold:** **B119** — `is_merit` sobre-incluye no-fondo (19 FP heterogéneos: 6 quejas, ~4 originarias, 3 competencia, 1 cautelar — NO solo quejas); **B111** — `mixto` sobre-dispara, etiqueta 15 arbitrariedades reales como mixto. **No validados (codificados):** materia (falta output `derivar_materia`), vía ordinario/extraordinario (falta campo en parser). **Capa dictamen (teoría → BITACORA/campo):** dictamen del PGN = Schelling inverso (adhesión = selección, no influencia); recurso ordinario = sin dictamen; toda la capa condicionada a la censura del ~90% (sala de admisibilidad invisible al corpus). NO toca pipeline → **sin re-sellado de manifest ni CHANGELOG** (entran al mergear M20). **Pendientes M20:** `derivar_recursos.py` (incluye vía ordinario/extraordinario) + re-golden + merge; `derivar_dictamen.py`; fix B119/B111 desde el gold. **Pendientes previos vigentes:** CODEBOOK materia; csjn_analisis_v4 left-join; refinamiento CA; test-retest/kappa (en pausa).
 
 > El detalle cronológico por sesión vive en `BITACORA.md` / `CHANGELOG.md`; este encabezado registra solo la sesión vigente. El estado ABIERTO de un vistazo está en el **Tablero de estado** (abajo). El cuerpo conserva las cerradas como referencia (se reabren: B045, familia B009, is_originaria/B010, etc.).
 
@@ -138,9 +138,10 @@ las cerradas como referencia). La entrada completa de cada ítem está más abaj
 | B105 | `por_ello` capturado de considerando/feria/oficio en vez del dispositivo | abierto |
 | B106 | `case_name_cuerpo` vacío teniendo «Vistos los autos:» presente | abierto |
 | B110 | `es_queja` capa-fuente (carátula hecha; tail débil + considerando abiertos) | parcial (H107) |
-| B111 | `tipo_cuestion_federal` sobre-usa `mixto` / pierde `arbitrariedad` | abierto |
+| B111 | `tipo_cuestion_federal` sobre-usa `mixto` / pierde `arbitrariedad` | abierto; re-cuantificado H119 (gold cuestión federal, accuracy real ~0,64) |
+| B119 | `is_merit` sobre-incluye NO-fondo (no solo quejas) | cuantificado H120: gate 0,907; 19 FP (6 quejas/~4 orig/3 comp/1 cautelar) |
 | B117 | zona `epilogo` absorbe la cola del considerando (testigo 329_p595) | abierto, generalidad sin verificar |
-| B118 | `por_ello`/dispositivo truncado por running-head de página (pierde el verbo de fondo) | confirmado H118 (~33 fondo) |
+| B118 | `por_ello`/dispositivo truncado por running-head de página (pierde el verbo de fondo) | confirmado H118 (~33 fondo); 12 marcados en frame M20 (H119) |
 
 **Catálogo / cruzador (abierto):**
 
@@ -155,9 +156,10 @@ las cerradas como referencia). La entrada completa de cada ítem está más abaj
 
 | ID | Qué | Estado |
 |----|-----|--------|
-| Frente B — materia | capas 1-2-3 HECHAS (v3.2); held-out capa 2 (H116) + **GOLD codificación ciega HECHO (H117)** — exactitud|emite 81,3% (capa1 82,5% / capa2 66,1%); CA silver 68,8% confirmado; finas medidas: salud/previsional/penal altas, **constitucional 0/0**, consumo 33% precisión | medido; refinamientos pendientes |
+| Frente B — materia | capas 1-2-3 HECHAS (v3.2); held-out capa 2 (H116) + GOLD H117 (era **codificación IA**, menos casos) — exactitud\|emite 81,3% (capa1 82,5% / capa2 66,1%); CA silver 68,8% confirmado; finas medidas: salud/previsional/penal altas, **constitucional 0/0**, consumo 33% precisión. **GOLD HUMANO n=300 codificado en H119** (label dominante a mano) → es el gold de referencia; validar `derivar_materia` contra este | medido; refinamientos pendientes |
 | csjn_casos_textos | separar texto pesado (desbloquea materia capa 2) | pendiente, PRIORITARIO |
-| M20 | refactor `outcome`→disposición+parte (molde SCDB, unidad parte×recurso) | **diseño fijado + PoC disposición (H118)**: vocab 4 valores (deja_sin_efecto/revoca/confirma/nulidad) + flag reenvía, cobertura 92% univ. revisión; falta `parte_ganadora` + cola ×recurso |
+| M20 | refactor `outcome`→disposición+parte (molde SCDB, unidad parte×recurso) | **VALIDADO H120** (n=300 completo): disposición 0,857 (confirma tesis), reenvía 0,773 (cruce valida codebook: deja_sin_efecto reenvía 71% vs revoca 44%), parte_ganadora 0,788, **certiorari criollo queja 95% vs concedido 68%**. Falta: `derivar_recursos.py` + re-golden + merge. **NUEVO campo:** vía ordinario/extraordinario (interactúa con dictamen) |
+| capa dictamen | `derivar_dictamen.py` (uso del dictamen PGN: remite/conformidad/oido/sin_dictamen) | gold ciego construido (H119); deriver no diseñado. **Caveat de alcance:** generaliza solo al vértice publicado (censura ~90%). Lectura teórica (Schelling inverso, sala de admisibilidad) → BITACORA/campo, no pipeline |
 | M19 | kappa / doble codificación + sección reliability del CODEBOOK | titular n=300 hecho; kappa pendiente |
 | post-B010 | recalibrar `is_originaria` / `inadmisible_280` / art. 4 sobre el considerando más preciso | pendiente |
 
@@ -438,11 +440,11 @@ exclusión de firmas, calificadores, headers de página, marcadores de apertura.
 **Componente:** parser (clasificador `tipo_cuestion_federal`).
 **Origen / fuente del diagnóstico:** H100 (titular M19).
 **Causa raíz:** el clasificador sobre-asigna `mixto` (precision 38%) donde el agravio es simple (casi siempre arbitrariedad) y pierde `arbitrariedad` cuando no aparece la palabra (recall 65%). Además emite `tipo_cf` fuera de REX/queja (debería ser null en originaria/ordinario; ej. 329_p4150, `cuestion_federal` sobre una acción declarativa originaria, del suplemento).
-**Diagnóstico / evidencia:** precision `mixto` 38,1%, recall `arbitrariedad` 65,5% (Marco A); 13 casos parser=`mixto` / cod=simple.
-**Estado de verificación:** `confirmado_cuantificado` (Marco A).
+**Diagnóstico / evidencia:** precision `mixto` 38,1%, recall `arbitrariedad` 65,5% (Marco A); 13 casos parser=`mixto` / cod=simple. **Cuantificado H120** (gold humano completo n=300, 3-way arbitrariedad/cuestion_federal/ninguna): accuracy 0,676 (n=136); **recall `arbitrariedad` 50%** — el parser etiqueta **15 arbitrariedades reales como `mixto`** y 9 como `cuestion_federal`. Confirma el sobre-disparo de `mixto` a costa de `arbitrariedad`.
+**Estado de verificación:** `confirmado_cuantificado` (Marco A; ratificado y cuantificado H120).
 **Validador propuesto:** los scans de keyword ya se descartaron en M19 (falsos +/−); lectura sustantiva. Gate de `tipo_cf` a REX/queja.
 **Estado del fix:** no diseñado.
-**Referencias cruzadas:** H100. M19. Sin ID histórico.
+**Referencias cruzadas:** H100. M19. H119/H120 (gold). Sin ID histórico.
 
 ---
 
@@ -529,7 +531,18 @@ exclusión de firmas, calificadores, headers de página, marcadores de apertura.
 **Validador propuesto:** dimensionar `por_ello` que terminan en running-head (`(DE JUSTICIA DE LA NACION|FALLOS DE LA CORTE)\s*\d*\s*$`); leer muestra con `extraer_caso.py`; arreglar el borde para arrastrar el texto post-header hasta el fin real del dispositivo (regla M15: validar sobre `.md` completo).
 **Impacto:** subcuenta la disposición de fondo en M20 (queda fuera del `por_ello`) y puede truncar `outcome` en página compartida. Acotado (~33 de fondo), pero toca el campo de mayor valor del refactor.
 **Estado del fix:** no diseñado.
-**Referencias cruzadas:** H118. Familia probable B104 (running-heads), B117 (borde de zona). M20 (disposición). DISENO_SCDB_corpus §1. Sin ID histórico.
+**Referencias cruzadas:** H118. Familia probable B104 (running-heads), B117 (borde de zona). M20 (disposición). DISENO_SCDB_corpus §1. H119: 12 casos marcados `flag_revisar_fuente` en el frame M20 n=300 (subconjunto del universo afectado). Sin ID histórico.
+
+### B119 — `is_merit` sobre-incluye quejas (FP del gate de fondo)
+
+**Componente:** parser (detector `is_merit_decision`).
+**Origen / fuente del diagnóstico:** H119 (validación ciega M20, gate `cod_es_revision_fondo` sobre el frame n=300).
+**Causa raíz:** `hipotesis_no_verificada`. El detector de revisión de fondo cuenta como merit casos de queja que resuelven acceso/admisibilidad (no el fondo sustantivo de una sentencia anterior). Probable interacción con la sobre-inclusión de quejas en la cadena de outcome (familia B109/B110).
+**Diagnóstico / evidencia:** `confirmado_cuantificado` (H120, gold completo n=300). GATE accuracy 0,907; **19 FP** (parser=fondo / gold=no): **6 quejas, ~4 originarias, 3 competencia, 1 cautelar, resto mixto**. Hallazgo clave: NO es solo un problema de quejas — `is_merit` toma como fondo varias categorías de no-fondo (competencia, cautelar, originaria). El fix debe excluir esas familias, no solo gatear quejas. 9 FN (parser pierde fondo real).
+**Estado de verificación:** `confirmado_cuantificado` (H120).
+**Validador propuesto:** `validar_H120.py` bloque GATE (confusión + FP×es_queja/is_originaria) sobre planilla completa. HECHO.
+**Estado del fix:** no diseñado. Impacta el universo de M20 (qué entra a disposición) y la derivación de `parte_ganadora`.
+**Referencias cruzadas:** H119. H120 (cuantificación). M20 (universo de fondo). Familia B109/B110 (quejas) + competencia/cautelar/originaria. Sin ID histórico.
 
 ### Capa-fuente `es_queja` — tail débil y capa considerando DIFERIDOS (H108)
 
@@ -4274,3 +4287,11 @@ mapa que consume el parser (`--mapa` confirmado en el log de invocación). **Pen
 menor (futura sesión):** digest del corpus crudo (`LibroVol*.md`), único eslabón de
 la cadena que el manifiesto todavía no fija.
 **Referencias cruzadas:** H085, H086. M12.
+
+### B122 — Zonificador: dispositivo cortado/ausente, carátula faltante, contaminación entre fallos
+**Componente:** parser (segmentación / detección de zonas).
+**Origen:** H121 (notas_m20 del gold M20).
+**Causa raíz:** la detección de zona dispositiva y la frontera de fallos falla en una clase de casos; el `por_ello` queda cortado por header, ausente, o con texto de otro fallo.
+**Diagnóstico/evidencia:** 25 casos zona-flagged en n=300. Impacto medido en el gate: 1 FP (340_p431) + 5/9 FN (330_p1907, 332_p2625, 334_p941, 344_p2393, 345_p583). Contaminación entre fallos: 334_p941. Carátula faltante: 330_p50, 332_p2625, 337_p481, 345_p241, 348_p1378.
+**Estado de verificación:** `confirmado_cuantificado` (vía notas_m20 + cruce con gate).
+**Estado del fix:** no diseñado. Banco de prueba: los 25 casos. Recupera ~5 FN independiente de B119.

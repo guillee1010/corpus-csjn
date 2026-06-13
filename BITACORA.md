@@ -16858,3 +16858,234 @@ Hallazgo central: el `outcome` actual captura la capa de ACCESO, no la disposici
 **Scripts modificados (pipeline):** `generar_manifiesto.py` 1.3→1.4.
 
 **Commits:** C1 (`generar_manifiesto.py` + `_manifest.json`, ya commiteado); + PoC H118; + DEUDA; + docs.
+
+# H119 — Validación M20 (disposición + parte_ganadora) y golds múltiples; capa dictamen como Schelling inverso (2026-06-12)
+
+**Objetivo:** construir el framework de validación ciega de M20 sobre el frame n=300, expandirlo a golds adicionales (materia, vía, cuestión federal, dictamen), y desarrollar la capa conceptual de la función del dictamen del PGN (focal point vs anticipación).
+
+### H119-01 — Framework de validación ciega M20 + golds múltiples
+
+Se armó la infraestructura de codificación ciega sobre el frame n=300 (M19). Artefactos (en `output/diagnostico/H119/` salvo indicación):
+
+- `planilla_M20_codificar.xlsx` — planilla ciega con dropdowns: `cod_es_revision_fondo`, `cod_disposicion`, `cod_reenvia`, `cod_parte_ganadora`, `cod_materia`, `cod_via_recurso`, `cod_tipo_cuestion_federal`, `cod_dictamen` + notas. Incluye `por_ello_text`, source pointer y `flag_revisar_fuente` (12 casos truncados / B118).
+- `M20_clave_parser_n300.csv` — clave del parser (no abrir hasta cerrar codificación ciega).
+- `CODEBOOK_M20.md` — definiciones + protocolo de codificación.
+- `analizar_validacion_M20.py` — harness de métricas (GATE / DISPOSICIÓN / PARTE_GANADORA / REENVÍA + descomposición ZONA-vs-regex vía tags en notas).
+- `aid_M20_textos_n300.md` — apoyo de lectura (considerando + por_ello del sidecar, sin labels del parser).
+- `extraer_lote_M20.py` — wrapper de `extraer_caso.py --blind` sobre los 300 (ids embebidos).
+- Columnas-dropdown standalone para pegar sin reescribir: `categorias_materia.xlsx`, `columna_materia_dropdown.xlsx`, `columnas_extra_dropdown.xlsx`, `columna_cuestion_federal_fina.xlsx`, `columna_dictamen_uso.xlsx`, `columnas_votos_dropdown.xlsx`.
+
+**Hallazgo de universo:** el frame n=300 tiene **145 is_merit=1** (donde vive la disposición); 155 son non-merit (capa de acceso, ya validada por M19). Disposición y parte_ganadora se validan solo sobre las revisiones de fondo. `nulidad` (n≈2) y `modifica` (n≈0) no son validables en este frame.
+
+### H119-02 — Decisiones de codificación (codebook)
+
+- **Gate** `cod_es_revision_fondo`: "la Corte resolvió el fondo sustantivo de una sentencia anterior". Originarios definitivos → `no`; revoca sobre competencia → `no`; recurso vs resolución del Consejo de la Magistratura → `no` (tag ADMIN-CM).
+- **Disposición:** 5 valores SCDB (`revoca` / `deja_sin_efecto` / `nulidad` / `confirma` / `modifica`), por **verbo literal**. `cod_disposicion` + `cod_reenvia` se cruzan post-hoc para derivar la caseDisposition compuesta. NO fusionar revoca y deja_sin_efecto.
+- **parte_ganadora:** recurrente-céntrica (= SCDB partyWinning), codificada **independiente** del verbo.
+- **cod_dictamen** (valores finales, por sustancia, ignorando la apertura "habiendo dictaminado"): `remite` (adopta por remisión sin fundar) / `conformidad` (funda propio + señala coincidencia) / `oido` (funda propio sin remitir ni coincidir) / `sin_dictamen` / `otro`.
+- **cod_materia:** etiquetas Tier-1 de `derivar_materia`, single-label dominante (gold de materia aparte).
+- **cod_via_recurso:** recurso_extraordinario / recurso_ordinario / per_saltum / queja / otro.
+- **cod_tipo_cuestion_federal:** taxonomía fina (simple / compleja_directa / compleja_indirecta / arbitrariedad / gravedad_institucional / mixto / ninguna); se colapsa para validar contra parser.
+- Vote-counting (n_disidencias / n_votos_svoto) **descartado** por costo; `voting_pattern` queda como derivación opcional.
+
+### H119-03 — Validación preliminar (codificación parcial — PROVISIONAL)
+
+Sobre codificación parcial (~240/300, secuencial). **Sujeto a re-corrida sobre planilla completa y limpia** (drift de etiquetas en `cod_dictamen` y `cod_tipo_cuestion_federal` pendiente de normalizar).
+
+- **DISPOSICIÓN (estable):** accuracy vs parser **0.87** (n=137). Distribución gold: `deja_sin_efecto` ~44% / `revoca` ~35% / `confirma` ~20% / `nulidad` ~1%. **Confirma la tesis de M20** con dato validado: el `outcome` actual captura la capa de acceso, no la disposición; la disposición real está dominada por `deja_sin_efecto` (vacate, doctrina de arbitrariedad), no por `confirma`.
+- **GATE (provisional, en curso):** FP concentrados en **quejas sobre-incluidas** por `is_merit`. Número de accuracy no estable en el estado parcial; pendiente re-corrida.
+- **CERTIORARI CRIOLLO (provisional):** dirección positiva (la queja gana más que el recurso concedido), pero la cuantificación a mano no está estable en el merge actual; pendiente re-corrida limpia. Material para H1 (control de agenda).
+- **DICTAMEN (provisional):** adhesión al PGN (remite + conformidad) ≈ **64–70%** según normalización de etiquetas; sensible al estado parcial. Pendiente.
+- **CUESTIÓN FEDERAL:** campo flojo del parser; el detector de `mixto` sobre-dispara (accuracy real ~0.64). No re-codificar `arbitrariedad` (ya validada en M19).
+
+### H119-04 — Hilo teórico: el dictamen no es el focal point (Schelling inverso)
+
+Reordenamiento conceptual clave, con testimonio de campo (secretario letrado):
+
+- El **focal point** de la tesis es el **proyecto interno de secretaría/vocalía** (coordina ex ante, H1/H3). **No hay hipótesis a priori de que el dictamen del PGN lo sea.**
+- El **dictamen es un Schelling inverso:** se lo convoca cuando ya se anticipa la adhesión de una mayoría. La convergencia **precede** a la señal → no puede estar coordinando lo que ya estaba anticipado. La adhesión observada (≈64–70%) es **selección**, no influencia. *(Caveat para el capítulo: ese porcentaje crudo sugeriría "el PGN conduce a la Corte"; el reframe dice lo inverso.)*
+- **Hipótesis emergente (abierta, NO a priori):** el dictamen, una vez en el expediente, podría funcionar como "lugar de encuentro" (texto saliente sobre el que convergen los Ministros). Compatible con el inverso: el inverso es sobre *por qué se convoca*; el lugar-de-encuentro es sobre *qué hace una vez presente*. Se deja como emergente, sin afirmar ni descartar.
+- **Tests empíricos (corpus completo, universo merit n=2941 — parser fields):**
+  - `dictamen_presente` × estructura de voto: CON dictamen (n=1850) → unánime 0.49 / disidencias 0.38; SIN (n=1091) → 0.62 / 0.26. Los casos con dictamen son **más divididos** (contra "se pide cuando es fácil").
+  - **Size-scaling** del efecto del dictamen sobre disidencias por tamaño de corte: gap ~0 en cortes ≤5; **+0.23 (corte 6), +0.21 (corte 7)**. Escala con el tamaño → consistente con mecanismo de coalición; en contra de causa-común por dificultad (que daría gap plano). **Caveat: tamaño confundido con época** (las cortes 6–7 son las tempranas). Test limpio requiere controlar período.
+  - **Recurso ordinario = sin dictamen** (estructural): en la codificación, 17/20 ordinarios `sin_dictamen`, 0 remite, 0 conformidad; el REX casi siempre tiene dictamen. El PGN vive en el REX y está ausente del ordinario. Define el universo del análisis de dictamen.
+
+### H119-05 — Caveat de censura (90%) y sala de admisibilidad (campo)
+
+- **Censura de la colección:** los Fallos publicados son la **punta seleccionada**. El piso visible en el corpus (5.697 fallos: 52% merit / 48% acceso; 60% con dictamen / 40% sin) ya es lo que *sobrevivió* a la publicación. El ~90% que se resuelve por decreto en secretaría judicial y se avala en vocalía —sin dictamen ni fundamento— **nunca entra al tomo**; el corpus es estructuralmente ciego a eso. **Consecuencia metodológica:** toda cifra de la capa dictamen está condicionada a dos filtros (estar publicado + ser de fondo) y generaliza al vértice razonado, no al caudal real de la Corte.
+- **Sala de admisibilidad (dato de campo):** coordinación rutinizada, semanal, secretario de secretaría ↔ vocalía, que decide admisibilidad por debajo de la línea de la decisión fundada. Es el "lugar de encuentro" literal del 90% y locus fuerte de H5 (agencia burocrática), invisible al corpus. Fuente: entrevista + artículo periodístico (el artículo es citable; la entrevista es dato de campo bajo el protocolo de divulgación de fuentes).
+- **Dos registros que no hay que mezclar:** corpus → ve el vértice razonado (dictamen con posible rol focal *emergente*); campo → ve el filtro (sala de admisibilidad, coordinación de masa y H5, fuera del alcance del corpus). Esto divide limpio el capítulo de corpus del de campo.
+
+## H119 — Validación M20 (disposición + parte_ganadora) y golds múltiples; capa dictamen como Schelling inverso (2026-06-12)
+
+**Objetivo:** construir el framework de validación ciega de M20 sobre el frame n=300, expandirlo a golds adicionales (materia, vía, cuestión federal, dictamen), y desarrollar la capa conceptual de la función del dictamen del PGN (focal point vs anticipación).
+
+### H119-01 — Framework de validación ciega M20 + golds múltiples
+
+Se armó la infraestructura de codificación ciega sobre el frame n=300 (M19). Artefactos (en `output/diagnostico/H119/` salvo indicación):
+
+- `planilla_M20_codificar.xlsx` — planilla ciega con dropdowns: `cod_es_revision_fondo`, `cod_disposicion`, `cod_reenvia`, `cod_parte_ganadora`, `cod_materia`, `cod_via_recurso`, `cod_tipo_cuestion_federal`, `cod_dictamen` + notas. Incluye `por_ello_text`, source pointer y `flag_revisar_fuente` (12 casos truncados / B118).
+- `M20_clave_parser_n300.csv` — clave del parser (no abrir hasta cerrar codificación ciega).
+- `CODEBOOK_M20.md` — definiciones + protocolo de codificación.
+- `analizar_validacion_M20.py` — harness de métricas (GATE / DISPOSICIÓN / PARTE_GANADORA / REENVÍA + descomposición ZONA-vs-regex vía tags en notas).
+- `aid_M20_textos_n300.md` — apoyo de lectura (considerando + por_ello del sidecar, sin labels del parser).
+- `extraer_lote_M20.py` — wrapper de `extraer_caso.py --blind` sobre los 300 (ids embebidos).
+- Columnas-dropdown standalone para pegar sin reescribir: `categorias_materia.xlsx`, `columna_materia_dropdown.xlsx`, `columnas_extra_dropdown.xlsx`, `columna_cuestion_federal_fina.xlsx`, `columna_dictamen_uso.xlsx`, `columnas_votos_dropdown.xlsx`.
+
+**Hallazgo de universo:** el frame n=300 tiene **145 is_merit=1** (donde vive la disposición); 155 son non-merit (capa de acceso, ya validada por M19). Disposición y parte_ganadora se validan solo sobre las revisiones de fondo. `nulidad` (n≈2) y `modifica` (n≈0) no son validables en este frame.
+
+### H119-02 — Decisiones de codificación (codebook)
+
+- **Gate** `cod_es_revision_fondo`: "la Corte resolvió el fondo sustantivo de una sentencia anterior". Originarios definitivos → `no`; revoca sobre competencia → `no`; recurso vs resolución del Consejo de la Magistratura → `no` (tag ADMIN-CM).
+- **Disposición:** 5 valores SCDB (`revoca` / `deja_sin_efecto` / `nulidad` / `confirma` / `modifica`), por **verbo literal**. `cod_disposicion` + `cod_reenvia` se cruzan post-hoc para derivar la caseDisposition compuesta. NO fusionar revoca y deja_sin_efecto.
+- **parte_ganadora:** recurrente-céntrica (= SCDB partyWinning), codificada **independiente** del verbo.
+- **cod_dictamen** (valores finales, por sustancia, ignorando la apertura "habiendo dictaminado"): `remite` (adopta por remisión sin fundar) / `conformidad` (funda propio + señala coincidencia) / `oido` (funda propio sin remitir ni coincidir) / `sin_dictamen` / `otro`.
+- **cod_materia:** etiquetas Tier-1 de `derivar_materia`, single-label dominante (gold de materia aparte).
+- **cod_via_recurso:** recurso_extraordinario / recurso_ordinario / per_saltum / queja / otro.
+- **cod_tipo_cuestion_federal:** taxonomía fina (simple / compleja_directa / compleja_indirecta / arbitrariedad / gravedad_institucional / mixto / ninguna); se colapsa para validar contra parser.
+- Vote-counting (n_disidencias / n_votos_svoto) **descartado** por costo; `voting_pattern` queda como derivación opcional.
+
+### H119-03 — Validación preliminar (codificación parcial — PROVISIONAL)
+
+Sobre codificación parcial (~240/300, secuencial). **Sujeto a re-corrida sobre planilla completa y limpia** (drift de etiquetas en `cod_dictamen` y `cod_tipo_cuestion_federal` pendiente de normalizar).
+
+- **DISPOSICIÓN (estable):** accuracy vs parser **0.87** (n=137). Distribución gold: `deja_sin_efecto` ~44% / `revoca` ~35% / `confirma` ~20% / `nulidad` ~1%. **Confirma la tesis de M20** con dato validado: el `outcome` actual captura la capa de acceso, no la disposición; la disposición real está dominada por `deja_sin_efecto` (vacate, doctrina de arbitrariedad), no por `confirma`.
+- **GATE (provisional, en curso):** FP concentrados en **quejas sobre-incluidas** por `is_merit`. Número de accuracy no estable en el estado parcial; pendiente re-corrida.
+- **CERTIORARI CRIOLLO (provisional):** dirección positiva (la queja gana más que el recurso concedido), pero la cuantificación a mano no está estable en el merge actual; pendiente re-corrida limpia. Material para H1 (control de agenda).
+- **DICTAMEN (provisional):** adhesión al PGN (remite + conformidad) ≈ **64–70%** según normalización de etiquetas; sensible al estado parcial. Pendiente.
+- **CUESTIÓN FEDERAL:** campo flojo del parser; el detector de `mixto` sobre-dispara (accuracy real ~0.64). No re-codificar `arbitrariedad` (ya validada en M19).
+
+### H119-04 — Hilo teórico: el dictamen no es el focal point (Schelling inverso)
+
+Reordenamiento conceptual clave, con testimonio de campo (secretario letrado):
+
+- El **focal point** de la tesis es el **proyecto interno de secretaría/vocalía** (coordina ex ante, H1/H3). **No hay hipótesis a priori de que el dictamen del PGN lo sea.**
+- El **dictamen es un Schelling inverso:** se lo convoca cuando ya se anticipa la adhesión de una mayoría. La convergencia **precede** a la señal → no puede estar coordinando lo que ya estaba anticipado. La adhesión observada (≈64–70%) es **selección**, no influencia. *(Caveat para el capítulo: ese porcentaje crudo sugeriría "el PGN conduce a la Corte"; el reframe dice lo inverso.)*
+- **Hipótesis emergente (abierta, NO a priori):** el dictamen, una vez en el expediente, podría funcionar como "lugar de encuentro" (texto saliente sobre el que convergen los Ministros). Compatible con el inverso: el inverso es sobre *por qué se convoca*; el lugar-de-encuentro es sobre *qué hace una vez presente*. Se deja como emergente, sin afirmar ni descartar.
+- **Tests empíricos (corpus completo, universo merit n=2941 — parser fields):**
+  - `dictamen_presente` × estructura de voto: CON dictamen (n=1850) → unánime 0.49 / disidencias 0.38; SIN (n=1091) → 0.62 / 0.26. Los casos con dictamen son **más divididos** (contra "se pide cuando es fácil").
+  - **Size-scaling** del efecto del dictamen sobre disidencias por tamaño de corte: gap ~0 en cortes ≤5; **+0.23 (corte 6), +0.21 (corte 7)**. Escala con el tamaño → consistente con mecanismo de coalición; en contra de causa-común por dificultad (que daría gap plano). **Caveat: tamaño confundido con época** (las cortes 6–7 son las tempranas). Test limpio requiere controlar período.
+  - **Recurso ordinario = sin dictamen** (estructural): en la codificación, 17/20 ordinarios `sin_dictamen`, 0 remite, 0 conformidad; el REX casi siempre tiene dictamen. El PGN vive en el REX y está ausente del ordinario. Define el universo del análisis de dictamen.
+
+### H119-05 — Caveat de censura (90%) y sala de admisibilidad (campo)
+
+- **Censura de la colección:** los Fallos publicados son la **punta seleccionada**. El piso visible en el corpus (5.697 fallos: 52% merit / 48% acceso; 60% con dictamen / 40% sin) ya es lo que *sobrevivió* a la publicación. El ~90% que se resuelve por decreto en secretaría judicial y se avala en vocalía —sin dictamen ni fundamento— **nunca entra al tomo**; el corpus es estructuralmente ciego a eso. **Consecuencia metodológica:** toda cifra de la capa dictamen está condicionada a dos filtros (estar publicado + ser de fondo) y generaliza al vértice razonado, no al caudal real de la Corte.
+- **Sala de admisibilidad (dato de campo):** coordinación rutinizada, semanal, secretario de secretaría ↔ vocalía, que decide admisibilidad por debajo de la línea de la decisión fundada. Es el "lugar de encuentro" literal del 90% y locus fuerte de H5 (agencia burocrática), invisible al corpus. Fuente: entrevista + artículo periodístico (el artículo es citable; la entrevista es dato de campo bajo el protocolo de divulgación de fuentes).
+- **Dos registros que no hay que mezclar:** corpus → ve el vértice razonado (dictamen con posible rol focal *emergente*); campo → ve el filtro (sala de admisibilidad, coordinación de masa y H5, fuera del alcance del corpus). Esto divide limpio el capítulo de corpus del de campo.
+
+### H119 — Estado final
+
+**Sin cambios canónicos.** No se modificaron scripts del pipeline ni outputs canónicos; M20 sigue en branch `refactor/m20-disposicion` (sin merge a main). No corresponde re-sellado de `_manifest.json` ni entrada de CHANGELOG en esta sesión.
+
+**Scripts creados:** `scripts/diagnostico/H119/` — framework de validación M20 (planillas, clave, codebook, analizador, wrapper de extracción, columnas-dropdown).
+
+**Líneas abiertas:**
+
+*Corpus (backlog de pipeline → ver DEUDA_TECNICA):*
+- Completar codificación (40 casos restantes) + limpiar drift de etiquetas + re-correr `analizar_validacion_M20.py` para números citables.
+- Corrección de parser desde el gold: recalibrar `is_merit` (FP en quejas), detector de `mixto` en cuestión federal, B118/zona.
+- Producción M20: `derivar_recursos.py` → `csjn_casos_recursos`; re-golden consciente; re-sellar manifest; merge a main. Incluye **vía recurso ordinario/extraordinario** (campo nuevo, interactúa con dictamen).
+- Nuevos derivadores: `derivar_dictamen.py` (booleano `dictamen_presente` → 4 verbos: remite/conformidad/oido/sin_dictamen). PoC cola multi-recurrente. Decisión grant_remand implícito.
+
+*Ejes analíticos (corpus, usan campos derivados):*
+- **queja vs concedido** (`es_queja` + vía): palanca de control de agenda (H1, certiorari criollo). Cruzar con materia/fuero, disposición, dictamen. Doble uso: la variación por fuero valida representatividad contra el **Anuario CSJN 2025** (referencia ya en DEUDA).
+- **cuestión federal** (simple / ninguna / arbitrariedad): arbitrariedad como categoría para comparar patrones (no solo validación de B111).
+- **materia**: el gold de referencia es el humano n=300 (H119); el de H117 fue IA con menos casos.
+
+*Campo (capítulo, no corpus):*
+- Análisis de **cita/solapamiento** textual fallo ↔ dictamen (test confound-free de orquestación; inmune a la selección del pedido).
+- `vista_obligatoria` time-aware + test obligatoria-vs-discrecional.
+- Dictamen × disidencia **escalando con tamaño de corte, controlando por época** (test limpio de coalición).
+- Recurso ordinario = sin dictamen (hallazgo estructural).
+- Sala de admisibilidad como locus de H5.
+
+## H119 — Validación M20 (disposición + parte_ganadora) y golds múltiples; capa dictamen como Schelling inverso (2026-06-12)
+
+**Objetivo:** construir el framework de validación ciega de M20 sobre el frame n=300, expandirlo a golds adicionales (materia, vía, cuestión federal, dictamen), y desarrollar la capa conceptual de la función del dictamen del PGN (focal point vs anticipación).
+
+### H119-01 — Framework de validación ciega M20 + golds múltiples
+
+Se armó la infraestructura de codificación ciega sobre el frame n=300 (M19). Artefactos (en `output/diagnostico/H119/` salvo indicación):
+
+- `planilla_M20_codificar.xlsx` — planilla ciega con dropdowns: `cod_es_revision_fondo`, `cod_disposicion`, `cod_reenvia`, `cod_parte_ganadora`, `cod_materia`, `cod_via_recurso`, `cod_tipo_cuestion_federal`, `cod_dictamen` + notas. Incluye `por_ello_text`, source pointer y `flag_revisar_fuente` (12 casos truncados / B118).
+- `M20_clave_parser_n300.csv` — clave del parser (no abrir hasta cerrar codificación ciega).
+- `CODEBOOK_M20.md` — definiciones + protocolo de codificación.
+- `analizar_validacion_M20.py` — harness de métricas (GATE / DISPOSICIÓN / PARTE_GANADORA / REENVÍA + descomposición ZONA-vs-regex vía tags en notas).
+- `aid_M20_textos_n300.md` — apoyo de lectura (considerando + por_ello del sidecar, sin labels del parser).
+- `extraer_lote_M20.py` — wrapper de `extraer_caso.py --blind` sobre los 300 (ids embebidos).
+- Columnas-dropdown standalone para pegar sin reescribir: `categorias_materia.xlsx`, `columna_materia_dropdown.xlsx`, `columnas_extra_dropdown.xlsx`, `columna_cuestion_federal_fina.xlsx`, `columna_dictamen_uso.xlsx`, `columnas_votos_dropdown.xlsx`.
+
+**Hallazgo de universo:** el frame n=300 tiene **145 is_merit=1** (donde vive la disposición); 155 son non-merit (capa de acceso, ya validada por M19). Disposición y parte_ganadora se validan solo sobre las revisiones de fondo. `nulidad` (n≈2) y `modifica` (n≈0) no son validables en este frame.
+
+### H119-02 — Decisiones de codificación (codebook)
+
+- **Gate** `cod_es_revision_fondo`: "la Corte resolvió el fondo sustantivo de una sentencia anterior". Originarios definitivos → `no`; revoca sobre competencia → `no`; recurso vs resolución del Consejo de la Magistratura → `no` (tag ADMIN-CM).
+- **Disposición:** 5 valores SCDB (`revoca` / `deja_sin_efecto` / `nulidad` / `confirma` / `modifica`), por **verbo literal**. `cod_disposicion` + `cod_reenvia` se cruzan post-hoc para derivar la caseDisposition compuesta. NO fusionar revoca y deja_sin_efecto.
+- **parte_ganadora:** recurrente-céntrica (= SCDB partyWinning), codificada **independiente** del verbo.
+- **cod_dictamen** (valores finales, por sustancia, ignorando la apertura "habiendo dictaminado"): `remite` (adopta por remisión sin fundar) / `conformidad` (funda propio + señala coincidencia) / `oido` (funda propio sin remitir ni coincidir) / `sin_dictamen` / `otro`.
+- **cod_materia:** etiquetas Tier-1 de `derivar_materia`, single-label dominante (gold de materia aparte).
+- **cod_via_recurso:** recurso_extraordinario / recurso_ordinario / per_saltum / queja / otro.
+- **cod_tipo_cuestion_federal:** taxonomía fina (simple / compleja_directa / compleja_indirecta / arbitrariedad / gravedad_institucional / mixto / ninguna); se colapsa para validar contra parser.
+- Vote-counting (n_disidencias / n_votos_svoto) **descartado** por costo; `voting_pattern` queda como derivación opcional.
+
+### H119-03 — Validación M20 (codificación completa n=300, limpia)
+
+Codificación cerrada (300/300 en gate; ~140 en los campos de fondo = universo merit). Drift de etiquetas normalizado (dictamen: concordantemente/cocordante→conformidad; 7 "habiendo" a recodificar; cuestión federal: acentos + colapso a 3 vías). Números finales y citables:
+
+- **GATE** (`cod_es_revision_fondo` vs parser): accuracy **0,907** (n=300). 19 FP / 9 FN. Los FP (`is_merit` sobre-incluye) son **heterogéneos**: 6 quejas, ~4 originarias, 3 competencia, 1 cautelar, resto mixto → `is_merit` toma como fondo varias categorías de no-fondo, no solo quejas (→ **B119**).
+- **DISPOSICIÓN** (vs parser): accuracy **0,857** (n=140). Dist gold: `deja_sin_efecto` ~45% / `revoca` ~34% / `confirma` ~19% / `nulidad` ~1%; recall 0,85–0,87 parejo. **Confirma la tesis de M20** con dato cerrado.
+- **REENVÍA** (vs parser): accuracy **0,773** (n=75). El cruce **reenvía × disposición valida empíricamente el codebook**: `deja_sin_efecto` reenvía 71% (vacate→remand), `revoca` reenvía 44% (reverse, resuelve más), `confirma` ~0%. **Prueba dura de por qué NO fusionar `deja_sin_efecto` y `revoca`.**
+- **PARTE_GANADORA** (campo, vs parser): accuracy **0,788** (n=137).
+- **CERTIORARI CRIOLLO** (queja vía parser `es_queja`): **queja gana 95% (n=65) vs concedido 68% (n=63)**. Material H1 (control de agenda), ahora con la queja del parser, no a mano.
+- **CUESTIÓN FEDERAL** (gold 3-way vs parser): accuracy **0,676** (n=136); arbitrariedad recall **50%** — el parser etiqueta 15 arbitrariedades reales como `mixto` (→ **B111** cuantificado).
+- **DICTAMEN** (presencia, gold vs `dictamen_presente`): accuracy **0,930** (n=128); adhesión (remite+conformidad) **71%** (n=90). Semilla de 4 verbos lista (remite 39 / sin_dictamen 38 / oido 26 / conformidad 25); 7 "habiendo" a recodificar.
+- **NO validados (codificados, pendientes de insumo):** materia (falta output de `derivar_materia`), vía ordinario/extraordinario (falta campo en el parser).
+
+Planilla limpia: `planilla_M20_LIMPIA_n300.xlsx`. Script: `scripts/diagnostico/H120/validar_H120.py`.
+
+### H119-04 — Hilo teórico: el dictamen no es el focal point (Schelling inverso)
+
+Reordenamiento conceptual clave, con testimonio de campo (secretario letrado):
+
+- El **focal point** de la tesis es el **proyecto interno de secretaría/vocalía** (coordina ex ante, H1/H3). **No hay hipótesis a priori de que el dictamen del PGN lo sea.**
+- El **dictamen es un Schelling inverso:** se lo convoca cuando ya se anticipa la adhesión de una mayoría. La convergencia **precede** a la señal → no puede estar coordinando lo que ya estaba anticipado. La adhesión observada (≈64–70%) es **selección**, no influencia. *(Caveat para el capítulo: ese porcentaje crudo sugeriría "el PGN conduce a la Corte"; el reframe dice lo inverso.)*
+- **Hipótesis emergente (abierta, NO a priori):** el dictamen, una vez en el expediente, podría funcionar como "lugar de encuentro" (texto saliente sobre el que convergen los Ministros). Compatible con el inverso: el inverso es sobre *por qué se convoca*; el lugar-de-encuentro es sobre *qué hace una vez presente*. Se deja como emergente, sin afirmar ni descartar.
+- **Tests empíricos (corpus completo, universo merit n=2941 — parser fields):**
+  - `dictamen_presente` × estructura de voto: CON dictamen (n=1850) → unánime 0.49 / disidencias 0.38; SIN (n=1091) → 0.62 / 0.26. Los casos con dictamen son **más divididos** (contra "se pide cuando es fácil").
+  - **Size-scaling** del efecto del dictamen sobre disidencias por tamaño de corte: gap ~0 en cortes ≤5; **+0.23 (corte 6), +0.21 (corte 7)**. Escala con el tamaño → consistente con mecanismo de coalición; en contra de causa-común por dificultad (que daría gap plano). **Caveat: tamaño confundido con época** (las cortes 6–7 son las tempranas). Test limpio requiere controlar período.
+  - **Recurso ordinario = sin dictamen** (estructural): en la codificación, 17/20 ordinarios `sin_dictamen`, 0 remite, 0 conformidad; el REX casi siempre tiene dictamen. El PGN vive en el REX y está ausente del ordinario. Define el universo del análisis de dictamen.
+
+### H119-05 — Caveat de censura (90%) y sala de admisibilidad (campo)
+
+- **Censura de la colección:** los Fallos publicados son la **punta seleccionada**. El piso visible en el corpus (5.697 fallos: 52% merit / 48% acceso; 60% con dictamen / 40% sin) ya es lo que *sobrevivió* a la publicación. El ~90% que se resuelve por decreto en secretaría judicial y se avala en vocalía —sin dictamen ni fundamento— **nunca entra al tomo**; el corpus es estructuralmente ciego a eso. **Consecuencia metodológica:** toda cifra de la capa dictamen está condicionada a dos filtros (estar publicado + ser de fondo) y generaliza al vértice razonado, no al caudal real de la Corte.
+- **Sala de admisibilidad (dato de campo):** coordinación rutinizada, semanal, secretario de secretaría ↔ vocalía, que decide admisibilidad por debajo de la línea de la decisión fundada. Es el "lugar de encuentro" literal del 90% y locus fuerte de H5 (agencia burocrática), invisible al corpus. Fuente: entrevista + artículo periodístico (el artículo es citable; la entrevista es dato de campo bajo el protocolo de divulgación de fuentes).
+- **Dos registros que no hay que mezclar:** corpus → ve el vértice razonado (dictamen con posible rol focal *emergente*); campo → ve el filtro (sala de admisibilidad, coordinación de masa y H5, fuera del alcance del corpus). Esto divide limpio el capítulo de corpus del de campo.
+
+### H119 — Estado final
+
+**Sin cambios canónicos.** No se modificaron scripts del pipeline ni outputs canónicos; M20 sigue en branch `refactor/m20-disposicion` (sin merge a main). No corresponde re-sellado de `_manifest.json` ni entrada de CHANGELOG en esta sesión.
+
+**Scripts creados:** `scripts/diagnostico/H119/` — framework de validación M20 (planillas, clave, codebook, analizador, wrapper de extracción, columnas-dropdown).
+
+**Líneas abiertas:**
+
+*Corpus (backlog de pipeline → ver DEUDA_TECNICA):*
+- Completar codificación (40 casos restantes) + limpiar drift de etiquetas + re-correr `analizar_validacion_M20.py` para números citables.
+- Corrección de parser desde el gold: recalibrar `is_merit` (FP en quejas), detector de `mixto` en cuestión federal, B118/zona.
+- Producción M20: `derivar_recursos.py` → `csjn_casos_recursos`; re-golden consciente; re-sellar manifest; merge a main. Incluye **vía recurso ordinario/extraordinario** (campo nuevo, interactúa con dictamen).
+- Nuevos derivadores: `derivar_dictamen.py` (booleano `dictamen_presente` → 4 verbos: remite/conformidad/oido/sin_dictamen). PoC cola multi-recurrente. Decisión grant_remand implícito.
+
+*Ejes analíticos (corpus, usan campos derivados):*
+- **queja vs concedido** (`es_queja` + vía): palanca de control de agenda (H1, certiorari criollo). Cruzar con materia/fuero, disposición, dictamen. Doble uso: la variación por fuero valida representatividad contra el **Anuario CSJN 2025** (referencia ya en DEUDA).
+- **cuestión federal** (simple / ninguna / arbitrariedad): arbitrariedad como categoría para comparar patrones (no solo validación de B111).
+- **materia**: el gold de referencia es el humano n=300 (H119); el de H117 fue IA con menos casos.
+
+*Campo (capítulo, no corpus):*
+- Análisis de **cita/solapamiento** textual fallo ↔ dictamen (test confound-free de orquestación; inmune a la selección del pedido).
+- `vista_obligatoria` time-aware + test obligatoria-vs-discrecional.
+- Dictamen × disidencia **escalando con tamaño de corte, controlando por época** (test limpio de coalición).
+- Recurso ordinario = sin dictamen (hallazgo estructural).
+- Sala de admisibilidad como locus de H5.
+
+### H121-05 — Hallazgo: artefactos de zona en el gold (notas_m20)
+Revisión tardía de `notas_m20` (gatillada por el usuario): 25 casos zona-flagged. Cruce contra el gate: 1 FP (340_p431) y 5 de 9 FN (330_p1907, 332_p2625, 334_p941, 344_p2393, 345_p583) son artefactos de segmentación (dispositivo cortado/ausente/contaminado), NO fallas de detector. El gate 0,907 tiene piso de artefactos de zona. 334_p941 muestra contaminación entre fallos. Decisión: paso 2 corre sobre FP no-zona; abrir work stream Z (zonificador) aparte.
