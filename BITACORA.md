@@ -17232,3 +17232,36 @@ La deshifenación/saltado de headers es hoy per-función; la extracción (`_barr
 - **Scripts creados:** ninguno canónico (CSV de banco + blueprint como diagnóstico).
 - **Commits:** 0 de código. Pendiente: docs sobre la rama.
 
+## H125 — Diagnóstico del mecanismo + PoC de impacto del fix M21/B122 (2026-06-14)
+
+**Objetivo:** validar en disco si el fix del `por_ello` truncado por running-head (B122/B118) recupera la señal jurisdiccional, atribuyendo el efecto a sus partes, sin tocar el pipeline.
+
+### H125-01 — El masking a `""` no libera el presupuesto; el modo de falla es único de `_barrer`
+
+Verificado contra `parser.py`: el chunk de `_barrer` (L3092-3095) cuenta líneas, no contenido → enmascarar el banner a `""` preservando el conteo (como fijaba el blueprint M21 §1.2) NO libera el presupuesto de 6. `extraer_considerando` (L1299-1301, sin presupuesto, filtra vacías) y `_encontrar_zona_fallo` (L1957+, escaneo de marcadores) consumen bien la vista limpia. El único camino con presupuesto-por-líneas es `_barrer`. Threading en `procesar_archivo` acotado: extracción quiere vista limpia, persistidos (carátula, firma, sidecar) quieren crudo; `find_case_name`/`find_tribunal_origen` leen `lines`, no `bloque`.
+
+### H125-02 — PoC recableado a `mapa_paginas` + perilla skip por monkeypatch
+
+`normalizar_bloque.py` reescrito desde cero: detección del running-head por `mapa_paginas` (canónico, no regex), enmascara la terna a `""` in-place preservando longitud/índices/ventana de firma; guard que saltea drift y headers interpolados B116 sin blanquear texto real. `poc_normalizar.py` mide 4 configs (`baseline`/`+masking`/`+skip`/`+masking+skip`); el skip se prueba por monkeypatch de `P._barrer` (NO toca `parser.py`). Métrica corregida: `recupera := outcome==competencia OR es_originaria`.
+
+### H125-03 — Corrida corpus-wide en disco: el SKIP es el lever
+
+n=5697 fallos reconstruidos. `+masking` solo **0 flips** · `+skip` solo **50** · `+masking+skip` **64**. Recuperación jurisdiccional `otro→competencia` **37**; `otro` 528→473 (−55); `competencia` 877→914 (+37). El masking suma +14 (limpieza de ruido). Las 9 transiciones no-`otro` (procedente/hace_lugar/mal_concedido → revoca/confirma/hace_lugar) verificadas una por una con `diag_textos`: **todas ganancias** — la capa de acceso tapaba el verbo de fondo (patrón H118/M20), recuperado pasado el corte. **0 regresiones.** `es_originaria` lee el considerando (no truncado) → casi nunca necesitó el fix (`es_orig_flips`=2; 348_p1576 ya `True` en baseline). Sanity baseline 0 mismatches.
+
+### H125-04 — Corrección de modelo y decisión
+
+El blueprint M21 original (masking preservando conteo de líneas) atacaba el mecanismo equivocado; el lever real es el **skip de vacías en el presupuesto del chunk**, emergido del diagnóstico. El skip recupera por sí solo ~33 de las 37 competencia (el texto crudo tiene blancos del OCR alrededor del banner; saltearlos libera el chunk, el banner queda como ruido inocuo para el regex). Decisión: aplicar las dos mitades — **skip primero** (dependency-free, +50, no mueve índices ni la ventana de firma), **masking después** (secundario, +14, gated en sus preguntas abiertas). Veredicto: **GO** para la integración (H126). Perilla `guion` DROP (redundante).
+
+### H125-05 — Hallazgos separados (no M21)
+
+- **Bug de detección de terna del masking** en layouts orden tomo/página/frase (343_p86 deja "96 FALLOS…"; 340_p1428 deja "1430"): benigno (el skip recupera igual), pero deja ruido — a decidir en H126.
+- **`dictamen_presente` inconsistente:** 329_p1917 `True` (dictamen embebido), 348_p1576 `False` (referenciado no embebido). Frente separado.
+- **Cobertura:** `otro`=473 sigue alto (otras causas, no M21). `aclaratoria` candidata a categoría marginal (surge en 329_p551).
+
+### H125 — Estado final
+
+- **Pipeline:** SIN CAMBIOS. `parser.py` **v18.26 intacto**; los 5 CSV canónicos y el golden **sin tocar**; `_manifest.json` **NO re-sellado**.
+- **Scripts creados:** `scripts/diagnostico/h125/{normalizar_bloque.py, poc_normalizar.py, diag_textos.py}` (diagnóstico, no canónicos, no se shippean).
+- **DEUDA:** B122 enriquecido (resultado PoC, lever=skip), B118 causa confirmada, M21 re-enmarcado (validado en PoC, integración pendiente), próximo trabajo #1 = H126.
+- **Handoff:** `REANUDACION_H126_integrar_M21_B122.md` (prompt de integración).
+- **Commits:** 1 — housekeeping de los 3 scripts de diagnóstico + edición de DEUDA + este append.
