@@ -32,6 +32,12 @@ import argparse
 import subprocess
 from pathlib import Path
 
+# H126: csjn_casos_textos.csv tiene campos > 131072 (considerando_text full, H113).
+# El default de csv.reader hace crashear diff_celdas la primera vez que textos
+# difiere del golden. Se sube al máximo seguro (2**31-1: el C long de Windows es
+# de 32 bits aunque Python sea 64-bit, sys.maxsize haría OverflowError).
+csv.field_size_limit(2**31 - 1)
+
 # ── Rutas (relativas a la raiz del repo) ─────────────────────────────────────
 # scripts/tests/check_regresion.py -> parents[2] = raiz del repo
 REPO_ROOT   = Path(__file__).resolve().parents[2]
