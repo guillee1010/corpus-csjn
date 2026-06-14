@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "18.26"  # B119: capa disposicion M20 (PASO 2) — detectores competencia/cautelar/nulidad_concesion/inoficioso pre-cascada + #1 originaria-no-merit + #2 des-hifenado es_originaria. Gate 0,907→0,953 (FP 19→5, 0 FN nuevos). // H113: split csjn_casos_textos — considerando_text/por_ello_text/firma_raw salen de csjn_casos.csv a output/parser/csjn_casos_textos.csv (5º CSV del parser, keyed por caso_id_canonico, espejo 1:1 5890 filas, SIN truncado; antes considerando[:2000] 47,6% cortado / por_ello[:300]); habilita materia capa 2 (lee el considerando completo). Escritura por proyección de fieldnames (patrón zonas), texto full ya estaba en memoria → relocaliza al escribir, sin cambio de lógica de parseo. Re-golden consciente + 7º output al manifest (generar_manifiesto v1.3). // H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
+__version__ = "19.0"  # M21/H126: B122/B118 — skip de líneas vacías en el presupuesto del chunk de _barrer (resolver_dispositivo). El running-head intercalado dejaba vacías OCR que agotaban el chunk antes del '.' real y truncaban el verbo de disposición → outcome caía a otro. Skip-only +50 flips corpus-wide (otro→competencia 37), 0 regresiones (PoC H125). MAJOR: cambia el comportamiento de _barrer (afecta outcome/por_ello_text y sus derivados denormalizados en csjn_casos_votos —outcome/is_merit/is_originaria/tipo_voto_sep por voto—; considerando/firma/zonas/editorial intactos; identidad del voto juez/posicion/texto_voto/wc_voto intacta). Masking del banner = Fase 2 (gated). // B119: capa disposicion M20 (PASO 2) — detectores competencia/cautelar/nulidad_concesion/inoficioso pre-cascada + #1 originaria-no-merit + #2 des-hifenado es_originaria. Gate 0,907→0,953 (FP 19→5, 0 FN nuevos). // H113: split csjn_casos_textos — considerando_text/por_ello_text/firma_raw salen de csjn_casos.csv a output/parser/csjn_casos_textos.csv (5º CSV del parser, keyed por caso_id_canonico, espejo 1:1 5890 filas, SIN truncado; antes considerando[:2000] 47,6% cortado / por_ello[:300]); habilita materia capa 2 (lee el considerando completo). Escritura por proyección de fieldnames (patrón zonas), texto full ya estaba en memoria → relocaliza al escribir, sin cambio de lógica de parseo. Re-golden consciente + 7º output al manifest (generar_manifiesto v1.3). // H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
 
 import re
 import csv
@@ -3088,10 +3088,24 @@ def _barrer(bloque, rango, lineas_dictamen, *,
             continue
         if not es_candidato(stripped):
             continue
-        chunk = []
-        for m2 in range(k, min(k + 6, len(bloque))):
-            chunk.append(bloque[m2])
-            if bloque[m2].strip().endswith("."):
+        # B122/B118 (M21 · H126): el running-head editorial intercalado deja
+        # líneas EN BLANCO del OCR que, contadas, agotaban el presupuesto de 6
+        # del chunk antes del '.' real → el verbo de disposición caía pasado el
+        # corte (outcome=otro). Saltearlas SIN contarlas libera el presupuesto y
+        # el chunk llega a la disposición. No mueve k (=por_ello_idx) ni la
+        # ventana de firma k+1..k+41 (loop aparte). Lever validado corpus-wide
+        # en PoC H125 (+50 flips, 0 regresiones); el banner como ruido residual
+        # lo deshifena/colapsa classify_outcome (el masking de Fase 2 lo limpia).
+        chunk, n_lineas, m2 = [], 0, k
+        while n_lineas < 6 and m2 < len(bloque):
+            ln = bloque[m2]
+            m2 += 1
+            s = ln.strip()
+            if not s:                       # vacía OCR → no cuenta presupuesto
+                continue
+            chunk.append(ln)
+            n_lineas += 1
+            if s.endswith("."):
                 break
         candidate_text = " ".join(chunk).strip()
         if permite_fallback and _fb_idx is None:
