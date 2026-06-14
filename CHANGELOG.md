@@ -2,6 +2,15 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H126 (2026-06-14)
+
+- `parser.py`: skip de líneas vacías en el presupuesto del chunk de `_barrer` (B122/B118, M21 Fase 1). No mueve `por_ello_idx` ni la ventana de firma. v18.26→v19.0 (MAJOR).
+- `output/parser/csjn_casos.csv`: outcome 50 flips (competencia 877→910, otro 528→483) + acoplados (is_merit 10, es_queja 4, queja_resultado 6, causa_inadmisibilidad 2).
+- `output/parser/csjn_casos_textos.csv`: `por_ello_text` 537 celdas (todo extensión, 0 pérdida; 487 recuperan la cola de la disposición).
+- `output/parser/csjn_casos_votos.csv`: outcome 246 + is_merit 44 (denormalizados; identidad del voto intacta).
+- `scripts/tests/check_regresion.py`: + `csv.field_size_limit(2**31-1)` (infra; el sidecar textos supera el default de 131072).
+- Golden re-congelado + `_manifest.json` re-sellado v19.0.
+
 ### H121 (2026-06-13)
 
 - `parser.py` v18.25→v18.26: capa disposición M20 (B119 PASO 2). 4 detectores pre-cascada en `classify_outcome` (`RE_DISP_NULIDAD_CONCESION`/`_CAUTELAR`/`_COMPETENCIA`/`_INOFICIOSO`) → labels no-merit `nulidad_concesion`/`cautelar`/`competencia`/`abstracto`; `cautelar`+`nulidad_concesion` agregados a `OUTCOMES_NO_FALLBACK_280`. + #1 (`is_merit and not is_originaria`) + #2 (`_unhyphenate` en cuerpo de `es_originaria`). Gate M20 0,907→0,953 (FP 19→5, 0 FN nuevos).

@@ -17265,3 +17265,39 @@ El blueprint M21 original (masking preservando conteo de líneas) atacaba el mec
 - **DEUDA:** B122 enriquecido (resultado PoC, lever=skip), B118 causa confirmada, M21 re-enmarcado (validado en PoC, integración pendiente), próximo trabajo #1 = H126.
 - **Handoff:** `REANUDACION_H126_integrar_M21_B122.md` (prompt de integración).
 - **Commits:** 1 — housekeeping de los 3 scripts de diagnóstico + edición de DEUDA + este append.
+
+## H126 — Integración del skip de M21/B122 a parser.py (Fase 1) (2026-06-14)
+
+**Objetivo:** integrar a `parser.py` el lever validado en H125 (skip de líneas vacías en el presupuesto del chunk de `_barrer`), con re-golden consciente y re-sello; cerrar B122 (dispositivo truncado) y B118.
+
+### H126-01 — El fix: skip en el chunk de `_barrer`
+
+Verificado leyendo `_barrer` entero + `resolver_dispositivo` + grep DEUDA/BITACORA (no de memoria). El chunk (L3091) se reescribió para saltear las líneas vacías SIN contarlas en el presupuesto de 6 → el chunk pasa de largo el banner y los blancos del OCR y llega al `.` real. No mueve `k` (=`por_ello_idx`) ni la ventana de firma k+1..k+41 (loop aparte), confirmado con unit-test del `_barrer` real importado del archivo patcheado (idx invariante; byte-idéntico en limpio; lever en la forma B122). `extraer_considerando` usa `por_ello_idx` como fin de rango → `considerando_text` byte-idéntico. Bump MAJOR v18.26→v19.0.
+
+### H126-02 — Validación en disco (corpus completo)
+
+Inspector direccional `scripts/diagnostico/H126/inspect_diff_h126.py` (column-aware casos/textos + posicional votos) + `diag_porello_h126.py` (clasifica extensión/whitespace/pérdida): mismo set de casos (5890=5890); `csjn_casos.csv` cambia solo en columnas en scope (outcome 50, is_merit 10, es_queja 4, queja_resultado 6, causa_inadmisibilidad 2), todas ganancias, **ninguna transición hacia `otro`**; `por_ello_text` 537 celdas **todo EXTENSIÓN, 0 pérdida** (los 487 sin flip recuperan la cola de la disposición que el banner truncaba — costas, artículos, reenvío); `csjn_casos_votos.csv` cambia solo en columnas **denormalizadas** (outcome 246, is_merit 44; identidad del voto juez/posicion/texto_voto/wc_voto intacta); `considerando_text`/`firma_raw`/zonas/editorial byte-idénticos. `check_regresion` final: los 5 CSV [CLEAN].
+
+### H126-03 — Fix de infra del harness
+
+`check_regresion.py` crasheaba en `diff_celdas` la 1ª vez que el sidecar `textos` difiere del golden (`_csv.Error: field larger than field limit 131072` — el `considerando_text` full de H113 supera el default). Fix: `csv.field_size_limit(2**31 - 1)` tras los imports (2**31-1 por el C long de 32 bits en Windows). No es bug del parser; latente desde H113 (textos siempre daba [OK] → diff_celdas no corría).
+
+### H126-04 — Resultados
+
+`competencia` 877→**910** (+33), `otro` 528→**483** (−45); 50 flips de outcome (33 otro→competencia + acceso→fondo). Calza con la predicción de H125 (skip recupera ~33 de las 37 competencia; los ~4 restantes son territorio del masking de Fase 2). 487 disposiciones con la cola recuperada. 0 regresiones.
+
+### H126-05 — Hallazgos / frentes separados (no M21)
+
+- **B123 (nuevo):** los ~483 `otro` residuales (no truncados por banner) merecen escrutinio — DEUDA por pedido explícito. Candidata de categoría: `aclaratoria`.
+- **M22 (nuevo):** reenvío desde el dispositivo — la cláusula «vuelvan los autos… nuevo fallo» cae ahora en el `por_ello` extendido; recall de `reenvía` debería mejorar, validable vs gold.
+- **Bloqueo del gold:** a discutir alcance/origen (validar ≠ tunear); el skip no lo violó (mecánico, sin umbral).
+- **Masking (M21 Fase 2):** el banner queda embebido como ruido en el `por_ello` extendido — lo limpiaría la Fase 2 (gated en bug de terna + fuente de offsets + threading crudo/limpio).
+
+### H126 — Estado final
+
+- **Corpus:** 5890 casos. **Votos:** 27639 filas.
+- **Pipeline:** `parser.py` **v18.26→v19.0** (skip en `_barrer`). `check_regresion.py` +`field_size_limit` (infra).
+- **Outputs canónicos:** `csjn_casos.csv` 5890 (sha `c5bce9b9`) · `csjn_casos_textos.csv` 5890 (`eed1595a`) · `csjn_casos_votos.csv` 27639 (`87025c8d`) · `csjn_casos_zonas.csv` 141451 (`0fdbbb03`, sin cambio) · `csjn_casos_editorial.csv` 152 (`30a6da65`, sin cambio). Corpus digest `9fdd4726`. Manifest re-sellado v19.0; golden [CLEAN].
+- **Scripts creados:** `scripts/diagnostico/H126/{inspect_diff_h126.py, diag_porello_h126.py}` (diagnóstico, no canónicos).
+- **Bugs:** B122 (dispositivo truncado) y B118 **CERRADOS**; M21 Fase 1 integrada (Fase 2 masking pendiente). B123, M22 nuevos.
+- **Commits:** 3 (pipeline+golden+manifest; diagnósticos H126; DEUDA+infra).
