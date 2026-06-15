@@ -17340,3 +17340,66 @@ Gates: G1 reconstrucción 99,4% (5853/5890; 37 mismatch, 15 de t345); G2 réplic
 - **Hipótesis descartadas con evidencia:** A1/A2 (último, mete accesorios), B/C (último/primer-c/verbo, pierde a `sin_dispositivo` + no distingue accesorio).
 - **Scripts creados (diagnóstico, no canónicos):** `salud_firma_zonas.py`, `variantes_dispositivo.py`, `cruce_gold_variantes.py`, `autopsia_candidatos.py`, `autopsia_rotos_P.py` (en `scripts/diagnostico/` — unificar carpeta H128 al commitear).
 - **Commits:** diagnósticos H128 + DEUDA (B124 actualizado, B125 nuevo). Sin commit de pipeline (parser intacto).
+
+## H129 — Regla P (B124): implementación v20.0, validación, mis-pick detectado, ROLLBACK (2026-06-15)
+
+**Objetivo:** implementar la regla P validada en H128 (`_barrer` devuelve el primer candidato performativo con firma) y cerrar B124 con re-golden.
+
+### H129-01 — Implementación en `parser.py` (v19.0 → v20.0)
+
+Tres zonas: bump `__version__` a 20.0; `RE_PERF` agregado tras `POR_ELLO_ARGUMENTAL` con **clítico opcional** (`\bse\s+(?:(?:lo|la|los|las|le|les)\s+)?(resuelve|decide|declara|revoca|confirma|hace lugar|deja sin efecto|rechaza|desestima|tiene por|admite|anula|hace saber|intima)\b`, IGNORECASE); `_barrer` reescrito: primer performativo c/firma → return, si no fallback al primer-con-firma (= comportamiento pre-B124), si no B059. Ventana de firma k+1..k+41 y tope `inicio_votos_indiv` intactos; `resolver_dispositivo` sin cambios. El clítico se agregó porque el caso testigo de auditoría (346_p931) tenía "se **lo** desestima" entre `se` y el verbo. `git diff` confirmó las 3 zonas limpias (LF).
+
+### H129-02 — Validación en disco (parser v20 productivo + A/B)
+
+- **Outcome corpus-wide (A/B):** +147 corrige / 0 rompe (119 otro→real + 28 real→real). Baseline v19 `otro` 483 → v20 **364** (Δ = −119 exacto = la predicción otro→real). `competencia` 910→925.
+- **Gold M20 n300:** 7 cambios fuente-OK, los 7 mejoras, 0 regresiones.
+- **`es_queja`:** 10 flips = **7 recuperaciones** (quejas reales que el `por_ello` mislocalizado ocultaba: 329_p3617, 337_p590, 338_p1258, 340_p1913, 344_p3431, 346_p347, 348_p437) + **2 correcciones de FP** ("quejas de las partes"/"recurso de queja" citado en considerando: 329_p1703, 329_p1998) + **1 FN nuevo** (340_p114: queja con dispositivo "se revoca la resolución" sin token; la capa-carátula no la agarra). **Neto +6.**
+
+### H129-03 — `check_regresion` destapa −7 filas en votos → auditoría sobre `.md`
+
+`check_regresion` [FAIL] esperado en `csjn_casos`/`csjn_casos_textos`, [OK] en zonas/editorial. **Inesperado: `csjn_casos_votos` −7 filas** (27639→27632). Diagnóstico `votos_delta_P.py`: 4 casos. Auditados sobre `.md` real con `extraer_caso`:
+
+- **331_p1028 (9→1) = MIS-PICK de P.** La mayoría cierra "Por ello, **el Tribunal resuelve**: I) Declarar reunidos los recaudos… II) Cúmplase…" (firma de 6 + "Argibay según su voto"); Argibay cierra su voto "Por ello, **se confirma**…" (firma: Argibay sola). `RE_PERF` exige `se` antes del verbo → "el Tribunal resuelve" **no matchea**, "se confirma" sí → P ancla en la concurrencia: outcome=`confirma` (de Argibay, no el holding procesal de la mayoría), firma = solo Argibay. **El A/B no lo detectó: el scan de disidencia buscaba votos perdedores, no concurrencias** (Argibay concurre, mismo resultado) → contó el `otro→confirma` como corrección. Blind spot de validación.
+- **342_p1170 (1→5) = MEJORA.** Recupera el panel de 5 de la mayoría (era uno de los casos marcados en el plan).
+- **348_p1435 (5→4) = dedup** (Alcalá conjuez ×2→×1).
+- **332_p663 (6→4) = NO mis-pick (B126).** `RE_PERF` ancló bien ("se resuelve"), pero `collect_firma_lines`/`parse_firma` dropea los nombres partidos por salto de línea ("Carlos\nS. Fayt", "E.\nRaúl Zaffaroni"). Caso originaria/no-fondo, outcome sin cambio.
+
+### H129-04 — Decisión: ROLLBACK a v19.0
+
+P tiene un bug de correctitud real (331_p1028) no cubierto por la validación. **Rollback** de `parser.py` + `output/parser/` al estado committeado (v19.0); golden v19 intacto, sin re-golden ni re-sello. **B124 REABIERTO**: el fix necesita `RE_PERF v2` (matchear performativos de mayoría sin `se`) + auditoría del universo "resuelve sin se" + re-validación con check de pick-de-concurrencia. **B126 NUEVO** (extractor de firma, nombres partidos por línea; independiente de P).
+
+### H129 — Estado final
+
+- **Corpus:** 5890 casos (sin cambios — rollback a v19.0).
+- **Votos:** 27639 filas (v19, restaurado).
+- **Outputs canónicos (restaurados a v19.0, sin cambios netos):**
+  - `output/parser/csjn_casos.csv` — 5890 filas.
+  - `output/parser/csjn_casos_votos.csv` — 27639 filas.
+  - `output/parser/csjn_casos_zonas.csv` — 141451 segmentos.
+  - `output/parser/csjn_casos_editorial.csv` — 152 secciones.
+- **Parser:** v19.0 (v20.0 implementado y revertido). Golden y `_manifest.json` sin tocar.
+
+**Scripts creados:** `scripts/diagnostico/H129/` — `votos_delta_P.py`, `esqueja_flips_P.py` (+ los de validación de la regla P: `cruce_gold_variantes_clitico.py`, `impacto_P_clitico.py`, `autopsia_rotos_P_clitico.py`, `scan_disidencia_recup.py`).
+
+**Commits:** 2 — (1) DEUDA_TECNICA.md (B124 reabierto, B126 nuevo, header H129) + scripts de diagnóstico H129; (2) BITACORA.md (este append). Sin commit de pipeline/outputs/golden (rollback = sin cambio neto). Sin CHANGELOG (no hubo cambio shippeado al pipeline).
+
+## H130 — B124 CERRADO: regla P / `RE_PERF v2` en `_barrer` (parser v20.0)
+
+**Branch:** `refactor/m20-disposicion`. **Objetivo:** re-implementar la regla P (primer performativo-con-firma en `_barrer`) que H129 revirtió por el mis-pick de concurrencia en 331_p1028, extendiendo `RE_PERF` a los performativos de mayoría sin `se`, con auditoría previa del universo "resuelve sin se" y un check nuevo de pick-de-concurrencia.
+
+### H130-01 — Auditoría del universo "resuelve sin se" (gate antes de la regex)
+`scripts/diagnostico/H130/audit_resuelve_sin_se.py`, corrido en disco sobre 5890. Entre candidatos-con-firma de la ventana del dispositivo, las únicas formas sin-`se` son "el Tribunal resuelve" (300) y "resuelve:" (23). `OTRO_RESUELVE`/`ESTA_CORTE`/`LA_CORTE`/`RESUELVE_UP` = 0 → el over-match de instancia inferior NO se materializa; "resuelve:" pelado es seguro en la ventana del dispositivo. Los 23 colon-cases = la Corte resolviendo con "Tribunal" hifenado por el OCR ("el Tribu- nal resuelve:") o palabras interpuestas ("esta Corte Suprema resuelve", "la mayoría del Tribunal resuelve").
+
+### H130-02 — `RE_PERF v2` + regla P en `_barrer`
+`RE_PERF v2` = `se <verbo>` (clítico opc., v1) | `(el Tribunal|esta Corte|la Corte) resuelve` | `resuelve:`. Validado aislado contra todos los chunks reales del audit + 331_p1028 + negativos sintéticos (ordering test: v1 elige la concurrencia de Argibay = mis-pick; v2 elige la mayoría = fix). `_barrer` (regla P): devuelve el PRIMER performativo-con-firma; fallback al primer-con-firma (= comportamiento v19) si ninguno lo es. Parser v19.0 → **v20.0** (MAJOR: cambia el pick del dispositivo).
+
+### H130-03 — Validación en disco (outcome / concurrencia / es_queja / votos)
+- **outcome** (`outcome_delta_P.py`, A/B golden vs v20.0): **+121 recup** (otro→real) / 29 real→real (dom. `inadmisible_280`→merit) / **0 regresiones a otro**.
+- **concurrencia** (`scan_concurrencia.py`, check NUEVO; `RE_VOTO_HEAD v2` agarra "Voto la señora/el señor ministro" que el regex H129 perdía): **0 sospechosos** — 331_p1028 cerrado, ninguno nuevo. Cierra el blind spot de H129 (el scan validaba disidencias, no concurrencias según-su-voto).
+- **es_queja:** +8 recup (0→1) + 2 correcciones de FP (329_p1703 "quejas de las partes" = agravios; 329_p1998 "queja por casación denegada" = cita de instancia inferior) + 1 FN conocido (340_p114, en deuda).
+- **votos: net +1.** 342_p1170 1→5 (recupera panel), 348_p1435 5→4 (dedup Alcalá); **332_p663 6→4 (−2) = B126** (dropea Fayt y Zaffaroni, partidos por el wrap del OCR) = único negativo, frente aparte, NO regresión de B124.
+
+### H130-04 — Cierre en disco (re-run v20.0 → re-golden → regresión → sello)
+Re-corrida del parser con v20.0 para procedencia limpia (los outputs los codea el archivo ya bumpeado, no el v19-label parcheado; CSV byte-idénticos, header v20.0). Re-golden de los 5 outputs (snapshot coherente de una corrida). `check_regresion` **[CLEAN]** 5/5. `generar_manifiesto.py --verify` **[CLEAN] 61 artefactos**. **B124 cerrado en disco.** B126 logueado como próximo frente (el golden v20.0 carga 332_p663 = 4 firmas como instancia B126 conocida; no se re-stitcheó).
+
+**Estado final:** parser **v20.0** (B124 CERRADO). Outputs sellados: `csjn_casos` 5890, `csjn_casos_textos` 5890, `csjn_casos_votos` 27640, `csjn_casos_zonas` 141451, `csjn_casos_editorial` 152 (todos v20.0); `csjn_editorial_indice_partes` 11445 (v1.0) y `csjn_casos_materia` 5890 (v3.2) intactos. Manifest [CLEAN] 61 artefactos. Golden = corrida v20.0. **Próximo frente: B126** (extractor de firma; scan corpus-wide de nombres partidos antes de tocar el stitcher).

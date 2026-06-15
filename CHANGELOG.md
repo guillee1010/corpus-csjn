@@ -2,6 +2,21 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H130 — 2026-06-15 — B124 CERRADO (parser v20.0)
+
+### `scripts/pipeline/parser.py` — v19.0 → v20.0 (MAJOR)
+- **B124 CERRADO.** Regla P en `_barrer`: devuelve el PRIMER candidato performativo-con-firma; fallback al primer-con-firma (= comportamiento v19) si ninguno lo es.
+- `RE_PERF v2` = `se <verbo>` (clítico opc., v1) | `(el Tribunal|esta Corte|la Corte) resuelve` | `resuelve:` — extiende v1 a los performativos de mayoría sin `se`, auditados en disco (`audit_resuelve_sin_se.py`, 5890: "el Tribunal resuelve" 300 + "resuelve:" 23; `OTRO_RESUELVE`/`ESTA_CORTE`/`LA_CORTE`/`RESUELVE_UP` = 0 → sin over-match de instancia inferior).
+- MAJOR: cambia el pick del dispositivo → afecta `outcome`/`por_ello_text` y derivados denormalizados en `csjn_casos_votos` (outcome/is_merit/is_originaria/tipo_voto_sep); considerando/firma/zonas/editorial sin cambio de lógica.
+
+### Outputs (re-sellados v20.0)
+- `csjn_casos.csv` (5890), `csjn_casos_textos.csv` (5890), `csjn_casos_votos.csv` (27640), `csjn_casos_zonas.csv` (141451), `csjn_casos_editorial.csv` (152).
+- Deltas vs v19.0: outcome +121 recup (otro→real) / 29 real→real / 0 regresiones a otro; es_queja +8 recup / 2 FP-fix / 1 FN; votos net +1.
+- `csjn_editorial_indice_partes.csv` (v1.0) y `csjn_casos_materia.csv` (v3.2) intactos. Manifest `--verify` [CLEAN] 61 artefactos.
+
+### Scripts diagnóstico nuevos (`scripts/diagnostico/H130/`)
+- `audit_resuelve_sin_se.py` (universo resuelve-sin-se), `scan_concurrencia.py` (check de pick-de-concurrencia, `RE_VOTO_HEAD v2`), `outcome_delta_P.py` (A/B golden vs v20.0).
+
 ## H126 (2026-06-14)
 
 - `parser.py`: skip de líneas vacías en el presupuesto del chunk de `_barrer` (B122/B118, M21 Fase 1). No mueve `por_ello_idx` ni la ventana de firma. v18.26→v19.0 (MAJOR).
