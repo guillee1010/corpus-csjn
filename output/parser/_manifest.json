@@ -1,16 +1,16 @@
 {
   "schema_version": 4,
   "manifest_generator_version": "1.4",
-  "generated_at": "2026-06-15T03:23:19.453421+00:00",
+  "generated_at": "2026-06-15T06:58:43.727714+00:00",
   "git": {
-    "commit": "fe2b068196373b98d8698e222e45de6ccd376bf6",
+    "commit": "2b99f99aca1f484a9b2b0228ed7bd2eb46b2f095",
     "dirty": true
   },
   "pipeline_scripts": {
     "detectar_paginas.py": "1.01",
     "construir_catalogo.py": "1.01",
     "cruzar_catalogo_y_mapa.py": "1.0",
-    "parser.py": "20.0",
+    "parser.py": "20.01",
     "parser_editorial.py": "1.0",
     "derivar_materia.py": "3.2"
   },
@@ -316,39 +316,39 @@
     "csjn_casos.csv": {
       "path": "output/parser/csjn_casos.csv",
       "generated_by": "parser.py",
-      "generator_version": "20.0",
-      "sha256": "cf84fb418f7d46267a818b7df7608561b78b4b2796a5df72268cfade9247cb72",
+      "generator_version": "20.01",
+      "sha256": "c6f8e41dab127ed1abe102089406e9ae51a317697b72e6b9ebf0f8f85b52e92c",
       "n_rows": 5890,
-      "n_bytes": 4329577
+      "n_bytes": 4332418
     },
     "csjn_casos_textos.csv": {
       "path": "output/parser/csjn_casos_textos.csv",
       "generated_by": "parser.py",
-      "generator_version": "20.0",
-      "sha256": "ccc746052b34b006616dce8e8243ba74ce6223c387a498c80711ba4c6bc6b5a1",
+      "generator_version": "20.01",
+      "sha256": "8c2f1cc0372d36dfac5f6a3607b3177956a7a1da2504221db704abcef38bbc3b",
       "n_rows": 5890,
-      "n_bytes": 31835515
+      "n_bytes": 31836755
     },
     "csjn_casos_votos.csv": {
       "path": "output/parser/csjn_casos_votos.csv",
       "generated_by": "parser.py",
-      "generator_version": "20.0",
-      "sha256": "c0f8cbf61e47d06795b9a1d99fe961d53a7bbdd87d9ac3f36d8756c558cae916",
-      "n_rows": 27640,
-      "n_bytes": 10666895
+      "generator_version": "20.01",
+      "sha256": "b5018d77f4b7eb9fc7e8d6591f2e77b418b7c06890e59f098d2e349b31e6a100",
+      "n_rows": 27697,
+      "n_bytes": 10672395
     },
     "csjn_casos_zonas.csv": {
       "path": "output/parser/csjn_casos_zonas.csv",
       "generated_by": "parser.py",
-      "generator_version": "20.0",
-      "sha256": "0fdbbb03160367d3a58320e1e90883446d30ad690908bfd24b74a06c85f7cb0c",
+      "generator_version": "20.01",
+      "sha256": "98ce265d985476fc4a9f0cb9fa60bcfc77440cce557ccef54e56e5a5a23da4f3",
       "n_rows": 141451,
-      "n_bytes": 5571527
+      "n_bytes": 5571547
     },
     "csjn_casos_editorial.csv": {
       "path": "output/parser/csjn_casos_editorial.csv",
       "generated_by": "parser.py",
-      "generator_version": "20.0",
+      "generator_version": "20.01",
       "sha256": "30a6da652e3a9d2a0030192cd32a8f3f00dde8fcf57abb2cc5bffbda8e56ab8b",
       "n_rows": 152,
       "n_bytes": 8552
