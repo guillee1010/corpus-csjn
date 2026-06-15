@@ -17301,3 +17301,42 @@ Inspector direccional `scripts/diagnostico/H126/inspect_diff_h126.py` (column-aw
 - **Scripts creados:** `scripts/diagnostico/H126/{inspect_diff_h126.py, diag_porello_h126.py}` (diagnóstico, no canónicos).
 - **Bugs:** B122 (dispositivo truncado) y B118 **CERRADOS**; M21 Fase 1 integrada (Fase 2 masking pendiente). B123, M22 nuevos.
 - **Commits:** 3 (pipeline+golden+manifest; diagnósticos H126; DEUDA+infra).
+
+## H127 — Escrutinio B123: triage de los 483 `otro` + reframe en dos frentes (2026-06-14)
+
+**Objetivo:** triar los 483 `outcome=otro` (post-skip v19.0) leyendo el `.md` real, definir taxonomía de sub-causas y dimensionar recuperables. Sesión de diagnóstico/diseño — sin cambios de pipeline.
+
+### H127-01 — Triage sobre v19.0 + lectura de 77 `.md`
+Aislados los 483 `otro` reales (0 vacíos, 476 con `por_ello` legible). Muestra estratificada (seed=127, n=77): candidatas chicas completas + 18 de los 238 `sin_keyword`, extraídas con `extraer_caso.py` y leídas sobre el `.md`. Caveat de infra: `extraer_caso.py` v2.1 lee `considerando_text`/`por_ello_text` de `csjn_casos.csv` (movidas al sidecar en H113) → sección `## POR_ELLO` de la salida vacía; el `## BLOQUE` (por rango de líneas) intacto. Candidato a fix de 1 línea (join sidecar) — anotado, no aplicado.
+
+### H127-02 — Reframe: los 483 son DOS frentes
+Medido sobre los 483: **186 (38%) sin señal de dispositivo en el `por_ello`** (ni "se resuelve:" ni cierre Notifíquese/devuélvase) = mislocalización (→ B124); **297 (61%) dispositivo capturado, verbo no en vocab** = frente taxonómico.
+
+## H128 — B124: la regla del dispositivo es el primer performativo con firma (regla P) (2026-06-14)
+
+**Objetivo:** resolver B124 (mislocalización del `por_ello`) — encontrar la regla de selección de candidato en `_barrer` que recupere el dispositivo de fondo sin meter accesorios ni romper los no-`otro`. Sesión diagnóstico/diseño en disco local — **sin cambios de pipeline, parser v19.0 intacto**.
+
+### H128-01 — Refutación del diseño "último-con-firma" (H127)
+
+El fix diseñado en H127 (`_barrer` devuelve el ÚLTIMO candidato con firma) se midió en disco y **se refutó**: el "último" mete el accesorio posterior al dispositivo (acordada 47/91, art. 94 CPCC, "no se hace lugar a lo solicitado a fs. 58/59"). Variantes A1 (último-c/firma) y A2 (último-s/firma) rompen 86 y 93 casos no-`otro` en corpus, y 14 en el gold (incluyendo 5 accesorios reales: 331_p2913, 332_p979, 332_p1280, 339_p1530, 340_p1554). La posición pura no distingue dispositivo de accesorio.
+
+### H128-02 — Las 6 reglas medidas y el diseño de la regla P
+
+Diagnóstico standalone que reusa las funciones reales del parser (`zonificar_bloque`, `detectar_apertura/votos`, `resolver_dispositivo`, `classify_outcome`, `linea_es_firma_de_juez`) y reconstruye el bloque desde `construir_bloque_desde_localizacion`. Se midieron 6 reglas: actual (primer-c/firma), A1 (último-c/firma), A2 (último-s/firma), B (último-c/verbo), C (primer-c/verbo) y **P (primer performativo c/firma, fallback al actual)**. Performativo = `RE_PERF.search(chunk)`, `RE_PERF = \bse\s+(resuelve|decide|declara|revoca|confirma|hace lugar|deja sin efecto|rechaza|desestima|tiene por|admite|anula|hace saber|intima)\b`. **Insight:** la regla no es de posición (primero/último) ni de verbo semántico, sino de **performatividad con firma**: el dispositivo de fondo abre con marca performativa ("se resuelve/declara/revoca…"); el argumental que se cuela antes es no-performativo ("En consecuencia, no discutida…", "Por ello, si bien…", "Por lo expuesto, habida cuenta…") y se saltea; los accesorios posteriores son no-performativos o performativos-posteriores (P toma el PRIMER performativo, no el último). No enumera verbos → no choca con el frente taxonómico de B123.
+
+### H128-03 — Validación gold (n300) + corpus (5890), en disco
+
+**Corpus 5890** (`variantes_dispositivo.py`): rotos (regresión) P=**31** (mínimo; A1=86, A2=93, B=69, C=39); recuperados reales P=**119** (sin pérdida a `sin_dispositivo`; B/C inflan +295 a vacío = espejismo, recuperados nominales 483); neto P=**+88** (el mejor; A1=+40, A2=+33). **Gold M20 n300** (`cruce_gold_variantes.py`): cambios en fuente-OK (probable regresión) P=**7**, y **los 7 son mejoras** (argumental→dispositivo: 332_p2625, 334_p941, 334_p1081, 344_p2393, 345_p583, 346_p44, 348_p405); A1/A2=14 (con los 5 accesorios que P NO mete), B=25, C=23. **Autopsia de 11 casos clave** (`autopsia_candidatos.py`): hipótesis confirmada 11/11 — el dispositivo de fondo es siempre el primer candidato `perf=si` con firma; los argumentales son `perf=.`; los accesorios son posteriores. P domina a todas las variantes en las dos patas.
+
+### H128-04 — Gates de fidelidad + hallazgo colateral (B125)
+
+Gates: G1 reconstrucción 99,4% (5853/5890; 37 mismatch, 15 de t345); G2 réplica de la cascada del parser actual **0 fails** (la maquinaria del diagnóstico reproduce al parser); firma **más confiable de lo temido** — de 2948 firmas "fuera de zona", 2816 (95%) están en el sumario, fuera del rango de búsqueda del dispositivo (inocuas); desajuste votos-zonas = 0. **Hallazgo colateral → B125:** t345 tiene `por_ello_text` VACÍO en `csjn_casos_textos.csv` para 15 fallos donde la reconstrucción (mismas funciones, mismas líneas) SÍ extrae dispositivo real; causa no determinada (sidecar vs `li/lfr` vs bloque). Registrado, no diagnosticado.
+
+### H128 — Estado final
+
+- **Corpus:** 5890 casos. Parser **v19.0 intacto** (sin cambios). 5 CSV canónicos sin tocar. Golden sin tocar. Manifest sin re-sellar (no aplica).
+- **B124:** diagnóstico cerrado; **fix diseñado + validado en gold y corpus (regla P), NO implementado.** Pendiente H129: auditar los 31 rotos de P (`autopsia_rotos_P.py`) → si correcciones, implementar P en `parser.py` (MAJOR).
+- **B125 (nuevo):** t345 `por_ello_text` vacío en CSV — `confirmado_cuantificado` (15 casos), causa `hipotesis_no_verificada`.
+- **Hipótesis descartadas con evidencia:** A1/A2 (último, mete accesorios), B/C (último/primer-c/verbo, pierde a `sin_dispositivo` + no distingue accesorio).
+- **Scripts creados (diagnóstico, no canónicos):** `salud_firma_zonas.py`, `variantes_dispositivo.py`, `cruce_gold_variantes.py`, `autopsia_candidatos.py`, `autopsia_rotos_P.py` (en `scripts/diagnostico/` — unificar carpeta H128 al commitear).
+- **Commits:** diagnósticos H128 + DEUDA (B124 actualizado, B125 nuevo). Sin commit de pipeline (parser intacto).
