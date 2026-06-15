@@ -17497,3 +17497,42 @@ Se prototipó per saltum (art. 257 bis) en `clasificador_via` v0.2 (16 detectado
 **Scripts modificados:** `scripts/pipeline/clasificador_disposicion.py` (v1.02).
 
 **Commits:** 3 (script, deuda, docs).
+
+## H134 — Recalibración de tipo_cuestion_federal + seed de causal_arbitrariedad (diagnóstico) (2026-06-15)
+
+**Objetivo:** atacar B111 (sobre-disparo de `mixto` / pérdida de `arbitrariedad`). Sesión ENTERAMENTE DIAGNÓSTICA — ningún script canónico ni output canónico cambió; parser v20.0 intacto, golden/manifest sin tocar, sin re-sello.
+
+### H134-01 — Root cause del sobre-disparo de `mixto`
+
+`classify_cuestion_federal` (parser ~884-914) aplica regla de co-ocurrencia `has_arb AND has_cf → mixto`. En el fallback sobre el considerando, `has_arb` dispara con `\barbitrariedad\b` pelado y `has_cf` con `ley 48` pelado, ambos casi ubicuos en REX → `mixto` = "menciona las dos palabras". Conteos: `mixto` 677 (parser) vs 1 (gold humano n=300) vs 230 con voz literal "Sentencias arbitrarias" de la Secretaría. De los 677, solo ~27% tienen marcador fuerte de ambos lados.
+
+### H134-02 — La señal de arbitrariedad está distribuida en tres zonas
+
+Hallazgo central: (1) sumario editorial = voz de la Secretaría (taxonomía verbatim, precisa pero ~24% recall); (2) considerando = palabra suelta "arbitrar", sobre-dispara; (3) dictamen = donde vive la causal cuando la Corte remite. De 38 misses gold-arbitrariedad, 29 sin "arbitrar" en el considerando; de 28 misses-sin-`arbitrar`, 21 con `cod_dictamen=remite`, 23 con considerando <400 chars. Ninguna zona completa → caso empírico de weak supervision. El usuario corrigió: el dictamen está en el CUERPO, no en el sidecar de zonas parseadas que se estaba leyendo.
+
+### H134-03 — Taxonomía de causales (voz de la Secretaría, verbatim)
+
+Leaf tras "RECURSO EXTRAORDINARIO: Requisitos propios. Cuestiones no federales. Sentencias arbitrarias. Procedencia del recurso. _<LEAF>_": Defectos en la consideración de extremos conducentes (55), Falta de fundamentación suficiente (48), Excesos u omisiones en el pronunciamiento (39), Defectos en la fundamentación normativa (38), Exceso ritual manifiesto (22), Apartamiento de constancias (18), Contradicción (12), Valoración de circunstancias de hecho y prueba (7). Gravedad institucional = flag ortogonal, no causal.
+
+### H134-04 — Seed de dos zonas (voz + dictamen) y techo de la regex
+
+`harvestear_sumarios.py` v0.1 → `sumarios_arbitrariedad.csv` (1560 filas: 883 arbitrariedad + 677 mixto, con sumario_editorial + dictamen_text). Clasificador de 8-9 causales sobre ambas zonas. Cobertura de causal: voz sola 462 → voz+dictamen ~931 (+469 que recupera el dictamen). Recall vs gold-arbitrariedad-en-CSV (n=45): 18/45 (voz) → 38/45 (84%, voz+dictamen); ~7 sin señal (343_p1233, 339_p1530, 346_p646, 342_p1358, 339_p824, 349_p280, 347_p1215). Precisión muestreada ~80% (10 leídos: 8 causal predicada de la sentencia, 2 discurso reportado). El gate de discurso reportado descarta solo 10 casos / 0 cambio de recall → el FP no es discurso reportado sino marcador ancho ("carece de fundamentación", "contradicción") en contexto legítimo = techo de la regex. Conclusión: el seed es base de weak supervision (voz = LF alta precisión, dictamen = LF alto recall), no clasificador limpio a fuerza de regex.
+
+### H134-05 — Codebook de cuestión federal anclado en art. 14 Ley 48
+
+Descomposición pretoriana (dirección de fix de fondo): inc. 1 + inc. 3 = CF simple (norma/cláusula federal desestimada), inc. 2 = CF compleja (ley provincial vs CN, prelación art. 31); arbitrariedad = doctrina pretoriana ortogonal (flag aparte, no tipo de CF); mixto genuino = voz de CF Y voz de arbitrariedad coexistiendo. "ley 48" = 21% del corpus (23% de arbitrariedad pura) → no discrimina; art. 15 / "relación directa" = boilerplate de admisibilidad. art.14-inciso = alta precisión / baja cobertura.
+
+### H134-06 — Retractación honesta + B128 + mejoras anotadas
+
+El "85% over-fire" afirmado al inicio se corrigió: solo 230/1560 tienen voz literal, pero la voz sub-cuenta (11/45 gold-arb con voz literal; 14 gold-arb son FN del parser). B128 NUEVO: `extraer_caso.py` stale post-H113 — lee `considerando_text`/`por_ello_text` de `csjn_casos.csv` que ya no los tiene (migrados al sidecar `csjn_casos_textos.csv`); modos `--md`/glob/`--blind`/sanity-check muertos, char-count reporta 0; la extracción por rango de líneas sobre el `.md` sí funciona. Mejora anotada: el parser calcula `sumario_text` (~3535-3543) y `lineas_dictamen` pero no los persiste (el harvest los recupera del cuerpo). Bug del split del harvest: `RE_DICTAMEN` matchea la atribución "–Del dictamen de la Procuración–" del sumario y misubica voces (testigo 329_p1661).
+
+### H134 — Estado final
+
+- **Corpus:** 5890 casos. Sin cambios (sesión diagnóstica).
+- **Outputs canónicos:** intactos. parser v20.0, golden [CLEAN], manifest [CLEAN] 61 artefactos — NO re-sellados (no se tocó la cadena).
+- **B111:** avanza de "lever" a diagnosticado + seed dos-zonas (recall 84% / precisión ~80%); dirección de fix = descomposición pretoriana (eje CF art.14 + flag arbitrariedad ortogonal + flag gravedad institucional) o weak supervision. NO cerrado.
+- **B128:** NUEVO (extraer_caso stale post-H113).
+- **Scripts creados:** `scripts/diagnostico/H134/harvestear_sumarios.py` v0.1.
+- **Outputs diagnósticos:** `diagnostico/H134/sumarios_arbitrariedad.csv` (1560 filas).
+- **Commits:** sin commits de pipeline (diagnóstico). Pendiente commitear script diagnóstico + CSV + DEUDA.
+
