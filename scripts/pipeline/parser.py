@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "19.0"  # M21/H126: B122/B118 — skip de líneas vacías en el presupuesto del chunk de _barrer (resolver_dispositivo). El running-head intercalado dejaba vacías OCR que agotaban el chunk antes del '.' real y truncaban el verbo de disposición → outcome caía a otro. Skip-only +50 flips corpus-wide (otro→competencia 37), 0 regresiones (PoC H125). MAJOR: cambia el comportamiento de _barrer (afecta outcome/por_ello_text y sus derivados denormalizados en csjn_casos_votos —outcome/is_merit/is_originaria/tipo_voto_sep por voto—; considerando/firma/zonas/editorial intactos; identidad del voto juez/posicion/texto_voto/wc_voto intacta). Masking del banner = Fase 2 (gated). // B119: capa disposicion M20 (PASO 2) — detectores competencia/cautelar/nulidad_concesion/inoficioso pre-cascada + #1 originaria-no-merit + #2 des-hifenado es_originaria. Gate 0,907→0,953 (FP 19→5, 0 FN nuevos). // H113: split csjn_casos_textos — considerando_text/por_ello_text/firma_raw salen de csjn_casos.csv a output/parser/csjn_casos_textos.csv (5º CSV del parser, keyed por caso_id_canonico, espejo 1:1 5890 filas, SIN truncado; antes considerando[:2000] 47,6% cortado / por_ello[:300]); habilita materia capa 2 (lee el considerando completo). Escritura por proyección de fieldnames (patrón zonas), texto full ya estaba en memoria → relocaliza al escribir, sin cambio de lógica de parseo. Re-golden consciente + 7º output al manifest (generar_manifiesto v1.3). // H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
+__version__ = "20.0"  # H130: B124 CERRADO — regla P en _barrer: entre candidatos-con-firma de la ventana del dispositivo devuelve el PRIMER performativo (RE_PERF v2); fallback al primer-con-firma (= comportamiento v19) si ninguno lo es. RE_PERF v2 = "se <verbo>" (clítico opc., H129) | "(el Tribunal|esta Corte|la Corte) resuelve" | "resuelve:" — extiende v1 a performativos de mayoría SIN "se", auditados en disco (audit_resuelve_sin_se, 5890 casos: "el Tribunal resuelve" 300 + "resuelve:" 23; OTRO_RESUELVE/ESTA_CORTE/LA_CORTE/RESUELVE_UP = 0 → sin over-match de instancia inferior). Recupera el dispositivo de fondo cuando el primer-con-firma es argumental (cierra B123/B124). Validación en disco: outcome +121 recuperaciones (otro→real) / 29 real→real (dom. inadmisible_280→merit) / 0 regresiones a otro; scan_concurrencia 0 sospechosos (mis-pick de concurrencia 331_p1028 cerrado = causa del rollback v20→v19 en H129); es_queja +8 recup / 2 correcciones de FP / 1 FN conocido (340_p114); votos net +1 (342_p1170 1→5 recupera panel, 348_p1435 dedup Alcalá; 332_p663 6→4 = exposición de B126, frente aparte). MAJOR: cambia el pick del dispositivo (afecta outcome/por_ello_text y derivados denormalizados en votos —outcome/is_merit/is_originaria/tipo_voto_sep—; considerando/firma/zonas/editorial sin cambio de lógica). // M21/H126: B122/B118 — skip de líneas vacías en el presupuesto del chunk de _barrer (resolver_dispositivo). El running-head intercalado dejaba vacías OCR que agotaban el chunk antes del '.' real y truncaban el verbo de disposición → outcome caía a otro. Skip-only +50 flips corpus-wide (otro→competencia 37), 0 regresiones (PoC H125). MAJOR: cambia el comportamiento de _barrer (afecta outcome/por_ello_text y sus derivados denormalizados en csjn_casos_votos —outcome/is_merit/is_originaria/tipo_voto_sep por voto—; considerando/firma/zonas/editorial intactos; identidad del voto juez/posicion/texto_voto/wc_voto intacta). Masking del banner = Fase 2 (gated). // B119: capa disposicion M20 (PASO 2) — detectores competencia/cautelar/nulidad_concesion/inoficioso pre-cascada + #1 originaria-no-merit + #2 des-hifenado es_originaria. Gate 0,907→0,953 (FP 19→5, 0 FN nuevos). // H113: split csjn_casos_textos — considerando_text/por_ello_text/firma_raw salen de csjn_casos.csv a output/parser/csjn_casos_textos.csv (5º CSV del parser, keyed por caso_id_canonico, espejo 1:1 5890 filas, SIN truncado; antes considerando[:2000] 47,6% cortado / por_ello[:300]); habilita materia capa 2 (lee el considerando completo). Escritura por proyección de fieldnames (patrón zonas), texto full ya estaba en memoria → relocaliza al escribir, sin cambio de lógica de parseo. Re-golden consciente + 7º output al manifest (generar_manifiesto v1.3). // H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
 
 import re
 import csv
@@ -3026,6 +3026,33 @@ _RE_ASI = re.compile(
     re.I,
 )
 
+# ── B124 · regla P (H130) · RE_PERF v2 ────────────────────────────────────────
+# Performatividad del dispositivo para la regla P de _barrer: entre los
+# candidatos-CON-firma de la ventana, preferir el PRIMER performativo (y solo si
+# ninguno lo es, caer al primer-con-firma = comportamiento v19). El dispositivo
+# de fondo abre con marca performativa; el argumental que se cuela antes ("En
+# consecuencia, no discutida…", "Por ello, si bien…") es no-performativo y se
+# saltea.
+#
+# v2 (H130) extiende v1 (`se <verbo>`, H129) a los performativos de MAYORIA sin
+# `se`, AUDITADOS en disco (audit_resuelve_sin_se.py, 5890 casos, ventana del
+# dispositivo): únicas formas sin-`se` entre candidatos-con-firma → "el Tribunal
+# resuelve" (300) y "resuelve:" (23 = "Tribunal" hifenado por el wrap del OCR /
+# palabras interpuestas / "esta Corte Suprema" / "la mayoría del Tribunal" /
+# "…y resuelve:"). El audit probó OTRO_RESUELVE=0 y ESTA/LA_CORTE/RESUELVE_UP=0
+# en la ventana → NO hay "el a quo/la cámara resuelve": el over-match de
+# instancia inferior no se materializa. Sin v2, P saltea la mayoría sin-`se` y
+# ancla en una concurrencia según-su-voto con `se` (mis-pick 331_p1028 = causa
+# del rollback v20→v19 en H129).
+RE_PERF = re.compile(
+    r"\bse\s+(?:(?:lo|la|los|las|le|les)\s+)?"
+    r"(?:resuelve|decide|declara[n]?|revoca[n]?|confirma[n]?|"
+    r"hace[n]?\s+lugar|deja[n]?\s+sin\s+efecto|rechaza[n]?|desestima[n]?|"
+    r"tiene[n]?\s+por|admite[n]?|anula[n]?|hace\s+saber|intima)\b"
+    r"|\b(?:el\s+[Tt]ribunal|esta\s+[Cc]orte|la\s+[Cc]orte)\s+resuelve\b"
+    r"|\bresuelve\s*:",
+    re.IGNORECASE)
+
 
 def _cand_estructural(stripped):
     """Tiers 1 y 3: apertura estructural (detectar_apertura_dispositivo)."""
@@ -3074,12 +3101,20 @@ def _barrer(bloque, rango, lineas_dictamen, *,
     Motor único de las 5 capas. Barre rango=(inicio, fin) sobre bloque. En cada
     línea no vacía (y no excluida, si excluye_dictamen) evalúa es_candidato. Si
     es candidata: arma el chunk (hasta 6 líneas o hasta el primer '.') y valida
-    firma de juez en k+1..k+41. Devuelve el primer hit CON firma. Si
-    permite_fallback, recuerda el primer candidato sin firma y lo devuelve si
-    ninguno tuvo firma (= comportamiento pre-fix B059, sin regresión).
+    firma de juez en k+1..k+41.
+
+    REGLA P (B124 · H130): entre los candidatos-CON-firma, devuelve el PRIMER
+    PERFORMATIVO (RE_PERF v2). Si ninguno es performativo, cae al PRIMER
+    candidato-con-firma (= comportamiento v19, sin regresión). El argumental que
+    se cuela antes del dispositivo de fondo ("En consecuencia, no discutida…",
+    "Por ello, si bien…") es no-performativo y se saltea; recupera el dispositivo
+    real cuando el primer-con-firma es argumental (B123/B124). Si permite_fallback
+    y no hubo NINGÚN candidato-con-firma, devuelve el primer candidato sin firma
+    (= fallback B059).
     """
     inicio, fin = rango
-    _fb_idx, _fb_text = None, None
+    _fb_idx, _fb_text = None, None        # primer candidato (con o sin firma) — B059
+    _firma_idx, _firma_text = None, None  # primer candidato CON firma — fallback de P (= v19)
     for k in range(inicio, fin):
         if excluye_dictamen and k in lineas_dictamen:
             continue
@@ -3112,7 +3147,15 @@ def _barrer(bloque, rango, lineas_dictamen, *,
             _fb_idx, _fb_text = k, candidate_text
         if any(linea_es_firma_de_juez(bloque[j])
                for j in range(k + 1, min(k + 41, len(bloque)))):
-            return k, candidate_text
+            # Regla P: el primer performativo-con-firma gana de una.
+            if RE_PERF.search(candidate_text):
+                return k, candidate_text
+            # No-performativo con firma: recordarlo como fallback (primer-con-firma = v19).
+            if _firma_idx is None:
+                _firma_idx, _firma_text = k, candidate_text
+    # Ningún performativo-con-firma → primer-con-firma (idéntico a v19).
+    if _firma_idx is not None:
+        return _firma_idx, _firma_text
     if permite_fallback and _fb_idx is not None:
         return _fb_idx, _fb_text
     return None, ""
