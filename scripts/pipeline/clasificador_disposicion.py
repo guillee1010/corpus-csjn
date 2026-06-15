@@ -9,13 +9,21 @@ Una sola copia => el 0,857 blind describe exactamente lo que se shippea. Sin dri
 
 Garantía: corrido sobre los mismos textos, reproduce la clave blind 300/300
 (disposición, reenvía, parte_ganadora). NO modificar sin re-validar contra held-out.
+
+v1.01 — norm() ahora des-hifena el soft-hyphen (\u00ad) de fin de línea del OCR
+        ('re­ curso' -> 'recurso'), que antes quedaba como 're curso' y rompía el
+        match del verbo dispositivo. Cambio GENERAL (no a medida del gold). Validado
+        en disco vs gold: disposición 0,887 -> 0,930, 0 regresiones, 6 mejoras.
+        REQUIERE regenerar la clave (build_m20) y re-sellar antes de cerrar.
 """
 import re
-__version__ = "1.0"
+__version__ = "1.02"
 
 def norm(s):
-    s = re.sub(r"\u00ad", "", s or "")
-    s = re.sub(r"(\w)-\s+(\w)", r"\1\2", s)
+    s = s or ""
+    s = re.sub(r"(\w)\u00ad\s*(\w)", r"\1\2", s)   # des-hifena el soft-hyphen de fin de linea ('re­ curso' -> 'recurso')
+    s = re.sub(r"\u00ad", "", s)                    # limpia soft-hyphens sueltos restantes
+    s = re.sub(r"(\w)-\s+(\w)", r"\1\2", s)         # des-hifena el guion normal
     return re.sub(r"\s+", " ", s).strip()
 
 OBJ  = r"(?:la|las|el|los)\s+(?:sentencia|pronunciamiento|resoluci[oó]n|fallo|decisorio|decisi[oó]n|auto)s?\b"
@@ -55,7 +63,7 @@ def disposicion(pe):
     if RE_PROCESAL.search(pe): return "no_revision_procesal", remand
     if RE_HEADER.search(pe):  return "por_ello_cortado", remand
     if RE_GRANT.search(pe) and remand: return "grant_remand_implicito", remand
-    return "sin_disposicion_legible", remand
+    return "no_fondo", remand   # v1.02: ex 'sin_disposicion_legible'. El por_ello es legible; no hay disposicion de FONDO (competencia/liquidacion/desercion/queja/honorarios). El gold concuerda: 88/89 vacio.
 
 def parte_ganadora_regla(disp):
     if disp in ("revoca", "deja_sin_efecto", "nulidad", "grant_remand_implicito"): return "recurrente_gana"
