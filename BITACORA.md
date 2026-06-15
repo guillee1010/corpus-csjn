@@ -17403,3 +17403,97 @@ P tiene un bug de correctitud real (331_p1028) no cubierto por la validación. *
 Re-corrida del parser con v20.0 para procedencia limpia (los outputs los codea el archivo ya bumpeado, no el v19-label parcheado; CSV byte-idénticos, header v20.0). Re-golden de los 5 outputs (snapshot coherente de una corrida). `check_regresion` **[CLEAN]** 5/5. `generar_manifiesto.py --verify` **[CLEAN] 61 artefactos**. **B124 cerrado en disco.** B126 logueado como próximo frente (el golden v20.0 carga 332_p663 = 4 firmas como instancia B126 conocida; no se re-stitcheó).
 
 **Estado final:** parser **v20.0** (B124 CERRADO). Outputs sellados: `csjn_casos` 5890, `csjn_casos_textos` 5890, `csjn_casos_votos` 27640, `csjn_casos_zonas` 141451, `csjn_casos_editorial` 152 (todos v20.0); `csjn_editorial_indice_partes` 11445 (v1.0) y `csjn_casos_materia` 5890 (v3.2) intactos. Manifest [CLEAN] 61 artefactos. Golden = corrida v20.0. **Próximo frente: B126** (extractor de firma; scan corpus-wide de nombres partidos antes de tocar el stitcher).
+
+## H131 — B019 CERRADO: `detectar_fin_real` extiende la firma wrapeada (2026-06-15)
+
+**Objetivo:** decidir el próximo frente del refactor M20 y, derivado de ahí, diagnosticar y cerrar el truncado de firmas multilínea.
+
+### H131-01 — Reencuadre del frente "B126" (firma)
+
+El frente elegido como próximo ("B126", firma) se disolvió en disco en **dos bugs distintos**, ninguno "firma partida en `parse_firma`":
+
+- **332_p663** = regresión de la regla P (B124), **1 solo caso corpus-wide**: un running-head intercalado en el preámbulo "Por ello, oídas las exposiciones…" come el presupuesto del chunk de `_barrer` → "se resuelve:" del principal cae fuera del chunk → la regla P salta de la mayoría (6 firmantes) a la aclaratoria (4). Familia B118/B122 (running-head); fix natural = M21 Fase 2 (masking, gated). Singleton, deuda conocida, no urge.
+- **Las firmas colgantes = B019**, no un B126 nuevo.
+
+### H131-02 — Diagnóstico de mecanismo y cuantificación de B019
+
+B019 (`detectar_fin_real` off-by-one en firmas multilínea) estaba `confirmado_caso_testigo` con causa raíz "no diagnosticada al nivel de mecanismo". Esta sesión aportó lo que faltaba:
+
+- **Mecanismo:** la firma de la Corte wrapea en >1 línea del OCR ("…— Carlos\nS. Fayt — …"). El fallback `firma_actual` (bidireccional closest-to-lfc, B045/H069) ancla `linea_fin_real` en la PRIMERA línea-firma y deja la continuación afuera del bloque → firma y votos truncados.
+- **Cuantificación:** 115 casos en el fallback `firma_actual` (blast radius); de esos, **24 con firma truncada** (el regex angosto inicial daba 18 = piso; los demás los destapó el diff por `caso_id`).
+- **Hallazgo arquitectónico:** la zonificación corre **downstream** de `linea_fin_real` (bloque reconstruido a `linea_fin_real` en `procesar_archivo` L3324; `zonificar_bloque` en L3365), así que la zona `firma` **hereda** el truncado. El divisor de zonas NO puede ser el fix (sería circular: zonifica sobre lo que el borde ya cortó); arreglar el borde es el prerequisito que repara las zonas. El "divisor de zonas que no se usa para nada" queda anotado como el camino de consolidación elegante a futuro (mover la zonificación upstream del borde).
+
+### H131-03 — PoC de validación en disco
+
+`scripts/diagnostico/H131/poc_b019_extender_firma_actual.py`: A/B sin tocar el pipeline, reusa `linea_es_firma_de_juez` + `parse_firma` reales. La v1 (predicado con fallback raya/calificador) destapó que tragaba la línea editorial del epílogo ("Recurso … interpuesto por … – …") en 4 casos → la v2 endureció el predicado a `linea_es_firma_de_juez` solo. PoC v2 en disco: 23 extiende / +56 votos / 0 sobre-extensión / firma-completa intactos.
+
+### H131-04 — Fix y validación corpus-wide
+
+Fix en el fallback `firma_actual` de `detectar_fin_real` (helper `extender_firma`): extiende la línea elegida por las líneas de continuación de firma, frena en la primera no-firma (epílogo), tolera 1 vacía (espejo de `collect_firma_lines`), acotado por `limite_adelante`. **NO altera el pick bidireccional B045/H069**, solo extiende su salida. Parser **v20.0 → v20.01** (MINOR).
+
+Validación en disco (diff por `caso_id`, nuevo vs golden v20.0):
+
+- `csjn_casos.csv`: **24 casos cambiaron, los 24 en `firma_actual`, 0 fuera**. Cada uno `linea_fin_real +1` + columnas de firma. Full benches restituidos (337_p822 2→5 = unánime real; 337_p133 +Zaffaroni +Argibay; 337_p692 +Petracchi +Maqueda).
+- `csjn_casos_votos.csv`: **27640 → 27697 (+57)**, 23 casos, todos `firma_actual`, 0 fuera. **337_p149 idéntico por `caso_id`** → el cascadeo que mostraba `check_regresion` era puramente posicional (inserción de filas), no un cambio real.
+- **343_p1332**: el pipeline lo extendió (firma genuinamente wrapeada a la línea de abajo) aunque el PoC lo marcó inerte — su techo en el PoC estaba corrupto por un solapamiento de bloques preexistente; el pipeline usa `limite_adelante`, más permisivo, y lo agarró bien. Explica el +57 (pipeline) vs +56 (PoC).
+- **345_p605**: cambió solo `linea_fin_real` (la línea extendida no sumó juez a nivel caso). Dentro del set, sin votos nuevos.
+
+El `[FAIL]` de `check_regresion` es el esperado: B019 es un fix, no un refactor — la salida debe cambiar, y cambió solo donde debía.
+
+### H131 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos + 193 sumario_con_link).
+- **Sin firma:** 16 / 5697 fallos (0,28%). Cobertura firma: 99,72%.
+- **Votos:** 27697 filas.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5890 filas.
+- `output/parser/csjn_casos_textos.csv` — 5890 filas.
+- `output/parser/csjn_casos_votos.csv` — 27697 filas.
+- `output/parser/csjn_casos_zonas.csv` — 141451 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones.
+
+**Procedencia** (`output/parser/_manifest.json`, `--verify` [CLEAN] 61 artefactos):
+- corpus 46 archivos `9fdd4726ce6d` · vocabularios 5 archivos `a8f74668f07c`.
+- outputs (todos v20.01): `csjn_casos.csv` `c6f8e41dab12` · `csjn_casos_textos.csv` `8c2f1cc0372d` · `csjn_casos_votos.csv` `b5018d77f4b7` · `csjn_casos_zonas.csv` `98ce265d9854` · `csjn_casos_editorial.csv` `30a6da652e3a`.
+- Golden congelado en `scripts/tests/golden` (`check_regresion` [CLEAN] 5/5).
+
+**Scripts creados:** `scripts/diagnostico/H131/poc_b019_extender_firma_actual.py`.
+
+**Versiones canónicas finales:** `parser.py` **v20.01**; `parser_editorial.py` v1.0, `construir_catalogo.py` v1.0, `cruzar_catalogo_y_mapa.py` v1.0, `detectar_paginas.py` v1.0 (sin cambios).
+
+**Commits:**
+- `2b99f99` — checkpoint H131 pre-B019 (parser v20.0 + PoC v2 + scripts H129/H131).
+- [cierre] B019 CERRADO: parser v20.01 + outputs + golden + `_manifest.json` re-sellado.
+- [docs] DEUDA_TECNICA + BITACORA + CHANGELOG.
+
+## H132 — Capa-deriver: renombre no_fondo + dispositivo bifásico; vía en reevaluación (2026-06-15)
+
+**Objetivo:** estabilizar la capa-deriver de disposición sin tocar el parser; diagnosticar el bucket modal `sin_disposicion_legible`; decidir el alcance de la vía.
+
+### H132-01 — Diagnóstico del bucket `no_fondo` (ex `sin_disposicion_legible`)
+
+Bucket modal (1860 casos, 31,6% del corpus): NO es OCR ni cobertura, es taxonómico. El `por_ello` se lee perfecto; son resoluciones sin disposición de fondo (competencia, liquidación, deserción, queja, honorarios). El gold concuerda: de los 89 del bucket en el n300, 88 vacío + 1 `deja_sin_efecto` (98,9%). El gold se diseñó binario (fondo fino / no-fondo todo "no"), así que el bucket hace lo que el gold quiere. Decisión: NO desagregar en sub-etiquetas, solo renombrar.
+
+### H132-02 — Hallazgo: dispositivo bifásico (B127)
+
+De los 1860, 31 con verbo de fondo en el `por_ello` no capturado. Causa: el dispositivo de la CSJN es bifásico — admisibilidad ("se declara procedente el REX") + fondo ("y se deja sin efecto/revoca/nulidad"); `disposicion()` agarra el primer verbo (admisibilidad) y no salta al de fondo. De los 31: 26 con `es_revision_fondo=si` (FN reales), 5 FP (nulidad procesal/cautelar/concesión). 14 de los 26 son quejas. Gold: 1 confirmado (330_p1907). Impacto = cobertura del corpus (~26 victorias de fondo subcontadas → sesga `parte_ganadora`), no la métrica. → B127 nuevo, fix no diseñado.
+
+### H132-03 — Fix aplicado: renombre no_fondo
+
+`clasificador_disposicion.py` v1.01→v1.02: renombre `sin_disposicion_legible`→`no_fondo`. Inocuo: 1860 casos idénticos, accuracy de disposición sin cambio (0,930 en disco, n=142 — ojo fila basura `gold=141` en la planilla, conviene limpiarla).
+
+### H132-04 — Vía: per saltum revertido, replanteo del valor (M23)
+
+Se prototipó per saltum (art. 257 bis) en `clasificador_via` v0.2 (16 detectados, 0,956 intacto, 0 robados al gold) y se **revirtió a v0.1**: la "primacía" sobre extraordinario es innecesaria para algo <1%, y un per saltum ES un extraordinario. Replanteo de fondo (decisión del usuario): el TIPO de recurso no es un fin analítico (el anuario CSJN compara concedidos vs quejas, ya en `es_queja`), sino una heurística para clasificar el dispositivo (originaria/competencia/ordinario/extraordinario tienen dispositivos distintos). Reevaluar si la vía-tipo merece ser campo de salida o es feature interno. Pendientes anotados: 253 quejas sin vía (imputar extraordinario, art. 285 — incierto si se captura), originarios sin vía (conecta is_originaria). → M23 nuevo.
+
+### H132 — Estado final
+
+- **Parser:** v20.0 SIN cambios. 5 CSV canónicos intactos, golden y manifest sin tocar.
+- **Capa-deriver:** clasificador_disposicion **v1.02** (cambia), clasificador_via **v0.1** (sin cambios — per saltum revertido), derivar_recursos v0.2.
+- **Métricas en disco:** disposición 0,930 (n=142), vía 0,956 (n=136), no_fondo 1860.
+- **Deuda:** B127 (bifásico) y M23 (vía: replanteo + per saltum diferido) creados; B123 anotado.
+
+**Scripts modificados:** `scripts/pipeline/clasificador_disposicion.py` (v1.02).
+
+**Commits:** 3 (script, deuda, docs).

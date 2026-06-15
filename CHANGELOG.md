@@ -2,6 +2,22 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H132 (2026-06-15)
+
+- `clasificador_disposicion.py`: v1.01→v1.02. Renombre de la etiqueta `sin_disposicion_legible`→`no_fondo` (cosmético; 1860 casos, accuracy sin cambio).
+- `clasificador_via.py`: sin cambios (per saltum prototipado y revertido; queda en v0.1).
+- Parser v20.0 sin cambios; outputs canónicos, golden y manifest sin tocar.
+
+## H131 (2026-06-15)
+
+- `parser.py` v20.0 → **v20.01**: B019 CERRADO. El fallback `firma_actual` de `detectar_fin_real` extiende la firma wrapeada en >1 línea del OCR (helper `extender_firma`): avanza por `linea_es_firma_de_juez`, frena en el epílogo, tolera 1 vacía, respeta `limite_adelante`. No altera el pick bidireccional B045/H069. **24 casos `firma_actual` afectados.**
+- `output/parser/csjn_casos.csv`: 5890 filas (24 casos con `linea_fin_real +1` + columnas de firma; full benches restituidos).
+- `output/parser/csjn_casos_votos.csv`: 27640 → **27697 filas (+57)**; 23 casos recuperan jueces wrapeados.
+- `output/parser/csjn_casos_textos.csv`: `firma_raw` completa en los 24 casos.
+- `output/parser/csjn_casos_zonas.csv`: zona `firma` extendida (`n_lineas 1→2`) en los 24 casos.
+- Golden re-sellado + `output/parser/_manifest.json` regenerado (`--verify` [CLEAN] 8/8).
+
+
 ## H130 — 2026-06-15 — B124 CERRADO (parser v20.0)
 
 ### `scripts/pipeline/parser.py` — v19.0 → v20.0 (MAJOR)
