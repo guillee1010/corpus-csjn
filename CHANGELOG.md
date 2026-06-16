@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H138 — 2026-06-16
+
+### Changed
+- `parser.py` v20.01 → **v21.0**: M21 Fase 2 (masking de `RE_RUNNING_HEAD` en `_barrer`). Corrido en disco; recuperación PARCIAL — el `por_ello_text` persiste del crudo, Gate A sigue en 467, 5 CSV [CLEAN] vs golden (no-op sobre output persistido). Persistir-al-sidecar pendiente.
+- `clasificador_disposicion.py` v1.04 → **v1.05**: enmascara el running-head en `norm()` antes de clasificar. `por_ello_cortado` 18→0, +6 fondo, 0 regresiones (B127/banner cerrado en capa-deriver).
+- `generar_manifiesto.py` v1.4 → **v1.5**: sella `derivar_recursos.py` (script) + `secciones_indices.csv` (input) + `csjn_casos_recursos.csv` (output). `--verify [CLEAN] 63 artefactos` (eran 61).
+- `derivar_recursos.py` v0.2: re-corrido con disp v1.05 → `csjn_casos_recursos.csv` regenerado.
+
+### Notes
+- M24 NUEVO (deuda): runner de regresión general que englobe `check_regresion` + manifest + accuracy-gold + unit tests. No implementado (scope nuevo).
+
 ## H135 (2026-06-16)
 
 **Merge `refactor/m20-disposicion` → main** (FF `a2ac106..622bfa6`, parser v20.01). main pasa a ser la línea principal con M20 + capa-deriver. Harness post-merge sobre main: [CLEAN] 5/5.

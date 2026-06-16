@@ -17607,3 +17607,36 @@ Frente real del banner, al ORIGEN (confrontación REE: `por_ello_cortado` es un 
 
 **Scripts (estado, NO commiteados este cierre):** `parser.py` v20.01→**v21.0** (patcheado), `clasificador_disposicion.py` v1.02→**v1.04**.
 **Commit de este cierre:** solo `DEUDA_TECNICA.md` + `BITACORA.md`.
+
+## H138 — M21 Fase 2 corrida (parcial) + B127/banner cerrado en deriver + manifest sella recursos/secciones (2026-06-16)
+
+Continuación directa de H136–H137: se corre y valida en disco lo que quedó patcheado, se cierra el banner aguas abajo y se sella la provenance de la capa-deriver.
+
+### H138 — parser v21.0 corrido: M21 Fase 2 PARCIAL
+
+- **Corrido y medido en disco** (lo que H137 dejó sin validar). `validar_m21_fase2.py --casos-old backup\csjn_casos.csv`: **Gate A = 467 banners restantes (= pre-fix)**, Gate B = 0 flips `real→otro`. `check_regresion` **[CLEAN]** (5 CSV byte-idénticos al golden).
+- **Hallazgo clave:** el masking de `RE_RUNNING_HEAD` en `_barrer` limpia la vista de *matching* (`candidate_text`), pero el `por_ello_text` que se PERSISTE al sidecar sale del **CRUDO**, no del chunk enmascarado → **v21.0 es no-op sobre todo output persistido**. Masking integrado; persistir-al-sidecar el chunk enmascarado = mitad faltante de Fase 2.
+- **Decisión:** v21.0 **QUEDA** (código correcto), se documenta honesto como Fase 2 parcial. No se revierte por estética de git.
+
+### H138 — B127/banner CERRADO en capa-deriver: clasificador v1.03 → v1.05
+
+- Agregado `RE_RUNNING_HEAD` (VERBATIM del parser L215) en `norm()` de `clasificador_disposicion.py` → enmascara el banner antes de clasificar.
+- Re-corrido `derivar_recursos.py` (disp v1.05): **`por_ello_cortado` 18→0**, 4 interpolados recuperan fondo (330_p380/330_p960→`deja_sin_efecto`, 333_p1951→`revoca`, 344_p1444→`deja_sin_efecto`), fondo leída 2886→2892 (+6), **0 regresiones**. Los truncados-de-verdad caen a `no_fondo` (correcto = territorio parser/M21).
+- El banner **interpolado** (línea presente) se recupera en el clasificador; el **truncado** (verbo nunca persistido) solo en el parser. El relabel `por_ello_cortado` (v1.04) queda moot.
+
+### H138 — Manifest: recursos + secciones SELLADOS (generar_manifiesto v1.4 → v1.5)
+
+- `derivar_recursos.py` → PIPELINE_SCRIPTS; `secciones_indices.csv`/`construir_catalogo.py` → INPUTS; `csjn_casos_recursos.csv`/`derivar_recursos.py` → OUTPUTS.
+- `--verify [CLEAN] 63 artefactos` (eran 61). Cierra el único gap de provenance de la capa-deriver. **Re-sello final POST-commit** (árbol limpio).
+
+### H138 — Estado final
+
+- **Parser:** v20.01 → **v21.0** (M21 Fase 2 parcial, commiteado).
+- **clasificador_disposicion:** v1.04 → **v1.05** (banner enmascarado en `norm()`).
+- **generar_manifiesto:** v1.4 → **v1.5** (sella recursos + secciones).
+- **derivar_recursos:** v0.2 (re-corrido con disp v1.05).
+- **Outputs:** 5 CSV canónicos **[CLEAN] vs golden** (v21.0 no los movió). `csjn_casos_recursos.csv` regenerado. Manifest 63 artefactos.
+
+**Scripts modificados:** `parser.py` v20.01→**v21.0**; `clasificador_disposicion.py` v1.04→**v1.05**; `generar_manifiesto.py` v1.4→**v1.5**; `derivar_recursos.py` v0.2 (re-run).
+
+**Pendiente próxima sesión:** (1) completar M21 Fase 2 = persistir el chunk enmascarado al `por_ello_text` del sidecar → Gate A baja de 467, canónico cambia, re-golden + re-sello (MAJOR); (2) **M24** = `check_regresion` general (inventario en disco primero: ubicación de los `test_*`, si `csjnv11`/`test_clasificador` está vivo o legacy, baseline verde); (3) **B127-bifásico** (admisibilidad), distinto del banner ya cerrado; (4) **B129** (334_p1272).
