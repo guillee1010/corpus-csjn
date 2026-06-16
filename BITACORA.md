@@ -17536,3 +17536,43 @@ El "85% over-fire" afirmado al inicio se corrigió: solo 230/1560 tienen voz lit
 - **Outputs diagnósticos:** `diagnostico/H134/sumarios_arbitrariedad.csv` (1560 filas).
 - **Commits:** sin commits de pipeline (diagnóstico). Pendiente commitear script diagnóstico + CSV + DEUDA.
 
+
+## H135 — Merge M20 → main + B128 (extraer_caso) + persistencia tardía de H132 (2026-06-16)
+
+**Objetivo:** mergear `refactor/m20-disposicion` a main (M20 defendible, decisión H132) y cerrar B128 (`extraer_caso.py` stale post-H113). En el camino se saldó una deuda de versionado: el estado de cierre de H132 nunca se había commiteado.
+
+### H135-01 — B128 CERRADO: `extraer_caso.py` v2.1 → v2.3
+
+Dos cambios sobre la herramienta de diagnóstico (NO toca pipeline ni golden):
+
+- **B128 (lectura del sidecar):** H113 movió `considerando_text`/`por_ello_text` de `csjn_casos.csv` al sidecar `csjn_casos_textos.csv`; la herramienta seguía leyéndolos del canónico → `ancla`/`pe` vacíos y modos `--md`/`--blind`/glob/sanity-check muertos. Fix: tras cargar la fila del canónico, mergea esas dos columnas desde el sidecar por `caso_id_canonico` (mismo join que `derivar_recursos.py`), solo si faltan; degrada con WARN si el sidecar no está. Nuevo flag `--csv-textos`. El flag `TRUNCADO@2000` (muerto post-H113, el sidecar guarda el considerando completo) se reemplazó por largo+fuente honestos.
+- **Display por perillas, default CRUDO:** el `norm()` previo mezclaba dos transformaciones — des-hifenado (`_unhyphenate`) y colapso de espacios (`\s+`) — y aplanaba el `.md`, escondiendo los artefactos que rompen los regex (firmas partidas por línea = B126, running-heads intercalados = B104/B122, guiones de OCR). Ahora **default = crudo** (el `.md` tal cual) + perillas ortogonales `--norm` (atajo), `--deshifen`, `--colapso`. **Decisión de diseño:** la herramienta NO reusa la normalización del parser a propósito — replicarla heredaría sus errores y cegaría el contraste fuente↔CSV; por eso el crudo es independiente y no se sube `parser.py` para copiar su norma. El sanity-check del ancla sigue corriendo sobre el normalizado total (no tira WARN falso).
+
+**Validación en disco:** 332_p663 (POR_ELLO poblado; considerando 12453 chars desde el sidecar; en crudo se ven Fayt y Zaffaroni partidos por `\n` = B126; el bloque resultó ser doble — resolución sustantiva del 26/3 + aclaratoria del 27/3, `outcome=otro` capturó la aclaratoria). 329_p142 (POR_ELLO poblado, 162 chars; running-head `147 DE JUSTICIA DE LA NACION 329` embebido en plena frase del dispositivo = B104/B122; dispositivo bifásico de manual, testigo para B127).
+
+### H135-02 — Persistencia tardía de H132 (deuda de versionado saldada)
+
+`git status` reveló el working tree sucio con trabajo de H132 que el cierre de esa sesión **declaró pero nunca commiteó**: `derivar_recursos.py` v0.1→v0.2 (vía recursiva: `via_recurso`/`multi_recurso`) y `clasificador_via.py` v0.1 (untracked), más la validación M20 regenerada (clave de 602 líneas por el renombre `sin_disposicion_legible`→`no_fondo`, `build_m20.py`, `validar_H120.py`). La bitácora de H132 listaba ese estado pero los 3 commits de H132 solo tocaron `clasificador_disposicion` + deuda + docs. Se regeneró `csjn_casos_recursos.csv` con v0.2 (5891 filas, +2 columnas de vía) para alinear output↔script y se commiteó todo el bloque como persistencia tardía de H132 (commit `964359c`). Distribución de vía sobre el corpus: `recurso_extraordinario` 3365, vacío 2197 (originarios/competencia/quejas sin imputar = pendientes M23), `recurso_ordinario` 328; `multi_recurso=si` 360. `clasificador_via` confirmado v0.1 (sin per saltum; per saltum se había revertido en H132). Lo que se había deshecho en H132 fue `clasificador_via` v0.2 (per saltum), NO `derivar_recursos` v0.2.
+
+### H135-03 — Merge `refactor/m20-disposicion` → main (Paso 0 de M20)
+
+main estaba clavado en H118 (`a2ac106`), ancestro directo del branch (`rev-list 0 31`) → fast-forward sin merge commit ni conflictos. Working tree limpiado en tres commits ordenados por sesión (`964359c` H132 tardío, `0333379` H135 extraer_caso, `622bfa6` gitignore de `diagnostico/_extraidos`), push del branch, y FF `a2ac106..622bfa6` sobre main + push. main, el branch y origin quedaron sincronizados en `622bfa6`. **Verificación post-merge:** harness regression→golden sobre main → **[CLEAN] 5/5** (los 5 CSV canónicos idénticos al golden). El FF arrastró todo H119–H135 de un saque (parser v18→v20.01, los 5 CSV + golden + manifest, `csjn_casos_recursos.csv` nuevo, la capa-deriver y los scripts de diagnóstico). Los warnings "Deletion of directory failed" durante el `checkout main` intermedio (Windows con archivos abiertos) fueron inocuos: el FF inmediato a `622bfa6` necesitaba esos directorios de vuelta; `working tree clean` final lo confirma.
+
+### H135-04 — Lección de proceso (mejora del skill de cierre)
+
+El episodio de H132 (estado declarado en la bitácora pero no commiteado) deja una regla: el cierre de corpus debe garantizar que **git == bitácora** antes de dar la sesión por cerrada — commitear el estado declarado como paso obligatorio, no opcional. Se agrega a `.gitignore` el directorio de outputs de la herramienta (`diagnostico/_extraidos/`) para evitar basura untracked recurrente.
+
+### H135 — Estado final
+
+- **main = línea principal:** parser **v20.01** + M20 completo + capa-deriver (disposición v1.02 + vía v0.1, `derivar_recursos` v0.2).
+- **Parser:** v20.01 INTACTO. La cadena no se tocó en H135.
+- **Outputs canónicos:** 5 CSV **[CLEAN] vs golden** (idénticos, sin cambios). Manifest NO re-sellado (la cadena no cambió). `csjn_casos_recursos.csv` (NO canónico): 5891 filas, +2 columnas de vía.
+- **Repo:** working tree limpio; main, branch y origin en `622bfa6`.
+
+**Scripts modificados:**
+- `scripts/diagnostico/extraer_caso.py` — v2.1 → **v2.3** (B128 + display crudo; diagnóstico, no cadena).
+- `scripts/pipeline/derivar_recursos.py` — v0.1 → **v0.2** (vía; deriver, no cadena).
+- `scripts/pipeline/clasificador_via.py` — v0.1 (untracked → trackeado; deriver, no cadena).
+- `scripts/diagnostico/H120/{build_m20.py, validar_H120.py, M20_clave_parser_n300.csv}` — regen post renombre `no_fondo`.
+
+**Commits:** 4 — `964359c` (H132 persistencia tardía), `0333379` (H135 extraer_caso v2.3), `622bfa6` (gitignore) + el FF de main. Pendiente: commit de docs (DEUDA + BITACORA + CHANGELOG).

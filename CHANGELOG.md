@@ -2,6 +2,20 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H135 (2026-06-16)
+
+**Merge `refactor/m20-disposicion` → main** (FF `a2ac106..622bfa6`, parser v20.01). main pasa a ser la línea principal con M20 + capa-deriver. Harness post-merge sobre main: [CLEAN] 5/5.
+
+- `scripts/diagnostico/extraer_caso.py`: v2.1 → v2.3. B128 — lee `considerando_text`/`por_ello_text` del sidecar `csjn_casos_textos.csv` por join (post-H113); revive `--md`/`--blind`/glob/sanity-check. Default de display cambiado a crudo + perillas `--norm`/`--deshifen`/`--colapso`. Diagnóstico, no toca la cadena ni el golden.
+- `scripts/pipeline/derivar_recursos.py`: v0.1 → v0.2 (persistencia tardía de H132). Agrega vía recursiva (`via_recurso`/`multi_recurso`) vía `clasificador_via`; lee considerando además del dispositivo. Capa-deriver, fuera de la cadena del parser y del manifest.
+- `scripts/pipeline/clasificador_via.py`: v0.1, untracked → trackeado (persistencia tardía de H132). Vía recursiva fuente-única, primacía del ordinario; vía 0,956 vs gold n=136.
+- `output/parser/csjn_casos_recursos.csv`: regenerado con `derivar_recursos` v0.2 → 5891 filas, +2 columnas de vía. NO canónico, NO sellado en el manifest.
+- `scripts/diagnostico/H120/{build_m20.py, validar_H120.py, M20_clave_parser_n300.csv}`: regen tras el renombre `sin_disposicion_legible`→`no_fondo` (clasificador_disposicion v1.02).
+- `.gitignore`: `diagnostico/_extraidos/` (output de `extraer_caso --out`).
+
+**Parser v20.01 sin cambios** — la cadena no se tocó; los 5 CSV canónicos siguen [CLEAN] vs golden; manifest no re-sellado.
+
+
 ## H132 (2026-06-15)
 
 - `clasificador_disposicion.py`: v1.01→v1.02. Renombre de la etiqueta `sin_disposicion_legible`→`no_fondo` (cosmético; 1860 casos, accuracy sin cambio).
