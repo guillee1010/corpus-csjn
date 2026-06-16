@@ -70,6 +70,13 @@ for lab,q in [('QUEJA','1'),('CONCEDIDO',None)]:
     dec=s[s.cod_parte_ganadora.map(na).isin(['recurrente_gana','recurrente_pierde'])]
     print(f'  {lab:<10} gana={dec.gana.mean():.0%} (n_decididos={len(dec)}, +{ (s.cod_parte_ganadora.map(na)=="parcial").sum()} parciales)')
 
+print('='*60);print('VÍA RECURSIVA  (cod_via_recurso vs parser)')
+vv=m[m.cod_via_recurso.isin(['recurso_extraordinario','recurso_ordinario'])].copy()
+print(f'  n={len(vv)}  accuracy={ (vv.cod_via_recurso==vv.parser_via_recurso).mean():.3f}  sin_deteccion={(vv.parser_via_recurso=="").sum()}')
+print('  confusión [fila=gold, col=parser]:')
+print(pd.crosstab(vv.cod_via_recurso,vv.parser_via_recurso.replace("",".vacío.")).to_string())
+print(f'  multi_recurso(parser)=si en el frame n300: {(m.parser_multi_recurso=="si").sum()}')
+
 print('='*60);print('CUESTIÓN FEDERAL  (gold 3-way colapsado vs parser)  [B111]')
 cf=m[m.cf_n.isin(['arbitrariedad','cuestion_federal','ninguna'])].copy()
 def pcf(s):

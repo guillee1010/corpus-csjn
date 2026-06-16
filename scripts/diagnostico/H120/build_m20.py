@@ -19,6 +19,7 @@ HERE = Path(__file__).resolve().parent          # scripts/diagnostico/H120/
 ROOT = HERE.parents[2]                            # raiz del repo
 sys.path.insert(0, str(ROOT / "scripts" / "pipeline"))
 from clasificador_disposicion import disposicion, parte_ganadora_regla, __version__ as CLF_VER
+from clasificador_via import via_recurso, __version__ as VIA_VER
 
 CASOS  = ROOT / "output" / "parser" / "csjn_casos.csv"
 TEXTOS = ROOT / "output" / "parser" / "csjn_casos_textos.csv"
@@ -27,11 +28,12 @@ OUT    = HERE / "M20_clave_parser_n300.csv"
 
 def construir_clave(casos_p=CASOS, textos_p=TEXTOS, frame_p=FRAME):
     casos = pd.read_csv(casos_p, dtype=str, keep_default_na=False)
-    textos = pd.read_csv(textos_p, dtype=str, keep_default_na=False)[["caso_id_canonico", "por_ello_text"]]
+    textos = pd.read_csv(textos_p, dtype=str, keep_default_na=False)[["caso_id_canonico", "por_ello_text", "considerando_text"]]
     frame = pd.read_excel(frame_p, dtype=str).fillna("")
     ids = [i for i in frame["caso_id_canonico"].tolist() if i.strip()]
     base = casos.set_index("caso_id_canonico").loc[ids].reset_index().merge(textos, on="caso_id_canonico", how="left")
     base["por_ello_text"] = base["por_ello_text"].fillna("")
+    base["considerando_text"] = base["considerando_text"].fillna("")
     res = base["por_ello_text"].map(disposicion)
     clave = pd.DataFrame({
         "caso_id_canonico": base["caso_id_canonico"],
@@ -40,6 +42,9 @@ def construir_clave(casos_p=CASOS, textos_p=TEXTOS, frame_p=FRAME):
         "parser_reenvia": res.map(lambda r: "si" if r[1] else "no"),
     })
     clave["parser_parte_ganadora"] = clave["parser_disposicion"].map(parte_ganadora_regla)
+    via = base.apply(lambda r: via_recurso(r["por_ello_text"], r["considerando_text"]), axis=1)
+    clave["parser_via_recurso"] = via.map(lambda t: t[0])
+    clave["parser_multi_recurso"] = via.map(lambda t: "si" if t[1] else "no")
     clave["_ctx_outcome_m19"] = base["outcome"]
     clave["_ctx_is_merit"] = base["is_merit_decision"]
     return clave
@@ -54,7 +59,7 @@ def main():
                             Path(a.frame) if a.frame else FRAME)
     dest = Path(a.out) if a.out else OUT
     clave.to_csv(dest, index=False, lineterminator="\n")
-    print(f"[build_m20 / clf v{CLF_VER}]  {len(clave)} filas -> {dest.name}")
+    print(f"[build_m20 / clf v{CLF_VER} / via v{VIA_VER}]  {len(clave)} filas -> {dest.name}")
     if a.verify:
         ref = pd.read_csv(a.verify, dtype=str, keep_default_na=False)
         m = ref.merge(clave, on="caso_id_canonico", suffixes=("_ref", "_new"))
