@@ -6,9 +6,9 @@ Escribe `output/parser/_manifest.json` con la procedencia COMPLETA de la cadena:
 
   A) git: commit HEAD + si el árbol estaba sucio  -> fija TODO el código del repo
      (todos los scripts del pipeline, transitivamente) cuando dirty=false.
-  B) pipeline_scripts: __version__ de los seis scripts de la cadena, en orden
+  B) pipeline_scripts: __version__ de los siete scripts de la cadena, en orden
      (detectar_paginas -> construir_catalogo -> cruzar -> parser/_editorial ->
-     derivar_materia). Capa legible, redundante con el commit.
+     derivar_materia -> derivar_recursos). Capa legible, redundante con el commit.
   C) corpus / vocabularios / inputs / outputs: hash + bytes (+ filas en CSV) de
      los artefactos, de la fuente cruda a los finales. Captura el DATO (cambios de
      corpus / vocabularios / intermedios que el commit no distingue). Cada
@@ -56,7 +56,7 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
-__version__ = "1.4"
+__version__ = "1.5"
 
 # csjn_casos.csv tiene campos de texto grandes (considerando_text). Subimos el
 # límite de campo de csv a un valor amplio pero seguro en Windows (sys.maxsize
@@ -81,16 +81,18 @@ PIPELINE_SCRIPTS = [
     "parser.py",
     "parser_editorial.py",
     "derivar_materia.py",
+    "derivar_recursos.py",
 ]
 
 # ── Capa C: artefactos del pipeline. (ruta relativa a output/, generador) ────
-# inputs = intermedios de la cadena; outputs = los siete CSV canónicos finales.
+# inputs = intermedios de la cadena; outputs = los ocho CSV canónicos finales.
 # Allow-list explícita a propósito (no glob): excluye BASELINE/_manifest.json,
 # y si falta un canónico el script grita en vez de manifestar parcial en silencio.
 # El corpus crudo NO va acá: se deriva de source_file (ver fuentes_corpus()).
 INPUTS = [
     ("mapa/mapa_paginas.csv",               "detectar_paginas.py"),
     ("catalogo/catalogo.csv",               "construir_catalogo.py"),
+    ("catalogo/secciones_indices.csv",      "construir_catalogo.py"),
     ("localizacion/fallos_localizados.csv", "cruzar_catalogo_y_mapa.py"),
 ]
 OUTPUTS = [
@@ -101,6 +103,7 @@ OUTPUTS = [
     ("parser/csjn_casos_editorial.csv",         "parser.py"),
     ("parser/csjn_editorial_indice_partes.csv", "parser_editorial.py"),
     ("parser/csjn_casos_materia.csv",           "derivar_materia.py"),
+    ("parser/csjn_casos_recursos.csv",          "derivar_recursos.py"),
 ]
 
 # ── Capa C': vocabularios controlados que lee derivar_materia.py ─────────────
