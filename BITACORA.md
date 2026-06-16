@@ -17576,3 +17576,34 @@ El episodio de H132 (estado declarado en la bitácora pero no commiteado) deja u
 - `scripts/diagnostico/H120/{build_m20.py, validar_H120.py, M20_clave_parser_n300.csv}` — regen post renombre `no_fondo`.
 
 **Commits:** 4 — `964359c` (H132 persistencia tardía), `0333379` (H135 extraer_caso v2.3), `622bfa6` (gitignore) + el FF de main. Pendiente: commit de docs (DEUDA + BITACORA + CHANGELOG).
+
+### H136 — B127 CERRADO (alcance capa-deriver): `clasificador_disposicion.py` v1.02 → v1.04
+
+Cierre de B127 en la capa-deriver (módulo fuera de la cadena del parser, NO sellado).
+
+- **v1.03 (plural -es):** `OBJ_es` con `(?:es|s)?` ('resoluciones'/'decisiones') SOLO en `revoca` y `deja_sin_efecto` — NO en nulidad/invalidez/confirma, donde el -es arrastra FP (339_p1077 confirma→nulidad, 346_p439, originarias 329_p59/344_p936). Disco 5890: **6 flips, 0 regresiones, gold 0/300 tocado.**
+- **v1.04 (relabel banner, STOPGAP):** variante 'FALLOS DE LA CORTE SUPREMA' en `RE_HEADER` + chequeo movido DESPUÉS de GRANT (preserva 347_p459) → **18 `no_fondo`→`por_ello_cortado`**, 0 movimiento de `parte_ganadora`. Honestidad taxonómica del dispositivo truncado por banner; NO recupera parte_ganadora.
+- **El 'skip bifásico' de la deuda H132 era ERRÓNEO:** verificado en texto de producción, la cláusula de admisibilidad NO bloquea el match. El bucket `no_fondo ∧ es_revision_fondo=si` (76) se descompone en ~19 banner-truncados (M21/parser), ~3-15 cobertura OBJ, 1 misclasificación parser (B129), 42 `no_fondo` legítimos (parser sobre-dispara `es_revision_fondo`).
+- **Magnitud (corrige la justificación de B127):** `parte_ganadora` del universo fondo ≈ **81,4%** (2353/2892); recuperar todos los ~22 recuperables mueve ~+0,1pp. **El valor no es la métrica, es dato limpio.**
+
+Validadores en `scripts/diagnostico/H136/` (`validar_b127_v104.py`, gate estructural version!=1.04 = FALLA). Re-corrido `derivar_recursos.py` (disp v1.04): `por_ello_cortado` 18→36, `no_fondo` 1860→1838, `deja_sin_efecto`+4, `revoca`+2.
+
+### H137 — M21 Fase 2 DIAGNOSTICADA + `parser.py` v20.01 → v21.0 PATCHEADO (EN CURSO, sin validar)
+
+Frente real del banner, al ORIGEN (confrontación REE: `por_ello_cortado` es un label de algo roto, no robusto/elegante; el banner se saca en el parser).
+
+- **Root cause confirmado en código:** `RE_PAGE_HEADER` (línea-sola, `^...$`) saca casi todos los headers split-form (frase-sola / número-solo) — por eso "elimina casi todos". Lo que NO agarra es la **TERNA** 'número FALLOS DE LA CORTE SUPREMA número' (ni en una línea ni interpolada). `_barrer` saltea vacías (Fase 1, H126) pero **APPENDEA el banner** → ensucia el `por_ello` y agota el presupuesto del chunk de 6 → trunca el verbo de fondo (testigo 330_p1907). El comentario del propio código admitía "el masking de Fase 2 lo limpia" (gated).
+- **Fix v21.0:** `RE_RUNNING_HEAD` (terna substring, ambas orientaciones; número obligatorio a un lado → distingue del 'Corte Suprema de Justicia de la Nación' legítimo) enmascarada en `_barrer` antes de armar el chunk. Saca el banner + si la línea era solo banner queda vacía → no cuenta presupuesto → **recupera el truncado** (igual que las vacías).
+- **Verificado SOLO en sandbox** (texto del sidecar): **463 banners / 0 FP** sobre la frase legítima. El gate `validar_m21_fase2.py` sobre el estado pre-fix detecta 467 banners → `[SUCIO]`.
+- **NO corrido en disco** → recuperación-por-presupuesto y regresión SIN medir. MAJOR (outcome/por_ello_text/votos denormalizados) → re-golden + re-sello pendientes.
+- **B129 NUEVO:** 334_p1272 — el parser marca una revocación de fondo (salvataje hipotecario, leyes 25.798/26.167) como `es_revision_fondo=no`/`is_merit=0`/`outcome=abstracto`; fondo real mal clasificado.
+
+### H136–H137 — Estado (cierre de docs solamente)
+
+- **parser.py:** v21.0 **patcheado en disco, NO corrido/validado.** M21 Fase 2 EN CURSO, no cerrada.
+- **clasificador:** v1.04 en disco, **SIN downgrade a v1.03** (el original se recuperó como `clasificador_disposicion_v103.py`; el colapso va post-validación).
+- **Decisión:** se commitean **SOLO docs** (DEUDA + BITACORA) para no ensuciar commits con código en vuelo. El código (parser v21.0, clasificador v1.04, recursos, validadores) queda en el working tree para correr/validar/commitear la próxima.
+- **Pendiente próxima sesión:** rama `refactor/m21-fase2-banner`; correr parser v21.0 + `validar_m21_fase2.py` (Gate A 0 banners, Gate B 0 regresiones `real→otro`) + check_regresion; si limpio → re-golden + re-sello + colapso clasificador a v1.03 + merge.
+
+**Scripts (estado, NO commiteados este cierre):** `parser.py` v20.01→**v21.0** (patcheado), `clasificador_disposicion.py` v1.02→**v1.04**.
+**Commit de este cierre:** solo `DEUDA_TECNICA.md` + `BITACORA.md`.
