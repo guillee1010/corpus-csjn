@@ -17,23 +17,42 @@ v1.01 — norm() ahora des-hifena el soft-hyphen (\u00ad) de fin de línea del O
         REQUIERE regenerar la clave (build_m20) y re-sellar antes de cerrar.
 """
 import re
-__version__ = "1.02"
+__version__ = "1.05"
+
+# v1.05 (M21 Fase 2 en el submódulo): banner editorial (terna 'número FALLOS… número' /
+# '…NACIÓN número') enmascarado en norm(). RE_RUNNING_HEAD VERBATIM del parser (L215) —
+# fuente única, no un regex paralelo (el RE_BANNER del validador es el drift que evitamos;
+# dedup futuro a módulo compartido). Recupera los INTERPOLADOS (banner mid-text que parte el
+# OBJ → al sacarlo se re-pega el verbo de fondo): 330_p380/330_p960 → deja_sin_efecto,
+# 333_p1951 → revoca, 344_p1444 → deja_sin_efecto. Los TRUNCADOS (verbo físicamente cortado)
+# NO se recuperan acá: viven en el parser (por_ello_cortado los marca legítimamente).
+RE_RUNNING_HEAD = re.compile(
+    r"\d{1,6}\s+(?:FALLOS DE LA CORTE SUPREMA|DE JUSTICIA DE LA NACI[OÓ]N)\s+\d{1,6}"
+    r"|\d{1,6}\s+(?:FALLOS DE LA CORTE SUPREMA|DE JUSTICIA DE LA NACI[OÓ]N)\b"
+    r"|\b(?:FALLOS DE LA CORTE SUPREMA|DE JUSTICIA DE LA NACI[OÓ]N)\s+\d{1,6}", re.I)
 
 def norm(s):
     s = s or ""
     s = re.sub(r"(\w)\u00ad\s*(\w)", r"\1\2", s)   # des-hifena el soft-hyphen de fin de linea ('re­ curso' -> 'recurso')
     s = re.sub(r"\u00ad", "", s)                    # limpia soft-hyphens sueltos restantes
     s = re.sub(r"(\w)-\s+(\w)", r"\1\2", s)         # des-hifena el guion normal
+    s = RE_RUNNING_HEAD.sub(" ", s)                 # v1.05: enmascara el banner editorial (terna) -> recupera interpolados
     return re.sub(r"\s+", " ", s).strip()
 
 OBJ  = r"(?:la|las|el|los)\s+(?:sentencia|pronunciamiento|resoluci[oó]n|fallo|decisorio|decisi[oó]n|auto)s?\b"
+# v1.03 (B127): OBJ con plural -es ('resoluciones'/'decisiones', que 's?' no cubria).
+# Aplicado SOLO en revoca/deja_sin_efecto (verbos de revocacion limpia). NO en
+# nulidad/invalidez/confirma: ahi el -es arrastra FP (nulidad-de-concesion, originarias,
+# 'confirmar ... en cuanto a la nulidad de las resoluciones'). Verificado en disco (5890):
+# 6 flips, 0 regresiones, gold 0/300 tocado. El frente del banner (por_ello truncado) es M21, no esto.
+OBJ_es = r"(?:la|las|el|los)\s+(?:sentencia|pronunciamiento|resoluci[oó]n|fallo|decisorio|decisi[oó]n|auto)(?:es|s)?\b"
 OBJX = r"(?:sentencia|pronunciamiento|resoluci[oó]n|fallo|decisorio|decisi[oó]n|auto|sanci[oó]n|pena|condena|multa)s?\b"
 W = r"[^.;]{0,55}"
 DISP = [
-    ("revoca",  re.compile(rf"\b(?:se\s+)?revoca(?:n)?\b{W}{OBJ}|\brevocar\b{W}{OBJ}|revoc[áa]ndose{W}{OBJ}", re.I)),
+    ("revoca",  re.compile(rf"\b(?:se\s+)?revoca(?:n)?\b{W}{OBJ_es}|\brevocar\b{W}{OBJ_es}|revoc[áa]ndose{W}{OBJ_es}", re.I)),
     ("deja_sin_efecto", re.compile(
-        rf"\bdeja(?:r|se|n)?\s+sin\s+efecto\b{W}{OBJ}|\bdej[áa]ndose\s+sin\s+efecto\b{W}?{OBJ}|"
-        rf"\bdejando\s+sin\s+efecto\b{W}?{OBJ}|\bd[ée]jase\s+sin\s+efecto\b{W}?{OBJ}|\bdeje\s+sin\s+efecto\b{W}?{OBJ}", re.I)),
+        rf"\bdeja(?:r|se|n)?\s+sin\s+efecto\b{W}{OBJ_es}|\bdej[áa]ndose\s+sin\s+efecto\b{W}?{OBJ_es}|"
+        rf"\bdejando\s+sin\s+efecto\b{W}?{OBJ_es}|\bd[ée]jase\s+sin\s+efecto\b{W}?{OBJ_es}|\bdeje\s+sin\s+efecto\b{W}?{OBJ_es}", re.I)),
     ("nulidad", re.compile(
         rf"\bnulidad\s+de\s+todo\s+lo\s+actuado\b|\b(?:se\s+)?declara\s+(?:la\s+)?nul[ao]s?\b|\bnulidad\b{W}{OBJ}|"
         rf"\b(?:se\s+)?anula\b{W}{OBJ}|\binvalidez\b{W}?{OBJ}|\bdeclara\s+(?:la\s+)?inv[áa]lid", re.I)),
