@@ -17,8 +17,12 @@ v1.01 — norm() ahora des-hifena el soft-hyphen (\u00ad) de fin de línea del O
         REQUIERE regenerar la clave (build_m20) y re-sellar antes de cerrar.
 """
 import re
-__version__ = "1.05"
+__version__ = "1.06"
 
+# v1.06 (H139): RE_RUNNING_HEAD case-sensitive (saca re.I), sync con parser L218.
+# El banner es MAYÚSCULAS; "Corte Suprema de Justicia de la Nación" en mixta es CUERPO,
+# no header. Verificado en disco: por_ello 467/467 mayúsculas → disposición byte-idéntica
+# (no-op sobre el output). Habilita limpiar el banner del considerando para materia (frente aparte).
 # v1.05 (M21 Fase 2 en el submódulo): banner editorial (terna 'número FALLOS… número' /
 # '…NACIÓN número') enmascarado en norm(). RE_RUNNING_HEAD VERBATIM del parser (L215) —
 # fuente única, no un regex paralelo (el RE_BANNER del validador es el drift que evitamos;
@@ -29,7 +33,7 @@ __version__ = "1.05"
 RE_RUNNING_HEAD = re.compile(
     r"\d{1,6}\s+(?:FALLOS DE LA CORTE SUPREMA|DE JUSTICIA DE LA NACI[OÓ]N)\s+\d{1,6}"
     r"|\d{1,6}\s+(?:FALLOS DE LA CORTE SUPREMA|DE JUSTICIA DE LA NACI[OÓ]N)\b"
-    r"|\b(?:FALLOS DE LA CORTE SUPREMA|DE JUSTICIA DE LA NACI[OÓ]N)\s+\d{1,6}", re.I)
+    r"|\b(?:FALLOS DE LA CORTE SUPREMA|DE JUSTICIA DE LA NACI[OÓ]N)\s+\d{1,6}")  # H139: sin re.I → case-sensitive
 
 def norm(s):
     s = s or ""
