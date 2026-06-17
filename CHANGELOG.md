@@ -2,6 +2,14 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H139 (2026-06-16)
+
+- `parser.py` v21.0→v21.01: `RE_RUNNING_HEAD` case-sensitive (sacado `re.I`). NO-OP (disposición 0/5890). Precondición para limpiar el banner del considerando (materia).
+- `clasificador_disposicion.py` v1.05→v1.06: idem `RE_RUNNING_HEAD` case-sensitive, sincronizado (fuente única con el parser).
+- `scripts/diagnostico/kappa_confiabilidad.py` v1.0 (NUEVO): Cohen's κ(parser↔gold) + IC bootstrap por variable.
+- `output/validacion/kappa_resultados.csv` (NUEVO): κ de 5 variables del gold M20 n=300 (gate 0,933 / vía 0,941 / disposición 0,912 / parte 0,653 / reenvía 0,408).
+- Outputs canónicos: sin cambios (case-sensitive NO-OP; κ no toca la cadena). Manifest `[CLEAN] 63`.
+
 ## H138 — 2026-06-16
 
 ### Changed
