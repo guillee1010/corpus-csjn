@@ -41,3 +41,6 @@ backup/
 estudio_13/
 
 .env
+
+output/diagnostico/
+output/auditoria/
