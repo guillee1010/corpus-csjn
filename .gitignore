@@ -36,3 +36,6 @@ estadisticas/validacion/_blind/
 tmp_*/
 
 diagnostico/_extraidos/
+backup/
+*.bak
+estudio_13/
