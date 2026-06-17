@@ -4,6 +4,78 @@ Registro de hipótesis, diagnósticos, falsos positivos e iteraciones de pensami
 
 Formato por entrada: hipótesis o hallazgo, evidencia, conclusión (válido / invalidado / parcialmente válido), implicancias.
 
+# BITACORA — append H141 (pegar al final de BITACORA.md)
+
+```markdown
+## H141 — Refactor admisión/mérito: diseño del de-interleave de `outcome` (2026-06-17)
+
+**Objetivo:** diagnosticar B129 (falso inoficioso) y resolver la decisión arquitectónica de fondo que
+destapó: separar admisión y mérito en dos canales canónicos del parser.
+
+### H141-01 — B129: falso inoficioso (diagnóstico cerrado en disco)
+
+Caso testigo `334_p1272` (salvataje hipotecario, leyes 25.798/26.167). Dispositivo real revoca de
+fondo, pero `RE_DISP_INOFICIOSO` (alt-2 `result\w+ inoficioso`) matchea "resultando inoficioso que
+dictamine el PGN" → `abstracto` antes de que la cascada vea "se revocan". "Inoficioso que dictamine el
+PGN" es aside del dictamen, no mootness de fondo. Fórmula endémica CSJN; el comentario de B119
+(parser ~l.493-496) ya lo anticipaba.
+
+A/B validado (`scripts/diagnostico/H141/ab_b129_inoficioso.py`, monkeypatch lookahead
+`(?![^.]{0,40}(?:dictamin|procurador))`): **25 flips** `abstracto`→`{revoca 5, procedente 16,
+confirma 2, hace_lugar 1, nulidad 1}`, **0 regresiones**, `348_p1499` intacto, los 25 ∈ MERIT_OUTCOMES,
+`is_originaria=0`. Eyeball = falso-inoficioso genuino. Fix validada pero **diferida**: el bug escaló a
+refactor (ver H141-02). Disponible como commit standalone de ~4 líneas.
+
+### H141-02 — Hallazgo: `outcome` conflaciona dos ejes → decisión de refactor
+
+Cruzando `csjn_casos_recursos.csv`: el deriver ya tiene la señal correcta. 24/25 casos de B129 con
+`disposicion=FONDO` y `parte_ganadora` correcta pero `es_revision_fondo=no`. Corpus-wide: **175**
+`disposicion=FONDO` ∧ `gate=no`; **153** `gate=sí` ∧ `disposicion≠FONDO`; `procedente` total = **759**.
+Causa: `outcome` es plano y mezcla admisión (procedente/280/desestima) con mérito (revoca/confirma), e
+`is_merit` cuelga de ese campo. B127-bifásico (CERRADO H139) confirma que la admisibilidad no rompe la
+captura del verbo de fondo. **Decisión (LOCKED):** refactor de base — de-interleave de `outcome` en dos
+canales canónicos (`admision` + `disposicion`), reusando toda la detección existente. Se acepta reabrir
+κ, costos hundidos y republicar Dataverse. Ver M26 en DEUDA.
+
+### H141-03 — Taxonomía (LOCKED)
+
+Borde del fondo definido por el corte de nulidad: **nulidad del auto de concesión** = procedimiento;
+**nulidad de la sentencia / de todo lo actuado** = fondo (ya separado como `nulidad_concesion` vs
+`nulidad`). Conjunto fondo = `revoca · deja_sin_efecto · confirma · modifica · nulidad sustantiva`;
+`is_merit = disposicion ∈ fondo`. Rollup de dos niveles: `disposicion` multiclass FINO (conserva
+`competencia`, `nulidad_concesion`, `aclaratoria`, etc. — "competencia en sí es distinto") + eje COARSE
+`{fondo, procedimiento, originaria}` que alimenta `is_merit`. Surge **B131** (nulidad del auto podría
+colarse como fondo: OBJ del clasificador incluye "auto").
+
+### H141-04 — Decisiones de schema
+
+`disposicion` → multiclass canónico (LOCKED). `admision` → multiclass canónico (LOCKED). Eje coarse →
+rollup derivado (LOCKED). `outcome` → deprecar+reemplazar, opción A (corte duro, rompe Dataverse) vs
+B (blanda, derivada legacy) **abierta**, recomendada B. Canal admisión: consolidar `RE_GRANT` (admite)
++ cascade 280/ac4/desestima (inadmite) en un `clasificador_admision.py` nuevo (fuente única).
+
+### H141-05 — Hallazgo metodológico HM-01
+
+El gate de admisibilidad es el aporte específico del corpus frente al SCDB (que trabaja post-gate). El
+refactor admisión/mérito es su expresión arquitectónica. A documentar en CODEBOOK (Fase 5 de M26) +
+tesis (relación con H1, certiorari criollo).
+
+### H141 — Estado final
+
+- **Corpus:** 5890 casos. **Sin cambios** en outputs canónicos vs H140 (sesión de diseño/diagnóstico).
+- **Parser:** v21.01 (sin cambios). `_manifest.json`: [CLEAN] 63, **no re-sellado** (no se tocó la cadena).
+- **Decisión:** refactor admisión/mérito (M26) aprobado, diseño cerrado, implementación multi-sesión (3–5).
+
+**Scripts creados:** `scripts/diagnostico/H141/ab_b129_inoficioso.py` (diagnóstico A/B de B129).
+
+**Documentación:** DEUDA — M26/B131/HM-01 nuevos, B129 entrada estructurada creada, encabezado +
+tablero actualizados. Handoff: `PROMPT_H142_refactor_admision_merito.md`.
+
+**Commits:** script de diagnóstico H141 + docs (BITACORA/DEUDA). Sin commit de pipeline/outputs/manifest
+(no cambió la cadena).
+```
+
+
 ---
 
 ## Sesión 2026-05-02
@@ -17640,3 +17712,83 @@ Continuación directa de H136–H137: se corre y valida en disco lo que quedó p
 **Scripts modificados:** `parser.py` v20.01→**v21.0**; `clasificador_disposicion.py` v1.04→**v1.05**; `generar_manifiesto.py` v1.4→**v1.5**; `derivar_recursos.py` v0.2 (re-run).
 
 **Pendiente próxima sesión:** (1) completar M21 Fase 2 = persistir el chunk enmascarado al `por_ello_text` del sidecar → Gate A baja de 467, canónico cambia, re-golden + re-sello (MAJOR); (2) **M24** = `check_regresion` general (inventario en disco primero: ubicación de los `test_*`, si `csjnv11`/`test_clasificador` está vivo o legacy, baseline verde); (3) **B127-bifásico** (admisibilidad), distinto del banner ya cerrado; (4) **B129** (334_p1272).
+
+## H139 — κ(parser↔gold) cerrado, B127-bifásico refutado, case-sensitive RE_RUNNING_HEAD (2026-06-16)
+
+**Objetivo:** cerrar κ de confiabilidad (parser↔gold) sobre el gold M20 n=300, verificar/cerrar B127-bifásico, y dejar la precondición case-sensitive para el frente de materia.
+
+### H139-01 — B127-bifásico: premisa refutada en disco → CERRADO
+
+La premisa H132 ("`disposicion()` matchea el primer verbo dispositivo; agarra la admisibilidad y no salta al fondo") es FALSA. Leído el código: hace `pat.search(pe)` GLOBAL sobre todo el `por_ello`; la cláusula de admisibilidad no está en el vocab DISP, así que no matchea ni bloquea, y el verbo de fondo tras la "y" se captura igual. Medido en disco: de **1935** `por_ello` con forma bifásica, **1917 se capturan como fondo**; los **13** que caen a `no_fondo` se leyeron uno por uno y **ninguno** cae por el bifásico. Causas reales de los 13: truncado/banner (329_p4634/347_p474/348_p355), OCR/typo (331_p2628), OBJ fuera de vocab (laudo, "lo resuelto", "declaración de inconstitucionalidad", contracautela, "recurso de casación", "todo lo actuado"), plural `-es` en nulidad (340_p1193). No hay lógica de salto que diseñar; el recuperable real (≈ +0,1pp sobre `parte_ganadora`) es OBJ-vocab + M21, no B127.
+
+### H139-02 — RE_RUNNING_HEAD case-sensitive (precondición materia, NO-OP)
+
+Sacado `re.I` de `RE_RUNNING_HEAD` (el banner es SIEMPRE mayúsculas; "Corte Suprema" en mixta es cuerpo legítimo). Sincronizado `parser.py` (L218) + `clasificador_disposicion.py` (fuente única). **parser v21.0→v21.01**, **clasificador_disposicion v1.05→v1.06**. Verificado NO-OP: disposición re-derivada 0/5890 cambios; banner 467/467 mayúsculas en `por_ello`, 0 escapados. `check_regresion` [CLEAN] (5 CSV byte-idénticos al golden) + manifest [CLEAN] 63. Commiteado. No arregla nada actual: es precondición del frente futuro de limpiar el banner del considerando para materia (el considerando persistido tiene 13275 banners crudos que `derivar_materia` capa2 traga como ruido). `RE_HEADER` (por_ello_cortado) no se tocó (ya 0).
+
+### H139-03 — κ(parser↔gold) cerrado en disco (M19 parcial)
+
+Nuevo `scripts/diagnostico/kappa_confiabilidad.py` **v1.0**: Cohen's κ + IC bootstrap percentil (5000 resamples), parametrizado (`--gold/--recursos/--out`), extensible a cf/dictamen/materia. Corrido en disco contra el gold rebuild canónico (`scripts/diagnostico/H120/planilla_M20_LIMPIA_n300__rebuild.xlsx`, 300 casos limpios) + `output/parser/csjn_casos_recursos.csv`. Resultados (output `output/validacion/kappa_resultados.csv`):
+
+| variable | n | κ | IC95% bootstrap |
+|---|---:|---:|---|
+| es_revision_fondo | 300 | 0,933 | [0,887–0,967] |
+| via_recurso | 132 | 0,941 | [0,842–1,0] |
+| disposicion | 140 | 0,912 | [0,847–0,966] |
+| parte_ganadora | 136 | 0,653 | [0,504–0,783] |
+| reenvia | 75 | 0,408 | [0,16–0,635] |
+
+El disco reprodujo exacto el sandbox → cierre REE. Es κ(parser↔gold) = valida el PIPELINE; NO es doble-codificación (reproducibilidad del codebook), que sigue pendiente (M19). Disposición es sobre el subset de fondo (n=140). reenvía no reportable (ver H139-04).
+
+### H139-04 — Gold rebuild canónico + B130 (reenvía)
+
+El gold a-mano (`planilla_M20_codificar-56xlsx.xlsx`) tenía: 2 filas de totales con `caso_id` nulo, `cod_materia` duplicada (col vacía), mayúsculas/typos en materia/cf/dictamen. El rebuild (`planilla_M20_LIMPIA_n300__rebuild.xlsx`, 67472 bytes, en `scripts/diagnostico/H120/`) limpia eso y agrega `cod_cf_norm`/`cod_dictamen_norm` (deja el crudo): **0/300 cambios de etiqueta** vs el a-mano → independiente, NO contaminado por el parser. Es el gold canónico. Las copias en `Downloads` (56019 bytes) son viejas. **B130 NUEVO:** el gold de `reenvía` tiene la clase negativa ruidosa (69 `si` / 6 `no`; ambiguos en blanco, algunos `no` sin certeza) → κ 0,408 no reportable (base-rate + ruido + n=75); recodificar negativos explícitos.
+
+### H139 — Estado final
+
+- **Corpus:** 5890 casos, tomos 329–349 (19 tomos). Sin cambios de conteo esta sesión.
+- **Outputs canónicos:** sin cambios (el case-sensitive fue NO-OP; el κ no toca la cadena).
+- **Output nuevo (no canónico):** `output/validacion/kappa_resultados.csv` — κ de 5 variables M20 n=300.
+- **κ(parser↔gold) cerrado:** gate 0,933 · vía 0,941 · disposición 0,912 · parte 0,653 · reenvía 0,408 (no reportable).
+- **Bugs:** B127-bifásico CERRADO (refutado); B130 NUEVO (reenvía negativos ruidosos).
+
+**Scripts creados:** `scripts/diagnostico/kappa_confiabilidad.py` v1.0.
+**Scripts modificados:** `parser.py` v21.0→v21.01, `clasificador_disposicion.py` v1.05→v1.06 (case-sensitive).
+
+**Commits:** case-sensitive parser+clasificador + re-sello manifest (ya commiteado en sesión); κ script + resultados; DEUDA H139; BITACORA + CHANGELOG H139.
+
+## H140 — κ del gate LIMPIO (held-out de facto, pre-B119); cierre de la deuda de leakage M20 (2026-06-17)
+
+**Objetivo:** recomputar el κ de confiabilidad del gate (`es_revision_fondo`) sin el leakage de B119, cerrando la única variable contaminada del set M20 reportado en H139.
+
+### H140-01 — Diagnóstico de leakage: el ledger H122 ya lo tenía mapeado
+
+Reapertura del ledger de contaminación (BITACORA H122, líneas 17197/17217). Confirmado variable por variable: el único κ contaminado del set H139 es el **gate**. B119 (H121) se tuneó sobre el n300 → 0,953 in-sample (línea 17176). El resto, limpio: disposición/parte/reenvía (regex congelada pre-gold), cuestión federal/dictamen (fix nunca aplicado), materia v3.2 (refinamientos nunca aplicados). Vía (ausente del ledger H122, productivizada en H132): limpia por construcción — deriva de señales pre-gold y el único toque-gold (per saltum v0.2) se revirtió en H132.
+
+Corrección de premisa: la sospecha de partida (que las refacciones de cf/dictamen/materia codeadas a ciego contaminaban su κ) quedó refutada por el ledger — esos fixes se diagnosticaron pero **nunca se aplicaron**. La codificación a ciego del gold fue genuinamente independiente del parser (que en ese momento ni detectaba esas categorías).
+
+### H140-02 — κ(gate) limpio vía predicción pre-B119 (de git)
+
+Recuperación del `is_merit_decision` del `csjn_casos.csv` PRE-B119 (commit `d856318`, "checkpoint pre-B119") directo del blob de git, sin re-correr el parser. Regla del gate copiada literal de `derivar_recursos.py` v0.2 (`es_revision_fondo = "si" if is_merit_decision == "1" else "no"`); sanity check **0 mismatches sobre 5890 filas** (reproduce el `recursos.csv` actual). κ recomputado con el harness canónico (`kappa_confiabilidad.py`, Cohen's κ + IC bootstrap 5000).
+
+Resultados (n=300):
+- **κ POST-B119 (in-sample):** 0,933 · acuerdo 0,967 · IC95 [0,887, 0,967]. Reproduce exacto el harness oficial de H139 (check de maquinaria).
+- **κ PRE-B119 (LIMPIO, held-out de facto):** **0,813** · acuerdo **0,907** · IC95 **[0,741, 0,873]** · "casi perfecto" (Landis-Koch). El acuerdo 0,907 reproduce exacto el "número limpio pre-B119" del ledger H122 (confirmación independiente por segunda vía).
+- **Delta atribuible al leakage:** +0,120. 20 flips PRE→hoy = 14 de B119 (ledger H122) + ~6 de la evolución posterior del gate (M21/B019/disp v1.0x); el delta puro de B119 sería contra `667b780`.
+
+### H140-03 — Decisión de reporte (framing de tesis)
+
+- **(a) Adoptado:** reportar **κ(gate) = 0,813 [0,741, 0,873]** como número honesto/conservador, con el ledger de contaminación declarado abiertamente. Es el gate en versión pre-ajuste, held-out de facto sobre el n300.
+- **(b) Diferido (deuda nueva):** el gate del pipeline FINAL (post-B119, el que genera el dataset publicado) no tiene validación limpia sobre el n300 porque ese set fue su dev. La validación in-distribution del gate final requiere **muestra fresca codificada a ciego (otros 300, fuera del gold actual)**. Conecta con opción 1 (doble codificación / ventana fresca).
+
+### H140 — Estado final
+
+**Sin cambios canónicos.** No se modificaron scripts del pipeline ni outputs; parser v21.01, golden y `_manifest.json` sin tocar.
+
+**Scripts creados:** `scripts/diagnostico/H140/kappa_gate_preB119.py` — recómputo de κ(gate) con predicción pre-B119 (blob de git + regla canónica + harness). Diagnóstico, no toca pipeline.
+
+**Commits:** 1 (script de diagnóstico H140 + docs).
+
+### H140-04 — Por qué `parte_ganadora` da el κ más bajo (→ M25)
+
+`parte_ganadora` no se detecta del texto: se *deriva* de la disposición (`disposicion.map(parte_ganadora_regla)`). Medido sobre el gold (n=135 fondo), la regla determinística óptima disposición→parte toca un **techo de 0,889** — aun con disposición perfecta no se puede superar. Los 15 que escapan son señal, no ruido: 8 `parcial` (resultado mixto que la disposición binaria no refleja) + 7 inversiones de rol (confirma→gana ×4, revoca→pierde ×2, deja_sin_efecto→pierde ×1, donde el recurrente está del lado opuesto al que la disposición favorece). El κ (0,653) cae además por desbalance (`recurrente_gana` 77% infla pe). Conclusión: el κ bajo no es falla de detección sino el costo de derivar de la disposición; "quién gana" necesita rol procesal + granularidad, legibles del texto pero ausentes del verbo dispositivo. → **M25 NUEVO** (detector real, banco = los 15 casos). Decisión: anotado en DEUDA, no se ataca en H140.
+
