@@ -4,76 +4,6 @@ Registro de hipótesis, diagnósticos, falsos positivos e iteraciones de pensami
 
 Formato por entrada: hipótesis o hallazgo, evidencia, conclusión (válido / invalidado / parcialmente válido), implicancias.
 
-# BITACORA — append H141 (pegar al final de BITACORA.md)
-
-```markdown
-## H141 — Refactor admisión/mérito: diseño del de-interleave de `outcome` (2026-06-17)
-
-**Objetivo:** diagnosticar B129 (falso inoficioso) y resolver la decisión arquitectónica de fondo que
-destapó: separar admisión y mérito en dos canales canónicos del parser.
-
-### H141-01 — B129: falso inoficioso (diagnóstico cerrado en disco)
-
-Caso testigo `334_p1272` (salvataje hipotecario, leyes 25.798/26.167). Dispositivo real revoca de
-fondo, pero `RE_DISP_INOFICIOSO` (alt-2 `result\w+ inoficioso`) matchea "resultando inoficioso que
-dictamine el PGN" → `abstracto` antes de que la cascada vea "se revocan". "Inoficioso que dictamine el
-PGN" es aside del dictamen, no mootness de fondo. Fórmula endémica CSJN; el comentario de B119
-(parser ~l.493-496) ya lo anticipaba.
-
-A/B validado (`scripts/diagnostico/H141/ab_b129_inoficioso.py`, monkeypatch lookahead
-`(?![^.]{0,40}(?:dictamin|procurador))`): **25 flips** `abstracto`→`{revoca 5, procedente 16,
-confirma 2, hace_lugar 1, nulidad 1}`, **0 regresiones**, `348_p1499` intacto, los 25 ∈ MERIT_OUTCOMES,
-`is_originaria=0`. Eyeball = falso-inoficioso genuino. Fix validada pero **diferida**: el bug escaló a
-refactor (ver H141-02). Disponible como commit standalone de ~4 líneas.
-
-### H141-02 — Hallazgo: `outcome` conflaciona dos ejes → decisión de refactor
-
-Cruzando `csjn_casos_recursos.csv`: el deriver ya tiene la señal correcta. 24/25 casos de B129 con
-`disposicion=FONDO` y `parte_ganadora` correcta pero `es_revision_fondo=no`. Corpus-wide: **175**
-`disposicion=FONDO` ∧ `gate=no`; **153** `gate=sí` ∧ `disposicion≠FONDO`; `procedente` total = **759**.
-Causa: `outcome` es plano y mezcla admisión (procedente/280/desestima) con mérito (revoca/confirma), e
-`is_merit` cuelga de ese campo. B127-bifásico (CERRADO H139) confirma que la admisibilidad no rompe la
-captura del verbo de fondo. **Decisión (LOCKED):** refactor de base — de-interleave de `outcome` en dos
-canales canónicos (`admision` + `disposicion`), reusando toda la detección existente. Se acepta reabrir
-κ, costos hundidos y republicar Dataverse. Ver M26 en DEUDA.
-
-### H141-03 — Taxonomía (LOCKED)
-
-Borde del fondo definido por el corte de nulidad: **nulidad del auto de concesión** = procedimiento;
-**nulidad de la sentencia / de todo lo actuado** = fondo (ya separado como `nulidad_concesion` vs
-`nulidad`). Conjunto fondo = `revoca · deja_sin_efecto · confirma · modifica · nulidad sustantiva`;
-`is_merit = disposicion ∈ fondo`. Rollup de dos niveles: `disposicion` multiclass FINO (conserva
-`competencia`, `nulidad_concesion`, `aclaratoria`, etc. — "competencia en sí es distinto") + eje COARSE
-`{fondo, procedimiento, originaria}` que alimenta `is_merit`. Surge **B131** (nulidad del auto podría
-colarse como fondo: OBJ del clasificador incluye "auto").
-
-### H141-04 — Decisiones de schema
-
-`disposicion` → multiclass canónico (LOCKED). `admision` → multiclass canónico (LOCKED). Eje coarse →
-rollup derivado (LOCKED). `outcome` → deprecar+reemplazar, opción A (corte duro, rompe Dataverse) vs
-B (blanda, derivada legacy) **abierta**, recomendada B. Canal admisión: consolidar `RE_GRANT` (admite)
-+ cascade 280/ac4/desestima (inadmite) en un `clasificador_admision.py` nuevo (fuente única).
-
-### H141-05 — Hallazgo metodológico HM-01
-
-El gate de admisibilidad es el aporte específico del corpus frente al SCDB (que trabaja post-gate). El
-refactor admisión/mérito es su expresión arquitectónica. A documentar en CODEBOOK (Fase 5 de M26) +
-tesis (relación con H1, certiorari criollo).
-
-### H141 — Estado final
-
-- **Corpus:** 5890 casos. **Sin cambios** en outputs canónicos vs H140 (sesión de diseño/diagnóstico).
-- **Parser:** v21.01 (sin cambios). `_manifest.json`: [CLEAN] 63, **no re-sellado** (no se tocó la cadena).
-- **Decisión:** refactor admisión/mérito (M26) aprobado, diseño cerrado, implementación multi-sesión (3–5).
-
-**Scripts creados:** `scripts/diagnostico/H141/ab_b129_inoficioso.py` (diagnóstico A/B de B129).
-
-**Documentación:** DEUDA — M26/B131/HM-01 nuevos, B129 entrada estructurada creada, encabezado +
-tablero actualizados. Handoff: `PROMPT_H142_refactor_admision_merito.md`.
-
-**Commits:** script de diagnóstico H141 + docs (BITACORA/DEUDA). Sin commit de pipeline/outputs/manifest
-(no cambió la cadena).
-```
 
 
 ---
@@ -17792,3 +17722,70 @@ Resultados (n=300):
 
 `parte_ganadora` no se detecta del texto: se *deriva* de la disposición (`disposicion.map(parte_ganadora_regla)`). Medido sobre el gold (n=135 fondo), la regla determinística óptima disposición→parte toca un **techo de 0,889** — aun con disposición perfecta no se puede superar. Los 15 que escapan son señal, no ruido: 8 `parcial` (resultado mixto que la disposición binaria no refleja) + 7 inversiones de rol (confirma→gana ×4, revoca→pierde ×2, deja_sin_efecto→pierde ×1, donde el recurrente está del lado opuesto al que la disposición favorece). El κ (0,653) cae además por desbalance (`recurrente_gana` 77% infla pe). Conclusión: el κ bajo no es falla de detección sino el costo de derivar de la disposición; "quién gana" necesita rol procesal + granularidad, legibles del texto pero ausentes del verbo dispositivo. → **M25 NUEVO** (detector real, banco = los 15 casos). Decisión: anotado en DEUDA, no se ataca en H140.
 
+
+## H141 — Refactor admisión/mérito: diseño del de-interleave de `outcome` (2026-06-17)
+
+**Objetivo:** diagnosticar B129 (falso inoficioso) y resolver la decisión arquitectónica de fondo que
+destapó: separar admisión y mérito en dos canales canónicos del parser.
+
+### H141-01 — B129: falso inoficioso (diagnóstico cerrado en disco)
+
+Caso testigo `334_p1272` (salvataje hipotecario, leyes 25.798/26.167). Dispositivo real revoca de
+fondo, pero `RE_DISP_INOFICIOSO` (alt-2 `result\w+ inoficioso`) matchea "resultando inoficioso que
+dictamine el PGN" → `abstracto` antes de que la cascada vea "se revocan". "Inoficioso que dictamine el
+PGN" es aside del dictamen, no mootness de fondo. Fórmula endémica CSJN; el comentario de B119
+(parser ~l.493-496) ya lo anticipaba.
+
+A/B validado (`scripts/diagnostico/H141/ab_b129_inoficioso.py`, monkeypatch lookahead
+`(?![^.]{0,40}(?:dictamin|procurador))`): **25 flips** `abstracto`→`{revoca 5, procedente 16,
+confirma 2, hace_lugar 1, nulidad 1}`, **0 regresiones**, `348_p1499` intacto, los 25 ∈ MERIT_OUTCOMES,
+`is_originaria=0`. Eyeball = falso-inoficioso genuino. Fix validada pero **diferida**: el bug escaló a
+refactor (ver H141-02). Disponible como commit standalone de ~4 líneas.
+
+### H141-02 — Hallazgo: `outcome` conflaciona dos ejes → decisión de refactor
+
+Cruzando `csjn_casos_recursos.csv`: el deriver ya tiene la señal correcta. 24/25 casos de B129 con
+`disposicion=FONDO` y `parte_ganadora` correcta pero `es_revision_fondo=no`. Corpus-wide: **175**
+`disposicion=FONDO` ∧ `gate=no`; **153** `gate=sí` ∧ `disposicion≠FONDO`; `procedente` total = **759**.
+Causa: `outcome` es plano y mezcla admisión (procedente/280/desestima) con mérito (revoca/confirma), e
+`is_merit` cuelga de ese campo. B127-bifásico (CERRADO H139) confirma que la admisibilidad no rompe la
+captura del verbo de fondo. **Decisión (LOCKED):** refactor de base — de-interleave de `outcome` en dos
+canales canónicos (`admision` + `disposicion`), reusando toda la detección existente. Se acepta reabrir
+κ, costos hundidos y republicar Dataverse. Ver M26 en DEUDA.
+
+### H141-03 — Taxonomía (LOCKED)
+
+Borde del fondo definido por el corte de nulidad: **nulidad del auto de concesión** = procedimiento;
+**nulidad de la sentencia / de todo lo actuado** = fondo (ya separado como `nulidad_concesion` vs
+`nulidad`). Conjunto fondo = `revoca · deja_sin_efecto · confirma · modifica · nulidad sustantiva`;
+`is_merit = disposicion ∈ fondo`. Rollup de dos niveles: `disposicion` multiclass FINO (conserva
+`competencia`, `nulidad_concesion`, `aclaratoria`, etc. — "competencia en sí es distinto") + eje COARSE
+`{fondo, procedimiento, originaria}` que alimenta `is_merit`. Surge **B131** (nulidad del auto podría
+colarse como fondo: OBJ del clasificador incluye "auto").
+
+### H141-04 — Decisiones de schema
+
+`disposicion` → multiclass canónico (LOCKED). `admision` → multiclass canónico (LOCKED). Eje coarse →
+rollup derivado (LOCKED). `outcome` → deprecar+reemplazar, opción A (corte duro, rompe Dataverse) vs
+B (blanda, derivada legacy) **abierta**, recomendada B. Canal admisión: consolidar `RE_GRANT` (admite)
++ cascade 280/ac4/desestima (inadmite) en un `clasificador_admision.py` nuevo (fuente única).
+
+### H141-05 — Hallazgo metodológico HM-01
+
+El gate de admisibilidad es el aporte específico del corpus frente al SCDB (que trabaja post-gate). El
+refactor admisión/mérito es su expresión arquitectónica. A documentar en CODEBOOK (Fase 5 de M26) +
+tesis (relación con H1, certiorari criollo).
+
+### H141 — Estado final
+
+- **Corpus:** 5890 casos. **Sin cambios** en outputs canónicos vs H140 (sesión de diseño/diagnóstico).
+- **Parser:** v21.01 (sin cambios). `_manifest.json`: [CLEAN] 63, **no re-sellado** (no se tocó la cadena).
+- **Decisión:** refactor admisión/mérito (M26) aprobado, diseño cerrado, implementación multi-sesión (3–5).
+
+**Scripts creados:** `scripts/diagnostico/H141/ab_b129_inoficioso.py` (diagnóstico A/B de B129).
+
+**Documentación:** DEUDA — M26/B131/HM-01 nuevos, B129 entrada estructurada creada, encabezado +
+tablero actualizados. Handoff: `PROMPT_H142_refactor_admision_merito.md`.
+
+**Commits:** script de diagnóstico H141 + docs (BITACORA/DEUDA). Sin commit de pipeline/outputs/manifest
+(no cambió la cadena).
