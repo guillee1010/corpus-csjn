@@ -39,3 +39,5 @@ diagnostico/_extraidos/
 backup/
 *.bak
 estudio_13/
+
+.env
