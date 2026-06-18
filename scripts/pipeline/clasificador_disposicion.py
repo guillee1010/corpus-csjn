@@ -17,7 +17,13 @@ v1.01 — norm() ahora des-hifena el soft-hyphen (\u00ad) de fin de línea del O
         REQUIERE regenerar la clave (build_m20) y re-sellar antes de cerrar.
 """
 import re
-__version__ = "1.06"
+__version__ = "1.07"
+
+# v1.07 (B131, M26 Fase 2): pre-cascada nulidad_concesion (RE_NULIDAD_CONCESION,
+# verbatim del parser L470) — nulidad/deja del auto de concesión o denegatoria del
+# REX = procedimiento, no fondo. Saca 30 casos de fondo (22 nulidad + 8 deja_sin_efecto).
+# Validado vs gold n300: los 4 tocados tienen es_revision_fondo=no → 0 regresión;
+# κ-gate del de-interleave 0,887→0,906 (+0,019). REQUIERE regenerar recursos + re-sellar.
 
 # v1.06 (H139): RE_RUNNING_HEAD case-sensitive (saca re.I), sync con parser L218.
 # El banner es MAYÚSCULAS; "Corte Suprema de Justicia de la Nación" en mixta es CUERPO,
@@ -73,12 +79,25 @@ RE_PROCESAL = re.compile(r"\bcaducidad\b|\breposici[oó]n\b|\baclaratoria\b|\bho
                          r"\bfalta\s+de\s+legitimaci[oó]n\b", re.I)
 RE_HEADER = re.compile(r"(?:DE\s+JUSTICIA\s+DE\s+LA\s+NACI[OÓ]N|FALLOS\s+DE\s+LA\s+CORTE)\s*\d*\s*$", re.I)
 RE_GRANT = re.compile(r"hace\s+lugar|procedente", re.I)
+# B131 (M26 Fase 2): nulidad/dejar sin efecto del AUTO DE CONCESIÓN o de la
+# denegatoria del REX = ataca la VÍA (procedimiento), no el fondo. VERBATIM del
+# parser.py L470 (RE_DISP_NULIDAD_CONCESION, B119, recall-safe n300=0 sobre gold=sí)
+# — fuente conceptual única; dedup a módulo compartido pendiente (igual que RE_RUNNING_HEAD v1.05).
+RE_NULIDAD_CONCESION = re.compile(
+    r"auto\s+de\s+concesi[oó]n\s+del\s+recurso\s+extraordinario|"
+    r"nulidad\s+de\s+(?:la\s+resoluci[oó]n|las\s+resoluciones)\b"
+    r".{0,90}?conced\w+\b.{0,30}?recursos?\s+extraordinarios?|"
+    r"(?:resoluci[oó]n|auto)\s+\w*\s*que\s+conced\w+\s+(?:el|los)\s+recursos?\s+extraordinarios?|"
+    r"resoluci[oó]n\s+denegatoria\s+del\s+remedio\s+federal|"
+    r"denegatoria\s+del\s+remedio\s+federal", re.I)
 
 def disposicion(pe):
     """(label, reenvia_bool) a partir del por_ello_text."""
     pe = norm(pe)
-    enc = [lab for lab, pat in DISP if pat.search(pe)]
     remand = bool(RE_REMAND.search(pe))
+    if RE_NULIDAD_CONCESION.search(pe):           # B131: nulidad/deja del auto de concesión = vía, no fondo
+        return "nulidad_concesion", remand
+    enc = [lab for lab, pat in DISP if pat.search(pe)]
     if enc: return enc[0], remand
     if RE_RECHAZA_REC.search(pe): return "confirma", remand
     if RE_COMPET.search(pe):  return "no_revision_competencia", remand
