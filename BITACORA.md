@@ -17789,3 +17789,46 @@ tablero actualizados. Handoff: `PROMPT_H142_refactor_admision_merito.md`.
 
 **Commits:** script de diagnóstico H141 + docs (BITACORA/DEUDA). Sin commit de pipeline/outputs/manifest
 (no cambió la cadena).
+
+## H142 — M26 Fase 1: A/B en disco del de-interleave admisión/mérito (2026-06-17)
+
+**Objetivo:** correr el A/B de Fase 1 del refactor M26 sobre los 5890 reales (gate REE), afinar la doctrina admisión/mérito y dejar el handoff para la cirugía (Fase 2). Sin cambios canónicos.
+
+### H142-01 — Apertura: citas de §9 re-confirmadas + bug del gate confirmado
+
+Re-confirmadas contra `parser.py` v21.01 todas las citas del handoff (`classify_outcome` l.503, `MERIT_OUTCOMES` l.3624, `is_merit` l.3629, `RE_DISP_INOFICIOSO` l.497, bare `\binoficioso\b` l.343). Hallazgo que afina el plan: `procesar_archivo` ya tiene las dos tablas de ruteo como sets (`MERIT_OUTCOMES` + `GATEKEEP_OUTCOMES`, l.3624-3628); los únicos `outcome` sin bucket son `competencia`/`cautelar`/`nulidad_concesion`. **Bug de §9 confirmado en disco:** `es_revision_fondo == is_merit_decision` en **5890/5890** → el gate es la copia perezosa del flag del parser (`out["es_revision_fondo"] = df["is_merit_decision"].map(...)` en `derivar_recursos`, la línea a borrar).
+
+### H142-02 — A/B del de-interleave (175/153 reproducido en disco)
+
+Script `scripts/diagnostico/H142/ab_deinterleave_fase1.py` (v2): rutea el `outcome` plano a los dos canales sobre los 5890, recomputa `is_merit = disposicion ∈ fondo` desde el deriver, sin tocar el parser; reusa `clasificador_disposicion.DISP` como fuente del set fondo.
+
+Crosstab viejo×nuevo `is_merit`: **175 gana / 153 pierde / neto +22** (base, idéntico al diagnóstico H141, ahora corrido full y reproducido en el disco de Guillermo). Sensibilidad de las 2 perillas: +grant_remand → +32; +grant_remand+guard originaria → **+16** (recomendada). Los 153 perdidos son **88% `hace_lugar`(99)+`procedente`(36) = admisión pura**. Los 175 ganados: 49 `abstracto` (incluye los 25 de B129, recuperados estructuralmente sin el parche), 30 `nulidad_concesion` (hotspot B131), 16 originaria∩fondo.
+
+### H142-03 — Doctrina admisión/mérito afinada (LOCKED)
+
+`procedente`/`admisible` = SIEMPRE admisibilidad (canal admisión), no indican ganador; el mérito y el ganador = el **VERBO** (`disposicion ∈ {revoca, deja_sin_efecto, confirma, modifica, nulidad}`); `hace lugar al recurso` = recurrente gana (fondo, trae verbo atrás). `hace lugar` es **object-dependent**: a la queja = admisión, a cautelar/demanda = procesal/originaria.
+
+Tests en disco: `procedente` (759) reparte **85% gana / 11% confirma** → admisibilidad orthogonal al ganador, CONFIRMADO. Hipótesis `es_queja` para discriminar los 81 `hace_lugar`+`confirma` REFUTADA (ambos 93% queja) → el objeto solo se resuelve con el por_ello.
+
+### H142-04 — Hallazgo arquitectónico: el canal admisión ya está medio construido
+
+`admisible` vive en `QUEJA_RESULTADO_PATTERNS` (parser l.766+, campo `queja_resultado`) = gate de admisión de la queja, ya modelado. El comentario de parser l.392-394 trae la fórmula canónica ("se declara admisible la queja, procedente el recurso extraordinario y se deja sin efecto" = capa admisión + verbo de mérito). El `clasificador_admision` (Fase 2) consolida `queja_resultado` (2080: admite 1485 + inadmite 595) + `procedente`/inadmisibles del outcome (990). Esto materializa **HM-01**: dos gates (admisión de la queja + procedencia del REX) adentro del corpus = el aporte vs SCDB. `procedente` 9% queja (concedido) vs `hace_lugar` 93% queja (recurso de hecho) = las dos vías de acceso (conecta con H1, certiorari criollo).
+
+### H142-05 — Eje coarse + decisiones de borde
+
+Eje coarse: **fondo 2886 / procedimiento 2458 / originaria 546**. `competencia` bifurca: originaria si `is_originaria`, si no procedimiento (Q2, RESUELTO). Decisiones de borde pendientes de lock: **grant_remand** (dentro de fondo, recurrente_gana, rec.) y **guard originaria** (se queda — "es_revision_fondo es revisión, originaria no es revisión", rec.).
+
+### H142 — Estado final
+
+**Sin cambios canónicos.** parser v21.01, `clasificador_disposicion` v1.06, golden, `_manifest.json` [CLEAN] 63 — todo intacto. Sesión 100% diagnóstica (manifest/CHANGELOG no se disparan).
+
+- **Corpus:** 5890 casos (sin cambios).
+- **Outputs canónicos:** sin tocar (no se re-corrió el parser, no se regeneró el manifest).
+
+**Scripts creados:** `scripts/diagnostico/H142/ab_deinterleave_fase1.py` (A/B Fase 1, v2). Auxiliar: lista de 56 IDs a desambiguar por objeto (`ids_grant_recurso_a_revisar.txt`).
+
+**Pendientes Fase 2 (requieren `csjn_casos_textos.csv`):** object-split de ~57 bare `no_fondo`+`rechaza` (→ `RE_GRANT_RECURSO`); ~17 deriver-FN (outcome=verbo pero `disposicion≠fondo`); 30 `nulidad_concesion`→fondo (B131); re-verificar los 25 de B129; value-set de `admision`.
+
+**Commits:** 1 — `scripts/diagnostico/H142/ab_deinterleave_fase1.py` + `DEUDA_TECNICA.md` (+ este append de BITACORA). Sin commits de pipeline (cadena canónica intacta).
+
+**Handoff Fase 2:** `PROMPT_H143_cirugia_parser.md`.
