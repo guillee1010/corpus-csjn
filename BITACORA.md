@@ -17832,3 +17832,28 @@ Eje coarse: **fondo 2886 / procedimiento 2458 / originaria 546**. `competencia` 
 **Commits:** 1 — `scripts/diagnostico/H142/ab_deinterleave_fase1.py` + `DEUDA_TECNICA.md` (+ este append de BITACORA). Sin commits de pipeline (cadena canónica intacta).
 
 **Handoff Fase 2:** `PROMPT_H143_cirugia_parser.md`.
+
+## H143 — M26 Fase 2: B131 CERRADO + esquema de nombres lockeado + eyeballs §4.2 (2026-06-17)
+
+**Objetivo:** ejecutar M26 Fase 2 — cerrar el primer ladrillo estructural (B131) y fijar el esquema canónico del refactor admisión/mérito.
+
+### H143-01 — A/B Fase 1 reproducido en disco (era virtual)
+Corrido `ab_deinterleave_fase1.py` (nunca había corrido; el 175/153/+22 del prompt H143 era reconstruido). Confirmado en disco: base **175 gana / 153 pierde / +22**, +grant +32, +grant+guard **+16** (= is_merit 2886). Eje coarse fondo 2886 / proc 2458 / orig 546; admisión sin_marcador 1950 / admite_queja 1485 / inadmite_queja 595 / admite_rex 565 / inadmite_rex 425. Bug del gate confirmado: `es_revision_fondo == is_merit_decision` **5890/5890** (copia perezosa).
+
+### H143-02 — Eyeballs §4.2 (18 deriver-FN) cerrados sobre texto real + clasificador real
+18/18 reproducen. **5 FN genuinos** (fondo perdido), todos **OBJ fuera de vocab** (332_p2797 «lo decidido», 332_p731 «reajuste de haberes», 340_p411 «declaración de inconstitucionalidad», 341_p1924 «aplicación», 338_p234 distancia W=55). **~12 remociones correctas** (nulidad procesal, excusación, providencia, cautelar, competencia). 1 borde (338_p284). Causa = OBJ-vocab (confirma H139), NO shadowing (premisa H132 refutada). Refinamiento: OBJ-vocab pesa también en el gate, no solo en parte. Ampliación OBJ conservadora medida: 16 flips, solo 2 FN conocidos, 13 FP-surface (2:13) → OBJ va estructural y gold-validado, commit aparte.
+
+### H143-03 — Esquema de nombres M26 LOCKEADO
+camelCase SCDB en la cara de datos, snake_case en código, valores español + crosswalk SCDB al CODEBOOK: `caseDisposition`←disposicion, `isMerit`←is_merit/es_revision_fondo, `admissibility` (multiclass nuevo con `no_aplica`), `partyWinning`←parte_ganadora. **`isAdmissible` NO va como bool forzado**: predicado parcial (1950 sin gate; bool los confundiría con los 1020 inadmitidos, rompe HM-01). Perillas lockeadas: dentro+guard → 2886. Aclaración κ: reabrir κ no obliga a re-codear 300 (gold independiente del parser; admissibility = +1 columna seedeada).
+
+### H143-04 — B131 CERRADO (commit a890d92)
+`clasificador_disposicion` v1.06→v1.07: pre-cascada `RE_NULIDAD_CONCESION` (verbatim del parser L470, B119). **31 casos → nulidad_concesion** (22 nulidad + 8 deja_sin_efecto + 1 no_fondo), **30 salen de fondo** (2892→2862), `parte_ganadora` de los 30 `recurrente_gana`→`no_aplica`. Gold n300: 4/4 tocados `es_revision_fondo=no` → **0 regresión**. κ-gate del de-interleave 0,887→**0,906** (+0,019), latente (cambia caseDisposition/parte, no es_revision_fondo aún). Números reproducidos exacto en disco.
+
+### H143 — Estado final
+- **Corpus:** 5890 casos (sin cambios — parser.py intacto).
+- **Output tocado:** `output/parser/csjn_casos_recursos.csv` — 5890 filas; disposición: nulidad_concesion 31 (nuevo) · nulidad 88→66 · deja_sin_efecto 1361→1353 · no_fondo 1868→1867; fondo leída 2892→2862.
+- **Parser outputs (casos/votos/zonas/editorial):** sin cambios.
+
+**Scripts creados:** ninguno en repo (diagnósticos en sandbox).
+
+**Commits:** 1 de código (`a890d92`, B131 + recursos.csv) + pendientes: manifest, DEUDA, BITACORA/CHANGELOG.

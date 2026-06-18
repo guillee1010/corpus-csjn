@@ -2,6 +2,11 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H143 (2026-06-17)
+
+- `clasificador_disposicion.py`: v1.06→v1.07 — pre-cascada `RE_NULIDAD_CONCESION` (B131, verbatim del parser L470). nulidad/deja del auto de concesión = procedimiento, no fondo.
+- `output/parser/csjn_casos_recursos.csv`: 5890 filas — nulidad_concesion 31 (nuevo); nulidad 88→66; deja_sin_efecto 1361→1353; fondo leída 2892→2862.
+
 ## H139 (2026-06-16)
 
 - `parser.py` v21.0→v21.01: `RE_RUNNING_HEAD` case-sensitive (sacado `re.I`). NO-OP (disposición 0/5890). Precondición para limpiar el banner del considerando (materia).
