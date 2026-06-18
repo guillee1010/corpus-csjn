@@ -17,7 +17,19 @@ v1.01 — norm() ahora des-hifena el soft-hyphen (\u00ad) de fin de línea del O
         REQUIERE regenerar la clave (build_m20) y re-sellar antes de cerrar.
 """
 import re
-__version__ = "1.07"
+__version__ = "1.08"
+
+# v1.08 (M26 Fase 2 — rewiring del gate). NO toca disposicion() (caseDisposition = el
+# verbo, κ disposición 0,912 intacto). Agrega es_revision_fondo() = el GATE de revisión
+# de fondo derivado de caseDisposition + guards B119 (competencia/inoficioso dispositivos
+# = procedimiento, no fondo) + lookahead B129 (no dispara en "resultando inoficioso que
+# dictamine el PGN"). Los guards van en el GATE, NO en el verbo: un fallo de competencia
+# que revoca para sentar competencia conserva caseDisposition=revoca (lo que codea el gold)
+# pero es_revision_fondo=no. Reemplaza la copia perezosa de derivar_recursos.
+# Validado n300: gate 0,933→0,946 (supera al publicado), disposición 0,912 (sin cambio),
+# 0 re-map del gold, 0 contaminación. Corpus: is_merit 2870→2816. RE_DISP_COMPETENCIA
+# verbatim parser L488; RE_DISP_INOFICIOSO = parser L497 + lookahead B129. REQUIERE
+# regenerar recursos + re-sellar. ABSORBE B129 (deja de ser commit standalone diferido).
 
 # v1.07 (B131, M26 Fase 2): pre-cascada nulidad_concesion (RE_NULIDAD_CONCESION,
 # verbatim del parser L470) — nulidad/deja del auto de concesión o denegatoria del
@@ -91,6 +103,20 @@ RE_NULIDAD_CONCESION = re.compile(
     r"resoluci[oó]n\s+denegatoria\s+del\s+remedio\s+federal|"
     r"denegatoria\s+del\s+remedio\s+federal", re.I)
 
+# v1.08: guards del GATE (NO del verbo). VERBATIM del parser classify_outcome (B119):
+# RE_DISP_COMPETENCIA L488, RE_DISP_INOFICIOSO L497 — competencia/inoficioso DISPOSITIVOS
+# = procedimiento, no fondo. El alt-2 de inoficioso lleva el lookahead de B129 para NO
+# disparar en el aside "resultando inoficioso que dictamine el PGN" (el fallo decide el
+# fondo igual). Usados SOLO en es_revision_fondo(); disposicion() (el verbo) no los ve.
+RE_DISP_COMPETENCIA = re.compile(
+    r"resulta\s+competente\s+para\s+conocer|"
+    r"tomar\s+intervenci[oó]n\s+en\s+el\s+conflicto|"
+    r"conflicto\s+(?:positivo|negativo)\s+de\s+competencia", re.I)
+RE_DISP_INOFICIOSO = re.compile(
+    r"inoficioso\s+(?:emitir|expedirse|(?:un\s+)?pronunciamiento|pronunciarse)|"
+    r"(?:deviene|torna\w*|result\w+)\s+(?:inoficioso|abstract\w+)(?![^.]{0,40}(?:dictamin|procurador))|"
+    r"declara\w*\s+abstract\w+\s+la\s+cuesti[oó]n", re.I)
+
 def disposicion(pe):
     """(label, reenvia_bool) a partir del por_ello_text."""
     pe = norm(pe)
@@ -112,3 +138,22 @@ def parte_ganadora_regla(disp):
     if disp == "confirma": return "recurrente_pierde"
     if disp == "modifica": return "parcial"
     return "no_aplica"
+
+_FONDO = {"revoca", "deja_sin_efecto", "nulidad", "confirma", "modifica", "grant_remand_implicito"}
+
+def es_revision_fondo(disp, por_ello, is_originaria):
+    """GATE de revisión de fondo (isMerit) — M26 rewiring.
+
+    Deriva de caseDisposition (disp) ∈ fondo, MENOS los guards dispositivos B119
+    (competencia/inoficioso = procedimiento) y la originaria. El guard vive acá, NO
+    en disposicion(): un fallo de competencia que revoca para sentar competencia
+    conserva caseDisposition=revoca, pero es_revision_fondo=no. Reemplaza la copia
+    perezosa (es_revision_fondo == is_merit_decision) de derivar_recursos.
+    Devuelve 'si'/'no'.
+    """
+    pe = norm(por_ello)
+    if RE_DISP_COMPETENCIA.search(pe) or RE_DISP_INOFICIOSO.search(pe):
+        return "no"                       # competencia/inoficioso dispositivo = procedimiento
+    if is_originaria:
+        return "no"                       # originaria no es revisión
+    return "si" if disp in _FONDO else "no"

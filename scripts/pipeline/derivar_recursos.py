@@ -10,6 +10,10 @@ La lógica se importa de módulos fuente-única (mismos que validan en build_m20
 
 Salida: output/parser/csjn_casos_recursos.csv (1 fila por caso).
 
+v0.3 — M26 rewiring del gate: es_revision_fondo deja de ser la copia perezosa de
+       is_merit_decision (parser) y pasa a derivarse de caseDisposition + guards
+       (es_revision_fondo() de clasificador_disposicion v1.08). Cierra el gate-gap del
+       de-interleave (gate κ 0,933→0,946) y absorbe B129. is_merit corpus 2870→2816.
 v0.2 — agrega la VÍA recursiva (via_recurso + multi_recurso) vía clasificador_via
        (fuente única, primacía del ordinario). Lee considerando además del dispositivo
        (la vía a veces vive en los fundamentos). Hereda el norm() v1.01 (\xad-aware),
@@ -27,10 +31,10 @@ csv.field_size_limit(10**7)
 HERE = Path(__file__).resolve().parent       # scripts/pipeline/
 ROOT = HERE.parents[1]                        # raiz del repo
 sys.path.insert(0, str(HERE))
-from clasificador_disposicion import disposicion, parte_ganadora_regla, __version__ as CLF_VER
+from clasificador_disposicion import disposicion, parte_ganadora_regla, es_revision_fondo, __version__ as CLF_VER
 from clasificador_via import via_recurso, __version__ as VIA_VER
 
-__version__ = "0.2"
+__version__ = "0.3"
 
 CASOS  = ROOT / "output" / "parser" / "csjn_casos.csv"
 TEXTOS = ROOT / "output" / "parser" / "csjn_casos_textos.csv"
@@ -57,8 +61,10 @@ def derivar(casos_path=CASOS, textos_path=TEXTOS, out_path=OUT):
     out["via_recurso"]   = v.map(lambda t: t[0])
     out["multi_recurso"] = v.map(lambda t: "si" if t[1] else "no")
 
-    # contexto para análisis (no es derivación nueva, viene del parser)
-    out["es_revision_fondo"] = df["is_merit_decision"].map(lambda x: "si" if x == "1" else "no")
+    # es_revision_fondo (M26 rewiring v0.3): GATE derivado de caseDisposition + guards
+    # (clasificador_disposicion.es_revision_fondo), ya NO la copia perezosa de is_merit_decision.
+    out["es_revision_fondo"] = [es_revision_fondo(d, pe, o == "1")
+        for d, pe, o in zip(out["disposicion"], df["por_ello_text"], df["is_originaria"])]
     out["es_queja"] = df.get("es_queja", "")
     return out
 

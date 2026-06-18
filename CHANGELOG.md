@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H145 (2026-06-18)
+
+- `clasificador_disposicion.py` v1.07→v1.08: + `es_revision_fondo(disp, por_ello, is_originaria)` (gate con guards competencia/inoficioso B119 + lookahead B129). `disposicion()` sin cambio.
+- `derivar_recursos.py` v0.2→v0.3: rewiring — `es_revision_fondo` derivado de `caseDisposition`+guards, ya no la copia perezosa de `is_merit_decision`.
+- `output/parser/csjn_casos_recursos.csv`: `es_revision_fondo` 234 celdas (gate κ 0,933→0,946; is_merit 2870→2816).
+
 ## H143 (2026-06-17)
 
 - `clasificador_disposicion.py`: v1.06→v1.07 — pre-cascada `RE_NULIDAD_CONCESION` (B131, verbatim del parser L470). nulidad/deja del auto de concesión = procedimiento, no fondo.

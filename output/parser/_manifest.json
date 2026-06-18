@@ -1,9 +1,9 @@
 {
   "schema_version": 4,
   "manifest_generator_version": "1.5",
-  "generated_at": "2026-06-18T02:45:22.109019+00:00",
+  "generated_at": "2026-06-18T04:00:27.657271+00:00",
   "git": {
-    "commit": "a890d92ba19debc119d099210c9a664dd50a4a52",
+    "commit": "b23e3151949413f44b59a1980a16c957f1a0c9ad",
     "dirty": true
   },
   "pipeline_scripts": {
@@ -13,7 +13,7 @@
     "parser.py": "21.01",
     "parser_editorial.py": "1.0",
     "derivar_materia.py": "3.2",
-    "derivar_recursos.py": "0.2"
+    "derivar_recursos.py": "0.3"
   },
   "corpus": {
     "n_files": 46,
@@ -381,8 +381,8 @@
     "csjn_casos_recursos.csv": {
       "path": "output/parser/csjn_casos_recursos.csv",
       "generated_by": "derivar_recursos.py",
-      "generator_version": "0.2",
-      "sha256": "1ca85401a0a4ddfc9a0101093429764bd99ed53fcd35100b78f923a5d32e99bc",
+      "generator_version": "0.3",
+      "sha256": "e6640fd98f6e74ea690887268331697cdd6b5bf2c31ac97f8805b5c553f9f0ae",
       "n_rows": 5890,
       "n_bytes": 359937
     }

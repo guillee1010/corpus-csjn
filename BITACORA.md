@@ -17857,3 +17857,27 @@ camelCase SCDB en la cara de datos, snake_case en código, valores español + cr
 **Scripts creados:** ninguno en repo (diagnósticos en sandbox).
 
 **Commits:** 1 de código (`a890d92`, B131 + recursos.csv) + pendientes: manifest, DEUDA, BITACORA/CHANGELOG.
+
+## H145 — M26 Fase 2: rewiring del gate (diseño B) + B129 CERRADO (2026-06-18)
+
+**Objetivo:** cerrar el gate-gap del de-interleave y hacer el rewiring de `es_revision_fondo` (de copia perezosa a derivado de `caseDisposition`).
+
+### H145-01 — Descomposición del gate-gap (refuta la premisa del prompt)
+El gap 0,906 vs 0,933 NO era OBJ-vocab (el prompt H144 lo daba como "5 FN OBJ + procedente"). Sobre el n300, de 9 casos del gap: 1 OBJ-vocab, 1 truncado/M21, 7 FP del de-interleave por **guards de competencia/inoficioso faltantes** — el de-interleave perdió la pre-cascada B119 al mudar el gate de `outcome`→`disposicion`. κ reproducidos exacto (viejo 0,933 / de-interleave 0,906).
+
+### H145-02 — El número del prompt era stale
+`2886/+16` (is_merit nuevo / neto) era el A/B pre-B131 arrastrado a H144. Sobre el dato vivo (recursos.csv post-B131): 2856/−14. Con guards: 2816/−54. El gate del de-interleave es más chico Y más preciso que el publicado.
+
+### H145-03 — Diseño A vs B; gold no se toca
+Diseño A (guard dentro de `disposicion`) cerraba el gate pero regresaba disposición 0,912→0,901 (1 caso, 339_p490: gold codea verbo=revoca, parser=competencia). Re-map del gold **descartado** (contaminación: el error humano es la señal). Diseño B: guard en el GATE, `caseDisposition`=verbo intacto → disposición 0,912 sin cambio, gold sin tocar.
+
+### H145-04 — B129 absorbido
+Port verbatim del inoficioso re-rompía B129 (46 FP corpus, asides "inoficioso que dictamine el PGN"). Lookahead `(?![^.]{0,40}(?:dictamin|procurador))` en el guard rescató 24 asides como fondo, dejó 22 mootness genuina afuera. B129 CERRADO sin commit standalone.
+
+### H145 — Estado final
+- **Corpus:** sin cambio (parser intacto v21.01) — casos/votos/zonas/editorial idénticos.
+- **`csjn_casos_recursos.csv`:** `es_revision_fondo` 234 celdas cambian (rewiring), `is_merit` corpus 2870→2816. `disposicion`/`parte`/`via` 0 cambios.
+- **Re-golden n300:** gate 0,933→0,946 · disposición 0,912 (sin cambio) · parte 0,644 (sin cambio). Sanity `disposicion(sidecar)==recursos` 0/5890.
+
+**Scripts:** `clasificador_disposicion.py` v1.07→v1.08 (gate function `es_revision_fondo`; `disposicion()` intacto), `derivar_recursos.py` v0.2→v0.3 (rewiring).
+**Commits:** 1 (rewiring + B129) — ver kit.
