@@ -2,6 +2,13 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H146 (2026-06-18)
+
+- `scripts/pipeline/clasificador_admision.py` v0.1 (NUEVO): canal de admisibilidad, eje puro `{admite, inadmite, no_aplica, sin_marcador}`, vía transversal. Object-aware `RE_ADMITE_REX_TXT`.
+- `scripts/pipeline/derivar_recursos.py` v0.3→v0.4: agrega columna `admisibilidad`. Aditivo puro (0 diffs en columnas existentes).
+- `output/parser/csjn_casos_recursos.csv`: +1 columna `admisibilidad` (5890 filas, sin cambio de filas). Dist: admite 2896 / sin_marcador 1450 / inadmite 1020 / no_aplica 524.
+- `output/parser/_manifest.json`: re-sellado.
+
 ## H145 (2026-06-18)
 
 - `clasificador_disposicion.py` v1.07→v1.08: + `es_revision_fondo(disp, por_ello, is_originaria)` (gate con guards competencia/inoficioso B119 + lookahead B129). `disposicion()` sin cambio.

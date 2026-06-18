@@ -17881,3 +17881,55 @@ Port verbatim del inoficioso re-rompía B129 (46 FP corpus, asides "inoficioso q
 
 **Scripts:** `clasificador_disposicion.py` v1.07→v1.08 (gate function `es_revision_fondo`; `disposicion()` intacto), `derivar_recursos.py` v0.2→v0.3 (rewiring).
 **Commits:** 1 (rewiring + B129) — ver kit.
+
+
+## H146 — M26 Fase 2: canal admisibilidad (`clasificador_admision.py`) — eje puro, vía transversal (2026-06-18)
+
+**Objetivo:** construir el canal de admisibilidad de M26 (paso 1 del plan restante): `clasificador_admision.py`, columna `admisibilidad` en `csjn_casos_recursos.csv`, y seed del κ.
+
+### H146-01 — Decisión de schema: eje PURO + vía TRANSVERSAL (revisa §3/§4 del plan M26)
+
+El plan M26 (§3/§4) tenía `admissibility` como multiclass con la vía fusionada en el valor (`admite_queja`/`inadmite_queja`/`admite_rex`/`inadmite_rex`). Refutado en disco: la queja es un **modo de acceso transversal**, no un valor del eje de admisibilidad. Decisión LOCKEADA: `admisibilidad ∈ {admite, inadmite, no_aplica, sin_marcador}` = SOLO la decisión de acceso; la vía (queja / REX directo / ordinario) vive en `es_queja`/`via_recurso`/`is_originaria`. HM-01 (dos vías de acceso) se expresa como el cruce `admisibilidad × es_queja`, no como valores compuestos.
+
+Hallazgos que fundan la decisión (en disco, 5890):
+- **Admitir la queja implica resolver el REX:** de 1485 `admite_queja`, solo 193 (13%) enuncian "procedente el REX" explícito; las 1292 restantes no lo dicen pero 1235 resuelven al fondo (deja 791 + revoca 352 + confirma 91 + nulidad 13). La procedencia del REX queda absorbida en el "hace lugar a la queja".
+- **La queja es transversal** a la vía-tipo (98,5% REX, 30 ordinario), a la admisibilidad (admite 1598 / inadmite 624) y al mérito (revoca+deja 1412 / confirma 106).
+
+### H146-02 — `clasificador_admision.py` v0.1 (nuevo) + object-aware
+
+Fuente única paralela a `clasificador_disposicion`/`clasificador_via` (reusa `norm`). Cascada con precedencia: queja (`queja_resultado`) > REX (`outcome`) > texto object-aware > originaria (`no_aplica`) > implícito (`disposicion∈fondo`) > `sin_marcador`.
+
+**Object-aware acotado** (`RE_ADMITE_REX_TXT`): recupera "se declara admisible el recurso extraordinario / el recurso de queja" y "hace lugar al recurso extraordinario" del `sin_marcador` — objeto ∈ {REX, queja}, NO reposición/demanda/cautelar (el objeto desambigua, solo visible en `por_ello`). `\b` antes de `admisible` → 0 falsos positivos en "inadmisible el REX" (17 casos verificados). Recuperó 8 netos del `sin_marcador`.
+
+### H146-03 — `derivar_recursos.py` v0.3→v0.4 + validación en disco
+
+Agrega columna `admisibilidad`. **Aditivo puro verificado:** 0 diffs en las 7 columnas existentes vs `recursos.csv` previo (disposicion/reenvia/parte_ganadora/via_recurso/multi_recurso/es_revision_fondo/es_queja byte-idénticas). Corrido en disco de Guillermo → distribución reproducida exacto.
+
+**Distribución `admisibilidad` (5890):** admite 2896 / sin_marcador 1450 / inadmite 1020 / no_aplica 524.
+
+**Coherencia con el gate humano (gold n300):** 135/135 `cod_es_revision_fondo=si` son `admite` (acceso ⟹ fondo); inadmite/no_aplica/sin_marcador todos gate=no; los 16 `admite ∩ gate=no` son acceso-concedido-sin-mérito legítimos (abstracto/remand/procesal).
+
+### H146-04 — κ `admisibilidad`: seed construido, verificación DIFERIDA
+
+Sanity del gold rebuild canónico (`planilla_M20_LIMPIA_n300__rebuild.xlsx`): gate 135/165, disposición deja63/revoca48/confirma27/nulidad2 — confirmado canónico. Construida planilla seedeada (`cod_admisibilidad` pre-llenada con la predicción + columnas `ref_*` con las señales + 14 object-aware marcados en amarillo). Review focalizado ≈ 27 filas (~4 decisiones doctrinales: `329_p472` nulidad_concesion, `334_p376` demanda, 2 desistidas). **κ no corrido** (verificación diferida).
+
+### H146-05 — B132 nuevo (parser)
+
+`331_p434` "admisible el recurso de queja" no sale en `queja_resultado`: `_SYN_Q` no cubre "recurso de queja". Recuperado por el object-aware del clasificador, pero el origen es el parser. Commit separado, fuera de M26.
+
+### H146 — Estado final
+
+**Capa-deriver (lo que cambió):**
+- `output/parser/csjn_casos_recursos.csv` — 5890 filas, +1 columna `admisibilidad` (aditivo puro, 7 columnas previas sin cambio). Dist: admite 2896 / sin_marcador 1450 / inadmite 1020 / no_aplica 524.
+
+**Parser (sin cambio vs H145):** v21.01, outputs canónicos del parser idénticos; `check_regresion` [CLEAN] 5/5 (no corre derivers, no requiere re-golden).
+
+**Scripts:**
+- `scripts/pipeline/clasificador_admision.py` v0.1 — NUEVO.
+- `scripts/pipeline/derivar_recursos.py` v0.3→v0.4.
+- Sin cambio: parser.py v21.01, clasificador_disposicion.py v1.08, clasificador_via.py v0.1.
+
+**Manifest:** re-sellado (recursos.csv hash + derivar_recursos v0.4). Provenance de `clasificador_admision.py` a verificar en `generar_manifiesto.py`.
+
+**Commits:** [completar con los reales].
+
