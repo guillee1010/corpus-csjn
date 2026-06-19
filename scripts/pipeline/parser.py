@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "21.01"  # H139: RE_RUNNING_HEAD case-sensitive (saca re.I) — el banner es MAYÚSCULAS; "Corte Suprema" en mixta del cuerpo NO es header. Verificado: por_ello 467/467 mayúsculas → no-op sobre el output (check_regresion [CLEAN] esperado). Base para limpiar el banner del considerando (materia, frente aparte). MINOR. // H137: M21 Fase 2 — RE_RUNNING_HEAD enmascarado en _barrer (saca el banner editorial del por_ello + libera presupuesto del chunk → recupera el dispositivo truncado). MAJOR (afecta outcome/por_ello_text/considerando indirecto/votos denormalizados). 463 banners / 0 FP verificado sobre el texto del sidecar; el efecto de recuperación-por-presupuesto y la regresión se validan en disco re-corriendo el parser (regression→golden→re-sello). PROPUESTA, NO cerrado. // H131: B019 CERRADO — fallback firma_actual de detectar_fin_real ahora extiende la firma wrapeada (extender_firma): cuando la firma de la Corte parte en >1 línea del OCR ("…— Carlos\nS. Fayt — …"), el pick bidireccional anclaba en la 1ª línea-firma y dejaba la continuación afuera del bloque → firma/votos truncados (23 casos, todos pista_fin=firma_actual). extender_firma avanza desde la línea elegida por linea_es_firma_de_juez, frena en la 1ª no-firma (epílogo "Recurso … interpuesto por …"), tolera 1 vacía (espejo collect_firma_lines), respeta limite_adelante (no invade el fallo siguiente). PoC en disco (poc_b019_extender_firma_actual): +56 votos / 23 casos / 0 sobre-extensión / 92 firma-completa intactos. Corolario: la zona firma de csjn_casos_zonas crece 1-2 líneas en esos 23 (la zonificación es downstream de linea_fin_real, así que heredaba el truncado). MINOR: solo extiende la salida del fallback firma_actual; NO altera el pick bidireccional B045/H069. Residual: 338_p1060 (línea "Maqueda (según su voto)." de 1 juez no la agarra el predicado angosto = deuda menor); consolidación vía divisor de zonas = camino elegante futuro (mover zonificación upstream del borde). // H130: B124 CERRADO — regla P en _barrer: entre candidatos-con-firma de la ventana del dispositivo devuelve el PRIMER performativo (RE_PERF v2); fallback al primer-con-firma (= comportamiento v19) si ninguno lo es. RE_PERF v2 = "se <verbo>" (clítico opc., H129) | "(el Tribunal|esta Corte|la Corte) resuelve" | "resuelve:" — extiende v1 a performativos de mayoría SIN "se", auditados en disco (audit_resuelve_sin_se, 5890 casos: "el Tribunal resuelve" 300 + "resuelve:" 23; OTRO_RESUELVE/ESTA_CORTE/LA_CORTE/RESUELVE_UP = 0 → sin over-match de instancia inferior). Recupera el dispositivo de fondo cuando el primer-con-firma es argumental (cierra B123/B124). Validación en disco: outcome +121 recuperaciones (otro→real) / 29 real→real (dom. inadmisible_280→merit) / 0 regresiones a otro; scan_concurrencia 0 sospechosos (mis-pick de concurrencia 331_p1028 cerrado = causa del rollback v20→v19 en H129); es_queja +8 recup / 2 correcciones de FP / 1 FN conocido (340_p114); votos net +1 (342_p1170 1→5 recupera panel, 348_p1435 dedup Alcalá; 332_p663 6→4 = exposición de B126, frente aparte). MAJOR: cambia el pick del dispositivo (afecta outcome/por_ello_text y derivados denormalizados en votos —outcome/is_merit/is_originaria/tipo_voto_sep—; considerando/firma/zonas/editorial sin cambio de lógica). // M21/H126: B122/B118 — skip de líneas vacías en el presupuesto del chunk de _barrer (resolver_dispositivo). El running-head intercalado dejaba vacías OCR que agotaban el chunk antes del '.' real y truncaban el verbo de disposición → outcome caía a otro. Skip-only +50 flips corpus-wide (otro→competencia 37), 0 regresiones (PoC H125). MAJOR: cambia el comportamiento de _barrer (afecta outcome/por_ello_text y sus derivados denormalizados en csjn_casos_votos —outcome/is_merit/is_originaria/tipo_voto_sep por voto—; considerando/firma/zonas/editorial intactos; identidad del voto juez/posicion/texto_voto/wc_voto intacta). Masking del banner = Fase 2 (gated). // B119: capa disposicion M20 (PASO 2) — detectores competencia/cautelar/nulidad_concesion/inoficioso pre-cascada + #1 originaria-no-merit + #2 des-hifenado es_originaria. Gate 0,907→0,953 (FP 19→5, 0 FN nuevos). // H113: split csjn_casos_textos — considerando_text/por_ello_text/firma_raw salen de csjn_casos.csv a output/parser/csjn_casos_textos.csv (5º CSV del parser, keyed por caso_id_canonico, espejo 1:1 5890 filas, SIN truncado; antes considerando[:2000] 47,6% cortado / por_ello[:300]); habilita materia capa 2 (lee el considerando completo). Escritura por proyección de fieldnames (patrón zonas), texto full ya estaba en memoria → relocaliza al escribir, sin cambio de lógica de parseo. Re-golden consciente + 7º output al manifest (generar_manifiesto v1.3). // H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
+__version__ = "22.0"  # H148: M26 paso 3 — REMOVIDA la columna causa_inadmisibilidad (re-cableada al deriver: clasificador_causa.py, gate=admisibilidad). Borrados OUTCOME_A_CAUSA/OUTCOMES_GATE_GENERICO/RE_CAUSA_*/clasificar_causa_inadmisibilidad. RE_280_*/RE_ACORDADA_4_*/_unhyphenate QUEDAN (los usa classify_outcome). El voto NO denormaliza causa → csjn_casos_votos.csv intacto. MAJOR (cambia el schema de csjn_casos.csv: 40 columnas, sin causa). Re-golden consciente + re-sello. // H139: RE_RUNNING_HEAD case-sensitive (saca re.I) — el banner es MAYÚSCULAS; "Corte Suprema" en mixta del cuerpo NO es header. Verificado: por_ello 467/467 mayúsculas → no-op sobre el output (check_regresion [CLEAN] esperado). Base para limpiar el banner del considerando (materia, frente aparte). MINOR. // H137: M21 Fase 2 — RE_RUNNING_HEAD enmascarado en _barrer (saca el banner editorial del por_ello + libera presupuesto del chunk → recupera el dispositivo truncado). MAJOR (afecta outcome/por_ello_text/considerando indirecto/votos denormalizados). 463 banners / 0 FP verificado sobre el texto del sidecar; el efecto de recuperación-por-presupuesto y la regresión se validan en disco re-corriendo el parser (regression→golden→re-sello). PROPUESTA, NO cerrado. // H131: B019 CERRADO — fallback firma_actual de detectar_fin_real ahora extiende la firma wrapeada (extender_firma): cuando la firma de la Corte parte en >1 línea del OCR ("…— Carlos\nS. Fayt — …"), el pick bidireccional anclaba en la 1ª línea-firma y dejaba la continuación afuera del bloque → firma/votos truncados (23 casos, todos pista_fin=firma_actual). extender_firma avanza desde la línea elegida por linea_es_firma_de_juez, frena en la 1ª no-firma (epílogo "Recurso … interpuesto por …"), tolera 1 vacía (espejo collect_firma_lines), respeta limite_adelante (no invade el fallo siguiente). PoC en disco (poc_b019_extender_firma_actual): +56 votos / 23 casos / 0 sobre-extensión / 92 firma-completa intactos. Corolario: la zona firma de csjn_casos_zonas crece 1-2 líneas en esos 23 (la zonificación es downstream de linea_fin_real, así que heredaba el truncado). MINOR: solo extiende la salida del fallback firma_actual; NO altera el pick bidireccional B045/H069. Residual: 338_p1060 (línea "Maqueda (según su voto)." de 1 juez no la agarra el predicado angosto = deuda menor); consolidación vía divisor de zonas = camino elegante futuro (mover zonificación upstream del borde). // H130: B124 CERRADO — regla P en _barrer: entre candidatos-con-firma de la ventana del dispositivo devuelve el PRIMER performativo (RE_PERF v2); fallback al primer-con-firma (= comportamiento v19) si ninguno lo es. RE_PERF v2 = "se <verbo>" (clítico opc., H129) | "(el Tribunal|esta Corte|la Corte) resuelve" | "resuelve:" — extiende v1 a performativos de mayoría SIN "se", auditados en disco (audit_resuelve_sin_se, 5890 casos: "el Tribunal resuelve" 300 + "resuelve:" 23; OTRO_RESUELVE/ESTA_CORTE/LA_CORTE/RESUELVE_UP = 0 → sin over-match de instancia inferior). Recupera el dispositivo de fondo cuando el primer-con-firma es argumental (cierra B123/B124). Validación en disco: outcome +121 recuperaciones (otro→real) / 29 real→real (dom. inadmisible_280→merit) / 0 regresiones a otro; scan_concurrencia 0 sospechosos (mis-pick de concurrencia 331_p1028 cerrado = causa del rollback v20→v19 en H129); es_queja +8 recup / 2 correcciones de FP / 1 FN conocido (340_p114); votos net +1 (342_p1170 1→5 recupera panel, 348_p1435 dedup Alcalá; 332_p663 6→4 = exposición de B126, frente aparte). MAJOR: cambia el pick del dispositivo (afecta outcome/por_ello_text y derivados denormalizados en votos —outcome/is_merit/is_originaria/tipo_voto_sep—; considerando/firma/zonas/editorial sin cambio de lógica). // M21/H126: B122/B118 — skip de líneas vacías en el presupuesto del chunk de _barrer (resolver_dispositivo). El running-head intercalado dejaba vacías OCR que agotaban el chunk antes del '.' real y truncaban el verbo de disposición → outcome caía a otro. Skip-only +50 flips corpus-wide (otro→competencia 37), 0 regresiones (PoC H125). MAJOR: cambia el comportamiento de _barrer (afecta outcome/por_ello_text y sus derivados denormalizados en csjn_casos_votos —outcome/is_merit/is_originaria/tipo_voto_sep por voto—; considerando/firma/zonas/editorial intactos; identidad del voto juez/posicion/texto_voto/wc_voto intacta). Masking del banner = Fase 2 (gated). // B119: capa disposicion M20 (PASO 2) — detectores competencia/cautelar/nulidad_concesion/inoficioso pre-cascada + #1 originaria-no-merit + #2 des-hifenado es_originaria. Gate 0,907→0,953 (FP 19→5, 0 FN nuevos). // H113: split csjn_casos_textos — considerando_text/por_ello_text/firma_raw salen de csjn_casos.csv a output/parser/csjn_casos_textos.csv (5º CSV del parser, keyed por caso_id_canonico, espejo 1:1 5890 filas, SIN truncado; antes considerando[:2000] 47,6% cortado / por_ello[:300]); habilita materia capa 2 (lee el considerando completo). Escritura por proyección de fieldnames (patrón zonas), texto full ya estaba en memoria → relocaliza al escribir, sin cambio de lógica de parseo. Re-golden consciente + 7º output al manifest (generar_manifiesto v1.3). // H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
 
 import re
 import csv
@@ -525,8 +525,9 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
     # B109 (H106): "desestima" suma al set. Cuando el dispositivo desestima la via
     # (la queja / presentacion directa / recurso), el verbo dispositivo manda: el
     # 280/ac4 del considerando es la CAUSAL del rechazo, no el outcome. La causal
-    # se preserva en causa_inadmisibilidad (deteccion textual de 280/ac4 anadida al
-    # bloque gate-generico de clasificar_causa_inadmisibilidad). Antes "desestima"
+    # se deriva ahora en clasificador_causa (capa-deriver, M26 paso 3), gateada por
+    # admisibilidad=="inadmite" (antes vivia en clasificar_causa_inadmisibilidad del
+    # parser). Antes "desestima"
     # caia al Paso 3 y el 280/ac4 lo pisaba con inadmisible_280/ac4 (229 casos).
     # Los mixtos de resultados opuestos (342_p1017: desestima queja + procedente
     # otro REX) quedan en "desestima" como mejor aproximacion disponible hasta el
@@ -601,157 +602,6 @@ def classify_outcome(por_ello_text: str, considerando_text: str = "") -> str:
 
     return base
 
-# ── H092: gate de admisibilidad — causa_inadmisibilidad ──────────────────────
-# Campo NUEVO y ADITIVO al outcome de merito (NO relabel). Vocabulario controlado
-# de la Corte. La causal se ata al recurso decidido (cada termino es polisemico,
-# como lo fue el art.280: una mencion suelta != causal). Solo causales VALIDADAS a
-# mano en H092; las candidatas (salto de instancia, falta de denegacion del REX,
-# relacion directa, introduccion oportuna de la CF, tribunal superior de la causa)
-# viven en el PoC scripts/diagnostico/H092/sub_gate.py hasta validarse.
-#
-# Invariante: causa_inadmisibilidad != "" <=> el caso es gatekeeping (no llego al
-# fondo). Vacio => merito / competencia / originaria / rechaza / sin_dispositivo /
-# catch-all 'otro' sin causal explicita.
-
-OUTCOME_A_CAUSA = {
-    "inadmisible_280":         "ART_280",
-    "inadmisible_acordada_4":  "ACORDADA_4_2007",
-    "abstracto":               "CUESTION_ABSTRACTA",
-    "desistimiento":           "DESISTIMIENTO",
-    "caducidad":               "CADUCIDAD_INSTANCIA",
-}
-# Universo gate-generico a sub-clasificar = GATEKEEP_OUTCOMES (ver ~3149) menos las
-# nativas. 'otro' NO entra al residual (catch-all heterogeneo): solo recibe causal
-# si aparece explicita en el texto.
-OUTCOMES_GATE_GENERICO = {"desestima", "mal_concedido", "desierto",
-                          "inadmisible", "improcedente"}
-
-# Cola validada (anclada al recurso). Sin solapes (verificado en PoC H092).
-RE_CAUSA_SENTENCIA_DEFINITIVA = re.compile(
-    r"no\s+se\s+dirige\s+contra\s+(?:una\s+|la\s+)?sentencia\s+definitiva"
-    r"(?:\s+o\s+equiparable)?|"
-    r"no\s+(?:constituye|reviste\s+(?:el\s+)?car[aá]cter\s+de|es)\s+"
-    r"(?:la\s+|una\s+)?sentencia\s+definitiva|"
-    r"recurso\s+extraordinario.{0,60}?no.{0,20}?sentencia\s+definitiva", re.I)
-RE_CAUSA_FUNDAMENTACION = re.compile(
-    r"(?:no\s+cumple\s+con\s+el\s+requisito\s+de|carece\s+de|sin|"
-    r"defectuosa|insuficiente|deficiente)\s+(?:la\s+)?"
-    r"fundamentaci[oó]n\s+aut[oó]noma|"
-    r"fundamentaci[oó]n\s+aut[oó]noma\s+(?:exigid|que\s+exige|requerid)", re.I)
-RE_CAUSA_DEPOSITO = re.compile(
-    r"no\s+(?:ha(?:berse)?\s+|se\s+ha\s+)?"
-    r"(?:integrad|efectuad|abonad|acreditad|cumplid)\w+\s+(?:con\s+)?el\s+dep[oó]sito|"
-    r"intimad\w+\s+a\s+(?:efectuar|integrar|abonar)\s+el\s+dep[oó]sito"
-    r".{0,120}?(?:no\s+|sin\s+)", re.I)
-# H096 (B103): el deposito describe una resolucion ANTERIOR de la Corte ("la
-# resolucion de fs. X que desestimo la queja ... no haberse ... el deposito");
-# lo decidido es una revocatoria/planteo CONTRA esa resolucion, no un gate sobre
-# el recurso presente -> DEPOSITO_PREVIO seria FP. Mismo discriminador holding-
-# vs-antecedente que B100/B101, de nivel considerando (343_p166 dice "planteo",
-# no "revocatoria"). Anclado al considerando (co), inmune al truncado.
-RE_CAUSA_DEPOSITO_EXCL = re.compile(
-    r"la\s+resoluci[oó]n\s+de\s+fs\.?\s*\d+[\s,]+que\s+desestim[oó]\b"
-    r".{0,80}?no\s+haberse\s+(?:efectuad|integrad|abonad|acreditad|cumplid)\w*"
-    r"\s+(?:con\s+)?el\s+dep[oó]sito", re.I)
-RE_CAUSA_FUERA_TERMINO = re.compile(
-    r"(?:recurso|queja|apelaci[oó]n|remedio|presentaci[oó]n)\s+\w*\s*"
-    r"(?:fue\s+|ha\s+sido\s+|resulta\s+|es\s+|deducid[ao]\s+)?"
-    r"(?:interpuest|deducid|present)?\w*\s+(?:de\s+manera\s+|en\s+forma\s+)?"
-    r"extempor[aá]ne|"
-    r"(?:recurso|queja|apelaci[oó]n)\s+\w*\s*(?:fue\s+|ha\s+sido\s+)?"
-    r"(?:interpuest|deducid)\w+\s+fuera\s+del?\s+(?:plazo|t[eé]rmino)", re.I)
-# Excluye 'extemporaneo' referido a algo que no es el recurso de esta causa.
-RE_CAUSA_FUERA_TERMINO_EXCL = re.compile(
-    r"declar[oó]\s+extempor|"
-    r"constancia\s+\w+\s+(?:resulta\s+|es\s+)?extempor|"
-    r"(?:declaraci[oó]n\s+de\s+incompetencia|demanda)\s+\w*\s*"
-    r"(?:resulta\s+|fue\s+|es\s+)?extempor", re.I)
-# H093: dispositivo de reposicion/revocatoria/aclaratoria. Si el fallo desestima
-# una reposicion (el recurso PRESENTE), el "extempor" del considerando pertenece
-# al antecedente atacado, no al recurso decidido -> FUERA_DE_TERMINO seria FP.
-# Se ancla al por_ello (dispositivo), inmune al truncado del considerando.
-RE_CAUSA_FUERA_TERMINO_EXCL_DISP = re.compile(
-    r"(?:se\s+)?(?:desestima\w*|rechaza\w*|no\s+ha\s+lugar\s+a)\s+"
-    r"(?:el\s+|la\s+|los\s+|las\s+)?(?:recurso\s+de\s+)?"
-    r"(?:reposici[oó]n|revocatoria|aclaratoria)", re.I)
-# Residual: remision al dictamen del Procurador (la causal vive alli, no aca).
-RE_CAUSA_REMITE_DICTAMEN = re.compile(
-    r"se\s+remite|comparte\s+(?:los\s+)?(?:sus\s+)?fundamentos|"
-    r"adecuado\s+tratamiento\s+en\s+el\s+dictamen|"
-    r"dictamen\s+(?:de|del|de\s+la)\s+(?:se[ñn]or|se[ñn]ora)\s+[Pp]rocurador", re.I)
-# H095: irrecurribilidad de las decisiones propias de la Corte (Fallos 316:1706).
-# Reposicion/revocatoria/aclaratoria/nulidad contra una decision del propio
-# Tribunal, rechazada porque sus decisiones no son susceptibles de recurso.
-# Anclada al FUNDAMENTO del considerando (el dispositivo generico "se desestima
-# lo solicitado" no alcanza; el ancla del por_ello sobre/sub-captura). Captura
-# "doctrina invocada", NO distingue holding de obiter (limite del regex sobre
-# OCR; ver DEUDA M/B running-heads). EXCL: el caso donde la Corte HACE LUGAR por
-# excepcion (344_p1904: queda en su causal de merito).
-RE_CAUSA_NO_RECURRIBLE = re.compile(
-    r"(?:las\s+(?:decisiones|sentencias|resoluciones)\s+(?:dictadas?\s+)?"
-    r"(?:de|por)\s+(?:esta\s+|la\s+)?corte|las\s+sentencias\s+del\s+tribunal)"
-    r".{0,130}?no\s+son,?\s*(?:como\s+principio,?\s*)?suscepti\w*\s+de\s+"
-    r"(?:recurso|reposici[oó]n|revocatoria|nulidad)", re.I)
-RE_CAUSA_NO_RECURRIBLE_EXCL = re.compile(
-    r"(?:se\s+resuelve\s+)?hac(?:er|e)\s+lugar\s+(?:a\s+)?(?:al?\s+|la\s+)?"
-    r"(?:recurso\s+de\s+)?(?:reposici[oó]n|revocatoria)", re.I)
-
-
-def clasificar_causa_inadmisibilidad(outcome, considerando_text, por_ello_text,
-                                     dictamen_presente):
-    """H092: causa de inadmisibilidad (vocabulario controlado de la Corte).
-    Nivel caso, aditivo al outcome de merito (no lo toca). "" => no gatekeeping.
-    Solo emite causales validadas; las candidatas no se emiten todavia."""
-    if outcome in OUTCOME_A_CAUSA:
-        return OUTCOME_A_CAUSA[outcome]
-    if outcome not in OUTCOMES_GATE_GENERICO and outcome != "otro":
-        return ""
-    co = re.sub(r"\s+", " ", _unhyphenate(considerando_text)).strip()
-    pe = re.sub(r"\s+", " ", _unhyphenate(por_ello_text)).strip()
-    txt = co + " || " + pe
-    # H094: las 4 causales de cola solo se afirman con outcome de rechazo
-    # (gate-generico). Para 'otro' el parser no determino dispositivo de gate,
-    # asi que la frase causal puede venir de un antecedente citado o de un
-    # dictamen embebido, no del holding -> FP (334_p419). FUERA ya lo exigia.
-    if outcome in OUTCOMES_GATE_GENERICO:
-        # B109 (H106): 280/ac4 detectado TEXTUALMENTE. Antes la causal ART_280/
-        # ACORDADA_4_2007 venia "gratis" del mapa OUTCOME_A_CAUSA cuando el outcome
-        # era inadmisible_280/ac4; al pasar esos casos a outcome="desestima" (verbo
-        # dispositivo manda, ver classify_outcome), la senal de gate se perderia.
-        # Se reusan las MISMAS regex que classify_outcome (no se reimplementa).
-        # Va PRIMERO en el bloque: el 280/ac4 es la formula explicita y literal del
-        # rechazo (art. 280 CPCCN); las causales de cola son inferencias sobre el
-        # fundamento. Ante coexistencia (1 caso, 329_p510: 280 + extempor en el
-        # considerando), la formula explicita gana y preserva la causa historica.
-        # Anclado al considerando (co), igual que classify_outcome.
-        if RE_280_CONSIDERANDO.search(co) or RE_280_LIBRE.search(co):
-            return "ART_280"
-        if (RE_ACORDADA_4_CONSIDERANDO.search(co)
-                or RE_ACORDADA_4_REGLAMENTO.search(co)
-                or RE_ACORDADA_4_DIRECTA.search(co)):
-            return "ACORDADA_4_2007"
-        if RE_CAUSA_SENTENCIA_DEFINITIVA.search(txt):
-            return "FALTA_SENTENCIA_DEFINITIVA"
-        if RE_CAUSA_FUNDAMENTACION.search(txt):
-            return "FALTA_FUNDAMENTACION_AUTONOMA"
-        if RE_CAUSA_DEPOSITO.search(txt) and not RE_CAUSA_DEPOSITO_EXCL.search(co):
-            return "DEPOSITO_PREVIO"
-        if (RE_CAUSA_FUERA_TERMINO.search(txt)
-                and not RE_CAUSA_FUERA_TERMINO_EXCL.search(txt)
-                and not RE_CAUSA_FUERA_TERMINO_EXCL_DISP.search(pe)):
-            return "FUERA_DE_TERMINO"
-        # H095: ULTIMA del bloque gate -> solo convierte lo que seria SIN_CAUSAL;
-        # por construccion no le roba a SD/FUND/DEPOSITO/FUERA. Ancla en el
-        # considerando (co); EXCL sobre el dispositivo (pe).
-        if (RE_CAUSA_NO_RECURRIBLE.search(co)
-                and not RE_CAUSA_NO_RECURRIBLE_EXCL.search(pe)):
-            return "RESOLUCION_NO_RECURRIBLE"
-    if outcome == "otro":
-        return ""   # catch-all sin causal explicita: no afirmar gatekeeping
-    if (RE_CAUSA_REMITE_DICTAMEN.search(co)
-            and str(dictamen_presente).strip().lower() in ("true", "1", "presente")):
-        return "INADMISIBLE_REMITE_DICTAMEN"
-    return "INADMISIBLE_SIN_CAUSAL_EXPLICITA"
 
 # ── H078: es_queja + queja_resultado ─────────────────────────────────────────
 # "Queja" = recurso de hecho = presentación directa. Tres sinónimos para la
@@ -2733,7 +2583,6 @@ def construir_caso_sumario_link(caso_id_canonico, tomo, nombres_indice,
         "date":                   "",
         "apertura_tipo":          "",
         "outcome":                "",
-        "causa_inadmisibilidad":  "",
         "voting_pattern":         "",
         "n_jueces":               0,
         "n_titulares":            0,
@@ -3549,11 +3398,6 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
         # incluido el caso sin dispositivo (por_ello_text vacío → "sin_dispositivo").
         outcome = classify_outcome(por_ello_text, considerando_text)
 
-        # H092: gate de admisibilidad — causa de inadmisibilidad (campo nuevo,
-        # aditivo; "" si el caso llego al fondo / no es gatekeeping).
-        causa_inadmisibilidad = clasificar_causa_inadmisibilidad(
-            outcome, considerando_text, por_ello_text, dictamen_presente)
-
         # H078: queja + cuestion federal (sobre textos completos, pre-truncamiento)
         es_queja, queja_resultado = classify_queja(por_ello_text, case_name_cuerpo)
         # Sumario editorial = texto del bloque antes de la apertura.
@@ -3666,7 +3510,6 @@ def procesar_archivo(filepath, fallos_del_archivo, headers_archivo, primer_token
             "date":                   fecha_str,
             "apertura_tipo":          apertura_tipo,
             "outcome":                outcome,
-            "causa_inadmisibilidad":  causa_inadmisibilidad,
             "voting_pattern":         firma_parsed["voting_pattern"],
             "n_jueces":               len(firma_parsed["jueces"]),
             "n_titulares":            n_titulares,
@@ -3972,7 +3815,7 @@ def main():
             "caso_id_canonico", "tomo",
             "case_name_indice", "case_name_cuerpo", "case_name_cuerpo_legacy",
             "date", "apertura_tipo",
-            "outcome", "causa_inadmisibilidad", "voting_pattern",
+            "outcome", "voting_pattern",
             "n_jueces", "n_titulares", "n_votos_svoto", "n_disidencias",
             "dictamen_presente", "is_originaria", "is_full_bench",
             "is_merit_decision",
