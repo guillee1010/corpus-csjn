@@ -6,9 +6,11 @@ Escribe `output/parser/_manifest.json` con la procedencia COMPLETA de la cadena:
 
   A) git: commit HEAD + si el árbol estaba sucio  -> fija TODO el código del repo
      (todos los scripts del pipeline, transitivamente) cuando dirty=false.
-  B) pipeline_scripts: __version__ de los siete scripts de la cadena, en orden
+  B) pipeline_scripts: __version__ de los scripts de la cadena, en orden
      (detectar_paginas -> construir_catalogo -> cruzar -> parser/_editorial ->
-     derivar_materia -> derivar_recursos). Capa legible, redundante con el commit.
+     derivar_materia -> derivar_recursos), seguidos de los clasificadores fuente-única
+     de la capa-deriver (disposicion/via/admision/causa). Capa legible, redundante con
+     el commit.
   C) corpus / vocabularios / inputs / outputs: hash + bytes (+ filas en CSV) de
      los artefactos, de la fuente cruda a los finales. Captura el DATO (cambios de
      corpus / vocabularios / intermedios que el commit no distingue). Cada
@@ -56,7 +58,7 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
-__version__ = "1.5"
+__version__ = "1.6"  # H148: +clasificadores (disposicion/via/admision/causa) a PIPELINE_SCRIPTS (provenance capa B)
 
 # csjn_casos.csv tiene campos de texto grandes (considerando_text). Subimos el
 # límite de campo de csv a un valor amplio pero seguro en Windows (sys.maxsize
@@ -82,6 +84,13 @@ PIPELINE_SCRIPTS = [
     "parser_editorial.py",
     "derivar_materia.py",
     "derivar_recursos.py",
+    # capa-deriver: módulos fuente-única que importa derivar_recursos. Su lógica no
+    # cuelga de la versión del deriver, así que se sellan aparte (gap de provenance
+    # de capa B, H146/H148). No cuentan como artefactos (--verify suma solo datos).
+    "clasificador_disposicion.py",
+    "clasificador_via.py",
+    "clasificador_admision.py",
+    "clasificador_causa.py",
 ]
 
 # ── Capa C: artefactos del pipeline. (ruta relativa a output/, generador) ────

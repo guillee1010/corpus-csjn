@@ -1,10 +1,10 @@
 {
   "schema_version": 4,
-  "manifest_generator_version": "1.5",
-  "generated_at": "2026-06-19T04:21:15.487456+00:00",
+  "manifest_generator_version": "1.6",
+  "generated_at": "2026-06-19T04:42:50.012043+00:00",
   "git": {
-    "commit": "f15df4b17291e2ca30f54463d985b567bd23f41e",
-    "dirty": false
+    "commit": "0afdf5b515cb2085685f79b8db6d2abb5fb04e6d",
+    "dirty": true
   },
   "pipeline_scripts": {
     "detectar_paginas.py": "1.01",
@@ -13,7 +13,11 @@
     "parser.py": "22.0",
     "parser_editorial.py": "1.0",
     "derivar_materia.py": "3.2",
-    "derivar_recursos.py": "0.5"
+    "derivar_recursos.py": "0.5",
+    "clasificador_disposicion.py": "1.08",
+    "clasificador_via.py": "0.1",
+    "clasificador_admision.py": "0.2",
+    "clasificador_causa.py": "0.1"
   },
   "corpus": {
     "n_files": 46,
