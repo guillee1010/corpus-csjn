@@ -2,6 +2,27 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## [H148] — 2026-06-19 — M26 paso 3: re-cableo de causa_inadmisibilidad + B133
+
+### Changed
+- **`causa_inadmisibilidad` re-cableada del parser al deriver.** Ahora se deriva en
+  `clasificador_causa.py` (nuevo) con gate `admisibilidad=="inadmite"` en vez de `outcome`.
+  Detectores textuales nuevos (caducidad/desistimiento/abstracta) anclados al tratado de la
+  Secretaría de Jurisprudencia; cola H092 verbatim. Invariante: `causa ≠ "" ⟺ inadmite`.
+- **`clasificador_admision` v0.2 (B133):** la mootness pura (`outcome=abstracto` sin verbo de
+  mérito) ahora deviene `inadmite` (antes caía a `sin_marcador`/`admite`). +87 inadmite.
+
+### Removed
+- **`parser.py` (v22.0):** removida la columna `causa_inadmisibilidad` de `csjn_casos.csv`
+  (schema 41→40 columnas) y toda su lógica. `csjn_casos_votos.csv` sin cambios (no la
+  denormalizaba). Las regex 280/Acordada-4 quedan (las usa `classify_outcome`).
+
+### Notes
+- Re-golden consciente de `csjn_casos.csv` (cambio de schema intencional).
+- Manifest re-sellado: 64 artefactos (+`clasificador_causa.py`).
+- Pendiente a κ-admisibilidad: 8 contradicciones `admite ∩ causa` + `339_p676`.
+```
+
 ## H146 (2026-06-18)
 
 - `scripts/pipeline/clasificador_admision.py` v0.1 (NUEVO): canal de admisibilidad, eje puro `{admite, inadmite, no_aplica, sin_marcador}`, vía transversal. Object-aware `RE_ADMITE_REX_TXT`.
