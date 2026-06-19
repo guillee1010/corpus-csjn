@@ -17933,3 +17933,37 @@ Sanity del gold rebuild canónico (`planilla_M20_LIMPIA_n300__rebuild.xlsx`): ga
 
 **Commits:** [completar con los reales].
 
+## H147 — M26 paso 3: diseño + diagnóstico del re-cableo de `causa_inadmisibilidad` + fundación del vocabulario sobre el tratado de la Secretaría (2026-06-18)
+
+**Objetivo:** ejecutar M26 paso 3 (`outcome`→legacy + re-cablear `causa_inadmisibilidad`/votos). Resultó sesión diagnóstica + de diseño: parser intacto, cero cambios canónicos.
+
+### H147-01 — Coverage check `outcome` ↔ canales nuevos
+
+`outcome` NO es rollup determinístico de los canales retenidos (techo 79,2% con disposicion+admisibilidad+es_queja+is_originaria+causa+queja_resultado, 5890). El ~20% irreconstruible NO es pérdida: ~76% del residual es conflación (acceso+mérito de-interleaveados) / redundancia / catch-all, ~89 desacuerdos de detector (gate nuevo más preciso, H145), 38 migran a causa; solo **~1,9% del corpus (109 casos, casi todo `rechaza` grueso)** es coarsening discutible. **Decisión (paso 3 step 2): `outcome` → legacy CONGELADA (opción B), valores actuales, sin recompute** (recompute = puente 80% a v2.0; congelada = 100%). B-vs-A reabierto (el "no romper Dataverse" es moot porque se republica): B se mantiene por reproducibilidad de versionado.
+
+### H147-02 — Ubicación del re-cableo (verificada en parser.py)
+
+`causa_inadmisibilidad` se computa en `clasificar_causa_inadmisibilidad` (parser L700), deriva de `outcome` vía `OUTCOME_A_CAUSA` (L616). La denorm de `outcome` en votos está en parser L3739. Ambos en el PARSER → el re-cableo toca parser (commit separado) o se mueve la causa al deriver (lean arquitectónico: b).
+
+### H147-03 — A/B del re-cableo de la causa (sobre texto real)
+
+Harness verbatim de `clasificar_causa_inadmisibilidad` reproduce la causa actual 5890/5890 (fidelidad). Gate swap `outcome`→`admisibilidad=inadmite`: delta 247/5890 (4,2%). Detectores demostrados: caducidad (gate inadmite + ancla `caducidad de la instancia` + guard `apercibimiento`/`rechazar el planteo`) = 13/13, 0 FP/FN; desistimiento (`se tiene por desistida la queja`) = 10/10, 0 FP. Ambos reusan la disciplina de polisemia del art. 280.
+
+### H147-04 — Correcciones doctrinales (Guillermo)
+
+(1) **Desistimiento:** 9/10 son default de depósito ("se tiene por desistida" por no integrar el depósito) = gatekeeping, NO terminación voluntaria; 1 voluntario (340_p251, parcial). Retractado el "relocalizar" y la supuesta inconsistencia de `clasificador_admision`. (2) **Abstracto = admisibilidad:** la mootness es decisión de admisibilidad (la actualidad del agravio es requisito; sin caso vivo se rechaza el planteo sin fondo). `CUESTION_ABSTRACTA` NO relocaliza — es causa de admisibilidad legítima. Bug destapado: `clasificador_admision` sub-marca la mootness (de 148 abstracto solo 5 inadmite; ~96 puros deberían serlo) → **B133**. Split: ~96 puros (no_fondo, gate=no) → inadmite+CUESTION_ABSTRACTA; ~52 mixtos (verbo de mérito) ya están bien.
+
+### H147-05 — Vocabulario canónico sobre el tratado de la Secretaría (M27 nuevo)
+
+`documento__37_.md` (tratado del REX de la Secretaría de Jurisprudencia, 11/06/2026, la misma que edita los tomos) = fuente autoritativa de la taxonomía de causales. Mapeo: 8 causas actuales mapean a categorías reales; 5 gaps (interposición incorrecta §1.2.2, salto de instancia §1.2.7.3, tribunal superior de la causa, relación directa, introducción oportuna de la CF). ~95/429 del cajón `INADMISIBLE_SIN_CAUSAL_EXPLICITA` llevan señal canónica detectable. El tratado valida la polisemia de caducidad (§2.6.1/§2.6.2) y confirma el rótulo `CUESTION_ABSTRACTA`. → M27 (frente aparte, un detector por causal, commit separado).
+
+### H147 — Estado final
+
+- **Sin cambios canónicos:** parser v21.01, outputs sin tocar, sin bumps, `_manifest.json` [CLEAN] sin re-sellar. Sesión diagnóstica + de diseño.
+- **Corpus:** 5890 casos (sin cambios).
+- **DEUDA:** B133 nuevo + M27 nuevo + header H147.
+- **M26 paso 3 scopeado 100%, sin decisiones abiertas:** `outcome`→legacy congelada; gate swap; detectores caducidad/desistimiento demostrados; abstracto=admisibilidad (no relocaliza, B133 en `clasificador_admision`); causa al deriver. Listo para sesión de implementación.
+
+**Scripts creados:** ninguno canónico (harness diagnóstico efímero `_causa_harness.py`, no se commitea).
+
+**Commits:** 1 (DEUDA_TECNICA.md — B133 + M27 + header H147).
