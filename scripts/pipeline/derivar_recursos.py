@@ -8,8 +8,20 @@ La lógica se importa de módulos fuente-única (mismos que validan en build_m20
   - clasificador_disposicion.py  -> disposicion, reenvia, parte_ganadora, es_revision_fondo
   - clasificador_via.py          -> via_recurso, multi_recurso
   - clasificador_admision.py     -> admisibilidad (eje puro de acceso)
+  - clasificador_causa.py         -> causa_inadmisibilidad (re-cableada, gate=inadmite)
 
 Salida: output/parser/csjn_casos_recursos.csv (1 fila por caso).
+
+v0.5 — M26 paso 3: RE-CABLEO de `causa_inadmisibilidad`. La columna sale del parser
+       (clasificador_causa.py, fuente única) y su GATE pasa de `outcome` a
+       `admisibilidad=="inadmite"`. Detectores textuales nuevos (caducidad/desistimiento/
+       abstracta) anclados al tratado de la Secretaría; cola H092 verbatim. Acoplado a
+       B133 (clasificador_admision v0.2: mootness puro -> inadmite). Validado en disco vs
+       columna publicada: caducidad 13/13, desistimiento 10/10, abstracto puros 89/89,
+       0 mixtos mal-etiquetados; A/B causa 134 deltas (68 ganancias inadmite-real,
+       64 pérdidas correctas [56 abstracto admite/no_aplica + 8 contradicciones->κ]).
+       Parser pierde la columna -> re-golden consciente + re-sello (columna nueva en
+       recursos.csv, clasificador_causa.py nuevo en provenance).
 
 v0.4 — M26 Fase 2: agrega la columna `admisibilidad` (eje PURO de acceso, valores
        {admite, inadmite, no_aplica, sin_marcador}) vía clasificador_admision v0.1.
@@ -43,8 +55,9 @@ sys.path.insert(0, str(HERE))
 from clasificador_disposicion import disposicion, parte_ganadora_regla, es_revision_fondo, __version__ as CLF_VER
 from clasificador_via import via_recurso, __version__ as VIA_VER
 from clasificador_admision import admisibilidad, __version__ as ADM_VER
+from clasificador_causa import causa_inadmisibilidad, __version__ as CAUSA_VER
 
-__version__ = "0.4"
+__version__ = "0.5"
 
 CASOS  = ROOT / "output" / "parser" / "csjn_casos.csv"
 TEXTOS = ROOT / "output" / "parser" / "csjn_casos_textos.csv"
@@ -84,6 +97,17 @@ def derivar(casos_path=CASOS, textos_path=TEXTOS, out_path=OUT):
             df["queja_resultado"], df["outcome"], out["disposicion"],
             df["is_originaria"], df["por_ello_text"])]
 
+    # causa_inadmisibilidad (M26 paso 3 v0.5): RE-CABLEADA del parser al deriver.
+    # GATE = admisibilidad=="inadmite" (eje puro), ya NO `outcome`. Detectores textuales
+    # caducidad/desistimiento/abstracta anclados al tratado de la Secretaría; cola H092
+    # verbatim. La columna sale del parser (clasificador_causa fuente única).
+    out["causa_inadmisibilidad"] = [
+        causa_inadmisibilidad(adm, d, co, pe, dic, o)
+        for adm, d, co, pe, dic, o in zip(
+            out["admisibilidad"], out["disposicion"],
+            df["considerando_text"], df["por_ello_text"],
+            df["dictamen_presente"], df["outcome"])]
+
     out["es_queja"] = df.get("es_queja", "")
     return out
 
@@ -96,7 +120,7 @@ def main():
                   Path(a.out) if a.out else OUT)
     dest = Path(a.out) if a.out else OUT
     out.to_csv(dest, index=False, lineterminator="\n")
-    print(f"[derivar_recursos v{__version__} / disp v{CLF_VER} / via v{VIA_VER} / adm v{ADM_VER}]  {len(out)} filas -> {dest.name}")
+    print(f"[derivar_recursos v{__version__} / disp v{CLF_VER} / via v{VIA_VER} / adm v{ADM_VER} / causa v{CAUSA_VER}]  {len(out)} filas -> {dest.name}")
     DISPVALS = {"revoca","deja_sin_efecto","confirma","nulidad","modifica"}
     es_disp = out.disposicion.isin(DISPVALS)
     print(f"  disposición de fondo leída: {es_disp.sum()}  ({100*es_disp.mean():.1f}%)")
@@ -104,6 +128,7 @@ def main():
     print("  dist via_recurso:");  print(out.via_recurso.value_counts().to_string())
     print(f"  multi_recurso=si: {(out.multi_recurso=='si').sum()}")
     print("  dist admisibilidad:"); print(out.admisibilidad.value_counts().to_string())
+    print("  dist causa_inadmisibilidad:"); print(out.causa_inadmisibilidad.value_counts().to_string())
 
 if __name__ == "__main__":
     main()

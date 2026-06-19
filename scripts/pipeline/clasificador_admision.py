@@ -34,7 +34,7 @@ NO modificar sin re-validar contra el gold como held-out.
 import re
 from clasificador_disposicion import norm   # normalizador compartido (\xad-aware)
 
-__version__ = "0.1"
+__version__ = "0.2"  # B133: mootness puro -> inadmite
 
 # ── Eje queja (de queja_resultado, parser — ESTABLE, A/B reproducido 1485/595) ──
 Q_ADMITE   = {"hace_lugar", "admisible", "procedente"}
@@ -74,5 +74,9 @@ def admisibilidad(queja_resultado, outcome, disposicion, is_originaria, por_ello
     if RE_ADMITE_REX_TXT.search(norm(por_ello)):             # 3. REX-admit por texto (object-aware)
         return "admite"
     if is_originaria:                 return "no_aplica"     # 4. originaria: sin gate de admisibilidad
+    # B133 (M26 paso3): mootness PURO = inadmisibilidad por falta de actualidad del agravio.
+    # outcome=="abstracto" (señal validada del parser) + SIN verbo de mérito (disposicion∉fondo)
+    # => los ~96 puros que devienen inadmite; los mixtos (verbo de mérito real) caen al fondo (admite).
+    if outcome == "abstracto" and disposicion not in _FONDO: return "inadmite"
     if disposicion in _FONDO:         return "admite"        # 5. admite_implicito (fondo sin marcador)
     return "sin_marcador"                                    # 6. sin decisión de acceso al REX

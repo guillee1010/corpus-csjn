@@ -82,7 +82,7 @@ The dataset consists of five CSV files. All files are UTF-8 encoded with comma s
 |---|---|---|
 | `apertura_tipo` | string | Type of ruling opening marker detected: `fallo`, `sentencia`, or null. |
 | `outcome` | string | Dispositional outcome of the ruling, extracted from the *por ello* clause. See [Coded Values](#outcome). 9.3% of cases are classified as `otro` (not yet subcategorized). |
-| `causa_inadmisibilidad` | string | Specific ground for inadmissibility or dismissal, refining `outcome`. See [Coded Values](#causa_inadmisibilidad). Populated for 1,056 cases; null otherwise. |
+| `causa_inadmisibilidad` | string | Specific ground for inadmissibility, derived in the recourse layer (`csjn_casos_recursos.csv`) and gated on `admisibilidad = inadmite`. See [Coded Values](#causa_inadmisibilidad). Populated for 1,107 cases (= every `inadmite`); null otherwise. |
 | `voting_pattern` | string | Voting configuration of the panel. See [Coded Values](#voting_pattern). |
 | `n_jueces` | integer | Total number of judges who signed the ruling. |
 | `n_titulares` | integer | Number of permanent (*titular*) justices among the signatories. |
@@ -249,25 +249,25 @@ Dispositional outcome extracted from the *por ello* clause. Distribution across 
 
 ### `causa_inadmisibilidad`
 
-Specific ground for inadmissibility or dismissal, refining the `outcome` field. Populated for 1,056 cases where the Court declared the appeal inadmissible or dismissed it on a defined procedural ground; null for the remaining 4,806 cases. Introduced during the H092–H095 development cycle.
+Specific ground for inadmissibility. Derived in the recourse layer (`clasificador_causa.py`, single source) and published in `csjn_casos_recursos.csv`. Computed **only when `admisibilidad == "inadmite"`**, so it is non-null exactly for the 1,107 cases the Court declined to admit and null for the remaining 4,783 — the clean invariant `causa ≠ "" ⟺ admisibilidad = inadmite`. Grounds are detected from the text of the dispositive (*por ello*) clause and the considerando, with the controlled vocabulary grounded in the Secretaría de Jurisprudencia's *Recurso Extraordinario* treatise. Introduced on the parser in the H092–H095 cycle; re-cabled to the recourse layer with the `admisibilidad` gate in M26 (H148, parser v22.0).
 
 | Value | N | Description |
 |---|---|---|
-| `INADMISIBLE_SIN_CAUSAL_EXPLICITA` | 421 | Inadmissibility declared without an explicit stated ground in the *por ello* clause. |
-| `ART_280` | 240 | Rejected under Art. 280 of the CPCCN (discretionary certiorari). |
-| `INADMISIBLE_REMITE_DICTAMEN` | 144 | Inadmissibility resolved by reference to the Procurador General's *dictamen*. |
-| `CUESTION_ABSTRACTA` | 101 | Appeal rejected because the question became moot (*abstracta*). |
-| `ACORDADA_4_2007` | 50 | Rejected for non-compliance with the formal requirements of *Acordada* 4/2007. |
+| `INADMISIBLE_SIN_CAUSAL_EXPLICITA` | 473 | Inadmissibility declared without a canonical ground detectable in the text (residual). |
+| `ART_280` | 229 | Rejected under Art. 280 of the CPCCN (discretionary certiorari). |
+| `INADMISIBLE_REMITE_DICTAMEN` | 160 | Inadmissibility resolved by reference to the Procurador General's *dictamen*. |
+| `CUESTION_ABSTRACTA` | 92 | Rejected because the question became moot (*abstracta* / no live controversy). Restricted to genuine mootness: cases that also decide the merits (a merit verb in `disposicion`) are excluded and recorded as `admite`. |
+| `ACORDADA_4_2007` | 51 | Rejected for non-compliance with the formal requirements of *Acordada* 4/2007. |
 | `FALTA_SENTENCIA_DEFINITIVA` | 43 | Rejected for absence of a final judgment (a prerequisite for the extraordinary appeal). |
+| `CADUCIDAD_INSTANCIA` | 13 | Dismissed for lapse of instance (*caducidad de instancia*; treatise §2.6). |
 | `RESOLUCION_NO_RECURRIBLE` | 12 | The challenged resolution is not subject to appeal. |
 | `FALTA_FUNDAMENTACION_AUTONOMA` | 12 | The appeal lacks the required autonomous grounds. |
-| `CADUCIDAD_INSTANCIA` | 11 | Dismissed for lapse of instance (*caducidad de instancia*). |
-| `DESISTIMIENTO` | 10 | Terminated by voluntary withdrawal. |
+| `DESISTIMIENTO` | 10 | Withdrawal of the appeal or *queja* — predominantly default on the deposit requirement (art. 286 CPCCN), not voluntary termination (treatise §2.1.11). |
 | `FUERA_DE_TERMINO` | 10 | Appeal filed out of time. |
 | `DEPOSITO_PREVIO` | 2 | Rejected in connection with the prior-deposit requirement. |
-| *(null)* | 4,806 | Not an inadmissibility/dismissal case, or no specific ground recorded. |
+| *(null)* | 4,783 | Case was admitted, not applicable, or carried no access decision (`admisibilidad ≠ inadmite`). |
 
-> **Relationship between `outcome` and `causa_inadmisibilidad`.** These two fields encode different dimensions and are not expected to coincide. `outcome` records the **dominant case-level disposition**; `causa_inadmisibilidad` records the **specific gatekeeping ground** whenever one applies, independently of the dominant outcome. As a result, a ground appears more often in `causa_inadmisibilidad` than as the matching `outcome` value. For Art. 280: 240 cases carry `causa_inadmisibilidad = ART_280`, but only 38 have `outcome = inadmisible_280`; the other 202 (155 of them *quejas*) have `outcome = desestima`, because at case level the operative result is the dismissal of the appeal or queja. The same holds for Acordada 4/2007 (50 grounds; 6 as `outcome`, 44 as `desestima`). `CUESTION_ABSTRACTA` is the exception, mapping 1:1 to `outcome = abstracto` (101 of 101). This separation reflects a deliberate decoupling of the gatekeeping axis (`causa_inadmisibilidad`) from the dispositional axis (`outcome`). **Analyses of Art. 280 or Acordada 4/2007 incidence should use `causa_inadmisibilidad`, not `outcome`.**
+> **Relationship to `admisibilidad` and `outcome`.** `causa_inadmisibilidad` is the **reason** for a rejection of access; `admisibilidad` is the **access decision** itself; `disposicion` (caseDisposition) is the **merit verb**. The field is gated on the pure access axis — non-null iff `admisibilidad = inadmite` (the invariant `causa ≠ "" ⟺ admisibilidad = inadmite`). The Art. 280 and Acordada 4/2007 grounds are detected from the considerando text regardless of the legacy `outcome` value (frozen in M26 and no longer the gate). `CUESTION_ABSTRACTA` is **not** 1:1 with `outcome = abstracto`: only moot cases without a merit disposition carry it; the ones that also revoke or affirm reach the merits and are recorded as `admite`. **Analyses of inadmissibility grounds should use `causa_inadmisibilidad`; analyses of the access decision should use `admisibilidad`.**
 
 ### `tipo_cuestion_federal`
 
