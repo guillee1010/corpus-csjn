@@ -18055,3 +18055,29 @@ El subsistema estaba esparcido (kappa_confiabilidad.py en raíz de diagnostico; 
 **Scripts creados:** ninguno canónico (sesión de validación). Subsistema κ movido a scripts/diagnostico/kappa/.
 
 **Commits:** chore (consolidación κ) + H151 (DEUDA + CODEBOOK + BITACORA).
+
+## H152 — Documentación de repo + higiene in/out (2026-06-21)
+
+**Objetivo:** READMEs por directorio, promover el subsistema κ a primera clase, y reescribir el `.gitignore` separando dataset reproducible de andamiaje. SIN CAMBIOS CANÓNICOS.
+
+### H152-01 — READMEs por directorio (6)
+
+Colocados: `output/parser/README.md` (corregido contra `_manifest.json`: 8 CSV con cuentas reales —casos 5890, votos 27697, zonas 141451, editorial 152, indice_partes 11445, materia 5890, recursos 5890, textos 5890—; reemplaza `readme_output_parser.md` stale que documentaba 5); `scripts/pipeline/README.md` (interfaz: etapas + clasificadores como submódulos de `derivar_recursos`); `scripts/validacion/README.md`; y 3 techos forenses (`scripts/diagnostico/`, `scripts/auditoria/`, `archivo/` = archivo no reproducible, fuera de Dataverse). Altitud de interfaz (rol + IO + versión), no reimplementación; marcado explícito lo rol-inferido.
+
+### H152-02 — Promoción del subsistema κ a scripts/validacion/
+
+`git mv` de los 9 trackeados (`kappa_confiabilidad`, `analizar_validacion_M20`, `build_m20`, `validar_H120`, `CODEBOOK_M20`, `M20_clave_parser_n300`, `textos_n300` + `golds/`) desde `scripts/diagnostico/kappa/`. Path fixes en `build_m20`/`validar_H120`: `HERE.parents[2]→[1]` (profundidad 3→2) y golds a `golds/`; OUT de `__rebuild` a `golds/`. `kappa_confiabilidad` no se toca (usa `--gold`). **Demo en disco:** corrido desde la ubicación nueva = IDÉNTICO al pre-move (parte 0,784 / gate 0,940 / vía 0,943 / disp 0,912 / reenvia 0,408) → el move no rompió nada.
+
+### H152-03 — .gitignore reescrito + higiene in/out
+
+Reescrito de cero (dedup, fix de línea malformada, EOL normalizado). **Intermedios `output/{mapa,catalogo,localizacion}` CONSERVADOS** (insumos del parser sellados en `_manifest.json` como `inputs` — regenerables pero load-bearing). Forense (session dirs de `auditoria`/`diagnostico` + `archivo/` + `docs/` stale) sacado del tracking vía `git rm --cached` (queda en disco + historia; solo READMEs-techo + `auditar_fallo.py` persisten). `output/validacion/` (κ resultados) trackeado. Limpieza: `_ls_*.txt` borrados; `diagnostico/` raíz vacío ignorado.
+
+### H152 — Estado final
+
+SIN CAMBIOS CANÓNICOS: parser v22.0, outputs y `_manifest.json` intactos (manifest/CHANGELOG no se disparan). Los 4 modificados de H148/H149 (`clasificador_causa.py`, `csjn_casos_recursos.csv`, `_manifest.json`, `CHANGELOG.md`) quedan SIN STAGEAR para su triage propia con re-sello.
+
+**Decisiones:** `corpus/` (46 vols, 329–349 excl. 335–336) → Dataverse como dataset base; `docs/` stale no se publica; `auditar_fallo.py` carve-out (tool vs `validacion/`) pendiente.
+
+**Pendiente:** triage H148/H149 + re-sello de manifest; reescritura del CODEBOOK; refresh Dataverse; B130/reenvia (pausado, coding manual).
+
+**Commits:** 1 (documentación + higiene).
