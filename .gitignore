@@ -44,3 +44,6 @@ estudio_13/
 
 output/diagnostico/
 output/auditoria/
+
+scripts/diagnostico/kappa/_extraidos_reenvia/
+scripts/diagnostico/kappa/reenvia_42.md
