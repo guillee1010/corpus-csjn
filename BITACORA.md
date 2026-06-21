@@ -17992,3 +17992,91 @@ B134 nuevo (originarias leak a inadmite por precedencia, 13 casos). B130 actuali
 - Versiones sin cambios: parser v22.0, clasificador_admision v0.2, clasificador_causa v0.1, derivar_recursos v0.5.
 
 **Commits:** abajo.
+
+## H150 — M27: tratado como vocabulario + §1.2.2 + cajón SIN_CAUSAL en su piso honesto (2026-06-20)
+
+**Objetivo:** minar el tratado de la Secretaría (`documento__37_.md`) como vocabulario de causales para alimentar `clasificador_causa`; implementar las causales del gap y dimensionar el cajón SIN_CAUSAL.
+
+### H150-01 — Redirección + extractor del tratado
+El prompt proponía el tratado como gold case-level (causal→[casos_id]→cruzar). Redirigido (Guillermo): el tratado = vocabulario/semántica; las citas se ignoran, importa el fraseo diagnóstico. `scripts/diagnostico/H150/extraer_tratado.py` (stdlib, parametrizado) → `tratado_estructurado.json`: 481/481 secciones del índice matcheadas (100%), 3545 proposiciones + 3348 bloques de citas. POC inicial con rutas hardcodeadas descartado.
+
+### H150-02 — §1.2.2 INTERPOSICION_INCORRECTA implementado
+`clasificador_causa` v0.1→v0.3, detector al final de la cola (solo drena SIN_CAUSAL). Regex anclado al fraseo real ("no fue presentado ante el tribunal que dictó"; "debe interponerse ante… sin que… subsane") + guard de antecedente. v0.2-con-P3 tuvo FP en `348_p1130` (= FUERA_DE_TERMINO por sumarios oficiales de la Secretaría, no foro equivocado) → P3 removida → v0.3 (bump faltante marcado por Guillermo). A/B: baseline v0.1 reproduce columna publicada 5890/5890; v0.3 cambia exactamente 2 (`329_p1538`, `340_p1068`: SIN_CAUSAL→INTERPOSICION_INCORRECTA), 0 FP, 0 regresión. Cajón SIN_CAUSAL 473→471.
+
+### H150-03 — Cajón SIN_CAUSAL: piso honesto
+Eyeball de cada causal candidata del gap: interposición=2; tribunal superior ~2 (descartado: polisemia + Levinas coyuntural); FUERA recall-gap ~5; relación directa 21 menciones → 1 genuino (`340_p1913`), 3/6 matches del patrón ya etiquetados `ACORDADA_4_2007`, FP de recusación (`338_p714`), antecedente atribuido a corte provincial (`347_p1061`); CF oportuna 5 pero no durable. Hallazgo: el residual del cajón = solapamiento con causales existentes + polisemia + antecedente, NO recall failure. M27 rinde real ~2-3 (la estimación H147 de ~95 se desinfló en el eyeball). Hallazgo metodológico: el residual de un clasificador de causa por texto mide solapamiento entre causales, no recall faltante.
+
+### H150-04 — Principio de durabilidad temporal
+Criterio fijado (Guillermo): causa = patrón durable atestiguado en TODO el corpus (early 329-335 / mid 336-342 / late 343-348); lo que clusterea reciente = sesgo del banco de 3 (3-banc bias) → tesis (H3), no pipeline. Distribución medida: relación directa early=7/mid=8/late=6 (durable); FUERA 13/9/13 (durable); CF oportuna early=0 (falla → descartada).
+
+### H150-05 — Frente PDF/encoding cerrado + provenance
+El glue de palabras del tratado ("art.257del") está en la geometría del PDF (pdftotext/pymupdf/tesseract spa → glue idéntico), irrecuperable por extracción/OCR; fuente = md; de-glue per-causal en eyeball, no global. `auditar_sincro.ps1` (hash audit) cazó que el disco tenía la v0.2-con-P3 (buggy, `e57e924f`) en `pipeline\` + duplicada en `H150\`, pero `recursos.csv` seguía sin regenerar (`d18f602b`) → el FP de 348 no se propagó a producción.
+
+### H150 — Estado final
+- **Corpus:** sin cambios vs H149 (parser INTACTO v22.0; el cambio vive en el deriver).
+- **`causa_inadmisibilidad` (post-v0.3):** inadmite 1107; SIN_CAUSAL 473→471; INTERPOSICION_INCORRECTA 0→2.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos_recursos.csv` — 5890 filas (sin cambio de filas; 2 celdas de `causa_inadmisibilidad`).
+- `csjn_casos.csv` / `csjn_casos_votos.csv` / `csjn_casos_zonas.csv` / `csjn_casos_editorial.csv` — sin cambios.
+
+**Scripts:** `scripts/diagnostico/H150/` — `extraer_tratado.py`, `auditar_sincro.ps1`. `scripts/pipeline/clasificador_causa.py` v0.1→v0.3.
+
+**Commits:** [a completar al commitear].
+
+## H151 — M20/M25: limpieza del gold de parte_ganadora + identificación del harness canónico (2026-06-21)
+
+**Objetivo:** dejar el gold M20 robusto para recomputar el κ de `parte_ganadora` con la regla binaria SCDB, e identificar el script canónico que lo valida. La sesión mide; no toca el parser.
+
+### H151-01 — Mapa estratégico de frentes restantes
+
+Triage de los frentes vivos por impacto/REE/comparabilidad-SCDB. Descartado `majOpinAssigner` como variable de tesis (error de categoría: la CSJN no tiene conferencia, regla de asignación ni orden de circulación registrado; coordinación radial). Frentes sobrevivientes priorizados: `admisibilidad`-como-detector-real (hoy síntesis, 0 κ propio), `declarationUncon`, M25 (detector de `parte`), y cierre + refresh de Dataverse (la versión publicada es pre-M26). REEL refactor parqueado salvo crecimiento.
+
+### H151-02 — Limpieza y recodificación del gold M20
+
+Gold original (`planilla_M20_codificar-56xlsx.xlsx`): removidas 2 filas de totales (caso_id nulo), columna `cod_materia` fantasma duplicada, y `\n` embebido en notas de `345_p523` (rompía el round-trip CSV). Investigación SCDB `partyWinning`: binario petitioner-centric, sin clase "parcial" (la victoria parcial se codea gana). → los 8 `parcial` recodificados a mano leyendo el `.md`: `329_p3213`/`337_p373`→pierde (confirma+desierto, ambos desfavorables); `329_p5007`/`332_p962`/`337_p505`/`348_p296`/`349_p280`→gana; Maza (`332_p2208`)→gana. Regla off-axis fijada: `parte_ganadora` solo vive en `es_revision_fondo=si`; `materia`/`via_recurso` transversales (no blanquear); verbo `disposicion` queda aun en no-fondo (B119). Blanqueado `parte` de 3 casos no-fondo (`329_p1936`, `329_p2645`, `337_p735`). Resultado: `cod_parte_ganadora` no-nulo solo en 134 fondo, binario (110 gana / 24 pierde). El gold queda robusto a cualquier script de κ (filtre por el gate o lea parte no-nula). Producto: `planilla_M20_57GOLD_parte_limpia.xlsx`.
+
+### H151-03 — Identificación del harness canónico de validación M20
+
+`analizar_validacion_M20.py` (H119) es el validador de los ejes desintercalados (GATE/DISPOSICIÓN/PARTE_GANADORA/REENVÍA) — el "validar m20". `kappa_confiabilidad.py` es posterior (H139). Confirmado documentalmente que el harness filtra `parte_ganadora` por el gate y no lee las filas no-fondo: la tabla κ de H139 corre parte sobre n=136 (no 300), y el log H119 fija "es_revision_fondo filtra; la estadística de fondo se restringe a ='si'". Pendiente de verificar al correrlo: si el filtro usa el gate del gold (`cod_es_revision_fondo`) o del parser (relevante donde gold-fondo ≠ parser-fondo; κ del gate 0,946). El blanqueo de esta sesión se hizo sobre el gate del gold (conservador).
+
+### H151 — Estado final
+
+- **Pipeline:** sin cambios. Parser, golden y outputs canónicos sin tocar. Manifest/CHANGELOG no se disparan.
+- **Validación:** gold M20 recodificado (`parcial`→binario SCDB, bycatch blanqueado). κ de `parte_ganadora` PENDIENTE — falta correr `analizar_validacion_M20.py` + `csjn_casos_recursos.csv`. Predicción κ > 0,653 (parcial colapsado); techo = 7 inversiones de rol (banco M25).
+- **Producto:** `planilla_M20_57GOLD_parte_limpia.xlsx` (300 casos; `parte` no-nulo en 134 fondo, 110 gana / 24 pierde).
+
+**Scripts creados:** ninguno canónico (sesión de validación).
+
+**Commits:** sin commits de pipeline (DEUDA + BITÁCORA).
+
+## H151 — M20/M25: gold de parte_ganadora binario SCDB + κ recomputado + consolidación del subsistema κ (2026-06-21)
+
+**Objetivo:** recomputar el κ de parte_ganadora con la regla binaria SCDB, consolidar el subsistema de validación κ en un hogar fijo. La sesión mide; no toca el pipeline.
+
+### H151-01 — Mapa estratégico
+Triage de frentes vivos. majOpinAssigner descartado como variable de tesis (error de categoría CSJN). Sobrevivientes: admisibilidad-como-detector-real (hoy síntesis, 0 κ propio), declarationUncon, M25, cierre+refresh Dataverse.
+
+### H151-02 — Gold M20 recodificado (regla binaria SCDB)
+partyWinning es binario petitioner-centric, sin clase parcial (victoria parcial = gana). Los 8 parcial recodeados a mano leyendo el .md (329_p3213/337_p373→pierde; resto→gana; Maza 332_p2208→gana). Regla off-axis: parte vive solo en es_revision_fondo=si; materia/via transversales; verbo disposicion queda en no-fondo. Blanqueado parte de 3 no-fondo → cod_parte_ganadora no-nulo solo en 134 fondo, binario (110 gana / 24 pierde). Producto: planilla_M20_57GOLD_parte_limpia.xlsx.
+
+### H151-03 — Harness canónico identificado
+analizar_validacion_M20.py (H119) es "validar m20"; kappa_confiabilidad.py es posterior (H139). kappa_confiabilidad filtra parte por los no-nulos del gold (no por columna de gate) → el blanqueo del bycatch alinea exacto: n=134.
+
+### H151-04 — κ recomputado + B130/reenvia reabierto
+κ(parser↔gold) con kappa_confiabilidad sobre el gold binario + csjn_casos_recursos.csv:
+- es_revision_fondo 0,940 [.899–.973] · via_recurso 0,943 [.850–1,0] · disposicion 0,912 [.847–.966] (sin cambio).
+- **parte_ganadora 0,653 → 0,784 [.632–.908]** (n=134, acuerdo 0,933, "sustancial"). El colapso de parcial sube el κ; el residual (~9 desacuerdos) = las 7 inversiones de rol (banco M25).
+- reenvia 0,408 (no reportable). **B130 reabierto:** clase negativa sub-codeada (69 si / 6 no / 225 blanco). Fix scopeado: codear los 42 del universo de reversión (revoca/deja/nulidad) en blanco LEYENDO (work-list extraído a reenvia_42.md vía extraer_caso en loop), blanquear 4 codeos fuera de universo (329_p1473/329_p1936/337_p735; re-leer 329_p5368 confirma→si), válvula '-'. Coding pass pendiente.
+
+### H151-05 — Consolidación del subsistema κ (housekeeping)
+El subsistema estaba esparcido (kappa_confiabilidad.py en raíz de diagnostico; M20 en H120/; M19 en estadisticas/validacion/). Consolidado en scripts/diagnostico/kappa/: harness M20, kappa_confiabilidad, build_m20, validar_H120, clave, textos, CODEBOOK_M20 + golds/ (rebuild, 56-original, 57-binario). Outputs κ unificados en output/validacion/. estadisticas/validacion/ (M19 + materia + retest) se deja: es otro subsistema (esquema outcome legacy). Pendiente menor: build_m20/validar_H120 hardcodean HERE/<gold> → ajustar a golds/ cuando se corran (no bloquea el κ, que usa --gold parametrizado).
+
+### H151 — Estado final
+- **Pipeline:** sin cambios. Parser, golden, outputs canónicos intactos. Manifest/CHANGELOG no se disparan.
+- **Validación:** parte_ganadora κ 0,784 (cerrado). reenvia/B130 reabierto (coding pass de 42 pendiente). CODEBOOK: nota partyWinning agregada.
+- **Producto:** planilla_M20_57GOLD_parte_limpia.xlsx; output/validacion/kappa_resultados_parte.csv.
+
+**Scripts creados:** ninguno canónico (sesión de validación). Subsistema κ movido a scripts/diagnostico/kappa/.
+
+**Commits:** chore (consolidación κ) + H151 (DEUDA + CODEBOOK + BITACORA).
