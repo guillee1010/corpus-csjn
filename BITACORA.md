@@ -18024,31 +18024,6 @@ El glue de palabras del tratado ("art.257del") está en la geometría del PDF (p
 
 **Commits:** [a completar al commitear].
 
-## H151 — M20/M25: limpieza del gold de parte_ganadora + identificación del harness canónico (2026-06-21)
-
-**Objetivo:** dejar el gold M20 robusto para recomputar el κ de `parte_ganadora` con la regla binaria SCDB, e identificar el script canónico que lo valida. La sesión mide; no toca el parser.
-
-### H151-01 — Mapa estratégico de frentes restantes
-
-Triage de los frentes vivos por impacto/REE/comparabilidad-SCDB. Descartado `majOpinAssigner` como variable de tesis (error de categoría: la CSJN no tiene conferencia, regla de asignación ni orden de circulación registrado; coordinación radial). Frentes sobrevivientes priorizados: `admisibilidad`-como-detector-real (hoy síntesis, 0 κ propio), `declarationUncon`, M25 (detector de `parte`), y cierre + refresh de Dataverse (la versión publicada es pre-M26). REEL refactor parqueado salvo crecimiento.
-
-### H151-02 — Limpieza y recodificación del gold M20
-
-Gold original (`planilla_M20_codificar-56xlsx.xlsx`): removidas 2 filas de totales (caso_id nulo), columna `cod_materia` fantasma duplicada, y `\n` embebido en notas de `345_p523` (rompía el round-trip CSV). Investigación SCDB `partyWinning`: binario petitioner-centric, sin clase "parcial" (la victoria parcial se codea gana). → los 8 `parcial` recodificados a mano leyendo el `.md`: `329_p3213`/`337_p373`→pierde (confirma+desierto, ambos desfavorables); `329_p5007`/`332_p962`/`337_p505`/`348_p296`/`349_p280`→gana; Maza (`332_p2208`)→gana. Regla off-axis fijada: `parte_ganadora` solo vive en `es_revision_fondo=si`; `materia`/`via_recurso` transversales (no blanquear); verbo `disposicion` queda aun en no-fondo (B119). Blanqueado `parte` de 3 casos no-fondo (`329_p1936`, `329_p2645`, `337_p735`). Resultado: `cod_parte_ganadora` no-nulo solo en 134 fondo, binario (110 gana / 24 pierde). El gold queda robusto a cualquier script de κ (filtre por el gate o lea parte no-nula). Producto: `planilla_M20_57GOLD_parte_limpia.xlsx`.
-
-### H151-03 — Identificación del harness canónico de validación M20
-
-`analizar_validacion_M20.py` (H119) es el validador de los ejes desintercalados (GATE/DISPOSICIÓN/PARTE_GANADORA/REENVÍA) — el "validar m20". `kappa_confiabilidad.py` es posterior (H139). Confirmado documentalmente que el harness filtra `parte_ganadora` por el gate y no lee las filas no-fondo: la tabla κ de H139 corre parte sobre n=136 (no 300), y el log H119 fija "es_revision_fondo filtra; la estadística de fondo se restringe a ='si'". Pendiente de verificar al correrlo: si el filtro usa el gate del gold (`cod_es_revision_fondo`) o del parser (relevante donde gold-fondo ≠ parser-fondo; κ del gate 0,946). El blanqueo de esta sesión se hizo sobre el gate del gold (conservador).
-
-### H151 — Estado final
-
-- **Pipeline:** sin cambios. Parser, golden y outputs canónicos sin tocar. Manifest/CHANGELOG no se disparan.
-- **Validación:** gold M20 recodificado (`parcial`→binario SCDB, bycatch blanqueado). κ de `parte_ganadora` PENDIENTE — falta correr `analizar_validacion_M20.py` + `csjn_casos_recursos.csv`. Predicción κ > 0,653 (parcial colapsado); techo = 7 inversiones de rol (banco M25).
-- **Producto:** `planilla_M20_57GOLD_parte_limpia.xlsx` (300 casos; `parte` no-nulo en 134 fondo, 110 gana / 24 pierde).
-
-**Scripts creados:** ninguno canónico (sesión de validación).
-
-**Commits:** sin commits de pipeline (DEUDA + BITÁCORA).
 
 ## H151 — M20/M25: gold de parte_ganadora binario SCDB + κ recomputado + consolidación del subsistema κ (2026-06-21)
 
