@@ -20,9 +20,34 @@ Cambios M26 paso 3:
   - Cola verbatim H092 (SD/FUND/DEPOSITO/FUERA/NO_RECURRIBLE) + guards holding-vs-
     antecedente (B100/B101/B103) SIN cambios, abierta a TODO `inadmite`.
 
+Cambios M27 (tratado de la Secretaría, un detector por causal, commit separado):
+  - INTERPOSICION_INCORRECTA §1.2.2: REX ante foro equivocado (no el tribunal que
+    dictó la resolución, art. 257 CPCCN). Tratado §1.2.2 (1 prop, fallos 329:1538,
+    312:1613, 307:639). Señal = foro equivocado + violación no subsanada, NO el
+    "ante el tribunal que dictó" suelto (FP de antecedente: 339_p1417 explica la
+    regla; 347_p352 la causa real es fundamentación). Va al FINAL de la cola, antes
+    del residual: solo puede drenar SIN_CAUSAL, nunca robar una causal etiquetada.
+    Rinde: 2 (329_p1538/340_p1068), 0 FP. v0.2 tenía P3 ("REX presentado ante
+    juzgado") → FP en 348_p1130 (holding real = extemporaneidad, no foro). v0.3
+    remueve P3 tras eyeball (Guillermo).
+
+Cambios H151 (bucket 1 del cajón SIN_CAUSAL — recall-gap remite-dictamen):
+  - REMITE_DICTAMEN recall-gap: la variante "de conformidad con lo dictaminado por
+    el Procurador" vive en el DISPOSITIVO (por_ello), NO en el considerando; el
+    detector base sólo mira `co`. Nueva rama anclada a `pe` + verbo desestima/
+    inadmisible (RE_REMITE_DICT_DISP / _VERBO), guard `disposicion∉_DISP_FONDO`
+    (excluye 329_p2523/334_p109 = `confirma`, mérito). NO 'mal concedido' (bucket 3,
+    329_p2005 queda en SIN_CAUSAL). GATEADA en dictamen_presente igual que la rama
+    base (robusto/consistente: NO se workaroundea el parser). Rinde +5 con el flag
+    actual (6º limpio 334_p417 + 345_p608 tienen wc_dictamen=0 → dictamen_presente
+    False por un gap de SEGMENTACIÓN del parser en tomos recientes [Bxxx, dx. H151];
+    se recuperan SOLOS al arreglar la fuente). Incluye 330_p170 (inhibitoria) que se
+    auto-corrige cuando B135 le flipee la admisibilidad. Extiende el detector
+    EXISTENTE, no agrega valor. Eyeball del banco completo (Guillermo).
+
 Cascada (dispositivo/explícito antes que considerando/inferencia; espejo B109):
   caducidad → desistimiento → abstracta → 280 → ac4 → SD → FUND → DEPOSITO →
-  FUERA → NO_RECURRIBLE → REMITE_DICTAMEN → SIN_CAUSAL.
+  FUERA → NO_RECURRIBLE → REMITE_DICTAMEN(co) → REMITE_DICTAMEN(disp,H151) → SIN_CAUSAL.
   (caducidad/desistimiento van PRIMERO: son holdings del por_ello; el 280/ac4 se
    ancla al considerando y puede venir de un antecedente citado — testigo 340_p251.)
 
@@ -30,7 +55,7 @@ NO modificar sin re-validar contra el gold/A/B.
 """
 import re
 
-__version__ = "0.1"
+__version__ = "0.4"
 
 # disposiciones de FONDO (verbo de mérito) — espejo de clasificador_disposicion._FONDO.
 # Se replica como literal para no acoplar el import a la firma; si _FONDO cambia allá,
@@ -138,6 +163,21 @@ RE_CAUSA_REMITE_DICTAMEN = re.compile(
     r"se\s+remite|comparte\s+(?:los\s+)?(?:sus\s+)?fundamentos|"
     r"adecuado\s+tratamiento\s+en\s+el\s+dictamen|"
     r"dictamen\s+(?:de|del|de\s+la)\s+(?:se[ñn]or|se[ñn]ora)\s+[Pp]rocurador", re.I)
+
+# ── REMITE_DICTAMEN recall-gap (H151 bucket 1) — variante del DISPOSITIVO ───────
+# "de conformidad con lo dictaminado por el/la (señor/a) Procurador..." en el por_ello
+# (el detector base sólo mira `co`). GATEADA en dictamen_presente igual que la base —
+# NO se workaroundea el parser. Los casos con remisión real pero wc_dictamen=0
+# (334_p417/345_p608) son un gap de SEGMENTACIÓN del parser (Bxxx, clusteriza en tomos
+# recientes); se recuperan al arreglar la fuente, no acá. Va con verbo desestima/
+# inadmisible (NO 'mal concedido' = bucket 3) y guard ∉ fondo.
+RE_REMITE_DICT_DISP = re.compile(
+    r"de\s+conformidad\s+con\s+lo\s+dictaminad\w+\s+por\s+(?:el\s+|la\s+)?"
+    r"(?:se[ñn]or\w?\s+|se[ñn]ora\s+)?procurador", re.I)
+RE_REMITE_DICT_DISP_VERBO = re.compile(
+    r"se\s+desestima|desestimar\b|"
+    r"(?:se\s+declara|declarar)\s+inadmisible|inadmisible\s+el\s+recurso", re.I)
+
 RE_CAUSA_NO_RECURRIBLE = re.compile(
     r"(?:las\s+(?:decisiones|sentencias|resoluciones)\s+(?:dictadas?\s+)?"
     r"(?:de|por)\s+(?:esta\s+|la\s+)?corte|las\s+sentencias\s+del\s+tribunal)"
@@ -146,6 +186,24 @@ RE_CAUSA_NO_RECURRIBLE = re.compile(
 RE_CAUSA_NO_RECURRIBLE_EXCL = re.compile(
     r"(?:se\s+resuelve\s+)?hac(?:er|e)\s+lugar\s+(?:a\s+)?(?:al?\s+|la\s+)?"
     r"(?:recurso\s+de\s+)?(?:reposici[oó]n|revocatoria)", re.I)
+
+# ── INTERPOSICION_INCORRECTA §1.2.2 (M27) — REX ante foro equivocado ───────────
+# Foro equivocado + violación NO subsanada. NO el "ante el tribunal que dictó"
+# suelto (eso es la regla; FP de antecedente 339_p1417/347_p352). Anclado a
+# considerando+por_ello; va al final de la cola (solo drena SIN_CAUSAL).
+RE_INTERP_INCORRECTA = re.compile(
+    # P1: (no) presentado/interpuesto ante el tribunal/cámara que dictó
+    r"(?:no\s+fue\s+|no\s+se\s+ha\s+)(?:present|interpu|deduc)\w+\s+ante\s+(?:el\s+|la\s+)?"
+    r"(?:tribunal|c[aá]mara|[oó]rgano)\s+que\s+(?:dict|pronunci)\w*"
+    r"|"
+    # P2: debe/debía interponerse ante el tribunal que dictó … sin que … subsane
+    r"(?:debe\s+ser\s+|deb[ií]a\s+(?:ser\s+)?)(?:interpu|present|deduc)\w+\s+ante\s+(?:el\s+|la\s+)?"
+    r"(?:tribunal|c[aá]mara|[oó]rgano)\s+que\s+(?:dict|pronunci)\w*[^.]{0,160}?"
+    r"(?:sin\s+que|no)[^.]{0,90}?subsan",
+    re.I)
+# NOTA: P3 ("REX presentado ante juzgado de primera instancia") REMOVIDA — era FP:
+# 348_p1130 se presentó ante el juzgado pero el holding es EXTEMPORANEIDAD (llegó
+# vencido el plazo del art. 257), no foro equivocado. El hecho del foro ≠ el ground.
 
 
 def causa_inadmisibilidad(admisibilidad, disposicion, considerando_text,
@@ -196,8 +254,22 @@ def causa_inadmisibilidad(admisibilidad, disposicion, considerando_text,
             and not RE_CAUSA_NO_RECURRIBLE_EXCL.search(pe)):
         return "RESOLUCION_NO_RECURRIBLE"
 
+    # interposición incorrecta §1.2.2 (M27) — al final de la cola: solo drena SIN_CAUSAL
+    if RE_INTERP_INCORRECTA.search(txt):
+        return "INTERPOSICION_INCORRECTA"
+
     # 4. residual
     if (RE_CAUSA_REMITE_DICTAMEN.search(co)
             and str(dictamen_presente).strip().lower() in ("true", "1", "presente")):
+        return "INADMISIBLE_REMITE_DICTAMEN"
+    # recall-gap H151 (bucket 1): remite-dictamen anclado al DISPOSITIVO (el detector
+    # base sólo mira `co`) + verbo desestima/inadmisible, guard ∉ fondo. GATEADO en
+    # dictamen_presente igual que la rama base — NO se workaroundea el parser. Los casos
+    # con remisión real pero wc_dictamen=0 (334_p417/345_p608, gap de SEGMENTACIÓN del
+    # parser clusterizado en tomos recientes, Bxxx) se recuperan SOLOS al arreglar la fuente.
+    if (str(dictamen_presente).strip().lower() in ("true", "1", "presente")
+            and disposicion not in _DISP_FONDO
+            and RE_REMITE_DICT_DISP.search(pe)
+            and RE_REMITE_DICT_DISP_VERBO.search(pe)):
         return "INADMISIBLE_REMITE_DICTAMEN"
     return "INADMISIBLE_SIN_CAUSAL_EXPLICITA"

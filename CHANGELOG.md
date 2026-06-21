@@ -2,6 +2,11 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H150 (2026-06-20)
+
+- `clasificador_causa.py`: v0.1→v0.3. Detector §1.2.2 INTERPOSICION_INCORRECTA al final de la cola (solo drena SIN_CAUSAL). +2 casos (`329_p1538`, `340_p1068`). 0 FP, 0 regresión.
+- `output/parser/csjn_casos_recursos.csv`: 5890 filas (sin cambio); 2 celdas `causa_inadmisibilidad` SIN_CAUSAL→INTERPOSICION_INCORRECTA.
+
 ## [H148] — 2026-06-19 — M26 paso 3: re-cableo de causa_inadmisibilidad + B133
 
 ### Changed
