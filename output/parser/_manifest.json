@@ -1,9 +1,9 @@
 {
   "schema_version": 4,
   "manifest_generator_version": "1.6",
-  "generated_at": "2026-06-21T22:08:11.406606+00:00",
+  "generated_at": "2026-06-21T22:23:35.151349+00:00",
   "git": {
-    "commit": "73c7ef4c98f67de846cd78dda58297f6851f0546",
+    "commit": "f2ecf37dd80124402db060eed033ef5db00ed8a0",
     "dirty": true
   },
   "pipeline_scripts": {
@@ -17,7 +17,7 @@
     "clasificador_disposicion.py": "1.08",
     "clasificador_via.py": "0.1",
     "clasificador_admision.py": "0.2",
-    "clasificador_causa.py": "0.4"
+    "clasificador_causa.py": "0.5"
   },
   "corpus": {
     "n_files": 46,

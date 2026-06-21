@@ -25,8 +25,8 @@ Cambios M27 (tratado de la Secretaría, un detector por causal, commit separado)
     dictó la resolución, art. 257 CPCCN). Tratado §1.2.2 (1 prop, fallos 329:1538,
     312:1613, 307:639). Señal = foro equivocado + violación no subsanada, NO el
     "ante el tribunal que dictó" suelto (FP de antecedente: 339_p1417 explica la
-    regla; 347_p352 la causa real es fundamentación). Va al FINAL de la cola, antes
-    del residual: solo puede drenar SIN_CAUSAL, nunca robar una causal etiquetada.
+    regla; 347_p352 la causa real es fundamentación). Va al FINAL de la cola, DESPUÉS de remite-dictamen
+    (v0.5): solo drena SIN_CAUSAL, nunca preempta una causal etiquetada.
     Rinde: 2 (329_p1538/340_p1068), 0 FP. v0.2 tenía P3 ("REX presentado ante
     juzgado") → FP en 348_p1130 (holding real = extemporaneidad, no foro). v0.3
     remueve P3 tras eyeball (Guillermo).
@@ -47,7 +47,7 @@ Cambios H151 (bucket 1 del cajón SIN_CAUSAL — recall-gap remite-dictamen):
 
 Cascada (dispositivo/explícito antes que considerando/inferencia; espejo B109):
   caducidad → desistimiento → abstracta → 280 → ac4 → SD → FUND → DEPOSITO →
-  FUERA → NO_RECURRIBLE → REMITE_DICTAMEN(co) → REMITE_DICTAMEN(disp,H151) → SIN_CAUSAL.
+  FUERA → NO_RECURRIBLE → REMITE_DICTAMEN(co) → REMITE_DICTAMEN(disp,H151) → INTERPOSICION_INCORRECTA → SIN_CAUSAL.
   (caducidad/desistimiento van PRIMERO: son holdings del por_ello; el 280/ac4 se
    ancla al considerando y puede venir de un antecedente citado — testigo 340_p251.)
 
@@ -55,7 +55,7 @@ NO modificar sin re-validar contra el gold/A/B.
 """
 import re
 
-__version__ = "0.4"
+__version__ = "0.5"
 
 # disposiciones de FONDO (verbo de mérito) — espejo de clasificador_disposicion._FONDO.
 # Se replica como literal para no acoplar el import a la firma; si _FONDO cambia allá,
@@ -254,10 +254,6 @@ def causa_inadmisibilidad(admisibilidad, disposicion, considerando_text,
             and not RE_CAUSA_NO_RECURRIBLE_EXCL.search(pe)):
         return "RESOLUCION_NO_RECURRIBLE"
 
-    # interposición incorrecta §1.2.2 (M27) — al final de la cola: solo drena SIN_CAUSAL
-    if RE_INTERP_INCORRECTA.search(txt):
-        return "INTERPOSICION_INCORRECTA"
-
     # 4. residual
     if (RE_CAUSA_REMITE_DICTAMEN.search(co)
             and str(dictamen_presente).strip().lower() in ("true", "1", "presente")):
@@ -272,4 +268,8 @@ def causa_inadmisibilidad(admisibilidad, disposicion, considerando_text,
             and RE_REMITE_DICT_DISP.search(pe)
             and RE_REMITE_DICT_DISP_VERBO.search(pe)):
         return "INADMISIBLE_REMITE_DICTAMEN"
+    # interposición incorrecta §1.2.2 (M27) — al FINAL de la cola (post remite-dictamen,
+    # v0.5): solo drena SIN_CAUSAL, nunca preempta una causal etiquetada.
+    if RE_INTERP_INCORRECTA.search(txt):
+        return "INTERPOSICION_INCORRECTA"
     return "INADMISIBLE_SIN_CAUSAL_EXPLICITA"
