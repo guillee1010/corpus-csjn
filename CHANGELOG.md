@@ -1,6 +1,10 @@
 # Changelog
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
+# H152 (2026-06-21)
+
+- `clasificador_causa.py`: v0.3→v0.5. v0.4: rama remite-dictamen anclada al DISPOSITIVO (`RE_REMITE_DICT_DISP` + verbo desestima/inadmisible, guard `∉ _DISP_FONDO`, gateada en `dictamen_presente`) — la variante "de conformidad con lo dictaminado por el Procurador" vive en el por_ello, no en el considerando; +5. v0.5: INTERPOSICION_INCORRECTA reordenado al final real de la cola (post remite-dictamen, antes de SIN_CAUSAL); a v0.4 había quedado antes del residual al insertarse la rama remite-dictamen(disp), rompiendo su contrato "solo drena SIN_CAUSAL". Reorden empíricamente nulo (INTERPOSICION sigue en 2, sin overlap). Docstring (cascada + frase M27) sincronizado.
+- `output/parser/csjn_casos_recursos.csv`: 5890 filas (sin cambio); +5 celdas `causa_inadmisibilidad` SIN_CAUSAL→INADMISIBLE_REMITE_DICTAMEN (v0.4), 0 por el reorden. Re-derivado; manifest re-sellado `--verify [CLEAN] 63`.
 
 ## H150 (2026-06-20)
 

@@ -18081,3 +18081,23 @@ SIN CAMBIOS CANÓNICOS: parser v22.0, outputs y `_manifest.json` intactos (manif
 **Pendiente:** triage H148/H149 + re-sello de manifest; reescritura del CODEBOOK; refresh Dataverse; B130/reenvia (pausado, coding manual).
 
 **Commits:** 1 (documentación + higiene).
+
+### H152 (cont.) — saldo del leftover H148/H149 + reorden INTERPOSICION (v0.5)
+
+Triaje de los 4 modificados-sin-stagear arrastrados de H148/H149 (clasificador_causa.py,
+csjn_casos_recursos.csv, _manifest.json, CHANGELOG.md). El `git diff` confirmó trabajo
+REAL, no stale: M27 INTERPOSICION_INCORRECTA §1.2.2 + H151 recall-gap remite-dictamen(disp),
+clasificador_causa en v0.4.
+
+Catch de review: INTERPOSICION_INCORRECTA estaba ANTES de las dos ramas remite-dictamen,
+contradiciendo su comentario ("solo drena SIN_CAUSAL, nunca roba una causal etiquetada").
+Decisión doctrinal (b): foro-equivocado NO preempta remite-dictamen → reordenado al final
+de la cola (post remite-dictamen, antes de SIN_CAUSAL). clasificador_causa v0.4→v0.5;
+docstring (cascada + frase M27) sincronizado.
+
+Re-derivado recursos.csv, re-sellado el manifest: `--verify [CLEAN] 63`. Reorden
+empíricamente NULO (INTERPOSICION sigue en 2: 329_p1538/340_p1068; remite-dictamen 165) —
+sin overlap, el fix es de correctness/futuro, no de números de hoy. Commiteados los 4.
+Working tree limpio.
+
+Scripts canónicos modificados: clasificador_causa.py v0.4 → **v0.5**.
