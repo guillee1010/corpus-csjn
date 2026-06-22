@@ -17,7 +17,21 @@ v1.01 — norm() ahora des-hifena el soft-hyphen (\u00ad) de fin de línea del O
         REQUIERE regenerar la clave (build_m20) y re-sellar antes de cerrar.
 """
 import re
-__version__ = "1.08"
+__version__ = "1.09"
+
+# v1.09 (Bxxx — Ruta 1 partyWinning). parte_ganadora_regla: `modifica` ENTRA al grupo
+# fondo-favorable (-> recurrente_gana), junto a revoca/deja_sin_efecto/nulidad/grant_remand.
+# ELIMINA el valor `parcial`: SCDB partyWinning es petitioner-centric BINARIO (partial
+# victory = win) y el gold humano coincide (0 parcial). Blindaje: no reformatio in pejus
+# (el recurrente no sale peor de su propio recurso -> toda modificación que obtiene es
+# favorable o neutra) + convención de recurrente-de-referencia, ya transversal a
+# revoca/deja/confirma. NO toca disposicion() ni las regex (verbo intacto, κ disposición
+# 0,912 sin cambio). 3 casos en disco (329_p2864/331_p1282/331_p1890, los únicos modifica,
+# multi_recurso=no), validados a mano sobre el texto -> gana. PoC κ-parte: 0,784 -> 0,784
+# (los 3 NO caen en el gold n=134; el cap son las 7 inversiones de rol, no los parciales).
+# Eje queda binario puro {recurrente_gana, recurrente_pierde, no_aplica}. La firma NO cambia
+# -> call site de derivar_recursos (.map) intacto. REQUIERE regenerar build_m20 (re-validar
+# held-out) + re-derivar recursos.csv + re-sellar manifest.
 
 # v1.08 (M26 Fase 2 — rewiring del gate). NO toca disposicion() (caseDisposition = el
 # verbo, κ disposición 0,912 intacto). Agrega es_revision_fondo() = el GATE de revisión
@@ -134,9 +148,10 @@ def disposicion(pe):
     return "no_fondo", remand   # v1.02: ex 'sin_disposicion_legible'. El por_ello es legible; no hay disposicion de FONDO (competencia/liquidacion/desercion/queja/honorarios). El gold concuerda: 88/89 vacio.
 
 def parte_ganadora_regla(disp):
-    if disp in ("revoca", "deja_sin_efecto", "nulidad", "grant_remand_implicito"): return "recurrente_gana"
+    # v1.09 (Ruta 1): `modifica` -> recurrente_gana (SCDB binario; no reformatio in pejus).
+    # Eliminado el valor `parcial` (fuera del esquema SCDB partyWinning).
+    if disp in ("revoca", "deja_sin_efecto", "nulidad", "modifica", "grant_remand_implicito"): return "recurrente_gana"
     if disp == "confirma": return "recurrente_pierde"
-    if disp == "modifica": return "parcial"
     return "no_aplica"
 
 _FONDO = {"revoca", "deja_sin_efecto", "nulidad", "confirma", "modifica", "grant_remand_implicito"}

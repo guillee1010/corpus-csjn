@@ -493,7 +493,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 329_p2847,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,ART_280,0
 329_p2856,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 329_p2860,no_revision_procesal,no,no_aplica,,no,no,sin_marcador,,0
-329_p2864,modifica,no,parcial,,no,si,admite,,0
+329_p2864,modifica,no,recurrente_gana,,no,si,admite,,0
 329_p2874,no_revision_procesal,no,no_aplica,,no,no,sin_marcador,,0
 329_p2876,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,si,si,admite,,0
 329_p2886,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
@@ -1993,7 +1993,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 331_p1243,no_fondo,no,no_aplica,,no,no,no_aplica,,0
 331_p1255,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
 331_p1262,no_revision_demanda,no,no_aplica,recurso_extraordinario,no,no,no_aplica,,0
-331_p1282,modifica,no,parcial,recurso_extraordinario,no,si,admite,,0
+331_p1282,modifica,no,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 331_p1284,confirma,no,recurrente_pierde,,no,si,admite,,0
 331_p1287,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,ART_280,1
 331_p1293,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
@@ -2071,7 +2071,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 331_p1865,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 331_p1869,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,CUESTION_ABSTRACTA,1
 331_p1873,revoca,no,recurrente_gana,recurso_ordinario,si,si,admite,,0
-331_p1890,modifica,no,parcial,recurso_extraordinario,no,si,admite,,0
+331_p1890,modifica,no,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 331_p1900,no_revision_competencia,no,no_aplica,,no,no,sin_marcador,,0
 331_p1906,nulidad,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 331_p1910,no_fondo,si,no_aplica,,no,no,sin_marcador,,0
