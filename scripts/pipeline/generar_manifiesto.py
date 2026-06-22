@@ -58,7 +58,7 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
-__version__ = "1.6"  # H148: +clasificadores (disposicion/via/admision/causa) a PIPELINE_SCRIPTS (provenance capa B)
+__version__ = "1.7"  # H154: +M29 (extraer_epilogos/derivar_partes) a PIPELINE_SCRIPTS y sus dos CSV a OUTPUTS (8->10 canónicos)
 
 # csjn_casos.csv tiene campos de texto grandes (considerando_text). Subimos el
 # límite de campo de csv a un valor amplio pero seguro en Windows (sys.maxsize
@@ -84,6 +84,8 @@ PIPELINE_SCRIPTS = [
     "parser_editorial.py",
     "derivar_materia.py",
     "derivar_recursos.py",
+    "extraer_epilogos.py",   # M29: extrae la zona epílogo del .md (insumo de partes)
+    "derivar_partes.py",     # M29: deriva recurrente/recurrido + rol del epílogo
     # capa-deriver: módulos fuente-única que importa derivar_recursos. Su lógica no
     # cuelga de la versión del deriver, así que se sellan aparte (gap de provenance
     # de capa B, H146/H148). No cuentan como artefactos (--verify suma solo datos).
@@ -94,7 +96,7 @@ PIPELINE_SCRIPTS = [
 ]
 
 # ── Capa C: artefactos del pipeline. (ruta relativa a output/, generador) ────
-# inputs = intermedios de la cadena; outputs = los ocho CSV canónicos finales.
+# inputs = intermedios de la cadena; outputs = los diez CSV canónicos finales.
 # Allow-list explícita a propósito (no glob): excluye BASELINE/_manifest.json,
 # y si falta un canónico el script grita en vez de manifestar parcial en silencio.
 # El corpus crudo NO va acá: se deriva de source_file (ver fuentes_corpus()).
@@ -113,6 +115,8 @@ OUTPUTS = [
     ("parser/csjn_editorial_indice_partes.csv", "parser_editorial.py"),
     ("parser/csjn_casos_materia.csv",           "derivar_materia.py"),
     ("parser/csjn_casos_recursos.csv",          "derivar_recursos.py"),
+    ("parser/csjn_casos_epilogo.csv",           "extraer_epilogos.py"),
+    ("parser/csjn_casos_partes.csv",            "derivar_partes.py"),
 ]
 
 # ── Capa C': vocabularios controlados que lee derivar_materia.py ─────────────

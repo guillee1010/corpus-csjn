@@ -1,9 +1,9 @@
 {
   "schema_version": 4,
-  "manifest_generator_version": "1.6",
-  "generated_at": "2026-06-22T01:09:00.772462+00:00",
+  "manifest_generator_version": "1.7",
+  "generated_at": "2026-06-22T04:06:46.044752+00:00",
   "git": {
-    "commit": "4bda29acd62ef1664710d46eec42b9bf997e78bd",
+    "commit": "44014c8b346904b54bfc42e84885b3528fd6b1c5",
     "dirty": true
   },
   "pipeline_scripts": {
@@ -14,6 +14,8 @@
     "parser_editorial.py": "1.0",
     "derivar_materia.py": "3.2",
     "derivar_recursos.py": "0.5",
+    "extraer_epilogos.py": "0.2",
+    "derivar_partes.py": "0.2",
     "clasificador_disposicion.py": "1.09",
     "clasificador_via.py": "0.1",
     "clasificador_admision.py": "0.2",
@@ -389,6 +391,22 @@
       "sha256": "e4e90c08d091afc44fd65685f27ba4f4f92dc8055c6a8bc6a706fd4450cf2b9a",
       "n_rows": 5890,
       "n_bytes": 444841
+    },
+    "csjn_casos_epilogo.csv": {
+      "path": "output/parser/csjn_casos_epilogo.csv",
+      "generated_by": "extraer_epilogos.py",
+      "generator_version": "0.2",
+      "sha256": "9c5cd1ce41979778aba979b44b808124452ea804cb03c22ac4c788e162e53f4c",
+      "n_rows": 5697,
+      "n_bytes": 6273087
+    },
+    "csjn_casos_partes.csv": {
+      "path": "output/parser/csjn_casos_partes.csv",
+      "generated_by": "derivar_partes.py",
+      "generator_version": "0.2",
+      "sha256": "abb9dea33997ea731204b6ee70380e6cf8fea108b9eeaf07546269b4a828f7be",
+      "n_rows": 5890,
+      "n_bytes": 450814
     }
   }
 }
