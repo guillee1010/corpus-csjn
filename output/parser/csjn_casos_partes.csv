@@ -121,7 +121,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p689,la Universidad Nacional del Nordeste –UNNE–,,Ramón Ramírez,,no,epilogo,epilogo:recurso+traslado
 329_p695,Camino del Atlántico S.A.C.V.,,,,no,epilogo,epilogo:recurso
 329_p710,el Banco de San Juan S.A. y la Provincia de San Juan,,,,no,epilogo,epilogo:recurso
-329_p716,,,,,,epilogo,sin_marcador_recurso
+329_p716,Dr. Ricardo Gustavo Wechsler,penal,,,no,epilogo,epilogo:nombre_recurrente
 329_p717,la Obra Social para la Actividad Docente,,,,no,epilogo,epilogo:recurso
 329_p723,Daniel Alejandro Gómez Saucedo,penal,,,no,epilogo,epilogo:recurso
 329_p730,el contador Osvaldo Juan Guistozzi,,,,no,epilogo,epilogo:recurso
@@ -244,7 +244,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p1493,Raúl Enrique Castets,,,,no,epilogo,epilogo:recurso
 329_p1501,"Roberto Tito Aguirre, actor en autos, por derecho propio, y",,,,no,epilogo,epilogo:recurso
 329_p1506,Fisco Nacional – Dirección General Impositiva,,,,no,epilogo,epilogo:recurso
-329_p1514,,,,,,epilogo,sin_marcador_recurso
+329_p1514,Claudio Marcelo Gómez (,penal,,,no,epilogo,epilogo:nombre_recurrente
 329_p1521,,,,,,sin_epilogo,sin_zona
 329_p1522,María Margarita Dialeva Naredo,,,,no,epilogo,epilogo:recurso
 329_p1538,Guillermo José González,,,,no,epilogo,epilogo:recurso
@@ -803,7 +803,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p4770,"las Dras. Déborah Dobniewski y Viviana Reinoso, asistentes letradas del menor imputado J. L. R. M",penal,,,no,epilogo,epilogo:recurso
 329_p4775,"Raúl Oscar Saavedra, Dr. Ricardo E. J. Calvo Arrázola. Tribunales que intervinieron con anterioridad: Corte Suprema de Justicia de Santa Fe y Cámara de Apelación en lo Penal de Santa Fe. NELIDA AMELIA TEODOSIO Y OTROS",penal,,,no,epilogo,epilogo:recurso
 329_p4781,Marina Alejandra Canosa Liñeiro,,,,no,epilogo,epilogo:recurso
-329_p4783,,,,,,epilogo,sin_marcador_recurso
+329_p4783,R. A. T.,,,,no,epilogo,epilogo:nombre_recurrente
 329_p4789,,,,,,sin_epilogo,sin_zona
 329_p4804,,,,,,epilogo,sin_marcador_recurso
 329_p4808,,,,,,epilogo,sin_marcador_recurso
@@ -1040,7 +1040,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p5985,,solo_letrado,,,no,epilogo,epilogo:recurso
 329_p5989,Trade S.A.,,,,no,epilogo,epilogo:recurso
 329_p5994,el Dr. Osvaldo Nelo Tieghi (letrado patrocinante de la querella),,,,no,epilogo,epilogo:recurso
-329_p6002,,,,,,epilogo,sin_marcador_recurso
+329_p6002,Dr. Raúl Omar Pleé (,penal,,,no,epilogo,epilogo:nombre_recurrente
 329_p6009,la Fiscalía de Estado de la Provincia de Buenos Aires,,,,no,epilogo,epilogo:recurso
 329_p6019,,,,,,epilogo,sin_marcador_recurso
 329_p6030,,,,,,sin_epilogo,sin_zona
@@ -1156,7 +1156,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 330_p478,,,,,,sin_epilogo,sin_zona
 330_p479,Silvia Raquel Quesada de Martelli,actora,,,no,epilogo,epilogo:recurso
 330_p484,Hércule S.A.,,,,no,epilogo,epilogo:recurso
-330_p487,,,,,,epilogo,sin_marcador_recurso
+330_p487,José Luis Reinoso,,,,no,epilogo,epilogo:nombre_recurrente
 330_p490,Fernando Román Ramírez (,penal,,,no,epilogo,epilogo:recurso
 330_p496,"sus hijos menores R. M. y R. M. M., representados por el Dr. Alfredo Gómez Chavero, con el patrocinio del Dr. Emilio Casin Azura",,,,no,epilogo,epilogo:recurso
 330_p499,Raúl Enrique Suárez,,,,no,epilogo,epilogo:recurso
@@ -1693,7 +1693,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 330_p4469,la Provincia de Buenos Aires,,,,no,epilogo,epilogo:recurso
 330_p4470,,,,,,sin_epilogo,sin_zona
 330_p4471,Raúl Alberto Montenegro,,,,no,epilogo,epilogo:recurso
-330_p4476,,,,,,epilogo,sin_marcador_recurso
+330_p4476,Andrés Sebastián Mannini,,,,no,epilogo,epilogo:nombre_recurrente
 330_p4483,el Banco de la Provincia de Buenos Aires,,,,no,epilogo,epilogo:recurso
 330_p4489,Riomar S.A.,,,,no,epilogo,epilogo:recurso
 330_p4498,"su hija menor de edad, con el patrocinio del Dr. Luis Alberto Larceri",,,,no,epilogo,epilogo:recurso
@@ -1975,7 +1975,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 331_p1090,Martín Salvador De los Santos,penal,,,no,epilogo,epilogo:recurso
 331_p1099,el imputado Damián Andrés Gago,penal,,,no,epilogo,epilogo:recurso
 331_p1105,Selene Cecilia Zamora,,,,no,epilogo,epilogo:recurso
-331_p1108,,,,,,epilogo,sin_marcador_recurso
+331_p1108,Jorge Zambianchi,,,,no,epilogo,epilogo:nombre_recurrente
 331_p1116,María Isabel Mussano,,,,no,epilogo,epilogo:recurso
 331_p1120,Mirta Susana Villalba Viñas,,,,no,epilogo,epilogo:recurso
 331_p1123,la Universidad Nacional de La Plata,,el,penal,no,epilogo,epilogo:recurso+traslado
@@ -2038,7 +2038,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 331_p1592,,,,,,epilogo,sin_marcador_recurso
 331_p1596,el Estado Nacional codemandado en autos,,"M. de los A. D., por derecho propio",actora,no,epilogo,epilogo:recurso+traslado
 331_p1605,,,,,,sin_epilogo,sin_zona
-331_p1611,,,,,,epilogo,sin_marcador_recurso
+331_p1611,Roberto Horacio Walsh,,,,no,epilogo,epilogo:nombre_recurrente
 331_p1620,,,,,,sin_epilogo,sin_zona
 331_p1622,,,,,,sin_epilogo,sin_zona
 331_p1646,la Administración Federal de Ingresos Públicos,demandada,Inés Soledad Loza,actora,no,epilogo,epilogo:recurso+traslado

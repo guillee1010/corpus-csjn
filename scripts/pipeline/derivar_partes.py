@@ -35,7 +35,7 @@ import unicodedata
 from collections import Counter
 from pathlib import Path
 
-__version__ = "0.2"  # H154: marcador flexible anclado a línea (queja/ordinario de apelación/deducido/federal/plural, salta arrastre de por_ello) -> recurrente_ok 2225->3633; parse_parte resuelve letrado (por derecho propio / por <parte> / defensor de <parte> / solo_letrado). // 0.1: marcador estricto (solo formato moderno) + capa epílogo inicial.
+__version__ = "0.4"  # H155: cobertura reportada también sobre el universo de MÉRITO (is_merit_decision, ya en casos.csv) — recurrente_ok 88,4% sobre los 2870 de mérito vs 63,9% sobre todos los fallos; el sin_epilogo del no-mérito (art.280 etc.) es ausencia esperada, no gap. Reporte-only: derivación y CSV de salida SIN cambios vs v0.3. // 0.3: H155 fallback formato viejo "Nombre del recurrente:" (Eje B directo) cuando falla RE_MARK_REC -> partes_fuente="epilogo:nombre_recurrente"; aditivo puro sobre el residual (NO toca los 3633 ya resueltos). // 0.2: H154 marcador flexible anclado a línea (queja/ordinario de apelación/deducido/federal/plural, salta arrastre de por_ello) -> recurrente_ok 2225->3633; parse_parte resuelve letrado (por derecho propio / por <parte> / defensor de <parte> / solo_letrado). // 0.1: marcador estricto (solo formato moderno) + capa epílogo inicial.
 
 csv.field_size_limit(10 ** 7)
 
@@ -46,7 +46,7 @@ DEFAULT_CASOS   = REPO_ROOT / "output" / "parser" / "csjn_casos.csv"
 DEFAULT_EPILOGO = REPO_ROOT / "output" / "parser" / "csjn_casos_epilogo.csv"
 DEFAULT_OUTPUT  = REPO_ROOT / "output" / "parser" / "csjn_casos_partes.csv"
 
-REQUIRED_CASOS   = ("caso_id_canonico", "tipo_entrada")
+REQUIRED_CASOS   = ("caso_id_canonico", "tipo_entrada", "is_merit_decision")
 REQUIRED_EPILOGO = ("caso_id_canonico", "epilogo_text")
 
 OUT_COLS = ["caso_id_canonico", "recurrente", "recurrente_rol",
@@ -69,6 +69,15 @@ RE_MARK_REC = re.compile(
     re.S | re.M)
 RE_MARK_TRA = re.compile(
     r"Traslado\s+contestad\w+\s+por\s+(.*?)(?=\bTribunal\b|$)", re.S | re.I)
+# FALLBACK formato viejo (tomos 329-334): rótulo explícito "Nombre del
+# recurrente:" cuando NO hay marcador "Recurso ... interpuesto por". Da Eje B
+# directo (quién recurrió). OJO: "Nombre del actor:" / "Parte demandada:" NO van
+# acá — eso es Eje A (actor/demandado), otra capa; mapearlo a recurrente
+# violaría la doctrina (el actor/demandado no define quién apeló).
+RE_MARK_NOMBRE = re.compile(
+    r"^Nombre\s+del\s+recurrente\s*:\s*(.*?)"
+    r"(?=^Nombre\s+del\b|\bTribunal\b|\bProfesional|\bNorma\b|\Z)",
+    re.S | re.M | re.I)
 
 # parte vs letrado: si hay "en representación de Y", la parte es Y.
 RE_REPDE = re.compile(r"\ben\s+representaci[oó]n\s+de\s+(.+)$", re.I)
@@ -151,6 +160,16 @@ def derivar_de_epilogo(epilogo_text: str) -> dict:
     """Aplica la gramática al epílogo crudo. Devuelve campos de salida (capa 1)."""
     rec = RE_MARK_REC.search(epilogo_text)
     if not rec:
+        # Fallback formato viejo: rótulo "Nombre del recurrente:" (Eje B directo).
+        nom = RE_MARK_NOMBRE.search(epilogo_text)
+        if nom:
+            nom_clause = _dehifen(nom.group(1))
+            nn, nr = parse_parte(nom_clause)
+            return {"recurrente": nn, "recurrente_rol": nr,
+                    "recurrido": "", "recurrido_rol": "",
+                    "multi_recurrente": "si" if RE_MULTI.search(nom_clause) else "no",
+                    "partes_capa": "epilogo",
+                    "partes_fuente": "epilogo:nombre_recurrente"}
         return {"recurrente": "", "recurrente_rol": "", "recurrido": "",
                 "recurrido_rol": "", "multi_recurrente": "",
                 "partes_capa": "epilogo", "partes_fuente": "sin_marcador_recurso"}
@@ -206,6 +225,7 @@ def derivar(casos_path: Path, epilogo_path: Path, output_path: Path) -> dict:
     cov_razon = Counter()
     rol_rec = Counter()
     multi_n = 0
+    merit_cov = {"1": Counter(), "0": Counter()}  # cobertura split por universo de mérito
     for r in filas:
         cid = r["caso_id_canonico"]
         if r.get("tipo_entrada") != "fallo":
@@ -216,14 +236,17 @@ def derivar(casos_path: Path, epilogo_path: Path, output_path: Path) -> dict:
                            "partes_fuente": f"tipo_entrada={r.get('tipo_entrada')}"})
             cov["no_aplica"] += 1
             continue
+        merit = r.get("is_merit_decision", "")
         if cid in epi and epi[cid]["status"] == "ok":
             d = derivar_de_epilogo(epi[cid]["text"])
             d["caso_id_canonico"] = cid
             salida.append(d)
             if d["partes_fuente"] == "sin_marcador_recurso":
                 cov["epilogo_sin_marcador"] += 1
+                clave = "epilogo_sin_marcador"
             else:
                 cov["recurrente_ok"] += 1
+                clave = "recurrente_ok"
                 if d["recurrente_rol"]:
                     rol_rec[d["recurrente_rol"]] += 1
                 else:
@@ -240,6 +263,9 @@ def derivar(casos_path: Path, epilogo_path: Path, output_path: Path) -> dict:
                            "partes_capa": "sin_epilogo", "partes_fuente": razon})
             cov["sin_epilogo"] += 1
             cov_razon[razon] += 1
+            clave = "sin_epilogo"
+        if merit in merit_cov:
+            merit_cov[merit][clave] += 1
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8", newline="") as fh:
@@ -248,7 +274,7 @@ def derivar(casos_path: Path, epilogo_path: Path, output_path: Path) -> dict:
         w.writerows(salida)
 
     return {"n": len(salida), "cov": cov, "cov_razon": cov_razon,
-            "rol_rec": rol_rec, "multi": multi_n}
+            "rol_rec": rol_rec, "multi": multi_n, "merit_cov": merit_cov}
 
 
 def _reporte(st: dict) -> None:
@@ -264,6 +290,17 @@ def _reporte(st: dict) -> None:
         pct = f"({100*v/base:5.1f}%)" if base else ""
         print(f"    {k:22s} {v:5d}  {pct}")
     print(f"  multi_recurrente (flag):  {st['multi']}")
+    mc = st.get("merit_cov")
+    if mc:
+        for universo, lbl in [("1", "MÉRITO (universo SCDB)"), ("0", "no-mérito")]:
+            c = mc.get(universo, Counter())
+            tot = sum(c.values())
+            if not tot:
+                continue
+            print(f"\n  === cobertura sobre {lbl}: {tot} fallos ===")
+            for k in ["recurrente_ok", "epilogo_sin_marcador", "sin_epilogo"]:
+                v = c.get(k, 0)
+                print(f"    {k:22s} {v:5d}  ({100*v/tot:5.1f}%)")
     if st["cov_razon"]:
         print("\n  === sin_epilogo, por razón (auditable) ===")
         for razon, v in st["cov_razon"].most_common():
