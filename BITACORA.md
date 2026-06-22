@@ -18203,14 +18203,14 @@ Las 7 inversiones de rol de M25 (`329_p5368`, `331_p2257`, `340_p1450`, `344_p34
 
 ### H154 — Estado final
 
-- **Corpus:** 5890 casos (sin cambio; M29 no toca el parser). Votos/zonas/sin_firma sin cambio (v22.0 intacto).
+- **Corpus:** 5890 casos (sin cambio; M29 no toca el parser). Votos 27697 / zonas 141451 / sin_firma sin cambio (v22.0 intacto).
 
 **Outputs canónicos (10):**
-- `csjn_casos.csv` 5890 · `csjn_casos_textos.csv` 5890 · `csjn_casos_votos.csv`, `csjn_casos_zonas.csv`, `csjn_casos_editorial.csv` sin cambio · `csjn_editorial_indice_partes.csv` 11445 · `csjn_casos_materia.csv` 5890 · `csjn_casos_recursos.csv` 5890 — todos sin cambio.
-- `csjn_casos_epilogo.csv` — **5697 filas (NUEVO)**, sha `[completar con --verify]`.
-- `csjn_casos_partes.csv` — **5890 filas (NUEVO)** (recurrente_ok 3633), sha `[completar con --verify]`.
+- `csjn_casos.csv` 5890 (`d2e43f077d75…`) · `csjn_casos_textos.csv` 5890 (`8c2f1cc0372d…`) · `csjn_casos_votos.csv` 27697 · `csjn_casos_zonas.csv` 141451 · `csjn_casos_editorial.csv` 152 · `csjn_editorial_indice_partes.csv` 11445 · `csjn_casos_materia.csv` 5890 · `csjn_casos_recursos.csv` 5890 (`e4e90c08d091…`) — todos sin cambio.
+- `csjn_casos_epilogo.csv` — **5697 filas (NUEVO)**, sha `9c5cd1ce4197…` v0.2.
+- `csjn_casos_partes.csv` — **5890 filas (NUEVO)** (recurrente_ok 3633), sha `abb9dea33997…` v0.2.
 
 **Scripts creados:** `scripts/pipeline/extraer_epilogos.py` v0.2, `scripts/pipeline/derivar_partes.py` v0.2.
 **Scripts modificados:** `scripts/pipeline/generar_manifiesto.py` v1.6→v1.7.
 **Manifest:** `--verify [CLEAN] 65` (eran 63).
-**Commits:** `[completar]`.
+**Commits:** `dafddad` (M29 capa 1: scripts + epilogo/partes + manifest + DEUDA) · `b01a0ad` (re-sello manifest post-commit, dirty=false) · docs BITACORA+CHANGELOG (este).
