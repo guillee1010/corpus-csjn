@@ -18165,3 +18165,52 @@ Decisión: se descartó la variante con guard `multi_recurso` (Ruta 2) — SCDB 
 **DEUDA nueva:** M29 (capa de partes petitioner/respondent, PRIORITARIA, insumo SCDB) · M30 (centralizar paths + orquestador downstream).
 
 **Commits:** 3 (Ruta 1 pipeline + manifest; CODEBOOK v2.0; docs).
+
+## H154 — M29 capa 1: partes desde el epílogo (recurrente/recurrido + rol procesal) (2026-06-22)
+
+**Objetivo:** implementar la capa de partes de M29 — derivar el recurrente/recurrido (Eje B = petitioner SCDB) y su rol procesal del epílogo editorial, el insumo de rol que le falta a M25. Sin tocar el parser (capa-deriver nueva).
+
+### H154-01 — Diseño: dos ejes de partes, no uno
+
+Verificado sobre dato real (329-349) que hay DOS ejes de partes distintos:
+- **Eje A — actor/demandado:** la relación procesal de origen. Sale del índice editorial (`csjn_editorial_indice_partes.csv`, 11445 filas, rol por sintaxis `X c/ Y` / `X (Y c/)`) + la carátula del cuerpo (`case_name_cuerpo`, separador `c/` en 59,0%). `c/` es el separador casi universal; no hay `v.` como separador de partes (los 3 `v.` del cuerpo son "véase Fallos").
+- **Eje B — recurrente/recurrido (= petitioner SCDB):** quién apeló a la Corte. Sale SOLO del epílogo editorial (`Recurso … interpuesto por X[, rol]` + `Traslado contestado por Y`). El actor/demandado NO define quién recurrió → la entrada M29 de H153 (que apuntaba al `c/` al 59%) describía el Eje A; el insumo que M25 necesita es el Eje B.
+
+Decisión arquitectónica: dos artefactos separados (replica `textos.csv` → clasificador): un extractor del epílogo (insumo persistido) + un derivador que lee ese CSV, no el `.md` → reproducible para Dataverse. El recurrente se busca SOLO en el epílogo (disciplina de `ambito`, como `derivar_materia`).
+
+### H154-02 — `extraer_epilogos.py` v0.2 (NUEVO): insumo persistido
+
+Lee la zona `epilogo` de `csjn_casos_zonas.csv` + `corpus/*.md` (offset relativo `linea_ini + linea_inicio` verbatim de H055). Bug cazado: v0.1 solo emitía los 4345 con zona (muerte silenciosa de los 1352 sin zona); v0.2 emite los **5697 fallos 1:1** con `epilogo_status`: ok 4345 (76,3%), sin_zona 1352 (23,7%), archivo_no_encontrado 0 (el offset de H055 resuelve todos los paths). [`derivar_materia` no tiene este bug — emite 1:1; degradación menor anotada como fix opcional.]
+
+### H154-03 — `derivar_partes.py` v0.2 (NUEVO): la gramática del epílogo
+
+Output `csjn_casos_partes.csv`. Validación iterativa de la regex sobre el universo real:
+- v0.1 (marcador estricto): recurrente_ok 2225, epilogo_sin_marcador 2120 (37%, señal roja).
+- Hipótesis (Guillermo): la zona agarró cuerpo. Verificación: 100% de los 2120 tienen marcador de pie → el problema era la REGEX (variantes), no la zona; la hipótesis de zona es real pero minoritaria (~103, frente 3).
+- v0.2 (marcador flexible anclado a línea `^(Recursos?|Queja)…(interpuest|deducid) por`): cubre queja, ordinario de apelación, deducido, federal, plural; salta el arrastre de `por ello`. Resultado: **recurrente_ok 3633 (63,8% fallos / 84% epílogos)**, epilogo_sin_marcador 712, multi 149.
+
+Sub-patrón letrado resuelto (75 letrado-capturado → 15): `parse_parte` desambigua `por derecho propio` (letrado = parte, 9), `, por <parte>` tras el 2º `por`, `defensor de <parte>`, y marca `solo_letrado` (parte fuera del marcador, típico penal, 45). Bug intermedio: `\b` tras título con punto (`Dra.`) rompía el match. `re.split` con `maxsplit` keyword (saca el DeprecationWarning de Python 3.13+; CSV byte-idéntico).
+
+Rol del recurrente (sobre 3633): sin_rol 2383, penal 444, demandada 368, actora 343, solo_letrado 45, querellante 21, codemandada 18, por_derecho_propio 9, coactora 2.
+
+### H154-04 — Validación cruzada + corrida en disco
+
+Las 7 inversiones de rol de M25 (`329_p5368`, `331_p2257`, `340_p1450`, `344_p344`, `333_p300`, `333_p1639`, `346_p675`) dan 7/7 recurrente legible → valida el Eje B. (Hallazgo lateral parkeado, es M25: en el por_ello real, 329_p5368 dice "se revoca" no "confirma", y en 333_p1639 la mayoría favorece al recurrente pero el gold dice pierde — candidatos a verificar contra el gold, NO tocados.) Corrida en disco de Guillermo = idéntica al sandbox (3633 exacto) → gate REE cerrado.
+
+### H154-05 — Sellado (manifest 8→10 canónicos)
+
+`generar_manifiesto.py` v1.6→v1.7: los dos scripts a PIPELINE_SCRIPTS; los dos CSV a OUTPUTS (precedente: `textos.csv` es insumo + OUTPUT). Sin conteo hardcodeado → `--verify` pasa de 63 a 65 solo. Parser v22.0 intacto, `check_regresion` [CLEAN] (capa-deriver, sin re-golden).
+
+### H154 — Estado final
+
+- **Corpus:** 5890 casos (sin cambio; M29 no toca el parser). Votos/zonas/sin_firma sin cambio (v22.0 intacto).
+
+**Outputs canónicos (10):**
+- `csjn_casos.csv` 5890 · `csjn_casos_textos.csv` 5890 · `csjn_casos_votos.csv`, `csjn_casos_zonas.csv`, `csjn_casos_editorial.csv` sin cambio · `csjn_editorial_indice_partes.csv` 11445 · `csjn_casos_materia.csv` 5890 · `csjn_casos_recursos.csv` 5890 — todos sin cambio.
+- `csjn_casos_epilogo.csv` — **5697 filas (NUEVO)**, sha `[completar con --verify]`.
+- `csjn_casos_partes.csv` — **5890 filas (NUEVO)** (recurrente_ok 3633), sha `[completar con --verify]`.
+
+**Scripts creados:** `scripts/pipeline/extraer_epilogos.py` v0.2, `scripts/pipeline/derivar_partes.py` v0.2.
+**Scripts modificados:** `scripts/pipeline/generar_manifiesto.py` v1.6→v1.7.
+**Manifest:** `--verify [CLEAN] 65` (eran 63).
+**Commits:** `[completar]`.

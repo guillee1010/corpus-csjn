@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H154 (2026-06-22)
+
+- `scripts/pipeline/extraer_epilogos.py` v0.2: NUEVO. Extrae la zona `epilogo` (`csjn_casos_zonas.csv` + `corpus/*.md`, offset H055) → `csjn_casos_epilogo.csv`; 5697 fallos 1:1 con `epilogo_status`.
+- `scripts/pipeline/derivar_partes.py` v0.2: NUEVO. Deriva recurrente/recurrido + rol procesal del epílogo → `csjn_casos_partes.csv`; recurrente_ok 3633 (63,8% fallos / 84% epílogos).
+- `scripts/pipeline/generar_manifiesto.py` v1.6→v1.7: +2 scripts a PIPELINE_SCRIPTS, +2 CSV a OUTPUTS (8→10 canónicos).
+- `output/parser/csjn_casos_epilogo.csv`: NUEVO, 5697 filas.
+- `output/parser/csjn_casos_partes.csv`: NUEVO, 5890 filas.
+- Parser v22.0 intacto; `check_regresion` [CLEAN]; manifest `--verify [CLEAN] 65`.
+
+
 ## H153 (2026-06-21)
 
 - `clasificador_disposicion.py`: v1.08 → v1.09. `parte_ganadora_regla` mapea `modifica → gana` (elimina el valor `parcial`; SCDB binario, no-reformatio-in-pejus). `disposicion()` sin cambio.
