@@ -2,6 +2,13 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H155 (2026-06-22)
+
+- `scripts/pipeline/derivar_partes.py` v0.2→v0.3: fallback `^Nombre del recurrente:` (formato viejo, Eje B). recurrente_ok 3633→3641 (+8), epilogo_sin_marcador 712→704. Aditivo, 0 regresión.
+- `output/parser/csjn_casos_partes.csv`: recurrente_ok 3641 (+8).
+- `scripts/pipeline/derivar_partes.py` v0.3→v0.4: `_reporte` agrega cobertura sobre universo de mérito (`is_merit_decision`). Reporte-only, CSV sin cambios.
+- `scripts/diagnostico/seleccionar_muestra_zona.py`: NUEVO (PoC muestra de zona).
+
 ## H154 (2026-06-22)
 
 - `scripts/pipeline/extraer_epilogos.py` v0.2: NUEVO. Extrae la zona `epilogo` (`csjn_casos_zonas.csv` + `corpus/*.md`, offset H055) → `csjn_casos_epilogo.csv`; 5697 fallos 1:1 con `epilogo_status`.

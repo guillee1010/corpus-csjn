@@ -18214,3 +18214,32 @@ Las 7 inversiones de rol de M25 (`329_p5368`, `331_p2257`, `340_p1450`, `344_p34
 **Scripts modificados:** `scripts/pipeline/generar_manifiesto.py` v1.6→v1.7.
 **Manifest:** `--verify [CLEAN] 65` (eran 63).
 **Commits:** `dafddad` (M29 capa 1: scripts + epilogo/partes + manifest + DEUDA) · `b01a0ad` (re-sello manifest post-commit, dirty=false) · docs BITACORA+CHANGELOG (este).
+
+## H155 — M29 capa 1: consolidación de la zona epílogo + fallback formato viejo + denominador de mérito (2026-06-22)
+
+**Objetivo:** consolidar la capa de partes (epílogo) — diagnosticar el over-capture de zona, recuperar el residual recuperable, y fijar el denominador correcto de cobertura.
+
+### H155-01 — Diagnóstico de la zona epílogo (B117 cuantificado)
+
+Over-capture dimensionado sobre `csjn_casos_epilogo.csv`: 478 zonas wc>200 (11%), 205 >1000, max 19788 (epílogo limpio = 58 wc mediana). **No corrompe la derivación de partes:** `RE_MARK_REC` ancla a inicio de línea + case-sensitive → el cuerpo arrastrado no matchea (verificado 3/3 en Mazzeo/Riveros 330_p3248, ALITT 329_p5266, Estado Nacional 340_p257; el recurrente sale del footer al final de la zona inflada). Riesgo real = 80 zonas doble-marcador, triadas 53 multi-recurrente / 16 multivoto / 11 come-varios-casos (familia B009; ~4 con partes distintas a recodear). **Des-hifenación pre-match DESCARTADA** (medida en disco: +1/−2 = neto −1, rompe el ancla `^`). Headers ya excluidos del `epilogo_text` por diseño. B117 → `confirmado_cuantificado`.
+
+### H155-02 — Denominador de mérito (decisión metodológica)
+
+La cobertura de partes se mide sobre el universo de MÉRITO (`is_merit_decision`, ya en `casos.csv`), no sobre todos los fallos = universo SCDB. Sobre 2870 fallos de mérito: recurrente_ok 88,4% (2536), sin_marcador 5,1% (145), sin_epilogo 6,6% (189). De los 1352 sin_epilogo, 1163 (86%) son no-mérito (art.280=229, desestimaciones, inadmisibles) = ausencia esperada, no gap; solo 189 de mérito sin zona = gap real (techo del fix B117). Aun en no-mérito, 1105 recurrente_ok = footer del peticionante (cobertura bonus).
+
+### H155-03 — Implementación (derivar_partes v0.3 + v0.4)
+
+- **v0.3** (fallback): `^Nombre del recurrente:` (formato viejo, Eje B directo) cuando falla `RE_MARK_REC` → `partes_fuente="epilogo:nombre_recurrente"`. Aditivo puro, 0 regresión sobre los 3633 (verificado con fillna; corrida en disco de Guillermo = sandbox). recurrente_ok 3633→3641 (+8), epilogo_sin_marcador 712→704.
+- **v0.4** (reporte): `_reporte` agrega el split de cobertura mérito/no-mérito. Reporte-only, output CSV byte-idéntico a v0.3.
+- Eje A (`Nombre del actor:` 83 / `Parte demandada:` 252 / `Nombre del demandado:` 77) DIFERIDO a la cascada de partes.
+
+### H155 — Estado final
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos_partes.csv` — recurrente_ok **3641** (era 3633), epilogo_sin_marcador 704, sin_epilogo 1352, no_aplica 193.
+- Resto (casos/votos/zonas/editorial/recursos/materia/textos) — SIN CAMBIOS.
+
+**Parser:** v22.0 intacto, golden [CLEAN], sin re-golden (capa-deriver).
+**Scripts:** `derivar_partes.py` v0.2→v0.4; `scripts/diagnostico/seleccionar_muestra_zona.py` (PoC nuevo).
+**Manifest:** re-sello esperado [CLEAN] 65.
+**Commits:** 2 — (1) v0.3 + regen CSV + manifest; (2) v0.4 + manifest (CSV sin cambios). + diagnóstico + docs.
