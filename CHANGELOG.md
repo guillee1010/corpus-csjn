@@ -1,6 +1,14 @@
 # Changelog
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
+
+## H153 (2026-06-21)
+
+- `clasificador_disposicion.py`: v1.08 → v1.09. `parte_ganadora_regla` mapea `modifica → gana` (elimina el valor `parcial`; SCDB binario, no-reformatio-in-pejus). `disposicion()` sin cambio.
+- `output/parser/csjn_casos_recursos.csv`: `parte_ganadora` binario {recurrente_gana 2335 / recurrente_pierde 537 / no_aplica 3018}, 0 `parcial` (3 celdas). Re-derivado.
+- `output/parser/_manifest.json`: re-sellado, `--verify [CLEAN] 63`.
+- `CODEBOOK.md`: v1.3 → v2.0 (schema real M26: 8 CSV, crosswalk SCDB, tabla κ, `outcome` legacy).
+
 # H152 (2026-06-21)
 
 - `clasificador_causa.py`: v0.3→v0.5. v0.4: rama remite-dictamen anclada al DISPOSITIVO (`RE_REMITE_DICT_DISP` + verbo desestima/inadmisible, guard `∉ _DISP_FONDO`, gateada en `dictamen_presente`) — la variante "de conformidad con lo dictaminado por el Procurador" vive en el por_ello, no en el considerando; +5. v0.5: INTERPOSICION_INCORRECTA reordenado al final real de la cola (post remite-dictamen, antes de SIN_CAUSAL); a v0.4 había quedado antes del residual al insertarse la rama remite-dictamen(disp), rompiendo su contrato "solo drena SIN_CAUSAL". Reorden empíricamente nulo (INTERPOSICION sigue en 2, sin overlap). Docstring (cascada + frase M27) sincronizado.
@@ -1766,3 +1774,8 @@ Ver `docs/changelog_parser.md` y historial de git (`git log --oneline`).
   (sin_dispositivo), 3 falsos positivos del zonificador (headers de
   sumario), 2 genuinamente complejos (ROI insuficiente: 35→33).
   Piso sin_firma ~17 confirmado.
+## H153 (2026-06-21)
+
+- clasificador_disposicion.py: v1.08 -> v1.09. parte_ganadora_regla: modifica -> recurrente_gana; eliminado el valor parcial (fuera de SCDB partyWinning, binario petitioner-centric). No toca disposicion() ni regex; firma intacta.
+- output/parser/csjn_casos_recursos.csv: 5890 filas. parte_ganadora: 3 celdas parcial -> recurrente_gana (329_p2864 / 331_p1282 / 331_p1890); eje binario {gana 2335, pierde 537, no_aplica 3018}. kappa-parte 0,784 sin cambio. Manifest [CLEAN] 63.
+- CODEBOOK.md: v1.3 -> v2.0. Reescritura a schema real: 8 CSV, parser v22.0, ejes M26, tabla kappa, crosswalk SCDB, invariante. parte_ganadora binario; gaps petitioner/respondent y declarationUncon; 335-336 exclusion temporal.

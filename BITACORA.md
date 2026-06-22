@@ -18101,3 +18101,67 @@ sin overlap, el fix es de correctness/futuro, no de números de hoy. Commiteados
 Working tree limpio.
 
 Scripts canónicos modificados: clasificador_causa.py v0.4 → **v0.5**.
+
+## H153 — CODEBOOK v2.0 + Ruta 1 partyWinning (2026-06-21)
+
+**Objetivo:** reescribir el CODEBOOK al schema real (M26) para destrabar Dataverse, y cerrar el valor `parcial` de `parte_ganadora`.
+
+### H153-01 — CODEBOOK v1.3 → v2.0
+
+Reescritura completa contra disco. Hallazgos de stale corregidos: cifras a 5890 (eran 5862); 8 CSV documentados (eran 5; faltaban recursos, materia, textos); `casos.csv` a 39 cols (decía 43; `por_ello_text`/`considerando_text`/`firma_raw` migraron a `textos.csv`, `causa_inadmisibilidad` a `recursos.csv`). Diccionario nuevo de `recursos.csv` (ejes M26). `outcome` marcado legacy/congelada. Tabla κ desintercalada reemplaza accuracy M19. Crosswalk SCDB (`partyWinning`/`caseDisposition`; gaps `declarationUncon`, `petitioner`/`respondent`; `majOpinAssigner` descartado). Invariante M26 verificada en disco: `causa ≠ "" ⟺ inadmite`, 1107=1107. 335–336 re-redactado como exclusión temporal (no falta permanente).
+
+### H153-02 — Ruta 1: `parte_ganadora` binario (elimina `parcial`)
+
+Diagnóstico: los 3 `parcial` del output coincidían 1:1 con `disposicion = modifica`; la rama `parte_ganadora_regla(modifica) → parcial` en `clasificador_disposicion.py` contradecía SCDB (partyWinning es binario petitioner-centric; partial victory = win). Los 3 (329_p2864 Olivan, 331_p1282 Patoco, 331_p1890 Picapau) se validaron a mano sobre el texto extraído (`extraer_caso.py`): los tres `recurrente_gana`.
+
+Decisión (Ruta 1): `modifica → recurrente_gana`; valor `parcial` eliminado. Blindaje: no reformatio in pejus (el recurrente no sale peor de su propio recurso) + convención de recurrente-de-referencia, transversal a revoca/deja/confirma. Descartada la variante con guard `multi_recurso` (Ruta 2): "alguno gana siempre" — la asignación petitioner-centric resuelve binario incluso en multi; el universo a revisar con la futura capa de partes ya queda marcado por `multi_recurso = si`, sin duplicar en partyWinning. El gold humano confirma: `cod_parte_ganadora` binario puro, 0 `parcial`.
+
+`clasificador_disposicion.py` v1.08 → v1.09 (solo `parte_ganadora_regla`; `disposicion()` y regex intactas, κ disposición 0,912 sin tocar; firma sin cambio → call site del deriver intacto). `recursos.csv` re-derivado: 3 celdas `parcial → recurrente_gana`, resto byte-idéntico. κ-parte 0,784 sin cambio (PoC en disco: los 3 no caen en el gold n=134). Limitación transversal registrada en CODEBOOK: la regla asume un recurrente de referencia, impreciso en recursos recíprocos contrapuestos.
+
+### H153 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos + 193 sumarios). Parser **NO tocado** (capa-deriver).
+- **`parte_ganadora` (binario):** `recurrente_gana` 2335 · `recurrente_pierde` 537 · `no_aplica` 3018. Sin `parcial`.
+
+**Outputs canónicos (manifest [CLEAN] 63):**
+- `output/parser/csjn_casos_recursos.csv` — 5890 filas · sha256 `e4e90c08d091…` · deriver v0.5 / clasificador_disposicion v1.09.
+- Resto de outputs sin cambio (casos/textos/votos/zonas/editorial/indice_partes/materia).
+
+**Scripts modificados:** `scripts/pipeline/clasificador_disposicion.py` v1.09.
+**Docs:** `CODEBOOK.md` v2.0.
+
+**Commits:** [completar tras pegar appends]
+
+## H153 — CODEBOOK v2.0 + Ruta 1 partyWinning (binarización) (2026-06-21)
+
+**Objetivo:** reescribir el CODEBOOK al schema real M26 y binarizar `parte_ganadora` (eliminar el valor `parcial` del output), alineándolo con la regla SCDB y el gold de H151.
+
+### H153-01 — CODEBOOK v1.3 → v2.0
+
+Reescritura completa al schema real (documento público de Dataverse, doi:10.7910/DVN/TJTVKW, en inglés). Cambios vs v1.3: **8 CSV** documentados (eran 5); diccionario nuevo de `csjn_casos_recursos.csv` (§4, ejes M26: disposicion/reenvia/parte_ganadora/via_recurso/multi_recurso/es_revision_fondo/admisibilidad/causa_inadmisibilidad/es_queja) y de `csjn_casos_textos.csv` (§5); `csjn_casos.csv` corregido a **39 columnas** (ya sin `por_ello_text`/`considerando_text`/`firma_raw`/`causa_inadmisibilidad`, migrados); `outcome` → LEGACY/congelada; tabla κ (§9) desintercalada, reemplaza la accuracy M19; **crosswalk SCDB** (§10): `parte_ganadora`→partyWinning, `disposicion`→caseDisposition, `es_revision_fondo`→merits, `via_recurso`→avenue, `reenvia`→remand; GAPS declarados (declarationUncon, petitioner/respondent prospectivo, `majOpinAssigner` DESCARTADO por per curiam); invariante M26 (`causa ≠ "" ⟺ admisibilidad = inadmite`, 1107=1107); 335–336 redactado como exclusión **temporal** (pendiente de copias físicas + OCR). Todas las sub-distribuciones verificadas contra los totales en disco.
+
+### H153-02 — Ruta 1: `parte_ganadora` binario (`parcial` eliminado del output)
+
+`partyWinning` del SCDB es binario petitioner-centric: la victoria parcial cuenta como gana. La regla de derivación `parte_ganadora_regla` (`clasificador_disposicion` v1.08→**v1.09**) deja de emitir `parcial` — `modifica` entra al grupo gana; blindaje doctrinal: no reformatio in pejus (el recurrente no sale peor de su propio recurso). Los **3 únicos `parcial` del corpus** (`329_p2864` Olivan/superintendencia, `331_p1282` Patoco c/ ANSeS/movilidad, `331_p1890` Picapau/pesificación) — los tres `multi_recurso=no`, coincidían 1:1 con `disposicion=modifica` — validados a mano sobre el `.md` (vía `extraer_caso.py`) → los tres `recurrente_gana`.
+
+Decisión: se descartó la variante con guard `multi_recurso` (Ruta 2) — SCDB asigna binario incluso en multi-recurrente, la convención de recurrente-de-referencia ya es transversal a revoca/deja/confirma, y el universo a revisar con la futura capa de partes ya queda marcado por `multi_recurso=si` (M29). `disposicion()` INTACTO (κ disposición 0,912 sin tocar); firma de la regla sin cambio (call site `.map` del deriver intacto).
+
+### H153 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos + 193 sumario_con_link). Parser v22.0 intacto (cambio en capa-deriver).
+- **`parte_ganadora`:** binario {recurrente_gana 2335 / recurrente_pierde 537 / no_aplica 3018}, 0 `parcial` (3 celdas cambiaron).
+- **κ-parte:** 0,784 sin cambio (los 3 casos no caen en el gold n=134).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5890 filas.
+- `output/parser/csjn_casos_recursos.csv` — 5890 filas (re-derivado; sha256 `e4e90c08d091…`, deriver v0.5).
+- `output/parser/csjn_casos_votos.csv` — 27697 · `_zonas.csv` — 141451 · `_textos.csv` — 5890 · `_materia.csv` — 5890 · `_editorial.csv` — 152 · `csjn_editorial_indice_partes.csv` — 11445.
+- `output/parser/_manifest.json` — re-sellado, `--verify [CLEAN] 63 artefactos`.
+
+**Scripts modificados:** `clasificador_disposicion.py` v1.08→v1.09 (solo `parte_ganadora_regla`).
+
+**Documentación:** CODEBOOK.md v1.3→v2.0; DEUDA_TECNICA.md (M25 actualizado, M29/M30 nuevas).
+
+**DEUDA nueva:** M29 (capa de partes petitioner/respondent, PRIORITARIA, insumo SCDB) · M30 (centralizar paths + orquestador downstream).
+
+**Commits:** 3 (Ruta 1 pipeline + manifest; CODEBOOK v2.0; docs).
