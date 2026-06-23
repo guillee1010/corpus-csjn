@@ -18243,3 +18243,38 @@ La cobertura de partes se mide sobre el universo de MÉRITO (`is_merit_decision`
 **Scripts:** `derivar_partes.py` v0.2→v0.4; `scripts/diagnostico/seleccionar_muestra_zona.py` (PoC nuevo).
 **Manifest:** re-sello esperado [CLEAN] 65.
 **Commits:** 2 — (1) v0.3 + regen CSV + manifest; (2) v0.4 + manifest (CSV sin cambios). + diagnóstico + docs.
+
+## H156 — M29 paso 4: fallback recurrente desde carátula (case_name_cuerpo) (2026-06-23)
+
+**Objetivo:** recuperar recurrentes del residual de mérito sin tocar el parser, derivándolos del campo canónico `case_name_cuerpo`.
+
+### H156-01 — Diagnóstico: el "frente 2 formato viejo" del prompt ya estaba cerrado
+
+El plan H155 apuntaba a una 2ª gramática para ~365 epílogos formato viejo. Verificado en disco que el estado estaba ADELANTE del prompt (derivar_partes ya v0.4, H155 cerrado). El gate (a)/(b) resolvió a (b): de los 354 formato-viejo residual, 97% son Eje A puro sin marca de recurso, 82%+ instancia originaria (no tienen recurrente por naturaleza). Universo recuperable Eje B = solo 17 casos. Frente 2 cerrado sin código (mapear actor/demandado→recurrente violaría la doctrina de los dos ejes).
+
+### H156-02 — Hallazgo: el recurrente del residual vive en case_name_cuerpo
+
+PoC de búsqueda en cuerpo (idea de Guillermo) sobre el residual de mérito sin recurrente (334 casos). Hallazgo central: el recurrente de los sin_zona vive mayormente en `case_name_cuerpo` ("Recurso de hecho deducido por X en la causa…"), campo CANÓNICO del CSV — NO requiere leer el `.md`, reproducible para Dataverse. Es la MISMA atribución de recurso del epílogo (Eje B), en voz de la Corte, en otra ubicación canónica — NO es actor/demandado (Eje A).
+
+### H156-03 — Implementación derivar_partes v0.5 (paso 4 de la cascada)
+
+`derivar_de_caratula()` lee `case_name_cuerpo` con `RE_MARK_CARATULA` (marcador de recurso + terminador "en la causa/las causas/los autos") + `parse_parte` verbatim. Dispara SOLO cuando falla el epílogo (`sin_marcador_recurso`) o no hay zona (`sin_zona`) → aditivo puro. Buckets nuevos: `caratula:recurso` (nombre), `caratula:rol_sin_nombre` (rol conocido, nombre vía Eje A). Soft-check de la columna `case_name_cuerpo` (degrada si falta). Helper `_registrar()`.
+
+### H156-04 — Validación (0 regresión por diff)
+
+Diff v0.4↔v0.5 en disco de Guillermo: 169 filas cambian, TODAS desde `sin_zona` (98) o `sin_marcador_recurso` (71) → carátula. Las 3641 previas, idénticas. Eyeball de calidad de los 108 nombres: limpios (Boggiano ×2, Astiz, AFIP demandada, Estado Nacional, Pico y Jessen multi, Vega Giménez penal). Caracteres ├│ en consola = codepage de PowerShell, archivo UTF-8 correcto (verificado con Get-Content -Encoding UTF8).
+
+### H156-05 — Reconciliación del residual + partyWinning/petitioner
+
+Residual sin recurrente = 1893: no-mérito-no-originaria 1133 (art.280/inadmisibles, ausencia esperada) + originaria 525 (sin recurrente por naturaleza) + mérito-no-originaria 235 (gap real = capa-cuerpo tail). `is_originaria`=1 total = 546 (confirma la intuición "~500 max"). `partyWinning` (parte_ganadora) YA existe (binario, κ 0,784, derivado de disposición — no necesita el nombre); M29 desbloquea M25 (detector de las 7 inversiones de rol, que pedía el rol procesal hoy disponible) y habilita partyWinning nombrable (join). SCDB distingue partyWinning (resultado) de petitioner/respondent (identidad como TIPO categórico ~200-300 clases) → el TIPO requiere clasificador inteligente, capa nueva.
+
+### H156 — Estado final
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos_partes.csv` — 5890 filas (v0.5, hash `ef91f17fc71c…`).
+- recurrente_ok 3749 (108 vía carátula) · caratula_rol_sin_nombre 61 · epilogo_sin_marcador 633 · sin_epilogo 1254 · no_aplica 193.
+- Cobertura mérito (2870): nombre 89,3% · nombre-o-rol 91,8%.
+
+**Manifest:** re-sellado `[CLEAN] 65`. Parser v22.0 intacto, sin re-golden.
+
+**Commits:** 1 (M29 paso 4 + CSV regenerado + manifest) + docs.

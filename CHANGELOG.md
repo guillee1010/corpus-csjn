@@ -2,6 +2,13 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H156 (2026-06-23)
+
+- `derivar_partes.py`: v0.4→v0.5. PASO 4 de la cascada — fallback recurrente desde `case_name_cuerpo` (carátula del fallo) cuando falla el epílogo (sin_marcador_recurso) o no hay zona (sin_zona). Aditivo puro, 0 regresión sobre los 3641 (verificado por diff). Buckets nuevos `caratula:recurso` / `caratula:rol_sin_nombre`.
+- `output/parser/csjn_casos_partes.csv`: 5890 filas. recurrente_ok 3641→3749 (+108 nombre vía carátula); caratula_rol_sin_nombre 61. Cobertura mérito 88,4%→90,5%.
+- `output/parser/_manifest.json`: re-sellado [CLEAN] 65 (hash csjn_casos_partes.csv → `ef91f17fc71c…`).
+
+
 ## H155 (2026-06-22)
 
 - `scripts/pipeline/derivar_partes.py` v0.2→v0.3: fallback `^Nombre del recurrente:` (formato viejo, Eje B). recurrente_ok 3633→3641 (+8), epilogo_sin_marcador 712→704. Aditivo, 0 regresión.
