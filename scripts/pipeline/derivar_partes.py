@@ -35,7 +35,7 @@ import unicodedata
 from collections import Counter
 from pathlib import Path
 
-__version__ = "0.4"  # H155: cobertura reportada también sobre el universo de MÉRITO (is_merit_decision, ya en casos.csv) — recurrente_ok 88,4% sobre los 2870 de mérito vs 63,9% sobre todos los fallos; el sin_epilogo del no-mérito (art.280 etc.) es ausencia esperada, no gap. Reporte-only: derivación y CSV de salida SIN cambios vs v0.3. // 0.3: H155 fallback formato viejo "Nombre del recurrente:" (Eje B directo) cuando falla RE_MARK_REC -> partes_fuente="epilogo:nombre_recurrente"; aditivo puro sobre el residual (NO toca los 3633 ya resueltos). // 0.2: H154 marcador flexible anclado a línea (queja/ordinario de apelación/deducido/federal/plural, salta arrastre de por_ello) -> recurrente_ok 2225->3633; parse_parte resuelve letrado (por derecho propio / por <parte> / defensor de <parte> / solo_letrado). // 0.1: marcador estricto (solo formato moderno) + capa epílogo inicial.
+__version__ = "0.5"  # H156: PASO 4 de la cascada — fallback `case_name_cuerpo` ("Recurso ... deducido por X en la causa ...", carátula del FALLO DE LA CORTE). Es la MISMA atribución de recurso del epílogo (Eje B), en voz de la Corte, en otro campo CANÓNICO (no es el actor/demandado = Eje A, que sí violaría la doctrina). Reusa parse_parte verbatim. ADITIVO PURO sobre el residual: solo dispara cuando falla el epílogo (sin_marcador_recurso) o no hay zona (sin_zona) -> 0 regresión sobre los recurrente_ok previos. Rol pelado ("la actora"/"la demandada") -> partes_fuente="caratula:rol_sin_nombre" (rol conocido, nombre vía Eje A futuro). // 0.4: H155: cobertura reportada también sobre el universo de MÉRITO (is_merit_decision, ya en casos.csv) — recurrente_ok 88,4% sobre los 2870 de mérito vs 63,9% sobre todos los fallos; el sin_epilogo del no-mérito (art.280 etc.) es ausencia esperada, no gap. Reporte-only: derivación y CSV de salida SIN cambios vs v0.3. // 0.3: H155 fallback formato viejo "Nombre del recurrente:" (Eje B directo) cuando falla RE_MARK_REC -> partes_fuente="epilogo:nombre_recurrente"; aditivo puro sobre el residual (NO toca los 3633 ya resueltos). // 0.2: H154 marcador flexible anclado a línea (queja/ordinario de apelación/deducido/federal/plural, salta arrastre de por_ello) -> recurrente_ok 2225->3633; parse_parte resuelve letrado (por derecho propio / por <parte> / defensor de <parte> / solo_letrado). // 0.1: marcador estricto (solo formato moderno) + capa epílogo inicial.
 
 csv.field_size_limit(10 ** 7)
 
@@ -78,6 +78,22 @@ RE_MARK_NOMBRE = re.compile(
     r"^Nombre\s+del\s+recurrente\s*:\s*(.*?)"
     r"(?=^Nombre\s+del\b|\bTribunal\b|\bProfesional|\bNorma\b|\Z)",
     re.S | re.M | re.I)
+
+# PASO 4 (H156): carátula del FALLO DE LA CORTE, campo canónico case_name_cuerpo.
+# "Recurso de hecho deducido por X en la causa <CaseName>" — MISMA atribución de
+# recurso que el epílogo (Eje B = quién apeló), en voz de la Corte. NO es Eje A:
+# no se mapea actor/demandado, se lee el marcador de recurso. El terminador es
+# "en la causa/los autos" (cierre del caption); ancla case-sensitive a "Recurso/
+# Queja" (la carátula siempre arranca en mayúscula).
+RE_MARK_CARATULA = re.compile(
+    r"^(?:Recursos?|Queja)\b[^\n]*?(?:interpuest\w+|deducid\w+)\s+por\s+"
+    r"(.*?)(?=\s+en\s+(?:la\s+causa|las\s+causas|los\s+autos)\b|\bTribunal\b|\Z)",
+    re.S)
+# rol pelado sin nombre en la carátula ("la actora", "la demandada", "la
+# recurrente"): el rol se conserva, el NOMBRE se resuelve vía Eje A (capa futura).
+RE_CARATULA_SOLO_ROL = re.compile(
+    r"^(?:el|la|los|las)\s+(?:parte\s+)?"
+    r"(?:actora|demandada|querellante|coactora|codemandada|recurrente)s?\s*$", re.I)
 
 # parte vs letrado: si hay "en representación de Y", la parte es Y.
 RE_REPDE = re.compile(r"\ben\s+representaci[oó]n\s+de\s+(.+)$", re.I)
@@ -156,8 +172,34 @@ def parse_parte(clause: str) -> tuple[str, str]:
     return _trim_nombre(clause[:m.start()] if m else clause), _rol(clause)
 
 
-def derivar_de_epilogo(epilogo_text: str) -> dict:
-    """Aplica la gramática al epílogo crudo. Devuelve campos de salida (capa 1)."""
+def derivar_de_caratula(case_name_cuerpo: str) -> dict | None:
+    """PASO 4: fallback Eje B desde la carátula del FALLO ('Recurso ... deducido
+    por X en la causa ...'), campo canónico case_name_cuerpo. Devuelve el dict de
+    salida o None si no hay marcador de recurso en la carátula. NO inventa partes
+    desde actor/demandado: solo lee el marcador de recurso (mismo Eje B que el
+    epílogo)."""
+    if not case_name_cuerpo:
+        return None
+    m = RE_MARK_CARATULA.match(case_name_cuerpo.strip())
+    if not m:
+        return None
+    clause = _dehifen(m.group(1))
+    multi = "si" if RE_MULTI.search(clause) else "no"
+    # rol pelado sin nombre ("la actora") -> rol conocido, nombre vía Eje A futuro
+    if RE_CARATULA_SOLO_ROL.match(clause):
+        return {"recurrente": "", "recurrente_rol": _rol(clause),
+                "recurrido": "", "recurrido_rol": "", "multi_recurrente": multi,
+                "partes_capa": "caratula", "partes_fuente": "caratula:rol_sin_nombre"}
+    rn, rr = parse_parte(clause)
+    return {"recurrente": rn, "recurrente_rol": rr,
+            "recurrido": "", "recurrido_rol": "", "multi_recurrente": multi,
+            "partes_capa": "caratula", "partes_fuente": "caratula:recurso"}
+
+
+def derivar_de_epilogo(epilogo_text: str, case_name_cuerpo: str = "") -> dict:
+    """Aplica la gramática al epílogo crudo. Devuelve campos de salida (capa 1).
+    Si el epílogo no trae marcador, intenta el PASO 4 (carátula) antes de declarar
+    sin_marcador."""
     rec = RE_MARK_REC.search(epilogo_text)
     if not rec:
         # Fallback formato viejo: rótulo "Nombre del recurrente:" (Eje B directo).
@@ -170,6 +212,10 @@ def derivar_de_epilogo(epilogo_text: str) -> dict:
                     "multi_recurrente": "si" if RE_MULTI.search(nom_clause) else "no",
                     "partes_capa": "epilogo",
                     "partes_fuente": "epilogo:nombre_recurrente"}
+        # PASO 4: carátula del fallo (case_name_cuerpo) antes de rendirse.
+        car = derivar_de_caratula(case_name_cuerpo)
+        if car:
+            return car
         return {"recurrente": "", "recurrente_rol": "", "recurrido": "",
                 "recurrido_rol": "", "multi_recurrente": "",
                 "partes_capa": "epilogo", "partes_fuente": "sin_marcador_recurso"}
@@ -189,6 +235,20 @@ def derivar_de_epilogo(epilogo_text: str) -> dict:
             "partes_capa": "epilogo", "partes_fuente": fuente}
 
 
+def _registrar(d: dict, cov: Counter, rol_rec: Counter) -> tuple[str, int]:
+    """Contabiliza un d CON recurrente (epílogo/nombre/carátula). Devuelve
+    (clave_cobertura, incremento_multi). Separa la carátula-rol-sin-nombre
+    (rol conocido, nombre pendiente de Eje A) de recurrente_ok (con nombre)."""
+    if d["partes_fuente"] == "caratula:rol_sin_nombre":
+        cov["caratula_rol_sin_nombre"] += 1
+        return "caratula_rol_sin_nombre", 0
+    cov["recurrente_ok"] += 1
+    if d["partes_fuente"] == "caratula:recurso":
+        cov["_via_caratula"] += 1          # sub-cuenta auditable del paso 4
+    rol_rec[d["recurrente_rol"] or "(sin rol)"] += 1
+    return "recurrente_ok", (1 if d["multi_recurrente"] == "si" else 0)
+
+
 def derivar(casos_path: Path, epilogo_path: Path, output_path: Path) -> dict:
     # universo: entradas de casos.csv (para left-join 1:1)
     if not casos_path.exists():
@@ -198,6 +258,12 @@ def derivar(casos_path: Path, epilogo_path: Path, output_path: Path) -> dict:
         faltan = [c for c in REQUIRED_CASOS if c not in (rd.fieldnames or [])]
         if faltan:
             sys.exit(f"[FATAL] faltan columnas en {casos_path}: {faltan}")
+        # case_name_cuerpo es el insumo del PASO 4 (carátula). Si falta, el paso 4
+        # queda deshabilitado (degrada, no rompe): r.get(...) devuelve "".
+        tiene_caratula = "case_name_cuerpo" in (rd.fieldnames or [])
+        if not tiene_caratula:
+            print("[WARN] falta 'case_name_cuerpo' en casos.csv -> PASO 4 (carátula) "
+                  "DESHABILITADO; la cobertura no incluye el fallback de carátula.")
         filas = list(rd)
 
     # insumo: epílogos
@@ -237,33 +303,36 @@ def derivar(casos_path: Path, epilogo_path: Path, output_path: Path) -> dict:
             cov["no_aplica"] += 1
             continue
         merit = r.get("is_merit_decision", "")
+        caratula = r.get("case_name_cuerpo", "")          # insumo PASO 4
         if cid in epi and epi[cid]["status"] == "ok":
-            d = derivar_de_epilogo(epi[cid]["text"])
+            d = derivar_de_epilogo(epi[cid]["text"], caratula)
             d["caso_id_canonico"] = cid
             salida.append(d)
             if d["partes_fuente"] == "sin_marcador_recurso":
                 cov["epilogo_sin_marcador"] += 1
                 clave = "epilogo_sin_marcador"
             else:
-                cov["recurrente_ok"] += 1
-                clave = "recurrente_ok"
-                if d["recurrente_rol"]:
-                    rol_rec[d["recurrente_rol"]] += 1
-                else:
-                    rol_rec["(sin rol)"] += 1
-                if d["multi_recurrente"] == "si":
-                    multi_n += 1
+                clave, mi = _registrar(d, cov, rol_rec)
+                multi_n += mi
         else:
-            # sin epílogo aprovechable: propaga la RAZÓN (sin_zona /
-            # archivo_no_encontrado / no_en_epilogo_csv), no muerte silenciosa.
+            # sin zona de epílogo: intentar la carátula (PASO 4) antes de rendirse.
             razon = epi[cid]["status"] if cid in epi else "no_en_epilogo_csv"
-            salida.append({"caso_id_canonico": cid, "recurrente": "",
-                           "recurrente_rol": "", "recurrido": "",
-                           "recurrido_rol": "", "multi_recurrente": "",
-                           "partes_capa": "sin_epilogo", "partes_fuente": razon})
-            cov["sin_epilogo"] += 1
-            cov_razon[razon] += 1
-            clave = "sin_epilogo"
+            car = derivar_de_caratula(caratula)
+            if car:
+                car["caso_id_canonico"] = cid
+                salida.append(car)
+                clave, mi = _registrar(car, cov, rol_rec)
+                multi_n += mi
+            else:
+                # sin epílogo aprovechable: propaga la RAZÓN (sin_zona /
+                # archivo_no_encontrado / no_en_epilogo_csv), no muerte silenciosa.
+                salida.append({"caso_id_canonico": cid, "recurrente": "",
+                               "recurrente_rol": "", "recurrido": "",
+                               "recurrido_rol": "", "multi_recurrente": "",
+                               "partes_capa": "sin_epilogo", "partes_fuente": razon})
+                cov["sin_epilogo"] += 1
+                cov_razon[razon] += 1
+                clave = "sin_epilogo"
         if merit in merit_cov:
             merit_cov[merit][clave] += 1
 
@@ -280,15 +349,17 @@ def derivar(casos_path: Path, epilogo_path: Path, output_path: Path) -> dict:
 def _reporte(st: dict) -> None:
     cov = st["cov"]
     fallos = (cov.get("recurrente_ok", 0) + cov.get("epilogo_sin_marcador", 0)
-              + cov.get("sin_epilogo", 0))
+              + cov.get("sin_epilogo", 0) + cov.get("caratula_rol_sin_nombre", 0))
     print(f"\n  derivar_partes v{__version__}")
     print(f"  filas escritas: {st['n']}  (fallos: {fallos})")
-    print("\n  === cobertura (capa 1, epílogo) ===")
-    for k in ["recurrente_ok", "epilogo_sin_marcador", "sin_epilogo", "no_aplica"]:
+    print("\n  === cobertura (capa 1 epílogo + paso 4 carátula) ===")
+    for k in ["recurrente_ok", "caratula_rol_sin_nombre", "epilogo_sin_marcador",
+              "sin_epilogo", "no_aplica"]:
         v = cov.get(k, 0)
         base = fallos if k != "no_aplica" else st["n"]
         pct = f"({100*v/base:5.1f}%)" if base else ""
-        print(f"    {k:22s} {v:5d}  {pct}")
+        print(f"    {k:24s} {v:5d}  {pct}")
+    print(f"    └─ de recurrente_ok, vía carátula (paso 4): {cov.get('_via_caratula', 0)}")
     print(f"  multi_recurrente (flag):  {st['multi']}")
     mc = st.get("merit_cov")
     if mc:
@@ -298,9 +369,10 @@ def _reporte(st: dict) -> None:
             if not tot:
                 continue
             print(f"\n  === cobertura sobre {lbl}: {tot} fallos ===")
-            for k in ["recurrente_ok", "epilogo_sin_marcador", "sin_epilogo"]:
+            for k in ["recurrente_ok", "caratula_rol_sin_nombre",
+                      "epilogo_sin_marcador", "sin_epilogo"]:
                 v = c.get(k, 0)
-                print(f"    {k:22s} {v:5d}  ({100*v/tot:5.1f}%)")
+                print(f"    {k:24s} {v:5d}  ({100*v/tot:5.1f}%)")
     if st["cov_razon"]:
         print("\n  === sin_epilogo, por razón (auditable) ===")
         for razon, v in st["cov_razon"].most_common():
