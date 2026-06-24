@@ -18355,3 +18355,56 @@ Al diagnosticar el `sin_zona` de ANTONIO: de los fallos `fin_por_firma_actual`, 
 **Scripts:** `scripts/pipeline/derivar_partes.py` (v0.7); `scripts/diagnostico/diff_partes_v06_v07.py` (nuevo).
 
 **Commits:** [a completar].
+
+## H160 — Capa de partes: Capa 2 (parseo) + capa CARÁTULA (2026-06-24)
+
+**Objetivo:** completar la capa de partes de `derivar_partes` — parseo del clause de letrado (esquema de rol del Ministerio Público + representado + por derecho propio) y recuperación de nombre desde la carátula, sobre la capa de marcadores. `derivar_partes` v0.7 → v0.11. Bumps separados por capa.
+
+### H160-01 — Capa de MARCADORES (v0.8, terminador over-capture)
+
+Ortogonal a v0.7 (no toca `parse_parte`). Tres ediciones sobre `RE_MARK_REC`/`RE_MARK_TRA`: (1) terminador `\bTraslados?\b` (plural; antes el singular over-capturaba la cola del traslado); (2) cierre de `RE_MARK_TRA` con `\bRecurso\b` en el lookahead (antes se comía la línea "Recurso de queja interpuesto por…" siguiente: `348_p1334`/`329_p4066`); (3) head de TRA plural → captura el contestador del traslado plural como recurrido. Principio adjudicado (Guillermo): "la cola no se lleva a representados" — recortar la cola del recurrente no debe dejar huérfano al representado del traslado. **Recurrido +62 recuperados, 0 perdidos, 0 good→bad.** Corrupción real por nombre = 5 (`329`/`330`/`339`/`345`/`348`). Validado contra repro v0.7 byte-exacto.
+
+### H160-02 — Capa 0 DESHIFENIZACIÓN del epílogo (v0.9)
+
+El `epilogo_text` trae soft-hyphen U+00AD en cortes de palabra del OCR ("representa­\nda" → "representa da"), 3079/5697 epílogos afectados. Fix: `_deshifenar` soft-hyphen-only en el chokepoint de `derivar_de_epilogo`. **Decisión arquitectónica:** soft-only, NO el `parser._unhyphenate` de prosa — el guión REGULAR en el listado de partes es separador de entidad ("Estado Nacional- Ministerio") y unirlo corrompe ("NacionalMinisterio"). NO colapsa saltos estructurales (los marcadores anclan por línea, re.M). 420 nombres limpios, 0 regresión, compuestos (AFIP-DGI) intactos. STOPGAP en el deriver; ticket: migrar 1 línea soft-only a `extraer_epilogos.py`.
+
+### H160-03 — Capa 2 PARSEO del clause (v0.10) — cierra el frente consolidado `parse_parte`
+
+Esquema de rol del letrado adjudicado caso por caso con Guillermo:
+- fiscal / fiscalía / Procurador Fiscal·General → el funcionario es la parte, **`mp_fiscal`** (MPF, acusa).
+- defensor público/oficial/general · asesor de menores·incapaces·pobres·ausentes → el funcionario es la parte, **`mp_defensa`** (MPD, defiende). MPD y MPF en lados opuestos.
+- defensor / abogado / en-ejercicio-de-la-defensa / a-cargo-de-la-defensa / abogado-del-condenado **de \<imputado nombrado\>** → el imputado es la parte, **`penal`**.
+- apoderado / representante / en-representación de X (civil) → X, rol vacío.
+- por derecho propio / en causa propia / con su propio patrocinio → el letrado es la parte, **`por_derecho_propio`**.
+
+Fix indicador letrado: `Dres?\.` → `Dr(?:es)?\.` (228 "Dr." singular no entraban a la rama). Defensor del Pueblo = institución-parte (no defensa penal). Tokens `mp_fiscal`/`mp_defensa` (más legibles que `penal`/genérico; conectan M32) → CODEBOOK v2.1.
+
+**Bug intra-sesión:** over-fire `mp_defensa` cuando el imputado se nombra — "el Dr. Pirrello, defensor público oficial a cargo de la defensa de Justo Santiago Torres" caía a MPD; el patrón "de la defensa de X" debe ganarle a `RE_DEFENSA_MP` → Torres/`penal` (`329_p1541`). Cerrado.
+
+**Distribución:** `mp_fiscal` 0→81, `mp_defensa` 0→16, `por_derecho_propio` 10→44, `penal` 450→383, `solo_letrado` 47→9.
+
+### H160-04 — Capa CARÁTULA: recuperación de nombre del `rol_sin_nombre` (v0.11)
+
+Insight de Guillermo: la carátula "X c/ Y" es el formato NORMAL (común); "Recurso deducido por X" es el moderno que da el recurrente directo. Tres mecanismos:
+- **`rol_causa`:** la carátula vieja "deducido por la actora/demandada EN LA CAUSA X c/ Y" — el token de rol elige el lado (actora→X izquierda, demandada→Y derecha). Sigue Eje B (el recurrente lo da el marcador "deducido por la actora"; la causa solo provee el nombre del lado señalado). **Recupera 66 nombres** (41 actora + 25 demandada). Validado: **0/66 swaps** (cada nombre del lado correcto de `c/`).
+- **name-match:** carátula normal "X c/ Y" sin marcador de recurso — si el nombre del letrado del epílogo coincide (≥2 tokens apellido+nombre) con una parte → `por_derecho_propio` (Szelagowski, Gil Domínguez).
+- **fallback `solo_letrado`→carátula:** dispara `derivar_de_caratula` (PASO 4) también cuando el epílogo solo nombra al letrado, preservando el recurrido del traslado.
+
+**`NAME_RECOVERED` 43→106.** Los 9 `solo_letrado` residuales = letrado de parte no nombrada ni en epílogo ni en carátula (sentinel correcto, "no inventa la parte").
+
+### H160-05 — Validación contra fallos enteros
+
+Extraídos 10 fallos completos representativos (`extraer_caso.py`, cubriendo cada patrón) y adjudicados contra el cuerpo: **5/5 landings sustantivas correctas** (fiscal, abogado-del-condenado, en-ejercicio-de-la-defensa, representado-del-Estado, institución); el over-fire `mp_defensa` (`329_p1541`) detectado por la carátula y corregido; `rol_causa` y name-match confirmados (Szelagowski/Gil Domínguez → pdp; Torre/Benegas/Laitán → actora con nombre; Zubiri/Castellucci).
+
+### H160 — Estado final
+
+- **Capa de partes:** `NAME_RECOVERED` 43→106 (vs capa-0). `solo_letrado` 47→9. `mp_fiscal` 81 / `mp_defensa` 16 / `por_derecho_propio` 44 / `penal` 383.
+- **Capa carátula:** `caratula:recurso` 102, `caratula:rol_causa` 62, `caratula:rol_sin_nombre` 5, `caratula_via_letrado:{recurso 7, rol_causa 4, nombre_match 2}`.
+- Frente consolidado `parse_parte` **CERRADO** (los tres patrones (a)/(b)/(c) + decisión de rol MP resueltos).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos_partes.csv` — 5890 filas (regenerado, v0.11). sha256 [completar del manifest].
+
+**Scripts:** `scripts/.../derivar_partes.py` v0.7→v0.11.
+
+**Commits:** [completar].

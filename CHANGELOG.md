@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H160 (2026-06-24)
+
+- `derivar_partes.py`: v0.7 → v0.11. Bumps separados por capa.
+  - v0.8 — capa de MARCADORES: terminador `Traslados?` plural + cierre `RE_MARK_TRA` con `\bRecurso\b` en lookahead + head TRA plural. Recurrido +62 recuperados, 0 perdidos.
+  - v0.9 — Capa 0 DESHIFENIZACIÓN del epílogo (`_deshifenar`, soft-hyphen-only, chokepoint en `derivar_de_epilogo`). 420 nombres limpios, 0 regresión. STOPGAP (migrar a `extraer_epilogos.py`).
+  - v0.10 — Capa 2 PARSEO: esquema de rol del letrado (`mp_fiscal`/`mp_defensa`/`penal`/`por_derecho_propio`/representado), fix indicador `Dr.` (`Dr(?:es)?\.`), Defensor del Pueblo = institución. Cierra el frente consolidado `parse_parte`. `mp_fiscal` 0→81, `mp_defensa` 0→16, `por_derecho_propio` 10→44, `solo_letrado` 47→9.
+  - v0.11 — capa CARÁTULA: `rol_causa` (token actora/demandada elige X/Y de "deducido por la actora EN LA CAUSA X c/ Y", recupera 66 nombres, 0 swaps) + name-match letrado↔carátula "X c/ Y" + fallback `solo_letrado`→carátula. `NAME_RECOVERED` 43→106.
+- `output/parser/csjn_casos_partes.csv`: 5890 filas (regenerado; recurrente/recurrente_rol/recurrido enriquecidos por la capa de partes Capa 2 + carátula).
+
+
 ## H159 (2026-06-23)
 
 - `derivar_partes.py`: v0.6 → v0.7. BUG1 (`RE_REPDE` "por sí" precedence) + BUG2 ("(" colgado) + ruteo rol-pelado → `caratula:rol_sin_nombre`. 36 casos corregidos, 0 regresión.
