@@ -35,7 +35,7 @@ import unicodedata
 from collections import Counter
 from pathlib import Path
 
-__version__ = "0.5"  # H156: PASO 4 de la cascada — fallback `case_name_cuerpo` ("Recurso ... deducido por X en la causa ...", carátula del FALLO DE LA CORTE). Es la MISMA atribución de recurso del epílogo (Eje B), en voz de la Corte, en otro campo CANÓNICO (no es el actor/demandado = Eje A, que sí violaría la doctrina). Reusa parse_parte verbatim. ADITIVO PURO sobre el residual: solo dispara cuando falla el epílogo (sin_marcador_recurso) o no hay zona (sin_zona) -> 0 regresión sobre los recurrente_ok previos. Rol pelado ("la actora"/"la demandada") -> partes_fuente="caratula:rol_sin_nombre" (rol conocido, nombre vía Eje A futuro). // 0.4: H155: cobertura reportada también sobre el universo de MÉRITO (is_merit_decision, ya en casos.csv) — recurrente_ok 88,4% sobre los 2870 de mérito vs 63,9% sobre todos los fallos; el sin_epilogo del no-mérito (art.280 etc.) es ausencia esperada, no gap. Reporte-only: derivación y CSV de salida SIN cambios vs v0.3. // 0.3: H155 fallback formato viejo "Nombre del recurrente:" (Eje B directo) cuando falla RE_MARK_REC -> partes_fuente="epilogo:nombre_recurrente"; aditivo puro sobre el residual (NO toca los 3633 ya resueltos). // 0.2: H154 marcador flexible anclado a línea (queja/ordinario de apelación/deducido/federal/plural, salta arrastre de por_ello) -> recurrente_ok 2225->3633; parse_parte resuelve letrado (por derecho propio / por <parte> / defensor de <parte> / solo_letrado). // 0.1: marcador estricto (solo formato moderno) + capa epílogo inicial.
+__version__ = "0.6"  # H157: alternancia de rol MASCULINA + PLURAL (el actor / los actores / el demandado / las demandadas / coactor[es] / codemandad[oa]s) en RE_ROL + RE_CARATULA_SOLO_ROL + RE_CORTE, normalizada al canónico (femenino singular) en _rol (_ROL_CANON) — el NÚMERO va en multi_recurrente, no fragmenta el value-set. El feminine-singular-only dejaba rol=∅ + basura colgada ("…, actor[es] en autos") + las carátulas "el actor"/"los actores" aterrizaban como recurrente="el actor" en vez de caratula:rol_sin_nombre. Recupera rol para ~302 recurrentes (masc 242 + plural 60), limpia los nombres con trailing, y espeja el comportamiento en carátula. ADITIVO PURO: agrega masculino/plural, conserva el femenino-singular verbatim → 0 recurrente-con-nombre cambia de parte ni se pierde; validado por diff v0.5↔v0.6 en disco (eyeball H157). NOTA (ticket): en multi-recurrente, recurrente_rol guarda solo el rol del recurrente PRIMARIO (leftmost); el resto queda señalado por multi_recurrente. // 0.5: H156: PASO 4 de la cascada — fallback `case_name_cuerpo` ("Recurso ... deducido por X en la causa ...", carátula del FALLO DE LA CORTE). Es la MISMA atribución de recurso del epílogo (Eje B), en voz de la Corte, en otro campo CANÓNICO (no es el actor/demandado = Eje A, que sí violaría la doctrina). Reusa parse_parte verbatim. ADITIVO PURO sobre el residual: solo dispara cuando falla el epílogo (sin_marcador_recurso) o no hay zona (sin_zona) -> 0 regresión sobre los recurrente_ok previos. Rol pelado ("la actora"/"la demandada") -> partes_fuente="caratula:rol_sin_nombre" (rol conocido, nombre vía Eje A futuro). // 0.4: H155: cobertura reportada también sobre el universo de MÉRITO (is_merit_decision, ya en casos.csv) — recurrente_ok 88,4% sobre los 2870 de mérito vs 63,9% sobre todos los fallos; el sin_epilogo del no-mérito (art.280 etc.) es ausencia esperada, no gap. Reporte-only: derivación y CSV de salida SIN cambios vs v0.3. // 0.3: H155 fallback formato viejo "Nombre del recurrente:" (Eje B directo) cuando falla RE_MARK_REC -> partes_fuente="epilogo:nombre_recurrente"; aditivo puro sobre el residual (NO toca los 3633 ya resueltos). // 0.2: H154 marcador flexible anclado a línea (queja/ordinario de apelación/deducido/federal/plural, salta arrastre de por_ello) -> recurrente_ok 2225->3633; parse_parte resuelve letrado (por derecho propio / por <parte> / defensor de <parte> / solo_letrado). // 0.1: marcador estricto (solo formato moderno) + capa epílogo inicial.
 
 csv.field_size_limit(10 ** 7)
 
@@ -93,19 +93,30 @@ RE_MARK_CARATULA = re.compile(
 # recurrente"): el rol se conserva, el NOMBRE se resuelve vía Eje A (capa futura).
 RE_CARATULA_SOLO_ROL = re.compile(
     r"^(?:el|la|los|las)\s+(?:parte\s+)?"
-    r"(?:actora|demandada|querellante|coactora|codemandada|recurrente)s?\s*$", re.I)
+    r"(?:actor(?:a|es|as)?|demandad(?:o|a|os|as)|querellantes?|"
+    r"coactor(?:a|es|as)?|codemandad(?:o|a|os|as)|recurrentes?)\s*$", re.I)
 
 # parte vs letrado: si hay "en representación de Y", la parte es Y.
 RE_REPDE = re.compile(r"\ben\s+representaci[oó]n\s+de\s+(.+)$", re.I)
 # corte del nombre de la parte (donde arranca rol/representación/patrocinio):
 RE_CORTE = re.compile(
-    r",?\s*(?:parte\s+\w+|(?:actora|demandada|querellante|coactora|codemandada)"
+    r",?\s*(?:parte\s+\w+|(?:actor(?:a|es|as)?|demandad(?:o|a|os|as)|querellantes?|"
+    r"coactor(?:a|es|as)?|codemandad(?:o|a|os|as))"
     r"\s+en\s+autos|representad\w+|asistid\w+|con\s+el\s+patrocinio|"
     r"en\s+su\s+car[aá]cter|en\s+calidad|patrocinad\w+|Defensor\w*|Fiscal\b|"
     r"Procurador\w*)", re.I)
 # rol procesal explícito en el clause:
+# H157: alternancia masculina + PLURAL (el actor / los actores / las demandadas / …),
+# normalizada al canónico (femenino singular) en _rol; el NÚMERO va en multi_recurrente,
+# no en el value-set de rol.
 RE_ROL   = re.compile(
-    r"\b(?:parte\s+)?(actora|demandada|querellante|coactora|codemandada)\b", re.I)
+    r"\b(?:parte\s+)?(actor(?:a|es|as)?|demandad(?:o|a|os|as)|querellantes?|"
+    r"coactor(?:a|es|as)?|codemandad(?:o|a|os|as))\b", re.I)
+_ROL_CANON = {"actor": "actora", "actores": "actora", "actoras": "actora",
+              "demandado": "demandada", "demandados": "demandada", "demandadas": "demandada",
+              "coactor": "coactora", "coactores": "coactora", "coactoras": "coactora",
+              "codemandado": "codemandada", "codemandados": "codemandada",
+              "codemandadas": "codemandada", "querellantes": "querellante"}
 RE_PENAL = re.compile(
     r"\b(Fiscal|Defensor\w*|Procurador\w*|imputad\w+|Ministerio\s+P[úu]blico)\b",
     re.I)
@@ -142,7 +153,8 @@ RE_DEF_DE   = re.compile(r"(?:abogad\w+\s+)?defensor\w*\s+(?:oficial\s+)?de\s+(.
 def _rol(clause: str) -> str:
     mr = RE_ROL.search(clause)
     if mr:
-        return mr.group(1).lower()
+        r = mr.group(1).lower()
+        return _ROL_CANON.get(r, r)        # H157: masculino -> canónico femenino
     return "penal" if RE_PENAL.search(clause) else ""
 
 
