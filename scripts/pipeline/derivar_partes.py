@@ -35,7 +35,7 @@ import unicodedata
 from collections import Counter
 from pathlib import Path
 
-__version__ = "0.7"  # H159: capa de PARSEO del clause (parse_parte/_trim_nombre). B-H159a (BUG1, "por sí" precedence): "X, por sí y en representación de Y" -> el principal es X (recurrió por sí), no el representado Y; RE_POR_SI + rama 0 en parse_parte; rol desde la cola (_rol(clause), p.ej. "actora en autos"); head con letrado ("los Dres. ... por sí") -> nombre + por_derecho_propio; head rol-pelado ("el actor", típico anonimizado) -> caratula:rol_sin_nombre (NO "el actor" como nombre; el nombre llega del epílogo/Eje A). B-H159b (BUG2, "(" colgado): _trim_nombre saca paréntesis abierto sin cerrar al final, conservando sufijos válidos ("(h)"). ADITIVO PURO: 36 cambios sobre el baseline v0.6, TODOS mejoras (17 misatribuciones "por sí" rec+recd + ~17 strip de "(" + 1 rol-pelado a rol_sin_nombre + ANTONIO 343_p1758 recuperado vía carátula); validado por diff v0.6↔v0.7 en disco: NAME_LOST 0, PARTY_CHANGED-a-peor 0, campos tocados solo {recurrente, recurrente_rol, recurrido}. NO toca marcadores (terminador Traslados -> v0.8) ni el extractor (sin_zona -> bump propio). Tags B0xx a asignar en cierre. // 0.6: H157: alternancia de rol MASCULINA + PLURAL (el actor / los actores / el demandado / las demandadas / coactor[es] / codemandad[oa]s) en RE_ROL + RE_CARATULA_SOLO_ROL + RE_CORTE, normalizada al canónico (femenino singular) en _rol (_ROL_CANON) — el NÚMERO va en multi_recurrente, no fragmenta el value-set. El feminine-singular-only dejaba rol=∅ + basura colgada ("…, actor[es] en autos") + las carátulas "el actor"/"los actores" aterrizaban como recurrente="el actor" en vez de caratula:rol_sin_nombre. Recupera rol para ~302 recurrentes (masc 242 + plural 60), limpia los nombres con trailing, y espeja el comportamiento en carátula. ADITIVO PURO: agrega masculino/plural, conserva el femenino-singular verbatim → 0 recurrente-con-nombre cambia de parte ni se pierde; validado por diff v0.5↔v0.6 en disco (eyeball H157). NOTA (ticket): en multi-recurrente, recurrente_rol guarda solo el rol del recurrente PRIMARIO (leftmost); el resto queda señalado por multi_recurrente. // 0.5: H156: PASO 4 de la cascada — fallback `case_name_cuerpo` ("Recurso ... deducido por X en la causa ...", carátula del FALLO DE LA CORTE). Es la MISMA atribución de recurso del epílogo (Eje B), en voz de la Corte, en otro campo CANÓNICO (no es el actor/demandado = Eje A, que sí violaría la doctrina). Reusa parse_parte verbatim. ADITIVO PURO sobre el residual: solo dispara cuando falla el epílogo (sin_marcador_recurso) o no hay zona (sin_zona) -> 0 regresión sobre los recurrente_ok previos. Rol pelado ("la actora"/"la demandada") -> partes_fuente="caratula:rol_sin_nombre" (rol conocido, nombre vía Eje A futuro). // 0.4: H155: cobertura reportada también sobre el universo de MÉRITO (is_merit_decision, ya en casos.csv) — recurrente_ok 88,4% sobre los 2870 de mérito vs 63,9% sobre todos los fallos; el sin_epilogo del no-mérito (art.280 etc.) es ausencia esperada, no gap. Reporte-only: derivación y CSV de salida SIN cambios vs v0.3. // 0.3: H155 fallback formato viejo "Nombre del recurrente:" (Eje B directo) cuando falla RE_MARK_REC -> partes_fuente="epilogo:nombre_recurrente"; aditivo puro sobre el residual (NO toca los 3633 ya resueltos). // 0.2: H154 marcador flexible anclado a línea (queja/ordinario de apelación/deducido/federal/plural, salta arrastre de por_ello) -> recurrente_ok 2225->3633; parse_parte resuelve letrado (por derecho propio / por <parte> / defensor de <parte> / solo_letrado). // 0.1: marcador estricto (solo formato moderno) + capa epílogo inicial.
+__version__ = "0.11"  # H160 (cont.): capa de CARÁTULA — recuperación de NOMBRE del rol-sin-nombre. (1) rol_causa: la carátula vieja "deducido por la actora/demandada EN LA CAUSA X c/ Y" -> el token de rol elige el lado (actora->X izq, demandada->Y der); _nombre_desde_causa. Sigue Eje B (el recurrente lo da el marcador "deducido por la actora", la causa solo provee el nombre del lado señalado). (2) name-match: carátula NORMAL "X c/ Y" (la común; "Recurso deducido por X" es la moderna) — si el nombre del letrado del epílogo coincide (>=2 tokens, apellido+nombre) con una parte -> por_derecho_propio (_match_letrado_caratula). (3) fallback solo_letrado -> derivar_de_caratula (PASO 4 también cuando el epílogo solo nombró al letrado), preservando el recurrido del traslado. Validado: 66/66 nombres del lado correcto de c/ (41 actora izq + 25 demandada der, 0 swaps) + 10 fallos enteros extraídos (Szelagowski/Gil Domínguez->pdp, Torre/Benegas/Laitán->actora con nombre, Zubiri/Castellucci). NAME_RECOVERED 43->106, solo_letrado 47->9. Tags B0xx a asignar. // 0.10 H160: capa de PARSEO Capa 2 (parse_parte). Esquema de rol MP adjudicado con Guillermo: fiscal/fiscalía/Procurador Fiscal·General -> el funcionario es la parte, mp_fiscal (MPF acusa); defensor público/oficial/general·asesor de menores·incapaces·pobres·ausentes -> funcionario es la parte, mp_defensa (MPD defiende); defensor/abogado/en-ejercicio-de-la-defensa/a-cargo-de-la-defensa de <imputado nombrado> -> el imputado es la parte, penal; apoderado/representante/en-representación de X (civil) -> X, rol vacío; por/en-causa propia·con su propio patrocinio -> el letrado es la parte, por_derecho_propio. Fix indicador letrado: Dres?\\. -> Dr(?:es)?\\. (228 "Dr." singular no entraban a la rama). Defensor del Pueblo = institución-parte (no defensa penal). Over-fire mp_defensa corregido: "a cargo de la defensa de X" caía a MPD cuando el imputado estaba nombrado (329_p1541 Pirrello->Torres/penal); patrón "de la defensa de X" le gana a RE_DEFENSA_MP. Distribución: mp_fiscal 0->81, mp_defensa 0->16, por_derecho_propio 10->44. Token mp_fiscal/mp_defensa va a CODEBOOK v2.1 (conecta M32). // 0.9 H160: Capa 0 DESHIFENIZACIÓN del epílogo (_deshifenar, chokepoint en derivar_de_epilogo). Soft-hyphen-only (U+00AD) — NO el parser._unhyphenate de prosa, que une el guión REGULAR separador de entidad y corrompe ("Estado Nacional- Ministerio" -> "NacionalMinisterio"). NO colapsa saltos estructurales (los marcadores anclan por línea, re.M). 3079/5697 epílogos afectados, 420 nombres limpios, 0 regresión. STOPGAP: el fix de producción es 1 línea soft-only en extraer_epilogos.py (ticket DEUDA). // 0.8 H160: capa de MARCADORES (terminador over-capture), ORTOGONAL a v0.7 (no toca parse_parte). DOS ediciones: (1) RE_MARK_REC terminador \bTraslados?\b (antes \bTraslado\b singular -> no frenaba ante "Traslados" plural y over-capturaba la cola del traslado: 330_p298/339_p323/345_p549, + rol leido de la cola en 340_p1775). (2) RE_MARK_TRA cierre en linea: \bRecurso\b agregado al lookahead (antes solo \bTribunal\b|$ con re.S -> se comia la linea "Recurso de queja/de hecho interpuesto por..." siguiente: 348_p1334/329_p4066). head de TRA tambien plural (Traslados? contestad) -> captura el contestador del traslado plural como recurrido (62 recuperados, 0 perdidos, 0 good->bad), honrando el principio "la cola no se lleva a representados" (Guillermo H160): recortar la cola del recurrente NO debe dejar huerfano al representado del traslado. Poblacion re-medida en disco (H160) vs ~3 del PROMPT: SET A 64 (REC plural) + SET B 52 (TRA over-capture), corrupcion REAL = 5 por nombre (329/330/339/345/348) + ROL_ONLY destapados por el diff (340_p1775 etc.). Validado por diff_partes contra repro v0.7 (sha f09979db83e1). Tags B0xx a asignar en cierre. // 0.7 H159: capa de PARSEO del clause (parse_parte/_trim_nombre). B-H159a (BUG1, "por sí" precedence): "X, por sí y en representación de Y" -> el principal es X (recurrió por sí), no el representado Y; RE_POR_SI + rama 0 en parse_parte; rol desde la cola (_rol(clause), p.ej. "actora en autos"); head con letrado ("los Dres. ... por sí") -> nombre + por_derecho_propio; head rol-pelado ("el actor", típico anonimizado) -> caratula:rol_sin_nombre (NO "el actor" como nombre; el nombre llega del epílogo/Eje A). B-H159b (BUG2, "(" colgado): _trim_nombre saca paréntesis abierto sin cerrar al final, conservando sufijos válidos ("(h)"). ADITIVO PURO: 36 cambios sobre el baseline v0.6, TODOS mejoras (17 misatribuciones "por sí" rec+recd + ~17 strip de "(" + 1 rol-pelado a rol_sin_nombre + ANTONIO 343_p1758 recuperado vía carátula); validado por diff v0.6↔v0.7 en disco: NAME_LOST 0, PARTY_CHANGED-a-peor 0, campos tocados solo {recurrente, recurrente_rol, recurrido}. NO toca marcadores (terminador Traslados -> v0.8) ni el extractor (sin_zona -> bump propio). Tags B0xx a asignar en cierre. // 0.6: H157: alternancia de rol MASCULINA + PLURAL (el actor / los actores / el demandado / las demandadas / coactor[es] / codemandad[oa]s) en RE_ROL + RE_CARATULA_SOLO_ROL + RE_CORTE, normalizada al canónico (femenino singular) en _rol (_ROL_CANON) — el NÚMERO va en multi_recurrente, no fragmenta el value-set. El feminine-singular-only dejaba rol=∅ + basura colgada ("…, actor[es] en autos") + las carátulas "el actor"/"los actores" aterrizaban como recurrente="el actor" en vez de caratula:rol_sin_nombre. Recupera rol para ~302 recurrentes (masc 242 + plural 60), limpia los nombres con trailing, y espeja el comportamiento en carátula. ADITIVO PURO: agrega masculino/plural, conserva el femenino-singular verbatim → 0 recurrente-con-nombre cambia de parte ni se pierde; validado por diff v0.5↔v0.6 en disco (eyeball H157). NOTA (ticket): en multi-recurrente, recurrente_rol guarda solo el rol del recurrente PRIMARIO (leftmost); el resto queda señalado por multi_recurrente. // 0.5: H156: PASO 4 de la cascada — fallback `case_name_cuerpo` ("Recurso ... deducido por X en la causa ...", carátula del FALLO DE LA CORTE). Es la MISMA atribución de recurso del epílogo (Eje B), en voz de la Corte, en otro campo CANÓNICO (no es el actor/demandado = Eje A, que sí violaría la doctrina). Reusa parse_parte verbatim. ADITIVO PURO sobre el residual: solo dispara cuando falla el epílogo (sin_marcador_recurso) o no hay zona (sin_zona) -> 0 regresión sobre los recurrente_ok previos. Rol pelado ("la actora"/"la demandada") -> partes_fuente="caratula:rol_sin_nombre" (rol conocido, nombre vía Eje A futuro). // 0.4: H155: cobertura reportada también sobre el universo de MÉRITO (is_merit_decision, ya en casos.csv) — recurrente_ok 88,4% sobre los 2870 de mérito vs 63,9% sobre todos los fallos; el sin_epilogo del no-mérito (art.280 etc.) es ausencia esperada, no gap. Reporte-only: derivación y CSV de salida SIN cambios vs v0.3. // 0.3: H155 fallback formato viejo "Nombre del recurrente:" (Eje B directo) cuando falla RE_MARK_REC -> partes_fuente="epilogo:nombre_recurrente"; aditivo puro sobre el residual (NO toca los 3633 ya resueltos). // 0.2: H154 marcador flexible anclado a línea (queja/ordinario de apelación/deducido/federal/plural, salta arrastre de por_ello) -> recurrente_ok 2225->3633; parse_parte resuelve letrado (por derecho propio / por <parte> / defensor de <parte> / solo_letrado). // 0.1: marcador estricto (solo formato moderno) + capa epílogo inicial.
 
 csv.field_size_limit(10 ** 7)
 
@@ -65,10 +65,10 @@ OUT_COLS = ["caso_id_canonico", "recurrente", "recurrente_rol",
 # en mayúscula = pie editorial; "recurso" minúscula = por_ello, NO matchea).
 RE_MARK_REC = re.compile(
     r"^(?:Recursos?|Queja)\b[^\n]*?(?:interpuest\w+|deducid\w+)\s+por\s+"
-    r"(.*?)(?=\bTraslado\b|\bTribunal\b|\bProfesional|\bNorma\b|\Z)",
+    r"(.*?)(?=\bTraslados?\b|\bTribunal\b|\bProfesional|\bNorma\b|\Z)",
     re.S | re.M)
 RE_MARK_TRA = re.compile(
-    r"Traslado\s+contestad\w+\s+por\s+(.*?)(?=\bTribunal\b|$)", re.S | re.I)
+    r"Traslados?\s+contestad\w+\s+por\s+(.*?)(?=\bTribunal\b|\bRecurso\b|$)", re.S | re.I)
 # FALLBACK formato viejo (tomos 329-334): rótulo explícito "Nombre del
 # recurrente:" cuando NO hay marcador "Recurso ... interpuesto por". Da Eje B
 # directo (quién recurrió). OJO: "Nombre del actor:" / "Parte demandada:" NO van
@@ -97,7 +97,7 @@ RE_CARATULA_SOLO_ROL = re.compile(
     r"coactor(?:a|es|as)?|codemandad(?:o|a|os|as)|recurrentes?)\s*$", re.I)
 
 # parte vs letrado: si hay "en representación de Y", la parte es Y.
-RE_REPDE = re.compile(r"\ben\s+representaci[oó]n\s+de\s+(.+)$", re.I)
+RE_REPDE = re.compile(r"\b(?:en\s+representaci[oó]n|representante(?:\s+legal)?)\s+de(?:l)?\s+(.+)$", re.I)
 # B-H159: "X, por sí y en representación de Y" -> X recurrió por sí (es el principal)
 RE_POR_SI = re.compile(r",?\s+\bpor\s+s[ií]\b", re.I)
 # corte del nombre de la parte (donde arranca rol/representación/patrocinio):
@@ -147,10 +147,65 @@ def _trim_nombre(s: str) -> str:
 
 
 # sub-patrones de letrado (recurrente listado como abogado, no como parte):
-RE_LETRADO  = re.compile(r"^(?:el|la|los|las)\s+(?:Dres?\.|Dra\.|Defensora?|Procuradora?)", re.I)
-RE_DPROPIO  = re.compile(r"\bpor\s+derecho\s+propio\b", re.I)
-RE_POR_X    = re.compile(r",?\s*\bpor\s+(?!derecho\s+propio)(.+)$", re.I)
-RE_DEF_DE   = re.compile(r"(?:abogad\w+\s+)?defensor\w*\s+(?:oficial\s+)?de\s+(.+)$", re.I)
+# Capa 2 (H160): indicador = Dr.|Dra.|Dres.|Defensor|Procurador|Asesor (artículo opcional).
+RE_LETRADO  = re.compile(r"^(?:(?:el|la|los|las)\s+)?(?:Dr(?:es)?\.|Dra\.|Defensora?|Procuradora?|Asesora?)", re.I)
+RE_TITULO   = re.compile(r"^(?:(?:el|la|los|las)\s+)?(?:Dr(?:es)?\.|Dra\.|Defensora?|Procuradora?|Asesora?)\s*", re.I)
+RE_DPROPIO  = re.compile(r"\bpor\s+(?:su\s+|mismo\s+)?(?:propio\s+)?derecho\b|\ben\s+causa\s+propia\b|\bcon\s+su\s+propio\s+patrocinio\b", re.I)
+RE_POR_X    = re.compile(r",?\s*\bpor\s+(?!derecho\s+propio|su\s+|mismo\s+|mism|s[ií]\b)(.+)$", re.I)
+RE_DEF_DE   = re.compile(r"(?:abogad\w+\s+)?defensor\w*\s+(?:particular\w*\s+|oficial\s+|p[uú]blic\w+\s+)?(?:de|del)\s+(.+)$", re.I)
+RE_EJERC_DEF = re.compile(r"\b(?:en\s+ejercicio\s+|a\s+cargo\s+)?de\s+la\s+defensa\s+de(?:l)?\s+(.+)$", re.I)  # "(en ejercicio/a cargo) de la defensa de X" -> X, penal
+RE_PATROCINANTE = re.compile(r"\b(?:letrad\w+\s+)?patrocinante\s+de(?:l)?\s+(.+)$", re.I)  # "letrado patrocinante de X" -> X
+RE_APODERADO = re.compile(r"\bapoderad\w+\b[^,]{0,25}?\bde(?:l)?\s+(.+)$", re.I)
+RE_ABOGADO_DE = re.compile(r"\babogad\w+\s+(?:defensor\s+)?de(?:l)?\s+(.+)$", re.I)  # "abogado del condenado X" -> X
+# MP (Ministerio Público): SIN representado nombrado, el FUNCIONARIO es la parte.
+RE_FISCAL    = re.compile(r"\bfiscal(?:[ií]a)?\b|\bprocurador\w*\s+(?:general|fiscal)\b", re.I)   # MPF: acusa
+RE_DEFENSA_MP = re.compile(r"\bdefensor\w*\s+(?:p[uú]blic\w+|oficial|general)\b|\bdefensor[ií]a\b|\basesor\w*\s+de\s+(?:menores|incapac\w+|pobres|ausentes)|\bpobres\s+y\s+ausentes\b", re.I)  # MPD: defiende/representa menores·incapaces·pobres·ausentes
+RE_TAG_CARGO = re.compile(r",?\s*(?:en\s+su\s+car[áa]cter|en\s+representaci|titular|fiscal|defensora?|procuradora?|asesora?|subprocurador)", re.I)
+
+
+def _strip_titulo(s: str) -> str:
+    return RE_TITULO.sub("", s, count=1)
+
+
+def _letrado_name(clause: str) -> str:
+    """Nombre del funcionario del MP (es la parte): saca el título y corta en el tag
+    de cargo (', fiscal' / ', defensor público' / 'en su carácter…')."""
+    s = _strip_titulo(clause)
+    mt = RE_TAG_CARGO.search(s)
+    return _trim_nombre(s[:mt.start()] if mt else s)
+
+
+# --- Capa 2 (H160): name-matching del letrado contra la carátula NORMAL "X c/ Y" ---
+# La carátula "X c/ Y" es el formato comun (vs "Recurso deducido por X", el moderno que
+# da el recurrente directo). Cuando el epilogo solo nombra al letrado (solo_letrado) y la
+# caratula es normal, si el nombre del letrado coincide con una parte => es por_derecho_propio.
+RE_LETRADO_NOMBRE = re.compile(r"^([A-ZÁÉÍÓÚÑ][\wáéíóúñ.'-]*(?:\s+(?:[A-ZÁÉÍÓÚÑ][\wáéíóúñ.'-]*|de|del|la|los|las))*)")
+
+def _letrado_solo_name(clause: str) -> str:
+    """Corre el nombre propio del letrado al inicio del clause (frena en coma/conector
+    minusculo: 'con el patrocinio', 'por', etc.)."""
+    m = RE_LETRADO_NOMBRE.match(_strip_titulo(clause))
+    return m.group(1).strip() if m else ""
+
+def _name_tokens(s: str) -> set:
+    return {t for t in re.findall(r"[a-záéíóúñ]{3,}", s.lower())}
+
+def _match_letrado_caratula(clause: str, caratula: str):
+    """Si el nombre del letrado del clause coincide (>=2 tokens, apellido+nombre) con una
+    parte de la caratula 'X c/ Y', devuelve (nombre, 'por_derecho_propio'); si no, None.
+    El >=2 tokens evita falsos por apellido comun (la caratula normal nombra 'Apellido, Nombre')."""
+    if not caratula or " c/ " not in caratula:
+        return None
+    nombre = _letrado_solo_name(clause)
+    lt = _name_tokens(nombre)
+    if len(lt) < 2:
+        return None
+    actor, resto = caratula.split(" c/ ", 1)
+    demandado = re.split(r"\s+s/\s+", resto, 1)[0]
+    for parte in (actor, demandado):
+        if len(lt & _name_tokens(parte)) >= 2:
+            return _trim_nombre(nombre), "por_derecho_propio"
+    return None
 
 
 def _rol(clause: str) -> str:
@@ -172,7 +227,7 @@ def parse_parte(clause: str) -> tuple[str, str]:
     if msi and _rep0 and msi.start() < _rep0.start():
         head = clause[:msi.start()].rstrip(" ,")
         if RE_LETRADO.match(head):                       # "los Dres. ... por sí" = parte por derecho propio
-            name = _trim_nombre(re.sub(r"^(?:el|la|los|las)\s+(?:Dres?\.|Dra\.|Defensora?|Procuradora?)\s*", "", head, flags=re.I))
+            name = _trim_nombre(_strip_titulo(head))
             return name, (_rol(clause) or "por_derecho_propio")
         mc = RE_CORTE.search(head)
         return _trim_nombre(head[:mc.start()] if mc else head), _rol(clause)
@@ -180,21 +235,64 @@ def parse_parte(clause: str) -> tuple[str, str]:
     rep = RE_REPDE.search(clause)
     if rep:
         return _trim_nombre(rep.group(1)), _rol(clause)
-    # 2) el clause arranca con un letrado -> buscar la parte real
+    # 2) el clause arranca con un letrado -> buscar la PARTE real + su rol (Capa 2 H160)
     if RE_LETRADO.match(clause):
         if RE_DPROPIO.search(clause):                       # el letrado ES la parte
-            nombre = _trim_nombre(re.split(r",?\s*por\s+derecho", clause, maxsplit=1)[0])
-            return nombre, "por_derecho_propio"
-        mp = RE_POR_X.search(clause)                        # "..., por <parte>"
+            return _trim_nombre(_strip_titulo(RE_DPROPIO.split(clause, maxsplit=1)[0])), "por_derecho_propio"
+        md = RE_DEF_DE.search(clause)                       # "defensor de <imputado nombrado>" -> X, penal
+        if md and "ante" not in md.group(1)[:6].lower():
+            if re.match(r"Pueblo\b", md.group(1), re.I):     # "Defensor del Pueblo" = Ombudsman, institución-parte
+                inst = re.sub(r"^(?:el|la)\s+", "", clause, flags=re.I).split(",")[0]
+                return _trim_nombre(inst), ""
+            return _trim_nombre(md.group(1)), "penal"
+        mej = RE_EJERC_DEF.search(clause)                  # "en ejercicio de la defensa de X" -> X, penal
+        if mej:
+            return _trim_nombre(mej.group(1)), "penal"
+        mab = RE_ABOGADO_DE.search(clause)                  # "abogado del condenado/imputado X" -> X
+        if mab and "ante" not in mab.group(1)[:6].lower():
+            x = mab.group(1)
+            es_penal = bool(re.match(r"(?:el\s+|la\s+)?(?:condenad|imputad|procesad|acusad|reo\b|encausad)", x, re.I))
+            x = re.sub(r"^(?:el\s+|la\s+)?(?:condenad[oa]|imputad[oa]|procesad[oa]|acusad[oa]|encausad[oa])\s+", "", x, flags=re.I)
+            return _trim_nombre(x), ("penal" if es_penal else "")
+        ma = RE_APODERADO.search(clause)                   # "apoderado de X" (civil) -> X, rol vacío (no sale del epílogo)
+        if ma and "ante" not in ma.group(1)[:6].lower():
+            return _trim_nombre(ma.group(1)), ""
+        mpa = RE_PATROCINANTE.search(clause)               # "letrado patrocinante de X" -> X
+        if mpa and "ante" not in mpa.group(1)[:6].lower():
+            return _trim_nombre(mpa.group(1)), _rol(clause)
+        mp = RE_POR_X.search(clause)                        # "..., por <parte>" (representación) -> parte
         if mp:
             return _trim_nombre(mp.group(1)), _rol(clause)
-        md = RE_DEF_DE.search(clause)                       # "defensor de <parte>"
-        if md and "ante" not in md.group(1)[:6].lower():
-            return _trim_nombre(md.group(1)), "penal"
+        if RE_FISCAL.search(clause):                        # MPF (acusa): el funcionario ES la parte
+            return _letrado_name(clause), "mp_fiscal"
+        if RE_DEFENSA_MP.search(clause):                    # MPD (defiende): el funcionario ES la parte
+            return _letrado_name(clause), "mp_defensa"
+        r = _rol(clause)                                    # "el Dr. X, actor en autos" -> el letrado ES esa parte
+        if r:
+            return _letrado_name(clause), r
         return "", "solo_letrado"                           # letrado sin parte: marcar
     # 3) caso general: recortar en el primer marcador de rol/representación
     m = RE_CORTE.search(clause)
     return _trim_nombre(clause[:m.start()] if m else clause), _rol(clause)
+
+
+def _nombre_desde_causa(caratula: str, rol: str) -> str:
+    """Capa 2 (H160): carátula vieja 'deducido por la actora/demandada EN LA CAUSA
+    X c/ Y' -> el token de rol elige el lado de la causa (actora->X, demandada->Y).
+    Recupera el NOMBRE que 'rol-sin-nombre' dejaba pendiente. Sigue siendo Eje B: el
+    recurrente se identifica por el marcador de recurso ('deducido por la actora'),
+    NO se mapea actor/demandado a ciegas; la causa solo provee el nombre del lado ya
+    señalado por el marcador."""
+    m = re.search(r"\ben\s+(?:la\s+causa|las\s+causas|los\s+autos)\s+(.+)$", _dehifen(caratula), re.I)
+    if not m or " c/ " not in m.group(1):
+        return ""
+    actor, resto = m.group(1).split(" c/ ", 1)
+    demandado = re.split(r"\s+s/\s+", resto, 1)[0]
+    if rol in ("actora", "querellante"):
+        return _trim_nombre(actor)
+    if rol == "demandada":
+        return _trim_nombre(demandado)
+    return ""
 
 
 def derivar_de_caratula(case_name_cuerpo: str) -> dict | None:
@@ -210,16 +308,27 @@ def derivar_de_caratula(case_name_cuerpo: str) -> dict | None:
         return None
     clause = _dehifen(m.group(1))
     multi = "si" if RE_MULTI.search(clause) else "no"
-    # rol pelado sin nombre ("la actora") -> rol conocido, nombre vía Eje A futuro
+    # rol pelado ("la actora"/"los actores") -> el token elige el lado de "X c/ Y"
     if RE_CARATULA_SOLO_ROL.match(clause):
-        return {"recurrente": "", "recurrente_rol": _rol(clause),
+        rol = _rol(clause)
+        nom = _nombre_desde_causa(case_name_cuerpo, rol)
+        if nom:
+            return {"recurrente": nom, "recurrente_rol": rol,
+                    "recurrido": "", "recurrido_rol": "", "multi_recurrente": multi,
+                    "partes_capa": "caratula", "partes_fuente": "caratula:rol_causa"}
+        return {"recurrente": "", "recurrente_rol": rol,
                 "recurrido": "", "recurrido_rol": "", "multi_recurrente": multi,
                 "partes_capa": "caratula", "partes_fuente": "caratula:rol_sin_nombre"}
     rn, rr = parse_parte(clause)
     # B-H159: si tras "por sí" el head quedó como rol pelado ("el actor") en vez de
     # un nombre (típico cuando la carátula no nombra a la parte por ser anonimizada),
-    # NO dejar "el actor" como nombre -> rol conocido, nombre pendiente de Eje A/epílogo.
+    # NO dejar "el actor" como nombre -> el token elige el lado de la causa, o rol_sin_nombre.
     if RE_CARATULA_SOLO_ROL.match(rn):
+        nom = _nombre_desde_causa(case_name_cuerpo, rr)
+        if nom:
+            return {"recurrente": nom, "recurrente_rol": rr,
+                    "recurrido": "", "recurrido_rol": "", "multi_recurrente": multi,
+                    "partes_capa": "caratula", "partes_fuente": "caratula:rol_causa"}
         return {"recurrente": "", "recurrente_rol": rr,
                 "recurrido": "", "recurrido_rol": "", "multi_recurrente": multi,
                 "partes_capa": "caratula", "partes_fuente": "caratula:rol_sin_nombre"}
@@ -228,10 +337,26 @@ def derivar_de_caratula(case_name_cuerpo: str) -> dict | None:
             "partes_capa": "caratula", "partes_fuente": "caratula:recurso"}
 
 
+def _deshifenar(t: str) -> str:
+    """Capa 0 (H160): une palabras partidas por guión/soft-hyphen a fin de línea
+    (break interno de palabra OCR), preservando el en-dash separador "–". Los saltos
+    de línea NO hifenados se colapsan a espacio (son cortes reales de palabra/cláusula).
+    STOPGAP en el deriver; migrar al extractor con parser._unhyphenate cuando exista."""
+    # Deshifenización del EPÍLOGO = soft-hyphen-only (NO el _unhyphenate de prosa).
+    # El pie editorial usa soft-hyphen (U+00AD) para cortes de palabra ("representa­\nda");
+    # el guión REGULAR en el listado es SEPARADOR de entidad ("Estado Nacional- Ministerio")
+    # -> unirlo corrompe (canónico daba "NacionalMinisterio"). Soft-only enhebra la aguja: [CLEAN].
+    # Solo consume el whitespace tras el soft-hyphen -> NO colapsa saltos estructurales (markers anclan por línea).
+    # STOPGAP: el fix real es 1 línea en extraer_epilogos.py con ESTA regla (no parser._unhyphenate).
+    t = re.sub(r"(\w)\u00ad\s*\n\s*(\w)", r"\1\2", t)
+    return t                                                          # NO colapsar saltos: los marcadores anclan por línea (re.M)
+
+
 def derivar_de_epilogo(epilogo_text: str, case_name_cuerpo: str = "") -> dict:
     """Aplica la gramática al epílogo crudo. Devuelve campos de salida (capa 1).
     Si el epílogo no trae marcador, intenta el PASO 4 (carátula) antes de declarar
     sin_marcador."""
+    epilogo_text = _deshifenar(epilogo_text)                           # capa 0: texto limpio antes de marcadores/parse
     rec = RE_MARK_REC.search(epilogo_text)
     if not rec:
         # Fallback formato viejo: rótulo "Nombre del recurrente:" (Eje B directo).
@@ -259,6 +384,26 @@ def derivar_de_epilogo(epilogo_text: str, case_name_cuerpo: str = "") -> dict:
     dn, dr = ("", "")
     if tra:
         dn, dr = parse_parte(_dehifen(tra.group(1)))
+
+    # Capa 2 (H160): el epílogo solo nombró al letrado (solo_letrado) -> la parte real
+    # suele vivir en la carátula del fallo (Eje B, "Recurso ... deducido por X"). Disparar
+    # el PASO 4 también acá; conservar el recurrido del traslado si lo hubo. Solo override
+    # si la carátula aporta nombre o rol conocido (si no, queda solo_letrado).
+    if rr == "solo_letrado" and not rn.strip():
+        car = derivar_de_caratula(case_name_cuerpo)
+        if car and (car["recurrente"].strip() or car["partes_fuente"] == "caratula:rol_sin_nombre"):
+            return {"recurrente": car["recurrente"], "recurrente_rol": car["recurrente_rol"],
+                    "recurrido": dn, "recurrido_rol": dr,
+                    "multi_recurrente": car["multi_recurrente"],
+                    "partes_capa": "caratula",
+                    "partes_fuente": car["partes_fuente"].replace("caratula:", "caratula_via_letrado:")}
+        # carátula NORMAL "X c/ Y": name-match del letrado contra las partes -> por_derecho_propio
+        nm = _match_letrado_caratula(rec_clause, case_name_cuerpo)
+        if nm:
+            return {"recurrente": nm[0], "recurrente_rol": nm[1],
+                    "recurrido": dn, "recurrido_rol": dr,
+                    "multi_recurrente": "no",
+                    "partes_capa": "caratula", "partes_fuente": "caratula_via_letrado:nombre_match"}
 
     fuente = "epilogo:recurso" + ("+traslado" if tra else "")
     return {"recurrente": rn, "recurrente_rol": rr,
