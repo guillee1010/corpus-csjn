@@ -18279,10 +18279,48 @@ Residual sin recurrente = 1893: no-mérito-no-originaria 1133 (art.280/inadmisib
 
 **Commits:** 1 (M29 paso 4 + CSV regenerado + manifest) + docs.
 
-## H158 — M25 descartado (2026-06-23)
 
-**Objetivo:** construir el detector M25 de inversiones de rol de `parte_ganadora`. Descartado.
+## H157 — M29/M25: validación del 91,8% (gate A) + fix de rol masculino/plural (`derivar_partes` v0.6) (2026-06-23)
 
-**M25 — descartado sin código.** El banco de "7 inversiones de rol" no eran inversiones genuinas: leídos los casos contra el `.md`, los 9 desacuerdos proyección↔gold son 4 errores de codeo del gold (la proyección `disposicion→parte_ganadora` acierta), 2 parciales SCDB ya bien codeados (granularidad de disposición), 1 convención y 2 gate. Las dos rutas determinísticas para levantar κ (detector por rol; marcador de disposición `"con el alcance"`) over-firean. Corregidos los 4 errores demostrables del gold → `planilla_M20_58GOLD_parte_H158corr.xlsx` (no aplicado al canónico). κ-parte ilustrativo 0,784→0,880.
+**Objetivo:** validar la cobertura de la capa de partes (gate A, eyeball) y cerrar el eje débil (rol procesal).
 
-**Estado final — SIN CAMBIOS CANÓNICOS.** Parser v22.0 intacto, golden [CLEAN], manifest no re-sellado, CHANGELOG no disparado.
+### H157-01 — Gate A (eyeball 30 casos)
+
+Identificación de PARTE **29/30 = 96,7% correcto** (1 misatribución: `343_p1758`, `RE_REPDE` over-fire en "por sí y en representación de sus hijos" → devuelve los hijos, tira a la madre que recurrió por sí; ticketeado, no bloquea). Cobertura **91,8% confirmada real por conteo** (nombre 89,3% + rol 2,5%; sin recurrente 235 = 8,2%). Eje débil = rol.
+
+### H157-02 — Fix de rol masculino + plural (`derivar_partes.py` v0.5→v0.6)
+
+Causa única acotada (en disco): `RE_ROL`/`RE_CARATULA_SOLO_ROL`/`RE_CORTE` cubrían solo femenino-singular → masculino "el actor"/"el demandado"/"actor en autos" (227) + plurales "los actores"/"las demandadas" (60) = **287 casos sin match**. Fix: alternancia masculina + plural en las 3 regex + `_ROL_CANON` (normaliza género y número → canónico femenino singular; el número va en `multi_recurrente`, NO fragmenta el value-set). **ADITIVO PURO** (conserva el femenino-singular verbatim).
+
+Validación por diff v0.5↔v0.6 sobre réplica byte-idéntica: **NAME_LOST 0, PARTY_CHANGED 0, rol-perdido 0, recurrido-name-lost 0** (0 regresión). Recupera **~306 roles** (∅→actora 190 / demandada 94 / codemandada 15 / coactora 5 / querellante 2), limpia nombres con trailing, mueve 5 carátulas "el actor"/"los actores"→`caratula:rol_sin_nombre`. Efecto lateral: corrige **16 falsos-positivos penal** (Defensor/Fiscal = patrocinante o tipo-institución, no rol; p.ej. `340_p1581` "el MPF, demandado en autos"→demandada; `337_p307` "Defensor del Pueblo, actor en autos"→actora) + 4 multi mal-etiquetados (leftmost toma el rol del recurrente primario).
+
+Cobertura de rol procesal usable por M25 (mérito): **32,1%→39,6% (+217)**. recurrente_ok 3749→3744, caratula_rol_sin_nombre 61→66.
+
+### H157-03 — Hallazgo `solo_letrado` + frente `parse_parte` consolidado
+
+De 47 `solo_letrado` (31 mérito): honorarios per se raro (~2-3), pero **23 Ministerio Público** + 9-12 parte-nombrada-recuperable → frente `parse_parte` consolidado (ticket reescrito). Decisión metodológica: **eyeball PRIMERO**, scope del fix con toda la data (el masculino resultó el frente más grande y de mayor ROI para M25; el resto al ticket consolidado).
+
+### H157 — Estado final
+
+**SIN CAMBIOS AL PARSER** — capa-deriver, parser v22.0 intacto, golden [CLEAN], sin re-golden.
+
+**Output:** `output/parser/csjn_casos_partes.csv` v0.6 — 5891 filas / 450986 bytes (sha `d104b107b3590775…`).
+
+**Manifest:** re-sellado [CLEAN] 65.
+
+**Próximo:** M25 detector de inversiones de rol + resto del frente `parse_parte`.
+
+
+## H158 — M25 descartado: detector de inversiones de rol inviable (2026-06-23)
+
+**Objetivo:** construir el detector M25 de las inversiones de rol de `parte_ganadora`. Resultado: descartado y lockeado.
+
+**M25 — DESCARTADO sin código.** Probadas en disco las dos rutas determinísticas para detectar las inversiones de rol:
+- Cruce `disposicion × recurrente_rol`: over-firea (`confirma×demandada` 61 casos para ~3 inversiones; `deja×demandada` 164 para 1).
+- Marcador de disposición `"con el alcance"`: over-firea ~3:2.
+
+La señal que separa una inversión real de una no-inversión es de **mérito** (a favor de quién era la sentencia revisada y de qué lado está el recurrente), no un patrón presente en `{disposicion, recurrente_rol, por_ello}`. Par mínimo `342_p1393`/`344_p344`: `por_ello` casi byte-idéntico + firma `(confirma,demandada)` idéntica, lecturas opuestas. Detector determinístico inviable; no hay banco que detectar por patrón. **Lockeado: no reabrir sin evidencia nueva.**
+
+**Estado final — SIN CAMBIOS CANÓNICOS.** Parser v22.0 intacto, golden [CLEAN], outputs canónicos sin tocar, `_manifest.json` sin re-sellar, CHANGELOG no disparado.
+
+**Housekeeping:** header de DEUDA colapsado (cadena de resúmenes `// Previo H0xx` → puntero a BITACORA; ~54 KB de duplicación removidos).
