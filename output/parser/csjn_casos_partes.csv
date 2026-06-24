@@ -244,7 +244,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p1493,Raúl Enrique Castets,,,,no,epilogo,epilogo:recurso
 329_p1501,Roberto Tito Aguirre,actora,,,no,epilogo,epilogo:recurso
 329_p1506,Fisco Nacional – Dirección General Impositiva,,,,no,epilogo,epilogo:recurso
-329_p1514,Claudio Marcelo Gómez (,penal,,,no,epilogo,epilogo:nombre_recurrente
+329_p1514,Claudio Marcelo Gómez,penal,,,no,epilogo,epilogo:nombre_recurrente
 329_p1521,,,,,,sin_epilogo,sin_zona
 329_p1522,María Margarita Dialeva Naredo,,,,no,epilogo,epilogo:recurso
 329_p1538,Guillermo José González,,,,no,epilogo,epilogo:recurso
@@ -288,7 +288,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p1805,la Provincia de Mendoza,,Alberto Staib y otros,,no,epilogo,epilogo:recurso+traslado
 329_p1812,San Buenaventura S.R.L.,,,,no,epilogo,epilogo:recurso
 329_p1821,Rolando Omar Treyer,penal,,,no,epilogo,epilogo:recurso
-329_p1826,Antonio Gustavo Gómez (,penal,,,no,epilogo,epilogo:recurso
+329_p1826,Antonio Gustavo Gómez,penal,,,no,epilogo,epilogo:recurso
 329_p1831,,,,,,epilogo,sin_marcador_recurso
 329_p1834,,,,,,sin_epilogo,sin_zona
 329_p1836,,,,,,sin_epilogo,sin_zona
@@ -402,7 +402,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p2356,,,,,,epilogo,sin_marcador_recurso
 329_p2358,,,,,,sin_epilogo,sin_zona
 329_p2361,Olga Arrabal de Canals y otros,,,,si,epilogo,epilogo:recurso
-329_p2367,"Omar M. Antiñir, Néstor I. Antiñir, Miguel A. Parra Sánchez",penal,el Dr. Ricardo J. Mendaña (,penal,no,epilogo,epilogo:recurso+traslado
+329_p2367,"Omar M. Antiñir, Néstor I. Antiñir, Miguel A. Parra Sánchez",penal,el Dr. Ricardo J. Mendaña,penal,no,epilogo,epilogo:recurso+traslado
 329_p2413,los actores,actora,,,no,epilogo,epilogo:recurso
 329_p2419,Nicolás Nazareno Corradini,actora,el Estado Nacional (Ministerio de Justicia),demandada,no,epilogo,epilogo:recurso+traslado
 329_p2425,GE Compañía Financiera S.A.,,,,no,epilogo,epilogo:recurso
@@ -609,7 +609,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p3666,"el Dr. Adrián Ernesto Galli Basualdo por la Administración Nacional de Medicamentos, Alimentos y Tecnología Médica (ANMAT)",,,,no,epilogo,epilogo:recurso
 329_p3673,la Municipalidad de la ciudad de San Salvador de Jujuy,demandada,,,no,epilogo,epilogo:recurso
 329_p3680,Marcelo Eduardo Gramajo,penal,,,no,epilogo,epilogo:recurso
-329_p3749,"su hija menor M. C. S., representadas por el Dr. Horacio Darío Carraza",,,,no,epilogo,epilogo:recurso
+329_p3749,Carmen Natalia Heidenreich,,,,no,epilogo,epilogo:recurso
 329_p3757,Homecare S.A.,,,,no,epilogo,epilogo:recurso
 329_p3761,la Administración Federal de Ingresos Públicos,,,,no,epilogo,epilogo:recurso
 329_p3764,el codemandado Juan Carlos Rodríguez Martorelli,codemandada,,,no,epilogo,epilogo:recurso
@@ -752,7 +752,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p4426,el Dr. Adolfo R. Vázquez,,Alberto Kakazu (por su,penal,no,epilogo,epilogo:recurso+traslado
 329_p4430,sucesores de Abel Wellig,actora,la Municipalidad de Puerto Vilelas,demandada,no,epilogo,epilogo:recurso+traslado
 329_p4438,Edesal S.A.,actora,,,no,epilogo,epilogo:recurso
-329_p4446,Abel Fleitas Ortiz de Rozas y Agustina Stabile (,penal,,,no,epilogo,epilogo:recurso
+329_p4446,Abel Fleitas Ortiz de Rozas y Agustina Stabile,penal,,,no,epilogo,epilogo:recurso
 329_p4447,,,,,,sin_epilogo,sin_zona
 329_p4449,,,,,,sin_epilogo,sin_zona
 329_p4462,,,,,,sin_epilogo,sin_zona
@@ -789,13 +789,13 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p4663,"Raúl Oscar Bednarz, letrado",penal,,,no,epilogo,epilogo:recurso
 329_p4667,Cablevisión S.A.,,,,no,epilogo,epilogo:recurso
 329_p4672,BBVA Banco Francés S.A.,,,,no,epilogo,epilogo:recurso
-329_p4677,el Dr. Mario Luis Coriolano (,penal,,,no,epilogo,epilogo:recurso
+329_p4677,el Dr. Mario Luis Coriolano,penal,,,no,epilogo,epilogo:recurso
 329_p4682,"la actora, Telecom de Argentina Stet-France Telecom S.A. (F.1547.XXXIX)",actora,,,no,epilogo,epilogo:recurso
 329_p4688,los Dres. Marcos G. Salt y Natalia Sergi,penal,,,no,epilogo,epilogo:recurso
 329_p4715,Alicia Noemí Martin,,,,no,epilogo,epilogo:recurso
 329_p4717,la defensa de Jorge Manuel Berraz,,,,no,caratula,caratula:recurso
 329_p4729,Héctor Ernesto Fernández,penal,,,no,epilogo,epilogo:recurso
-329_p4730,Ramiro R. Rodríguez Bosch (,penal,,,no,epilogo,epilogo:recurso
+329_p4730,Ramiro R. Rodríguez Bosch,penal,,,no,epilogo,epilogo:recurso
 329_p4741,los actores,actora,,,no,epilogo,epilogo:recurso
 329_p4755,el Estado Nacional – Ministerio de Economía,,,,no,caratula,caratula:recurso
 329_p4762,el Estado Nacional (Ministerio de Economía),,,,no,epilogo,epilogo:recurso
@@ -997,7 +997,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p5755,José Elías Antoni,actora,el Estado Nacional – Fuerza Aérea Argentina – Círculo de la Fuerza Aérea,,no,epilogo,epilogo:recurso+traslado
 329_p5762,el Dr. Mario L. Coriolano,penal,,,no,epilogo,epilogo:recurso
 329_p5769,la actora,actora,,,no,epilogo,epilogo:recurso
-329_p5776,Juan M. Romero Victorica (,penal,,,no,epilogo,epilogo:recurso
+329_p5776,Juan M. Romero Victorica,penal,,,no,epilogo,epilogo:recurso
 329_p5778,el Estado Nacional,demandada,,,no,epilogo,epilogo:recurso
 329_p5789,Néstor Hugo Tabares y otros,,,,no,epilogo,epilogo:recurso
 329_p5791,,,,,,sin_epilogo,sin_zona
@@ -1040,7 +1040,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p5985,,solo_letrado,,,no,epilogo,epilogo:recurso
 329_p5989,Trade S.A.,,,,no,epilogo,epilogo:recurso
 329_p5994,el Dr. Osvaldo Nelo Tieghi (letrado patrocinante de la querella),,,,no,epilogo,epilogo:recurso
-329_p6002,Dr. Raúl Omar Pleé (,penal,,,no,epilogo,epilogo:nombre_recurrente
+329_p6002,Dr. Raúl Omar Pleé,penal,,,no,epilogo,epilogo:nombre_recurrente
 329_p6009,la Fiscalía de Estado de la Provincia de Buenos Aires,,,,no,epilogo,epilogo:recurso
 329_p6019,Claudio Esteban Vega Giménez,penal,,,no,caratula,caratula:recurso
 329_p6030,,,,,,sin_epilogo,sin_zona
@@ -1157,8 +1157,8 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 330_p479,Silvia Raquel Quesada de Martelli,actora,,,no,epilogo,epilogo:recurso
 330_p484,Hércule S.A.,,,,no,epilogo,epilogo:recurso
 330_p487,José Luis Reinoso,,,,no,epilogo,epilogo:nombre_recurrente
-330_p490,Fernando Román Ramírez (,penal,,,no,epilogo,epilogo:recurso
-330_p496,"sus hijos menores R. M. y R. M. M., representados por el Dr. Alfredo Gómez Chavero, con el patrocinio del Dr. Emilio Casin Azura",,,,no,epilogo,epilogo:recurso
+330_p490,Fernando Román Ramírez,penal,,,no,epilogo,epilogo:recurso
+330_p496,Mirta Sorroche,,,,no,epilogo,epilogo:recurso
 330_p499,Raúl Enrique Suárez,,,,no,epilogo,epilogo:recurso
 330_p506,,demandada,,,no,caratula,caratula:rol_sin_nombre
 330_p516,Marcelo Oscar Carames,,,,no,epilogo,epilogo:recurso
@@ -1222,7 +1222,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 330_p963,la demandada,demandada,la actora,actora,no,epilogo,epilogo:recurso+traslado
 330_p971,,,,,,epilogo,sin_marcador_recurso
 330_p1008,Daniel Magallanes,,Sabina Inés Fiore,,no,epilogo,epilogo:recurso+traslado
-330_p1013,el Banco de la Nación Argentina (apoderado: Dr. Francisco Juan María Gros),,Hugo O. Cañón (,penal,no,epilogo,epilogo:recurso+traslado
+330_p1013,el Banco de la Nación Argentina (apoderado: Dr. Francisco Juan María Gros),,Hugo O. Cañón,penal,no,epilogo,epilogo:recurso+traslado
 330_p1016,Hugo D. Amoedo y otros,penal,,,no,epilogo,epilogo:recurso
 330_p1025,,,,,,sin_epilogo,sin_zona
 330_p1026,,solo_letrado,,,no,epilogo,epilogo:recurso
@@ -1308,7 +1308,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 330_p1465,Rafael Brave,,,,no,epilogo,epilogo:recurso
 330_p1469,el Banco Credicoop Cooperativo Limitado,,,,no,epilogo,epilogo:recurso
 330_p1474,"el representante de la acreedora incidentista C. Steinweg Handelsveem BV, Dr. Eduardo A. Sambrizzi",,,,no,epilogo,epilogo:recurso
-330_p1478,el Dr. Mario Luis Coriolano (,penal,,,no,epilogo,epilogo:recurso
+330_p1478,el Dr. Mario Luis Coriolano,penal,,,no,epilogo,epilogo:recurso
 330_p1491,Ingaser S.R.L.,actora,,,no,epilogo,epilogo:recurso
 330_p1497,"la defensa de Juan Carlos Aguilera Maldonado, Dr. Carlos Varela Alvarez",,,,no,epilogo,epilogo:recurso
 330_p1503,el actor Carlos Patricio Guixa,actora,,,no,epilogo,epilogo:recurso
@@ -1381,7 +1381,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 330_p1855,Comisión Nacional de Valores,,Beatriz M. Auge de Spachi y otros,,no,epilogo,epilogo:recurso+traslado
 330_p1888,el Banco Macrobansud S.A,,,,no,caratula,caratula:recurso
 330_p1893,S.A.B.B. Sociedad Anónima,,,,no,epilogo,epilogo:recurso
-330_p1895,sus hijos,,,,no,epilogo,epilogo:recurso
+330_p1895,"Eduardo R. Sequeiros, Roberto A. Castellano, Carlos M. Esteva",por_derecho_propio,,,no,epilogo,epilogo:recurso
 330_p1903,Jorge Raúl Insaurralde y otro,,,,no,epilogo,epilogo:recurso
 330_p1907,Mastellone Hermanos S.A.,,,,no,epilogo,epilogo:recurso
 330_p1910,"el actor, Ernesto Ramos",actora,,,no,epilogo,epilogo:recurso
@@ -1410,7 +1410,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 330_p2064,,,,,,sin_epilogo,sin_zona
 330_p2065,James Douglas Lus,,,,no,epilogo,epilogo:recurso
 330_p2074,la Asociación Mutual Supervisores Ferroviarios,,,,no,epilogo,epilogo:recurso
-330_p2081,Edelar S.A.,,Alberto S. Ferrari (,penal,no,epilogo,epilogo:recurso+traslado
+330_p2081,Edelar S.A.,,Alberto S. Ferrari,penal,no,epilogo,epilogo:recurso+traslado
 330_p2090,"Marta Noemí Guarino, causahabiente de Arminda Lescano",,el Consorcio Viamonte 2982,,no,epilogo,epilogo:recurso+traslado
 330_p2093,Obra Social del Personal Directivo de la Industria de la Construcción,,Swiss Medical S.A.,,no,epilogo,epilogo:recurso+traslado
 330_p2101,la Obra Social para Empleados de Comercio (OSECAC),,la Caja de Previsión y Seguro Médico de la Provincia de Buenos Aires,,no,epilogo,epilogo:recurso+traslado
@@ -1418,7 +1418,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 330_p2115,Telefónica de Argentina S.A.,actora,,,no,epilogo,epilogo:recurso
 330_p2122,Telefónica de Argentina S.A.,actora,,,no,epilogo,epilogo:recurso
 330_p2131,la comuna actora,actora,,,no,epilogo,epilogo:recurso
-330_p2134,Celia N. Cajide (,,,,no,epilogo,epilogo:recurso
+330_p2134,Celia N. Cajide,,,,no,epilogo,epilogo:recurso
 330_p2140,el Diario Perfil S.A.,,,,no,epilogo,epilogo:recurso
 330_p2146,"el actor, Jorge Virgilio Lorenzo",actora,,,no,epilogo,epilogo:recurso
 330_p2151,ADT Security Services S.A.,,,,no,epilogo,epilogo:recurso
@@ -1429,7 +1429,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 330_p2206,la Cámara de Diputados de la Nación,,,,no,epilogo,epilogo:recurso
 330_p2215,Nucleoeléctrica Argentina S.A.,codemandada,,,no,epilogo,epilogo:recurso
 330_p2222,Julio César Binotti,actora,"el Honorable Senado de la Nación, demando en autos",,no,epilogo,epilogo:recurso+traslado
-330_p2231,Miguel Raúl Gentil,,Víctor R. Martínez (,querellante,no,epilogo,epilogo:recurso+traslado
+330_p2231,Miguel Raúl Gentil,,Víctor R. Martínez,querellante,no,epilogo,epilogo:recurso+traslado
 330_p2234,la concursada (Droguería del Norte S.A.),,Rofina S.A.I.C.F.,,no,epilogo,epilogo:recurso+traslado
 330_p2241,TTI Tecnología Telecomunicaciones e Informática S.A.,,Graciela Inés Illobre,,no,epilogo,epilogo:recurso+traslado
 330_p2245,el,demandada,,,no,epilogo,epilogo:recurso
@@ -2264,7 +2264,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 332_p422,Héctor Daniel Martínez,,,,no,epilogo,epilogo:recurso
 332_p424,"Oscar Alberto Barravecchia, Marta Pagano y Adrián Barravecchia, en su calidad de ejecutados",,"Carlos Alberto Paterno y Francisco Callispo, en su calidad de ejecutantes",,no,epilogo,epilogo:recurso+traslado
 332_p426,Picapau S.R.L.,,Buttener S.A. Industria y Comercio,,no,epilogo,epilogo:recurso+traslado
-332_p433,Alejandro Carlos Biondini,,el Dr. Jorge Alvarez Berlanda (,penal,no,epilogo,epilogo:recurso+traslado
+332_p433,Alejandro Carlos Biondini,,el Dr. Jorge Alvarez Berlanda,penal,no,epilogo,epilogo:recurso+traslado
 332_p459,,,,,,sin_epilogo,sin_zona
 332_p460,el Servicio Penitenciario Federal,,Nélida Haydee Viola de Castro,,no,epilogo,epilogo:recurso+traslado
 332_p466,la actora Automotores Saavedra S.A.,actora,,,no,epilogo,epilogo:recurso
@@ -2460,7 +2460,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 332_p2120,,,,,,epilogo,sin_marcador_recurso
 332_p2136,,,,,,epilogo,sin_marcador_recurso
 332_p2139,,,,,,epilogo,sin_marcador_recurso
-332_p2141,"Roberto Dante Marchitto, actores en autos, patrocinados por la Dra. Antonia Núñez",actora,,,no,epilogo,epilogo:recurso
+332_p2141,Claudio Roberto Marchitto,actora,,,no,epilogo,epilogo:recurso
 332_p2142,Silvano Sivilotti,,,,no,epilogo,epilogo:recurso
 332_p2146,,,,,no,epilogo,epilogo:recurso
 332_p2152,,,,,,sin_epilogo,sin_zona
@@ -2623,7 +2623,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 333_p589,,,,,,sin_epilogo,sin_zona
 333_p596,,,,,,sin_epilogo,sin_zona
 333_p600,la Comisión Nacional de Regulación del Transporte,demandada,Tiempo Nuevo S.R.L.,actora,no,epilogo,epilogo:recurso+traslado
-333_p604,"S. M., B.",,"sus hijos menores, con el patrocinio del Dr. Juan Pablo María Viar",,no,epilogo,epilogo:recurso+traslado
+333_p604,"S. M., B.",,"V. A., P.",,no,epilogo,epilogo:recurso+traslado
 333_p631,"Bertoto, Bruera y Cía. S.A.C. y F.",,la AFIP – DGI,,no,epilogo,epilogo:recurso+traslado
 333_p633,el Estado Nacional,,la,actora,no,epilogo,epilogo:recurso+traslado
 333_p662,,,,,,sin_epilogo,sin_zona
@@ -2672,7 +2672,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 333_p1140,,,,,,sin_epilogo,sin_zona
 333_p1143,,solo_letrado,,,no,epilogo,epilogo:recurso
 333_p1147,la Universidad Nacional de Córdoba,demandada,Gabriela Beatriz Quiroga,actora,no,epilogo,epilogo:recurso+traslado
-333_p1152,el Estado Nacional – Estado Mayor General del Ejército,demandada,"sus hijos menores, actora en autos, representada por el Dr. Marcos Esteban Isa, en calidad de apoderado",actora,no,epilogo,epilogo:recurso+traslado
+333_p1152,el Estado Nacional – Estado Mayor General del Ejército,demandada,Rosa Patricia Rivera,actora,no,epilogo,epilogo:recurso+traslado
 333_p1156,la demandada,demandada,,,no,epilogo,epilogo:recurso
 333_p1163,,,,,,sin_epilogo,sin_zona
 333_p1179,"el Dr. Ricardo de la Cruz Rodríguez, en ejercicio de la defensa de Christophe Alain Laurent Perriod",,,,no,epilogo,epilogo:recurso
@@ -2810,7 +2810,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 334_p62,Alberto Eduardo Girondo,actora,el Estado Nacional,demandada,no,epilogo,epilogo:recurso+traslado
 334_p95,"la actora, Ingenio Río Grande S.A.",actora,,,no,epilogo,epilogo:recurso
 334_p109,,,,,,sin_epilogo,sin_zona
-334_p120,"sus hijos menores, representada por la Dra. Rut Emilce Cardón",,CNA Asegurador de Riesgos del Trabajo S.A.,,no,epilogo,epilogo:recurso+traslado
+334_p120,Estela Mónica Guerrero,,CNA Asegurador de Riesgos del Trabajo S.A.,,no,epilogo,epilogo:recurso+traslado
 334_p128,AFIP – DGA,,Expreso Brújula Sociedad Anónima de Transporte y Turismo,,no,epilogo,epilogo:recurso+traslado
 334_p139,el Gobierno de la Ciudad de Bs. As,,Global Crossing Argentina SA,,no,epilogo,epilogo:recurso+traslado
 334_p144,,,,,,epilogo,sin_marcador_recurso
@@ -2865,7 +2865,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 334_p552,Armada Holland BV Schiedam Denmark,,,,no,epilogo,epilogo:recurso
 334_p559,"el Dr. Hernán Matías Rey, abogado",penal,,,no,epilogo,epilogo:recurso
 334_p565,Campo del Cielo S.R.L.,,,,no,epilogo,epilogo:recurso
-334_p573,"sus hijos menores Rocío Elizabeth Noemí San Martín Naval y Marco Alejandro Isaías San Martín Naval, representada por la doctora Mirta Graciela Díaz",,,,no,epilogo,epilogo:recurso
+334_p573,Patricia Elizabeth Naval,,,,no,epilogo,epilogo:recurso
 334_p582,,actora,,,no,caratula,caratula:rol_sin_nombre
 334_p591,Alberto Jorge Rinaldi y Arce,,,,no,epilogo,epilogo:recurso
 334_p592,,,,,,sin_epilogo,sin_zona
@@ -3379,7 +3379,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 339_p456,el Estado Nacional – Ministerio de Economía y Finanzas Públicas,demandada,,,no,epilogo,epilogo:recurso
 339_p457,Juan Carlos Vultaggio,,,,no,epilogo,epilogo:recurso
 339_p459,el Fisco Nacional (DGI),,,,no,epilogo,epilogo:recurso
-339_p464,el Dr. Daniel Bugallo Olano – (,actora,,,no,epilogo,epilogo:recurso
+339_p464,el Dr. Daniel Bugallo Olano –,actora,,,no,epilogo,epilogo:recurso
 339_p468,el Estado Nacional (Administración de Parques Nacionales),demandada,,,no,epilogo,epilogo:recurso
 339_p477,Milagro Amalia Ángela Sala,,,,no,epilogo,epilogo:recurso
 339_p480,el Dr. Raúl Omar Pleé,penal,,,no,epilogo,epilogo:recurso
@@ -3554,7 +3554,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 339_p1523,Prevención ART S.A.,,Alicia Gabriela Gómez,,no,epilogo,epilogo:recurso+traslado
 339_p1528,,,,,,sin_epilogo,sin_zona
 339_p1530,el Club de Planeadores La Plata,,,,no,epilogo,epilogo:recurso
-339_p1534,"sus hijas menores, con el patrocinio letrado de los Dres. Luis Alberto Flores Vega y Gustavo A. Bossert; y por la Defensora Oficial de V. y V. Q., ejercida por María Cristina Mar tínez Córdoba",penal,,,si,epilogo,epilogo:recurso
+339_p1534,M. V. C.,penal,,,si,epilogo,epilogo:recurso
 339_p1559,,,,,,sin_epilogo,sin_zona
 339_p1562,,,,,,sin_epilogo,sin_zona
 339_p1565,,,,,,sin_epilogo,sin_zona
@@ -3566,7 +3566,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 339_p1581,,,,,,epilogo,sin_marcador_recurso
 339_p1583,Bienes Raíces del Sur S.R.L.,demandada,,,no,epilogo,epilogo:recurso
 339_p1591,,,,,,sin_epilogo,sin_zona
-339_p1592,"sus hijas menores, con el patrocinio letrado de los Dres. Luis Alberto Flores Vega y Gustavo A. Bossert",,,,no,epilogo,epilogo:recurso
+339_p1592,M. V. C.,,,,no,epilogo,epilogo:recurso
 339_p1593,Roque Ricardo Rivas,actora,la Universidad Nacional de Mar del Plata,,no,epilogo,epilogo:recurso+traslado
 339_p1599,,,,,,sin_epilogo,sin_zona
 339_p1601,,,,,,sin_epilogo,sin_zona
@@ -3940,7 +3940,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 341_p260,la,demandada,,,no,epilogo,epilogo:recurso
 341_p262,Citibank N.A.,,,,no,epilogo,epilogo:recurso
 341_p266,A.M.D.L.V.,,,,no,epilogo,epilogo:recurso
-341_p273,"sus hijos menores, con el patrocinio del Dr. Julio B. Cisterna Pastenes",,,,no,epilogo,epilogo:recurso
+341_p273,"M., V. R.",,,,no,epilogo,epilogo:recurso
 341_p274,Valeria Fernanda Tejera,,"la Administración Nacional de la Seguridad Social, repre sentada por el Dr. Francisco Martín Illia",,no,epilogo,epilogo:recurso+traslado
 341_p287,,,,,,sin_epilogo,sin_zona
 341_p289,,,,,,epilogo,sin_marcador_recurso
@@ -4021,7 +4021,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 341_p774,"Elsa Sánchez de Oesterheld, Martín Miguel Mórtola, Fernando Carlos Araldi y Francisco Solano López",,"el Dr. Ignacio A. De La Vega, apoderado de la demandada Ediciones Record S.A",demandada,no,epilogo,epilogo:recurso+traslado
 341_p865,,,,,,sin_epilogo,sin_zona
 341_p868,,,,,,sin_epilogo,sin_zona
-341_p870,"sus hijos menores, actora en autos, representada por el Dr. Enrique René Rivas",actora,"G. A., J. A. A. A., E. E. A., I. A. A., C. M. A., A. E. A. y T. C. A. A",penal,no,epilogo,epilogo:recurso+traslado
+341_p870,Marta Adela Ochoa,actora,"G. A., J. A. A. A., E. E. A., I. A. A., C. M. A., A. E. A. y T. C. A. A",penal,no,epilogo,epilogo:recurso+traslado
 341_p876,el Estado Nacional –PEN–,,,,no,epilogo,epilogo:recurso
 341_p878,,demandada,,,no,caratula,caratula:rol_sin_nombre
 341_p883,J. A. M.,penal,,,no,epilogo,epilogo:recurso
@@ -4067,7 +4067,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 341_p1232,"Empresa Ciudad de Gualeguaychú S.R.L., Empresa San José S.A. y Derudder Hnos. S.R.L.",,,,no,epilogo,epilogo:recurso
 341_p1237,el Dr. Raúl Omar Pleé,penal,,,no,epilogo,epilogo:recurso
 341_p1246,Molinos Río de la Plata S.A,,,,no,epilogo,epilogo:recurso
-341_p1251,"Mondelez Argentina S.A. –ex Kraft Foods Argenti na S.A.-, adquirente de Cadbury Stani Adams S.A. (",demandada,,,no,epilogo,epilogo:recurso
+341_p1251,"Mondelez Argentina S.A. –ex Kraft Foods Argenti na S.A.-, adquirente de Cadbury Stani Adams S.A.",demandada,,,no,epilogo,epilogo:recurso
 341_p1258,Sergio Gustavo Pantano,,,,no,epilogo,epilogo:recurso
 341_p1263,el,penal,,,no,caratula,caratula:recurso
 341_p1268,Asociart S.A. Aseguradora de Riesgos del Trabajo,codemandada,,,no,epilogo,epilogo:recurso
@@ -4521,7 +4521,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 343_p1337,"el Gobierno de la Ciudad de Buenos Aires, repre sentado por la Dra. Soledad Eva Rolón",,,,no,epilogo,epilogo:recurso
 343_p1352,Balembaum S.A.,actora,,,no,epilogo,epilogo:recurso
 343_p1354,el Estado Nacional – Ministerio de Defensa - Es tado Mayor General del Ejército,,,,no,epilogo,epilogo:recurso
-343_p1362,"su hija menor de edad N. L. S. V., con el patrocinio letrado de la Dra. Eloísa Raya de Vera",,,,no,epilogo,epilogo:recurso
+343_p1362,C. R. S. Y.,,,,no,epilogo,epilogo:recurso
 343_p1386,Elsa Dominga Alessandria,,,,no,epilogo,epilogo:recurso
 343_p1388,,actora,,,no,caratula,caratula:rol_sin_nombre
 343_p1389,la Asociación del Personal Municipal del Departa mento Las Colonias de la Provincia de Santa Fe,,,,no,epilogo,epilogo:recurso
@@ -4557,7 +4557,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 343_p1738,Javier Luis Endler,penal,,,no,epilogo,epilogo:recurso
 343_p1750,,,,,,sin_epilogo,sin_zona
 343_p1752,OSDE Organización de Servicios Directos Empresarios,,"su hijo menor de edad M. L. H. M., con el patrocinio letrado de la Dra. María Cielo Ribolzi",,no,epilogo,epilogo:recurso+traslado
-343_p1758,sus hijos menores P. M. A. y A. M. A,,,,no,caratula,caratula:recurso
+343_p1758,Marta Myriam Antonio,,,,no,caratula,caratula:recurso
 343_p1762,QBE Argentina ART S.A. y Roberto Walter Alastuey (CNT 27504/2013/2/RH2),,,,no,caratula,caratula:recurso
 343_p1772,la,penal,,,no,epilogo,epilogo:recurso
 343_p1784,el Ministerio de Relaciones Exteriores y Culto (Di rección Nacional del Antártico),,,,no,epilogo,epilogo:recurso
@@ -4848,7 +4848,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 344_p2647,M.L.A. y D.E.F.,,M.A.L.,penal,no,epilogo,epilogo:recurso+traslado
 344_p2659,Juan Ariel Antonio,penal,el doctor Javier Augusto De Luca,penal,si,epilogo,epilogo:recurso+traslado
 344_p2665,,,,,,sin_epilogo,sin_zona
-344_p2669,"sus hijos menores F.P.B., M.P.B. y F.P.B",actora,,,no,caratula,caratula:recurso
+344_p2669,,actora,,,no,caratula,caratula:rol_sin_nombre
 344_p2690,Seberino Pino y otros,actora,la Gendarmería Nacional,demandada,no,epilogo,epilogo:recurso+traslado
 344_p2728,GASNOR S.A.,,,,no,epilogo,epilogo:recurso
 344_p2752,el Estado Nacional,demandada,Adolfo María Repetto,actora,no,epilogo,epilogo:recurso+traslado
@@ -4858,7 +4858,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 344_p2811,,,,,,epilogo,sin_marcador_recurso
 344_p2830,Loma del Pila S.R.L.,,,,no,epilogo,epilogo:recurso
 344_p2835,,actora,,,no,caratula,caratula:rol_sin_nombre
-344_p2849,"M.F.G.D.S., representados por la Dra. María Alejandra Vázquez",,,,si,epilogo,epilogo:recurso
+344_p2849,la Obra Social del Poder Judicial de la Nación,,,,si,epilogo,epilogo:recurso
 344_p2858,Valentín Artigas,actora,la Prefectura Naval Argentina,demandada,no,epilogo,epilogo:recurso+traslado
 344_p2868,"su hijo, con el patrocinio letrado de la Dra. María Soledad Price",,la Provincia de Entre Ríos,,no,epilogo,epilogo:recurso+traslado
 344_p2901,los actores C. L. R. y C. A. C.,actora,,,no,epilogo,epilogo:recurso
@@ -5041,7 +5041,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 345_p702,,,,,,sin_epilogo,sin_zona
 345_p715,el Estado Nacional –Ministerio de Seguri dad– Policía Federal Argentina,demandada,Camilo Di Nanno,actora,no,epilogo,epilogo:recurso+traslado
 345_p716,,,,,,no_aplica,tipo_entrada=sumario_con_link
-345_p722,"su hija menor A.M.G., representadas por el Dr. Oscar Rodolfo Clerici",,,,no,epilogo,epilogo:recurso
+345_p722,María Virginia Cansino,,,,no,epilogo,epilogo:recurso
 345_p728,Experta Aseguradora de Riesgos del Trabajo S.A.,,la Superintendencia de Riesgos del Trabajo,,no,epilogo,epilogo:recurso+traslado
 345_p730,la Asociación Civil Asamblea Permanente por los Derechos Humanos,,,,no,epilogo,epilogo:recurso
 345_p783,,,,,,epilogo,sin_marcador_recurso
@@ -5743,7 +5743,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 348_p1097,la Administración Federal de Ingresos Públi cos,,Fiduciaria Neuquina S.A.,,no,epilogo,epilogo:recurso+traslado
 348_p1104,el Fisco Nacional AFIP - DGI,,,,no,epilogo,epilogo:recurso
 348_p1109,los menores M.A.P. y V.A.P,penal,V.A.K. —progenitora de los niños—,penal,si,epilogo,epilogo:recurso+traslado
-348_p1130,"sus hijas A. M. y N. M., asistida por su letrada patrocinante Dra. Patricia Marcela Cogo",,"el actor, P. M. M.",actora,no,epilogo,epilogo:recurso+traslado
+348_p1130,K. A. M.,,"el actor, P. M. M.",actora,no,epilogo,epilogo:recurso+traslado
 348_p1133,"la Municipalidad del Partido de Escobar, represen tada por el Dr. Juan Pablo Ytalia",,,,no,epilogo,epilogo:recurso
 348_p1149,la Administración Federal de Ingresos Públicos (AFIP),,,,no,epilogo,epilogo:recurso
 348_p1152,la Administración Federal de Ingresos Públicos,,,,no,epilogo,epilogo:recurso
@@ -5797,7 +5797,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 348_p1516,Provincia ART S.A.,demandada,,,no,epilogo,epilogo:recurso
 348_p1519,,,,,,no_aplica,tipo_entrada=sumario_con_link
 348_p1523,,,,,,no_aplica,tipo_entrada=sumario_editorial
-348_p1524,"sus hijos menores, con el patrocinio letrado de los Dres. Jorge A. S. Barbagelata, Pacífico Rodríguez Villar y Héctor Pedro Iribarne",,,,no,epilogo,epilogo:recurso
+348_p1524,C. C. M. de F. C. y J. F. C.,,,,no,epilogo,epilogo:recurso
 348_p1533,,,,,,no_aplica,tipo_entrada=sumario_con_link
 348_p1534,,,,,,no_aplica,tipo_entrada=sumario_con_link
 348_p1535,Sucesores de Camilo Racca y Teresa Aurora Pive tta –Norberto y Mario Racca–,,,,no,epilogo,epilogo:recurso
