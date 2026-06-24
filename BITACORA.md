@@ -18278,3 +18278,11 @@ Residual sin recurrente = 1893: no-mérito-no-originaria 1133 (art.280/inadmisib
 **Manifest:** re-sellado `[CLEAN] 65`. Parser v22.0 intacto, sin re-golden.
 
 **Commits:** 1 (M29 paso 4 + CSV regenerado + manifest) + docs.
+
+## H158 — M25 descartado (2026-06-23)
+
+**Objetivo:** construir el detector M25 de inversiones de rol de `parte_ganadora`. Descartado.
+
+**M25 — descartado sin código.** El banco de "7 inversiones de rol" no eran inversiones genuinas: leídos los casos contra el `.md`, los 9 desacuerdos proyección↔gold son 4 errores de codeo del gold (la proyección `disposicion→parte_ganadora` acierta), 2 parciales SCDB ya bien codeados (granularidad de disposición), 1 convención y 2 gate. Las dos rutas determinísticas para levantar κ (detector por rol; marcador de disposición `"con el alcance"`) over-firean. Corregidos los 4 errores demostrables del gold → `planilla_M20_58GOLD_parte_H158corr.xlsx` (no aplicado al canónico). κ-parte ilustrativo 0,784→0,880.
+
+**Estado final — SIN CAMBIOS CANÓNICOS.** Parser v22.0 intacto, golden [CLEAN], manifest no re-sellado, CHANGELOG no disparado.
