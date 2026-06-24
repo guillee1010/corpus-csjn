@@ -2,6 +2,15 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H161 (2026-06-24)
+
+- `derivar_partes.py` v0.11→v0.12: `re.split` posicional → `maxsplit=` keyword (deuda #4, fix Py3.14). CSV byte-idéntico.
+- `extraer_epilogos.py` v0.2→v0.3: fallback `sin_zona` para `fin_por_firma_actual` (pie tras firma) + deshifen soft-only migrada (deuda #3). +89 epílogos.
+- `derivar_partes.py` v0.12→v0.13: terminadores `RE_MARK_REC`/`RE_MARK_NOMBRE` anclados a inicio de línea (colisión nombre-vs-footer "Norma"/"Tribunal"/"Profesional"). +6 nombres, +14 correcciones, 0 regresión.
+- `output/parser/csjn_casos_epilogo.csv`: 5697 filas, v0.3 (sin_zona 1352→1263).
+- `output/parser/csjn_casos_partes.csv`: 5890 filas, v0.13 (mérito recurrente_ok 2637→2664).
+- `output/parser/_manifest.json`: re-sellado, `[CLEAN] 65`.
+
 ## H160 (2026-06-24)
 
 - `derivar_partes.py`: v0.7 → v0.11. Bumps separados por capa.

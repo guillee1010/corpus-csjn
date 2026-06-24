@@ -18408,3 +18408,35 @@ Extraídos 10 fallos completos representativos (`extraer_caso.py`, cubriendo cad
 **Scripts:** `scripts/.../derivar_partes.py` v0.7→v0.11.
 
 **Commits:** [completar].
+
+## H161 — Cleanup deuda #4 + recupero del pie perdido (extractor sin_zona + colisión terminador) (2026-06-24)
+
+**Objetivo:** cerrar la deprecación de C (deuda #4), recuperar los huérfanos de mérito cuyo pie editorial cae fuera de zona (frente B), y resolver la colisión terminador-vs-nombre que B destapó. Tres bumps en tres capas, bumps separados.
+
+### H161-01 — C: cleanup deuda #4 (`derivar_partes` v0.11→v0.12)
+
+`re.split` con `maxsplit` posicional → keyword en los 2 sitios (L204 `_match_letrado_caratula` + L290 `_nombre_desde_causa`). Saca el `DeprecationWarning` de Py3.13+ — que en la máquina de Guillermo (Python 3.14) ya es ERROR y bloqueaba `derivar_partes`. Validado: `csjn_casos_partes.csv` **byte-idéntico** (sha `766f0e093a01`), reproducido en sandbox y en producción. **Deuda #5** (carátula "nombre enterrado en la causa interna") **CERRADA SIN MATERIAL**: los 5 `caratula:rol_sin_nombre` residuales tienen `case_name_cuerpo` cortado en "en las causas" sin "X c/ Y" → 0 recuperable. Hallazgo registrado (no tocado): 54 recurrentes con prefijo artículo+rol pegado al nombre → ticket parse_parte.
+
+### H161-02 — B-extractor: fallback `sin_zona` (`extraer_epilogos` v0.2→v0.3)
+
+`fin_por_firma_actual` deja el pie editorial después de la firma, fuera de `[linea_inicio, linea_fin]` → 100/113 caen `sin_zona`. `_pie_desde_firma` escanea desde `linea_fin_real` (validado = fin de la última zona `firma` en los 30) hasta `linea_inicio` del caso siguiente, con guard al footer (`^Tribunal(es)?`/`^Profesional`) y skip de artefactos de página (`RE_PAGE`). Convención validada vs `zonas.csv`: la zona `epilogo` real arranca firma+1 (72,6%) / firma+4 con artefacto de página (8,3%). **+89 epílogos recuperados** (sin_zona 1352→1263). De los 30 huérfanos de mérito: **27 recuperan recurrente** end-to-end, 2 negativos correctos (`337_p45` sin pie, `348_p473` originaria Eje-A), 1 (`337_p948`) bloqueado por `por:` (ticket). Migrada la deshifenización (deuda #3) al extractor (`_deshifenar` soft-only U+00AD, idempotente con el de `derivar_partes`).
+
+### H161-03 — B-gramática: colisión terminador-vs-nombre (`derivar_partes` v0.12→v0.13)
+
+El fallback de B destapó `346_p811` → vacío pese a pie limpio: el terminador de `RE_MARK_REC` (`\bNorma\b` sin anclar) matcheaba el nombre de pila "Norma Hebe Adela Tacconi". Mismo defecto con "Tribunal"/"Profesional" dentro de partes ("Superior Tribunal de Justicia", "Consejo Profesional"). Fix: anclar terminadores a inicio de línea (`^Traslados?`/`^Tribunal(?:es)?`/`^Profesional`/`^Normas?`) en `RE_MARK_REC` y `RE_MARK_NOMBRE`. **+6 nombres** (5 ya rotos en baseline v0.12 + `346_p811` de B) **+14 correcciones** (de-truncados, basura `.Tribunal` stripeada, abogado→parte: `329_p2614` Coriolano→Lourtau, `331_p2449` Gavernet→Lima/penal). Validado: diff v0.12→v0.13 = 6 GANA, **0 PIERDE**, 14 CAMBIA (todas mejoras), 0 regresión sobre los 3806. `recurrente_ok` no sube (los Norma ya contaban como ok con captura vacía) → mejora de calidad.
+
+### H161 — Estado final
+
+- **Cobertura mérito `recurrente_ok`:** 2637 (91,9%) → **2664 (92,8%)**, +27 huérfanos del pie perdido.
+- **Epílogo:** ok 4434 (4345 zona + 89 fallback firma) / sin_zona 1263.
+- **Partes (5697 fallos):** recurrente_ok 3845 · rol_sin_nombre 5 · epilogo_sin_marcador 642 · sin_epilogo 1205.
+- **Fuente (3836 con nombre):** epílogo 3690 · carátula 125 · carátula_vía_letrado 13.
+- **Parser v22.0 intacto.** Manifest `[CLEAN] 65 artefactos`.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos_epilogo.csv` — 5697 filas, sha `56eae57f…`, v0.3.
+- `output/parser/csjn_casos_partes.csv` — 5890 filas, sha `54fe7e27…`, v0.13.
+
+**Scripts:** `extraer_epilogos.py` v0.3, `derivar_partes.py` v0.13. Diagnóstico: `dump_pie_windows.py`, `diff_partes_b.py`.
+
+**Tickets nuevos:** `por:` (gramática `RE_MARK_REC`, +1 latente) · calidad `parse_parte` (prefijo rol + inversión nombre, 54 corpus-wide). **Cerrados:** deuda #4 (maxsplit), deuda #3 (deshifen migrada), extractor `sin_zona`, terminador colisión-Norma. **Sin material:** deuda #5.
