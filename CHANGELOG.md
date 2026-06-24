@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H159 (2026-06-23)
+
+- `derivar_partes.py`: v0.6 → v0.7. BUG1 (`RE_REPDE` "por sí" precedence) + BUG2 ("(" colgado) + ruteo rol-pelado → `caratula:rol_sin_nombre`. 36 casos corregidos, 0 regresión.
+- `output/parser/csjn_casos_partes.csv`: regenerado v0.7 (5890 filas; 16 misatribuciones de recurrente corregidas, cobertura −1 por ruteo `344_p2669`).
+- `scripts/diagnostico/diff_partes_v06_v07.py`: nuevo — harness de no-regresión de la capa de parseo.
+
 ## H156 (2026-06-23)
 
 - `derivar_partes.py`: v0.4→v0.5. PASO 4 de la cascada — fallback recurrente desde `case_name_cuerpo` (carátula del fallo) cuando falla el epílogo (sin_marcador_recurso) o no hay zona (sin_zona). Aditivo puro, 0 regresión sobre los 3641 (verificado por diff). Buckets nuevos `caratula:recurso` / `caratula:rol_sin_nombre`.

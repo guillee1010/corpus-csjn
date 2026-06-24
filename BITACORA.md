@@ -18324,3 +18324,34 @@ La señal que separa una inversión real de una no-inversión es de **mérito** 
 **Estado final — SIN CAMBIOS CANÓNICOS.** Parser v22.0 intacto, golden [CLEAN], outputs canónicos sin tocar, `_manifest.json` sin re-sellar, CHANGELOG no disparado.
 
 **Housekeeping:** header de DEUDA colapsado (cadena de resúmenes `// Previo H0xx` → puntero a BITACORA; ~54 KB de duplicación removidos).
+
+## H159 — M29: capa de parseo de partes, `derivar_partes` v0.6→v0.7 (BUG1 + BUG2) (2026-06-23)
+
+**Objetivo:** cerrar el subconjunto determinístico del frente `parse_parte` (misatribución por "por sí", paréntesis colgado) con no-regresión sobre el baseline v0.6, y caracterizar en disco el resto del frente.
+
+### H159-01 — BUG1: `RE_REPDE` over-fire en "por sí y en representación de"
+
+Causa: con clause "X, por sí y en representación de Y", `RE_REPDE` capturaba a Y (representado) + cola de letrado, tirando a X que recurrió por sí. Fix: `RE_POR_SI` + rama 0 en `parse_parte` — si "por sí" precede a "en representación de", el principal es X; rol desde la cola (`_rol(clause)`); head con letrado ("los Dres. ... por sí") → nombre + `por_derecho_propio`. Población real en disco: **15 en recurrente + 2 en recurrido** (el ticket estimaba 1; el testigo `343_p1758` era el de carátula, recuperado por PASO 4). **14/16 son casos de menores** (progenitor por sí + representación legal de hijos) — error sistemático, no aleatorio.
+
+### H159-02 — BUG2: "(" colgado (`_trim_nombre`)
+
+Paréntesis abierto sin cerrar al final del nombre. Fix: strip en `_trim_nombre`, conservando sufijos válidos ("(h)"). ~17 casos (recurrente + recurrido); el ticket estimaba ~8 (solo había contado el path `RE_MARK_NOMBRE`).
+
+### H159-03 — Ruteo rol-pelado + `344_p2669`
+
+El head tras "por sí" puede quedar rol pelado ("el actor", típico anonimizado). `derivar_de_caratula` lo rutea a `caratula:rol_sin_nombre` en vez de dejar "el actor" como nombre. 1 caso; su nombre real ("E. G. P. B.") vive en el epílogo perdido → recupero del bump del extractor.
+
+### H159-04 — Hallazgo: `extraer_epilogos.py` pierde el pie en cierres por firma
+
+Al diagnosticar el `sin_zona` de ANTONIO: de los fallos `fin_por_firma_actual`, **100/113 (88%) caen `sin_zona`** (base ~24%). El pie va después de la firma y cae fuera de `[linea_inicio, linea_fin]`. Residual real = **30 huérfanos de mérito** (carátula Eje A → ni epílogo ni PASO 4). Tajada nítida del body-search (~206). `linea_fin_real` no sirve de cota; ventana robusta = firma → `linea_inicio` siguiente. Ticket nuevo en DEUDA; fix diseñado, no implementado (necesita `extraer_epilogos.py`).
+
+### H159 — Estado final
+
+- **`derivar_partes.py`:** v0.6 → **v0.7**.
+- **`output/parser/csjn_casos_partes.csv`:** regenerado, 5890 filas (sin cambio de cardinalidad). `recurrente_ok` 3743 (65,7%); mérito 2592/2870 (90,3%). Δ vs v0.6 = correctitud (16 misatribuciones), no cobertura (−1 a propósito).
+- **Parser v22.0 intacto**, golden [CLEAN] (no se tocó el parser).
+- **Validación:** `diff_partes_v06_v07.py` v0.6↔v0.7 = **[CLEAN]** (NAME_LOST_REAL 0; 16 PARTY_CHANGED todas parte-equivocada→correcta; 12 PAREN_STRIP; 1 NAME_TO_ROLSINNOMBRE intencional). Reproducido en local, números idénticos al sandbox.
+
+**Scripts:** `scripts/pipeline/derivar_partes.py` (v0.7); `scripts/diagnostico/diff_partes_v06_v07.py` (nuevo).
+
+**Commits:** [a completar].
