@@ -51,3 +51,8 @@ docs/
 
 # working dir raiz (legacy, vacio)
 /diagnostico/
+
+# H155 - muestras / scratch de diagnostico de zona (no canonico)
+muestra_zona_*
+epilogo_muestra/
+tres_casos.md
