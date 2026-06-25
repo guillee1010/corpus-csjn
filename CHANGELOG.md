@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H163 (2026-06-25)
+
+- `derivar_partes.py`: v0.14→v0.15 — cruce NOMBRE-desde-índice anclado a `c/` para rol-conocido-sin-nombre (+42 nombres). Regex puro, 100% derivado del corpus. (v0.16 capa de adjudicación manual construida y REVERTIDA: el override pisaba el regex y no escala.)
+- `output/parser/csjn_casos_partes.csv`: sha `8b5eb721…` v0.15 (`recurrente_ok` 3845→3846, calidad no conteo).
+- `tests/gold/partes_gold_nombre.csv`: NUEVO — gold de 72 nombres (42 regex-OK + 30 regex-NO), fuera del pipeline.
+
 ## H162 (2026-06-24)
 
 - `derivar_partes.py` v0.13 → v0.14: handler de inversión en `parse_parte`

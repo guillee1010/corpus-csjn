@@ -18505,3 +18505,42 @@ Validación: baseline v0.13 reproducido byte-idéntico (sha 54fe7e27). Diff corp
 **Manifest:** regenerado, `--verify` [CLEAN] 65 artefactos.
 
 **Commits:** (completar al pushear).
+
+## H163 — Capa de partes: nombre del recurrente vía carátula + reversión del override (2026-06-25)
+
+**Objetivo:** recuperar el NOMBRE del recurrente cuando el rol está pero el nombre es rol-pelado ("la actora") o vacío, cruzando la carátula.
+
+### H163-01 — Cruce NOMBRE-desde-índice (`derivar_partes` v0.15, regex puro)
+
+`_partes_desde_indice` + `_refinar_nombre_desde_caratula` cruzan `case_name_indice` "X c/ Y" anclado a `c/` (actora=izq, demandada=der; invertido "Y (X c/)"→X). **42 nombres recuperados** de los 72 rol-conocido-sin-nombre (eyeball 42/42 lado correcto). `recurrente_ok` 3845→3846 (mejora de CALIDAD, no de conteo: los bare-rol ya contaban como ok). **Restricción doctrina: solo con ancla `c/`** — la convención "primer segmento del índice = actora" se midió corpus-wide = **85,3% (464 mismatch)** → el orden sin `c/` NO es inferible por patrón; el ojo humano acierta por semántica externa (persona vs empresa), que el regex no tiene. Baseline v0.14 byte-idéntico; sha `8b5eb721…` v0.15.
+
+### H163-02 — Capa de adjudicación manual (v0.16) construida y REVERTIDA
+
+Se construyó un sidecar `partes_adjudicacion_manual.csv` (30 overrides: 27 carátulas `|` sin `c/` + 3 del cuerpo "Vistos los autos") que llegó a nombrar 71/72. **Se revirtió por decisión de diseño:** el override pisa la salida del regex y TAPA los casos que el regex falla (veneno para afinar a escala — a ~60k casos no se corrige de a 30), y como input sellado arrastra deuda de procedencia (codificación humana, no derivada del corpus). El deriver quedó en **v0.15 regex puro**. Lección registrada: las correcciones manuales son gold, no override de producción.
+
+### H163-03 — Gold congelado fuera del pipeline
+
+`partes_gold_nombre.csv` (72 filas, NO es input del pipeline): `caratula_c/ (regex OK)` 42 · `pipe_editorial (regex NO)` 27 · `cuerpo_caption (regex NO)` 3. Es la vara contra la que se mide el regex. Cobertura name-recovery regex-vs-gold = **42/72**.
+
+### H163-04 — Hallazgos
+
+- **17 penal-falsos** re-medidos (entidades públicas marcadas `penal` por el cargo "Fiscal de Estado/Procurador" del REPRESENTANTE, no de la parte) → actualiza el bump-2 de H162 (estimado en 1). DEUDA L184.
+- **10 rol+cola** que la detección estricta de target salteó (rol pelado + cola), pre-existentes, 0 regresión: 6 con el nombre YA en el clause (miss de `parse_parte` → bump-4 L184: Gardebled/Valtellina/Equity Group/Colombo/ENCOTeSA/Almada Benítez) + 4 que necesitan carátula (`330_p4459`/`332_p2068`/`333_p1325`/`339_p1302`).
+
+### H163 — Estado final
+
+- **Corpus:** 5890 filas (5697 fallos).
+- **`recurrente_ok`:** 3846 (67,5%). Mérito 2665/2870 (92,9%).
+- **`caratula_rol_sin_nombre`:** 4.
+- **Trayectoria recurrente_ok:** 3641→3749→3745→3806→3845→**3846**.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos_partes.csv` — 5890 filas, sha `8b5eb721…` v0.15.
+
+**Gold (fuera del pipeline):** `tests/gold/partes_gold_nombre.csv` — 72 filas.
+
+**Scripts:** `scripts/pipeline/derivar_partes.py` v0.14 → v0.15 (cruce índice; v0.16 override construido y revertido).
+
+**Manifest:** regenerado, `--verify` [CLEAN] 65 artefactos.
+
+**Commits:** (completar al pushear).
