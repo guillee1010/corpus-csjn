@@ -2,6 +2,15 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H162 (2026-06-24)
+
+- `derivar_partes.py` v0.13 → v0.14: handler de inversión en `parse_parte`
+  ("(art)(parte)? ROL[,] NOMBRE [cola]"). 146 recurrente + 4 recurrido recuperados,
+  2 correcciones de representación, 1 apoderado resuelto. Restringido a recuperación de
+  nombre (rol-only cae a v0.13). 0 PIERDE, 0 cambio de métrica.
+- `output/parser/csjn_casos_partes.csv`: 5890 filas (sin delta), sha f2894294 (v0.14).
+- `output/parser/_manifest.json`: regenerado (--verify [CLEAN] 65).
+
 ## H161 (2026-06-24)
 
 - `derivar_partes.py` v0.11→v0.12: `re.split` posicional → `maxsplit=` keyword (deuda #4, fix Py3.14). CSV byte-idéntico.

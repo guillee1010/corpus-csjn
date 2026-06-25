@@ -18440,3 +18440,68 @@ El fallback de B destapó `346_p811` → vacío pese a pie limpio: el terminador
 **Scripts:** `extraer_epilogos.py` v0.3, `derivar_partes.py` v0.13. Diagnóstico: `dump_pie_windows.py`, `diff_partes_b.py`.
 
 **Tickets nuevos:** `por:` (gramática `RE_MARK_REC`, +1 latente) · calidad `parse_parte` (prefijo rol + inversión nombre, 54 corpus-wide). **Cerrados:** deuda #4 (maxsplit), deuda #3 (deshifen migrada), extractor `sin_zona`, terminador colisión-Norma. **Sin material:** deuda #5.
+
+
+## H162 — Capa de partes: handler de inversión (bump 1) (2026-06-24)
+
+**Objetivo:** limpiar la calidad de `parse_parte` (opción B) — recuperar nombres en
+epílogos con rol invertido ("(art) ROL[,] NOMBRE"), antes de tipificar partes (M32).
+
+### H162-01 — Handler de inversión en parse_parte (v0.13 → v0.14)
+
+Implementado el handler para el formato viejo donde el rol procesal precede al nombre
+("la parte actora, X" / "el demandado X por derecho propio"), que v0.13 dejaba con el
+prefijo pegado o cortaba en RE_CORTE perdiendo el nombre. Nuevas regex RE_INVERSION
+(ancla el prefijo, captura el rol), RE_CORTE_INV (superset de RE_CORTE: agrega
+representaci\w+/representant/apoderad, "con la representación letrada", conjuntamente con,
+y los marcadores de PDP). Helper `_limpiar_nombre_inv`. Si tras el rol va letrado/apoderado
+se recursa a parse_parte para resolver la parte representada.
+
+Decisión de diseño (rol): rol PROCESAL (actora/demandada/coactora/querellante/codemandada),
+NO por_derecho_propio — eje procesal puro; por_derecho_propio queda para letrado-es-parte
+sin rol procesal dicho. Los 9 PDP triple-validados contra el corpus real (epílogo +
+carátula + bloque del fallo, 9/9 limpio).
+
+RESTRICCIÓN: el handler retorna solo si recupera un nombre; rol-only sin nombre cae a la
+lógica v0.13 (0 cambio de métrica). La re-clasificación rol-only→rol_sin_nombre se difirió
+como bump 1b (mueve canónico).
+
+Validación: baseline v0.13 reproducido byte-idéntico (sha 54fe7e27). Diff corpus-wide:
+146 recurrente recuperados (21 bare→nombre + 125 prefijo→limpio) + 4 recurrido limpiados
++ 346_p491 corregido (hijo representado → actora "M. S. E.", confirmado por carátula
+"E., M. S. y otro c/ OSDE") + 344_p1835 apoderado resuelto (→ "la Municipalidad de Puán").
+0 PIERDE (recurrente y recurrido). 0 cambio de métrica (recurrente_ok 3845, con-nombre
+3836, mérito 2664/2661 idénticos a v0.13). Correcciones de representación: 330_p1034
+(RE_REPDE agarraba "su esposa" → "Antonini Modet"/demandada).
+
+### H162-02 — Hallazgos cuantificados (→ DEUDA)
+
+- **Inflación rol-only:** ~80 casos "la actora, representada por X" cuentan como
+  recurrente_ok con nombre "la actora". Mérito-con-nombre honesto ≈ 90.7% (2604/2870)
+  vs 92.8%. → bump 1b (decisión, mueve canónico).
+- **Rol por carátula (paso 5):** de 2138 `(sin rol)`, 98.5% es estructural (el epílogo no
+  declara rol). Pero 531 tienen rol leíble directo de la carátula; ~415 consistentes
+  (recurrente del epílogo cae del lado correcto del c/), 61 discrepan, 31 ambiguos.
+  Recuperable con guard de consistencia. Impacto: rol-cobertura ~44% → ~55%.
+- **Multi-leaks preexistentes:** 332_p1488, 341_p1619 (multi-recurrente sin segmentar).
+- **31 sin-rol con rol no capturado:** varios roles no modelados (ejecutado, Defensor del
+  Pueblo, Fiscalía de Estado).
+
+### H162 — Estado final
+
+- **Corpus:** 5890 filas (5697 fallos).
+- **Partes (v0.14):** recurrente_ok 3845 (67.5%); mérito 2664/2870 (92.8%);
+  multi_recurrente 144; vía carátula paso 4: 87.
+- **Rol del recurrente:** (sin rol) 2138 · actora 588 · demandada 512 · penal 389 ·
+  mp_fiscal 84 · por_derecho_propio 46 · codemandada 34 · querellante 24 · mp_defensa 14 ·
+  solo_letrado 9 · coactora 7.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos_partes.csv` — 5890 filas, sha f2894294c7a2…, v0.14
+  (único output tocado en la sesión).
+
+**Scripts:** `scripts/pipeline/derivar_partes.py` v0.13 → v0.14 (modificado).
+
+**Manifest:** regenerado, `--verify` [CLEAN] 65 artefactos.
+
+**Commits:** (completar al pushear).
