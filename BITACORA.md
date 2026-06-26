@@ -18544,3 +18544,118 @@ Se construyó un sidecar `partes_adjudicacion_manual.csv` (30 overrides: 27 car�
 **Manifest:** regenerado, `--verify` [CLEAN] 65 artefactos.
 
 **Commits:** (completar al pushear).
+
+# PROMPT H165 — corpus-csjn · capa de partes · FRONTERA: orden c/ en índice editorial 331–334
+
+## Estado de arranque (verificado en H164, NO re-derivar)
+- `derivar_partes.py` SELLADO en v0.15 (regex puro). El parche **v0.16 (fallback al
+  cuerpo) SE DESCARTA** — apuntaba al lugar equivocado y nació de una medición rota
+  del `V.`. NO mergear. Baseline a reproducir: `csjn_casos_partes.csv` sha `8b5eb721…`.
+- Gold: `tests/gold/partes_gold_nombre.csv` (72 filas) — VARA, no input. Cobertura 42/72.
+
+## Hallazgo H164 (verificado contra .md crudo — punto de partida)
+El índice editorial de **331–334** pierde el orden actora/demandada:
+- En el `.md`, el ENCABEZADO EDITORIAL de 331–334 trae el orden con `c/`
+  ("De Bernardi c/ Swiss Medical"; "AFIP–DGI c/ Victorio Gualtieri S.A.").
+- En el CSV, `case_name_indice` quedó **PLANO** ("Nombre | Nombre", sin c/).
+  → el pipeline PIERDE el `c/` al parsear el índice de estos cuatro tomos.
+- 329 (tomos viejos): el encabezado usa `V.` (versus, MAYÚSCULAS) y el pipeline SÍ
+  lo normaliza a `c/` → 329 queda con orden completo. Corte de convención editorial:
+  viejos = `V.`, 331+ = `c/`.
+- Localización: parseo del encabezado editorial en **`construir_catalogo.py` /
+  `parser_editorial.py`** para 331–334. NO es `derivar_partes`; NO es el cuerpo.
+
+## Pregunta 0 de H165 — DECIDIR ANTES DE DISEÑAR NADA
+**¿Vale la pena recuperar el `c/` del índice en 331–334?**
+~696 casos tienen índice plano, PERO la mayoría YA resuelve el recurrente desde el
+epílogo (Eje B). El impacto real sobre el recurrente sin resolver es ~22 (`rol_sin_nombre`).
+Recuperar el `c/` del índice arregla `case_name_indice`, campo que para el recurrente
+casi no se usa. → Decisión de Guillermo. Si la respuesta es NO, esto se documenta como
+límite y se cierra; si es SÍ, recién ahí se mira el parseo. **No diseñar el fix hasta decidir esto.**
+
+## Si la respuesta es SÍ — dónde mirar (medir, no parchear)
+1. Leer `construir_catalogo.py` (`parsear_indice_nombres` + `RE_CRUZADA_PARENT`) y ver
+   por qué la entrada de 331–334 cae a forma plana cuando el `.md` tiene `c/`.
+2. Comparar el parseo de un encabezado 329 (`V.`→`c/`, funciona) vs uno 331 (`c/`, se
+   aplana) para aislar la diferencia.
+3. Validar contra el gold: si recupera el lado correcto en los casos del gold, generaliza;
+   si no, aislar la subclase que falla.
+
+## Pendientes parqueados (de PROMPT_H164, siguen abiertos)
+- bump-4 (DEUDA L184): 6 rol+cola con el nombre ya en el clause. No diseñado.
+- bump-2 (DEUDA L184): 17 penal-falsos (cargo del representante ≠ parte). No diseñado.
+- 3 `cuerpo` del gold (caption del cuerpo → `_nombre_desde_causa`). Pendiente.
+
+## Disciplina de arranque (gates H164 — lo que faltó esta sesión)
+1. `apertura-sesion-corpus`: medir en disco, gold = vara, 0 override.
+2. **Para CUALQUIER afirmación sobre el CONTENIDO de la fuente: traer un `.md` crudo
+   PRIMERO (`extraer_caso.py`), antes de medir CSV o diseñar nada.** Los CSV son datos
+   de segunda mano. Esta sesión se desordenó por saltear esto.
+3. **El conocimiento del proyecto de Guillermo es input verificado, no hipótesis a
+   re-derivar.** Si dice cómo funcionan los fallos/tomos, es dato; chequear solo lo
+   mecánico (¿el CSV/script lo refleja?), no el hecho.
+4. **Decidir "¿vale la pena?" ANTES de diseñar el fix, no después.**
+
+## Archivos para abrir (pedir al inicio)
+- `scripts/pipeline/construir_catalogo.py`, `parser_editorial.py`
+- `output/parser/csjn_casos.csv`, `csjn_casos_partes.csv` (baseline `8b5eb721…`)
+- `tests/gold/partes_gold_nombre.csv`
+- **Un `.md` de 331–334 a la vista desde el arranque** (ej. extraer `331_p13`).
+
+# H165 — Bump del artículo inicial (partes v0.17) + hallazgo de alcance B136 (2026-06-26)
+
+**Objetivo:** cerrar el bump del artículo inicial en `derivar_partes` y, a partir del análisis de vacíos de partes, detectar y documentar un error de alcance en `is_merit` (originaria de fondo excluida sobre una premisa SCDB falsa).
+
+### H165-01 — `derivar_partes.py` v0.15 → v0.17: strip del artículo inicial
+
+Pasada FINAL `_strip_articulo_inicial` sobre `salida` (después de `_refinar_nombre_desde_caratula` y `_registrar`, antes de escribir), que quita el artículo gramatical en **minúscula** del nombre de la parte («la Administración Federal de Ingresos Públicos» → «Administración Federal…»; «la ANSeS» → «ANSeS»). Discriminante validado contra revisión manual de Guillermo (~100 nombres): **minúscula = accesorio (sacar) / MAYÚSCULA = nombre propio (preservar:** «La Nación», «La Serenísima», «La Caja ART»). **Excluye** el wrapper letrado-por-parte («el apoderado de X» / «la defensa de X») para no enmascararlo (DEUDA L184/L179): esos 37 quedan con su artículo.
+
+Ubicación elegida (pasada final) porque `_refinar` necesita ver el artículo para detectar el rol pelado (`RE_CARATULA_SOLO_ROL`) y `_registrar` lee `partes_fuente`/`rol`/`multi` pero no el nombre → el strip al final es aditivo puro y no interfiere.
+
+**Validación:** corrido el script REAL end-to-end vs `csjn_casos.csv` + `csjn_casos_epilogo.csv`. Diff a nivel celda v0.15→v0.17: **1591 celdas** cambiadas (1172 `recurrente` + 419 `recurrido`), TODAS solo-quitar-artículo (0 que no lo sean); `recurrente_rol`/`recurrido_rol`/`multi_recurrente`/`partes_capa`/`partes_fuente` = **0 cambios**; 0 flips nombre↔vacío. **0-regresión a nivel celda.** Controles: 37 wrappers letrado-por-parte intactos, 28 nombres con artículo MAYÚSCULA preservados, 0 nombres no-wrapper con artículo minúscula residual. `csjn_casos_partes.csv` sha `8b5eb721…` (v0.15) → `8c46013f…` (v0.17). `recurrente_ok` sin cambio (mejora de CALIDAD, no de conteo).
+
+NOTA versión: v0.16 quedó quemada en la capa de adjudicación manual CONSTRUIDA y REVERTIDA en H163 → next limpio = v0.17.
+
+### H165-02 — B136: `is_merit` excluye originaria DE FONDO sobre premisa SCDB falsa
+
+Analizando los vacíos de partes apareció que `is_merit_decision` excluye TODA originaria del universo de mérito (guard #1 de B119: `is_merit = int(outcome in MERIT_OUTCOMES and not is_originaria)`), y que el golden de partyWinning (M20) se construyó sobre ese universo. La justificación de fondo era que **SCDB excluiría los casos de jurisdicción originaria**.
+
+**La premisa es FALSA**, verificado contra el codebook SCDB v2021_01 (§17 `varJurisdiction`): la jurisdicción originaria es UNA categoría más del modo de acceso (junto a certiorari/appeal/error/certification); Marbury v. Madison (originaria) ESTÁ en la base, codificado por el writ. SCDB INCLUYE la originaria y le asigna petitioner/respondent; solo deja partyWinning indefinido fuera del mérito (otra variable). «SCDB no computa quién ganó en no-mérito» ≠ «SCDB excluye el caso».
+
+**Medido en disco:** `is_originaria=1` = 546 fallos; `∩ is_merit=1` = **0** (exclusión en bloque confirmada). Desglose por `outcome` de las 546: **379 no-fondo** (281 competencia + abstracto/desestima/cautelar/sin_dispositivo → exclusión CORRECTA) + **167 DE FONDO** (96 hace_lugar + 68 rechaza + 2 procedente + 1 confirma → exclusión INDEBIDA). **153 de las 167 con Provincia/Estado en carátula** = el Estado-litigante de H1–H5 en su forma más pura (Estado demandado de origen, no recurrente de un extraordinario), hoy fuera del universo de mérito y del golden.
+
+**Fix (no diseñado, frente propio):** condicionar el guard #1 de B119 a la disposición — `is_originaria ∧ outcome∈MERIT_OUTCOMES → is_merit=1`. `is_originaria` ya detecta el proceso y `outcome` ya trae los verbos; es cambiar UNA palanca, sin detección nueva. NO atómico: re-codificar a mano las 167 en el golden + re-κ del eje + republicar Dataverse. Ticketeado B136 (DEUDA), con cross-refs REVISITADO a B119 + nota en M20 + B112 + M32.
+
+### H165-03 — Diagnóstico de vacíos de partes (medido, sin código)
+
+Los fallos sin recurrente son **33 % (1860/5697)**, no «la mitad». Descomposición por `partes_fuente`: **1205 `sin_zona`** (el zonificador no marcó epílogo) + **642 `sin_marcador_recurso`** (epílogo presente, gramática no pesca el marcador) + ~13 residuales. El fallback al cuerpo del fallo YA existe (PASO 4, `derivar_de_caratula`): 138 recurrentes ya recuperados de la carátula; el límite es doctrinal (lee el marcador de recurso = Eje B, no actor/demandado = Eje A).
+
+Verificado en el `.md` real (329_p47, Conde c/ Provincia de Buenos Aires + Estado Nacional, originaria-competencia): las partes SÍ están en el cuerpo. El **62 % de los vacíos tiene «X c/ Y»** en el título. Lo recuperable es **Eje A (actor/demandado)** vía la máquina existente `_partes_desde_indice`, hoy solo disparada cuando hay rol Eje B; falta el camino directo para los `sin_zona`/originaria. Esto alimenta M32 (el Estado-litigante de originaria).
+
+### H165-04 — Matriz de decisión para el próximo trabajo
+
+Caminos puntuados en impacto / robustez / riesgo / escalabilidad / esfuerzo, ordenados por **valor/esfuerzo + dependencias**: (1) **Eje A** (capa actor/demandado del «X c/ Y» — mejor valor/esfuerzo, enriquece M32), (2) **M32** (clasificador de tipo, gold listo, corre sobre las partes enriquecidas), (3) **letrado-por-parte** (cleanup <1 sesión), (4) **B136** (alto valor tesis pero sesión propia: re-golden + re-κ + republicar), (5) **zona epílogo + sin_marcador** (residual, rendimiento decreciente). Decisión de orden pendiente (Eje A primero vs B136 primero según pese el error de alcance). Detalle completo en PROMPT_H166.
+
+### Lo aprendido (registro explícito)
+
+1. **Premisas externas se verifican contra la fuente, no de memoria.** La creencia «SCDB excluye originaria» era falsa y se había propagado a dos lugares estructurales: el guard de `is_merit` (B119) y el golden de partyWinning (M20). El codebook (§17) lo desmiente directo. El costo de no haberla chequeado en su momento es un error de alcance de 167 casos (153 con Estado) que ahora obliga a re-golden.
+2. **«Ausencia legítima» fue una racionalización; el disco la corrigió.** Frente a los vacíos de 329 se asumió ausencia esperada; abrir el `.md` mostró que las partes están en el cuerpo (62 % con `c/`). Medir antes de concluir, incluso cuando la inferencia parece razonable.
+3. **partyWinning ≠ petitioner/respondent.** Resultado (indefinido fuera del mérito) e identidad (incluida también en originaria) son variables distintas de SCDB; no se contradicen. La confusión entre las dos fue la raíz del choque sobre originaria.
+4. **El número de versión declara madurez, no se recicla.** v0.16 quemada (adjudicación revertida) → v0.17. Y `0.x` se mantiene a propósito mientras partes sea un frente abierto: 1.0 sería un acto deliberado de cierre, no inercia incremental.
+5. **El fallback al cuerpo ya existía (PASO 4); el frente no era construirlo sino entender su límite doctrinal** (Eje B vs Eje A). Antes de proponer una capa nueva, medir qué hace la existente.
+
+### H165 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos + 160 sumario_con_link + 33 sumario_editorial).
+- **Partes:** `csjn_casos_partes.csv` 5890 filas; `recurrente_ok` mérito 2662/2870 (92,8 %); recurrente con nombre 3837/5697 fallos (67,4 %).
+- **`is_merit_decision=1`:** 2870 · **`is_originaria=1`:** 546 (de ellas 167 de-fondo, 153 con Estado — B136).
+- Parser sin cambios en H165 (votos/zonas/editorial intactos; valores en `_manifest.json`).
+
+**Outputs canónicos tocados:**
+- `output/parser/csjn_casos_partes.csv` — 5890 filas — sha `8b5eb721…` → `8c46013f…` (v0.17).
+
+**Scripts modificados:** `scripts/pipeline/derivar_partes.py` v0.15 → v0.17.
+
+**Manifest:** re-sellar (output canónico + `__version__` cambiaron). Precondición: `check_regresion` [CLEAN] — OJO el delta esperado de nombre (1591 celdas) contra el `partes_gold_nombre.csv` (debería alinear mejor, el gold tiene la razón social sin artículo accesorio).
+
+**Commits:** 2 (pipeline+output: derivar_partes v0.17 + csjn_casos_partes.csv + manifest; docs: DEUDA B136 + BITACORA + CHANGELOG).

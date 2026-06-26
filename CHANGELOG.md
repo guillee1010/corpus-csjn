@@ -1,6 +1,12 @@
 # Changelog
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
+## H165 (2026-06-26)
+
+- `derivar_partes.py`: v0.15 → v0.17. Pasada final `_strip_articulo_inicial`: quita el artículo gramatical en minúscula del nombre de la parte (preserva mayúscula = nombre propio; excluye el wrapper letrado-por-parte). Aditivo puro, 1591 celdas (1172 recurrente + 419 recurrido), 0-regresión a nivel celda.
+- `output/parser/csjn_casos_partes.csv`: sha `8b5eb721…` → `8c46013f…` (5890 filas, sin delta de filas).
+- `output/parser/_manifest.json`: re-sellado (output canónico + `__version__` de `derivar_partes` cambiaron).
+
 
 ## H163 (2026-06-25)
 
