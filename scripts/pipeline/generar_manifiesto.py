@@ -58,7 +58,7 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
-__version__ = "1.7"  # H154: +M29 (extraer_epilogos/derivar_partes) a PIPELINE_SCRIPTS y sus dos CSV a OUTPUTS (8->10 canónicos)
+__version__ = "1.8"  # H167 (M35): -csjn_editorial_indice_partes.csv (fósil) de OUTPUTS, 10->9 canónicos
 
 # csjn_casos.csv tiene campos de texto grandes (considerando_text). Subimos el
 # límite de campo de csv a un valor amplio pero seguro en Windows (sys.maxsize
@@ -112,7 +112,6 @@ OUTPUTS = [
     ("parser/csjn_casos_votos.csv",             "parser.py"),
     ("parser/csjn_casos_zonas.csv",             "parser.py"),
     ("parser/csjn_casos_editorial.csv",         "parser.py"),
-    ("parser/csjn_editorial_indice_partes.csv", "parser_editorial.py"),
     ("parser/csjn_casos_materia.csv",           "derivar_materia.py"),
     ("parser/csjn_casos_recursos.csv",          "derivar_recursos.py"),
     ("parser/csjn_casos_epilogo.csv",           "extraer_epilogos.py"),
