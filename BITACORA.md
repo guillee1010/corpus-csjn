@@ -18706,3 +18706,13 @@ Triple verificación (fuente de parser_editorial + grep recursivo + tabla del ma
 **Scripts creados:** scripts/tests/{check_allowlist_paths, check_append_only_docs, check_version_bump, gate_manifiesto}.py; MAPA.md; scripts/migraciones/limpieza_raiz.ps1.
 
 **Commits:** (1) gates + MAPA + limpieza raíz/pipeline + gold H163 preservado; (2) BITACORA + DEUDA. (SHA exacto sellado en _manifest.json cuando se re-selle; ver M37 para backfill H164–H165.)
+
+## H167 — M35: democión del fósil indice_partes (①②③ aplicadas, Dataverse pendiente) (2026-06-28)
+
+**Objetivo:** aplicar M35 — sacar `csjn_editorial_indice_partes.csv` (output fósil) del set canónico, preservarlo, y probar en disco la redundancia que la DEUDA traía como testimonio de H166. Frente elegido del menú A–D (apertura H167).
+
+### H167-01 — Gate de apertura sobre M35 (verificación antes de tocar)
+
+- **Productor muerto, confirmado en disco** (grep recursivo `scripts/`): el único *writer* del CSV es `auditoria/H061/crosscheck_indice_partes.py` (one-shot, función `parsear_indice_partes` eliminada en H061). `parser_editorial.py` (manifest L115) solo lo *referencia* — es librería de `parser.py`, no lo emite.
+- **`check_regresion` NO depende del fósil:** la mención (L13) es comentario del docstring; el contrato es la lista `OUTPUTS` (5 del parser, sin el fósil), y corre a un dir temporal. → relocate seguro, sin tocar la red.
+- **Trampa detectada (Gate 2/3):** el fósil NO es puro descarte — B115 (merge Arriola/Acosta) y M32 Eje A lo citan como insumo (`case_name_indice` 100%, el `c/` que el índice colapsado perdió, pendiente H164 sin cerrar). →

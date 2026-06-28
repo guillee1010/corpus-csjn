@@ -1,6 +1,13 @@
 # Changelog
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
+
+## H167 (2026-06-28)
+
+- `generar_manifiesto.py`: v1.7→v1.8 — `csjn_editorial_indice_partes.csv` (fósil) fuera de `OUTPUTS`. Canónicos 10→9.
+- `output/parser/_manifest.json`: re-sellado, 9 outputs (`--verify [CLEAN] 64 artefactos`).
+- `output/parser/csjn_editorial_indice_partes.csv`: demovido a `archivo/fosiles/` (productor muerto
+
 ## H165 (2026-06-26)
 
 - `derivar_partes.py`: v0.15 → v0.17. Pasada final `_strip_articulo_inicial`: quita el artículo gramatical en minúscula del nombre de la parte (preserva mayúscula = nombre propio; excluye el wrapper letrado-por-parte). Aditivo puro, 1591 celdas (1172 recurrente + 419 recurrido), 0-regresión a nivel celda.
