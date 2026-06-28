@@ -1,9 +1,9 @@
 {
   "schema_version": 4,
-  "manifest_generator_version": "1.7",
-  "generated_at": "2026-06-26T05:47:25.680229+00:00",
+  "manifest_generator_version": "1.8",
+  "generated_at": "2026-06-28T03:03:00.905529+00:00",
   "git": {
-    "commit": "6e45b9a7f0fad00c759174d3ddd209df7196b953",
+    "commit": "9e3f4d38e28f69cd65ddb6dea2e50dcffc9ae684",
     "dirty": true
   },
   "pipeline_scripts": {
@@ -367,14 +367,6 @@
       "sha256": "30a6da652e3a9d2a0030192cd32a8f3f00dde8fcf57abb2cc5bffbda8e56ab8b",
       "n_rows": 152,
       "n_bytes": 8552
-    },
-    "csjn_editorial_indice_partes.csv": {
-      "path": "output/parser/csjn_editorial_indice_partes.csv",
-      "generated_by": "parser_editorial.py",
-      "generator_version": "1.0",
-      "sha256": "cba0dcf509a64babdc8dc4cb389a874062e8d10b92fe13f95ffed4117b12185a",
-      "n_rows": 11445,
-      "n_bytes": 1206651
     },
     "csjn_casos_materia.csv": {
       "path": "output/parser/csjn_casos_materia.csv",
