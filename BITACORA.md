@@ -18659,3 +18659,50 @@ Caminos puntuados en impacto / robustez / riesgo / escalabilidad / esfuerzo, ord
 **Manifest:** re-sellar (output canónico + `__version__` cambiaron). Precondición: `check_regresion` [CLEAN] — OJO el delta esperado de nombre (1591 celdas) contra el `partes_gold_nombre.csv` (debería alinear mejor, el gold tiene la razón social sin artículo accesorio).
 
 **Commits:** 2 (pipeline+output: derivar_partes v0.17 + csjn_casos_partes.csv + manifest; docs: DEUDA B136 + BITACORA + CHANGELOG).
+
+## H166 — Gates de cierre, MAPA del pipeline, fósil indice_partes y limpieza de raíz (2026-06-27)
+
+**Objetivo:** instalar guardrails a nivel artefacto (no prompt), documentar el grafo de dependencias del pipeline, y resolver el estatus de outputs/archivos huérfanos. Sesión de tooling/auditoría — NO toca la cadena de parseo.
+
+### H166-01 — Seis gates de cierre en scripts/tests/
+
+Cuatro scripts nuevos + dos enganches a tooling existente, todos probados en disco en ambos sentidos (pasan en limpio, fallan ante la violación):
+- `check_allowlist_paths.py` — rechaza paths fuera del schema (allowlist derivada de git ls-files real). [CLEAN] 412.
+- `check_append_only_docs.py` — BITACORA/CHANGELOG solo-adiciones; probado: mordió un borrado plantado.
+- `check_version_bump.py` — autodescubre los 15 scripts versionados de pipeline/auditoría, exige bump de __version__ por VALOR (no por línea); probado sobre parser.py y derivar_partes.py.
+- `gate_manifiesto.py` — wrapper de generar_manifiesto.py --verify (no reimplementa; Gate 3).
+- Regresión+golden: ya existían en check_regresion.py; no se reescribieron, se documentó el enganche.
+Disparo (pre-commit vs cierre) a definir → M38; los scripts son standalone.
+
+### H166-02 — MAPA.md: grafo de dependencias del pipeline
+
+Mapa consume→produce de los 15 scripts, verificado en disco (DEFAULT_*, .open(), imports + manifest INPUTS/OUTPUTS); orden topológico. Hallazgos: clasificadores = librerías de derivar_recursos (no etapas); parser_editorial = librería de parser.py (no produce CSV); derivar_materia consume además los 5 vocabularios de _meta/vocab_materia/.
+
+### H166-03 — csjn_editorial_indice_partes.csv: fósil, a demover (M35)
+
+Triple verificación (fuente de parser_editorial + grep recursivo + tabla del manifest) y medición en disco:
+- Productor real = scripts/auditoria/H061/crosscheck_indice_partes.py (one-shot), NO parser_editorial.py. Manifest línea 115 lo atribuye mal.
+- El productor no corre: importa parsear_indice_partes, función eliminada en H061 (verificado ausente en parser_editorial y construir_catalogo).
+- Redundante E incompleto vs catalogo.csv. Medición (no testimonio): MISS=0; 478 EXTRA, los 478 en catalogo, los 478 con nombres_indice poblado.
+- Decisión: demover. NO ejecutado esta sesión → M35 (toca manifest + Dataverse, requiere OK).
+
+### H166-04 — Limpieza de raíz y pipeline
+
+- Baja: extraer_lote_M20.py (git rm).
+- Movidos a su sesión: caracterizar_extra_indice.py + .txt → auditoria/H166/.
+- Gold preservado (NO borrado): partes_adjudicacion_manual.csv (30 overrides H163) → diagnostico/H163/.
+- 335 y 336/ → archivo/335_y_336_ocr_legacy (git mv); diagnostico/ y epilogo_muestra/ (gitignoreadas) → archivo/.
+- extraer_recuperados_H109.py → diagnostico/H109/ (grep de imports limpio).
+- Script: scripts/migraciones/limpieza_raiz.ps1.
+- Pendiente: test_spacy.py (archivar/borrar).
+
+### H166 — Estado final
+
+- **Corpus (sin cambios esta sesión, verificado vía check_regresion [CLEAN]):** 5890 casos, 27697 votos, 141451 zonas, 152 editorial. Los 5 CSV del parser byte-idénticos al golden. Outputs de derivers NO re-medidos (no se corrieron).
+- **No se tocó la cadena.** Sin re-sello de manifest, sin entrada de CHANGELOG.
+- **Allowlist:** [CLEAN] 412 paths.
+- **Deuda nueva:** M35 (fósil indice_partes), M36 (derivers sin golden), M37 (BITACORA atrasada H164–H165), M38 (disparo de gates).
+
+**Scripts creados:** scripts/tests/{check_allowlist_paths, check_append_only_docs, check_version_bump, gate_manifiesto}.py; MAPA.md; scripts/migraciones/limpieza_raiz.ps1.
+
+**Commits:** (1) gates + MAPA + limpieza raíz/pipeline + gold H163 preservado; (2) BITACORA + DEUDA. (SHA exacto sellado en _manifest.json cuando se re-selle; ver M37 para backfill H164–H165.)
