@@ -18757,3 +18757,86 @@ El cascade de `is_merit` a `clasificar_tipo_voto` reclasificó 13 votos de fondo
 **Manifest:** `_manifest.json` re-sellado (`--verify [CLEAN] 64`).
 
 **Commits:** B136 código+data (3 scripts + golden + outputs, commit previo) · `10f2c5c` (re-sello manifest) · cierre H169 (manifest regenerado + DEUDA + BITÁCORA/CHANGELOG).
+
+## H170 — Auditoría REE del pipeline: eje de mérito bicapa (D1) ejecutado, taxonomía M1-M5 cerrada (2026-07-01)
+
+**Objetivo:** auditoría REE integral del pipeline (deuda + código), read-only: 0 cambios a outputs canónicos y 0 bumps de `__version__` de la cadena.
+
+### H170-01 — Eje 1: informe de deuda (vigente / obsoleta / escalada)
+
+Hallazgos documentales: BITACORA con H167 truncada mid-entry (~L18718) y H168 ausente → amplía M37 (backfill H164+H167+H168); bloque «Estado del corpus» de DEUDA stale (decía 6117/27774; canon real 5890 casos / 27697 votos); sub-gap M24 de `indice_partes` obsoleto post-M35/H167; filas cerradas figurando abiertas en el tablero; cola B014-B099 sin triar. Escalados: B137, cluster is_originaria (B135+B134+post-B010, agravado porque B136 hizo a `is_originaria` portadora del eje de mérito), κ ciego de `es_de_fondo` + re-codificar partyWinning de las 133 originarias (M19/M20), Dataverse (M35-④+B136), M36 (derivers sin golden). Guillermo redirigió la sesión al código sin validar las preguntas del informe.
+
+### H170-02 — Ejes 2+3: auditoría de código priorizada (D/R/E)
+
+Tabla completa de divergencias (D1-D6), robustez (R1-R5) y elegancia (E1-E2) con línea citada por ítem. D1 (eje de mérito bicapa verificado consistente SOLO en las 546 originarias) se ejecutó en esta sesión (bloques 03-05). R1 (RE_CN_DEMANDA_ESTADO definida y nunca usada; docstring de `es_originaria` promete señal compuesta que el cuerpo no implementa) quedó absorbido en la actualización de B135. El resto quedó registrado como **M40** en DEUDA: D2 (RE_DISP_INOFICIOSO divergido parser-sin-lookahead vs clasificador-con), D3 (_FONDO en 4 copias, DISPVALS de derivar_recursos.main L131 divergente), D4 (familia 280/ac4 duplicada parser L277-318 ↔ clasificador_causa; dedup antes de post-B010), D5 (asimetría de normalización: `causa` usa _prep sin banner mask), D6 (doble gramática del pie editorial sin test de contrato), R2 (=audit B137), R3 (writers upstream sin lineterminator → CRLF, clase H111), R4 (columnas sin REQUIRED check en derivar_recursos), R5 (merge L78 sin assert de cardinalidad), E1 (changelogs inline ~9k chars), E2 (fuente de cruzar en CRLF).
+
+### H170-03 — D1 ejecutado: divergencia medida y clasificada por mecanismo
+
+`scripts/diagnostico/H170/consistencia_merito.py` v0.1→v0.3 (read-only; cruza casos × recursos × textos; v0.2+ importa `norm`/`DISP`/`RE_RECHAZA_REC` del clasificador real — Gate 3, no regex paralelas). Resultado en disco: **234/5697 fallos (4,1%) con `is_merit` ⟺ `es_revision_fondo` divergentes; 0 en las 546 originarias; 0 residuales**. Taxonomía v0.3: M1_ORIGINARIA_PERDIDA 15 · M2A_SOBREINCLUSION 98 · M2B_OUTCOME_FONDO 18 · M2C_CAND_ORIGINARIA 13 · M3_MIXTO 44 · M4_ASIDE_B129 24 · M4_ABSTRACTO_OTRO 3 · M5_RECHAZA_REC 19. Validación cruzada independiente: M4_ASIDE = exactamente los «24 asides conservados» de B129/H145. Señal soft de case_name: 0/15 en M1 y 3/13 en M2C pese a ser pleitos contra provincias → RE_CN_DEMANDA_ESTADO no cubre la carátula invertida canónica de Fallos («X c/ Nombre, Provincia de»).
+
+### H170-04 — 19 testigos leídos contra el `.md` (sub-audits adjudicados)
+
+Primera tanda (9): 329_p2688 Bustos y 329_p3403 Ferrari de Grand (originarias de fondo), 329_p222 OSDOP, 329_p926 Vaggi, 329_p623 Casas (M2A: gate correcto), 329_p1767 Mathieu (M3 mixto real), 334_p1272 Breitfeld (M4 aside + revoca real), 329_p4083 Alvarez y 330_p826 Manrrubia (M5: gatekeeping puro, 0 fondo). Segunda tanda (10): **M2B adjudicado MIXTO** — 332_p731 Chimondeguy («confirmar el reajuste de haberes») y 340_p411 Gualtieri («revocar la declaración de inconstitucionalidad») = FN reales del gate por OBJETO MATERIAL; 330_p251 Carrillo (dejar sin efecto la EXCUSACIÓN) y 333_p1152 Rivera (nulidad por vicio pupilar) = aciertos del gate con outcome equivocado. **M2C adjudicado** — 337_p234 Credicoop y 344_p3476 Coihue = originarias de fondo confirmadas (con 329_p3403 y 348_p473/H161: 4 confirmadas del bucket); 331_p100 Tucumán c/ Fisco = NO originaria, sentencia sustitutiva art. 16 in fine ley 48 («se rechaza la demanda» en sede recursiva ES mérito). **M4_OTRO adjudicado** — 337_p850 Malossi = fondo real con aside «inoficioso…recursos de hecho» (variante B129 lado parser); 329_p5261 ADC = FP del gate (revoca-formal en abstracto, «no importa abrir juicio»); 343_p2098 Paccagnini = FP del gate (guard nulidad_concesion de B131 fuera de ventana). Verificación adicional en disco (sidecar de textos): en 337_p234 la señal «competencia originaria» SÍ está en el considerando pero partida por guionado + running head («competencia origi- 247 DE JUSTICIA… naria») → ninguna regex sobre crudo la ve; en 344_p3476 la señal genuinamente vive fuera de `considerando_text` (Resulta / voto concurrente).
+
+### H170-05 — Entradas de deuda registradas y orden del fix
+
+DEUDA actualizada (editada directamente): **M39** (entrada madre: taxonomía completa, IDs, impacto en votos/B137/cobertura de partes/golden M20/Dataverse), **B138** (RE_RECHAZA_REC sobre-dispara en denegatoria de acceso pura; 19 confirmados; cardinalidad corpus-wide pendiente — invisible a D1 donde outcome=confirma acompaña), **B139** (FN del gate: objeto material + «rechaza la demanda» recursiva), **B140** (FP del gate: revoca-formal en abstracto + ventana del guard B131; corrección de atribución intra-sesión: el gap es de B131, no de B133), **B135 actualizado con 3 sub-causas** (regex angosta 15/15 recuperables · guionado+banner → los 15 son PISO, re-jerarquiza D5 · carátula invertida) + nota cruzada en B131 + **M40** (backlog D2-D6/R2-R5/E1-E2). Decisión de diseño LOCKEADA en M39 — orden del fix: (1) B135, (2) guards del gate B138/B139/B140, (3) extender patrón B136 corpus-wide (clasificador fuente única, `is_merit` derivado). El orden inverso consagra los FP del gate como canon. Cada paso: re-golden + re-derivar + re-κ.
+
+### H170 — Estado final
+
+- **Corpus:** SIN CAMBIOS (sesión read-only). 5890 casos; 5697 fallos comparados en D1; 27697 votos.
+- **Eje de mérito:** `is_merit` 3003 / `es_revision_fondo` 2949 (valores H169, no tocados); divergencia medida 234 (4,1%).
+- **Outputs canónicos:** sin cambios; manifest de H169 vigente (`--verify [CLEAN]`, commit `bb4de21` de cierre H169).
+
+**Scripts creados:** `scripts/diagnostico/H170/consistencia_merito.py` v0.1→v0.3 (gitignored por defecto; versionar con `git add -f` si se decide).
+
+**Commits:** 1 (documentación del cierre: DEUDA_TECNICA.md + BITACORA.md).
+
+**Pendientes que hereda H171:** cardinalidad corpus-wide de B138/B139/B140 (una pasada read-only, molde v0.3) → completa los números de las entradas; después, paso 1 de M39 (B135). Siguen en cola de H169: audit B137, κ ciego `es_de_fondo`, Dataverse M35-④+B136 (ahora también condicionado por la decisión de documentar-o-esperar de M39).
+
+## H171 — Cardinalidad corpus-wide de los bugs del gate (B138/B139/B140) + adjudicación por testigos (2026-07-01)
+
+**Objetivo:** medir la cardinalidad corpus-wide de B138/B139/B140 en UNA pasada read-only (los conteos de H170/D1 eran solo la tajada visible en la divergencia) y adjudicar testigos contra el `.md`.
+
+### H171-01 — Baseline reproducido
+
+Protocolo de apertura completo. `consistencia_merito.py` v0.1 re-corrido en disco: 5697 comparados / 546 originarias / **234 mismatches (144 dirección A · 90 dirección B)**. v0.3 re-corrido: taxonomía **exacta** al cierre de H170 (M1 15 · M2A 98 · M2B 18 · M2C 13 · M3 44 · M4 24+3 · M5 19, **0 residuales**). Baseline [OK].
+
+### H171-02 — `cardinalidad_gate.py` v0.1→v0.2 (read-only)
+
+`scripts/diagnostico/H171/cardinalidad_gate.py`. Importa `norm`/`DISP`/`RE_RECHAZA_REC`/`RE_NULIDAD_CONCESION`/`RE_DISP_COMPETENCIA`/`RE_DISP_INOFICIOSO`/`disposicion`/`_FONDO` del clasificador real v1.10 (Gate 3); las únicas regex nuevas son de diagnóstico, marcadas [DIAG]. Tres anclas de validación cruzada embebidas: (1) sanity global — `disposicion()` recomputada sobre los 5697 `pe` == columna publicada de `recursos.csv` → **[OK], CSV no stale**; (2) los 19 IDs de M5 ⊆ B138 corpus-wide → **19/19 [OK]**; (3) `outcome=abstracto ∧ disp∈fondo ∧ gate=si` == 27 → **[OK]**. v0.2 corrigió una mala especificación mía del ancla (3): la población comparable a M4/D1 exige `gate=si`; el ∧-solo-disp da 50 (27 gate=si + 23 ya suprimidos por `RE_DISP_INOFICIOSO`).
+
+### H171-03 — Cardinalidades medidas
+
+- **B138 = 19, invisibles a D1 = 0 → CERRADO en cardinalidad.** La invisibilidad temida no existe: ante «se rechaza el recurso/queja» el parser da `outcome=rechaza`, nunca `confirma` → el mecanismo siempre diverge y D1 lo vio completo. Composición: queja 9 + recurso de hecho 1 + recurso 9 (7 REX / 2 ordinarios, 1 reposición). Los 19 con `gate=si`.
+- **B139a = 59 candidatos brutos** (verbo pelado sin ventana W/OBJ; deja_sin_efecto 30 · nulidad 13 · revoca 8 · confirma 6 · modifica 2; 43 apel / 16 orig). Estratificación a ojo confirmada por testigos: FN material real / objeto procesal (acierto del clasificador) / `pe` truncado (familia M21/B122) / ruido del bare de diagnóstico.
+- **B139b = 13/178 `no_revision_demanda`.** La señal estructural (`via_recurso=rex` de recursos.csv) captura los 13, incluidos los 5 con cita art. 16 ley 48 → la vía derivada resuelve la sub-causa (b) sola.
+- **B140a:** población `abstracto ∧ disp∈fondo ∧ gate=si` = 27 [ancla OK]; detector textual «sin perjuicio de revocar»/«no importa abrir juicio» corpus-wide = 32, de los cuales **solo 3 FUERTES en el `pe`** (329_p5115, 329_p5261, 340_p1973); los 29 en `co` son boilerplate de arbitrariedad-por-demora / asides limitativos.
+- **B140b = 10, invisibles a D1 = 9 → CERRADO en cardinalidad.** Los 9 invisibles comparten fórmula LITERAL: «se declara la nulidad de la resolución (de fs. X,) por la que se concedió el recurso» — el guard `RE_NULIDAD_CONCESION` exige «extraordinario» y no cubre la conectiva «por la que se concedió». Los 10 con `outcome=nulidad ∧ gate=si` (salvo Paccagnini, abstracto): ambas capas mal juntas, inflan `is_merit`, `es_revision_fondo` y `parte_ganadora=recurrente_gana`.
+
+### H171-04 — 7 testigos nuevos leídos contra el `.md` (extraídos a `diagnostico/_extraidos/H171/`)
+
+- **330_p1205 (B138, REX): FP del gate.** Considerando de UNA línea: «el recurso extraordinario es inadmisible (art. 280 CPCCN)» — 280 disfrazado de «se rechaza».
+- **348_p747 (B138, REX): FP del gate.** Remisión al dictamen; el dictamen funda en falta de fundamentación autónoma (art. 15 ley 48) y opina «mal concedido».
+- **330_p1927 (B139a): FN material CONFIRMADO** — «rechazar la impugnación… y, en consecuencia, confirmar el acto administrativo» de la DGI; mérito claro, `confirma` de `DISP` no matchea («acto administrativo» ∉ OBJ). Tercer testigo de la clase con Chimondeguy/Gualtieri: transversal, no anecdótico.
+- **329_p4634 (B139a → M21/B122): truncado del parser CONFIRMADO contra fuente** (`--cola`): el `pe` de producción termina «se deja sin efecto la sen-» con banner interpolado; el `.md` sigue «-tencia apelada». Sale del universo B139.
+- **337_p813 (B139a, originaria): ACIERTO del gate** (ruta grant-demanda de `es_de_fondo`; verificado mecánicamente en sandbox). Deja 2 observaciones laterales: «invalidez» ∉ `RE_FONDO_EXTRA_GRANT` (teórica, anotada en B136) y `parte_ganadora=no_aplica` en originaria ganada (= re-codificación M19/M20 pendiente).
+- **340_p1973 (B140a fuerte): ACIERTO del gate.** El considerando 7° invoca expresamente el art. 16, segunda parte, ley 48 «y decidir sobre el fondo de la cuestión sometida»; la salvedad «no implica abrir juicio» refiere al asunto subyacente. (Disidencia: Rosenkrantz por 280 — dato para H3.)
+- **331_p1262 (B139b, originaria): FP de la señal `rex` CONFIRMADO** — originaria de fondo (OSPLAD c/ Catamarca); la única mención de «extraordinario» en el bloque es la cita de Fallos 324:2153 → `via_recurso` leyó narrativa del considerando. Consecuencia de diseño: señal restringida a no-originarias.
+- **329_p120 (B140b): FP CONFIRMADO** — nulidad de concesión por auto no fundado (Olivero y Rodríguez), vía pura, 0 fondo; `RE_NULIDAD_CONCESION.search(norm(pe))` = False verificado en sandbox sobre el `pe` de producción. Por identidad literal de la fórmula, la clase de 9 se da por confirmada con este ejemplar (criterio M2B/H170).
+
+### H171-05 — DEUDA actualizada y pendientes
+
+DEUDA editada directamente: encabezado + **B138** (cardinalidad cerrada, restricción de diseño: guard POR OBJETO, no barrer `RE_RECHAZA_REC`), **B139** (estratos + señal (b) restringida), **B140** ((a) universo fuerte reducido; (b) cerrado con fix candidato quirúrgico: cubrir «por la que se concedió el recurso» sin exigir «extraordinario»), **M39** (constancia H171, orden del fix SIN cambio), **B136** (observación «invalidez»), **M21** (caso testigo 329_p4634 verificado contra fuente).
+
+**Pendientes para H172 (antes del diseño de guards):** (1) decisión doctrinal sobre 329_p5115 — ¿la arbitrariedad-remand («sin abrir juicio sobre el fondo, se deja sin efecto») cuenta como revisión de fondo? Posición Spaeth-compatible (*vacated & remanded* = mérito) reduciría B140a a UN caso (ADC); (2) leer los 2 ordinarios de B138 (334_p1302, 342_p1524) — únicos candidatos a `confirma` correcto; (3) recién entonces diseño de guards, respetando el orden LOCKEADO de M39 (B135 primero).
+
+### H171 — Estado final
+
+- **Corpus:** SIN CAMBIOS (sesión read-only; ningún output canónico tocado, ningún `__version__` de la cadena bumpeado). 5890 casos; 5697 fallos comparados; manifest intacto.
+- **Eje de mérito:** valores H169 sin tocar (`is_merit` 3003 / `es_revision_fondo` 2949); divergencia 234; cardinalidades corpus-wide de los 3 bugs del gate MEDIDAS.
+
+**Scripts creados:** `scripts/diagnostico/H171/cardinalidad_gate.py` (v0.2, read-only).
+**Extracciones:** `diagnostico/_extraidos/H171/` — 10 archivos (9 casos + 1 `--cola`).
+
+**Commits:** 1 (script de diagnóstico H171 + DEUDA + BITACORA).
