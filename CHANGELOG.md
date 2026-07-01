@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H169 (2026-07-01)
+
+- `clasificador_disposicion.py` v1.09→v1.10: detector nuevo `es_de_fondo(considerando, por_ello)` (fondo de la demanda en instancia originaria); `es_revision_fondo` gana param `considerando` y deja de hardcodear «no» para la originaria.
+- `parser.py` v22.0→v23.0: `is_merit` de la originaria vía `es_de_fondo`. 133 originarias-de-fondo entran a mérito.
+- `derivar_recursos.py` v0.5→v0.6: call-site de `es_revision_fondo` pasa `considerando`.
+- `output/parser/csjn_casos.csv`: is_merit 2870→3003 (+133).
+- `output/parser/csjn_casos_recursos.csv`: es_revision_fondo 2816→2949 (+133).
+- `output/parser/csjn_casos_votos.csv`: denormalización is_merit (+662 filas afectadas) + cascade `clasificar_tipo_voto` en 13 votos (`indeterminado→D`, flag → B137).
+- `_manifest.json`: re-sellado (v23.0/v1.10/v0.6), `--verify [CLEAN] 64`.
+
 ## H167 (2026-06-28)
 
 - `generar_manifiesto.py`: v1.7→v1.8 — `csjn_editorial_indice_partes.csv` (fósil) fuera de `OUTPUTS`. Canónicos 10→9.

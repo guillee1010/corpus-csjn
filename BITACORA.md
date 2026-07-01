@@ -18716,3 +18716,44 @@ Triple verificación (fuente de parser_editorial + grep recursivo + tabla del ma
 - **Productor muerto, confirmado en disco** (grep recursivo `scripts/`): el único *writer* del CSV es `auditoria/H061/crosscheck_indice_partes.py` (one-shot, función `parsear_indice_partes` eliminada en H061). `parser_editorial.py` (manifest L115) solo lo *referencia* — es librería de `parser.py`, no lo emite.
 - **`check_regresion` NO depende del fósil:** la mención (L13) es comentario del docstring; el contrato es la lista `OUTPUTS` (5 del parser, sin el fósil), y corre a un dir temporal. → relocate seguro, sin tocar la red.
 - **Trampa detectada (Gate 2/3):** el fósil NO es puro descarte — B115 (merge Arriola/Acosta) y M32 Eje A lo citan como insumo (`case_name_indice` 100%, el `c/` que el índice colapsado perdió, pendiente H164 sin cerrar). →
+
+## H169 — Cierre de B136: is_merit de la originaria de fondo (2026-07-01)
+
+**Objetivo:** cerrar B136 — incorporar las originarias que resuelven el fondo al eje de mérito (`is_merit` / `es_revision_fondo`), que la premisa H165 excluía en bloque.
+
+### H169-01 — Reproducción y refutación de la premisa H165
+
+La premisa de apertura («1 palanca: condicionar el guard #1 de B119 al `outcome`, los verbos ya están») resultó FALSA en disco:
+- El eje vive en 2 capas, no 1: `is_merit` (parser) Y `es_revision_fondo` (deriver `derivar_recursos.py`), que también hardcodeaba «no» para toda originaria. Condicionar solo el guard #1 habría dejado el deriver inconsistente.
+- Los verbos no estaban: la originaria resuelve la demanda (hacer lugar / rechazar), no revisa un inferior (confirma/revoca/deja_sin_efecto que trae `outcome`).
+- El estimador naive de H165 (167 de-fondo por `outcome∈{hace_lugar,rechaza,…}`) sobre-cuenta: incluye hacer-lugar a excepciones/cautelares que no son fondo de la demanda.
+
+Reproducción del piso del detector: 125 (spec literal) → 131 (conjugaciones) → 133 (verbos de fondo extra). Hallazgo metodológico: el «bug de deshif» del spec era reinventar peor la normalización — `clasificador_disposicion.py` ya trae un `norm()` \xad-aware (v1.01) que lo resuelve.
+
+### H169-02 — Fix: detector `es_de_fondo` compartido
+
+Detector nuevo `es_de_fondo(considerando, por_ello)` en `clasificador_disposicion.py` (v1.09→v1.10, módulo hoja que solo importa `re`), reusado en las 2 capas para consistencia: `parser.py` (v22.0→v23.0) → `if is_originaria: is_merit = int(es_de_fondo(...))`; `es_revision_fondo` (deriver) gana param `considerando`, `derivar_recursos.py` v0.5→v0.6 (backward-compat 3-args). Detector = split de `RE_DEMANDA` (grant `hac\w+ lugar`|`admit\w+` / reject `rechaz\w+`|`desestim\w+`) + {0,30} interposición + verbos de fondo extra + asimetría (grant⇒fondo siempre; reject⇒fondo salvo INADM en considerando) + guards reusados. Reusa `norm()`; NO toca `disposicion()` (verbo congelado blind 0.930).
+
+**Medido en disco:** 133/546 originarias-de-fondo (89 grant + 44 reject). `is_merit` 2870→3003 (+133); `es_revision_fondo` 2816→2949 (+133); 0 no-originarias tocadas; consistencia `is_merit`⟺`es_revision_fondo` en las 546 = True.
+
+**Validación:** `check_regresion` [CLEAN] 5/5 tras re-golden — diff confinado a `csjn_casos.csv` (133) + `csjn_casos_votos.csv` (denormalización 662 + cascade tipo_voto 13); textos/zonas/editorial byte-idénticos. `confirmar_scope_b136` [OK]. `--verify [CLEAN] 64`.
+
+### H169-03 — Hallazgo cascada → B137 (error silencioso corpus-wide)
+
+El cascade de `is_merit` a `clasificar_tipo_voto` reclasificó 13 votos de fondo-originarias `indeterminado→D` vía el fallback pre-existente `is_merit AND wc>=2500`. Leer la función entera reveló que D = «concurrencia sustantiva independiente» (no disidencia) y que el fallback dispara SILENCIOSAMENTE cuando los matchers A/B/C/E fallan el fraseo (regex de estructura no caza «1 )»/«1º)»; C no caza «resultandos»). En los 13 la reclasificación parece correcta (votos largos independientes subcontados por el bug de is_merit=0), pero 2 son dudosos por fórmula de adhesión/remisión: 333_p1088 Argibay, 343_p1944 Rosenkrantz. Riesgo corpus-wide (2870 apelados + 133 orig); dato sensible para H3. Registrado como B137, audit = H170.
+
+### H169 — Estado final
+
+- **Corpus:** 5890 casos, 27697 votos (cardinalidad sin cambio).
+- **is_merit:** 2870→3003 (+133). **es_revision_fondo:** 2816→2949 (+133). **tipo_voto_sep:** 13 votos `indeterminado→D` (→ B137).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5890 filas (is_merit +133).
+- `output/parser/csjn_casos_votos.csv` — 27697 filas (denormalización is_merit + cascade tipo_voto 13).
+- `output/parser/csjn_casos_recursos.csv` — 5890 filas (es_revision_fondo +133).
+
+**Scripts modificados:** `parser.py` v22.0→v23.0 · `clasificador_disposicion.py` v1.09→v1.10 · `derivar_recursos.py` v0.5→v0.6.
+**Scripts creados:** `scripts/diagnostico/` — `verificar_b136.py`, `confirmar_scope_b136.py`, `listar_votos_reclasificados.py`.
+**Manifest:** `_manifest.json` re-sellado (`--verify [CLEAN] 64`).
+
+**Commits:** B136 código+data (3 scripts + golden + outputs, commit previo) · `10f2c5c` (re-sello manifest) · cierre H169 (manifest regenerado + DEUDA + BITÁCORA/CHANGELOG).
