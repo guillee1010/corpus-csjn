@@ -12,6 +12,14 @@ La lógica se importa de módulos fuente-única (mismos que validan en build_m20
 
 Salida: output/parser/csjn_casos_recursos.csv (1 fila por caso).
 
+v0.6 — B136 (H169): es_revision_fondo pasa el `considerando` (clasificador_disposicion
+       v1.10). El branch originaria del gate deja de ser hard-'no' y usa es_de_fondo
+       (mérito por verbo-que-resuelve-la-demanda, mismo detector que el is_merit del
+       parser → ejes coinciden). Solo cambia la originaria: es_revision_fondo=si pasa
+       2816→2949 (+133), 0 no-originarias tocadas (verificado en disco recomputando vs
+       la columna publicada). recursos.csv sin columnas nuevas (mismos campos) →
+       check_regresion del parser [CLEAN] por construcción PERO is_merit del parser
+       cambia (frente parser) → re-derivar recursos + re-sellar manifest.
 v0.5 — M26 paso 3: RE-CABLEO de `causa_inadmisibilidad`. La columna sale del parser
        (clasificador_causa.py, fuente única) y su GATE pasa de `outcome` a
        `admisibilidad=="inadmite"`. Detectores textuales nuevos (caducidad/desistimiento/
@@ -57,7 +65,7 @@ from clasificador_via import via_recurso, __version__ as VIA_VER
 from clasificador_admision import admisibilidad, __version__ as ADM_VER
 from clasificador_causa import causa_inadmisibilidad, __version__ as CAUSA_VER
 
-__version__ = "0.5"
+__version__ = "0.6"
 
 CASOS  = ROOT / "output" / "parser" / "csjn_casos.csv"
 TEXTOS = ROOT / "output" / "parser" / "csjn_casos_textos.csv"
@@ -84,10 +92,11 @@ def derivar(casos_path=CASOS, textos_path=TEXTOS, out_path=OUT):
     out["via_recurso"]   = v.map(lambda t: t[0])
     out["multi_recurso"] = v.map(lambda t: "si" if t[1] else "no")
 
-    # es_revision_fondo (M26 rewiring v0.3): GATE derivado de caseDisposition + guards
-    # (clasificador_disposicion.es_revision_fondo), ya NO la copia perezosa de is_merit_decision.
-    out["es_revision_fondo"] = [es_revision_fondo(d, pe, o == "1")
-        for d, pe, o in zip(out["disposicion"], df["por_ello_text"], df["is_originaria"])]
+    # es_revision_fondo (M26 v0.3 + B136 H169): GATE derivado de caseDisposition + guards;
+    # la originaria ya NO es hard-'no' (usa es_de_fondo dentro del gate) → pasa el considerando.
+    out["es_revision_fondo"] = [es_revision_fondo(d, pe, o == "1", co)
+        for d, pe, o, co in zip(out["disposicion"], df["por_ello_text"],
+                                df["is_originaria"], df["considerando_text"])]
 
     # admisibilidad (M26 Fase 2 v0.4): eje PURO de acceso {admite/inadmite/no_aplica/sin_marcador}
     # (clasificador_admision). La vía (queja/REX/ordinario) es transversal (es_queja/via_recurso),

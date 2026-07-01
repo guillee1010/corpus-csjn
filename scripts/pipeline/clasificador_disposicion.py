@@ -17,7 +17,24 @@ v1.01 — norm() ahora des-hifena el soft-hyphen (\u00ad) de fin de línea del O
         REQUIERE regenerar la clave (build_m20) y re-sellar antes de cerrar.
 """
 import re
-__version__ = "1.09"
+__version__ = "1.10"
+
+# v1.10 (B136 — H169). Agrega es_de_fondo(considerando, por_ello): detector de MÉRITO
+# para la originaria, que NO tiene verbos de apelación (confirma/revoca/deja_sin_efecto)
+# sino que resuelve la demanda directamente. Vocabulario = split de RE_DEMANDA (hac\w+
+# lugar|admit\w+ = grant ; rechaz\w+|desestim\w+ = reject) con {0,30} de interposición,
+# reusa norm() (\xad-aware) + los guards de negación (B107) y excepción/falta-de. Extras
+# no-demanda (inconstitucionalidad / nulidad de decreto-acto / condena / ejecución).
+# ASIMETRÍA: grant = fondo siempre; reject = fondo SALVO que el considerando funde
+# inadmisibilidad (RE_FONDO_INADM). es_revision_fondo() gana el parámetro `considerando`
+# (default "") y su branch originaria pasa de hard-`no` (bug B136) a es_de_fondo. El MISMO
+# detector lo importa el parser para is_merit (from clasificador_disposicion import
+# es_de_fondo, L~57) → is_merit_decision y es_revision_fondo COINCIDEN en la originaria.
+# Medido en disco (546 originarias): 133 de fondo (grant 89 + reject 44, precisión limpia,
+# 0 FP en la rama reject). Corpus: is_merit 2870→3003, es_revision_fondo 2816→2949, 0
+# cambios en no-originarias (ambos ejes). NO toca disposicion() (verbo congelado, blind
+# 0,930 en pie). REQUIERE re-golden del parser (ripple is_merit + denormalización en votos)
+# + re-derivar recursos + re-sellar manifest + κ ciego nuevo de es_de_fondo (pendiente).
 
 # v1.09 (Bxxx — Ruta 1 partyWinning). parte_ganadora_regla: `modifica` ENTRA al grupo
 # fondo-favorable (-> recurrente_gana), junto a revoca/deja_sin_efecto/nulidad/grant_remand.
@@ -156,19 +173,71 @@ def parte_ganadora_regla(disp):
 
 _FONDO = {"revoca", "deja_sin_efecto", "nulidad", "confirma", "modifica", "grant_remand_implicito"}
 
-def es_revision_fondo(disp, por_ello, is_originaria):
-    """GATE de revisión de fondo (isMerit) — M26 rewiring.
+# ── B136 (H169): detector de MÉRITO de la ORIGINARIA ─────────────────────────
+# La originaria resuelve la demanda directamente (no revisa un inferior): sus
+# verbos NO son confirma/revoca/deja_sin_efecto sino hacer lugar/rechazar/desestimar
+# LA DEMANDA. Vocabulario = split de RE_DEMANDA (fuente única) + {0,30} interposición
+# (recupera 'la presente demanda' / 'en todas sus partes la demanda' bajo norm).
+_DEM_FONDO = r"(?:demanda|acci[oó]n|pretensi[oó]n)"
+RE_FONDO_GRANT_DEM  = re.compile(rf"\b(?:hac\w+\s+lugar|admit\w+)\b[^.;]{{0,30}}\b{_DEM_FONDO}\b", re.I)
+RE_FONDO_REJECT_DEM = re.compile(rf"\b(?:rechaz\w+|desestim\w+)\b[^.;]{{0,30}}\b{_DEM_FONDO}\b", re.I)
+# Verbos de fondo que NO se anclan a 'demanda' (grant): la originaria a veces resuelve
+# declarando inconstitucionalidad/nulidad de un decreto/acto, condenando o mandando ejecución.
+RE_FONDO_EXTRA_GRANT = re.compile(
+    r"declarar\s+la\s+inconstitucionalidad"
+    r"|declarar\s+la\s+nulidad\s+de(?:l|\s+la)\s+(?!auto|concesi|resoluci[oó]n\s+de\s+fs)"  # NO nulidad_concesion
+    r"|\bse\s+condena\b|\bcondenar\s+a\b"
+    r"|(?:mandar|ordenar\s+que\s+se)\s+llev\w+\s+adelante\s+la\s+ejecuci[oó]n", re.I)
+# Guard de negación: VERBATIM del parser B107 (RE_B107_NEG_HACER_LUGAR). 'no hacer lugar'
+# no es grant. (El ruteo pleno de la negación a la rama reject se difiere a la 2ª pasada
+# de apelados de resolución directa; 0 casos en las 546 originarias.)
+RE_FONDO_NEG = re.compile(r"\bno\s+(?:se\s+)?(?:corresponde\s+)?(?:hacer?|ha|hace|hacen)\s+lugar\b", re.I)
+# Guard de objeto: el verbo cae sobre una excepción/defensa procesal, no sobre la demanda.
+RE_FONDO_EXCEP = re.compile(
+    r"\bexcepci[oó]n\b|\bfalta\s+de\s+(?:acci[oó]n|legitimaci[oó]n)\b|\bdefecto\s+legal\b|\bacumulaci[oó]n\b", re.I)
+# Asimetría: el rechazo es de fondo SALVO que el considerando funde inadmisibilidad
+# (la instancia originaria no procede / la pretensión es ajena a la competencia originaria).
+RE_FONDO_INADM = re.compile(
+    r"inadmisibilidad\s+de\s+la\s+pretensi[oó]n|admisibilidad\s+de\s+la\s+instancia"
+    r"|recaudos\s+que\s+condiciona\s+la\s+admisibilidad|requisitos\s+jurisdiccionales"
+    r"|no\s+debe\s+tramitar\s+ante\s+esta\s+instancia"
+    r"|ajena\s+a\s+la\s+(?:competencia|jurisdicci[oó]n)\s+originaria|en\s+condici[oó]n\s+de\s+parte", re.I)
+
+def es_de_fondo(considerando, por_ello):
+    """¿La originaria resolvió el FONDO de la demanda? (isMerit de la originaria).
+
+    Opera sobre texto norm()'d. grant = fondo siempre; reject = fondo salvo que el
+    considerando funde inadmisibilidad (asimetría B136). Verbo sobre excepción/defensa
+    o 'no hacer lugar' NO cuenta. Medido en disco: 133/546 originarias, precisión limpia.
+    """
+    pe = norm(por_ello); co = norm(considerando)
+    if RE_FONDO_EXTRA_GRANT.search(pe):
+        return True
+    for m in RE_FONDO_GRANT_DEM.finditer(pe):
+        if RE_FONDO_NEG.search(pe[max(0, m.start() - 25):m.end()]):
+            continue                      # 'no hacer lugar' = no grant
+        if RE_FONDO_EXCEP.search(m.group(0)):
+            continue                      # 'hacer lugar a la excepción...' = procesal
+        return True
+    for m in RE_FONDO_REJECT_DEM.finditer(pe):
+        if RE_FONDO_EXCEP.search(m.group(0)):
+            continue                      # 'desestimar la excepción de falta de acción' = procesal
+        return not bool(RE_FONDO_INADM.search(co))   # asimetría
+    return False
+
+def es_revision_fondo(disp, por_ello, is_originaria, considerando=""):
+    """GATE de revisión de fondo (isMerit) — M26 rewiring + B136 (H169).
 
     Deriva de caseDisposition (disp) ∈ fondo, MENOS los guards dispositivos B119
-    (competencia/inoficioso = procedimiento) y la originaria. El guard vive acá, NO
-    en disposicion(): un fallo de competencia que revoca para sentar competencia
-    conserva caseDisposition=revoca, pero es_revision_fondo=no. Reemplaza la copia
-    perezosa (es_revision_fondo == is_merit_decision) de derivar_recursos.
-    Devuelve 'si'/'no'.
+    (competencia/inoficioso = procedimiento). El guard vive acá, NO en disposicion():
+    un fallo de competencia que revoca para sentar competencia conserva
+    caseDisposition=revoca, pero es_revision_fondo=no. B136: la originaria ya NO es
+    hard-`no` — su mérito lo decide es_de_fondo (mismo detector que el is_merit del
+    parser → ejes coinciden). Devuelve 'si'/'no'.
     """
     pe = norm(por_ello)
     if RE_DISP_COMPETENCIA.search(pe) or RE_DISP_INOFICIOSO.search(pe):
         return "no"                       # competencia/inoficioso dispositivo = procedimiento
     if is_originaria:
-        return "no"                       # originaria no es revisión
+        return "si" if es_de_fondo(considerando, por_ello) else "no"   # B136: era 'no' fijo
     return "si" if disp in _FONDO else "no"
