@@ -18840,3 +18840,61 @@ DEUDA editada directamente: encabezado + **B138** (cardinalidad cerrada, restric
 **Extracciones:** `diagnostico/_extraidos/H171/` — 10 archivos (9 casos + 1 `--cola`).
 
 **Commits:** 1 (script de diagnóstico H171 + DEUDA + BITACORA).
+
+## H172 — B135 (a)+(b) implementado (paso 1 de M39) + adjudicación de pendientes H171 (2026-07-02)
+
+**Objetivo:** cerrar los pendientes de H171 (decisión doctrinal 329_p5115, leer los 2 ordinarios de B138) e implementar el paso 1 del orden lockeado de M39 (B135), respetando REE: PoC read-only antes de tocar el parser.
+
+### H172-01 — Adjudicación de los pendientes H171 (lectura contra `.md`)
+
+- **329_p5115 (Civitarreale, doble conforme penal): FONDO / gate ACIERTO.** La cuestión federal (arbitrariedad por denegación del derecho a revisión post-Casal) fue adjudicada en pleno a favor del recurrente; la salvedad «sin abrir juicio sobre el fondo de la cuestión» reserva el fondo penal subyacente al tribunal de reenvío, no niega la revisión (el dictamen usa la misma fórmula en dos niveles). Decisión **Spaeth-compatible**: *vacated & remanded* = disposición de mérito, consistente con el 41% de `deja_sin_efecto` del corpus (M20). La posición estricta colapsaría el eje entero, no solo B140a.
+- **329_p5261 (ADC, imagen religiosa en Tribunales): ÚNICO FP de B140a confirmado.** Es *Munsingwear-style vacatur* — revocación profiláctica por mootness (imagen retirada) SIN adjudicación de nada (cons. 6°: «no importa confirmar ni afirmar… esta Corte se ve impedida de emitir opinión»). Simetría con 5115: en 5115 la fórmula limitativa es retórica y el mérito real; en ADC la «revocación» es retórica y la abstracción real. Resuelto casi íntegramente por conjueces (los ministros se excusaron: la demandada es el Poder Judicial). → **B140a cardinalidad real = 1.**
+- **334_p1302 (Mezzadra c/ EN, ordinario): ACIERTO del gate.** 3ª instancia ordinaria; cons. 7° «cabe ingresar… en el examen del planteo de la demandada», revisa responsabilidad estatal por morosidad judicial (>20 años). «Rechaza el ordinario» ≡ confirma en el fondo.
+- **342_p1524 (Deutsche Rück c/ Caja Nac. Ahorro, ordinario): ACIERTO del gate — testigo elegante.** La mayoría escribe «se rechaza el recurso ordinario», los votos Rosenkrantz y Rosatti escriben «se confirma la sentencia» para el MISMO resultado → **equivalencia rechaza≡confirma TEXTUAL dentro del propio fallo**.
+- **→ B138 = 17 FP reales + 2 aciertos ordinarios.** Restricción de diseño del guard futuro: excluir `via_recurso=ordinario` además de barrer por objeto.
+
+### H172-02 — PoC read-only del flip-set B135(a)+(b) (`poc_b135_flips.py` v0.1→v0.3)
+
+`scripts/diagnostico/H172/poc_b135_flips.py`. Importa los detectores reales del parser (Gate 3); mide el flip-set corpus-wide bajo las condiciones EXACTAS del fix. **Hallazgo de diseño clave:** el «ensanche» que H170 midió como 15/15 no era una regex con verbos, era la señal PELADA `competencia originaria`. Y el miss por guionado corpus-wide resultó **= 1** (337_p234 Credicoop) — los 15 de M1 no eran piso, eran casi el techo.
+
+- **v0.1:** flip-set bruto 49 bajo (b) mask + (a) señal pelada. Anclas A1 (replicación es_originaria == columna), A4 (0 pérdidas 1→0), A2, A3 [OK]. Eyeball → clases de FP: CIDH-local, tribunal provincial, «originaria o apelada».
+- **v0.2:** guards local/apelada/provincial + ensanche art.117 tentativo. Detectó que M1=15 era mecánico: **337_p901 (Duarte) es FP** (cita CIDH «competencia originaria local»), M1 real = 14. Gemelo 342_p2389.
+- **v0.3 (diseño final):** ensanche art.117 **RECHAZADO** (contribución marginal 0 TP / 1 FP: 348_p841); +guard `precedente` («…originaria en la causa "X"», 345_p220). **6 anclas [OK], flip-set == 43 exacto.**
+
+Los 8 flips ambiguos adjudicados por lectura contra el `.md` (extraídos H172). Clases de FP: F1 CIDH-local, F2 provincial, F3 «originaria o apelada», F4 precedente-en-la-causa, F6 doctrina causa-o-controversia (resuelto al rechazar art.117), **F5 historia procesal narrada** — no regexeable → 4 FP aceptados: 349_p163, 347_p2146, 347_p2286 (Ferrari-Levinas — cruce con H3 de la tesis), 334_p1842.
+
+### H172-03 — Cableado a `parser.py` (v23.0 → v23.1)
+
+`es_originaria` reescrita: **(b)** `RE_RUNNING_HEAD.sub` ANTES de `_unhyphenate` (el des-guionado unía «origi-» con el número de página del banner, no con «naria»); **(a)** 5ª señal pelada con `_orig_pelada_con_guards` (4 guards por-match, ventana provincial W=120), DESPUÉS de las 4 señales existentes (intactas). Cambio confinado a `es_originaria` + sus regex. Smoke funcional en sandbox 13/13 (señales previas intactas, mask con banner partiendo la palabra, 4 guards, CIDH suprimido con puntuación real).
+
+### H172-04 — Validación en disco (`verificar_b135_post.py` v0.1→v0.2)
+
+Primera corrida reveló que el P4 de v0.1 estaba MAL DISEÑADO (asumía ripple solo-ascendente). El ripple de `is_merit` es **BIDIRECCIONAL** (B136: la originaria nueva pasa del verbo apelativo a `es_de_fondo`). v0.2 rediseñó P4 como diff fila-a-fila vs golden.
+
+- **P1** is_originaria=1: 546 → **589** [OK]
+- **P2** flip-set 43/43 [OK] · **P3** 7 FP-fuera en 0 [OK]
+- **P4** cambios confinados a los 43 IDs × {is_originaria, is_merit_decision, tribunal_origen_status} [OK]
+- **Ripple is_merit 3003 → 3006 (+6 / −3):** suben (0→1, todas `rechaza`-de-fondo = mérito denegatorio que el verbo apelativo no veía): 329_p2088, 330_p748, 330_p4064, 332_p552, 334_p376, 337_p712. Bajan (1→0): 329_p2226 (caducidad en originaria, correcto), 329_p3894 (M1, eyeball pendiente H173), 347_p2146 (FP-F5, **costo real documentado: 1 caso de mérito genuino perdido**).
+
+### H172-05 — Sellado y medición de M39
+
+Golden re-sellado (`csjn_casos` sha `b8a21dcd1169`), recursos re-derivado (v0.6, disposición de fondo 2862/48,6%), manifest [CLEAN] 64. **Divergencia M39: 234 → 219** (`consistencia_merito` v0.3). Los 14 M1-verdaderos convergieron. El «1» que el diagnóstico sigue reportando en M1 es 337_p901 = ruido de la regex amplia SIN guards del script de diagnóstico (en el parser está correctamente en 0); **M1-real-del-parser = 0.** Paso 1 de M39 EJECUTADO.
+
+### H172-06 — Housekeeping de schema detectado (→ M41)
+
+Guillermo señaló que las extracciones de diagnóstico se vienen escribiendo en `diagnostico/_extraidos/HXX/` en la RAÍZ del repo, fuera del schema (deriva por imitación desde H171; H172 la siguió). Scripts bien ubicados (`scripts/diagnostico/HXX/`), salidas no. Registrado como **M41**: destino canónico propuesto `output/diagnostico/HXX/` + enforcement en `check_allowlist_paths` + skills. Migración + wiring = primer ítem de H173 (no se hizo en H172 para no mezclar move de archivos con la validación del golden).
+
+### H172 — Estado final
+
+- **Corpus:** parser v23.0 → **v23.1** (MINOR: recall de `is_originaria` acotado y medido; sin cambio de schema ni semántica). is_originaria 546→589, is_merit 3003→3006. Golden re-sellado, recursos re-derivado, manifest [CLEAN] 64.
+- **Eje de mérito:** divergencia M39 234→219; paso 1 del orden lockeado EJECUTADO. Próximo del orden: guards del gate (B138/B139/B140), con adjudicación ya hecha (B138 = 17+2, B140a = 1).
+- **B135:** sub-causas (a)+(b) CERRADAS; (c) señal compuesta PENDIENTE (refinamiento, no bloquea el paso 2).
+
+**Scripts creados:** `scripts/diagnostico/H172/poc_b135_flips.py` (v0.3, read-only), `scripts/diagnostico/H172/verificar_b135_post.py` (v0.2, gate de salida).
+**Scripts modificados:** `scripts/pipeline/parser.py` v23.0 → **v23.1** (`es_originaria`: mask (b) + señal 5 con guards (a)).
+**Outputs re-sellados:** `csjn_casos` (sha b8a21dcd1169), `csjn_casos_votos`, `csjn_casos_recursos` (v0.6); golden congelado; `_manifest.json` [CLEAN] 64.
+**Extracciones:** `diagnostico/_extraidos/H172/` — 13 casos + `b135_flips*.csv` (ubicación fuera de schema → M41).
+
+**Pendientes H173:** (1) housekeeping M41 (migrar `_extraidos`, wiring del gate) — PRIMERO; (2) eyeball 329_p3894 (M1, is_merit 1→0: ¿hace_lugar a demanda o incidente?); (3) B135(c) señal compuesta (opcional); (4) paso 2 de M39 = guards del gate (B138 excluir ordinarios + objeto; B139 estratos; B140a documentar ADC / B140b guard quirúrgico «por la que se concedió el recurso»).
+
+**Commits:** 1 (parser v23.1 + golden re-sellado + recursos re-derivado + manifest + 2 scripts diagnóstico H172 + DEUDA + BITACORA).

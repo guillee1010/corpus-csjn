@@ -44,7 +44,7 @@ wc_dictamen al final). El resto de las columnas mantienen su orden y
 semántica.
 """
 
-__version__ = "23.0"  # H169: B136 — is_merit de la ORIGINARIA ya NO es hard-0 (B119 #1 revertido en parte): la originaria resuelve la demanda directamente y su mérito lo detecta es_de_fondo (clasificador_disposicion v1.10, importado en cabecera), el MISMO detector que es_revision_fondo del deriver → is_merit_decision y es_revision_fondo coinciden en la originaria (133 de fondo). Verbo apelativo (outcome ∈ MERIT_OUTCOMES) sigue rigiendo la no-originaria SIN cambio. Medido en disco: is_merit 2870→3003 (+133 originarias 0→1), 0 no-originarias tocadas; ripple a la denormalización de is_merit en csjn_casos_votos + señal de clasificar_tipo_voto. MAJOR (semántica del eje de mérito para toda la clase originaria + nueva dependencia de módulo). Re-golden consciente + re-derivar recursos + re-sellar. NO cambia el schema (40 columnas). // H148: M26 paso 3 — REMOVIDA la columna causa_inadmisibilidad (re-cableada al deriver: clasificador_causa.py, gate=admisibilidad). Borrados OUTCOME_A_CAUSA/OUTCOMES_GATE_GENERICO/RE_CAUSA_*/clasificar_causa_inadmisibilidad. RE_280_*/RE_ACORDADA_4_*/_unhyphenate QUEDAN (los usa classify_outcome). El voto NO denormaliza causa → csjn_casos_votos.csv intacto. MAJOR (cambia el schema de csjn_casos.csv: 40 columnas, sin causa). Re-golden consciente + re-sello. // H139: RE_RUNNING_HEAD case-sensitive (saca re.I) — el banner es MAYÚSCULAS; "Corte Suprema" en mixta del cuerpo NO es header. Verificado: por_ello 467/467 mayúsculas → no-op sobre el output (check_regresion [CLEAN] esperado). Base para limpiar el banner del considerando (materia, frente aparte). MINOR. // H137: M21 Fase 2 — RE_RUNNING_HEAD enmascarado en _barrer (saca el banner editorial del por_ello + libera presupuesto del chunk → recupera el dispositivo truncado). MAJOR (afecta outcome/por_ello_text/considerando indirecto/votos denormalizados). 463 banners / 0 FP verificado sobre el texto del sidecar; el efecto de recuperación-por-presupuesto y la regresión se validan en disco re-corriendo el parser (regression→golden→re-sello). PROPUESTA, NO cerrado. // H131: B019 CERRADO — fallback firma_actual de detectar_fin_real ahora extiende la firma wrapeada (extender_firma): cuando la firma de la Corte parte en >1 línea del OCR ("…— Carlos\nS. Fayt — …"), el pick bidireccional anclaba en la 1ª línea-firma y dejaba la continuación afuera del bloque → firma/votos truncados (23 casos, todos pista_fin=firma_actual). extender_firma avanza desde la línea elegida por linea_es_firma_de_juez, frena en la 1ª no-firma (epílogo "Recurso … interpuesto por …"), tolera 1 vacía (espejo collect_firma_lines), respeta limite_adelante (no invade el fallo siguiente). PoC en disco (poc_b019_extender_firma_actual): +56 votos / 23 casos / 0 sobre-extensión / 92 firma-completa intactos. Corolario: la zona firma de csjn_casos_zonas crece 1-2 líneas en esos 23 (la zonificación es downstream de linea_fin_real, así que heredaba el truncado). MINOR: solo extiende la salida del fallback firma_actual; NO altera el pick bidireccional B045/H069. Residual: 338_p1060 (línea "Maqueda (según su voto)." de 1 juez no la agarra el predicado angosto = deuda menor); consolidación vía divisor de zonas = camino elegante futuro (mover zonificación upstream del borde). // H130: B124 CERRADO — regla P en _barrer: entre candidatos-con-firma de la ventana del dispositivo devuelve el PRIMER performativo (RE_PERF v2); fallback al primer-con-firma (= comportamiento v19) si ninguno lo es. RE_PERF v2 = "se <verbo>" (clítico opc., H129) | "(el Tribunal|esta Corte|la Corte) resuelve" | "resuelve:" — extiende v1 a performativos de mayoría SIN "se", auditados en disco (audit_resuelve_sin_se, 5890 casos: "el Tribunal resuelve" 300 + "resuelve:" 23; OTRO_RESUELVE/ESTA_CORTE/LA_CORTE/RESUELVE_UP = 0 → sin over-match de instancia inferior). Recupera el dispositivo de fondo cuando el primer-con-firma es argumental (cierra B123/B124). Validación en disco: outcome +121 recuperaciones (otro→real) / 29 real→real (dom. inadmisible_280→merit) / 0 regresiones a otro; scan_concurrencia 0 sospechosos (mis-pick de concurrencia 331_p1028 cerrado = causa del rollback v20→v19 en H129); es_queja +8 recup / 2 correcciones de FP / 1 FN conocido (340_p114); votos net +1 (342_p1170 1→5 recupera panel, 348_p1435 dedup Alcalá; 332_p663 6→4 = exposición de B126, frente aparte). MAJOR: cambia el pick del dispositivo (afecta outcome/por_ello_text y derivados denormalizados en votos —outcome/is_merit/is_originaria/tipo_voto_sep—; considerando/firma/zonas/editorial sin cambio de lógica). // M21/H126: B122/B118 — skip de líneas vacías en el presupuesto del chunk de _barrer (resolver_dispositivo). El running-head intercalado dejaba vacías OCR que agotaban el chunk antes del '.' real y truncaban el verbo de disposición → outcome caía a otro. Skip-only +50 flips corpus-wide (otro→competencia 37), 0 regresiones (PoC H125). MAJOR: cambia el comportamiento de _barrer (afecta outcome/por_ello_text y sus derivados denormalizados en csjn_casos_votos —outcome/is_merit/is_originaria/tipo_voto_sep por voto—; considerando/firma/zonas/editorial intactos; identidad del voto juez/posicion/texto_voto/wc_voto intacta). Masking del banner = Fase 2 (gated). // B119: capa disposicion M20 (PASO 2) — detectores competencia/cautelar/nulidad_concesion/inoficioso pre-cascada + #1 originaria-no-merit + #2 des-hifenado es_originaria. Gate 0,907→0,953 (FP 19→5, 0 FN nuevos). // H113: split csjn_casos_textos — considerando_text/por_ello_text/firma_raw salen de csjn_casos.csv a output/parser/csjn_casos_textos.csv (5º CSV del parser, keyed por caso_id_canonico, espejo 1:1 5890 filas, SIN truncado; antes considerando[:2000] 47,6% cortado / por_ello[:300]); habilita materia capa 2 (lee el considerando completo). Escritura por proyección de fieldnames (patrón zonas), texto full ya estaba en memoria → relocaliza al escribir, sin cambio de lógica de parseo. Re-golden consciente + 7º output al manifest (generar_manifiesto v1.3). // H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
+__version__ = "23.1"  # H172: B135 (a)+(b) PARCIAL — es_originaria: (b) mask de RE_RUNNING_HEAD ANTES de _unhyphenate (el banner intercalado partía la señal y el des-guionado la unía al número de página; miss corpus-wide medido = 1, 337_p234 Credicoop); (a) 5ª señal «competencia originaria» PELADA con guards por-match (local/apelada/precedente/provincial W=120), calibrada por PoC en disco (poc_b135_flips v0.1→v0.3, anclas A1-A6 [OK]): flip-set 43 = 39 TP + 4 FP-F5 aceptados y documentados (349_p163, 347_p2146, 347_p2286, 334_p1842 — historia procesal narrada, 0,07%). M1 corregido a 14 (337_p901=Duarte, FP por cita CIDH «competencia originaria local»; gemelo 342_p2389). Ensanche de RE_ART_117_CN medido y RECHAZADO (marginal 0 TP / 1 FP: 348_p841). Las 4 señales existentes y el criterio-amplio SIN cambio; sub-causa (c) señal compuesta PENDIENTE. Ripple esperado: is_originaria 546→589 → is_merit vía es_de_fondo (B136) en el subset de fondo + denormalización en votos — MEDIR con verificar_b135_post. MINOR (recall acotado y medido; sin cambio de semántica ni schema). Re-golden consciente + re-derivar recursos + re-sellar. // H169: B136 — is_merit de la ORIGINARIA ya NO es hard-0 (B119 #1 revertido en parte): la originaria resuelve la demanda directamente y su mérito lo detecta es_de_fondo (clasificador_disposicion v1.10, importado en cabecera), el MISMO detector que es_revision_fondo del deriver → is_merit_decision y es_revision_fondo coinciden en la originaria (133 de fondo). Verbo apelativo (outcome ∈ MERIT_OUTCOMES) sigue rigiendo la no-originaria SIN cambio. Medido en disco: is_merit 2870→3003 (+133 originarias 0→1), 0 no-originarias tocadas; ripple a la denormalización de is_merit en csjn_casos_votos + señal de clasificar_tipo_voto. MAJOR (semántica del eje de mérito para toda la clase originaria + nueva dependencia de módulo). Re-golden consciente + re-derivar recursos + re-sellar. NO cambia el schema (40 columnas). // H148: M26 paso 3 — REMOVIDA la columna causa_inadmisibilidad (re-cableada al deriver: clasificador_causa.py, gate=admisibilidad). Borrados OUTCOME_A_CAUSA/OUTCOMES_GATE_GENERICO/RE_CAUSA_*/clasificar_causa_inadmisibilidad. RE_280_*/RE_ACORDADA_4_*/_unhyphenate QUEDAN (los usa classify_outcome). El voto NO denormaliza causa → csjn_casos_votos.csv intacto. MAJOR (cambia el schema de csjn_casos.csv: 40 columnas, sin causa). Re-golden consciente + re-sello. // H139: RE_RUNNING_HEAD case-sensitive (saca re.I) — el banner es MAYÚSCULAS; "Corte Suprema" en mixta del cuerpo NO es header. Verificado: por_ello 467/467 mayúsculas → no-op sobre el output (check_regresion [CLEAN] esperado). Base para limpiar el banner del considerando (materia, frente aparte). MINOR. // H137: M21 Fase 2 — RE_RUNNING_HEAD enmascarado en _barrer (saca el banner editorial del por_ello + libera presupuesto del chunk → recupera el dispositivo truncado). MAJOR (afecta outcome/por_ello_text/considerando indirecto/votos denormalizados). 463 banners / 0 FP verificado sobre el texto del sidecar; el efecto de recuperación-por-presupuesto y la regresión se validan en disco re-corriendo el parser (regression→golden→re-sello). PROPUESTA, NO cerrado. // H131: B019 CERRADO — fallback firma_actual de detectar_fin_real ahora extiende la firma wrapeada (extender_firma): cuando la firma de la Corte parte en >1 línea del OCR ("…— Carlos\nS. Fayt — …"), el pick bidireccional anclaba en la 1ª línea-firma y dejaba la continuación afuera del bloque → firma/votos truncados (23 casos, todos pista_fin=firma_actual). extender_firma avanza desde la línea elegida por linea_es_firma_de_juez, frena en la 1ª no-firma (epílogo "Recurso … interpuesto por …"), tolera 1 vacía (espejo collect_firma_lines), respeta limite_adelante (no invade el fallo siguiente). PoC en disco (poc_b019_extender_firma_actual): +56 votos / 23 casos / 0 sobre-extensión / 92 firma-completa intactos. Corolario: la zona firma de csjn_casos_zonas crece 1-2 líneas en esos 23 (la zonificación es downstream de linea_fin_real, así que heredaba el truncado). MINOR: solo extiende la salida del fallback firma_actual; NO altera el pick bidireccional B045/H069. Residual: 338_p1060 (línea "Maqueda (según su voto)." de 1 juez no la agarra el predicado angosto = deuda menor); consolidación vía divisor de zonas = camino elegante futuro (mover zonificación upstream del borde). // H130: B124 CERRADO — regla P en _barrer: entre candidatos-con-firma de la ventana del dispositivo devuelve el PRIMER performativo (RE_PERF v2); fallback al primer-con-firma (= comportamiento v19) si ninguno lo es. RE_PERF v2 = "se <verbo>" (clítico opc., H129) | "(el Tribunal|esta Corte|la Corte) resuelve" | "resuelve:" — extiende v1 a performativos de mayoría SIN "se", auditados en disco (audit_resuelve_sin_se, 5890 casos: "el Tribunal resuelve" 300 + "resuelve:" 23; OTRO_RESUELVE/ESTA_CORTE/LA_CORTE/RESUELVE_UP = 0 → sin over-match de instancia inferior). Recupera el dispositivo de fondo cuando el primer-con-firma es argumental (cierra B123/B124). Validación en disco: outcome +121 recuperaciones (otro→real) / 29 real→real (dom. inadmisible_280→merit) / 0 regresiones a otro; scan_concurrencia 0 sospechosos (mis-pick de concurrencia 331_p1028 cerrado = causa del rollback v20→v19 en H129); es_queja +8 recup / 2 correcciones de FP / 1 FN conocido (340_p114); votos net +1 (342_p1170 1→5 recupera panel, 348_p1435 dedup Alcalá; 332_p663 6→4 = exposición de B126, frente aparte). MAJOR: cambia el pick del dispositivo (afecta outcome/por_ello_text y derivados denormalizados en votos —outcome/is_merit/is_originaria/tipo_voto_sep—; considerando/firma/zonas/editorial sin cambio de lógica). // M21/H126: B122/B118 — skip de líneas vacías en el presupuesto del chunk de _barrer (resolver_dispositivo). El running-head intercalado dejaba vacías OCR que agotaban el chunk antes del '.' real y truncaban el verbo de disposición → outcome caía a otro. Skip-only +50 flips corpus-wide (otro→competencia 37), 0 regresiones (PoC H125). MAJOR: cambia el comportamiento de _barrer (afecta outcome/por_ello_text y sus derivados denormalizados en csjn_casos_votos —outcome/is_merit/is_originaria/tipo_voto_sep por voto—; considerando/firma/zonas/editorial intactos; identidad del voto juez/posicion/texto_voto/wc_voto intacta). Masking del banner = Fase 2 (gated). // B119: capa disposicion M20 (PASO 2) — detectores competencia/cautelar/nulidad_concesion/inoficioso pre-cascada + #1 originaria-no-merit + #2 des-hifenado es_originaria. Gate 0,907→0,953 (FP 19→5, 0 FN nuevos). // H113: split csjn_casos_textos — considerando_text/por_ello_text/firma_raw salen de csjn_casos.csv a output/parser/csjn_casos_textos.csv (5º CSV del parser, keyed por caso_id_canonico, espejo 1:1 5890 filas, SIN truncado; antes considerando[:2000] 47,6% cortado / por_ello[:300]); habilita materia capa 2 (lee el considerando completo). Escritura por proyección de fieldnames (patrón zonas), texto full ya estaba en memoria → relocaliza al escribir, sin cambio de lógica de parseo. Re-golden consciente + 7º output al manifest (generar_manifiesto v1.3). // H111: B114 find_tribunal_origen v12 — corta el nombre del tribunal por el fin de línea del OCR (guión/soft-hyphen intra-palabra + corte inter-palabra en preposición); v12 une hasta la línea que cierra en '.', break por carátula (_parece_caratula, proporción ≥60% MAYÚS) + _unhyphenate al persistir; ~1141 celdas tribunal_origen recuperadas, 0 violaciones de invariante; habilita capa 1 del Frente B (tribunal→fuero→materia). + Fix infra: lineterminator="\n" en los 4 DictWriter — csv.DictWriter default escribe CRLF, pero golden/prod estaban en LF (normalizados por git) → check_regresion daba FAIL espurio en los 4 CSV (byte-diff, 0 diffs de celda); ahora escritura LF determinística e independiente del entorno/git. // H108: capa-fuente es_queja — ancla fuerte de caratula ("recurso de hecho deducido/interpuesto por"), ~225 flips, guard cita; tail debil + capa considerando diferidos a DEUDA. // H107: B110 (parte) es_queja plural — \\bqueja\\b→\\bquejas?\\b en RE_ES_QUEJA y _SYN_Q (quejas multi-recurrente); ~60 es_queja 0→1, ~57 recuperan queja_resultado; aditivo (0 flips 1→0)
 
 import re
 import csv
@@ -1283,9 +1283,56 @@ RE_CN_DEMANDA_ESTADO = re.compile(
     re.I,
 )
 
+# ── B135 (H172): 5ª señal — «competencia originaria» pelada, con guards ──────
+# La cola de RE_COMPETENCIA_ORIGINARIA («de esta Corte/del Tribunal/de la Corte
+# Suprema») pierde los holdings sin cola («mantener su / asume su competencia
+# originaria para dictar sentencia definitiva», «este juicio corresponde a la
+# competencia originaria prevista en los artículos 116 y 117…»). Señal pelada
+# medida corpus-wide (poc_b135_flips v0.1→v0.3, anclas A1-A6 [OK]): flip-set
+# 43 = 39 TP + 4 FP-F5 aceptados (historia procesal narrada / doctrina:
+# 349_p163, 347_p2146, 347_p2286 Ferrari-Levinas, 334_p1842 — 0,07%).
+# Guards POR-MATCH, calibrados contra FP leídos; NO tocan las 4 señales previas:
+#   local      — cita CIDH «competencia originaria local» (Barreto Leiva:
+#                337_p901=Duarte, 342_p2389)
+#   apelada    — aside doctrinal «originaria o apelada» (339_p1254)
+#   precedente — precedente citado «…originaria en la causa “X”» (345_p220)
+#   provincial — tribunal/constitución provincial en ventana previa W=120
+#                (329_p6072 TSJ Neuquén, 330_p76 Constitución del Chaco)
+# Ensanche de RE_ART_117_CN a «116 y 117»: medido y RECHAZADO (0 TP / 1 FP
+# marginal, 348_p841).
+RE_ORIG_PELADA = re.compile(r"competencia\s+originaria", re.I)
+RE_ORIG_G_LOCAL      = re.compile(r"^\s*local\b", re.I)
+RE_ORIG_G_APELADA    = re.compile(r"^\s+o\s+apelada\b", re.I)
+RE_ORIG_G_PRECEDENTE = re.compile(r"^\s+en\s+la\s+causa\b", re.I)
+RE_ORIG_G_PROVINCIAL = re.compile(
+    r"Superior\s+de\s+Justicia|Superior\s+Tribunal|Tribunal\s+Superior|"
+    r"Suprema\s+Corte\s+de|Constituci[óo]n\s+de\s+la\s+Provincia|"
+    r"Constituci[óo]n\s+provincial", re.I)
+_ORIG_W_PROV = 120
+
+
+def _orig_pelada_con_guards(cuerpo):
+    """B135 (H172): True si algún match de la señal pelada sobrevive a los
+    guards por-match (calibración en el comentario de arriba)."""
+    for m in RE_ORIG_PELADA.finditer(cuerpo):
+        post = cuerpo[m.end():]
+        pre = cuerpo[max(0, m.start() - _ORIG_W_PROV):m.start()]
+        if RE_ORIG_G_LOCAL.search(post):
+            continue
+        if RE_ORIG_G_APELADA.search(post):
+            continue
+        if RE_ORIG_G_PRECEDENTE.search(post):
+            continue
+        if RE_ORIG_G_PROVINCIAL.search(pre):
+            continue
+        return True
+    return False
+
+
 def es_originaria(case_name, considerando_text, por_ello_text):
     """
-    v11: detección positiva de competencia originaria.
+    v11: detección positiva de competencia originaria. B135 (H172): +señal 5
+    y mask del banner antes del des-guionado.
 
     Criterio AMPLIO: incluye fallos donde la Corte declina la competencia
     originaria (porque el caso fue presentado como originario, aunque la Corte
@@ -1295,14 +1342,20 @@ def es_originaria(case_name, considerando_text, por_ello_text):
       1. "competencia originaria de esta Corte" en el texto del fallo
       2. Referencia al art. 117 CN en el texto
       3. "Originario" como marcador en el case_name
-      4. Patrón de demanda contra Provincia o Estado Nacional en case_name
-         CON al menos una mención adicional de competencia o art. 117
+      4. Forma originaria mencionada
+      5. "competencia originaria" pelada con guards por-match (B135, H172)
 
-    El criterio (4) requiere doble señal porque el case_name por sí solo
-    no garantiza originaria: hay quejas contra provincias que llegan en
-    apelación y NO son originarios.
+    El case_name tipo demanda-contra-Estado sigue sin usarse solo (precisión
+    ≈11%, H156) — señal compuesta = B135(c), pendiente.
     """
-    cuerpo = _unhyphenate((considerando_text or "") + " " + (por_ello_text or ""))
+    # B135(b) (H172): enmascarar el running-head ANTES del des-guionado — el
+    # banner intercalado parte la señal («competencia origi- [5117 DE JUSTICIA
+    # DE LA NACIÓN 329] naria», 337_p234 Credicoop) y _unhyphenate une el guión
+    # con el NÚMERO de página (\w matchea dígitos), no con «naria». Patrón H137
+    # (_barrer) aplicado localmente. Miss por guionado corpus-wide medido = 1.
+    cuerpo = (considerando_text or "") + " " + (por_ello_text or "")
+    cuerpo = RE_RUNNING_HEAD.sub(" ", cuerpo)
+    cuerpo = _unhyphenate(cuerpo)
 
     # Señal fuerte 1: competencia originaria mencionada explícitamente
     if RE_COMPETENCIA_ORIGINARIA.search(cuerpo):
@@ -1316,9 +1369,12 @@ def es_originaria(case_name, considerando_text, por_ello_text):
     # Señal fuerte 4: forma originaria mencionada
     if RE_FORMA_ORIGINARIA.search(cuerpo):
         return True
-    # Señal compuesta: provincia/Estado en case_name + corroboración en cuerpo
-    # (deliberadamente NO se usa case_name solo como señal — demasiados falsos
-    # positivos, p.ej. quejas contra el fisco provincial que vienen en apelación)
+    # Señal 5 (B135/H172): pelada con guards por-match
+    if _orig_pelada_con_guards(cuerpo):
+        return True
+    # Señal compuesta: B135(c) PENDIENTE — provincia/Estado en case_name +
+    # corroboración en cuerpo (deliberadamente NO case_name solo: ≈11% de
+    # precisión medida H156, p.ej. quejas contra el fisco provincial en apelación)
     return False
 
 # ── NUEVO v12: clasificación de votos individuales ────────────────────────

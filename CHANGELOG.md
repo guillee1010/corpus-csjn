@@ -2,6 +2,19 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H172 (2026-07-02)
+
+- `parser.py` v23.0→v23.1: B135 (a)+(b) — `es_originaria` gana 5ª señal `competencia originaria` pelada con 4 guards por-match (local/apelada/precedente/provincial W=120) + mask de `RE_RUNNING_HEAD` ANTES de `_unhyphenate` (el banner intercalado partía la señal y el des-guionado la unía al número de página). Las 4 señales previas y el criterio-amplio, intactos. Ensanche de `RE_ART_117_CN` medido y RECHAZADO (0 TP/1 FP). Recall acotado y medido; sin cambio de schema ni semántica. Sub-causa (c) señal compuesta, PENDIENTE.
+- `output/parser/csjn_casos.csv`: v23.1, sha `b8a21dcd1169`. is_originaria 546→589 (+43); is_merit 3003→3006 (ripple bidireccional vía `es_de_fondo`/B136: +6 rechaza-de-fondo / −3); tribunal_origen_status → originaria en los 43. Cambios confinados a los 43 IDs × {is_originaria, is_merit_decision, tribunal_origen_status} (verificado fila-a-fila vs golden).
+- `output/parser/csjn_casos_votos.csv`: v23.1, sha `8f771848b38a` (denormalización de is_originaria/is_merit sobre los 43).
+- `output/parser/csjn_casos_recursos.csv`: re-derivado v0.6, sha `6a03a70fcea6` (disposición de fondo 2862/48,6%).
+- `scripts/tests/golden/`: golden re-congelado (5 CSV del parser; `csjn_casos` sha `b8a21dcd1169`). Diff consciente vs golden previo = solo los 43 originarias.
+- `_manifest.json`: re-sellado (v23.1/v0.6), `--verify [CLEAN] 64`.
+- `scripts/diagnostico/H172/poc_b135_flips.py`: NUEVO v0.1→v0.3 — PoC read-only del flip-set corpus-wide bajo las condiciones exactas del fix (importa detectores reales del parser; anclas A1-A6). Flip-set final 43 = 39 TP + 4 FP-F5 aceptados (0,07%).
+- `scripts/diagnostico/H172/verificar_b135_post.py`: NUEVO v0.1→v0.2 — gate de salida del cableado (P1-P4: cardinalidad, flip-set, FP-fuera, diff fila-a-fila vs golden con descomposición del ripple). v0.1 rediseñada tras la 1ª corrida (P4 asumía ripple solo-ascendente; es bidireccional).
+- Divergencia M39 234→219 (`consistencia_merito` v0.3): paso 1 del orden lockeado EJECUTADO; M1-real-del-parser = 0.
+- (Nota housekeeping → DEUDA M41: extracciones de diagnóstico en `diagnostico/_extraidos/HXX/` fuera de schema; migración a destino canónico + wiring de `check_allowlist_paths` = primer ítem H173.)
+
 ## H169 (2026-07-01)
 
 - `clasificador_disposicion.py` v1.09→v1.10: detector nuevo `es_de_fondo(considerando, por_ello)` (fondo de la demanda en instancia originaria); `es_revision_fondo` gana param `considerando` y deja de hardcodear «no» para la originaria.
