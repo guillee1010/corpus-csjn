@@ -18980,3 +18980,53 @@ Corrida completa v23.2 + `verificar_b141_post.py`: 13 `por_ello` extendidos, is_
 **Scripts creados:** `scripts/diagnostico/H174/` (no publicado, política del repo): `poc_b141_guard_inlimine.py`, `verificar_b141_post.py`, extracts de los 16, backups PRE, `corrida_v232.log`.
 
 **Commits:** 2 (pipeline+outputs+golden+manifest; docs).
+
+# APPEND para BITACORA.md — pegar al final
+
+## H175 — Paso 2 de M39: guards del gate — B138 cerrado (rediseño post-testigos) + B140b cerrado + B140a documentado (2026-07-04)
+
+**Objetivo:** diseñar, medir (PoC read-only primero) e implementar los guards del gate `es_revision_fondo` para B138/B140b, con B140a a confirmar-y-documentar, en unidades atómicas y con flip-set adjudicado antes de cada cableado.
+
+### H175-01 — Baseline reproducido + discrepancia adjudicada
+
+Gates de apertura completos en sandbox sobre los CSVs de producción: is_merit 3008 · is_originaria 589 · divergencia M39 219 · B138=19 (ancla D1 19/19 [OK]) · B140b=10 (IDs verbatim) [OK]. Una discrepancia bloqueante adjudicada antes de diseñar: el molde mostró 3 casos B138 con `via_recurso=ordinario` (no 2) — el tercero es 330_p826 (queja pura, FP confirmado H170) con la VÍA MAL DERIVADA (mismo modo de FP que 331_p1262/B139b; no es ripple B141, no está en la familia). Consecuencia de diseño: la excepción del ordinario en el guard B138 va POR OBJETO TEXTUAL en el pe, no por la columna `via_recurso` — coincide con la restricción ya registrada en H171-05.
+
+### H175-02 — B138: diseño v1 DESCARTADO pre-instalación por lectura de testigos
+
+PoC v1 (lista negativa: suprimir el fallback `RE_RECHAZA_REC` salvo objeto ordinario) midió flip-set exacto de 17. ANTES de instalar se extrajeron y leyeron los 4 del flip-set nunca leídos contra el `.md`: **la clase «se rechaza el REX» resultó HETEROGÉNEA** — 330_p3801 (Minaglia, Fallos 330:3801) es FONDO REAL con dispositivo mixto (mal concedido ×2 + «bien concedido»/«ingresando al fondo del agravio», art. 18 CN en 4 considerandos, disidencias Petracchi y Maqueda-Zaffaroni) → el diseño v1 le fabricaba un FN sobre un leading case; 331_p2567 (Espejo Sola) borderline inclinado a fondo; 331_p2621 (insuficiencia, remisión a dictamen) y 330_p4891 (reposición encubierta, pe dice «el recurso de fs. 34») acceso puro. Minaglia y Espejo Sola quedan anotados como evidencia B142 (mixtos).
+
+### H175-03 — B138 CERRADO: guard lista-positiva (clasificador v1.11→v1.12)
+
+Rediseño con polaridad invertida: guard dispara SOLO en objetos inequívocos de acceso (`RE_RECHAZA_ACCESO`: queja / recurso de hecho / recurso de queja / reposición); REX y «recurso» genérico quedan fuera (gate=si, default conservador ante corpus futuro). PoC re-medido: flip-set EXACTO = 11 (9 quejas + 330_p826 + 331_p1284), 0 no→si; divergencia 219→208; `disposicion()` 0 diffs/5697 (verbo intacto); `parte_ganadora` 0 cambios; is_merit del parser 0 ripple (importa `es_de_fondo`, intacto). Contabilidad 19/19: 11 corregidos + 2 ordinarios (si) + 4 FP residuales documentados (1205, 747, 2621, 4891) + Minaglia (si correcto) + 2567 (si, sin daño). Verificación en disco bimodal [OK]: PRE 11 flips, POST 0 flips + columna directa (los 11 en no, si total 2958). Dists de vía/admisibilidad/causa invariantes verificadas rubro por rubro contra la columna pre.
+
+### H175-04 — B140b CERRADO: ensanche RE_NULIDAD_CONCESION (v1.12→v1.13)
+
+Alternativa nueva en el guard B131 (se suma, no reemplaza): «nulidad (parcial) de la/del resolución/decisión/auto … conced… … recurso» SIN exigir «extraordinario» — cubre «por la que se concedió» (los 9 invisibles) y la intercalada de Paccagnini. FLIP DE VERBO (pre-cascada de `disposicion()`): PoC flip-set EXACTO = los 10 IDs de DEUDA, 0 hits extra corpus-wide; nulidad 66→56, nulidad_concesion 31→41; parte_ganadora → no_aplica; gate → no. **Ripple NO PREDICHO adjudicado:** `admisibilidad` consume `disposicion` → los 10 salen de `admite` (donde estaban mal): 9→sin_marcador (coherentes por construcción: dist final de nulidad_concesion = 40 sin_marcador + 1 inadmite) y 1→inadmite+CUESTION_ABSTRACTA (Paccagnini). Divergencia 208→**216** — CORRECTO: los 9 invisibles tienen is_merit=1 del parser (su copia de la regex, parser L470, NO se tocó — orden M39 lockeado) y quedan EXPUESTOS como residuo lado parser para el paso 3; Paccagnini converge. Verificación bimodal en disco [OK].
+
+### H175-05 — Gold n300: blind 0,930 intacto por construcción
+
+Kit de validación localizado en `scripts/validacion/` (el docstring L6 del clasificador apunta al path viejo de H120 — anotado). Ninguno de los 10 de B140b (ni los 11 de B138) cae en el n300. `build_m20.py` corrido con clf v1.13: clave regenerada BYTE-IDÉNTICA a la pre (0 celdas diff / 300 filas) → el blind no se re-mide porque no se tocó. Backup de la clave pre en `scripts/diagnostico/H175/M20_clave_PRE_v113.csv`.
+
+### H175-06 — B140a: resuelto-sin-guard, documentado
+
+Conforme la adjudicación H172 (cardinalidad real = 1, ADC/329_p5261, Munsingwear-style vacatur): documentado como FP conocido en la entrada; sin guard. Con esto el paso 2 de M39 queda sustancialmente ejecutado; resta B139.
+
+### H175-07 — Lección operativa: protocolo de instalación de entregas
+
+Dos unidades tropezaron en el tránsito por Downloads (sufijos del navegador instalaron un PoC supersedido; un `Copy-Item` sin destino ensució la raíz del repo — limpiado; una re-derivación corrió con v1.12 creyendo v1.13 — no-op inocuo, detectado). Los CANDADOS DE VERSIÓN embebidos en los PoC frenaron correctamente las tres veces. Protocolo consagrado: (1) `Select-String __version__` en ORIGEN, (2) `Copy-Item` con DESTINO EXPLÍCITO, (3) `Select-String` en DESTINO, (4) Downloads limpio tras cada entrega. Los verificadores quedan BIMODALES (pre-rederivación: flip-set esperado; post: 0 flips + columna al día) para servir de medición y de verificación post-instalación con el mismo artefacto.
+
+### H175 — Estado final
+
+- **Corpus:** 5890 casos; 5697 fallos comparados. Parser INTACTO (v23.2; is_merit 3008, is_originaria 589 sin cambio).
+- **Eje de mérito:** `es_revision_fondo=si` 2969 → 2958 (B138) → **2948** (B140b; recomputado corpus completo con v1.13). Divergencia M39: 219 → 208 → **216** (los 9 de B140b expuestos = residuo lado parser, paso 3).
+- **Disposición:** nulidad 66→56 · nulidad_concesion 31→41; resto de la dist byte-idéntico. `admisibilidad`: admite 2896→2886 · sin_marcador 1323→1332 · inadmite 1108→1109; `causa`: CUESTION_ABSTRACTA 92→93.
+- **Gold n300:** clave byte-idéntica con v1.13; 0 IDs tocados en el frame.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos_recursos.csv` — 5890 filas (re-derivado ×2: v1.12 y v1.13).
+- Resto de outputs del parser: sin cambios.
+
+**Scripts creados:** `scripts/diagnostico/H175/` — poc_b138_flips.py (bimodal), poc_b140b_flips.py (bimodal), clasificador_disposicion_v112_PRE.py (backup), M20_clave_PRE_v113.csv (backup clave). Extracciones leídas: 330_p3801, 331_p2567, 331_p2621, 330_p4891 (+ los .md en scripts/diagnostico/H175/ si se conservan).
+
+**Commits:** [completar tras el paso 6 del cierre].
+

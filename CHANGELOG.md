@@ -2,6 +2,18 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+# APPEND para CHANGELOG.md — pegar al final
+
+## H175 (2026-07-04)
+
+- `clasificador_disposicion.py` v1.11 → v1.12 (B138): guard lista-positiva `RE_RECHAZA_ACCESO` en `es_revision_fondo` — el fallback `RE_RECHAZA_REC` con objeto inequívoco de acceso (queja / recurso de hecho / recurso de queja / reposición) deja de contar como fondo. 11 casos (gate si→no). Verbo intacto (0 diffs corpus).
+- `clasificador_disposicion.py` v1.12 → v1.13 (B140b): alternativa nueva en `RE_NULIDAD_CONCESION` — «nulidad (parcial) de resolución/decisión/auto … conced… … recurso» sin exigir «extraordinario». 10 casos: verbo nulidad→nulidad_concesion, parte→no_aplica, gate→no, admisibilidad admite→sin_marcador(9)/inadmite(1).
+- `output/parser/csjn_casos_recursos.csv`: 5890 filas (sin delta de filas). es_revision_fondo=si 2969→2948; nulidad_concesion 31→41; admite 2896→2886; CUESTION_ABSTRACTA 92→93.
+- Divergencia M39: 219→216 (11+1 convergen; 9 invisibles de B140b expuestos = residuo lado parser, paso 3).
+- `scripts/validacion/M20_clave_parser_n300.csv`: regenerada con clf v1.13, byte-idéntica (blind 0,930 intacto).
+- `scripts/diagnostico/H175/`: poc_b138_flips.py, poc_b140b_flips.py (verificadores bimodales), backups (clasificador v1.12 PRE, clave n300 PRE).
+
+
 ## H174 (2026-07-03)
 
 - `parser.py` v23.1→v23.2: B141 — guard de falso terminador en el chunk de `_barrer` (inicial anonimizada / numeral romano a fin de línea) + peek de firma anti-contaminación. 13 `por_ello` extendidos, is_merit +2 (3006→3008), pick de 334_p1047 sanado (regla P + considerando). + Fix infra: stdout/stderr `errors="replace"` (crash cp1252 bajo redirección, latente en todas las versiones).
