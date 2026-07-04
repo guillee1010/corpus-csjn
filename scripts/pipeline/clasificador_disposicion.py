@@ -17,7 +17,56 @@ v1.01 — norm() ahora des-hifena el soft-hyphen (\u00ad) de fin de línea del O
         REQUIERE regenerar la clave (build_m20) y re-sellar antes de cerrar.
 """
 import re
-__version__ = "1.11"
+__version__ = "1.13"
+
+# v1.13 (B140b — H175). Ensancha RE_NULIDAD_CONCESION (pre-cascada B131, usada
+# por disposicion() L~): alternativa NUEVA que cubre la fórmula literal «nulidad
+# (parcial) de la resolución/decisión/auto … conced… … recurso» SIN exigir
+# «extraordinario» — el gap de ventana registrado en H170 (DEUDA L4656, testigo
+# 343_p2098 con referencia intercalada) y cerrado en cardinalidad en H171: 10
+# casos, 9 invisibles a la divergencia (outcome acompaña), fórmula «por la que
+# se concedió el recurso»; testigo 329_p120 leído H171 (Olivero y Rodríguez:
+# nulidad de concesión por auto no fundado — vía pura, 0 fondo). FLIP DE VERBO
+# (a diferencia del guard B138): nulidad → nulidad_concesion en los 10, arrastra
+# parte_ganadora recurrente_gana → no_aplica (la corrección buscada: los 10
+# inflaban is_merit/gate/parte) y gate si → no (nulidad_concesion ∉ _FONDO).
+# PoC read-only corpus-wide (poc_b140b_flips.py): flip-set EXACTO = los 10 IDs
+# de DEUDA, 0 hits extra fuera de la familia. Divergencia M39 SUBE 208 → 216 y
+# es correcto: los 9 invisibles tienen is_merit=1 del parser (outcome=nulidad,
+# copia propia de la regex en parser L470 NO tocada — orden M39 lockeado) y
+# quedan expuestos como residuo lado parser hasta el paso 3 (is_merit derivado
+# del clasificador). Paccagnini (2098, abstracto) converge. Blind 0,930: exige
+# verificación gold n300 en disco (build_m20) antes de sellar — los 10 IDs los
+# lista el PoC.
+
+# v1.12 (B138 — H175). Guard del GATE (patrón B119/B131, verbo intacto): cuando
+# disp=confirma llegó por el FALLBACK RE_RECHAZA_REC (ningún patrón de DISP matchea
+# el pe) Y el objeto rechazado es INEQUÍVOCAMENTE de acceso (RE_RECHAZA_ACCESO,
+# lista POSITIVA: queja / recurso de hecho / recurso de queja / reposición) →
+# es_revision_fondo=no. Rechazar la queja o el recurso de hecho es negarse a abrir
+# la instancia por definición; la reposición es procesal. DISEÑO POST-TESTIGOS
+# (H175): la primera versión del guard (lista negativa: suprimir todo salvo
+# ordinario) se DESCARTÓ antes de instalarse porque la clase «se rechaza el REX»
+# resultó HETEROGÉNEA al leerla contra el .md — 330_p3801 (Minaglia, Fallos
+# 330:3801) es dispositivo MIXTO con fondo real («bien concedido» + «ingresando al
+# fondo del agravio», rechaza en el mérito ≡ confirma; evidencia B142) y 331_p2567
+# (Espejo Sola) trata un agravio en sustancia; vs 330_p1205 / 348_p747 / 331_p2621
+# = acceso puro (280, mal concedido, insuficiencia). La lista positiva deja los REX
+# y el «recurso» genérico FUERA del guard (gate=si se sostiene): 3 FP conocidos
+# quedan documentados en B138, 0 FN fabricados, y el default ante objeto desconocido
+# en corpus futuro es NO tocar. Respeta H172 (ordinarios 334_p1302/342_p1524 quedan
+# si) y H171-05 (por objeto textual, NO por via_recurso — FP conocido de la columna:
+# 330_p826 via=ordinario siendo queja pura). PoC read-only corpus-wide: flip-set
+# EXACTO = 11 (9 quejas + 1 recurso de hecho + 1 reposición), si→no, 0 no→si;
+# divergencia M39 219→208; is_merit del parser 0 ripple por construcción (importa
+# es_de_fondo, intacto). disposicion() intacta (blind 0,930 en pie). Residuales:
+# parte_ganadora=recurrente_pierde queda en los 11 (deriva del verbo lockeado) y
+# los FP del fallback que el guard NO toca quedan como límite documentado — 4
+# leídos/adjudicados H175: 330_p1205 (280 en una línea), 348_p747 (dictamen «mal
+# concedido»), 331_p2621 (insuficiencia, remisión a dictamen), 330_p4891 (reposición
+# contra desestimación de queja, pero el pe dice «el recurso de fs. 34» pelado —
+# objeto genérico ambiguo, no entra a la lista positiva a propósito). Su eventual
+# tratamiento exige señal de considerando y roza B142 (mixtos), fuera del alcance.
 
 # v1.11 (B141 acople — H174). Guard IN LIMINE en la rama reject de es_de_fondo():
 # el rechazo/desestimación «in limine» de la demanda es de UMBRAL (falta de caso
@@ -131,6 +180,12 @@ DISP = [
     ("modifica", re.compile(rf"\b(?:se\s+)?modifica(?:n)?\b{W}{OBJX}|\bsustituir\b{W}{OBJX}|\b(?:se\s+)?sustituye\b{W}{OBJX}", re.I)),
 ]
 RE_RECHAZA_REC = re.compile(r"\b(?:se\s+)?rechaza(?:n)?\b[^.;]{0,40}\b(?:recurso|queja)\b", re.I)
+# v1.12 (B138): objetos INEQUÍVOCOS de acceso (lista POSITIVA) — mismo esqueleto
+# que RE_RECHAZA_REC con el objeto especializado. Usado SOLO por el guard del gate
+# (es_revision_fondo); disposicion() no lo ve. Por objeto textual, NO via_recurso.
+RE_RECHAZA_ACCESO = re.compile(
+    r"\b(?:se\s+)?rechaza(?:n)?\b[^.;]{0,40}"
+    r"\b(?:quejas?|recursos?\s+de\s+(?:hecho|queja|reposici[oó]n))\b", re.I)
 RE_REMAND = re.compile(r"vuelvan?\s+los\s+autos|dicte\s+(?:un\s+)?nuev[ao]|nuevo\s+(?:pronunciamiento|fallo|sentencia)", re.I)
 RE_COMPET = re.compile(r"\bresulta\s+competente\b|\bdeclara\s+(?:la\s+)?(?:in)?competencia\b|\bdeber[áa]\s+entender\b|\bdeclara\s+competente\b", re.I)
 RE_DEMANDA = re.compile(r"\b(?:hac\w+\s+lugar|rechaz\w+|admit\w+|desestim\w+)\b[^.;]{0,30}\b(?:demanda|acci[oó]n|pretensi[oó]n)\b", re.I)
@@ -150,7 +205,13 @@ RE_NULIDAD_CONCESION = re.compile(
     r".{0,90}?conced\w+\b.{0,30}?recursos?\s+extraordinarios?|"
     r"(?:resoluci[oó]n|auto)\s+\w*\s*que\s+conced\w+\s+(?:el|los)\s+recursos?\s+extraordinarios?|"
     r"resoluci[oó]n\s+denegatoria\s+del\s+remedio\s+federal|"
-    r"denegatoria\s+del\s+remedio\s+federal", re.I)
+    r"denegatoria\s+del\s+remedio\s+federal|"
+    # v1.13 (B140b): «nulidad (parcial) de la resolución/decisión/auto …
+    # conced… … recurso» SIN exigir «extraordinario» — cubre la conectiva
+    # «por la que se concedió» (9 invisibles) y la intercalada de 343_p2098.
+    r"nulidad\s+(?:parcial\s+)?de(?:l|\s+la|\s+las)?\s+"
+    r"(?:resoluci[oó]n(?:es)?|decisi[oó]n(?:es)?|autos?)\b"
+    r".{0,90}?conced\w+\b.{0,30}?recursos?\b", re.I)
 
 # v1.08: guards del GATE (NO del verbo). VERBATIM del parser classify_outcome (B119):
 # RE_DISP_COMPETENCIA L488, RE_DISP_INOFICIOSO L497 — competencia/inoficioso DISPOSITIVOS
@@ -264,4 +325,9 @@ def es_revision_fondo(disp, por_ello, is_originaria, considerando=""):
         return "no"                       # competencia/inoficioso dispositivo = procedimiento
     if is_originaria:
         return "si" if es_de_fondo(considerando, por_ello) else "no"   # B136: era 'no' fijo
+    if (disp == "confirma"
+            and not any(p.search(pe) for _, p in DISP)     # confirma llegó por el fallback
+            and RE_RECHAZA_REC.search(pe)
+            and RE_RECHAZA_ACCESO.search(pe)):             # solo objeto INEQUÍVOCO de acceso
+        return "no"                       # v1.12 B138: queja/hecho/reposición ≠ revisión de fondo
     return "si" if disp in _FONDO else "no"

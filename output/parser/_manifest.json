@@ -1,9 +1,9 @@
 {
   "schema_version": 4,
   "manifest_generator_version": "1.8",
-  "generated_at": "2026-07-03T18:14:24.329751+00:00",
+  "generated_at": "2026-07-04T05:07:25.535560+00:00",
   "git": {
-    "commit": "f0fa30a8d9ec9c11bd00e5dd95aa56a549ee069e",
+    "commit": "cbf8015317166d8dd87e91f3434ed743ad3d0bbc",
     "dirty": true
   },
   "pipeline_scripts": {
@@ -16,7 +16,7 @@
     "derivar_recursos.py": "0.6",
     "extraer_epilogos.py": "0.3",
     "derivar_partes.py": "0.17",
-    "clasificador_disposicion.py": "1.11",
+    "clasificador_disposicion.py": "1.13",
     "clasificador_via.py": "0.1",
     "clasificador_admision.py": "0.2",
     "clasificador_causa.py": "0.5"
@@ -380,9 +380,9 @@
       "path": "output/parser/csjn_casos_recursos.csv",
       "generated_by": "derivar_recursos.py",
       "generator_version": "0.6",
-      "sha256": "da9b75c68bdf395c56d52070163e8744dea5ae8348de4b3e0acb8e9678eb2be7",
+      "sha256": "74cb18d336c4f45d1080ef570f996d6d0bfce9aae4f8f81a52fc2ff0a85a8385",
       "n_rows": 5890,
-      "n_bytes": 444806
+      "n_bytes": 444920
     },
     "csjn_casos_epilogo.csv": {
       "path": "output/parser/csjn_casos_epilogo.csv",

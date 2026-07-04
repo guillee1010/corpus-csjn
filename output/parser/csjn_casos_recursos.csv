@@ -18,7 +18,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 329_p88,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 329_p94,deja_sin_efecto,no,recurrente_gana,recurso_ordinario,no,si,admite,,0
 329_p117,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,0
-329_p120,nulidad,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
+329_p120,nulidad_concesion,si,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 329_p123,revoca,no,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 329_p134,no_fondo,no,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 329_p135,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,ART_280,1
@@ -664,7 +664,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 329_p4058,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,0
 329_p4066,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,ART_280,0
 329_p4078,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
-329_p4083,confirma,no,recurrente_pierde,,no,si,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
+329_p4083,confirma,no,recurrente_pierde,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 329_p4087,confirma,no,recurrente_pierde,recurso_extraordinario,no,si,admite,,1
 329_p4094,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,0
 329_p4096,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,CUESTION_ABSTRACTA,1
@@ -712,7 +712,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 329_p4266,no_revision_demanda,no,no_aplica,,no,si,no_aplica,,0
 329_p4271,no_fondo,no,no_aplica,recurso_ordinario,no,no,sin_marcador,,0
 329_p4273,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,ART_280,0
-329_p4279,nulidad,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
+329_p4279,nulidad_concesion,si,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 329_p4282,no_fondo,no,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 329_p4284,no_revision_procesal,no,no_aplica,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 329_p4289,deja_sin_efecto,si,recurrente_gana,,no,si,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
@@ -803,7 +803,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 329_p4770,revoca,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 329_p4775,no_fondo,no,no_aplica,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 329_p4781,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,0
-329_p4783,confirma,no,recurrente_pierde,,no,si,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
+329_p4783,confirma,no,recurrente_pierde,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 329_p4789,no_revision_demanda,no,no_aplica,,no,si,no_aplica,,0
 329_p4804,no_revision_demanda,no,no_aplica,,no,no,sin_marcador,,0
 329_p4808,no_revision_procesal,no,no_aplica,,no,no,sin_marcador,,0
@@ -945,7 +945,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 329_p5567,confirma,no,recurrente_pierde,recurso_extraordinario,no,si,admite,,0
 329_p5575,no_fondo,no,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 329_p5578,no_revision_procesal,no,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
-329_p5579,nulidad,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
+329_p5579,nulidad_concesion,si,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 329_p5581,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,0
 329_p5586,no_revision_competencia,no,no_aplica,recurso_extraordinario,no,no,admite,,1
 329_p5590,no_fondo,no,no_aplica,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
@@ -1211,7 +1211,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 330_p816,no_revision_competencia,no,no_aplica,,no,no,sin_marcador,,0
 330_p818,revoca,no,recurrente_gana,recurso_ordinario,si,si,admite,,0
 330_p822,revoca,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
-330_p826,confirma,no,recurrente_pierde,recurso_ordinario,si,si,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
+330_p826,confirma,no,recurrente_pierde,recurso_ordinario,si,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
 330_p829,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 330_p834,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,FALTA_SENTENCIA_DEFINITIVA,1
 330_p855,revoca,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
@@ -1320,11 +1320,11 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 330_p1526,revoca,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 330_p1528,no_revision_procesal,no,no_aplica,,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
 330_p1529,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
-330_p1534,confirma,no,recurrente_pierde,,no,si,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
+330_p1534,confirma,no,recurrente_pierde,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 330_p1540,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 330_p1545,revoca,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 330_p1550,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
-330_p1564,confirma,no,recurrente_pierde,,no,si,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
+330_p1564,confirma,no,recurrente_pierde,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 330_p1567,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 330_p1572,revoca,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 330_p1578,revoca,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
@@ -1590,7 +1590,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 330_p3635,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 330_p3640,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 330_p3652,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,ART_280,1
-330_p3657,confirma,no,recurrente_pierde,,no,si,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
+330_p3657,confirma,no,recurrente_pierde,,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
 330_p3659,no_fondo,no,no_aplica,,no,no,sin_marcador,,0
 330_p3663,no_fondo,no,no_aplica,,no,no,sin_marcador,,0
 330_p3673,confirma,no,recurrente_pierde,recurso_ordinario,no,si,admite,,0
@@ -1708,7 +1708,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 330_p4534,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 330_p4539,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 330_p4544,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
-330_p4549,confirma,no,recurrente_pierde,,no,si,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
+330_p4549,confirma,no,recurrente_pierde,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 330_p4554,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 330_p4564,no_revision_demanda,no,no_aplica,,no,si,no_aplica,,0
 330_p4585,no_fondo,no,no_aplica,,no,no,sin_marcador,,0
@@ -1994,7 +1994,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 331_p1255,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
 331_p1262,no_revision_demanda,no,no_aplica,recurso_extraordinario,no,si,no_aplica,,0
 331_p1282,modifica,no,recurrente_gana,recurso_extraordinario,no,si,admite,,0
-331_p1284,confirma,no,recurrente_pierde,,no,si,admite,,0
+331_p1284,confirma,no,recurrente_pierde,,no,no,admite,,0
 331_p1287,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,ART_280,1
 331_p1293,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
 331_p1302,no_revision_procesal,no,no_aplica,,no,no,no_aplica,,0
@@ -2073,7 +2073,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 331_p1873,revoca,no,recurrente_gana,recurso_ordinario,si,si,admite,,0
 331_p1890,modifica,no,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 331_p1900,no_revision_competencia,no,no_aplica,,no,no,sin_marcador,,0
-331_p1906,nulidad,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
+331_p1906,nulidad_concesion,si,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 331_p1910,no_fondo,si,no_aplica,,no,no,sin_marcador,,0
 331_p1917,confirma,si,recurrente_pierde,recurso_extraordinario,si,si,admite,,0
 331_p1927,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,ART_280,0
@@ -2159,7 +2159,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 331_p2567,confirma,no,recurrente_pierde,recurso_extraordinario,no,si,admite,,0
 331_p2573,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 331_p2578,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
-331_p2583,nulidad,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
+331_p2583,nulidad_concesion,si,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 331_p2586,confirma,no,recurrente_pierde,recurso_extraordinario,no,si,admite,,0
 331_p2590,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 331_p2603,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
@@ -2397,7 +2397,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 332_p1388,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 332_p1391,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 332_p1394,revoca,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
-332_p1406,confirma,no,recurrente_pierde,,no,si,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
+332_p1406,confirma,no,recurrente_pierde,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 332_p1413,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,ART_280,1
 332_p1422,no_fondo,no,no_aplica,,no,no,no_aplica,,0
 332_p1430,no_fondo,no,no_aplica,,no,no,no_aplica,,0
@@ -2531,7 +2531,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 332_p2797,no_revision_procesal,no,no_aplica,recurso_ordinario,si,no,admite,,1
 332_p2801,revoca,no,recurrente_gana,recurso_ordinario,no,si,admite,,0
 332_p2806,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,CUESTION_ABSTRACTA,0
-332_p2813,nulidad,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
+332_p2813,nulidad_concesion,si,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 332_p2815,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 332_p2828,deja_sin_efecto,si,recurrente_gana,,no,si,admite,,1
 332_p2835,no_fondo,no,no_aplica,,no,no,no_aplica,,0
@@ -2935,7 +2935,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 334_p1113,confirma,no,recurrente_pierde,recurso_extraordinario,no,si,admite,,0
 334_p1123,grant_remand_implicito,si,recurrente_gana,recurso_extraordinario,no,no,admite,,1
 334_p1133,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
-334_p1139,nulidad,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
+334_p1139,nulidad_concesion,si,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 334_p1143,no_fondo,no,no_aplica,,no,no,no_aplica,,0
 334_p1162,no_fondo,no,no_aplica,,no,si,no_aplica,,0
 334_p1172,revoca,si,recurrente_gana,recurso_ordinario,no,si,admite,,0
@@ -3346,7 +3346,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 339_p274,no_revision_procesal,no,no_aplica,,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
 339_p276,no_fondo,no,no_aplica,recurso_extraordinario,no,no,admite,,1
 339_p290,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
-339_p299,nulidad,no,recurrente_gana,recurso_extraordinario,no,si,admite,,0
+339_p299,nulidad_concesion,no,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 339_p302,no_revision_procesal,no,no_aplica,,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,0
 339_p304,no_fondo,no,no_aplica,,no,no,inadmite,RESOLUCION_NO_RECURRIBLE,0
 339_p305,no_revision_procesal,no,no_aplica,,no,no,sin_marcador,,0
@@ -3742,7 +3742,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 340_p711,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 340_p722,no_fondo,no,no_aplica,,no,no,sin_marcador,,0
 340_p724,no_revision_competencia,no,no_aplica,,no,no,sin_marcador,,0
-340_p725,confirma,no,recurrente_pierde,recurso_extraordinario,no,si,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
+340_p725,confirma,no,recurrente_pierde,recurso_extraordinario,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
 340_p729,no_revision_competencia,no,no_aplica,,no,no,no_aplica,,0
 340_p732,no_revision_competencia,no,no_aplica,,no,no,sin_marcador,,0
 340_p734,no_revision_competencia,no,no_aplica,,no,no,sin_marcador,,0
@@ -3799,7 +3799,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 340_p1035,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,0
 340_p1038,revoca,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 340_p1062,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
-340_p1068,confirma,no,recurrente_pierde,recurso_extraordinario,no,si,inadmite,INTERPOSICION_INCORRECTA,1
+340_p1068,confirma,no,recurrente_pierde,recurso_extraordinario,no,no,inadmite,INTERPOSICION_INCORRECTA,1
 340_p1070,no_fondo,no,no_aplica,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 340_p1074,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,ART_280,1
 340_p1078,no_fondo,no,no_aplica,,no,no,no_aplica,,0
@@ -4590,7 +4590,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 343_p2080,no_fondo,no,no_aplica,,no,no,no_aplica,,0
 343_p2087,no_fondo,no,no_aplica,recurso_extraordinario,no,no,no_aplica,,0
 343_p2095,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,ACORDADA_4_2007,0
-343_p2098,nulidad,no,recurrente_gana,recurso_extraordinario,no,si,admite,,0
+343_p2098,nulidad_concesion,no,no_aplica,recurso_extraordinario,no,no,inadmite,CUESTION_ABSTRACTA,0
 343_p2122,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 343_p2135,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 343_p2145,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
@@ -4743,7 +4743,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 344_p1374,confirma,no,recurrente_pierde,recurso_extraordinario,no,si,admite,,0
 344_p1388,confirma,no,recurrente_pierde,recurso_extraordinario,no,si,admite,,0
 344_p1411,revoca,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
-344_p1435,nulidad,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
+344_p1435,nulidad_concesion,si,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 344_p1438,no_revision_competencia,no,no_aplica,,no,no,sin_marcador,,0
 344_p1442,no_fondo,no,no_aplica,,no,no,inadmite,RESOLUCION_NO_RECURRIBLE,0
 344_p1444,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
