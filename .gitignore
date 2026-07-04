@@ -44,8 +44,8 @@ scripts/diagnostico/*
 archivo/*
 !archivo/README.md
 
-# docs/ stale — no se publica (queda local)
-docs/
+# docs/ deprecado H174 -> movido a archivo/docs_legacy/ (local, no publicado)
+archivo/docs_legacy/
 # working dir raiz (legacy _extraidos)
 /diagnostico/
 
