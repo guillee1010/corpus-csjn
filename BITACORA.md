@@ -18898,3 +18898,85 @@ Guillermo señaló que las extracciones de diagnóstico se vienen escribiendo en
 **Pendientes H173:** (1) housekeeping M41 (migrar `_extraidos`, wiring del gate) — PRIMERO; (2) eyeball 329_p3894 (M1, is_merit 1→0: ¿hace_lugar a demanda o incidente?); (3) B135(c) señal compuesta (opcional); (4) paso 2 de M39 = guards del gate (B138 excluir ordinarios + objeto; B139 estratos; B140a documentar ADC / B140b guard quirúrgico «por la que se concedió el recurso»).
 
 **Commits:** 1 (parser v23.1 + golden re-sellado + recursos re-derivado + manifest + 2 scripts diagnóstico H172 + DEUDA + BITACORA).
+## H173 — Wiring M41 (gate v1.2) + eyeball 329_p3894 → B141 nuevo (2026-07-03)
+
+**Objetivo:** ejecutar los pendientes 1 y 2 de H172 — enforcement estructural de M41 (`check_allowlist_paths`) y adjudicación del flip descendente 329_p3894 del ripple B135.
+
+### H173-01 — Wiring M41: `check_allowlist_paths.py` v1.0 → v1.2
+
+Hallazgo en dos capas, cada una revelada por un PoC en disco que NO falló como debía:
+- **v1.1:** el diagnóstico de M41 era impreciso — `diagnostico/` de raíz YA era rechazable por la allowlist (no está en `TOP_DIRS_OK`); el gate no lo veía porque `_git_paths` solo mira trackeados (`ls-files`) o staged (`diff --cached`). v1.1 sumó untracked no-ignorados en ambos modos.
+- **PoC v1.1 en disco: [CLEAN] espurio** → segunda capa: el `.gitignore` oculta la zona A PROPÓSITO (L42 `scripts/diagnostico/*` + `!README.md`; L50/53 `/diagnostico/` duplicada). Política deliberada del repo público: el scratch de diagnóstico no se publica (`git ls-files scripts/diagnostico` = solo H109 + README). `--exclude-standard` respeta esa política → los ignorados eran invisibles también para v1.1.
+- **v1.2 (diseño final):** `_fs_toplevel()` — escaneo del PRIMER NIVEL del working tree en disco (raíz real vía `git rev-parse --show-toplevel`), independiente del estado git, marcado «(en disco, ignorado o no)». Deliberadamente NO camina el árbol: el scratch en `scripts/diagnostico/HXX/` sigue legítimo, ignorado y sin flagear (política intacta). Dedupe contra la vía git. Validado primero en sandbox (repo sintético replicando el `.gitignore` real, 5 escenarios) y luego EN DISCO: fixture `diagnostico/PoC/test.md` → [FAIL] en `--all` y en staged; borrado → desaparece.
+
+**Efecto colateral valioso:** el gate destapó 4 residentes fuera de schema antes invisibles. Triage (decisiones de Guillermo): `.env` → allowlist [SECRETS]; `.tmp.driveupload/` → allowlist [SYNC — el repo vive en carpeta sincronizada con Google Drive]; `muestra_zona_epilogo.csv` (scratch H155, cf. `.gitignore` L55) → BORRADO (regenerable); `docs/` (PIPELINE.md 126.838 bytes pre-deprecación + analisis_forense_pipeline.md 254kB + GRAMATICA_DEL_FALLO + changelog_parser + BITACORA_2026-05-01 + log + figuras H025) → **[COMPLETAR: resolución]**.
+
+### H173-02 — Estado del gate al cierre
+
+**[COMPLETAR]:** salida final de `python scripts\tests\check_allowlist_paths.py --all` tras el triage (esperado [CLEAN] si docs/ se resolvió; si no, [FAIL] con docs/ como único ítem).
+
+Pendientes menores registrados en M41: línea en los skills apertura/cierre (texto propuesto entregado, pega Guillermo); dedup o eliminación de `/diagnostico/` en `.gitignore` (L50/53 — el gate ya cubre); decisión sobre publicar `extraer_caso.py` (herramienta canónica citada en CODEBOOK, hoy no publicada por L42).
+
+### H173-03 — Eyeball 329_p3894: FONDO → el flip 1→0 fue REGRESIÓN (B141 NUEVO)
+
+Adjudicado contra el `.md` real (extraído a `scripts/diagnostico/H173/329_p3894.md`). **Quiroz Franco c/ Mendoza** (19/09/2006, originaria mantenida pese a «Barreto» por la duración del proceso): dispositivo mixto «I) Hacer lugar a la excepción de falta de legitimación activa … II) **Rechazar la demanda interpuesta**», cons. 8° «no se dan los requisitos que habilitarían la reparación civil» — responsabilidad estatal por prisión preventiva revisada y denegada en el mérito (gemelo originario de Mezzadra/334_p1302). El punto I tampoco es incidente puro: la legitimación se resuelve por el art. 1078 CC = defensa de fondo en la definitiva.
+
+- **Veredicto:** is_merit=0 post-B135 es FN. Pre-B135 el caso acertaba por la razón equivocada (rama apelativa, outcome=hace_lugar); post-B135 entra a la rama originaria y `es_de_fondo` lo pierde.
+- **Mecanismo NO verificado** (`clasificador_disposicion.py` v1.10 no se leyó en H173). Candidatos en la entrada B141: anclaje al primer verbo (clase M3_MIXTO dentro de la rama originaria), infinitivo «Rechazar» no conjugado, o guard de excepciones.
+- **Contabilidad:** costo real de B135 en mérito genuino perdido = 2 (347_p2146 FP-F5 + 329_p3894). Divergencia M39 = 219 sin cambio (verificar al medir B141: gate y parser coinciden en el valor equivocado).
+- **Cardinalidad de B141:** NO medida — PoC corpus-wide sobre las 589 originarias, después de leer el detector.
+
+### H173 — Estado final
+
+- **Corpus: SIN CAMBIOS** — parser v23.1, `csjn_casos` sha b8a21dcd1169, is_originaria 589, is_merit 3006, golden y manifest [CLEAN] 64 de H172 intactos. No se tocó pipeline ni outputs → no corresponde re-sellar manifest.
+- **Infra:** `scripts/tests/check_allowlist_paths.py` v1.0 → **v1.2** (untracked + escaneo de disco de primer nivel; allowlist +`.env`/`.tmp.driveupload`). Validado en disco.
+- **DEUDA:** M41 constancia H173 (wiring ejecutado, triage, pendientes menores); **B141 NUEVO** (`hipotesis_no_verificada` en mecanismo, `confirmado_caso_testigo` en adjudicación); M39 constancia H173.
+
+**Scripts creados:** ninguno (solo el fixture PoC, borrado).
+**Scripts modificados:** `scripts/tests/check_allowlist_paths.py` v1.0 → **v1.2**.
+**Extracciones:** `scripts/diagnostico/H173/329_p3894.md` (ubicación conforme a la regla M41; no se publica, política del repo).
+
+**Pendientes H174:** (1) **B141** — leer `clasificador_disposicion.py`, PoC del mecanismo sobre 3894, medir cardinalidad en las 589 originarias; (2) **paso 2 de M39** — guards del gate (B138 excluir ordinarios + objeto; B139 estratos; B140a documentar ADC / B140b guard «por la que se concedió el recurso»), adjudicación ya hecha en H172; (3) B135(c) señal compuesta (opcional); (4) menores M41 (skills, .gitignore dedup, extraer_caso.py público s/n; docs/ si quedó abierto).
+
+**Commits:** 1 (gate v1.2 + DEUDA + BITACORA; .gitignore/docs si se tocaron).
+
+## H174 — B141 cerrado: falso terminador del chunk de `_barrer` (2026-07-03)
+
+**Objetivo:** verificar el mecanismo de B141 (FN de mérito en 329_p3894), medir cardinalidad y aplicar el fix.
+
+### H174-01 — Mecanismo aislado y causa raíz re-atribuida
+
+PoC sobre el output canónico real: el `por_ello_text` de 3894 llega con 211 chars, cortado en «...sus hijos E.» — el punto II («Rechazar la demanda») nunca llega a `es_de_fondo`. El detector es INOCENTE (sobre texto completo → `True`; los 3 candidatos de H173 descartados por PoC). Causa real, verificada contra código (Select-String + parser.py): el chunk de `_barrer` corta en la primera línea terminada en `.` (v23.1 L3102) y una inicial anonimizada o numeral romano a fin de línea es falso terminador. Cardinalidad cerrada corpus-wide con firma de dos niveles: 16 hits = 14 truncados reales + 2 fines genuinos (332_p238, 340_p397), los 14 adjudicados contra fuente. Mérito perdido = 2 exactos (329_p3894, 341_p1148). Cross-hallazgos: 330_p3777 (rechazo in limine = umbral, el fix ingenuo fabricaba 1 FP), 3 candidatos FN de is_originaria (329_p3403, 330_p4526, 338_p699 → post-B010), residuales de presupuesto/banner-partido (→ M21 Fase 3).
+
+### H174-02 — Unidad 1: guard in-limine (clasificador_disposicion v1.10→v1.11)
+
+`RE_FONDO_IN_LIMINE` en la rama reject de `es_de_fondo`, ventana `m.group(0)` (decidida con dato: 5 co-ocurrencias reject∩in-limine, todas dentro del grupo; cubre comillas OCR). A/B módulo-vs-módulo: 0 flips sobre 589 originarias (no-op pre-fix, pre-emptivo); endurece 5 'no' que dependían de INADM. Verificado en disco: `poc_b141_guard_inlimine.py` [OK] x3.
+
+### H174-03 — Unidad 2: fix de `_barrer` (parser v23.1→v23.2)
+
+`RE_FALSO_TERMINADOR` + peek `_proxima_linea_es_firma` (reusa `linea_es_firma_de_juez`). Pre-validación con `_barrer` de producción viejo-vs-parcheado sobre los 14 bloques fuente: el viejo reproduce el CSV (fidelidad), el nuevo recupera 12, genuinos byte-idénticos, residuales de presupuesto sin empeorar. Diff del patch auditado (solo las 3 ediciones). + Fix infra: stdout/stderr `errors="replace"` — UnicodeEncodeError cp1252 bajo stdout REDIRIGIDO, latente en todas las versiones (reproducido sobre v23.1 intacta), a consola directa lo tapaba PEP 528.
+
+### H174-04 — Corrida, adjudicación del diff y sellado
+
+Corrida completa v23.2 + `verificar_b141_post.py`: 13 `por_ello` extendidos, is_merit flips exactos {3894, 1148} 0→1, 3777 sostenido en 0 por el guard en producción, zonas/editorial byte-idénticos. Fuera de familia solo 334_p1047 = RECUPERACIÓN: el «: I.» escondía «Se revoca» → chunk no-performativo → la regla P caía al fallback argumental; el fix sana el pick + devuelve el considerando robado (wc 2471→2629). Outcome flips adjudicados: 3894 mejora (hace_lugar→rechaza); 1148 (rechaza vs hace_lugar), 4526 (caducidad vs desistimiento) y 1047 (abstracto vs revoca, bicapa — verificado con módulos reales: disposicion()=revoca / gate=no) → **B142 NUEVO** (sesgo en dispositivos mixtos). Divergencia M39 = 219 sin cambio, explicada caso a caso. Golden `--make-golden` + check [CLEAN] 5/5; recursos re-derivado (v0.6/disp v1.11); materia re-derivada (hash cambió — el considerando de 1047 la alcanzaba); manifest [CLEAN] 64. Determinismo del pipeline verificado: dos corridas completas consecutivas, sha256 idénticos en los 5 CSVs.
+
+### H174-05 — Episodios operativos (documentados)
+
+(a) Instalación sin backup previo → recuperado de git (71aa139) + uploads de la sesión con identidad probada por sha (`b8a21dcd1169` = sello H173). Lección: backup verificado en disco ANTES de instalar. (b) Corrida en falso ×46 «ARCHIVO NO ENCONTRADO» con los 50 .md presentes — causa formal NO cerrada; ambos parsers exonerados por experimento (harness con salida idéntica; carga = `filepath.exists()` puro, sin normalización de nombres — no existe ni existió); candidato único: transitorio de Drive. Lección: pausar sync en corridas largas. (c) Crash de encoding atribuible al `| Tee-Object` agregado en la sesión (pipe → cp1252), no a la versión — el pushback de Guillermo forzó la adjudicación correcta y el fix quedó DENTRO del parser (funciona para cualquier usuario del repo, sin variables de entorno). (d) Invocación canónica del parser reconstruida desde argparse + chats y confirmada en disco → M42 (orquestador).
+
+### H174 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos + 193 sumario_con_link).
+- **Sin firma:** 16. **Votos:** 27697 filas. **Zonas:** 141451. **Editorial:** 152.
+- **is_merit:** 3006→**3008** (+2: 329_p3894, 341_p1148). **is_originaria:** 589. **Divergencia M39:** 219.
+- **Bugs:** B141 CERRADO; B142 NUEVO; M42 NUEVO; notas en M21 (Fase 3), M39 (constancia), post-B010 (+3 candidatos).
+
+**Outputs canónicos (manifest [CLEAN] 64):**
+- `csjn_casos.csv` — 5890 filas, sha 40e5e621b137, v23.2.
+- `csjn_casos_textos.csv` — 5890, sha 05ddd9acafd4. `csjn_casos_votos.csv` — 27697, sha 65d041446a9b.
+- `csjn_casos_zonas.csv` — 141451, sha 98ce265d9854. `csjn_casos_editorial.csv` — 152, sha 30a6da652e3a.
+- `csjn_casos_recursos.csv` — 5890, sha da9b75c68bdf, v0.6/disp v1.11. `csjn_casos_materia.csv` — 5890, sha c843f425e847, v3.2.
+
+**Scripts creados:** `scripts/diagnostico/H174/` (no publicado, política del repo): `poc_b141_guard_inlimine.py`, `verificar_b141_post.py`, extracts de los 16, backups PRE, `corrida_v232.log`.
+
+**Commits:** 2 (pipeline+outputs+golden+manifest; docs).

@@ -2,6 +2,14 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H174 (2026-07-03)
+
+- `parser.py` v23.1→v23.2: B141 — guard de falso terminador en el chunk de `_barrer` (inicial anonimizada / numeral romano a fin de línea) + peek de firma anti-contaminación. 13 `por_ello` extendidos, is_merit +2 (3006→3008), pick de 334_p1047 sanado (regla P + considerando). + Fix infra: stdout/stderr `errors="replace"` (crash cp1252 bajo redirección, latente en todas las versiones).
+- `clasificador_disposicion.py` v1.10→v1.11: guard `RE_FONDO_IN_LIMINE` en `es_de_fondo` (acople de B141; 0 flips pre-fix; evita 1 FP en 330_p3777).
+- `output/parser/`: casos/textos/votos cambian (13 casos + denormalización de 2 flips); zonas/editorial byte-idénticos. Recursos re-derivado (v0.6/disp v1.11); materia re-derivada (considerando de 1047).
+- Golden re-sellado (`--make-golden`, [CLEAN] 5/5); `_manifest.json` re-sellado ([CLEAN] 64).
+- DEUDA: B141 CERRADO (causa raíz re-atribuida al parser); B142 NUEVO (sesgo bicapa en dispositivos mixtos); M42 NUEVO (orquestador); notas M21/M39/post-B010.
+
 ## H172 (2026-07-02)
 
 - `parser.py` v23.0→v23.1: B135 (a)+(b) — `es_originaria` gana 5ª señal `competencia originaria` pelada con 4 guards por-match (local/apelada/precedente/provincial W=120) + mask de `RE_RUNNING_HEAD` ANTES de `_unhyphenate` (el banner intercalado partía la señal y el des-guionado la unía al número de página). Las 4 señales previas y el criterio-amplio, intactos. Ensanche de `RE_ART_117_CN` medido y RECHAZADO (0 TP/1 FP). Recall acotado y medido; sin cambio de schema ni semántica. Sub-causa (c) señal compuesta, PENDIENTE.
