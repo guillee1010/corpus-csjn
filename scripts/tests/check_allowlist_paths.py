@@ -26,13 +26,19 @@ Uso (PowerShell, desde la raiz del repo)
     python scripts/tests/check_allowlist_paths.py            # modo staged (hook)
     python scripts/tests/check_allowlist_paths.py --all      # auditar todo el repo
 
+En AMBOS modos se chequean ademas los archivos UNTRACKED no-ignorados del
+working tree (v1.1, ver changelog).
+
 Exit 0 = OK   |   Exit 1 = path fuera de la estructura permitida
 """
 import subprocess
 import sys
 
+__version__ = "1.2"  # H173: M41 (2ª iteracion) — el gate delegaba TODA la vista del arbol en git, pero la politica del repo (publico) es que git NO vea el scratch de diagnostico: .gitignore 42 `scripts/diagnostico/*` (intencional, solo README trackeado) y 50/53 `/diagnostico/`. La v1.1 (untracked via --exclude-standard) quedaba ciega a lo IGNORADO → el PoC de la deriva no fallaba. v1.2 agrega _fs_toplevel(): escaneo de PRIMER NIVEL del filesystem desde la raiz real del repo (git rev-parse --show-toplevel) — dirs de raiz fuera de TOP_DIRS_OK y archivos de raiz fuera de ROOT_FILES_OK fallan SIN importar su estado en git, marcados (en disco). No camina el arbol completo (los ignorados profundos —__pycache__, extraidos en scripts/diagnostico/HXX/— son legitimos por politica). // 1.1 (H173): + untracked no-ignorados en ambos modos. // 1.0 (H166): gate original, allowlist desde el arbol real.
+
 # --- Archivos permitidos en la RAIZ (single-component). Del arbol real. -------
 ROOT_FILES_OK = {
+    ".env",          # [SECRETS] convención estándar; ignorado por git, vive en raíz (triage M41/H173)
     ".gitattributes",
     ".gitignore",
     "BITACORA.md",
@@ -47,6 +53,7 @@ ROOT_FILES_OK = {
 
 # --- Top-level dirs permitidos. Del arbol real. -------------------------------
 TOP_DIRS_OK = {
+    ".tmp.driveupload",  # [SYNC] transitoria de Google Drive for Desktop; aparece/desaparece con el sync (triage M41/H173)
     "335 y 336",   # [CRUFT?] OCR/legacy de tomos 335-336 — candidato a archivo/ o limpieza
     "_meta",
     "archivo",
@@ -68,13 +75,29 @@ TOP_DIRS_OK = {
 STRICT_SUBDIRS = {}
 
 
-def _git_paths(mode):
-    if mode == "all":
-        args = ["git", "ls-files", "-z"]
-    else:  # staged
-        args = ["git", "diff", "--cached", "--name-only", "--diff-filter=ACMR", "-z"]
+def _run_git(args):
     r = subprocess.run(args, capture_output=True, text=True, encoding="utf-8")
     return [p for p in r.stdout.split("\0") if p]
+
+
+def _git_paths(mode):
+    """Devuelve [(path, origen)] con origen ∈ {"tracked", "staged", "untracked"}.
+
+    v1.1 (M41): en ambos modos se agregan los untracked no-ignorados del
+    working tree — la regla de schema aplica al arbol, no solo a los commits;
+    los archivos que git no trackea eran el punto ciego exacto de la deriva
+    H171/H172.
+    """
+    if mode == "all":
+        base = [(p, "tracked") for p in _run_git(["git", "ls-files", "-z"])]
+    else:  # staged
+        base = [(p, "staged") for p in _run_git(
+            ["git", "diff", "--cached", "--name-only", "--diff-filter=ACMR", "-z"])]
+    vistos = {p for p, _ in base}
+    untracked = [(p, "untracked") for p in _run_git(
+        ["git", "ls-files", "--others", "--exclude-standard", "-z"])
+        if p not in vistos]
+    return base + untracked
 
 
 def _check(path):
@@ -93,18 +116,59 @@ def _check(path):
     return None
 
 
+def _fs_toplevel():
+    """v1.2 (M41): audita el PRIMER NIVEL del working tree EN DISCO, sin pasar
+    por git — unica forma de ver lo ignorado (.gitignore /diagnostico/,
+    scripts/diagnostico/*), que es politica del repo publico y fue el punto
+    ciego exacto de la deriva H171/H172. Devuelve [(path, "en disco")].
+    Solo primer nivel: los ignorados profundos son legitimos por politica.
+    """
+    import os
+    r = subprocess.run(["git", "rev-parse", "--show-toplevel"],
+                       capture_output=True, text=True, encoding="utf-8")
+    raiz = r.stdout.strip()
+    if not raiz:
+        return []  # fuera de un repo git: no hay raiz que auditar
+    out = []
+    for nombre in sorted(os.listdir(raiz)):
+        if nombre == ".git":
+            continue
+        full = os.path.join(raiz, nombre)
+        if os.path.isdir(full):
+            if nombre not in TOP_DIRS_OK:
+                out.append((nombre + "/", "en disco"))
+        else:
+            if nombre not in ROOT_FILES_OK:
+                out.append((nombre, "en disco"))
+    return out
+
+
 def main():
     mode = "all" if "--all" in sys.argv else "staged"
     paths = _git_paths(mode)
 
-    if not paths:
-        print(f"[CLEAN] sin archivos para chequear (modo {mode}).")
+    fallos = []
+    ya_en_disco = set()
+
+    # v1.2 (M41): primer nivel del disco, independiente de git/ignorados.
+    for p, _ in _fs_toplevel():
+        ya_en_disco.add(p.rstrip("/"))
+        if p.endswith("/"):
+            fallos.append(f"top-level dir no permitido: {p}  (en disco, ignorado o no)")
+        else:
+            fallos.append(f"archivo nuevo en RAIZ no permitido: {p}  (en disco, ignorado o no)")
+
+    if not paths and not fallos:
+        print(f"[CLEAN] sin archivos para chequear (modo {mode}); raiz en disco OK.")
         return 0
 
-    fallos = []
-    for p in paths:
+    for p, origen in paths:
+        if p.split("/")[0] in ya_en_disco:
+            continue  # ya reportado por el escaneo de disco
         motivo = _check(p)
         if motivo:
+            if origen == "untracked":
+                motivo += "  (untracked)"
             fallos.append(motivo)
 
     if fallos:
@@ -115,7 +179,7 @@ def main():
               "Si no, movelo al schema antes de commitear.")
         return 1
 
-    print(f"[CLEAN] {len(paths)} path(s) dentro de la estructura permitida (modo {mode}).")
+    print(f"[CLEAN] {len(paths)} path(s) via git + raiz en disco, dentro de la estructura permitida (modo {mode}).")
     return 0
 
 
