@@ -39,7 +39,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 329_p206,civil_comercial,capa1,regla:\ben lo comercial\b
 329_p212,,originaria,originaria
 329_p215,contencioso_administrativo,capa2,provincia:ca
-329_p218,civil_comercial,capa1,regla:civil y comercial federal
+329_p218,,originaria,originaria
 329_p222,contencioso_administrativo,capa2,provincia:ca
 329_p224,,originaria,originaria
 329_p229,,pendiente_capa2,sin_ancla
@@ -92,7 +92,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 329_p518,penal,capa1,regla:casacion penal
 329_p526,penal,capa1,regla:casacion penal
 329_p530,,pendiente_capa2,sin_ancla
-329_p537,contencioso_administrativo,capa2,provincia:ca
+329_p537,,originaria,originaria
 329_p542,,originaria,originaria
 329_p545,,originaria,originaria
 329_p548,contencioso_administrativo,capa2,provincia:ca
@@ -139,7 +139,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 329_p789,tributario,capa2,kw(2)
 329_p792,,originaria,originaria
 329_p803,contencioso_administrativo,capa2,provincia:ca
-329_p805,contencioso_administrativo,capa2,provincia:ca
+329_p805,,originaria,originaria
 329_p809,,originaria,originaria
 329_p833,,originaria,originaria
 329_p838,contencioso_administrativo,capa2,provincia:ca
@@ -304,7 +304,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 329_p1898,,originaria,originaria
 329_p1905,,pendiente_capa2,sin_ancla
 329_p1908,,pendiente_capa2,sin_ancla
-329_p1910,,pendiente_capa2,sin_ancla
+329_p1910,,originaria,originaria
 329_p1912,penal,capa2,objeto(1)
 329_p1915,,pendiente_capa2,sin_ancla
 329_p1917,,pendiente_capa2,sin_ancla
@@ -339,7 +339,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 329_p2069,,originaria,originaria
 329_p2080,,originaria,originaria
 329_p2085,,originaria,originaria
-329_p2088,contencioso_administrativo,capa2,provincia:ca
+329_p2088,,originaria,originaria
 329_p2105,,originaria,originaria
 329_p2111,,originaria,originaria
 329_p2115,,originaria,originaria
@@ -374,7 +374,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 329_p2221,civil_comercial,capa1,regla:\ben lo civil\b
 329_p2223,penal,capa1,regla:casacion penal
 329_p2224,civil_comercial,capa1,regla:\ben lo comercial\b
-329_p2226,contencioso_administrativo,capa2,provincia:ca
+329_p2226,,originaria,originaria
 329_p2231,,originaria,originaria
 329_p2240,constitucional,capa2,objeto(1)
 329_p2244,,pendiente_capa2,sin_ancla
@@ -452,17 +452,17 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 329_p2674,civil_comercial,capa1,regla:\ben lo civil\b
 329_p2680,,originaria,originaria
 329_p2684,,originaria,originaria
-329_p2688,civil_comercial,capa2,objeto(1)
+329_p2688,,originaria,originaria
 329_p2714,contencioso_administrativo,capa2,provincia:ca
 329_p2719,contencioso_administrativo,capa2,provincia:ca
 329_p2726,contencioso_administrativo,capa2,provincia:ca
 329_p2729,tributario,capa2,kw+objeto(2)
 329_p2731,constitucional,capa2,objeto(1)
 329_p2733,contencioso_administrativo,capa2,provincia:ca
-329_p2735,contencioso_administrativo,capa2,provincia:ca
+329_p2735,,originaria,originaria
 329_p2737,,originaria,originaria
 329_p2745,,originaria,originaria
-329_p2754,contencioso_administrativo,capa2,provincia:ca
+329_p2754,,originaria,originaria
 329_p2757,contencioso_administrativo,capa2,provincia:ca
 329_p2759,contencioso_administrativo,capa2,provincia:ca
 329_p2761,contencioso_administrativo,capa2,provincia:ca
@@ -630,7 +630,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 329_p3879,contencioso_administrativo,capa2,provincia:ca
 329_p3884,tributario,capa2,kw+norma:11683(2)
 329_p3890,,originaria,originaria
-329_p3894,civil_comercial,capa2,objeto(1)
+329_p3894,,originaria,originaria
 329_p3905,,pendiente_capa2,sin_ancla
 329_p3908,civil_comercial,capa2,kw+norma:24522(2)
 329_p3910,civil_comercial,capa2,kw+norma:24522(2)
@@ -834,7 +834,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 329_p4925,,pendiente_capa2,sin_ancla
 329_p4928,,pendiente_capa2,sin_ancla
 329_p4931,penal,capa2,objeto(1)
-329_p4944,consumo,capa2,kw+norma:24240(2)
+329_p4944,,originaria,originaria
 329_p4979,civil_comercial,capa2,objeto(1)
 329_p4981,,pendiente_capa2,sin_ancla
 329_p4983,,pendiente_capa2,sin_ancla
@@ -1172,7 +1172,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 330_p547,contencioso_administrativo,capa2,provincia:ca
 330_p549,,originaria,originaria
 330_p555,,originaria,originaria
-330_p563,laboral,capa2,kw+norma:24557(2)
+330_p563,,originaria,originaria
 330_p607,contencioso_administrativo,capa2,provincia:ca
 330_p610,,originaria,originaria
 330_p618,contencioso_administrativo,capa2,provincia:ca
@@ -1197,7 +1197,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 330_p743,,originaria,originaria
 330_p745,,originaria,originaria
 330_p747,contencioso_administrativo,capa2,provincia:ca
-330_p748,civil_comercial,capa2,objeto(1)
+330_p748,,originaria,originaria
 330_p778,civil_comercial,capa2,objeto(1)
 330_p780,,originaria,originaria
 330_p785,,originaria,originaria
@@ -1246,7 +1246,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 330_p1110,contencioso_administrativo,capa2,provincia:ca
 330_p1114,,originaria,originaria
 330_p1135,,originaria,originaria
-330_p1158,ambiental,capa2,norma:25675(1)
+330_p1158,,originaria,originaria
 330_p1167,,pendiente_capa2,sin_ancla
 330_p1169,,pendiente_capa2,sin_ancla
 330_p1172,penal,capa2,norma:23737(1)
@@ -1632,7 +1632,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 330_p4049,contencioso_administrativo,capa2,provincia:ca
 330_p4055,,originaria,originaria
 330_p4062,,originaria,originaria
-330_p4064,contencioso_administrativo,capa2,provincia:ca
+330_p4064,,originaria,originaria
 330_p4071,tributario,capa2,objeto(1)
 330_p4076,,originaria,originaria
 330_p4081,,pendiente_capa2,sin_ancla
@@ -2052,7 +2052,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 331_p1674,penal,capa2,objeto(1)
 331_p1676,,originaria,originaria
 331_p1679,,originaria,originaria
-331_p1690,civil_comercial,capa2,kw+objeto(2)
+331_p1690,,originaria,originaria
 331_p1701,,originaria,originaria
 331_p1712,contencioso_administrativo,capa1,regla:contencioso administrativo
 331_p1715,contencioso_administrativo,capa1,regla:contencioso administrativo
@@ -2278,7 +2278,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 332_p525,tributario,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 332_p531,tributario,capa2,kw(1)
 332_p548,,originaria,originaria
-332_p552,,pendiente_capa2,conflicto_capa2:civil_comercial/penal
+332_p552,,originaria,originaria
 332_p582,ambiental,capa2,kw+norma:25675(2)
 332_p585,contencioso_administrativo,capa1,regla:contencioso administrativo
 332_p588,civil_comercial,capa1,regla:\ben lo civil\b
@@ -2423,7 +2423,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 332_p1600,ambiental,capa2,norma:25675(1)
 332_p1616,contencioso_administrativo,capa2,provincia:ca
 332_p1622,,originaria,originaria
-332_p1624,contencioso_administrativo,capa2,provincia:ca
+332_p1624,,originaria,originaria
 332_p1629,civil_comercial,capa2,objeto(1)
 332_p1633,tributario,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 332_p1651,contencioso_administrativo,capa1,regla:contencioso administrativo
@@ -2431,7 +2431,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 332_p1663,,pendiente_capa2,sin_ancla
 332_p1670,contencioso_administrativo,capa2,provincia:ca
 332_p1671,civil_comercial,capa1,regla:\ben lo civil\b
-332_p1688,civil_comercial,capa2,norma:17418(1)
+332_p1688,,originaria,originaria
 332_p1704,,originaria,originaria
 332_p1736,contencioso_administrativo,capa2,provincia:ca
 332_p1738,,pendiente_capa2,sin_ancla
@@ -2471,7 +2471,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 332_p2228,tributario,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 332_p2237,contencioso_administrativo,capa1,regla:contencioso administrativo
 332_p2250,,originaria,originaria
-332_p2265,tributario,capa2,coocur:tributario_disfrazado(desempate)
+332_p2265,,originaria,originaria
 332_p2280,tributario,capa2,norma:11683+objeto+parte(3)
 332_p2288,contencioso_administrativo,capa1,regla:contencioso administrativo
 332_p2295,,pendiente_capa2,sin_ancla
@@ -2536,7 +2536,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 332_p2828,,pendiente_capa2,sin_ancla
 332_p2835,,originaria,originaria
 332_p2838,,originaria,originaria
-332_p2842,civil_comercial,capa2,objeto(1)
+332_p2842,,originaria,originaria
 332_p2865,,pendiente_capa2,sin_ancla
 332_p2868,previsional,capa1,regla:seguridad social
 332_p2872,contencioso_administrativo,capa1,regla:contencioso administrativo
@@ -2560,7 +2560,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 333_p86,contencioso_administrativo,capa1,regla:contencioso administrativo
 333_p90,previsional,capa1,regla:seguridad social
 333_p93,laboral,capa1,regla:\bdel trabajo\b
-333_p95,contencioso_administrativo,capa2,provincia:ca
+333_p95,,originaria,originaria
 333_p108,,originaria,originaria
 333_p119,penal,capa2,kw+objeto(2)
 333_p123,previsional,capa1,regla:seguridad social
@@ -2646,9 +2646,9 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 333_p777,contencioso_administrativo,capa1,regla:contencioso administrativo
 333_p792,contencioso_administrativo,capa1,regla:contencioso administrativo
 333_p796,penal,capa1,regla:casacion penal
-333_p802,contencioso_administrativo,capa2,provincia:ca
+333_p802,,originaria,originaria
 333_p819,contencioso_administrativo,capa1,regla:contencioso administrativo
-333_p825,,pendiente_capa2,sin_ancla
+333_p825,civil_comercial,capa2,norma:24522(1)
 333_p828,previsional,capa1,regla:seguridad social
 333_p831,,pendiente_capa2,sin_ancla
 333_p847,contencioso_administrativo,capa1,regla:contencioso administrativo
@@ -2840,7 +2840,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 334_p357,tributario,capa2,parte(1)
 334_p362,penal,capa1,regla:criminal y correccional
 334_p365,,pendiente_capa2,sin_ancla
-334_p376,,pendiente_capa2,conflicto_capa2:civil_comercial/laboral
+334_p376,,originaria,originaria
 334_p396,tributario,capa2,parte(1)
 334_p398,laboral,capa1,regla:\bdel trabajo\b
 334_p405,civil_comercial,capa1,regla:\ben lo civil\b
@@ -2913,7 +2913,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 334_p972,tributario,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 334_p983,contencioso_administrativo,capa1,regla:contencioso administrativo
 334_p988,civil_comercial,capa1,regla:\ben lo civil\b
-334_p996,contencioso_administrativo,capa2,provincia:ca
+334_p996,,originaria,originaria
 334_p1002,penal,capa1,regla:casacion penal
 334_p1010,civil_comercial,capa1,regla:civil y comercial federal
 334_p1018,laboral,capa1,regla:\bdel trabajo\b
@@ -2992,8 +2992,8 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 334_p1804,previsional,capa1,regla:seguridad social
 334_p1808,tributario,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 334_p1815,laboral,capa1,regla:\bdel trabajo\b
-334_p1821,civil_comercial,capa2,kw+norma:17418+objeto(3)
-334_p1842,civil_comercial,capa2,objeto(1)
+334_p1821,,originaria,originaria
+334_p1842,,originaria,originaria
 334_p1848,civil_comercial,capa1,regla:civil y comercial federal
 334_p1854,tributario,capa2,parte(1)
 334_p1861,,originaria,originaria
@@ -3026,7 +3026,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 337_p196,contencioso_administrativo,capa1,regla:contencioso administrativo
 337_p205,contencioso_administrativo,capa1,regla:contencioso administrativo
 337_p222,salud,capa2,coocur:salud_amparo
-337_p234,constitucional,capa2,objeto(1)
+337_p234,,originaria,originaria
 337_p256,contencioso_administrativo,capa1,regla:contencioso administrativo
 337_p291,civil_comercial,capa1,regla:\ben lo comercial\b
 337_p307,contencioso_administrativo,capa1,regla:contencioso administrativo
@@ -3063,7 +3063,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 337_p681,contencioso_administrativo,capa1,regla:contencioso administrativo
 337_p692,contencioso_administrativo,capa1,regla:contencioso administrativo
 337_p703,tributario,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
-337_p712,civil_comercial,capa1,regla:civil y comercial federal
+337_p712,,originaria,originaria
 337_p731,civil_comercial,capa1,regla:civil y comercial federal
 337_p735,,pendiente_capa2,sin_ancla
 337_p740,contencioso_administrativo,capa2,provincia:ca
@@ -3206,7 +3206,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 338_p623,civil_comercial,capa1,regla:\ben lo civil\b
 338_p628,electoral,capa1,regla:electoral
 338_p651,penal,capa1,regla:penal economico
-338_p652,,pendiente_capa2,conflicto_capa2:civil_comercial/laboral
+338_p652,,originaria,originaria
 338_p693,laboral,capa1,regla:\bdel trabajo\b
 338_p697,,pendiente_capa2,sin_ancla
 338_p699,contencioso_administrativo,capa2,provincia:ca
@@ -3215,7 +3215,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 338_p714,contencioso_administrativo,capa1,regla:contencioso administrativo
 338_p716,previsional,capa1,regla:seguridad social
 338_p724,,originaria,originaria
-338_p748,constitucional,capa2,objeto(1)
+338_p748,,originaria,originaria
 338_p757,contencioso_administrativo,capa1,regla:contencioso administrativo
 338_p763,contencioso_administrativo,capa1,regla:contencioso administrativo
 338_p765,contencioso_administrativo,capa2,provincia:ca
@@ -3706,7 +3706,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 340_p518,contencioso_administrativo,capa2,provincia:ca
 340_p521,,pendiente_capa2,sin_ancla
 340_p524,,pendiente_capa2,sin_ancla
-340_p526,contencioso_administrativo,capa1,regla:contencioso administrativo
+340_p526,,originaria,originaria
 340_p538,,no_aplica,tipo_entrada=sumario_editorial
 340_p540,penal,capa2,objeto(1)
 340_p543,contencioso_administrativo,capa1,regla:contencioso administrativo
@@ -3716,7 +3716,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 340_p609,,pendiente_capa2,sin_ancla
 340_p611,,pendiente_capa2,sin_ancla
 340_p614,,pendiente_capa2,sin_ancla
-340_p620,laboral,capa2,objeto(1)
+340_p620,laboral,capa2,kw+objeto(2)
 340_p626,,pendiente_capa2,sin_ancla
 340_p628,salud,capa2,coocur:salud_amparo
 340_p630,,pendiente_capa2,sin_ancla
@@ -3748,7 +3748,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 340_p734,,pendiente_capa2,sin_ancla
 340_p737,penal,capa2,objeto(1)
 340_p739,,originaria,originaria
-340_p745,tributario,capa2,norma:20628+norma:23548(2)
+340_p745,,originaria,originaria
 340_p757,,originaria,originaria
 340_p765,civil_comercial,capa1,regla:\ben lo civil\b
 340_p786,penal,capa2,norma:23737(1)
@@ -3881,7 +3881,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 340_p1680,,originaria,originaria
 340_p1686,civil_comercial,capa1,regla:\ben lo comercial\b
 340_p1688,,originaria,originaria
-340_p1695,laboral,capa1,regla:\bdel trabajo\b
+340_p1695,,originaria,originaria
 340_p1753,laboral,capa1,regla:\bdel trabajo\b
 340_p1756,,pendiente_capa2,sin_ancla
 340_p1775,,pendiente_capa2,sin_ancla
@@ -4204,7 +4204,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 342_p643,,pendiente_capa2,sin_ancla
 342_p645,,originaria,originaria
 342_p654,,pendiente_capa2,sin_ancla
-342_p662,contencioso_administrativo,capa2,provincia:ca
+342_p662,,originaria,originaria
 342_p667,laboral,capa1,regla:\bdel trabajo\b
 342_p681,laboral,capa1,regla:\bdel trabajo\b
 342_p685,contencioso_administrativo,capa1,regla:contencioso administrativo
@@ -4289,7 +4289,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 342_p1463,contencioso_administrativo,capa2,provincia:ca
 342_p1468,laboral,capa2,coocur:indemniz_despido
 342_p1473,tributario,capa2,kw(1)
-342_p1477,ambiental,capa2,kw+norma:25675(2)
+342_p1477,,originaria,originaria
 342_p1483,,pendiente_capa2,sin_ancla
 342_p1484,civil_comercial,capa1,regla:civil y comercial federal
 342_p1490,contencioso_administrativo,capa1,regla:contencioso administrativo
@@ -4349,7 +4349,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 342_p2155,civil_comercial,capa2,objeto(1)
 342_p2183,contencioso_administrativo,capa2,provincia:ca
 342_p2187,civil_comercial,capa1,regla:\ben lo civil\b
-342_p2198,civil_comercial,capa2,kw+objeto(2)
+342_p2198,,originaria,originaria
 342_p2230,civil_comercial,capa2,objeto(1)
 342_p2231,penal,capa1,regla:casacion penal
 342_p2236,contencioso_administrativo,capa2,provincia:ca
@@ -4372,7 +4372,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 343_p25,previsional,capa2,objeto+parte(2)
 343_p26,contencioso_administrativo,capa1,regla:contencioso administrativo
 343_p28,contencioso_administrativo,capa1,regla:contencioso administrativo
-343_p33,constitucional,capa2,objeto(1)
+343_p33,tributario,capa2,coocur:tributario_disfrazado(desempate)
 343_p35,laboral,capa2,parte(1)
 343_p37,,pendiente_capa2,sin_ancla
 343_p38,,originaria,originaria
@@ -4474,7 +4474,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 343_p919,civil_comercial,capa2,objeto(1)
 343_p930,,originaria,originaria
 343_p938,,pendiente_capa2,sin_ancla
-343_p944,contencioso_administrativo,capa2,provincia:ca
+343_p944,,originaria,originaria
 343_p947,laboral,capa1,regla:\bdel trabajo\b
 343_p951,penal,capa1,regla:casacion penal
 343_p956,civil_comercial,capa1,regla:civil y comercial federal
@@ -4535,7 +4535,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 343_p1447,contencioso_administrativo,capa2,objeto(1)
 343_p1457,,pendiente_capa2,sin_ancla
 343_p1591,,pendiente_capa2,sin_ancla
-343_p1599,tributario,capa2,parte(1)
+343_p1599,tributario,capa2,kw+parte(2)
 343_p1605,,pendiente_capa2,sin_ancla
 343_p1611,ambiental,capa2,kw+norma:25675(2)
 343_p1613,penal,capa1,regla:casacion penal
@@ -5328,7 +5328,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 346_p1361,,originaria,originaria
 346_p1377,cambiario,capa2,parte(1)
 346_p1379,penal,capa2,kw+norma:24767+objeto(3)
-346_p1387,ambiental,capa2,kw(1)
+346_p1387,,originaria,originaria
 346_p1405,penal,capa2,kw(1)
 346_p1415,civil_comercial,capa1,regla:civil y comercial federal
 346_p1419,tributario,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
@@ -5578,7 +5578,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 347_p2041,tributario,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 347_p2044,,originaria,originaria
 347_p2115,contencioso_administrativo,capa2,provincia:ca
-347_p2146,civil_comercial,capa2,objeto(1)
+347_p2146,,originaria,originaria
 347_p2154,civil_comercial,capa1,regla:\ben lo comercial\b
 347_p2160,,pendiente_capa2,sin_ancla
 347_p2177,civil_comercial,capa1,regla:civil y comercial federal
@@ -5587,7 +5587,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 347_p2241,contencioso_administrativo,capa2,objeto(1)
 347_p2242,,originaria,originaria
 347_p2278,,originaria,originaria
-347_p2286,civil_comercial,capa1,regla:civil y comercial federal
+347_p2286,,originaria,originaria
 347_p2314,civil_comercial,capa1,regla:civil y comercial federal
 347_p2318,civil_comercial,capa1,regla:\ben lo comercial\b
 347_p2324,penal,capa1,regla:\ben lo penal\b
@@ -5729,7 +5729,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 348_p957,penal,capa2,kw(1)
 348_p967,,originaria,originaria
 348_p975,,pendiente_capa2,sin_ancla
-348_p983,ambiental,capa2,kw(1)
+348_p983,,originaria,originaria
 348_p1028,,no_aplica,tipo_entrada=sumario_con_link
 348_p1030,previsional,capa1,regla:seguridad social
 348_p1032,,pendiente_capa2,sin_ancla
@@ -5867,7 +5867,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 349_p131,civil_comercial,capa1,regla:\ben lo civil\b
 349_p139,contencioso_administrativo,capa1,regla:contencioso administrativo
 349_p148,civil_comercial,capa1,regla:\ben lo civil\b
-349_p163,contencioso_administrativo,capa1,regla:contencioso administrativo
+349_p163,,originaria,originaria
 349_p166,civil_comercial,capa1,regla:\ben lo civil\b
 349_p201,previsional,capa2,norma:24241+parte(2)
 349_p203,civil_comercial,capa1,regla:\ben lo civil\b

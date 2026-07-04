@@ -17,7 +17,25 @@ v1.01 — norm() ahora des-hifena el soft-hyphen (\u00ad) de fin de línea del O
         REQUIERE regenerar la clave (build_m20) y re-sellar antes de cerrar.
 """
 import re
-__version__ = "1.10"
+__version__ = "1.11"
+
+# v1.11 (B141 acople — H174). Guard IN LIMINE en la rama reject de es_de_fondo():
+# el rechazo/desestimación «in limine» de la demanda es de UMBRAL (falta de caso
+# justiciable, pronunciamiento teórico vedado — Fallos 325:474), no de mérito.
+# Testigo adjudicado: 330_p3777 (San Luis c/ Nación, cons. 5º-8º) — con el por_ello
+# COMPLETO (post-fix _barrer de B141) el reject matchearía «Rechazar in limine la
+# demanda» e INADM no dispara (sus patrones cubren instancia/competencia ajena, no
+# falta-de-caso) → sin guard, el fix de _barrer fabricaba 1 FP de mérito. Ventana =
+# m.group(0) (mismo estilo que EXCEP): medido en disco, 5 co-ocurrencias reject∩
+# in-limine en las 589 originarias, todas dentro del grupo (ventana+20 no agrega);
+# cubre comillas OCR («rechazar “in limine” la demanda», 337_p627). A/B corpus-wide
+# sobre textos canónicos actuales: 0 flips (no-op puro — pre-emptivo del fix de
+# _barrer; además endurece 5 'no' correctos que hoy dependían de INADM: 329_p1675,
+# 329_p2754, 330_p3109, 331_p1364, 337_p627). Testigos con texto completo: 3777
+# True→False (correcto), 329_p3894 y 341_p1148 siguen True. Outputs byte-idénticos
+# esperados → re-golden [CLEAN] por construcción; manifest re-sellar (CLF_VER en
+# provenance). Residual documentado: falta-de-caso SIN la fórmula «in limine» no
+# se guardea (0 casos vistos; evaluar patrón en INADM si aparece testigo).
 
 # v1.10 (B136 — H169). Agrega es_de_fondo(considerando, por_ello): detector de MÉRITO
 # para la originaria, que NO tiene verbos de apelación (confirma/revoca/deja_sin_efecto)
@@ -202,6 +220,10 @@ RE_FONDO_INADM = re.compile(
     r"|recaudos\s+que\s+condiciona\s+la\s+admisibilidad|requisitos\s+jurisdiccionales"
     r"|no\s+debe\s+tramitar\s+ante\s+esta\s+instancia"
     r"|ajena\s+a\s+la\s+(?:competencia|jurisdicci[oó]n)\s+originaria|en\s+condici[oó]n\s+de\s+parte", re.I)
+# Guard de umbral (v1.11, B141/330_p3777): rechazo IN LIMINE de la demanda = falta de
+# caso justiciable, no mérito. Se evalúa sobre m.group(0) del reject (como EXCEP);
+# \b tolera las comillas del OCR («“in limine”»). i-acentuada por robustez.
+RE_FONDO_IN_LIMINE = re.compile(r"\bin\s+l[ií]mine\b", re.I)
 
 def es_de_fondo(considerando, por_ello):
     """¿La originaria resolvió el FONDO de la demanda? (isMerit de la originaria).
@@ -222,6 +244,8 @@ def es_de_fondo(considerando, por_ello):
     for m in RE_FONDO_REJECT_DEM.finditer(pe):
         if RE_FONDO_EXCEP.search(m.group(0)):
             continue                      # 'desestimar la excepción de falta de acción' = procesal
+        if RE_FONDO_IN_LIMINE.search(m.group(0)):
+            continue                      # v1.11: rechazo in limine = umbral (B141/330_p3777), no fondo
         return not bool(RE_FONDO_INADM.search(co))   # asimetría
     return False
 
