@@ -82,7 +82,7 @@ caso_id_canonico,parser_es_revision_fondo,parser_disposicion,parser_reenvia,pars
 330_p1179,no,no_revision_competencia,no,no_aplica,,no,competencia,0
 330_p1303,no,no_revision_competencia,no,no_aplica,,no,competencia,0
 330_p1465,si,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
-330_p1907,no,no_fondo,no,no_aplica,recurso_extraordinario,no,procedente,0
+330_p1907,si,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
 330_p2014,no,no_fondo,no,no_aplica,,no,desestima,0
 330_p2081,si,confirma,no,recurrente_pierde,recurso_extraordinario,no,procedente,1
 330_p2345,no,no_revision_competencia,no,no_aplica,,no,competencia,0
@@ -264,7 +264,7 @@ caso_id_canonico,parser_es_revision_fondo,parser_disposicion,parser_reenvia,pars
 346_p646,si,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
 346_p675,si,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,procedente,1
 346_p1241,si,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,procedente,1
-346_p1339,si,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,procedente,1
+346_p1339,si,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,procedente,1
 347_p360,no,deja_sin_efecto,no,recurrente_gana,,no,competencia,0
 347_p412,no,no_fondo,no,no_aplica,recurso_extraordinario,si,otro,0
 347_p606,si,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
@@ -286,7 +286,7 @@ caso_id_canonico,parser_es_revision_fondo,parser_disposicion,parser_reenvia,pars
 348_p1347,no,no_fondo,no,no_aplica,,no,abstracto,0
 348_p1378,si,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,si,hace_lugar,1
 348_p1499,no,revoca,no,recurrente_gana,recurso_extraordinario,no,abstracto,0
-348_p1576,no,no_fondo,no,no_aplica,recurso_extraordinario,no,otro,0
+348_p1576,no,no_fondo,no,no_aplica,recurso_extraordinario,no,competencia,0
 348_p1717,no,nulidad_concesion,no,no_aplica,recurso_extraordinario,no,nulidad_concesion,0
 349_p95,no,revoca,no,recurrente_gana,recurso_ordinario,no,abstracto,0
 349_p148,si,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
