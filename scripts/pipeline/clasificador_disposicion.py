@@ -17,7 +17,61 @@ v1.01 — norm() ahora des-hifena el soft-hyphen (\u00ad) de fin de línea del O
         REQUIERE regenerar la clave (build_m20) y re-sellar antes de cerrar.
 """
 import re
-__version__ = "1.15"
+__version__ = "1.18"
+
+# v1.18 (B143-extensión — H181, unidad C). El pe completo de Pereyra 348_p1352
+# (destapado por M21 Fase 3, parser v25.0) muestra «se deja sin efecto todo lo
+# actuado con posterioridad a la notificación de la sentencia que denegó el
+# recurso de inaplicabilidad» = nulidad de ACTUACIONES (criterio de codebook
+# H176/H177: retrotrae el trámite = procesal) — y el disp REAL del testigo es
+# grant_remand_implicito (verificado en disco: el remand «vuelvan los autos…
+# conforme lo decidido» es lo que lo mete en _FONDO), fuera del ancla
+# disp=="nulidad" del guard v1.15; misma clase que 333_p405 (revoca). Sin este guard, el ciclo de F3 habría CONSAGRADO el FP en el golden
+# (lógica de orden (a), H177). Guard espejo de B143: disp=="deja_sin_efecto" ∧
+# RE_DSE_ACTUADO ∧ ¬RE_ABSOLUCION → no. Superficie corpus-wide medida sobre
+# norm(pe) ANTES de cablear: EXACTAMENTE 1 = el testigo (la medición cierra la
+# adjudicación: 0 lecturas nuevas). OJO medición: el pe CRUDO trae «efec-to»
+# partido por soft-hyphen — medir siempre sobre norm(pe), lo que el gate ve.
+
+
+# v1.17 (B139(b) — H181). Guard del GATE en dirección INVERSA (fuerza 'si'):
+# sentencia SUSTITUTIVA en sede recursiva — «se hace lugar a la queja, se
+# declara procedente el recurso extraordinario y se rechaza la demanda
+# (art. 16, segunda parte, de la ley 48)»: el rechazo de la demanda ES la
+# decisión de mérito (art. 16 in fine: la Corte resuelve el fondo en lugar
+# del a quo). La regla «rechaza la demanda → no_revision_demanda» asumía
+# contexto originario (causa raíz B139(b), H170). Señal COMPUESTA calibrada
+# por 9 lecturas adjudicadas caso a caso (H181, criterio confirmado por
+# Guillermo): S1 = art. 16 ∧ ley 48 en el pe (5/6 TP; NO la columna
+# via_recurso — FP conocidos 330_p826/331_p1262 por narrativa) ∨ S2 =
+# concesión-de-recurso ∧ «rechaza la demanda» en el MISMO pe (agarra
+# 332_p2559, sustitutiva sin cita del art. 16). ¬originaria por construcción
+# (la rama originaria del gate retorna antes). Flip-set corpus-wide medido
+# en disco (poc_b139b_guard v0.1, universo = las 181 no_revision_demanda):
+# EXACTAMENTE 6 = los 6 TP adjudicados — 331_p100 (testigo H170, cierra el
+# costo aceptado del paso 3), 337_p1174 (Rodríguez c/ Google), 343_p1259
+# (FADEEAC, TP-con-asterisco: único REX desestimado + art. 16, la Corte
+# dispone igual sobre la demanda), 344_p277, 348_p895 (Defensor del Pueblo),
+# 332_p2559 — 0 extras, 0 pérdidas (el guard solo agrega 'si'), 3 aciertos
+# verificados fuera (330_p3160 Bussi inoficioso / 331_p530 Cóspito acceso /
+# 332_p2237 incidental). NOTA de eje: `disposicion` de los 6 QUEDA
+# no_revision_demanda (verbo intacto, patrón B119/B143 — el guard vive en el
+# gate, no en disposicion()); la tensión sustitutiva-vs-eje-dispositivo y su
+# efecto en parte_ganadora quedan anotados en DEUDA (entrada B139).
+
+# v1.16 (H181, destapado por B135c). Ensanche mínimo de RE_FONDO_EXTRA_GRANT:
+# «condenar\s+a\b» → «condenar\s+al?\b» — la contracción «al» rompía la
+# frontera de palabra y escondía la condena de fondo («Por ello, se resuelve:
+# Condenar AL Estado Nacional... a implementar y ejecutar el Plan Integral
+# Estratégico», Equística 348_p1686, originaria ambiental). ESTRICTAMENTE
+# ADITIVO a nivel regex; medido en disco sobre el universo completo donde
+# es_de_fondo corre (595 = 589 originarias publicadas + 6 flips B135c) con
+# poc_condenar_al v0.1: A0 identidad gate==publicado 0 diffs · A1 pérdidas
+# si→no = 0 · flip-set no→si = 1 = el testigo, adjudicado TP por lectura.
+# FP-costas («condenar al pago de las costas» en originaria no-de-fondo):
+# 0 en el universo. Superficie fuera del universo: 5 «condenar/condena al»
+# en pe de no-originarias, efecto 0 hoy (la rama no corre ahí), dimensionada
+# para una eventual 2ª pasada de apelados de resolución directa.
 
 # v1.15 (B143 — H177). Guard del GATE (patrón B119/B131/B138, verbo intacto):
 # «nulidad de todo lo actuado» = nulidad DE ACTUACIONES (vicio in procedendo,
@@ -328,7 +382,7 @@ RE_FONDO_REJECT_DEM = re.compile(rf"\b(?:rechaz\w+|desestim\w+)\b[^.;]{{0,30}}\b
 RE_FONDO_EXTRA_GRANT = re.compile(
     r"declarar\s+la\s+inconstitucionalidad"
     r"|declarar\s+la\s+nulidad\s+de(?:l|\s+la)\s+(?!auto|concesi|resoluci[oó]n\s+de\s+fs)"  # NO nulidad_concesion
-    r"|\bse\s+condena\b|\bcondenar\s+a\b"
+    r"|\bse\s+condena\b|\bcondenar\s+al?\b"  # v1.16 (H181): «al» contraído (Equística 348_p1686)
     r"|(?:mandar|ordenar\s+que\s+se)\s+llev\w+\s+adelante\s+la\s+ejecuci[oó]n", re.I)
 # Guard de negación: VERBATIM del parser B107 (RE_B107_NEG_HACER_LUGAR). 'no hacer lugar'
 # no es grant. (El ruteo pleno de la negación a la rama reject se difiere a la 2ª pasada
@@ -348,6 +402,24 @@ RE_FONDO_INADM = re.compile(
 # caso justiciable, no mérito. Se evalúa sobre m.group(0) del reject (como EXCEP);
 # \b tolera las comillas del OCR («“in limine”»). i-acentuada por robustez.
 RE_FONDO_IN_LIMINE = re.compile(r"\bin\s+l[ií]mine\b", re.I)
+
+# ── v1.17 (B139(b), H181): señales del guard sentencia-sustitutiva ───────────
+# VERBATIM de poc_b139b_guard v0.1 (mismo objeto = mismo flip-set medido: 6).
+RE_B139B_ART16 = re.compile(r"art[íi]?c?u?l?o?s?\.?\s*16\b", re.I)
+RE_B139B_LEY48 = re.compile(r"ley\s*48", re.I)
+RE_B139B_GRANT = re.compile(
+    r"hace\w*\s+lugar\s+a\s+la\s+queja"
+    r"|declar\w+\s+(?:procedente|admisible)s?\s+(?:el|los)\s+recurso", re.I)
+RE_B139B_RECHAZA_DEM = re.compile(r"rechaz\w+\s+la\s+demanda", re.I)
+
+# ── v1.18 (B143-extensión, H181): nulidad de actuaciones bajo deja_sin_efecto ─
+# «se deja sin efecto TODO LO ACTUADO con posterioridad a…» = mismo criterio
+# H176/H177 (retrotrae el trámite, procesal) con OTRO verbo — fuera del ancla
+# disp=="nulidad" del guard v1.15 (misma clase que 333_p405/revoca).
+# Superficie corpus-wide medida sobre norm(pe): EXACTAMENTE 1 = el testigo
+# 348_p1352 Pereyra (destapado por M21 F3: el pe truncado escondía la frase).
+RE_DSE_ACTUADO = re.compile(
+    r"dej\w+\s+sin\s+efecto[^.;]{0,120}todo\s+lo\s+actuado", re.I)
 
 def es_de_fondo(considerando, por_ello):
     """¿La originaria resolvió el FONDO de la demanda? (isMerit de la originaria).
@@ -397,4 +469,13 @@ def es_revision_fondo(disp, por_ello, is_originaria, considerando=""):
             and RE_NULIDAD_ACTUADO.search(pe)
             and not RE_ABSOLUCION.search(pe)):
         return "no"                       # v1.15 B143: nulidad de actuaciones = procesal (salvo sustitutiva con absolución)
+    if (disp in ("grant_remand_implicito", "deja_sin_efecto")
+            and RE_DSE_ACTUADO.search(pe)
+            and not RE_ABSOLUCION.search(pe)):
+        return "no"                       # v1.18 B143-ext: deja sin efecto TODO LO ACTUADO = nulidad de actuaciones aunque venga con grant+remand (testigo 348_p1352, disp REAL=grant_remand_implicito verificado en disco; deja_sin_efecto = verbo hermano, misma semántica; superficie corpus-wide de RE_DSE_ACTUADO = 1, acota ambas anclas)
+    if (disp == "no_revision_demanda"
+            and ((RE_B139B_ART16.search(pe) and RE_B139B_LEY48.search(pe))
+                 or (RE_B139B_GRANT.search(pe)
+                     and RE_B139B_RECHAZA_DEM.search(pe)))):
+        return "si"                       # v1.17 B139(b): sentencia SUSTITUTIVA — el rechazo de la demanda ES el mérito (¬originaria por construcción: la rama originaria retornó arriba)
     return "si" if disp in _FONDO else "no"

@@ -1,22 +1,22 @@
 {
   "schema_version": 4,
   "manifest_generator_version": "1.8",
-  "generated_at": "2026-07-05T05:48:15.952452+00:00",
+  "generated_at": "2026-07-05T19:29:11.895939+00:00",
   "git": {
-    "commit": "d0ae3f9a917ebbda78091564eb894d57b104fcfe",
+    "commit": "f46ac01acfae8d67b2ba1c32b5a433b89685c884",
     "dirty": true
   },
   "pipeline_scripts": {
     "detectar_paginas.py": "1.01",
     "construir_catalogo.py": "1.01",
     "cruzar_catalogo_y_mapa.py": "1.0",
-    "parser.py": "24.0",
+    "parser.py": "25.0",
     "parser_editorial.py": "1.0",
     "derivar_materia.py": "3.2",
     "derivar_recursos.py": "0.6",
     "extraer_epilogos.py": "0.3",
     "derivar_partes.py": "0.17",
-    "clasificador_disposicion.py": "1.15",
+    "clasificador_disposicion.py": "1.18",
     "clasificador_via.py": "0.1",
     "clasificador_admision.py": "0.2",
     "clasificador_causa.py": "0.5"
@@ -331,31 +331,31 @@
     "csjn_casos.csv": {
       "path": "output/parser/csjn_casos.csv",
       "generated_by": "parser.py",
-      "generator_version": "24.0",
-      "sha256": "dc3830dcef8245778aad0037fe0a175e547924f2b13339cba64c342d0e3ee60e",
+      "generator_version": "25.0",
+      "sha256": "5c7420d5406beb159b96bd6a7c2e24f6ce1aa34af237a6f320bfeccec37eeb28",
       "n_rows": 5890,
-      "n_bytes": 4301387
+      "n_bytes": 4301684
     },
     "csjn_casos_textos.csv": {
       "path": "output/parser/csjn_casos_textos.csv",
       "generated_by": "parser.py",
-      "generator_version": "24.0",
-      "sha256": "05ddd9acafd4c3b6831a43935f6f35c686e9febadd9705321cec5dec447d8755",
+      "generator_version": "25.0",
+      "sha256": "d814fd9ef05925849f5707d5d2f513c7fd24105aca73adece58c5553bde3176f",
       "n_rows": 5890,
-      "n_bytes": 31839684
+      "n_bytes": 31895805
     },
     "csjn_casos_votos.csv": {
       "path": "output/parser/csjn_casos_votos.csv",
       "generated_by": "parser.py",
-      "generator_version": "24.0",
-      "sha256": "8e320b59aea1848c022147398008e05c9af27518d3f9f00266ee3da3a324c276",
-      "n_rows": 27697,
-      "n_bytes": 10672419
+      "generator_version": "25.0",
+      "sha256": "e1ae805dcd0672c75828cd356a2112f600bdae0eb0f3a03db99236700139dc46",
+      "n_rows": 27699,
+      "n_bytes": 10672862
     },
     "csjn_casos_zonas.csv": {
       "path": "output/parser/csjn_casos_zonas.csv",
       "generated_by": "parser.py",
-      "generator_version": "24.0",
+      "generator_version": "25.0",
       "sha256": "98ce265d985476fc4a9f0cb9fa60bcfc77440cce557ccef54e56e5a5a23da4f3",
       "n_rows": 141451,
       "n_bytes": 5571547
@@ -363,7 +363,7 @@
     "csjn_casos_editorial.csv": {
       "path": "output/parser/csjn_casos_editorial.csv",
       "generated_by": "parser.py",
-      "generator_version": "24.0",
+      "generator_version": "25.0",
       "sha256": "30a6da652e3a9d2a0030192cd32a8f3f00dde8fcf57abb2cc5bffbda8e56ab8b",
       "n_rows": 152,
       "n_bytes": 8552
@@ -372,17 +372,17 @@
       "path": "output/parser/csjn_casos_materia.csv",
       "generated_by": "derivar_materia.py",
       "generator_version": "3.2",
-      "sha256": "c843f425e84717576bd19ed63c6affe8dcef5fe3be4aeaf3ab0b2afa6a5205bf",
+      "sha256": "405a4d07c629f553a7a912f8fbb533f6977b995aa6c8328f9eb87b4af93c717a",
       "n_rows": 5890,
-      "n_bytes": 279819
+      "n_bytes": 279724
     },
     "csjn_casos_recursos.csv": {
       "path": "output/parser/csjn_casos_recursos.csv",
       "generated_by": "derivar_recursos.py",
       "generator_version": "0.6",
-      "sha256": "a074a2ed9e86c0f506e7a22457f7cf37730e7a2bf45f7353fa3e80b3e8197e08",
+      "sha256": "70b275bc17798d71193905799f0dd240da83054d5ade6eb1c426c08334cb225f",
       "n_rows": 5890,
-      "n_bytes": 444920
+      "n_bytes": 445361
     },
     "csjn_casos_epilogo.csv": {
       "path": "output/parser/csjn_casos_epilogo.csv",
