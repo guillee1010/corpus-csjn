@@ -3,7 +3,7 @@
 clasificador_disposicion.py — fuente ÚNICA de la lógica de disposición (corpus-csjn).
 =====================================================================================
 Regex VERBATIM del PoC v3 (H118), congeladas. Importado por:
-  - scripts/diagnostico/H120/build_m20.py   (validación: genera la clave)
+  - scripts/validacion/build_m20.py          (validación: genera la clave)
   - scripts/pipeline/derivar_recursos.py     (producción: csjn_casos_recursos.csv)
 Una sola copia => el 0,857 blind describe exactamente lo que se shippea. Sin drift.
 
@@ -17,7 +17,63 @@ v1.01 — norm() ahora des-hifena el soft-hyphen (\u00ad) de fin de línea del O
         REQUIERE regenerar la clave (build_m20) y re-sellar antes de cerrar.
 """
 import re
-__version__ = "1.13"
+__version__ = "1.15"
+
+# v1.15 (B143 — H177). Guard del GATE (patrón B119/B131/B138, verbo intacto):
+# «nulidad de todo lo actuado» = nulidad DE ACTUACIONES (vicio in procedendo,
+# retrotrae el trámite aunque barra la sentencia) = procesal, NO revisión de fondo
+# — criterio de codebook fijado en H176 (nulidad de sentencia [art. 253 CPCCN] =
+# fondo · nulidad de actuaciones = procesal; Pereyra 348_p1352 / Rivera 333_p1152).
+# Señal = RE_NULIDAD_ACTUADO (VERBATIM del alt window-free 1º de la entrada
+# `nulidad` de DISP — fuente conceptual única, dedup pendiente igual que
+# RE_NULIDAD_CONCESION) anclada a disp=="nulidad" (deja fuera por construcción a
+# 333_p405, disp=revoca). EXCEPCIÓN sustitutiva RE_ABSOLUCION: «nulidad + se
+# absuelve» (art. 16 2ª parte ley 48) ES fondo — testigo 330_p399 (López),
+# adjudicado H176/H177; co-ocurrencia alt∩absolución medida corpus-wide = solo
+# {330_p399, 333_p405}. Los 16 del alt LEÍDOS contra el .md en H177 (extraídos a
+# scripts/diagnostico/H177/) y adjudicados caso a caso: 15 FP del gate (6 in-forma-
+# pauperis/asistencia ineficaz: 329_p1794, 330_p487, 330_p4925, 330_p5052,
+# 333_p1671, 339_p656 · 4 juzgado incompetente/avocación: 330_p1169, 334_p1458,
+# 337_p97, 345_p191 · 1 inexistencia de caso art. 116: 332_p1823 [sin controversia
+# = umbral, coherente con in-limine B141 y con «falta de acción» de EXCEP] · 4
+# retrotraídos por vicio de trámite: 344_p163, 344_p1259, 347_p327, 348_p1152)
+# + 1 acierto (330_p399). Solapamiento con gold n300 = 0 (verificado H177) → el
+# guard no re-mapea codificación humana. PoC read-only corpus-wide: flip-set
+# EXACTO = los 15, si→no, 0 no→si; gate=si 2950→2935; divergencia M39 216→227
+# (+13 coincide-en-error expuestos lado parser [los 2 restantes, 347_p327 y
+# 348_p1152, ya eran divergentes con is_merit=0 y SALEN] — residuo para el paso 3
+# de M39, mismo estatus que los 9 de B140b). disposicion() INTACTA (el alt sigue
+# rindiendo caseDisposition=nulidad, correcto como verbo) → blind 0,930
+# byte-idéntico por construcción (verificar igual con build_m20, candado).
+# parte_ganadora=recurrente_gana QUEDA en los 15 (deriva del verbo lockeado,
+# residual estilo B138). Parser 0 ripple (es_de_fondo/outcome intactos) →
+# check_regresion [CLEAN] por construcción; re-derivar recursos + re-sellar
+# manifest. Verificador bimodal: scripts/diagnostico/H177/poc_b143_guard.py.
+# + Fix docstring L6: path de build_m20 scripts/diagnostico/H120 → scripts/validacion (stale).
+
+# v1.14 (B136 vocabulario — H176; hallado por la re-estratificación B139). _DEM_FONDO
+# gana «impugnación»: la originaria contencioso-administrativa resuelve la IMPUGNACIÓN
+# del acto, sinónimo funcional de demanda/pretensión que el split de RE_DEMANDA no
+# cubría. Testigos GEMELOS (San Juan c/ AFIP-DGI, mismo Convenio de Transferencia
+# previsional), ambos LEÍDOS H176 contra el .md, ambos mérito real: 330_p1927
+# («Rechazar la impugnación … y, en consecuencia, confirmar el acto administrativo»,
+# rama reject, INADM=False en el considerando) y 330_p2478 («Hacer lugar parcialmente
+# a la impugnación … dejar sin efecto la resolución 297/96», rama grant; su INADM=True
+# es narrativa de mérito rubro-por-rubro, no cierre de umbral — adjudicado por lectura).
+# Los dos eran coincide-en-error (is_merit=0 ∧ gate=no) INVISIBLES a la divergencia M39.
+# Cardinalidad corpus-wide (PoC read-only, 589 originarias): 3 co-ocurrencias
+# verbo+impugnación → flip-set EXACTO = {330_p1927, 330_p2478}; ancla no-op 331_p2769
+# (ya si/si por otra ruta, debe quedar idéntica). disposicion() INTACTA: RE_DEMANDA es
+# regex aparte y NO consume _DEM_FONDO → clave blind 0,930 byte-idéntica por
+# construcción (verificar igual con build_m20, candado). Ripple (contrato completo,
+# lección B140b): is_merit 3008→3010 (el parser importa es_de_fondo) + denormalización
+# en votos → RE-GOLDEN consciente (diff exacto = los 2 IDs); es_revision_fondo
+# 2948→2950 → re-derivar recursos + re-sellar manifest. Divergencia M39 = 216 SIN
+# CAMBIO (ambas capas flipean juntas — el fix es tan invisible al instrumento como lo
+# era el bug). parte_ganadora / admisibilidad / causa: 0 ripple (consumen
+# disposicion/outcome, intactos). Verificador bimodal con candado de versión:
+# scripts/diagnostico/H176/poc_b136_impugnacion.py. El κ de es_de_fondo sigue
+# pendiente (M43) y validará esta versión.
 
 # v1.13 (B140b — H175). Ensancha RE_NULIDAD_CONCESION (pre-cascada B131, usada
 # por disposicion() L~): alternativa NUEVA que cubre la fórmula literal «nulidad
@@ -186,6 +242,13 @@ RE_RECHAZA_REC = re.compile(r"\b(?:se\s+)?rechaza(?:n)?\b[^.;]{0,40}\b(?:recurso
 RE_RECHAZA_ACCESO = re.compile(
     r"\b(?:se\s+)?rechaza(?:n)?\b[^.;]{0,40}"
     r"\b(?:quejas?|recursos?\s+de\s+(?:hecho|queja|reposici[oó]n))\b", re.I)
+# v1.15 (B143): señal del guard nulidad-de-actuaciones. VERBATIM del alt 1º de la
+# entrada `nulidad` de DISP (fuente conceptual única; dedup pendiente). Usado SOLO
+# por es_revision_fondo(); disposicion() no lo consulta (el verbo queda nulidad).
+RE_NULIDAD_ACTUADO = re.compile(r"\bnulidad\s+de\s+todo\s+lo\s+actuado\b", re.I)
+# v1.15 (B143): excepción sustitutiva — nulidad + absolución (art. 16 2ª parte ley 48)
+# = fondo. Testigo 330_p399 (López).
+RE_ABSOLUCION = re.compile(r"\babsuelv\w+|\babsolv\w+|\babsoluci[oó]n\b", re.I)
 RE_REMAND = re.compile(r"vuelvan?\s+los\s+autos|dicte\s+(?:un\s+)?nuev[ao]|nuevo\s+(?:pronunciamiento|fallo|sentencia)", re.I)
 RE_COMPET = re.compile(r"\bresulta\s+competente\b|\bdeclara\s+(?:la\s+)?(?:in)?competencia\b|\bdeber[áa]\s+entender\b|\bdeclara\s+competente\b", re.I)
 RE_DEMANDA = re.compile(r"\b(?:hac\w+\s+lugar|rechaz\w+|admit\w+|desestim\w+)\b[^.;]{0,30}\b(?:demanda|acci[oó]n|pretensi[oó]n)\b", re.I)
@@ -257,7 +320,7 @@ _FONDO = {"revoca", "deja_sin_efecto", "nulidad", "confirma", "modifica", "grant
 # verbos NO son confirma/revoca/deja_sin_efecto sino hacer lugar/rechazar/desestimar
 # LA DEMANDA. Vocabulario = split de RE_DEMANDA (fuente única) + {0,30} interposición
 # (recupera 'la presente demanda' / 'en todas sus partes la demanda' bajo norm).
-_DEM_FONDO = r"(?:demanda|acci[oó]n|pretensi[oó]n)"
+_DEM_FONDO = r"(?:demanda|acci[oó]n|pretensi[oó]n|impugnaci[oó]n)"  # v1.14 (B136/H176): +impugnación — testigos gemelos 330_p1927/330_p2478
 RE_FONDO_GRANT_DEM  = re.compile(rf"\b(?:hac\w+\s+lugar|admit\w+)\b[^.;]{{0,30}}\b{_DEM_FONDO}\b", re.I)
 RE_FONDO_REJECT_DEM = re.compile(rf"\b(?:rechaz\w+|desestim\w+)\b[^.;]{{0,30}}\b{_DEM_FONDO}\b", re.I)
 # Verbos de fondo que NO se anclan a 'demanda' (grant): la originaria a veces resuelve
@@ -330,4 +393,8 @@ def es_revision_fondo(disp, por_ello, is_originaria, considerando=""):
             and RE_RECHAZA_REC.search(pe)
             and RE_RECHAZA_ACCESO.search(pe)):             # solo objeto INEQUÍVOCO de acceso
         return "no"                       # v1.12 B138: queja/hecho/reposición ≠ revisión de fondo
+    if (disp == "nulidad"
+            and RE_NULIDAD_ACTUADO.search(pe)
+            and not RE_ABSOLUCION.search(pe)):
+        return "no"                       # v1.15 B143: nulidad de actuaciones = procesal (salvo sustitutiva con absolución)
     return "si" if disp in _FONDO else "no"
