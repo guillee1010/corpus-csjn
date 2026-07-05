@@ -2,6 +2,15 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H178 (2026-07-05)
+
+- `parser.py` v23.2→v24.0: is_merit derivado del gate del clasificador (fuente única, patrón B136 corpus-wide); retiro de MERIT_OUTCOMES y del branch originaria; GATEKEEP_OUTCOMES removido (muerto). 227 casos flipean (151 1→0 + 76 0→1).
+- `output/parser/csjn_casos.csv`: 5890 filas; is_merit 3010→2935; 227 filas tocadas (solo is_merit_decision).
+- `output/parser/csjn_casos_votos.csv`: 27697 filas; 1078 tocadas (is_merit denormalizado) + 6 flips tipo_voto_sep.
+- `M20_clave_parser_n300.csv`: 8 filas — candado byte-idéntico retirado con D1 (re-validación: M43).
+- Derivers (epilogo/partes/materia/recursos): re-corridos, byte-idénticos.
+- `_manifest.json`: re-sellado, 5 CSV del parser en v24.0.
+
 ## H177 (2026-07-05)
 
 - `clasificador_disposicion.py`: v1.14→v1.15 — guard B143 en `es_revision_fondo` (nulidad de actuaciones = procesal; excepción sustitutiva con absolución, testigo 330_p399). 15 casos gate si→no. + fix docstring L6 (path build_m20).

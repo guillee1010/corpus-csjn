@@ -19114,3 +19114,35 @@ HEAD estaba en el fix de H175: **H176 sin commitear** (golden re-congelado + gem
 
 **Commits:** 2 — uno que absorbe el working tree pendiente de H176 (gemelos San Juan + golden re-congelado + docs), y el de H177 (clasificador v1.15 + recursos.csv re-derivado + manifest re-sellado).
 
+## H178 — Paso 3 de M39: is_merit derivado del gate como fuente única; retiro de D1 (2026-07-05)
+
+**Objetivo:** ejecutar el paso 3 (último del orden lockeado H170): `is_merit` derivado del clasificador como fuente única, con retiro documentado del instrumento D1.
+
+### H178-01 — Apertura y verificación de insumos
+
+Gate reproducido exacto: divergencia 227 (151+76) · is_merit 3010 · gate=si 2935 · orig 589 · nulidad 56 (corrige el «2950» de la constancia H177: el sellado post-B143 es 2935). Versiones: clasificador 1.15 / derivar 0.6 / parser 23.2. Micro-item 1 (sección del skill): verificado NO pegada — sigue en Guillermo. Micro-item 2: decidido `git add -f` de los PoCs bimodales (H177+H178).
+
+### H178-02 — Diseño (gate #1): opción (i), patrón B136 extendido
+
+is_merit sigue columna del parser; su fuente pasa a ser el gate para todo el corpus (import `disposicion`+`es_revision_fondo`, llamada idéntica a derivar_recursos v0.6). Verificado en código contra la opción (ii): build_m20 consume is_merit (2 columnas), B137/tipo_voto lo consume en parseo (L1738/L3680), votos lo denormaliza, schema 39 intacto. Intersección n300 ∩ flip-set medida = 8 → candado byte-idéntico NO alcanzable bajo ningún diseño; se retira CON D1 y la re-validación es M43. Copia nulidad_concesion del parser QUEDA (eje outcome legacy; dedup → D3/M40). Hallazgo: GATEKEEP_OUTCOMES era código muerto preexistente (0 usos).
+
+### H178-03 — PoC bimodal (poc_paso3_m39 v0.2) y adjudicación por clase
+
+[CLEAN] PRE en sandbox y en disco: A1 identidad de insumos (gate recomputado 0 diffs vs columna publicada — round-trip CSV neutro); A2 flip-set == 227 ids exactos; A3 31/31 anclas 1→0 (9 B140b + 13 B143 + 9 aciertos-del-gate); A4 330_p399 no-flip; A5 los 8 de n300. Costos aceptados adjudicados y aprobados (~22 flips, todos con unidad sucesora): 9 FN-B139a (1→0) · 4 resid-B138 (0→1; tomos completados: 330_p1205, 330_p4891, 331_p2621, 348_p747) · 3 originarias B135(c) (329_p3403, 344_p3476, 348_p473 — autorreparables al cerrar B135c) · 331_p100 (B139b) · 4 truncados M21 (329_p4634, 330_p4129, 347_p474, 348_p355) · ADC/329_p5261 (0→1). Cota de ripple en votos: 1078 filas + tipo_voto ≤17.
+
+### H178-04 — Cableado (parser v23.2 → v24.0) y ciclo completo
+
+6 ediciones (import, bloque is_merit, 3 comentarios stale, changelog+corrección «40→39 columnas»). check_regresion [FAIL] adjudicado: solo `is_merit_decision`; textos/zonas/editorial byte-idénticos. Golden re-congelado con totalidad demostrada por git diff --stat: casos EXACTAMENTE 227 filas, votos EXACTAMENTE 1078. Parser a producción → [CLEAN] 5/5. Re-derivados los 4 derivers: hashes SIN cambio (0 ripple; derivar_partes lee is_merit solo para su summary: «universo SCDB 2935»). Clave n300: 8 filas (16 marcas en git). PoC POST [CLEAN]: divergencia 0+0, is_merit 2935, 31/31 anclas, 330_p399=1, P1b 0 diffs. Manifest re-sellado: casos dc3830dcef82 == golden, votos 8e320b59aea1 == golden. Dato fino (diff_votos_h178): tipo_voto_sep 6 flips reales (4 D→indet en 1→0, incl. Rosenkrantz 341_p1924 Blanco [FN-B139a]; 2 indet→D en 0→1, incl. 342_p1524 Deutsche Rück [acierto B138 = mejora]); acopladas 6/6; ninguna otra columna.
+
+### H178-05 — Retiro de D1 e incidentes ops
+
+D1 retirado: trayectoria 234→219→208→216→227→0, cada movimiento adjudicado. Límite registrado: las clases coincide-en-error (B142, B143 pre-fix, v1.14) le fueron invisibles por construcción; sucesor M43. Incidentes: (1) placeholder `<ruta>` en hoja de ruta PS → ParserError, parser no instalado; detectado por Select-String de versión; regla: hojas de ruta sin placeholders. (2) `--make-golden` corre a temp y NO refresca producción → PoC POST frenó el ciclo incompleto (hashes golden ≠ manifest); regla: parser a producción explícito post-golden.
+
+### H178 — Estado final
+
+- **Corpus:** 5890 casos · is_merit=1: **2935** (== gate=si) · is_originaria: 589 · **divergencia M39: 0 por construcción**.
+- **Votos:** 27697 filas (1078 tocadas: is_merit denormalizado; 6 tipo_voto).
+
+**Outputs canónicos (manifest [CLEAN] N_VERIFY):**
+- `csjn_casos.csv` — 5890 filas, dc3830dcef82…, v24.0.
+- `csjn_casos_textos.csv` —
