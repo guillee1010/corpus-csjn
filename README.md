@@ -99,13 +99,13 @@ corpus-csjn/
 ├── CHANGELOG.md                       ← cambios versionados al pipeline
 ├── MAPA.md                            ← mapa de arquitectura + orden de ejecución (spec del DAG)
 ├── scripts/
-│   ├── pipeline/                      ← pipeline productivo
+│   ├── pipeline/                      ← pipeline productivo + orquestador + sello
 │   │   ├── correr_pipeline.py         ← orquestador de la cadena (v1.0)
 │   │   ├── parser.py                  ← parser principal (v24.0)
-│   │   ├── parser_editorial.py        ← parser de zonas editoriales (librería)
-│   │   ├── construir_catalogo.py      ← genera catálogo
-│   │   ├── cruzar_catalogo_y_mapa.py  ← localizador
-│   │   ├── detectar_paginas.py        ← detecta headers de página
+│   │   ├── parser_editorial.py        ← zonas editoriales (librería)
+│   │   ├── construir_catalogo.py      ← catálogo (etapa de localización)
+│   │   ├── detectar_paginas.py        ← mapa de páginas (etapa de localización)
+│   │   ├── cruzar_catalogo_y_mapa.py  ← localizador (etapa de localización)
 │   │   ├── extraer_epilogos.py        ← extrae epílogos (v0.3)
 │   │   ├── derivar_partes.py          ← recurrente/recurrido (v0.17)
 │   │   ├── derivar_materia.py         ← materia inferida (v3.2)
@@ -113,16 +113,20 @@ corpus-csjn/
 │   │   ├── clasificador_disposicion.py ← lógica de disposición/mérito (v1.15, librería)
 │   │   ├── clasificador_admision.py   ← lógica de admisibilidad (v0.2, librería)
 │   │   ├── clasificador_causa.py      ← lógica de causa de inadmisibilidad (v0.5, librería)
-│   │   └── clasificador_via.py        ← lógica de vía del recurso (v0.1, librería)
-│   ├── validacion/                    ← regresión, κ y sellado
-│   │   ├── check_regresion.py         ← harness de regresión (golden)
-│   │   ├── kappa_confiabilidad.py     ← κ inter-codificador (n300)
-│   │   └── generar_manifiesto.py      ← sella _manifest.json (v1.8)
-│   ├── auditoria/                     ← auditor canónico
-│   │   └── auditar_fallo.py           ← auditor canónico
-│   └── diagnostico/                   ← herramientas y PoCs por sesión
-│       ├── extraer_caso.py            ← extrae considerando+por_ello de un fallo
-│       └── H0NN/                      ← PoCs y diagnósticos por sesión
+│   │   ├── clasificador_via.py        ← lógica de vía del recurso (v0.1, librería)
+│   │   └── generar_manifiesto.py      ← sella output/parser/_manifest.json (v1.8)
+│   ├── validacion/                    ← gold n300 + confiabilidad
+│   │   ├── build_m20.py               ← construye el gold n300
+│   │   └── kappa_confiabilidad.py     ← κ inter-codificador
+│   ├── tests/                         ← harness de regresión + gates
+│   │   ├── check_regresion.py         ← regresión contra el golden
+│   │   └── test_*.py · gate_manifiesto.py · check_*.py
+│   ├── auditoria/                     ← auditor canónico (+ PoCs por sesión)
+│   │   └── auditar_fallo.py
+│   ├── diagnostico/                   ← PoCs y diagnósticos por sesión (H0NN/, B0NN/)
+│   │   └── extraer_caso.py            ← extrae considerando+por_ello de un fallo
+│   ├── explorador/                    ← explorador Streamlit del corpus
+│   └── visor/                         ← visor de auditoría
 ├── output/
 │   ├── parser/                        ← outputs canónicos del parser + derivers
 │   │   ├── csjn_casos.csv             ← dataset de casos (5.890 · 39 columnas)

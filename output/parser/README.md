@@ -1,35 +1,41 @@
 # output/parser/
 
-Outputs canónicos del pipeline. **Son el dataset** — lo que se publica en Dataverse.
-Un CSV por dimensión. Clave de join entre tablas: `caso_id_canonico`.
+Outputs canónicos del parser y de los derivers. Un CSV por dimensión del dataset;
+el sello de hashes / filas / versión-de-generador de la última corrida vive en
+`_manifest.json`.
 
-| Archivo | Filas | Generador | Qué es |
-|---|---|---|---|
-| `csjn_casos.csv` | 5.890 | `parser.py` 22.0 | Nivel **caso**: carátula (índice y cuerpo), fecha, tomo, `apertura_tipo`, `voting_pattern`, `n_jueces`, word-counts por zona, firma, jueces, posiciones, `tribunal_origen`, localización. *(`outcome` presente pero **legacy** — superado por los ejes de `recursos`.)* |
-| `csjn_casos_textos.csv` | 5.890 | `parser.py` 22.0 | Texto completo por caso (tabla pesada, ~32 MB). |
-| `csjn_casos_votos.csv` | 27.697 | `parser.py` 22.0 | Nivel **voto** (un registro por juez por caso): posición, texto del voto, `tipo_voto_sep`, `fragmenta_ratio`, `punto_divergencia`. |
-| `csjn_casos_zonas.csv` | 141.451 | `parser.py` 22.0 | Zonas de texto por caso: `zona` (sumario, dictamen, considerando, dispositiva, voto…), segmento, rangos de línea, word-count. |
-| `csjn_casos_editorial.csv` | 152 | `parser.py` 22.0 | Zonas editoriales por tomo (`indice_partes`, `indice_materias`) con rangos de línea y word-count. |
-| `csjn_editorial_indice_partes.csv` | 11.445 | `parser_editorial.py` 1.0 | Entradas parseadas del índice alfabético de partes de cada tomo. |
-| `csjn_casos_materia.csv` | 5.890 | `derivar_materia.py` 3.2 | Materia por caso (derivada vía `_meta/vocab_materia/`). |
-| `csjn_casos_recursos.csv` | 5.890 | `derivar_recursos.py` 0.5 | **Ejes recursivos M26** (un registro por caso): `disposicion`, `reenvia`, `parte_ganadora`, `via_recurso`, `multi_recurso`, `es_revision_fondo`, `admisibilidad`, `causa_inadmisibilidad`, `es_queja`. Usa los `clasificador_{disposicion,via,admision,causa}`. |
+| Archivo | Registros | Descripción |
+|---------|-----------|-------------|
+| `csjn_casos.csv` | 5.890 | Dataset a nivel caso (39 columnas): carátula (índice y cuerpo), fecha, tomo, `apertura_tipo`, `outcome` (legacy), `voting_pattern`, `is_merit_decision`, `is_originaria`, `es_queja`, `queja_resultado`, `tipo_cuestion_federal`, word counts por zona, jueces, posiciones, `tribunal_origen`, localización |
+| `csjn_casos_textos.csv` | 5.890 | Blobs de texto crudos por caso (`considerando_text`, `por_ello_text`, `firma_raw`), espejo 1:1, sin truncar |
+| `csjn_casos_votos.csv` | 27.697 | Dataset a nivel voto: un registro por juez por caso, con posición, `texto_voto`, `tipo_voto_sep`, `fragmenta_ratio`, `punto_divergencia` (`is_merit` denormalizado) |
+| `csjn_casos_zonas.csv` | 141.451 | Zonas de texto por caso: `zona` (dictamen, considerando, dispositiva, firma, voto, etc.), `segmento`, rangos de línea, word count |
+| `csjn_casos_editorial.csv` | 152 | Zonas editoriales por tomo: `subtipo`, rangos de línea y word count |
+| `csjn_casos_epilogo.csv` | 5.697 | Texto crudo de la zona epílogo por fallo (deriver, M29) |
+| `csjn_casos_partes.csv` | 5.890 | Recurrente / recurrido + rol (deriver, M29) |
+| `csjn_casos_materia.csv` | 5.890 | Materia inferida (deriver: capa 1 tribunal→fuero + capa 2 sobre considerando) |
+| `csjn_casos_recursos.csv` | 5.890 | Ejes M26 (deriver): `disposicion`, `admisibilidad`, `causa_inadmisibilidad`, `via_recurso`, `es_revision_fondo`, `reenvia`, `parte_ganadora` |
+| `_manifest.json` | — | Sello de provenance: hashes, filas y versión de cada generador (64 artefactos) |
 
-## Provenance
-
-Según `_manifest.json` (schema v4):
+## Cómo se producen (`_manifest.json`, schema v4)
 
 ```
 corpus/ (46 vols, 329–349 excl. 335–336)
-  ├─ detectar_paginas      → output/mapa/mapa_paginas.csv         ┐ intermedios
-  ├─ construir_catalogo    → output/catalogo/{catalogo,secciones} │ regenerables
-  └─ cruzar_catalogo_y_mapa→ output/localizacion/fallos_localizados.csv ┘ (gitignored)
+  ├─ construir_catalogo    → output/catalogo/{catalogo,secciones}    ┐ intermedios
+  ├─ detectar_paginas      → output/mapa/mapa_paginas.csv            │ regenerables
+  └─ cruzar_catalogo_y_mapa→ output/localizacion/fallos_localizados  ┘ (gitignored)
 corpus + localizacion
-  ├─ parser.py 22.0        → csjn_casos · _textos · _votos · _zonas · _editorial
-  └─ parser_editorial 1.0  → csjn_editorial_indice_partes
-csjn_casos
-  ├─ derivar_materia 3.2 (+ _meta/vocab_materia) → csjn_casos_materia
-  └─ derivar_recursos 0.5 (+ clasificador_*)     → csjn_casos_recursos
+  └─ parser.py 24.0        → csjn_casos · _textos · _votos · _zonas · _editorial
+csjn_casos (+ derivers)
+  ├─ extraer_epilogos 0.3                          → csjn_casos_epilogo
+  ├─ derivar_partes 0.17   (+ epilogo)             → csjn_casos_partes
+  ├─ derivar_materia 3.2   (+ _textos, vocab)      → csjn_casos_materia
+  └─ derivar_recursos 0.6  (+ clasificador_*)      → csjn_casos_recursos
 ```
+
+`parser_editorial.py` es librería importada por `parser.py` (sin `__main__`); su CSV
+histórico (`csjn_editorial_indice_partes.csv`) quedó fósil, fuera de los canónicos
+(H167/M35). Ver `MAPA.md` para el DAG completo y el orden de ejecución.
 
 ## Convenciones
 
@@ -37,6 +43,3 @@ csjn_casos
 - **Versionado:** sin sufijos de versión en los nombres — git versiona; el sello de
   hashes / filas / versión-de-generador vive en `_manifest.json`.
 - **Cobertura:** volúmenes 329–349, **excluyendo 335–336** (OCR pendiente; ver CODEBOOK §11).
-
----
-*Reemplaza a `scripts/pipeline/readme_output_parser.md` (stale: documentaba 5 CSV con cuentas viejas).*
