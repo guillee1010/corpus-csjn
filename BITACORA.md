@@ -19143,6 +19143,64 @@ D1 retirado: trayectoria 234→219→208→216→227→0, cada movimiento adjudi
 - **Corpus:** 5890 casos · is_merit=1: **2935** (== gate=si) · is_originaria: 589 · **divergencia M39: 0 por construcción**.
 - **Votos:** 27697 filas (1078 tocadas: is_merit denormalizado; 6 tipo_voto).
 
-**Outputs canónicos (manifest [CLEAN] N_VERIFY):**
+**Outputs canónicos (manifest [CLEAN] 64_VERIFY):**
 - `csjn_casos.csv` — 5890 filas, dc3830dcef82…, v24.0.
 - `csjn_casos_textos.csv` —
+
+## H179 — M42: orquestador del pipeline `correr_pipeline.py` (2026-07-05)
+
+**Objetivo:** M42 — script único que corra la cadena canónica en orden, con MAPA.md como spec; diseño gateado, dry-run adjudicado, validación auto-contenida reproduciendo el sello H178 en 0 cambios.
+
+### H179-01 — Apertura y diseño adjudicado
+
+Gate de apertura reproducido exacto en disco: is_merit 2935 == gate=si 2935 · divergencia 0 · is_originaria 589 · manifest [CLEAN] 64 · versiones parser 24.0 / clasificador_disposicion 1.15 / derivar_recursos 0.6. CLIs de las 6 etapas + check_regresion + generar_manifiesto leídas verbatim (no uniformes: `--out` en recursos, `--input` en materia — se cablean, no se normalizan). Decisiones adjudicadas: (1) `--sin-parser` del esbozo eliminado (redundante con `--solo-derivers`); (2) `--consciente`/`--regolden` en dos pasos — freno humano tras el diff, nada irreversible sin adjudicación; (3) upstream (catálogo/páginas/cruce) fuera del ejecutable v1 (CLIs no leídas, zonas ⚠ en MAPA) con v2 condicionada a tomos nuevos reales; (4) el alcance corrige el esbozo: MAPA manda, la cadena incluye extraer_epilogos y derivar_partes.
+
+### H179-02 — Gate de corpus-drift (no previsto en el esbozo)
+
+Pregunta de Guillermo («¿y si hubiera .md nuevos?») destapó el gap: el manifest no detecta .md nunca parseados (sella solo lo referenciado por source_file). Pre-flight nuevo: corpus/*.md en disco vs universo source_file de casos.csv (misma derivación que fuentes_corpus); drift → ABORT, `--ignorar-corpus-drift` declara la exclusión deliberada. Primer contacto con el disco detectó los 4 .md de 335/336 (exclusión conocida y documentada en generar_manifiesto).
+
+### H179-03 — Implementación y validación
+
+`correr_pipeline.py` v1.0 en scripts/pipeline/. Invariantes H178 cableados: (a) fail-fast total; (b) versiones pre-flight + pin `--esperar` + frescura post-etapa por mtime; (c) assert golden==producción por sha256 (5 CSV del parser) en toda corrida; (d) paths constantes desde REPO_ROOT con existencia verificada. Infra: PYTHONUTF8=1 al env de los hijos (clase charmap H174 cubierta sin tocar los scripts). Validación en orden estricto: smoke sandbox (7 tests: paths faltantes, drift abort/tolerado, pin mismatch/OK, modos incompatibles, plan) → `--plan` en disco adjudicado contra MAPA.md paso a paso → corrida real completa (parser 98.5s + derivers): 5 etapas [ok] con outputs frescos, check_regresion [CLEAN] 5/5, invariante (c) hashes idénticos (casos dc3830dcef82 · textos 05ddd9acafd4 · votos 8e320b59aea1 · zonas 98ce265d9854 · editorial 30a6da652e3a), manifest [CLEAN] 64 sin re-sello. **0 cambios: el orquestador se validó reproduciendo el sello.**
+
+### H179-04 — Decisión de provenance y documentación
+
+correr_pipeline.py NO entra a PIPELINE_SCRIPTS del manifest: no moldea datos (mismo estatus que check_regresion; el manifest sella lógica que produce bytes, no infra de ejecución) → manifest intacto, cero re-sello. MAPA.md gana la sección «Cómo correr la cadena»; su cierre pasa de «si alguna vez se construye un run_pipeline.py» a «mapa y orquestador se mueven juntos». M42 CERRADA en DEUDA con v2-upstream como unidad futura explícita.
+
+### H179 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos + 193 no-fallo). SIN CAMBIOS (byte-idéntico al sello H178).
+- **is_merit:** 2935 (== gate=si) · divergencia 0 · is_originaria 589.
+- **Votos:** 27697 filas. **Zonas:** 141451 segmentos. **Editorial:** 152 secciones.
+
+**Outputs canónicos:** los 9 sin cambios; golden sin cambios; `_manifest.json` sin cambios ([CLEAN] 64, verificado 2×).
+
+**Scripts creados:** `scripts/pipeline/correr_pipeline.py` (v1.0).
+
+**Pendiente arrastrado:** micro-item «Dónde está cada cosa» (skill apertura) — tercera verificación no-pegada (H177/H178/H179); decisión pega-o-abandona diferida a H180.
+
+**Commits:** 2 — (1) pipeline: correr_pipeline.py v1.0 + MAPA.md sección nueva + README de scripts/pipeline; (2) docs: DEUDA (M42 cerrada + encabezado) + BITACORA + CHANGELOG.
+
+## H180 — Housekeeping del repo + READMEs a v24.0 + skills actualizados (2026-07-05)
+
+**Objetivo:** poner los READMEs al día con el estado v24.0, ordenar `scripts/`, y cerrar el micro-ítem de paths del skill de apertura. Sin cambios a la cadena.
+
+### H180-01 — READMEs a v24.0
+Los 4 READMEs actualizados y cruzados contra disco: main (árbol de `scripts/` corregido — `generar_manifiesto` está en `pipeline/`, `check_regresion` en `tests/`, no en `validacion/`), `scripts/pipeline/` (orden de etapas alineado a MAPA §orden), `output/parser/` (9 CSV con conteos v24.0 + DAG completo con derivers; sacado el fósil `csjn_editorial_indice_partes`). Eliminado `scripts/pipeline/readme_output_parser.md` (copia vieja mal ubicada; el bueno vive en `output/parser/`).
+
+### H180-02 — Housekeeping de scripts
+`scripts/migraciones/*.ps1` (one-off ejecutados) → `archivo/scripts_historicos/`. `auditar_sincro.ps1` promovido de `diagnostico/` a `auxiliares/` (reusable; path de uso interno corregido). 6 scratch sueltos de B136/materia/partes → `archivo/diagnostico_suelto/`. Basura borrada (`poc_partes_cuerpo_189 py` + csv). `output/visor/` (10 vistas regenerables) → gitignore + `git rm --cached`. Toda la masa `diagnostico/HNN`, `auditoria/HNN` queda intacta (scratch por sesión, ya gitignoreada, es el audit trail).
+
+### H180-03 — Skills apertura/cierre
+Apertura: agregada la sección «Dónde está cada cosa» (índice de paths canónicos verificado en disco + puntero a MAPA para el DAG) — cierra el micro-ítem arrastrado H177/H178/H179. Cierre: Paso 2 reescrito para delegar la cadena (regresión → re-golden → re-sello) a `correr_pipeline.py` (`--consciente`→adjudicar→`--regolden`), dejando el candado blind `build_m20` y la adjudicación como pasos humanos (Gate 3: invoca, no duplica).
+
+### H180-04 — Hallazgo git
+`correr_pipeline.py` (M42/H179) estaba **sin trackear** — el commit de docs de H179 quedó incompleto (BITACORA/CHANGELOG figuran modificados sin commitear). Se agrega y cierra en este cierre.
+
+### H180 — Estado final
+- **Corpus:** SIN CAMBIOS, byte-idéntico a H179. 5890 casos · is_merit 2935 · is_originaria 589 · 27697 votos · 141451 zonas · 152 editorial.
+- **Outputs canónicos:** los 9 sin cambios; `_manifest.json` [CLEAN] 64 sin re-sello (nada tocó la cadena).
+
+**Scripts creados:** `scripts/diagnostico/H180/reporte_readme.py` (reporter read-only de distribuciones para docs).
+
+**Commits:** N — housekeeping (moves + gitignore + stray) + docs (3 READMEs) + `correr_pipeline.py` (faltaba trackear). [completar descripción simbólica al commitear]

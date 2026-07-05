@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H179 (2026-07-05)
+
+- `scripts/pipeline/correr_pipeline.py`: NUEVO (v1.0, M42) — orquestador de la cadena canónica (parser → epilogos → partes → materia → recursos → check_regresion → manifest) con DAG de MAPA.md como spec. Fail-fast, versiones pre-flight + pin `--esperar`, frescura post-etapa, gate de corpus-drift, assert golden==producción (sha256), sello condicional del manifest. Modos `--plan` / `--solo-derivers` / `--consciente` / `--regolden`. Validado reproduciendo el sello H178 en 0 cambios.
+- `MAPA.md`: sección «Cómo correr la cadena» (apunta al orquestador); cierre actualizado (mapa y orquestador se mueven juntos).
+- Outputs canónicos, golden y `_manifest.json`: SIN CAMBIOS.
+
 ## H178 (2026-07-05)
 
 - `parser.py` v23.2→v24.0: is_merit derivado del gate del clasificador (fuente única, patrón B136 corpus-wide); retiro de MERIT_OUTCOMES y del branch originaria; GATEKEEP_OUTCOMES removido (muerto). 227 casos flipean (151 1→0 + 76 0→1).
