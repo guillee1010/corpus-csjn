@@ -2,7 +2,20 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
-# APPEND para CHANGELOG.md — pegar al final
+## H177 (2026-07-05)
+
+- `clasificador_disposicion.py`: v1.14→v1.15 — guard B143 en `es_revision_fondo` (nulidad de actuaciones = procesal; excepción sustitutiva con absolución, testigo 330_p399). 15 casos gate si→no. + fix docstring L6 (path build_m20).
+- `output/parser/csjn_casos_recursos.csv`: re-derivado — es_revision_fondo=si 2950→2935 (−15). 5890 filas (sin cambio).
+- `output/parser/_manifest.json`: re-sellado, [CLEAN] 64.
+- (housekeeping) commit retroactivo de H176 que estaba pendiente en working tree (golden + casos/votos de los gemelos San Juan).
+
+## H176 (2026-07-04)
+
+- `clasificador_disposicion.py` v1.13→**v1.14**: `_DEM_FONDO` gana «impugnación» (B136/B139; gemelos San Juan 330_p1927/330_p2478, leídos = mérito real). disposicion() intacta: 0 diffs/5697; clave gold n300 byte-idéntica.
+- `output/parser/csjn_casos.csv`: 5890 filas; is_merit 3008→3010 (2 flips exactos).
+- `output/parser/csjn_casos_votos.csv`: 27697 filas; is_merit_decision denormalizado en 13 filas de los 2 casos.
+- `output/parser/csjn_casos_recursos.csv`: 5890 filas; es_revision_fondo=si 2948→2950. Divergencia M39: 216 sin cambio.
+- Golden re-congelado (--make-golden, diff adjudicado 2+13 filas) + `_manifest.json` re-sellado [CLEAN] 64.
 
 ## H175 (2026-07-04)
 

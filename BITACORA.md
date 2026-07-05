@@ -19030,3 +19030,87 @@ Dos unidades tropezaron en el tránsito por Downloads (sufijos del navegador ins
 
 **Commits:** [completar tras el paso 6 del cierre].
 
+## H176 — B139: re-estratificación, adjudicación caso a caso y decisión diferir + v1.14 «impugnación» (2026-07-04)
+
+**Objetivo:** paso 2 de M39, unidad final — re-estratificar los 59 brutos de B139a contra el corpus post-B141/B138/B140b y decidir guard-o-diferir.
+
+### H176-01 — Gate de apertura y molde H171 re-corrido
+
+Métricas selladas de H175 reproducidas exactas (divergencia 216 · is_merit 3008 · gate=si 2948 · orig 589). Molde `cardinalidad_gate.py` v0.2 re-corrido: B139a repite 59 brutos con misma distribución de verbos pero composición rotada (42 apel/17 orig, era 43/16); B139b 14/181; B140b=0 (cierre H175 confirmado en cardinalidad); ancla B140a 26≠27 = drift esperado de v1.13 (Paccagnini 343_p2098 salió de _FONDO), verificado contra CSV, no falla. Sanity: disposicion() recomputada == publicada en 5697.
+
+### H176-02 — Re-estratificación mecánica y adjudicación por lectura (17 extracciones)
+
+Corte por sub-mecanismo sobre el pe real + ejes del gate. Hallazgos estructurales: 13 originarias del bucket convergen si/si (es_de_fondo las cubre; fuera del problema); el modelo de 4 clases de H171 se refina a 5 mecanismos. 17 casos leídos contra el .md: 10 FN reales del gate (material ×5 + ventana corta 338_p234 + OCR 331_p2628 + pronominal 337_p1042 + mixto ordinario/art.16 332_p2797 Autolatina + vocabulario es_de_fondo 330_p1927) y ~7 aciertos del gate con outcome equivocado del parser (1950, 4396, 1024, 852, 2513, 83, 1857) → residuo lado parser, insumo del paso 3. Sub-clase pronominal «lo resuelto» probada HETEROGÉNEA por lectura (1042 fondo vs 1857/4094 competencia). Autolatina: criterio SCDB-compatible — no decide el tema (honorarios) sino qué hizo la Corte (ordinario procedente + sustitución art. 16 = fondo); sin regla mecánica para honorarios.
+
+### H176-03 — Criterio de codebook nuevo y B143
+
+Criterio fijado (Guillermo): nulidad DE LA SENTENCIA (art. 253 CPCCN, subsumida en la apelación) = fondo · nulidad DE ACTUACIONES (in procedendo, retrotrae) = procesal → 348_p1352 Pereyra re-adjudicado a acierto (coherente con Rivera 333_p1152/H172). El criterio destapa B143: 16 gate=si vía el alt window-free «nulidad de todo lo actuado», todos coincide-en-error invisibles a la divergencia; contraejemplo 330_p399 (nulidad + ABSOLUCIÓN art. 16 = fondo) prohíbe guard ciego. Entrada nueva con las 16 lecturas como prerequisito y chequeo de solapamiento con gold n300.
+
+### H176-04 — Decisión: guard B139a DIFERIDO con fundamento
+
+El mismo shape mecánico (verbo+det+sustantivo material) cubre los FN y ~12 aciertos procesales; discriminar exige semántica del sustantivo (lista fiteada = overfitting) y toca disposicion() lockeada. 10 FN quedan adjudicados-sin-guard (estatus B138-residuales). «laudo»→OBJ: cardinalidad 1, anotado para el próximo bump de DISP. B139b diferido con diseño (señal art.16 textual ∧ ¬originaria; 8 lecturas pendientes). Truncados → M21/B122 + 2 variantes OCR nuevas (347_p474 «sen347», 348_p355 «sen tencia»).
+
+### H176-05 — Unidad cableada: clasificador_disposicion v1.14 (+«impugnación»)
+
+_DEM_FONDO gana «impugnación» — gemelos San Juan c/ AFIP-DGI (1927 reject + 2478 grant), ambos leídos = mérito real. Riesgo acotado con dato: la palabra aparece en el pe de solo 3/589 originarias (los 3 leídos; ancla no-op 2769). PoC bimodal con candado (poc_b136_impugnacion.py) PRE+POST verdes en disco. Ripple contratado y cumplido: is_merit 3008→3010 (2 filas casos + 13 votos), gate=si 2948→2950, divergencia 216 SIN CAMBIO (flip bicapa simétrico), parte/admisibilidad/causa 0 ripple. Golden re-congelado consciente (diff exacto adjudicado); clave gold n300 BYTE-IDÉNTICA probada vía git (trackeada, build_m20 v1.14, ausente de git status) → blind 0,930 vigente; manifest re-sellado [CLEAN] 64.
+
+### H176 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos). is_merit=1: **3010** · es_revision_fondo=si: **2950** · divergencia M39: **216** · is_originaria: 589.
+- **Votos:** 27697 filas. **Zonas:** 141451. **Editorial:** 152.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5890 filas (sha ffed0ce0eba0…, v23.2).
+- `output/parser/csjn_casos_textos.csv` — 5890 filas (05ddd9acafd4…).
+- `output/parser/csjn_casos_votos.csv` — 27697 filas (d7312eb7aaaa…).
+- `output/parser/csjn_casos_zonas.csv` — 141451 segmentos (98ce265d9854…).
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones (30a6da652e3a…).
+- `output/parser/csjn_casos_recursos.csv` — 5890 filas (5c2de3f62d0e…, v0.6 / disp v1.14).
+
+**Versiones resultantes:** clasificador_disposicion.py **v1.14** · parser.py v23.2 (intacto) · derivar_recursos.py v0.6 (intacto).
+**Scripts creados:** `scripts/diagnostico/H176/` — poc_b136_impugnacion.py (bimodal, candado) + 17 extracciones .md.
+**Lección ops:** 2 paths inventados por el asistente (auxiliares/ por pipeline/) — localizar con Get-ChildItem antes de invocar, nunca adivinar subdirs.
+
+**Commits:** 2 (unidad v1.14 completa [clasificador + outputs + golden + manifest + PoC]; documentación H176).
+
+## H177 — B143 cerrado: guard nulidad-de-actuaciones en el gate (clasificador v1.15) (2026-07-05)
+
+**Objetivo:** paso 3 de M39 según PROMPT_H177; el gate #1 de la sesión (decisión de orden sobre B143) resolvió ejecutar B143 primero — la sesión completó esa unidad y el paso 3 pasa a H178.
+
+### H177-01 — Apertura + micro-item de paths
+
+Gate de apertura reproducido exacto sobre los CSV canónicos: divergencia 216, is_merit 3010, gate=si 2950, is_originaria 589; versiones verificadas (parser 23.2, clasificador 1.14, derivar 0.6). Micro-item H176 cerrado: el skill de apertura NO tiene paths stale (solo nombra `detectar_paginas.py` y `extraer_caso.py` sin ruta; ambos verificados en disco con Get-ChildItem). Se aprobó agregar al skill una sección «Dónde está cada cosa» que apunta a MAPA.md (raíz) como fuente única del DAG + los 4 paths de infra ya verificados (check_regresion, build_m20, generar_manifiesto, extraer_caso) — sin duplicar el mapa. MAPA.md corroborado en lo verificable (filas parser y derivar_recursos coinciden con el código subido). Discrepancia menor anotada: docstring del parser dice «40 columnas», csjn_casos.csv tiene 39 → corregir en el bump del paso 3.
+
+### H177-02 — Decisión de orden (punto 0): opción (a)
+
+B143 se adjudica ANTES del paso 3. Dato nuevo que refuerza la decisión: los 16 no eran todos invisibles — 14 coincide-en-error (is_merit=1) + 2 ya divergentes con is_merit=0 (347_p327 abstracto, 348_p1152 otro). El paso 3 sin B143 habría consagrado los 14 como canon Y flipeado los 2 correctos a is_merit=1 (fabricando errores nuevos). Prerequisito verificado: solapamiento B143 ∩ gold n300 = 0 → el guard no re-mapea codificación humana. Superficie del alt corpus-wide = 17: el 17º es 333_p405 (disp=revoca, con señal de absolución), fuera del guard por construcción.
+
+### H177-03 — Adjudicación de las 16 lecturas (criterio de codebook H176)
+
+Extraídas a `scripts/diagnostico/H177/` y leídas contra el `.md`. Resultado: **15 procesales** — 6 in-forma-pauperis/asistencia ineficaz (329_p1794, 330_p487, 330_p4925, 330_p5052, 333_p1671, 339_p656; en Domínguez 330_p5052 el vicio arranca «desde la sentencia» pero es defensa ineficaz en la vía recursiva: retrotrae, no sustituye), 4 juzgado incompetente/avocación (330_p1169, 334_p1458, 337_p97, 345_p191), 1 inexistencia de «caso» art. 116 (332_p1823 PROCURAR: litigio fabricado sin controversia — actor y demandados pedían ratificar el decreto; adjudicado umbral tipo abstracto, coherente con B141 y con «falta de acción» de EXCEP), 4 vicio de trámite (344_p163 traslado, 344_p1259 notificación, 347_p327 ministerio pupilar, 348_p1152 tercero impedido) — más **1 acierto**: 330_p399 (López), «nulidad y se absuelve», art. 16 2ª parte ley 48 = sustitutiva con absolución = fondo.
+
+### H177-04 — Guard v1.15 + PoC bimodal + sellado
+
+Guard en `es_revision_fondo` (patrón B119/B131, verbo intacto): `disp=="nulidad" ∧ RE_NULIDAD_ACTUADO ∧ ¬RE_ABSOLUCION → "no"`. RE_NULIDAD_ACTUADO verbatim del alt 1º de DISP (dedup pendiente, estatus RE_NULIDAD_CONCESION); RE_ABSOLUCION cubre la excepción sustitutiva (co-ocurrencia corpus-wide medida: solo 399 y 405). Arrastra el fix del docstring L6 (path de build_m20 → scripts/validacion). PoC bimodal `poc_b143_guard.py` con candado de versión (PRE exige 1.14 / POST 1.15): PRE verde, POST pre-derivar = los 15 exactos 0 extras, POST post-derivar = 0 diffs. Métricas finales: gate=si 2950→**2935** · divergencia 216→**227** (+13 expuestos lado parser [residuo → paso 3], −2 salen) · disposicion=nulidad 56 · parser 0 ripple → check_regresion **[CLEAN] sin re-golden** · build_m20 v1.15 con clave **byte-idéntica** (ausente de git status; blind 0,930 vigente) · manifest **[CLEAN] 64**.
+
+### H177-05 — Hallazgo git + lecciones ops
+
+HEAD estaba en el fix de H175: **H176 sin commitear** (golden re-congelado + gemelos San Juan en working tree). Resuelto con 2 commits separados preservando trazabilidad H-código→commit. `scripts/diagnostico/H177/` resultó gitignored → el PoC quedó untracked (decisión pendiente: versionarlo con `git add -f` o aceptar la convención). Lección de protocolo: las hojas de ruta PowerShell van con `$ErrorActionPreference = 'Stop'` (fail-fast) — los Copy-Item fallidos de la corrida no debían silenciarse (benignos acá: los archivos ya estaban instalados y el candado de versión del PoC abortó limpio el `--modo pre` tardío, comportamiento diseñado).
+
+### H177 — Estado final
+
+- **Corpus:** 5890 casos. is_merit 3010 · is_originaria 589 · gate=si **2935** · divergencia M39 **227**.
+- **Votos:** 27697 filas (sin cambio).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5890 filas (sha ffed0ce0eba0…, v23.2, sin cambio en H177).
+- `output/parser/csjn_casos_recursos.csv` — 5890 filas (sha a074a2ed9e86…, derivar v0.6 / disp **v1.15**).
+- `output/parser/csjn_casos_votos.csv` — 27697 filas (v23.2).
+- `output/parser/csjn_casos_zonas.csv` — 141451 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones.
+- `_manifest.json` — [CLEAN] 64 artefactos.
+
+**Scripts creados:** `scripts/diagnostico/H177/` — poc_b143_guard.py (bimodal, candado de versión) + 16 extracciones .md (untracked por .gitignore).
+
+**Commits:** 2 — uno que absorbe el working tree pendiente de H176 (gemelos San Juan + golden re-congelado + docs), y el de H177 (clasificador v1.15 + recursos.csv re-derivado + manifest re-sellado).
+
