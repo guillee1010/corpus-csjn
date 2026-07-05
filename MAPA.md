@@ -58,6 +58,31 @@ generar_manifiesto.py  [lee toda la cadena]        → _manifest.json   (sella, 
 
 ---
 
+## Cómo correr la cadena
+
+Desde H179 la cadena canónica se corre con el **orquestador**
+`scripts/pipeline/correr_pipeline.py` (M42), que implementa este grafo:
+
+```powershell
+python scripts\pipeline\correr_pipeline.py --plan            # dry-run: secuencia exacta, nada se ejecuta
+python scripts\pipeline\correr_pipeline.py                   # cadena completa: parser → derivers → gate → manifest
+python scripts\pipeline\correr_pipeline.py --solo-derivers   # sin parser (epilogos → partes → materia → recursos)
+python scripts\pipeline\correr_pipeline.py --consciente      # post-fix: tolera [FAIL], muestra el diff y FRENA
+python scripts\pipeline\correr_pipeline.py --regolden        # tras adjudicar: congela golden + assert + re-sello
+```
+
+Gates automáticos: fail-fast por etapa · versiones en pre-flight (pin opcional
+`--esperar "parser=24.0,..."`) · frescura post-etapa · **corpus-drift** (aborta si
+hay `.md` en `corpus/` fuera del universo `source_file`; `--ignorar-corpus-drift`
+declara la exclusión deliberada) · assert **golden == producción** (sha256, los 5
+CSV del parser) en toda corrida · manifest verify → sello condicional, siempre último.
+
+**Upstream (orden 1–3: catálogo, páginas, cruce) queda FUERA del orquestador v1:**
+se corre a mano según este mapa, en sesión propia. La v2 lo incorpora cuando haya
+tomos nuevos reales (leyendo las CLIs de esas etapas, hoy no leídas).
+
+---
+
 ## Dependencias por script (verificado)
 
 | script | consume | produce | tipo |
@@ -100,6 +125,5 @@ como etapa con orden propio, confirmar quién y cuándo escribe ese archivo
 ## Cómo se mantiene este mapa
 
 Hecho a mano contra el disco, no autogenerado. Al **agregar o reconectar una etapa**
-del pipeline, actualizar la tabla y el orden. Si alguna vez se construye un
-`run_pipeline.py`, este grafo es su especificación: el orden de arriba es el orden
-de ejecución.
+del pipeline, actualizar la tabla y el orden — **y el orquestador** (`correr_pipeline.py`,
+H179): este grafo es su especificación; mapa y orquestador se mueven juntos.

@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H181 (2026-07-05)
+
+- `parser.py` v24.0→v24.1: B135(c) — señal 6 compuesta en `es_originaria` (forma invertida en `RE_CN_DEMANDA_ESTADO` + `_ventana_resulta` + pelada-con-guards sobre el Resulta). +6 is_originaria, +5 is_merit vía gate.
+- `parser.py` v24.1→v25.0: M21 Fase 3 — skip de `RE_PAGE_HEADER` en el chunk de `_barrer` sin contar presupuesto. 547 pe extendidos/limpiados; +18 is_merit; +1 is_originaria; +2 votos (332_p663).
+- `clasificador_disposicion.py` v1.15→v1.16: `condenar\s+al?\b` en `RE_FONDO_EXTRA_GRANT` (contracción «al»; testigo Equística 348_p1686). +1 is_merit.
+- `clasificador_disposicion.py` v1.16→v1.17: B139(b) — guard sentencia-sustitutiva (S1 art16∧ley48 ∨ S2 concesión∧rechaza-demanda) sobre disp=no_revision_demanda. +6 is_merit.
+- `clasificador_disposicion.py` v1.17→v1.18: B143-ext — deja-sin-efecto-todo-lo-actuado (anclas grant_remand_implicito/deja_sin_efecto). Evita 1 FP (Pereyra 348_p1352).
+- `output/parser/csjn_casos.csv`: 63 filas modificadas (orig 589→596, merit 2935→2965). `csjn_casos_votos.csv`: 27697→27699 (+2), 214 filas modificadas. `csjn_casos_textos.csv`: 547 pe. Derivers re-derivados (recursos en cada ciclo; materia con las orig nuevas). Golden re-congelado ×3 (adjudicación previa en cada ciclo); manifest [CLEAN] 64.
+- `scripts/validacion/M20_clave_parser_n300.csv`: regenerada con clf v1.18 (desviación consciente H178; re-validación = M43).
+
+
 ## H179 (2026-07-05)
 
 - `scripts/pipeline/correr_pipeline.py`: NUEVO (v1.0, M42) — orquestador de la cadena canónica (parser → epilogos → partes → materia → recursos → check_regresion → manifest) con DAG de MAPA.md como spec. Fail-fast, versiones pre-flight + pin `--esperar`, frescura post-etapa, gate de corpus-drift, assert golden==producción (sha256), sello condicional del manifest. Modos `--plan` / `--solo-derivers` / `--consciente` / `--regolden`. Validado reproduciendo el sello H178 en 0 cambios.

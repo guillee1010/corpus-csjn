@@ -19204,3 +19204,53 @@ Apertura: agregada la sección «Dónde está cada cosa» (índice de paths can�
 **Scripts creados:** `scripts/diagnostico/H180/reporte_readme.py` (reporter read-only de distribuciones para docs).
 
 **Commits:** N — housekeeping (moves + gitignore + stray) + docs (3 READMEs) + `correr_pipeline.py` (faltaba trackear). [completar descripción simbólica al commitear]
+
+## H181 — B135(c) + B139(b) + M21 Fase 3 + micro-unidades del gate v1.16/v1.18 (2026-07-05)
+
+**Objetivo:** cobrar los costos aceptados del paso 3 (H178) en tres unidades atómicas: A = B135(c) señal compuesta de is_originaria; B = B139(b) guard sentencia-sustitutiva; C = M21 Fase 3 (banner-partido en el chunk).
+
+**Nota de numeración:** H180 fue la sesión de housekeeping/docs de otra conversación (corpus byte-idéntico a H179); esta sesión corre como H181.
+
+## H181 — B135(c) + B139(b) + M21 Fase 3 + micro-unidades del gate v1.16/v1.18 (2026-07-05)
+
+**Objetivo:** cobrar los costos aceptados del paso 3 (H178) en tres unidades atómicas: A = B135(c) señal compuesta de is_originaria; B = B139(b) guard sentencia-sustitutiva; C = M21 Fase 3 (banner-partido en el chunk).
+
+**Nota de numeración:** H180 fue la sesión de housekeeping/docs de otra conversación (corpus byte-idéntico a H179); esta sesión corre como H181.
+
+### H181-01 — Apertura
+
+Gate reproducido exacto contra el sello H179 (`--plan` del orquestador con pins; is_merit 2935 == gate=si, div 0, orig 589, manifest [CLEAN] 64). Docs subidos primero eran PRE-H179 (detectado por header/M42-esbozo) → re-subidos y verificados. Micro-item «Dónde está cada cosa»: resuelto en H180 (verificado leyendo el skill en esta sesión).
+
+### H181-02 — Unidad A: B135(c) CERRADO (parser v24.0→24.1) + micro-unidad v1.16
+
+Señal 6 COMPUESTA en `es_originaria`: case_name demanda-contra-Estado/Provincia (`RE_CN_DEMANDA_ESTADO` ensanchada con la forma invertida «c/ <Nombre>, Provincia de» — deja de ser huérfana) ∧ `_orig_pelada_con_guards` reusada intacta sobre la ventana RESULTA (`_ventana_resulta` verbatim del PoC). PoC `poc_b135c` v0.1 en disco: A0 identidad 0 diffs/5890 · pool case_name-compuesto 326 → 6 · flip-set 6 = 6 TP adjudicados por lectura (López Casanegra, Ferrari, Fotógrafos Iguazú, Barrick, Coihue, Equística) · 0 FP. Ruta D descartada-fundada: su testigo 348_p473 = fila FANTASMA (⊂ 348_p461 La Rioja, ya orig=1/merit=1; constancia en B045; gap 18047–18076 = candidato al Hotesur real). Corrección de constancia H178: los «3 autorreparables» eran 2 + 1 espurio. Micro-unidad v1.16: «Condenar AL Estado» (contracción) rompía `\bcondenar\s+a\b`; `poc_condenar_al`: flip-set 1 = Equística, 0 pérdidas, 0 FP-costas. Ciclo empaquetado (un regolden): casos 6 filas {orig, merit, tribunal_origen_status; Coihue corrige `apelado_detectado` falso} + votos 28; tipo_voto: 2 D-por-fallback en Barrick (→ audit B137). Sello: orig 595 · merit 2941 · div 0.
+
+### H181-03 — Unidad B: B139(b) CERRADO (clasificador v1.17)
+
+Población re-medida EN SCRIPT (`poblacion_b139b`: 181 no_revision_demanda · 9 apeladas == flip-set H176 reconciliado; el conteo por consola OMITIÓ al testigo → lección ops 1). 8 lecturas adjudicadas caso a caso (criterio Guillermo): 6 TP (331_p100 testigo · Rodríguez c/ Google · FADEEAC TP-con-asterisco · 344_p277 · Defensor del Pueblo · 332_p2559 sin-art.16 → motiva S2) + 3 aciertos intactos (Bussi, Cóspito, 332_p2237). Guard v1.17 dirección INVERSA: disp==no_revision_demanda ∧ (S1 art16∧ley48 ∨ S2 concesión∧rechaza-demanda); ¬orig por construcción. `poc_b139b_guard`: A0 0 diffs/181 · flip-set EXACTAMENTE 6 · 0 extras · S1 y S2 ambas necesarias. Ciclo: casos/votos SOLO is_merit (6/28 filas), tipo_voto 0 flips, recursos único downstream movido; disposicion INTACTA (nota parte_ganadora en B139). Sello: merit 2947 · div 0.
+
+### H181-04 — Unidad C: M21 FASE 3 CERRADA (parser v25.0) + micro-unidad v1.18
+
+Skip de `RE_PAGE_HEADER` (línea-sola) en el chunk de `_barrer` sin contar presupuesto (lever Nota H174, simétrico a F1; detector reusado). Medición = ciclo `--consciente` (cambio de `_barrer` no admite PoC read-only; camino H126), adjudicado por `dump_diff_h181c` (52 casos con flip de decisión leídos uno a uno): pe 547 · outcome 23 (coherentes; 1 FP legacy nuevo → B144 apercibimiento-caducidad, 330_p1525) · merit +18 TP (4/4 truncados del paso 3 + 14 nítidos) · orig +1 (343_p726, art. 117 en pe) · quejas ~15 · totalidad estructural = SOLO 332_p663 → testigo B126 SANADO (panel 4→6, +2 votos). Fuera de alcance declarado y quieto: 330_p563. FP EVITADO PRE-GOLDEN (lógica orden (a) H177, 2ª aplicación): Pereyra 348_p1352 («deja sin efecto TODO LO ACTUADO» bajo disp=grant_remand_implicito, verificado en disco) → micro-unidad v1.18 (guard espejo B143; superficie corpus-wide sobre norm(pe) = exactamente 1 = el testigo; bimodal verde). UN regolden (25.0+1.18).
+
+### H181-05 — Cierre
+
+Clave n300 regenerada (build_m20, clf v1.18): 3 filas cambiadas (330_p1907, 348_p1576 — flips de la unidad C — y 346_p1339, mecanismo NO identificado en el cierre, con pe sin cambio: investigar al abrir M43). Candado byte-idéntico retirado con D1 (H178): la clave cambiando es lo esperado; la re-validación del eje unificado es M43. Lecciones ops: (1) regex no-ASCII no viajan por `python -c` (conteos que deciden van en script); (2) docstring de extraer_caso con ejemplo stale (`diagnostico/_extraidos/` → schema `scripts/diagnostico/HNN/`); (3) medir el pe sobre `norm(pe)`, nunca crudo (guión de corte); (4) patrón `dump_diff_h181c` para adjudicar diffs anchos de `_barrer`.
+
+### H181 — Estado final
+
+- **Corpus:** 5890 casos · **is_merit_decision: 2965** (== gate=si, divergencia 0) · **is_originaria: 596**.
+- **Trayectoria de la sesión:** is_merit 2935→2941→2947→2965 (+30, 0 pérdidas) · orig 589→595→596 (+7).
+- **Votos:** 27699 filas (+2, panel 332_p663/B126).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5890 filas (v25.0).
+- `output/parser/csjn_casos_votos.csv` — 27699 filas.
+- `output/parser/csjn_casos_textos.csv` — 5890 filas (547 pe extendidos/limpiados).
+- `output/parser/csjn_casos_zonas.csv` — 141451 segmentos (byte-idéntico toda la sesión).
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones (byte-idéntico).
+- Manifest re-sellado **[CLEAN] 64** (5 CSV del parser en v25.0; hashes en el `_manifest.json` commiteado).
+
+**Scripts creados:** `scripts/diagnostico/H181/` — poc_b135c.py · poc_condenar_al.py · poc_b139b_guard.py · poblacion_b139b.py · dump_diff_h181c.py (+ poc_b135c_flips.csv, diff_c_adjudicacion.csv como evidencia; extractos de las 11 lecturas).
+
+**Commits:** 4 — (1) pipeline H181 completo: parser v25.0 + clasificador v1.18 + outputs + golden + manifest; (2) validación: clave n300 regenerada (desviación consciente, sucesor M43); (3) verificadores H181 con `git add -f`; (4) docs: DEUDA + BITACORA + CHANGELOG + PROMPT_H182.
