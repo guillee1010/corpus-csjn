@@ -19254,3 +19254,24 @@ Clave n300 regenerada (build_m20, clf v1.18): 3 filas cambiadas (330_p1907, 348_
 **Scripts creados:** `scripts/diagnostico/H181/` — poc_b135c.py · poc_condenar_al.py · poc_b139b_guard.py · poblacion_b139b.py · dump_diff_h181c.py (+ poc_b135c_flips.csv, diff_c_adjudicacion.csv como evidencia; extractos de las 11 lecturas).
 
 **Commits:** 4 — (1) pipeline H181 completo: parser v25.0 + clasificador v1.18 + outputs + golden + manifest; (2) validación: clave n300 regenerada (desviación consciente, sucesor M43); (3) verificadores H181 con `git add -f`; (4) docs: DEUDA + BITACORA + CHANGELOG + PROMPT_H182.
+
+## H182 — Diagnóstico B117: disparador del flip cuerpo→epilogo (2026-07-05)
+
+**Objetivo:** ejecutar el validador especificado en la constancia H179 de B117 (poc_b117_disparador) sobre la selección wc_epilogo>500 y dimensionar mecanismo (a) vs (b) antes de diseñar el fix.
+
+### H182-01 — poc_b117_disparador v0.1 (read-only)
+
+PoC en `scripts/diagnostico/H182/`: importa `zonificar_bloque` del parser y `RE_PIE_START` de extraer_epilogos (fuentes únicas), reconstruye el bloque verbatim producción (`lines[linea_inicio:linea_fin_real+1]`) con cross-check A0 por fila contra zonas.csv. El smoke sandbox destapó que en `fin_extendido` el 1er span suele ser pie/cola del caso ANTERIOR → se agregó la clasificación del 1er span dentro del caso propio (clase_post), sin la cual el mecanismo (b) quedaba subcontado.
+
+### H182-02 — Corrida en disco y adjudicación (299 casos)
+
+A0 299/299, 0 desync (parser v25.0 == sello), 0 faltantes. La hipótesis H179 se corrige y ensancha: (b) domina — recurso_narrativo 240 (237 en minúscula = wrap OCR) + rotulo_pie 27 (0/27 con `:`; TODAS las ramas no-ancladas de RE_DATOS_PARTES disparan, incluso sobre una carátula: 340_p1025); (a) minoritario (~29; 213/240 con guard PROPIO post-firma → sanear el residuo no arregla el grueso); pie_genuino 31 → frontera inferior = B096, frente aparte. Finos: 341_p1679 (gramática «y fundados por:» que RE_PIE_START pierde), 329_p4289 (narrativa que matchea RE_PIE_START vía re.I → case-sensitivity como discriminador, hipótesis a medir). Boceto de fix + gate de PoC de superficie documentados en la entrada B117. Corrida gemela sobre residuo>300 (793→708) quedó SIN adjudicar → insumo B089/B096. Lección ops: el output default del PoC pisa el archivo entre corridas.
+
+### H182 — Estado final
+
+- **Outputs canónicos:** SIN cambios (sesión read-only). Sello post-H181 vigente: is_merit 2965 == gate=si · divergencia 0 · is_originaria 596 · manifest [CLEAN] 64.
+- **Gate de apertura formal:** NO corrido (pivot directo desde el explorador); la identidad A0 299/299 verificó parser-en-disco == zonas.csv sellado.
+
+**Scripts creados:** `scripts/diagnostico/H182/` — poc_b117_disparador.py (+ out300.csv / out.csv, evidencia).
+
+**Commits:** 1 (PoC diagnóstico B117 + evidencia) + 1 (docs post-append).
