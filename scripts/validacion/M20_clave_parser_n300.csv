@@ -82,7 +82,7 @@ caso_id_canonico,parser_es_revision_fondo,parser_disposicion,parser_reenvia,pars
 330_p1179,no,no_revision_competencia,no,no_aplica,,no,competencia,0
 330_p1303,no,no_revision_competencia,no,no_aplica,,no,competencia,0
 330_p1465,si,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
-330_p1907,si,no_fondo,no,no_aplica,recurso_extraordinario,no,procedente,1
+330_p1907,no,no_fondo,no,no_aplica,recurso_extraordinario,no,procedente,0
 330_p2014,no,no_fondo,no,no_aplica,,no,desestima,0
 330_p2081,si,confirma,no,recurrente_pierde,recurso_extraordinario,no,procedente,1
 330_p2345,no,no_revision_competencia,no,no_aplica,,no,competencia,0
@@ -98,7 +98,7 @@ caso_id_canonico,parser_es_revision_fondo,parser_disposicion,parser_reenvia,pars
 330_p3777,no,no_revision_demanda,no,no_aplica,,no,competencia,0
 330_p4211,no,no_fondo,no,no_aplica,recurso_extraordinario,no,desestima,0
 330_p4252,no,no_revision_procesal,no,no_aplica,,no,otro,0
-330_p4592,no,deja_sin_efecto,no,recurrente_gana,recurso_ordinario,si,rechaza,0
+330_p4592,si,deja_sin_efecto,no,recurrente_gana,recurso_ordinario,si,rechaza,1
 330_p4632,no,no_fondo,no,no_aplica,recurso_extraordinario,no,desestima,0
 330_p4690,si,revoca,no,recurrente_gana,recurso_ordinario,no,procedente,1
 330_p4797,no,no_fondo,no,no_aplica,recurso_extraordinario,no,desestima,0
@@ -122,7 +122,7 @@ caso_id_canonico,parser_es_revision_fondo,parser_disposicion,parser_reenvia,pars
 331_p2266,si,revoca,no,recurrente_gana,recurso_extraordinario,no,procedente,1
 331_p2283,no,no_fondo,no,no_aplica,,no,desestima,0
 331_p2608,si,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,procedente,1
-331_p2621,no,confirma,no,recurrente_pierde,recurso_extraordinario,no,rechaza,0
+331_p2621,si,confirma,no,recurrente_pierde,recurso_extraordinario,no,rechaza,1
 331_p2839,si,revoca,si,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
 331_p2910,no,no_fondo,no,no_aplica,,no,otro,0
 331_p2913,no,no_fondo,no,no_aplica,,no,competencia,0
@@ -146,8 +146,8 @@ caso_id_canonico,parser_es_revision_fondo,parser_disposicion,parser_reenvia,pars
 332_p2043,si,revoca,si,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
 332_p2502,no,no_revision_procesal,no,no_aplica,,no,rechaza,0
 332_p2604,si,revoca,si,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
-332_p2625,no,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,desestima,0
-332_p2797,si,no_revision_procesal,no,no_aplica,recurso_ordinario,si,revoca,1
+332_p2625,si,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,desestima,1
+332_p2797,no,no_revision_procesal,no,no_aplica,recurso_ordinario,si,revoca,0
 333_p9,si,no_revision_demanda,no,no_aplica,recurso_extraordinario,no,rechaza,1
 333_p60,no,no_fondo,no,no_aplica,,no,otro,0
 333_p215,si,no_revision_demanda,no,no_aplica,,no,hace_lugar,1
@@ -178,7 +178,7 @@ caso_id_canonico,parser_es_revision_fondo,parser_disposicion,parser_reenvia,pars
 337_p1142,si,confirma,no,recurrente_pierde,recurso_ordinario,no,confirma,1
 337_p1234,si,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,procedente,1
 337_p1581,si,revoca,no,recurrente_gana,recurso_extraordinario,no,revoca,1
-338_p40,no,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,si,desestima,0
+338_p40,si,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,si,desestima,1
 338_p102,si,revoca,no,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
 338_p148,si,revoca,no,recurrente_gana,recurso_extraordinario,no,revoca,1
 338_p155,si,revoca,no,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
@@ -249,7 +249,7 @@ caso_id_canonico,parser_es_revision_fondo,parser_disposicion,parser_reenvia,pars
 344_p2669,si,revoca,si,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
 344_p2868,si,revoca,no,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
 344_p2955,no,no_fondo,no,no_aplica,recurso_extraordinario,si,desestima,0
-344_p3394,no,confirma,no,recurrente_pierde,recurso_extraordinario,no,desestima,0
+344_p3394,si,confirma,no,recurrente_pierde,recurso_extraordinario,no,desestima,1
 344_p3469,no,no_revision_competencia,no,no_aplica,,no,competencia,0
 345_p12,no,no_fondo,no,no_aplica,recurso_extraordinario,no,rechaza,0
 345_p154,si,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
@@ -277,7 +277,7 @@ caso_id_canonico,parser_es_revision_fondo,parser_disposicion,parser_reenvia,pars
 347_p2001,no,no_fondo,no,no_aplica,recurso_extraordinario,no,desestima,0
 347_p2025,no,no_fondo,no,no_aplica,recurso_extraordinario,no,desestima,0
 348_p61,no,no_fondo,no,no_aplica,,no,rechaza,0
-348_p92,si,no_revision_procesal,no,no_aplica,recurso_extraordinario,no,hace_lugar,1
+348_p92,no,no_revision_procesal,no,no_aplica,recurso_extraordinario,no,hace_lugar,0
 348_p113,si,revoca,si,recurrente_gana,recurso_extraordinario,no,procedente,1
 348_p169,si,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
 348_p296,si,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
