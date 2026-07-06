@@ -44,7 +44,7 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
-__version__ = "0.3"  # H161: (1) fallback sin_zona para fin_por_firma_actual (pie tras firma, escaneo firma->caso siguiente con guard al footer; +27 huérfanos de mérito recuperan recurrente, validado end-to-end vs 30 ventanas). (2) deshifenización soft-hyphen migrada de derivar_partes (deuda #3), idempotente. Output csjn_casos_epilogo.csv CAMBIA (sin_zona->ok via firma + soft-hyphen unidos); re-correr derivar_partes y re-sellar manifest. Status nuevo auditable: "ok" con n_seg=0 = recuperado por fallback de firma. // 0.2 H154: emite los 5697 fallos con epilogo_status (no solo los 4345 con zona). // 0.1: solo casos con zona (muerte silenciosa de los sin-epilogo) -- corregido.
+__version__ = "0.4"  # H185: ensanche de RE_PIE_START = UNIÓN de la escalera v2 (RE_EPILOGO_MARKER de parser.py 26.1, B117 F2, 7 ramas VERBATIM, case-sensitivity escopeada) + rama local «Nombre de la/el actor(a)/demandado(a):» (SOLO-vieja: la rama v2 dice «Nombre del» y no la cubre; testigo 329_p4811, pie genuino — perderlo era regresión). Cae el re.I GLOBAL (clase de FP H182: narrativa en minúscula, 329_p4289); el PoC demostró que ningún pie vigente dependía de él (identico 99/100 con v2 pura + 1 vía rama local). Diff adjudicado por lectura (poc_h185_ensanche_pie v0.1, scripts/diagnostico/H185/): universo fallback 113, A0 réplica == via_firma sellado 100, recuperos 4 = 4 pies GENUINOS (334_p1876 «interpuesto y fundado por» clase-gap-H182 · 337_p822 + 338_p1060 rótulos Eje-A · 338_p651 solo-footer), perdido 0 bajo la unión, start_movido 0 (los 100 vigentes byte-idénticos). Regresión exacta: via_firma 100→104 · ok 4377→4381 · sin_zona −4 · ids nuevos {334_p1876, 337_p822, 338_p651, 338_p1060} · 329_p4811 conserva su pie. Costo documentado: captura parcial en 338_p1060 (footer corta en wrap «Juan P. » — techo del ARMADO, preexistente, pariente M44; hoy ese caso no captura nada). Solo cambia el arranque: RE_PIE_LINE/RE_PAGE/RE_FOOTER/_CONT_TAIL intactos. Output CAMBIA (4 filas sin_zona→ok): re-correr derivar_partes y re-sellar. // 0.3 H161: (1) fallback sin_zona para fin_por_firma_actual (pie tras firma, escaneo firma->caso siguiente con guard al footer; +27 huérfanos de mérito recuperan recurrente, validado end-to-end vs 30 ventanas). (2) deshifenización soft-hyphen migrada de derivar_partes (deuda #3), idempotente. Output csjn_casos_epilogo.csv CAMBIA (sin_zona->ok via firma + soft-hyphen unidos); re-correr derivar_partes y re-sellar manifest. Status nuevo auditable: "ok" con n_seg=0 = recuperado por fallback de firma. // 0.2 H154: emite los 5697 fallos con epilogo_status (no solo los 4345 con zona). // 0.1: solo casos con zona (muerte silenciosa de los sin-epilogo) -- corregido.
 
 csv.field_size_limit(10 ** 7)
 
@@ -66,14 +66,46 @@ OUT_COLS = ["caso_id_canonico", "tomo", "source_file", "epilogo_status",
             "n_seg", "wc", "epilogo_text"]
 
 # ── Fallback sin_zona (pie editorial tras la firma) ──────────────────────────
-# Arranque del pie: marcador editorial anclado a línea. Incluye "por:" (dos
-# puntos, formato viejo) y los rótulos Eje-A/viejo para volcar el pie completo;
-# derivar_partes decide qué mapea a recurrente (Eje-A originaria NO mapea).
+# Arranque del pie (H185): UNIÓN = escalera v2 (ramas 1-7, VERBATIM de
+# RE_EPILOGO_MARKER, parser.py 26.1 / B117 F2 — fuente única de la gramática
+# del pie; si el parser la cambia, portar acá) + rama 8 LOCAL «Nombre de
+# la/el …» (la v2 dice «Nombre del» y no cubre «Nombre de la actora:»;
+# testigo 329_p4811 — divergencia deliberada, SOLO de este script).
+# Sin re.I global (case-sensitivity escopeada por rama, como en el parser):
+# la narrativa en minúscula («recurso ... interpuesto por la concursada»,
+# clase-FP H182/329_p4289) deja de arrancar pies. derivar_partes sigue
+# decidiendo qué mapea a recurrente (Eje-A originaria NO mapea).
 RE_PIE_START = re.compile(
-    r"^(?:Recursos?|Queja)\b[^\n]*?(?:interpuest\w+|deducid\w+)\s+por[:\s]"
-    r"|^Nombre\s+del\s+recurrente\s*:"
-    r"|^Parte\s+(?:actora|demandada)\s*:"
-    r"|^Nombre\s+de\s+(?:la|el)\s+(?:actora?|demandad[oa])\s*:", re.I)
+    # 1) v1 recurso: Recurso/Queja + interpuesto/deducido (y fundado) + por[:\s]
+    #    (case-sensitive entera)
+    r"^(?:Recursos?|Queja)\b[^\n]*?(?:interpuest\w+|deducid\w+)"
+    r"(?:\s+y\s+fundad\w+)?\s+por[:\s]"
+    # 2) v1 rótulos anclados a ':' (re.I escopeado)
+    r"|(?i:^(?:Nombre del|Tribunal de origen|Tribunal que intervino|"
+    r"Profesionales|Parte actora|Parte demandada)[^:\n]*:)"
+    # 3) Causa con ':' PEGADO
+    r"|(?i:^Causa\s*:)"
+    # 4) case_scope: gramática v1 con case solo en el arranque
+    r"|^(?:Recursos?|Queja)\b(?i:[^\n]*?(?:interpuest\w+|deducid\w+)"
+    r"(?:\s+y\s+fundad\w+)?\s+por[:\s])"
+    # 5) gram_v2: verbos ensanchados + «por» libre + sin-por (artículo / Nombre)
+    r"|^(?:Recursos?|Queja)\b(?i:[^\n]*?"
+    r"(?:inte\w*rpu\w+|deducid\w+|presentad\w+|articulad\w+|fundad\w+)"
+    r"(?:[^\n]*?\bpor\b"
+    r"|\s+(?:el|la|los|las)\b"
+    r"|\s+(?-i:[A-ZÁÉÍÓÚÑ])"
+    r"))"
+    # 6) recurso_dp: pie estilo rótulo sin verbo
+    r"|^(?:Recursos?|Queja)\b[^:\n]{0,60}:"
+    # 7) rotulo_relaj: rótulos case-sensitive, separador [,.] u omitido
+    r"|^(?:Parte\s+(?:actora|demandada)|Tribunal\s+de\s+origen|"
+    r"Profesionales(?:\s+intervinientes)?)"
+    r"\s*(?:[,.]\s*)?"
+    r"(?:Dres?\.|Dra\.|Cámara|Corte|Juzgado|Sala|Superior|Tribunal|\(|"
+    r"[A-ZÁÉÍÓÚÑ])"
+    # 8) LOCAL (no está en el parser): «Nombre de la/el actor(a)/demandado(a):»
+    #    — verbatim de la rama v0.3, re.I escopeado (testigo 329_p4811)
+    r"|(?i:^Nombre\s+de\s+(?:la|el)\s+(?:actora?|demandad[oa])\s*:)")
 # líneas que pertenecen al cuerpo/footer del pie editorial.
 RE_PIE_LINE = re.compile(
     r"^(?:Recursos?|Queja|Traslados?|Tribunales?|Norma|Profesional\w*|"
