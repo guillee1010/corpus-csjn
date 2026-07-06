@@ -19275,3 +19275,140 @@ A0 299/299, 0 desync (parser v25.0 == sello), 0 faltantes. La hipótesis H179 se
 **Scripts creados:** `scripts/diagnostico/H182/` — poc_b117_disparador.py (+ out300.csv / out.csv, evidencia).
 
 **Commits:** 1 (PoC diagnóstico B117 + evidencia) + 1 (docs post-append).
+
+## H183 — B117 F1: PoC bimodal de superficie ejecutado y adjudicado en verde (2026-07-05)
+
+**Objetivo:** F1 del fix B117 — medir la regex endurecida contra el universo real de disparadores `epilogo_marker` y adjudicar si el endurecimiento es seguro (gate de F2). Sesión read-only: 0 cambios en outputs canónicos y versiones del pipeline.
+
+### H183-01 — Apertura y Gate 2
+
+Gates de apertura por skill. Lectura de `RE_DATOS_PARTES` (parser.py L1587) y sus DOS consumidores — hallazgo: además del sitio del marker (L2467, zonificador), la usa A001/búsqueda inversa de firma (L1686, PoC H045) → decisión de diseño: el fix va como regex NUEVA (`RE_EPILOGO_MARKER`) solo en el zonificador, `RE_DATOS_PARTES` intacta. Lectura de `RE_PIE_START` (extraer_epilogos v0.3): confirmado el gap «interpuestos y fundados por:» (341_p1679) y el `re.I` que deja pasar narrativa minúscula (329_p4289).
+
+### H183-02 — PoC de superficie v0.1 (corpus completo)
+
+`poc_b117_superficie.py` v0.1 (`scripts/diagnostico/H183/`): re-corre `zonificar_bloque` importado sobre los 5697 fallos y junta TODAS las anclas `epilogo_marker` (no la selección wc>500 — el FN de pies genuinos vive en los casos sanos). Universo real: **11.201 markers**. A0 corpus-wide **5697/5697** · regresión out300 **299/299** (clase + k0). Candidata v1 (rama Recurso/Queja case-sensitive entera + «y fundados» + rótulos anclados a «:»): **queda 9848 (87,9%) / cae 1353 (12,1%)**. fn_candidata (caen pero RE_PIE_START vigente dice pie): 60.
+
+### H183-03 — Triage y lectura de adjudicación
+
+`poc_b117_triage.py` v0.1: corte por inicial (mayúscula = riesgo, minúscula = wrap OCR). fn_candidata: 58 minúsculas = FPs del detector VIGENTE (clase 329_p4289) + 2 Title Case tomo 347 = FN reales de la case-sensitivity total. Pool de riesgo 120, leído una a una: **67 voces TODO-CAPS de sumario** («RECURSO EXTRAORDINARIO» ×45 — sub-clase nueva de B117: la voz editorial flipea a epilogo) · ~15 narrativa con mayúscula (Recursos Hídricos, citas) · **34 pies genuinos con gramática degradada por OCR** («por» comido/deformado ~13, material entre verbo y «por» ~7, verbos fuera de set ~5, rótulos sin «:» 7, Title Case 2) · 4 ambiguos. Cruce: solo 13 de 90 todos_caen con línea de riesgo.
+
+### H183-04 — Candidata v2 + PoC v0.2 (corrida que decide)
+
+Candidata v2: case-sensitive SOLO en el token de arranque (resto `(?i:)`), verbos `inte\w*rpu\w+`/presentad/articulad/fundad, «por» libre (`\bpor\b`), sin-por (artículo o Nombre propio vía `(?-i:)`), `^Recurso[^:\n]{0,60}:`, rótulos relajados case-sensitive con separador `[,.]`/contenido. `poc_b117_superficie.py` v0.2 mide v1 y v2 lado a lado con **escalera de atribución por ensanche** y los **36 testigos adjudicados embebidos**. Resultado: **queda 9882 / cae 1319 · recupera EXACTAMENTE los 34 testigos · 0 readmitidas no-testigo** (gram_v2 24 · rotulo_relaj 7 · case_scope 2 · recurso_dp 1) · fn_candidata_v2 = 58 (las narrativas ya adjudicadas). Por caso: todos_caen 86 · mixto 834 · todos_quedan 3453 → **920 casos recuperan cuerpo**.
+
+### H183-05 — Ambiguos leídos en disco y veredicto
+
+4 extraídos con `extraer_caso.py --out` a `scripts/diagnostico/H183/`: 348_p61 = **pie genuino con verbo partido por soft-hyphen** («in­⏎terpuesto») → FN aceptado · 330_p2877 = títulos de sección del dictamen → recupero · 330_p3248 (Riveros, 5446 líneas legítimas, sin índice absorbido) = narrativa de dictamen con wrap; el pie real del final conserva marker → recupero · 343_p1218 = voces caps confirmadas como sumario. **Veredicto F1: VERDE. FN total corpus-wide = 3 líneas** (348_p61 · 338_p1084 · 331_p793) = 0,23% de las 1319 caídas, clase única «verbo ausente/partido».
+
+### H183-06 — Decisiones de diseño
+
+Evaluación por 5 ejes (impacto/riesgo/robustez/escalabilidad/elegancia) de opciones A (F2 pura) / B (A + lookahead de línea siguiente) / D (statu quo). **Decisión: F2 = A pura en H184** — el lookahead gana solo en escalabilidad y meterlo en el MAJOR rompería la atribución del diff. La formulación estructural (vista normalizada por línea con geometría preservada; NO deshifenar el corpus: unir líneas rompe el mapa) queda como **M44 NUEVO**, con PoC propio obligado, post-F2; beneficiario probable: B126.
+
+### H183 — Estado final
+
+Sesión read-only: outputs canónicos y versiones SIN cambios respecto del sello H181 (parser 25.0 · clasificador 1.18 · derivar_recursos 0.6 · correr_pipeline 1.0 · is_merit 2965 == gate · div 0 · is_originaria 596 · manifest [CLEAN] 64). Verificación de cierre: `correr_pipeline.py` default (0 cambios esperados) — resultado: [COMPLETAR con la corrida].
+
+**Scripts creados:** `scripts/diagnostico/H183/` — `poc_b117_superficie.py` (v0.1→v0.2), `poc_b117_triage.py` (v0.1), `poc_b117_superficie_out.csv` (corrida v0.2; la v0.1 pisada salvo renombre), `poc_b117_triage_riesgo.csv`, `348_p61.md`, `330_p2877.md`, `330_p3248.md`, `343_p1218.md`.
+
+**Docs:** DEUDA_TECNICA — header H183, constancia H183 en B117, Estado del fix de B117 (verde, F2 lista), **M44 nueva**. Sin CHANGELOG (0 cambios de pipeline).
+
+**Commits:** 2 — (1) evidencia H183: PoCs + outputs + extraídos de `scripts/diagnostico/H183/` (`git add -f`, patrón H177/H181); (2) docs: DEUDA_TECNICA + BITACORA post-append + PROMPT_H184.
+
+
+## H184 — B117 F2: RE_EPILOGO_MARKER aplicada y cerrada (2026-07-05)
+
+**Objetivo:** aplicar el fix B117 gateado en F1 (H183): regex nueva del epilogo_marker (escalera v2), ciclo consciente, adjudicación del diff y re-sello.
+
+### H184-01 — Parser 26.0: escalera v2 consolidada en el sitio del marker
+
+`RE_EPILOGO_MARKER` nueva = los seis cuerpos de la candidata v2 de `poc_b117_superficie.py` v0.2 unidos con `|` verbatim (único cambio sintáctico: el `re.I` global de los rótulos-`:` escopeado como `(?i:)`); equivalencia consolidada == escalera verificada en sandbox (0 diffs, 49 líneas de control) antes del edit. Swap SOLO en el sitio del epilogo_marker (Pasada 1 de `zonificar_bloque`); `RE_DATOS_PARTES` intacta para A001 (censo verificado: exactamente 2 consumidores `.match`). Corrección de constancia del PROMPT: en parser 25.0 el sitio estaba en L2840 y A001 en L2030 (no L2467/L1686).
+
+Regresión del fix (poc superficie v0.2 post-26.0): markers vivos en universo F1 = **9882 exactos, 34/34 testigos recuperados, cae 0, fn 0** — producción == escalera demostrado.
+
+### H184-02 — Hallazgo del dump: clase «Queja/Causa» fuera del universo F1
+
+`dump_diff_h184.py` (patrón `dump_diff_h181c`: una fila por caso tocado, wc por zona viejo/nuevo del backup `parser_BAK_H184_pre` vs producción + primera línea del epílogo viejo/nuevo de los dos epilogo.csv). Partición en script: **markers postfix 9986 = 9882 en universo F1 + 104 nuevos** — la regex vieja no anclaba `Queja` y exigía `Causa:` pegado, así que F1 nunca midió esas líneas. Lectura completa de las 104: **104/104 espurias** — 103 narrativa «causa “Casal” (Fallos: …» (el `:` lo regala la cita de Fallos a la rama `Causa[^:\n]*:` re.I) + 1 «Queja contra el Gobierno de Argentina presentada por el Sindicato» (340_p437, leída en .md extraído = cita de queja OIT caso 2240/informe 332 dentro del cuerpo).
+
+### H184-03 — Parser 26.1: rama Causa anclada; FP residual aceptado
+
+La rama `Causa` sale de la lista de rótulos-`[^:\n]*:` y pasa a alternativa propia `(?i:^Causa\s*:)` (verbatim de la regex vieja). 0 pérdidas del universo F1 por construcción (todo marker «Causa» viejo tenía el `:` adyacente); verificado en sandbox contra las líneas reales del dump: 87/87 únicas mueren, 21 controles sin diff. **FP residual aceptado y documentado: 340_p437** (entra por gram_v2 `presentad…por`; discriminador candidato «contra pre-verbo» encolado como sub-clase de M44 con PoC propio — no se parchea ad-hoc). Regresión 26.1: markers **9883 = 9882 + 1**, el FP es el único readmitido no-testigo.
+
+### H184-04 — Adjudicación del ciclo (--consciente x2, 26.0 y 26.1)
+
+- **0 flips de decisión por identidad:** casos/textos/votos/editorial byte-idénticos al golden en ambas corridas → outcome/is_merit/is_originaria intactos (2965 == gate quieto; M43 no contaminada).
+- **0 ripple:** materia y recursos hash-idénticos al backup (sha256 par a par).
+- Único CSV del parser que cambia: **zonas** (141451→140459, −992 segmentos).
+- Contrato negativo cumplido: 348_p61 pierde pie (FN aceptado, epi 46→0 sin_zona) · 338_p1084 epi 103→31 · dictámenes 330_p2877 (1117→76) y Mazzeo 330_p3248 (**19.962→56**) recuperan · 343_p1218 1248→434.
+
+### H184-05 — Conciliación del contrato F1 (corrección de constancia)
+
+El «920 casos (86 caída entera + 834 parcial)» de F1 era **marker-level**; el efecto real **zona-level = 728 casos** (68+1 caída entera + 655 parcial). Conciliado EXACTO en disco (`conciliar_f1_h184.py`): 920 − **19** todos_caen sin zona epílogo en el sello v25 (guarda de dictamen: el marker ancla en Pasada 1 pero nunca abre zona en Pasada 2) − **173** mixtos cuyos markers caídos eran redundantes (dentro de zona ya abierta por un marker sobreviviente) = **728, anomalías 0**. Corrección 2: casos.csv no tiene columnas wc_cuerpo/wc_epilogo/wc_residuo (viven en zonas.csv; el contrato del PROMPT sobre-predijo — la identidad byte de casos.csv es la versión favorable).
+
+Efecto: **470.005 wc de cuerpo recuperados / 655.469 wc de epílogo espurio descartado.** Downstream: epilogo ok 4402→4377 (via_firma 98→100); partes recurrente_ok 3848 (67,5%; sobre mérito 2652/2965 = 89,4%).
+
+### H184-06 — Residuo B089/B096: independencia de B117 demostrada
+
+Selección wc_residuo>300 recomputada del sello v25 = **793** (== H182); post-fix: tocados 199, **0 bajan de 300, 0 bajan algo**. Mecanismo: el residuo se define pre-primera-zona-semántica (Pasada 3) y el epílogo no participa de ese borde. La corrida gemela de H182 sigue siendo todo el frente B089/B096, ahora con esa certeza.
+
+### H184-07 — Re-golden y sello
+
+`--regolden --ignorar-corpus-drift`: golden congelado (5 CSV, sha256 impresos), invariante golden==producción [OK] x5, manifest re-sellado y verificado **[CLEAN] 64**. Candado blind N/A (clasificador e insumos n300 intactos; casos/textos byte-idénticos).
+
+### H184 — Estado final
+
+- **Eje de mérito:** is_merit_decision = 2965 == gate=si · divergencia 0 · is_originaria = 596 (QUIETO, sin cambio).
+- **Versiones:** parser **26.1** · extraer_epilogos 0.3 · derivar_partes 0.17 · derivar_materia 3.2 · derivar_recursos 0.6 · clasificador_disposicion 1.18 · correr_pipeline 1.0.
+- **Manifest:** [CLEAN] 64 artefactos.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5890 filas (byte-idéntico pre/post).
+- `output/parser/csjn_casos_votos.csv` — 27699 filas (byte-idéntico).
+- `output/parser/csjn_casos_zonas.csv` — **140459 segmentos (−992)**.
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones (byte-idéntico).
+- `output/parser/csjn_casos_epilogo.csv` — 5697 filas (ok 4377 / sin_zona 1320 / via_firma 100).
+- `output/parser/csjn_casos_partes.csv` — 5890 filas (recurrente_ok 3848).
+- materia / recursos — hash-idénticos al pre-fix.
+
+**Scripts creados:** `scripts/diagnostico/H184/` — `dump_diff_h184.py` v0.1, `conciliar_f1_h184.py` v0.1, `poc_b117_superficie_out_postfix.csv` (26.0), `poc_b117_superficie_out_postfix_261.csv`, `dump_diff_h184_261.csv`, `340_p437.md`.
+
+**Commits:** 3 — (1) docs del cierre H183 (BITACORA + DEUDA, pre-fix); (2) parser 26.0→26.1 + golden nuevo + outputs canónicos + manifest re-sellado; (3) docs del cierre H184 (BITACORA/CHANGELOG/DEUDA) + scripts de diagnóstico H184.
+
+---
+
+## H185 — Ensanche RE_PIE_START: gramática v2 al fallback de firma (2026-07-05)
+
+**Objetivo:** ejecutar el sucesor downstream opcional de B117 F2 — llevar la escalera v2 a `RE_PIE_START` de extraer_epilogos (fuente única de la gramática del pie) y evaluar resultados.
+
+### H185-01 — Decisiones de sesión
+
+- Unidad elegida: ensanche RE_PIE_START (opción B post-B117 F2), por sobre M43/residuo/M44.
+- **M43 POSTERGADA por decisión:** se ejecuta como ÚLTIMA unidad, después de todas las refacciones, como gate de publicación Dataverse v2 (una sola ronda ciega, pipeline congelado, muestra sin contaminar). No proponer hasta orden explícita. Registrado en la entrada M43 de DEUDA.
+- Verificación intermedia: alarma «793 con wc_epilogo>500» adjudicada como confusión de vista — 793 es la selección wc_residuo>300 (B089/B096); la de epílogo es 18 (CSV verificado: 18 filas, 11 fin_extendido_pag_compartida + 7 fin_por_editorial == los 7 ok_cortado_en_indice). Caso pegado (EDEN, 330 pp.5259-5267) = patrón B089/B096 preexistente (bloque arranca dentro del dictamen, guarda no activa, anclas espurias → residuo inflado), NO daño de H185.
+
+### H185-02 — PoC y adjudicación (poc_h185_ensanche_pie v0.1, read-only)
+
+Universo del fallback (sin zona + fin_por_firma_actual) = 113. A0: réplica con gramática vieja = 100 pies == via_firma sellado (fidelidad demostrada). Diff vieja vs escalera v2: identico 99 · sin_pie_ambos 9 · recupero_nuevo 4 · perdido 1 · start_movido 0. Los 5 que cambian, leídos uno a uno: 4 recuperos GENUINOS (334_p1876 «interpuesto y fundado por» = clase-gap H182; 337_p822 y 338_p1060 rótulos Eje-A; 338_p651 solo-footer) y el perdido (329_p4811 «Nombre de la actora:») es pie genuino que la v2 no cubre («Nombre del») → diseño = UNIÓN, no verbatim puro.
+
+### H185-03 — Fix (extraer_epilogos 0.3→0.4) y regresión exacta
+
+RE_PIE_START = escalera v2 (7 ramas verbatim de parser 26.1) + rama 8 local «Nombre de la/el …» (divergencia deliberada documentada). Cae el re.I global (clase-FP H182). Armado (RE_PIE_LINE/RE_PAGE/RE_FOOTER/_CONT_TAIL) intacto. Ciclo `correr_pipeline --solo-derivers --consciente`: epilogo ok 4377→4381 · via_firma 100→104 · sin_zona −4 · ids nuevos exactos {334_p1876, 337_p822, 338_p651, 338_p1060} · materia/recursos hash-idénticos · parser [CLEAN] 5/5 sin re-golden · manifest re-sellado [CLEAN] 64. Costo documentado: captura parcial 338_p1060 (footer corta en wrap — techo del armado, pariente M44).
+
+### H185-04 — Hallazgo: B145 (deriver)
+
+partes recurrente_ok 3848→3848 (+0). Adjudicado a nivel fila: 334_p1876 quedó `sin_marcador_recurso` con recurrente vacío. Causa verificada por grep: `RE_MARK_REC` (derivar_partes v0.17, L67) exige `por` adyacente al verbo — gramática v1 gemela de la reemplazada. No es problema de parte-institucional: el marcador muere antes de parse_parte. Mérito epilogo_sin_marcador 187→188 (+1 == el testigo). Entrada B145 creada; fix NO acoplado a esta sesión (un culpable por ciclo).
+
+### H185 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos). is_merit = 2965 == gate · divergencia 0 · is_originaria = 596.
+- **Epilogo:** ok 4381 (76,9%) · sin_zona 1316 · via_firma 104. **Partes:** recurrente_ok 3848 (67,5%; mérito 2652/2965 = 89,4%).
+- **Votos:** 27699 filas. **Zonas:** 140459 segmentos. **Editorial:** 152 secciones.
+- Manifest [CLEAN] 64. Golden parser sin cambios (invariante c sostenido).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos_epilogo.csv` — 5697 filas (v0.4; 4 sin_zona→ok).
+- `output/parser/csjn_casos_partes.csv` — 5890 filas (re-derivado; 0 flips de recurrente_ok).
+- Resto de la cadena: sin cambio (materia/recursos hash-idénticos; 5 CSV del parser byte-idénticos).
+
+**Scripts creados:** `scripts/diagnostico/H185/poc_h185_ensanche_pie.py` (+ `_out.csv`, `_diff.md`).
+
+**Commits:** 3 — (1) fix: extraer_epilogos v0.4 + epilogo.csv + partes.csv + _manifest.json; (2) PoC H185 (diagnóstico); (3) docs (DEUDA + BITACORA + CHANGELOG).

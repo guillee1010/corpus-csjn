@@ -2,6 +2,23 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H185 (2026-07-05)
+
+- `extraer_epilogos.py` 0.3→0.4: RE_PIE_START = unión escalera v2 (parser 26.1, verbatim) + rama local «Nombre de la/el»; cae re.I global. +4 pies genuinos, 0 perdidos, 0 movidos (PoC adjudicado 5/5 por lectura).
+- `output/parser/csjn_casos_epilogo.csv`: 5697 filas (ok 4377→4381, via_firma 100→104).
+- `output/parser/csjn_casos_partes.csv`: 5890 filas re-derivadas (recurrente_ok 3848 sin cambio → B145).
+- `output/parser/_manifest.json`: re-sellado [CLEAN] 64.
+
+## H184 (2026-07-05)
+
+- `parser.py` 25.0 → **26.0**: `RE_EPILOGO_MARKER` nueva (escalera v2 de poc_b117_superficie v0.2, unión verbatim de 6 cuerpos) reemplaza a `RE_DATOS_PARTES` SOLO en el sitio del epilogo_marker; `RE_DATOS_PARTES` intacta (A001). MAJOR.
+- `parser.py` 26.0 → **26.1**: rama `Causa` anclada `(?i:^Causa\s*:)` (mata 103 markers narrativa «causa …(Fallos:» fuera del universo F1); FP residual aceptado 340_p437 (→ M44).
+- `output/parser/csjn_casos_zonas.csv` — 140459 segmentos (−992): único CSV del parser que cambia; 728 casos con borde de epílogo corregido, 470.005 wc de cuerpo recuperados.
+- `output/parser/csjn_casos_epilogo.csv` — ok 4377 / sin_zona 1320 (via_firma 100); `csjn_casos_partes.csv` — recurrente_ok 3848.
+- casos/textos/votos/editorial byte-idénticos; materia/recursos hash-idénticos (0 flips, 0 ripple).
+- golden re-congelado + `_manifest.json` re-sellado [CLEAN] 64.
+
+
 ## H181 (2026-07-05)
 
 - `parser.py` v24.0→v24.1: B135(c) — señal 6 compuesta en `es_originaria` (forma invertida en `RE_CN_DEMANDA_ESTADO` + `_ventana_resulta` + pelada-con-guards sobre el Resulta). +6 is_originaria, +5 is_merit vía gate.
