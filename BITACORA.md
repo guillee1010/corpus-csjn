@@ -19412,3 +19412,6 @@ partes recurrente_ok 3848→3848 (+0). Adjudicado a nivel fila: 334_p1876 quedó
 **Scripts creados:** `scripts/diagnostico/H185/poc_h185_ensanche_pie.py` (+ `_out.csv`, `_diff.md`).
 
 **Commits:** 3 — (1) fix: extraer_epilogos v0.4 + epilogo.csv + partes.csv + _manifest.json; (2) PoC H185 (diagnóstico); (3) docs (DEUDA + BITACORA + CHANGELOG).
+### H185-05 — Remanente H184 encontrado en el cierre git
+
+Al commitear H185, `git status` expuso parser.py + csjn_casos_zonas.csv + golden de zonas modificados sin commitear: la sesión H183/H184 (B117 F2) nunca se commiteó (el log salta de H182 a H185). El commit `d28c0a7` de H185 absorbió el delta acumulado de epilogo/partes de ambas sesiones (de ahí sus 54.591 deletions) y dejó HEAD con el manifest sellando una zonas que el repo no tenía (verify [FAIL] para cualquier clone). Verificado por diff del `__version__` (25.0→26.1). Restaurado con commit propio «H184 remanente»; `--verify` sobre HEAD post-restauración: [CLEAN] 64. Corrección de constancia al campo Commits de la BITACORA H184: los commits ahí descriptos no se ejecutaron en su momento. Housekeeping: `output/parser_BAK_H184_pre/` eliminado (insumo de dump_diff_h184, ya documentado). Candado propuesto para el skill de cierre (H186): tras los commits del Paso 6, `git status --short` debe quedar vacío salvo untracked deliberados.
