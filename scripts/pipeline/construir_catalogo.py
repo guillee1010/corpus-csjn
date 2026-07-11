@@ -86,7 +86,7 @@ USO
       --verbose
 """
 
-__version__ = "1.01"  # H109 (B115)
+__version__ = "1.03"  # H189 (suplemento editorial): merge de _meta/catalogo_suplemento_editorial.csv — entradas curadas por lectura para fallos que el índice oficial de la Secretaría de Jurisprudencia OMITE (error editorial de origen, no del parser; testigos: Lombardi 333:1973, YPF c/Mercante 349). Dato versionado en git, no heurística: cero regex, cero body-scan, cada fila con fuente_verificacion. Se agrupa por (tomo,página) en el flujo normal → pagina_fin por inferencia global, cruce/parser sin cambios. Idempotente si la página ya existe (merge de nombres). // v1.02 H189 (B151): rescate de entradas con ancla degradada por OCR — 2ª pasada RE_ANCLA_DEG dentro de parsear_indice_nombres, sobre las carátulas que dejó la pasada estricta (RE_ANCLA intacta). Variantes: ':' sin 'p.' (": 1484.") y 'p.' sin ':' ("p. 748."). Guards: 1-4 dígitos, punto final obligatorio, página en rango [min,max] de las anclas estrictas del mismo bloque, carátula ≥8 chars con letras. Flip-set medido por PoC en disco (poc_b151_ancla_degradada v0.1, H189): 10 rescates / 14.406 entradas (0,07%) = 2 páginas nuevas (329:1484 Albornoz, 329:2965 Alnavi — fallos fantasma B012/B045 verificados por lectura) + polución de nombre limpiada en 329:1385 y 330:748. // v1.01 H109 (B115)
 
 
 import argparse
@@ -154,6 +154,25 @@ RE_ANCLA = re.compile(
     r':\s*(ps?\.)\s*[\xa0\s]*'              # ": p." o ": ps." con espacio o NBSP
     r'(\d+(?:\s*[,y]\s*\d+)*)'              # números: "537" o "243, 244, 297" o "1316 y 1334"
     r'\s*\.?',                              # punto final opcional
+    re.UNICODE
+)
+
+# B151 (H189): ancla DEGRADADA por OCR — el escaneo pierde de a un token del
+# ancla estricta:
+#   variante A: ':' presente, 'p.' perdido  → "...y otro: 1484."   (Albornoz 329:1484)
+#   variante B: 'p.' presente, ':' perdido  → "...Buenos Aires p. 748."  (330:748)
+# Una entrada sin ancla no corta en parsear_indice_nombres y queda PEGADA como
+# prefijo de la carátula siguiente; si TODAS las entradas de una página se
+# degradan, la página no genera fila → fallo ausente del corpus (B012/B045).
+# Esta regex se usa SOLO en la 2ª pasada de rescate, sobre las carátulas que ya
+# cortó la estricta — nunca compite con RE_ANCLA. Guards adicionales en código:
+# página en rango plausible del bloque, carátula rescatada no trivial.
+# A diferencia de la estricta, el PUNTO FINAL es OBLIGATORIO: sin ':p.' completo
+# es la única confirmación de cierre de entrada.
+RE_ANCLA_DEG = re.compile(
+    r'(?::\s*|\bps?\.\s*)[\xa0\s]*'         # ':' solo, o 'p.'/'ps.' solo
+    r'(\d{1,4}(?:\s*[,y]\s*\d{1,4})*)'      # páginas de 1-4 dígitos
+    r'\s*\.(?=\s|$)',                       # punto final obligatorio
     re.UNICODE
 )
 
@@ -360,6 +379,45 @@ def parsear_indice_nombres(lines, linea_inicio_1, linea_fin_1):
             entradas.append((caratula, paginas))
         pos = m.end()
 
+    # ── B151 (H189): 2ª pasada — rescate de entradas con ancla degradada ────
+    # Una entrada cuya ancla perdió ':' o 'p.' por OCR quedó pegada como
+    # prefijo de la carátula de la entrada siguiente (y su página, muerta).
+    # Se re-escanea cada carátula con RE_ANCLA_DEG y se parte: lo previo al
+    # ancla degradada sale como entrada propia (rescatada), el resto queda
+    # como carátula limpia de la entrada anfitriona. Aditivo puro: no altera
+    # las anclas estrictas ni el orden del índice.
+    if entradas:
+        todas_pags = [p for _, pags in entradas for p in pags]
+        pag_min, pag_max = min(todas_pags), max(todas_pags)
+        entradas_rescatadas = []
+        for caratula, paginas in entradas:
+            sub = []
+            pos2 = 0
+            for md in RE_ANCLA_DEG.finditer(caratula):
+                pre = caratula[pos2:md.start()].strip()
+                pags_deg = [int(n) for n in re.findall(r'\d+', md.group(1))]
+                # guards: página plausible en el bloque + carátula no trivial
+                if (not pags_deg
+                        or any(p < pag_min or p > pag_max for p in pags_deg)
+                        or len(pre) < 8
+                        or not re.search(r'[A-Za-zÁÉÍÓÚÑáéíóúñ]{3}', pre)):
+                    continue
+                sub.append((limpiar_caratula(pre), pags_deg))
+                pos2 = md.end()
+            resto = caratula[pos2:].strip()
+            # invariante: una entrada estricta NUNCA se pierde. Si el rescate
+            # consumiría la carátula entera (resto vacío), se aborta el rescate
+            # de esta carátula y queda como estaba.
+            if sub and not resto:
+                entradas_rescatadas.append((caratula, paginas))
+                continue
+            # orden del índice preservado: primero las rescatadas (su texto
+            # precedía al ancla estricta), después la anfitriona limpia
+            entradas_rescatadas.extend(sub)
+            if resto:
+                entradas_rescatadas.append((resto, paginas))
+        entradas = entradas_rescatadas
+
     return entradas
 
 
@@ -384,6 +442,46 @@ def limpiar_caratula(s):
 # ============================================================================
 # CONSTRUCCIÓN DEL CATÁLOGO
 # ============================================================================
+
+def cargar_suplemento_editorial(path):
+    """
+    H189: lee _meta/catalogo_suplemento_editorial.csv — la fe de erratas curada
+    del índice oficial. Cada fila es un fallo que la Secretaría de
+    Jurisprudencia OMITIÓ del índice del tomo (verificado por lectura del .md).
+
+    Columnas requeridas: tomo, pagina, caratula. Opcional: fuente_verificacion
+    (procedencia de la adjudicación, solo documental).
+
+    Retorna dict {tomo: [(caratula, [pagina])]} o {} si el archivo no existe.
+    NO es un fallback heurístico: solo entra lo adjudicado a mano.
+    """
+    if not path.is_file():
+        return {}
+    suplemento = defaultdict(list)
+    with open(path, encoding='utf-8') as f:
+        rdr = csv.DictReader(f)
+        faltantes = {'tomo', 'pagina', 'caratula'} - set(rdr.fieldnames or [])
+        if faltantes:
+            print(f"ERROR: suplemento {path} sin columnas {sorted(faltantes)}",
+                  file=sys.stderr)
+            sys.exit(1)
+        for i, row in enumerate(rdr, start=2):
+            try:
+                tomo = int(row['tomo'])
+                pagina = int(row['pagina'])
+            except (TypeError, ValueError):
+                print(f"ERROR: suplemento {path} fila {i}: tomo/pagina no "
+                      f"numéricos ({row.get('tomo')!r}, {row.get('pagina')!r})",
+                      file=sys.stderr)
+                sys.exit(1)
+            caratula = limpiar_caratula(row.get('caratula') or '')
+            if not caratula:
+                print(f"ERROR: suplemento {path} fila {i}: caratula vacía",
+                      file=sys.stderr)
+                sys.exit(1)
+            suplemento[tomo].append((caratula, [pagina]))
+    return dict(suplemento)
+
 
 def construir_filas_catalogo(entradas_por_archivo):
     """
@@ -613,6 +711,13 @@ def main():
         '--pattern', default='LibroVol*.md',
         help='Glob pattern para los .md (default: LibroVol*.md)'
     )
+    parser.add_argument(
+        '--suplemento', type=Path,
+        default=Path('../../_meta/catalogo_suplemento_editorial.csv'),
+        help='CSV curado con fallos omitidos por el índice oficial '
+             '(default: ../../_meta/catalogo_suplemento_editorial.csv; '
+             'si no existe, se omite)'
+    )
     args = parser.parse_args()
 
     if not args.input_dir.is_dir():
@@ -652,6 +757,19 @@ def main():
             'n_entradas': len(entradas),
             'n_paginas_unicas': len(paginas_unicas),
         }
+
+    # ── H189: merge del suplemento editorial (fe de erratas del índice) ──────
+    # Fallos que el índice oficial omite, adjudicados por lectura. Entra al
+    # mismo agrupado por (tomo, página): pagina_fin por inferencia global,
+    # cruce y parser sin cambios. Idempotente si la página ya tiene entrada.
+    suplemento = cargar_suplemento_editorial(args.suplemento)
+    if suplemento:
+        n_sup = sum(len(v) for v in suplemento.values())
+        print(f"[suplemento editorial] {args.suplemento}: {n_sup} entrada(s) "
+              f"en tomos {sorted(suplemento)}", file=sys.stderr)
+        for tomo, entradas_sup in suplemento.items():
+            clave = (tomo, "_suplemento_editorial")
+            entradas_por_archivo.setdefault(clave, []).extend(entradas_sup)
 
     filas_catalogo = construir_filas_catalogo(entradas_por_archivo)
 
