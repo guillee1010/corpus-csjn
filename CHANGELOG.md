@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H187 (2026-07-11)
+
+- `derivar_partes.py` v0.17→v0.18 (B145): `RE_MARK_REC` = gramática v2 de RE_PIE_START (verbos ensanchados + «y fundado» + `por[:\s]`) + guard «contra» pre-verbo (superficie corpus-wide 1 línea = FP 340_p437). «Por libre» diferido → B146.
+- `output/parser/csjn_casos_partes.csv`: 5890 filas, 52 cambian (34 GANA + 8 fuente + 10 movidos, 0 pierde). recurrente_ok 3848→3882; mérito 90,3%.
+- `output/parser/_manifest.json`: re-sellado [CLEAN] 64.
+
 ## H185 (2026-07-05)
 
 - `extraer_epilogos.py` 0.3→0.4: RE_PIE_START = unión escalera v2 (parser 26.1, verbatim) + rama local «Nombre de la/el»; cae re.I global. +4 pies genuinos, 0 perdidos, 0 movidos (PoC adjudicado 5/5 por lectura).

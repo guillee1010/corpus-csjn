@@ -19415,3 +19415,92 @@ partes recurrente_ok 3848→3848 (+0). Adjudicado a nivel fila: 334_p1876 quedó
 ### H185-05 — Remanente H184 encontrado en el cierre git
 
 Al commitear H185, `git status` expuso parser.py + csjn_casos_zonas.csv + golden de zonas modificados sin commitear: la sesión H183/H184 (B117 F2) nunca se commiteó (el log salta de H182 a H185). El commit `d28c0a7` de H185 absorbió el delta acumulado de epilogo/partes de ambas sesiones (de ahí sus 54.591 deletions) y dejó HEAD con el manifest sellando una zonas que el repo no tenía (verify [FAIL] para cualquier clone). Verificado por diff del `__version__` (25.0→26.1). Restaurado con commit propio «H184 remanente»; `--verify` sobre HEAD post-restauración: [CLEAN] 64. Corrección de constancia al campo Commits de la BITACORA H184: los commits ahí descriptos no se ejecutaron en su momento. Housekeeping: `output/parser_BAK_H184_pre/` eliminado (insumo de dump_diff_h184, ya documentado). Candado propuesto para el skill de cierre (H186): tras los commits del Paso 6, `git status --short` debe quedar vacío salvo untracked deliberados.
+
+## H186 — Explorador v8: M16 cerrado + gramática de zonas (2026-07-06)
+
+**Objetivo:** rediseñar el explorador Streamlit (v7→v8) para caza de errores de zonificación/firma e incorporar todo lo avanzado desde su creación (sidecars del deriver).
+
+### H186-01 — Decisiones de sesión
+
+- Unidad elegida: explorador v8 (herramienta), en lugar de los pendientes encolados de H185 (18 outlier_epi, residuo B089-B096, B145, M44) — siguen vigentes, sin tocar.
+- **Pipeline INTOCADO:** 0 scripts de pipeline, 0 outputs canónicos, 0 `__version__`. Paso 2 del cierre (regresión/re-golden/re-sello) N/A; manifest vigente [CLEAN] 64.
+- **Decisión: madurar el pipeline antes del siguiente κ** — reafirma la postergación de M43 (H185); la adjudicación de las poblaciones nuevas de gramática (M45) alimenta esa maduración.
+- Grep previo en DEUDA/BITACORA (Gate 2): el tab Auditoría cierra el pendiente explícito de M16; «gramática de zonas» sin antecedente → instrumento nuevo.
+
+### H186-02 — Desfasajes v7 verificados y calibración previa
+
+- v7 filtraba/mostraba `causa_inadmisibilidad` desde casos.csv, columna removida en H148 (M26 paso 3) — filtros muertos en silencio (pass-through de `_multiselect`). No cargaba ningún sidecar del deriver salvo materia.
+- Calibración sobre los CSVs reales (H185) ANTES de codear: fallos sin zona firma = 20 · sin dispositivo = 49 · firma en ≥4 segmentos = 453 · wc firma p50=20 / p95=71 / max=18.353 (142 casos >200) · las secuencias reales muestran que el patrón multi-voto (`…dispositivo>firma>voto_separado>cuerpo>dispositivo>firma>epilogo`) es legítimo y frecuente → la gramática lo modela para no fabricar FP.
+
+### H186-03 — Implementación (exploradorv8.py)
+
+- Capa de datos: left-joins graceful de recursos (dropeando su `es_queja`; recupera `causa_inadmisibilidad` en la UI), partes, epilogo (sin cargar `epilogo_text`), materia; pivot de zonas.csv → `wcz_*`/`nseg_*` por las 9 zonas + `pct_cobertura` + secuencia colapsada + 14 banderas.
+- Filtros nuevos: disposicion, admisibilidad, causa, es_revision_fondo, via_recurso, reenvia, parte_ganadora, multi_recurso, materia_capa/fuente, partes_capa, roles, epilogo_status, status_localizacion/status_fin/pista_fin, sliders de wc/nseg por zona elegida, cobertura.
+- Tab Auditoría (cierra pendiente M16 «modo auditoría-de-precisión»): banderas con conteo selección/corpus y click-para-filtrar; muestreo aleatorio reproducible (N+seed, aplicado como filtro global); marcado TP/FP/dudoso con nota y export CSV (las marcas viven en la sesión del navegador).
+- Detalle en tabs (Fuente a ancho completo / Metadatos / Votos y zonas) + panel inline de considerando/por_ello/firma completos desde textos.csv (cierra el otro pendiente M16; habilitado por H113, respeta M15).
+- Leccion H045 sostenida: el explorador no recomputa lógica del parser; todo sale de CSVs canónicos, el `.md` solo se pinta.
+- **Bug propio encontrado y corregido en primera corrida local:** el pivot emitía `wc_dictamen` y colisionaba con la columna homónima del parser (`ValueError: columns overlap`) → namespace `wcz_*` para TODAS las métricas de zona (blinda contra futuras `wc_*` del parser). Colisión reproducida y verificada resuelta en sandbox; flags idénticos post-fix (20/49/453/142).
+- README nuevo en `scripts/explorador/`: fuentes de datos y joins, cada filtro, leyenda de códigos de bandera con umbrales y su calibración de origen, workflow de auditoría, historial de versiones del explorador (H045→H056→H096→H186).
+
+### H186-04 — Hallazgo: poblaciones de gramática sin adjudicar → M45 (nueva)
+
+- epílogo-no-terminal = 154 · firma-antes-de-dispositivo = 179 (residuo-tardío = 0, control consistente con Pasada 3). Señal adjudicable, NO bug demostrado: puede haber patrones estructurales legítimos no modelados. Validador: muestreo N=30 con seed por bandera + lectura del `.md` pintado; si emergen clases de mis-zonificación → B0xx propio (familias candidatas: B117 residual, B141, M21).
+- Segunda parte de M45 (mejora): lazy-load de textos.csv por índice de offsets, prerequisito de la eventual versión online (HF Spaces / repo de deploy separado + persistencia de marcas). Sin urgencia local.
+
+### H186-05 — v8.1: multi-selección y exportes (misma sesión)
+
+- Semántica de la tabla corregida (feedback de uso): los ticks pasaban a abrir el detalle (single-row heredado de v7, confuso). Ahora `multi-row`: los ticks SELECCIONAN; «Abrir caso» entra al detalle con exactamente 1 tickeado. La selección es por página.
+- Export de **casos crudos .md** de los tickeados, cada bloque con encabezado de metadatos (ejes, banderas, secuencia, fuente/líneas). Anclaje canónico `source_file`+`linea_inicio`/`linea_fin_real` (mismo que extraer_caso v2.0 — lección B102; sin lógica paralela — lección H045).
+- Generador de **reporte de auditoría .md**: filtros activos + conteos de banderas sobre la selección + muestra (N/seed) + marcas TP/FP/dudoso + crudos tickeados. Insumo directo de la sesión H siguiente: cierra el círculo filtrar→tickear→bajar→adjudicar sin extraer_caso manual.
+- Smoke preliminar en sandbox (corpus sintético): bloque crudo respeta bordes exactos de líneas, reporte incluye filtros/seed/marcas. La validación que cierra es el primer uso en disco (H187).
+
+### H186 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos). is_merit = 2965 == gate · divergencia 0 · is_originaria = 596. (Sin cambio: valores H185.)
+- **Votos:** 27699 filas. **Zonas:** 140459 segmentos. **Editorial:** 152 secciones. Manifest [CLEAN] 64, sin re-sello (nada cambió).
+
+**Outputs canónicos:** sin cambio (0 outputs tocados).
+
+**Scripts creados:** `scripts/explorador/exploradorv8.py` + `scripts/explorador/README.md` (directorio no canónico, gitignoreado según schema — no entran a commits).
+
+**Commits:** 1 — docs (DEUDA_TECNICA + BITACORA).
+
+## H187 — B145: gramática v2 al marcador capturante de partes (2026-07-11)
+
+**Objetivo:** cerrar B145 — portar la gramática v2 de `RE_PIE_START` a `RE_MARK_REC` de derivar_partes (la v1 gemela que H185 dejó expuesta).
+
+### H187-01 — PoC escalera y redimensionamiento del bug
+
+`poc_b145_mark_rec.py` v0.1 (read-only, sobre csjn_casos_epilogo.csv v0.4 real; universo ok 4381 == sello H185; réplica E0 == RE_MARK_REC vigente asserted). Escalera: E0 (vigente) match 3722 · E1 (+«y fundado» + `por[:\s]`) recupera 38 · E2 (+verbos gram_v2) recupera 50 · E3 (+«por» libre) recupera 55 — pierde 0 en todos los niveles. **Redimensionamiento:** la clase «y fundado» del título de B145 era 3 casos; el grueso era el **«por:» de tomos viejos (35/50)** — el gap que H161 anotó sin medir. Los 50 clauses adjudicados por lectura: todos pies genuinos.
+
+### H187-02 — FP detectado y guard quirúrgico
+
+En E2, 340_p437 movía el clause a la cita de la queja OIT («Queja **contra** el Gobierno … presentada por el Sindicato») — el FP residual documentado de B117 F2, sub-clase M44 «contra pre-verbo». Discriminador medido corpus-wide: superficie total de líneas contra-pre-verbo en los 4381 epílogos = **1 exacta** (el FP); 0 matches vigentes afectados. Guard = tempered dot `(?:(?!\bcontra\b)[^\n])*?` entre token y verbo — divergencia DELIBERADA vs RE_PIE_START (acá el marcador CAPTURA y el FP corrompe el clause; en el extractor solo arranca el pie).
+
+### H187-03 — E3 («por» libre) diferido → B146
+
+Los 5 recuperos E3-only leídos uno a uno: 2 limpios (329_p5467 multi-expediente; 330_p1036 «a fs. N por») + 3 de la clase **«interpuesto a favor de X por su defensor»** (331_p2285/331_p2462/331_p600, penal) donde la parte queda PRE-«por» y la captura se llevaría al letrado. Gramática nueva, no ensanche → entrada B146, fuera del fix.
+
+### H187-04 — Fix (derivar_partes v0.17→v0.18) y validación en disco
+
+`RE_MARK_REC` = gramática v2 (verbos `inte\w*rpu\w+|deducid\w+|presentad\w+|articulad\w+|fundad\w+` + tolerancia «y fundado» + `por[:\s]`) + guard «contra». Módulo editado reproduce exacto el candidato del PoC (50/0/4, asserted en sandbox). Ciclo `correr_pipeline --solo-derivers --ignorar-corpus-drift` (primera corrida abortó por el gate de corpus-drift 335/336 — exclusión deliberada conocida): único canónico que cambia = partes.csv; epilogo/materia/recursos intactos; parser [CLEAN] 5/5 sin re-golden (flip en deriver, fuera del harness — instancia M36); manifest re-sellado [CLEAN] 64.
+
+### H187-05 — Adjudicación del diff 52/52
+
+`diff_partes_b145.py` v0.1 (vs backup v0.17): **34 GANA + 8 CAMBIA_FUENTE + 10 MOVIDO + PIERDE 0**. Conciliación exacta con el PoC: 50 recuperos = 34 sin rescate previo + 16 con rescate de carátula (flips de fuente); los 2 movidos restantes del PoC (337_p858/340_p251) salieron byte-idénticos (parse_parte extrajo la misma parte). MOVIDOS: mejoras claras (341_p1727 banner absorbido→limpio · 342_p624 «el»/penal espurio→Plée/mp_fiscal · 334_p427 des-trunca · 332_p2339 y 341_p1679 leftmost del pie, incl. el fino H182 TANDANOR) + neutrales de orden de nombre. Eyeball del único cambio real de entidad (344_p645, extraído contra el `.md`): el pie nombra a **Omint S.A. = sucesora por fusión** de la ejecutada disuelta (dictamen §VI) — el pie más preciso que la carátula; doctrina de cascada vindicada. Colaterales documentados: 3 roles perdidos caratula→epilogo (→ población M33) + micro-gap RE_MULTI (341_p1727: señal plural en la línea del marcador, fuera del clause → nota en Tablero).
+
+### H187 — Estado final
+
+- **Corpus:** 5890 casos (5697 fallos). is_merit = 2965 == gate · divergencia 0 · is_originaria = 596 (parser INTOCADO).
+- **Epilogo:** ok 4381 (76,9%) · sin_zona 1316 · via_firma 104 (sin cambio). **Partes:** recurrente_ok **3882 (68,1%)**; mérito **2677/2965 = 90,3%** (+25); epilogo_sin_marcador 573 (mérito 163).
+- **Votos:** 27699 filas. **Zonas:** 140459 segmentos. **Editorial:** 152 secciones.
+- **Versiones:** parser 26.1 · extraer_epilogos 0.4 · **derivar_partes 0.18** · derivar_materia 3.2 · derivar_recursos 0.6 · clasificador_disposicion 1.18 · correr_pipeline 1.0.
+- Manifest [CLEAN] 64. Golden parser sin cambios (invariante c sostenido).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos_partes.csv` — 5890 filas (sha 6ef71c06167a…, v0.18; 52 filas cambian, PIERDE 0).
+- Resto de la cadena: sin cambio (epilogo/materia/recursos intactos; 5 CSV del parser byte-idénticos).
+
+**Scripts creados:** `scripts/diagnostico/H187/` — `poc_b145_mark_rec.py` v0.1 (constancia; paths de sandbox), `diff_partes_b145.py` v0.1.
+
+**Commits:** 2 — (1) fix: derivar_partes v0.18 + csjn_casos_partes.csv + _manifest.json; (2) docs (DEUDA + BITACORA + CHANGELOG) + scripts de diagnóstico H187.
