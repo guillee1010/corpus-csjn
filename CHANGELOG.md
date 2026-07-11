@@ -2,6 +2,15 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H189 (2026-07-11)
+
+- `construir_catalogo.py`: v1.01→v1.04. B151: `RE_ANCLA_DEG` (2ª pasada de rescate de anclas degradadas por OCR; 10 rescates corpus-wide, 2 páginas recuperadas). M46: merge de `_meta/catalogo_suplemento_editorial.csv` (omisiones del índice oficial); v1.04 = path robusto + aviso obligatorio.
+- `_meta/catalogo_suplemento_editorial.csv`: NUEVO — fe de erratas curada del índice (Lombardi 333:1966, Mercante 349:43).
+- `output/catalogo/catalogo.csv`: 6145→6149 filas.
+- `output/parser/csjn_casos.csv`: 5890→5894 filas (+329_p1484, +329_p2965, +333_p1966, +349_p43; descontaminados 329_p1480/329_p2218/329_p2221/333_p1959/349_p40; flip adjudicado 2221 procedente→desestima).
+- `output/parser/csjn_casos_votos.csv`: →27724 filas.
+- Golden + `_manifest.json`: re-sellados ×2, [CLEAN].
+
 ## H187 (2026-07-11)
 
 - `derivar_partes.py` v0.17→v0.18 (B145): `RE_MARK_REC` = gramática v2 de RE_PIE_START (verbos ensanchados + «y fundado» + `por[:\s]`) + guard «contra» pre-verbo (superficie corpus-wide 1 línea = FP 340_p437). «Por libre» diferido → B146.

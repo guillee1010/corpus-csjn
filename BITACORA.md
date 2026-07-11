@@ -19550,3 +19550,49 @@ Pipeline INTOCADO (0 scripts de `scripts/pipeline/`, 0 outputs canónicos, 0 `__
 **Decisiones de diseño:** (1) el diagnóstico va separado del fix (unidad atómica: el diff de un arreglo debe tener un solo culpable). (2) B147/B148/B149 quedan como unidades sucesoras; ninguna se abre sin antes leer su detector satélite y medir el acople por ciclo. (3) Decisión vigente reafirmada: madurar el pipeline antes del próximo κ — M43 va ÚLTIMA.
 
 **Commits:** 1 — (1) DEUDA (M45 adjudicado + B147/B148/B149) + BITACORA + `scripts/diagnostico/H188/` (diag_frontera_b1.py v0.3 + out.csv + 20 .md extraídos).
+
+## H189 — B147 fase 2: adjudicación de fantasmas + B151 + suplemento editorial — los 4 ausentes recuperados (2026-07-11)
+
+**Objetivo:** adjudicar por lectura los 46 candidatos a fallo fantasma de B147 (fase 2) y, con la cardinalidad firme, resolver el frente de recuperación al catálogo.
+
+### H189-01 — Adjudicación de los 46 candidatos (lectura del lote)
+
+Orquestador `extraer_lote_h189.py` (invoca `extraer_caso.py` v2.3 por CLI, 46/46 OK) → `fantasmas_b147_lote.md`. Método: secuencia estructural C·V·D·S·R por bloque + contexto de cada «Vistos» + status del parser. Resultado: **43 FP + 3 fantasmas embebidos**. FP: 24 solape (cabeza del vecino con fila) · 13 bleed editorial (`fin_por_editorial`: índice de partes + acordadas del cierre de volumen — las «firmas» del diag eran de acordadas) · 6 multi-resolución del mismo caso (aclaratorias 332_p640/331_p1013/332_p663, incidentes 329_p4140/334_p913, votos conexos 329_p1066). **La cota «27-46» de H188 se corrige a 4.** Dos correcciones del usuario incorporadas: Mercante ya era conocido (F002, omisión editorial, no del parser) y «art.5 ley 23.521» era el vecino Ceniquel 329_p3806 (solape, no fantasma). Cruce en disco contra `csjn_casos.csv` descartó además 329_p576 (Benabén tiene fila 329_p573) y 346_p484 (electorales con fila 461/489). Entregable: `adjudicacion_b147_h189.csv`.
+
+### H189-02 — Causa raíz del fantasma pipeline leída en código (corrige constancia H188)
+
+Leídos `parser.py` (`detectar_fin_real` 2477-2650, call site 3400-3440, `siguiente_caso` 3966-3979), `construir_catalogo.py` y `cruzar_catalogo_y_mapa.py`. El borde inter-caso viene del CATÁLOGO (`linea_fin` es argumento); el parser solo refina contra el siguiente LOCALIZADO — nunca ve la carátula embebida. El fantasma nace upstream: `RE_ANCLA` exige `':'+'p.'` juntos y el OCR degrada de a un token (`': 1484.'` / `'p. 748.'`) → la entrada queda pegada a la carátula siguiente en `parsear_indice_nombres` → página sin fila. Evidencia a la vista en `nombres_indice` de 329_p2258/2219/2221 y 330_p1016.
+
+### H189-03 — B151: PoC lado-índice + fix + ciclo sellado (N 5890→5892)
+
+PoC `poc_b151_ancla_degradada.py` v0.1 (2 pasadas: `parsear_indice_nombres` real + rescate sobre carátulas, clasificación GHOST/POLUCION contra catálogo+casos): **10 rescates / 14.406 entradas (0,07%)** = 2 GHOST (329:1484 Albornoz ×4 entradas; **329:2965 Alnavi ×2 — hallazgo nuevo**, huérfano total en la cabecera de 329.3, invisible al lado-cuerpo; fallo verificado por lectura L42-121) + 2 POLUCION. Fix `construir_catalogo` v1.01→v1.02 (`RE_ANCLA_DEG` 2ª pasada, estricta intacta, guards + invariante «una estricta nunca se pierde»; sandbox A/B 0 páginas perdidas). Ciclo: catálogo 6145→6147 → cruce (+329_p1484 [4251,4348], +329_p2965 [38,106] de 329.3; Tedesco corta en 4250) → `--consciente` adjudicado: N 5892, Albornoz desestima/5, Alnavi nulidad_concesion/5, **Tedesco descontaminado** (wc_votos 805→137, tipo_voto→B), **Bergés 2218 panel 1→6** (la Pista 1 anclaba en el token espurio «Catering»), **Chabán 2221 quimera resuelta** (procedente→desestima: el outcome viejo era el dispositivo de Figueiredo; adjudicado contra el lote) → `--regolden`, manifest [CLEAN].
+
+### H189-04 — M46: suplemento editorial + ciclo sellado (N 5892→5894)
+
+Lombardi y Mercante NO están en el índice oficial (verificado: índice del t.333 existe, 26/22/37 cabeceras, y no lo lista). Descartado el fallback heurístico (comería citas); mecanismo elegido: `_meta/catalogo_suplemento_editorial.csv` como DATO curado (fila por omisión, con fuente_verificacion) mergeado por `cargar_suplemento_editorial` (v1.03). Páginas fijadas por running-head: **Lombardi 333:1966** (corrige el ~1969 estimado), **Mercante 349:43** (corrige el ~48). v1.03→**v1.04**: el default CWD-relative del path fallaba SILENCIOSO desde la raíz (dos ciclos no-op detectados por ausencia de la línea de aviso + gate de instalación); v1.04 ancla el fallback al script y avisa siempre. Ciclo: catálogo 6149 → cruce (handoff Parques[2910,3174]/Lombardi[3175,3665], Décima[1503,1600]/Mercante[1601,1980], sin solape ni agujero) → `--consciente` adjudicado: N 5894, Lombardi confirma/según_su_voto/7, Mercante desestima/mixed/2 (**conjuez Lozano no reconocido → B153**), Parques y Décima descontaminados (**F002 residuo 22% REPARADO**) → `--regolden`, manifest [CLEAN].
+
+### H189-05 — Destapes y decisiones
+
+- **B152**: Figueiredo c/ Malagoli (queja procedente, 329:2221) colisiona de página con Chabán-casación → sin fila propia; decisión de schema sub-página, encolada.
+- **B153**: conjueces (Lozano, Rodríguez Basavilbaso) fuera de la lista de ministros → paneles subcontados; encolado, relevante para el eje de votos.
+- La B150 provisoria (polución de `nombres_indice`) quedó absorbida en B151: misma raíz, misma población, cerrada por el mismo fix.
+- Registro de ausentes queda en cero conocidos; candidato siguiente del suplemento: gap Hotesur 348:18047-18076 (leer antes).
+
+### H189 — Estado final
+
+- **Corpus:** 5894 casos (5890→5892 B151 →5894 M46; +4 = Albornoz 329_p1484, Alnavi 329_p2965, Lombardi 333_p1966, Mercante 349_p43).
+- **Votos:** 27724 filas (27715 + 9: +7 Lombardi +2 Mercante; B151 ya sellado en 27715).
+- **Manifest:** [CLEAN] (re-sellado en ambos ciclos).
+
+**Outputs canónicos:**
+- `output/catalogo/catalogo.csv` — 6149 filas (v1.04).
+- `output/localizacion/fallos_localizados.csv` — 6149 filas.
+- `output/parser/csjn_casos.csv` — 5894 filas.
+- `output/parser/csjn_casos_votos.csv` — 27724 filas.
+- `output/parser/csjn_casos_zonas.csv` — ⟨copiar del manifest del sello final⟩ segmentos.
+- `output/parser/csjn_casos_epilogo.csv` — ⟨copiar del manifest⟩ filas.
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones.
+
+**Scripts creados:** `scripts/diagnostico/H189/` — `extraer_lote_h189.py`, `poc_b151_ancla_degradada.py` v0.1 (+ `fantasmas_b147_lote.md`, `poc_b151_rescates.csv`, `adjudicacion_b147_h189.csv`). Pipeline: `construir_catalogo.py` v1.01→v1.04. Dato nuevo: `_meta/catalogo_suplemento_editorial.csv`.
+
+**Commits:** 3 (① pipeline: construir_catalogo v1.04 + _meta/suplemento + scripts H189; ② outputs + golden + manifest de los dos ciclos; ③ docs: DEUDA/BITACORA/CHANGELOG).
