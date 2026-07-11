@@ -19504,3 +19504,49 @@ Los 5 recuperos E3-only leídos uno a uno: 2 limpios (329_p5467 multi-expediente
 **Scripts creados:** `scripts/diagnostico/H187/` — `poc_b145_mark_rec.py` v0.1 (constancia; paths de sandbox), `diff_partes_b145.py` v0.1.
 
 **Commits:** 2 — (1) fix: derivar_partes v0.18 + csjn_casos_partes.csv + _manifest.json; (2) docs (DEUDA + BITACORA + CHANGELOG) + scripts de diagnóstico H187.
+
+## H188 — M45 fase 1: adjudicación de las banderas de gramática de zonas + diagnóstico del bleed de frontera (2026-07-11)
+
+**Objetivo:** adjudicar en disco las dos poblaciones que M45 dejó sin mirar (epílogo-no-terminal 154, firma-antes-de-dispositivo 179), validando de paso el instrumento «gramática de zonas» del explorador v8 en su primer uso real. Sesión de diagnóstico: pipeline INTOCADO.
+
+### H188-01 — Validación del instrumento en disco (pendiente H186/H187)
+
+Las dos banderas del explorador v8 reproducen EXACTO sobre `csjn_casos_zonas.csv` real reimplementando `compute_zona_metrics._flags` en pandas: **epílogo-no-terminal = 154, firma-antes-de-dispositivo = 179** (idénticos al conteo H186). Queda saldado el pendiente H186/H187 «la validación que cierra es el primer uso en disco». Confirmado por lectura del explorador (Gate 2): NO zonifica — lee la columna `zona` que produce `parser.zonificar_bloque` (Lección H045 en su docstring). El cómputo de bandera es un chequeo posicional sobre la secuencia colapsada; el «modelado de multi-voto» de la constancia H186 es emergente del uso de índices de primera aparición, no una regla explícita.
+
+### H188-02 — Bandera 2 (firma-antes-de-dispositivo, 179): partición final
+
+Adjudicada por lectura de 16 `.md` extraídos con `extraer_caso.py` + alineación con `zonas.csv`. Partición corpus-wide (discriminador = wc del tramo firma pre-dispositivo + posición respecto del residuo):
+- **FP-A 64** — firma del caso previo alojada en la cola-residuo (wc≤30). Confirmado 4/4 por lectura: `329_p2179`, `333_p9`, `337_p346`, `341_p2019` (en los 4 el bloque abre a mitad del fallo anterior; la firma que dispara es la rúbrica del previo).
+- **residuo-miss 14** — firma del previo que la Pasada 3 no capturó como `residuo` (quedó `firma`+`epilogo` al tope). Testigo `330_p1927`.
+- **BUG-1 49** — `residuo`+`firma` etiquetan la CABEZA del propio caso. Testigos `334_p1461` (carátula+sumario como residuo), `333_p385` (dictamen entero ~1100 palabras en 4 segmentos `firma`).
+- **BUG-2 52** — `firma` dentro del cuerpo: excusaciones/asunción de jueces disparando `linea_es_firma_de_juez` (`329_p3649`, `339_p1371`) + miss de dispositivo «Que por lo expuesto…» (`329_p2596`).
+
+**Mis-zonificación genuina = 101/179 = 56%.** Corrección de método registrada: el pase estructural inicial (bucketeo por forma de secuencia) estimó «mayormente FP»; la lectura en disco lo dio vuelta — el dato mandó sobre el modelo mental. → B148 (firma), B149 (dispositivo).
+
+### H188-03 — Bandera 1 (epílogo-no-terminal, 154): es un detector de bleed de frontera
+
+No mide calidad de zonificación: mide contaminación de frontera de caso. Diagnóstico con `diag_frontera_b1.py` v0.3 (nuevo, read-only), corrido en disco. Discriminador central: cobertura del rango absoluto de la cola por el bloque `[linea_inicio, linea_fin_real]` de otros casos del mismo volumen (relatividad 0-based de `zonas.csv` verificada contra `329_p2218`/`329_p2614`/`329_p1480`). Partición: **51 carátula-suelta-1A · 27 fantasma-1B-fuerte · 19 fantasma-1B-ambiguo · 21 solape-1B' · 13 apéndice-1C · 23 epílogo-previo-FP** (= 154, testigos 6/6 OK). Réplica sandbox↔disco exacta.
+
+**Hallazgo mayor:** la familia B012/B045 (fallos ausentes del corpus) queda dimensionada por primera vez = **27-46 candidatos (~0,5-0,8% de 5697)**, concentrados en tomos 329-331. Testigos leídos: `329_p1480` (Tedesco+Albornoz, dos fallos en un `caso_id`; Albornoz sin fila), `346_p1564` (caso tragado como `epilogo`, fin de tomo), `329_p2614` (carátula Lacustre suelta), `339_p1530` (apéndice = 2ª resolución del mismo Club de Planeadores).
+
+### H188-04 — Findings del parser localizados en su capa real (por lectura)
+
+Leídos `zonificar_bloque` (~2746-2969), `detectar_fin_real` (~2477-2650) y el acople en `procesar_archivo` (3572-3610). Reparto por capa: **finding bleed = `detectar_fin_real`** (Pistas devuelven `k-1`, la carátula del siguiente queda 1-2 líneas adentro; el fantasma es catálogo upstream). **finding firma = `linea_es_firma_de_juez`** (satélite, no la máquina de estados; existe guard precedente `_en_sumario`/B076). **finding dispositivo = `detectar_apertura_dispositivo`** (satélite). **finding residuo-cabeza-propia = Pasada 3** (reclasificación incondicional a `residuo_caso_anterior`, 2951-2956; existe guard precedente 3b). Corrección de encuadre: NO era «cirugía en la máquina de estados» — 3 de 4 viven en detectores satélite.
+
+**Acople downstream verificado (el comentario 2751-2752 «uso futuro» quedó desactualizado):** la zona SÍ alimenta dato canónico — `lineas_dictamen` (zona `dictamen`) → `dictamen_presente` + entra a `resolver_dispositivo` + recorta considerando; `lineas_residuo` (zona `residuo`) → borra del `considerando_text` y del wc; `lineas_excluir`/M09 → máscara de `detectar_votos_disidencias`. Pero `outcome`/`por_ello` los decide `resolver_dispositivo`/`_barrer` sobre `lineas_dictamen`, no sobre la zona `dispositivo` → severidad del ripple a outcome de B148/B149 = TBD (medible solo por ciclo `--consciente`). Severidad neta por finding: bleed-1B (corrompe la fila entera) > residuo-cabeza (borra considerando real) > firma/dispositivo (mueven `zonas.csv`+`wc_*`, ripple a outcome TBD).
+
+### H188 — Estado final
+
+Pipeline INTOCADO (0 scripts de `scripts/pipeline/`, 0 outputs canónicos, 0 `__version__` de la cadena). Conteos heredados del sello H187, NO remedidos esta sesión:
+- **Corpus:** 5890 casos (5697 fallos) · is_merit 2965 == gate · is_originaria 596.
+- **Partes:** recurrente_ok 3882 (68,1%) · mérito 2677/2965 = 90,3%.
+- **Votos** 27699 · **Zonas** 140459 · **Editorial** 152 · Manifest **[CLEAN] 64** (sin re-sello — Paso 2 N/A).
+- **Versiones (verificadas en disco H188 por lectura, sin cambio):** parser 26.1 · extraer_epilogos 0.4 · derivar_partes 0.18 · derivar_materia 3.2 · derivar_recursos 0.6 · clasificador_disposicion 1.18 · correr_pipeline 1.0.
+
+**Scripts creados:** `scripts/diagnostico/H188/diag_frontera_b1.py` v0.3 (read-only, validador del finding B147; salida `diag_frontera_b1_out.csv`). Casos extraídos para adjudicación en `scripts/diagnostico/H188/` (20 `.md` vía `extraer_caso.py`).
+
+**DEUDA:** M45 → FASE 1 ADJUDICADA (partición completa de ambas banderas con testigos). Entradas nuevas: **B147** (bleed de frontera, 6 clases, familia B012/B045 dimensionada), **B148** (firma sobre-extiende), **B149** (dispositivo miss «Que por lo expuesto…»).
+
+**Decisiones de diseño:** (1) el diagnóstico va separado del fix (unidad atómica: el diff de un arreglo debe tener un solo culpable). (2) B147/B148/B149 quedan como unidades sucesoras; ninguna se abre sin antes leer su detector satélite y medir el acople por ciclo. (3) Decisión vigente reafirmada: madurar el pipeline antes del próximo κ — M43 va ÚLTIMA.
+
+**Commits:** 1 — (1) DEUDA (M45 adjudicado + B147/B148/B149) + BITACORA + `scripts/diagnostico/H188/` (diag_frontera_b1.py v0.3 + out.csv + 20 .md extraídos).
