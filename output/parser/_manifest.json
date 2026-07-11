@@ -1,9 +1,9 @@
 {
   "schema_version": 4,
   "manifest_generator_version": "1.8",
-  "generated_at": "2026-07-06T00:31:14.301950+00:00",
+  "generated_at": "2026-07-11T03:05:32.669892+00:00",
   "git": {
-    "commit": "c97207ff79806c053132433003256bf3505b85ff",
+    "commit": "ccb3e7e16320542a0579d36ea46bb0d59ac38409",
     "dirty": true
   },
   "pipeline_scripts": {
@@ -15,7 +15,7 @@
     "derivar_materia.py": "3.2",
     "derivar_recursos.py": "0.6",
     "extraer_epilogos.py": "0.4",
-    "derivar_partes.py": "0.17",
+    "derivar_partes.py": "0.18",
     "clasificador_disposicion.py": "1.18",
     "clasificador_via.py": "0.1",
     "clasificador_admision.py": "0.2",
@@ -395,10 +395,10 @@
     "csjn_casos_partes.csv": {
       "path": "output/parser/csjn_casos_partes.csv",
       "generated_by": "derivar_partes.py",
-      "generator_version": "0.17",
-      "sha256": "c2b0ca2466f5a49a83822a244caf15885f023d07e8944f136b7cc17ea7c8d6ec",
+      "generator_version": "0.18",
+      "sha256": "6ef71c06167a60426d3d4e7ef93a92385e5af17539956a2ade8534407bd68d49",
       "n_rows": 5890,
-      "n_bytes": 443212
+      "n_bytes": 445359
     }
   }
 }
