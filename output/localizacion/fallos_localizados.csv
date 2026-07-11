@@ -7,7 +7,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 329_p20,329,LibroVol329.1.md,20,28,569,873,"Ferrocarriles Metropolitanos S.A. y otros (Narváez, Claudio Jesús c/) | Narváez, Claudio Jesús c/ Ferrocarriles Metropolitanos S.A. y otros",2,ok
 329_p28,329,LibroVol329.1.md,28,40,874,1342,Municipalidad de La Plata y otro (Zubeldía y otros c/) | Zubeldía y otros c/ Municipalidad de La Plata y otro,2,ok
 329_p40,329,LibroVol329.1.md,40,47,1343,1609,Compañía Azucarera Concepción S.A. c/ Provincia de Tucumán y otro | Provincia de Tucumán y otro (Compañía Azucarera Concepción S.A. c/),2,ok
-329_p47,329,LibroVol329.1.md,47,49,1610,1682,"Conde, Juan José c/ Provincia de Buenos Aires y otro | Provincia de Buenos Aires y otro (Conde, Juan José c/) | Conapa Compañía Naviera Paraná S.A. (Alnavi S.A. c/): 2965. Conde, Juan José c/ Provincia de Buenos Aires y otro",3,ok
+329_p47,329,LibroVol329.1.md,47,49,1610,1682,"Conde, Juan José c/ Provincia de Buenos Aires y otro | Provincia de Buenos Aires y otro (Conde, Juan José c/)",2,ok
 329_p49,329,LibroVol329.1.md,49,53,1683,1830,"Cáceres, Valeria Beatriz c/ Provincia de La Rioja | Provincia de La Rioja (Cáceres, Valeria Beatriz c/)",2,ok
 329_p53,329,LibroVol329.1.md,53,59,1831,2052,"Juárez, Manuel Alberto y otra c/ Provincia de Catamarca | Provincia de Catamarca (Juárez, Manuel Alberto y otra c/) | (14) Juárez, Manuel Alberto y otra c/ Provincia de Catamarca",3,ok
 329_p59,329,LibroVol329.1.md,59,78,2053,2805,Nación Administradora de Fondos de Jubilaciones y Pensiones S.A. c/ Provincia de Santiago del Estero | Provincia de Santiago del Estero (Nación Administradora de Fondos de Jubilaciones y Pensiones S.A. c/) | Nación A.F.J.P. S.A. c/ Provincia de Santiago del Estero,3,ok
@@ -56,7 +56,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 329_p304,329,LibroVol329.1.md,304,309,11363,11561,"Facciuto, Omar Alberto y otros c/ Ministerio de Justicia | Ministerio de Justicia (Facciuto, Omar Alberto y otros c/)",2,ok
 329_p309,329,LibroVol329.1.md,309,314,11562,11759,"Compañía Transener S.A. y otro (Lagorio, Arnaldo Santiago c/) | Lagorio, Arnaldo Santiago c/ Compañía Transener S.A. y otro",2,ok
 329_p314,329,LibroVol329.1.md,314,317,11760,11869,Ciccone Calcográfica S.A. (Quadrum S.A. c/) | Quadrum S.A. c/ Ciccone Calcográfica S.A.,2,ok
-329_p317,329,LibroVol329.1.md,317,318,11870,11897,"Aldasoza Calderón, Sandra Elisabeth y otra c/ Posco, Magdalena Angela Luisa y otras | Posco, Magdalena Angela Luisa y otras (Aldasoza Calderón, Sandra Elisabeth y otra c/) | Albornoz Navor, José c/ Catering y Servicios S.A. y otro: 1484. Aldasoza Calderón, Sandra Elisabeth y otra c/ Posco, Magdalena Angela Luisa y otras",3,ok
+329_p317,329,LibroVol329.1.md,317,318,11870,11897,"Aldasoza Calderón, Sandra Elisabeth y otra c/ Posco, Magdalena Angela Luisa y otras | Posco, Magdalena Angela Luisa y otras (Aldasoza Calderón, Sandra Elisabeth y otra c/)",2,ok
 329_p318,329,LibroVol329.1.md,318,324,11898,12120,"Benítez, Sergio Rubén",1,ok
 329_p324,329,LibroVol329.1.md,324,326,12121,12187,"Construcciones Tevet c/ Malvaso, Nicolás y otro | Malvaso, Nicolás y otro (Construcciones Tevet c/)",2,ok
 329_p326,329,LibroVol329.1.md,326,329,12188,12286,"A.F.I.P. – Dirección General de Aduana y otro (Costanzo, Carlos Alberto y otra c/) | Costanzo, Carlos Alberto y otra c/ Administración Federal de Ingresos Públicos – Dirección General de Aduana y otro",2,ok
@@ -106,7 +106,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 329_p576,329,LibroVol329.1.md,576,584,21663,21968,"ANSeS (Tarditti, Marta Elena c/) | Tarditti, Marta Elena c/ ANSeS",2,ok
 329_p584,329,LibroVol329.1.md,584,595,21969,22410,"Caja de Retiros, Jubilaciones y Pensiones Policía Federal Argentina y otro (D‘Amore, Carlos y otro c/) | D‘Amore, Carlos y otro c/ Caja de Retiros, Jubilaciones y Pensiones Policía Federal Argentina y otro",2,ok
 329_p595,329,LibroVol329.1.md,595,617,22411,23319,Ente Regulador de la Electricidad de la Provincia de Santiago del Estero,1,ok
-329_p617,329,LibroVol329.1.md,617,619,23320,23390,"Catrupan, Narcizo y otros c/ Provincia del Neuquén y otros | Provincia del Neuquén y otros (Catrupan, Narcizo y otros c/) | Catering y Servicios S.A. y otro (Albornoz Navor, José c/): 1484. Catrupan, Narcizo y otros c/ Provincia del Neuquén y otros",3,ok
+329_p617,329,LibroVol329.1.md,617,619,23320,23390,"Catrupan, Narcizo y otros c/ Provincia del Neuquén y otros | Provincia del Neuquén y otros (Catrupan, Narcizo y otros c/)",2,ok
 329_p619,329,LibroVol329.1.md,619,620,23391,23417,"Cavallo, Ricardo Miguel",1,ok
 329_p620,329,LibroVol329.1.md,620,622,23418,23476,"Scheller, Raúl Enrique",1,ok
 329_p622,329,LibroVol329.1.md,622,623,23477,23504,"Ferrero, Claudia y otros",1,ok
@@ -225,7 +225,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 329_p1377,329,LibroVol329.2.md,1377,1380,110,224,"Fleitas, Daniel Aníbal y otros c/ Nación Argentina | Nación Argentina (Fleitas, Daniel Aníbal y otros c/)",2,ok
 329_p1380,329,LibroVol329.2.md,1380,1383,225,332,"Camnasi, Lidia Susana c/ Municipalidad de la Ciudad de Buenos Aires | Municipalidad de la Ciudad de Buenos Aires (Camnasi, Lidia Susana c/)",2,ok
 329_p1383,329,LibroVol329.2.md,1383,1385,333,409,"Sauco, Omar René y otros",1,ok
-329_p1385,329,LibroVol329.2.md,1385,1389,410,551,"Rizzo, Jorge Gabriel y otros c/ Ministerio de Trabajo y otros",1,ok
+329_p1385,329,LibroVol329.2.md,1385,1389,410,551,"Ministerio de Trabajo y otros (Rizzo, Jorge Gabriel y otros c/:) | Rizzo, Jorge Gabriel y otros c/ Ministerio de Trabajo y otros",2,ok
 329_p1389,329,LibroVol329.2.md,1389,1391,552,626,"Maldonado, Héctor Sergio c/ Ministerio de Justicia | Ministerio de Justicia de la Nación (Maldonado, Héctor Sergio c/)",2,ok
 329_p1391,329,LibroVol329.2.md,1391,1397,627,864,"Muñoz, Ricardo Martín c/ Provincia de San Luis | Provincia de San Luis (Muñoz, Ricardo Martín c/)",2,ok
 329_p1397,329,LibroVol329.2.md,1397,1399,865,936,Credibono Compañía Financiera S.A.,1,ok
@@ -237,7 +237,8 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 329_p1440,329,LibroVol329.2.md,1440,1447,2522,2785,"Barrientos, Luis Hugo c/ E.N.Tel. | E.N.Tel. (Barrientos, Luis Hugo c/)",2,ok
 329_p1447,329,LibroVol329.2.md,1447,1473,2786,3838,"Olmos, José Horacio",1,ok
 329_p1473,329,LibroVol329.2.md,1473,1480,3839,4113,"Ministerio de Justicia de la Nación (Sánchez, Dora Cristina c/) | Sánchez, Dora Cristina c/ Ministerio de Justicia",2,ok
-329_p1480,329,LibroVol329.2.md,1480,1487,4114,4348,"Tedesco, Juan Carlos y otros",1,ok
+329_p1480,329,LibroVol329.2.md,1480,1484,4114,4250,"Tedesco, Juan Carlos y otros",1,ok
+329_p1484,329,LibroVol329.2.md,1484,1487,4251,4348,"Albornoz Navor, José c/ Catering y Servicios S.A. y otro | Catering y Servicios S.A. y otro (Albornoz Navor, José c/)",2,ok
 329_p1487,329,LibroVol329.2.md,1487,1488,4349,4379,"Ampuero Villarroel, María Gladys",1,ok
 329_p1488,329,LibroVol329.2.md,1488,1490,4380,4446,"Alarcón, Marcelo Gabriel c/ Wall Mart Argentina S.A. | Wall Mart Argentina S.A. (Alarcón, Marcelo Gabriel c/) | Alarcón, Marcelo Gabriel c/ Wal Mart Argentina S.A. | Wal Mart Argentina S.A. (Alarcón, Marcelo Gabriel c/)",4,ok
 329_p1490,329,LibroVol329.2.md,1490,1493,4447,4549,"Comignani, Luis Silvio c/ Perlui S.A. | Perlui S.A. (Comignani, Luis Silvio c/)",2,ok
@@ -370,8 +371,8 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 329_p2212,329,LibroVol329.2.md,2212,2217,31752,31940,Provincia del Neuquén c/ Yacimientos Petrolíferos Fiscales S.A. | Y.P.F. S.A. (Provincia del Neuquén c/),2,ok
 329_p2217,329,LibroVol329.2.md,2217,2218,31941,31967,"Azar, Musa y otros",1,ok
 329_p2218,329,LibroVol329.2.md,2218,2219,31968,31996,"Bergés, Jorge Antonio",1,ok
-329_p2219,329,LibroVol329.2.md,2219,2221,31997,32059,"Catering y Servicios S.A. y otro (Albornoz Navor, José c/): 1484. Chabán, Omar Emir | Chabán, Omar Emir",2,ok
-329_p2221,329,LibroVol329.2.md,2221,2223,32060,32125,"Catering y Servicios S.A. y otro (Albornoz Navor, José c/): 1484. Chabán, Omar Emir | Figueiredo Do Nascimento, Ignez Helena c/ Malagoli, Enrique y otros | Malagoli, Enrique y otros (Figueiredo Do Nascimento, Ignez Helena c/) | Chabán, Omar Emir",4,ok
+329_p2219,329,LibroVol329.2.md,2219,2221,31997,32059,"Chabán, Omar Emir",1,ok
+329_p2221,329,LibroVol329.2.md,2221,2223,32060,32125,"Chabán, Omar Emir | Figueiredo Do Nascimento, Ignez Helena c/ Malagoli, Enrique y otros | Malagoli, Enrique y otros (Figueiredo Do Nascimento, Ignez Helena c/)",3,ok
 329_p2223,329,LibroVol329.2.md,2223,2224,32126,32154,"Sheller, Raúl Enrique",1,ok
 329_p2224,329,LibroVol329.2.md,2224,2226,32155,32226,Compañía Nacional Azucarera S.A. (S.A. Compañía Azucarera Tucumana c/) | S.A. Compañía Azucarera Tucumana c/ Compañía Nacional Azucarera,2,ok
 329_p2226,329,LibroVol329.2.md,2226,2231,32227,32413,Asociación de Trabajadores del Estado c/ Provincia de Misiones | Provincia de Misiones (Asociación Trabajadores del Estado c/),2,ok
@@ -382,7 +383,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 329_p2251,329,LibroVol329.2.md,2251,2253,33165,33235,"ANSeS c/ García, Marisa Silvia | García, Marisa Silvia (ANSeS c/)",2,ok
 329_p2253,329,LibroVol329.2.md,2253,2256,33236,33345,"Ballarini, Edgardo Adrián c/ Transportes Depego S.R.L. | Transportes Depego S.R.L. (Ballarini, Edgardo Adrián c/)",2,ok
 329_p2256,329,LibroVol329.2.md,2256,2258,33346,33408,"Domínguez, Ricardo",1,ok
-329_p2258,329,LibroVol329.2.md,2258,2261,33409,33514,"Albornoz Navor, José c/ Catering y Servicios S.A. y otro: 1484. Alper, Angel Mario y otro | Alnavi S.A. c/ Conapa Compañía Naviera Paraná S.A.: 2965. Alper, Angel Mario y otro",2,ok
+329_p2258,329,LibroVol329.2.md,2258,2261,33409,33514,"Alper, Angel Mario y otro",1,ok
 329_p2261,329,LibroVol329.2.md,2261,2263,33515,33587,"ANSeS (Ríos, Beatriz c/) | Ríos, Beatriz c/ ANSeS",2,ok
 329_p2263,329,LibroVol329.2.md,2263,2265,33588,33651,"Cabeza, Daniel Vicente y otros",1,ok
 329_p2265,329,LibroVol329.2.md,2265,2274,33652,34004,"Cardozo, Gustavo Fabián",1,ok
@@ -496,7 +497,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 329_p2864,329,LibroVol329.2.md,2864,2874,56260,56634,"Oliván, Alfredo",1,ok
 329_p2874,329,LibroVol329.2.md,2874,2876,56635,56696,"Noro Villagra, Lucrecia",1,ok
 329_p2876,329,LibroVol329.2.md,2876,2886,56697,57093,Banco Central de la República Argentina c/ Banco Patricios S.A. | Banco Patricios S.A. (Banco Central de la República Argentina c/),2,ok
-329_p2886,329,LibroVol329.2.md,2886,2890,57094,57235,"Daus, Oscar Normando c/ Ministerio del Interior y otros | Ministerio de Trabajo y otros (Rizzo, Jorge Gabriel y otros c/:) p. 1385. Ministerio del Interior y otros (Daus, Oscar Normando c/) | Ministerio del Interior y otros (Daus, Oscar Normando c/)",3,ok
+329_p2886,329,LibroVol329.2.md,2886,2890,57094,57235,"Daus, Oscar Normando c/ Ministerio del Interior y otros | Ministerio del Interior y otros (Daus, Oscar Normando c/)",2,ok
 329_p2890,329,LibroVol329.2.md,2890,2896,57236,57474,"Díaz Cabral, Marcelo Gonzalo y otros c/ Ministerio de Justicia de la Nación | Ministerio de Justicia de la Nación (Díaz Cabral, Marcelo Gonzalo y otros c/)",2,ok
 329_p2896,329,LibroVol329.2.md,2896,2897,57475,57511,"Mecikovsky, Jaime Leonardo y otro",1,ok
 329_p2897,329,LibroVol329.2.md,2897,2903,57512,57731,"Núñez, Fernando Ernesto y otra c/ Provincia de Buenos Aires y otros | Provincia de Buenos Aires y otros (Núñez, Fernando Ernesto y otra c/)",2,ok
@@ -516,7 +517,8 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 329_p2944,329,LibroVol329.2.md,2944,2946,59233,59299,"Gómez Segura, Juan Cruz",1,ok
 329_p2946,329,LibroVol329.2.md,2946,2948,59300,59366,"Pozzo, Norma Susana",1,ok
 329_p2948,329,LibroVol329.2.md,2948,2949,59367,59395,"Righi, Ricardo y otros",1,ok
-329_p2949,329,LibroVol329.2.md,2949,2967,59396,72062,Provincia de Tucumán c/ Timen S.A. | Timen S.A. (Provincia de Tucumán c/),2,fallo_cruza_archivos
+329_p2949,329,LibroVol329.2.md,2949,2965,59396,72062,Provincia de Tucumán c/ Timen S.A. | Timen S.A. (Provincia de Tucumán c/),2,fallo_cruza_archivos
+329_p2965,329,LibroVol329.3.md,2965,2967,38,106,Alnavi S.A. c/ Conapa Compañía Naviera Paraná S.A. | Conapa Compañía Naviera Paraná S.A. (Alnavi S.A. c/),2,ok
 329_p2967,329,LibroVol329.3.md,2967,2975,107,409,Cruz Suiza Compañía de Seguros de Vida y Salud S.A.,1,ok
 329_p2975,329,LibroVol329.3.md,2975,2985,410,795,Dirección de Vialidad de la Provincia de Buenos Aires (Edesur S.A. c/) | (3) Edesur S.A. c/ Dirección de Vialidad de la Provincia de Buenos Aires | (9) Edesur S.A. c/ Dirección de Vialidad de la Provincia de Buenos Aires,3,ok
 329_p2985,329,LibroVol329.3.md,2985,2986,796,828,"(4) Fernández, Adrián Eduardo c/ Medina, Araldo Alfredo y otro | (6) Medina, Araldo Alfredo y otro (Fernández, Adrián Eduardo c/) | Fernández, Adrián Eduardo c/ Medina, Araldo Alfredo y otro | Medina, Araldo Alfredo y otro (Fernández, Adrián Eduardo c/)",4,ok
@@ -934,7 +936,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 329_p5518,329,LibroVol329.4.md,5518,5520,24036,24102,"INPS – Caja Nacional de Previsión para el Personal del Estado y Servicios Públicos (Lobo, Nilda Flérida c/) | Lobo, Nilda Flérida c/ INPS – Caja Nacional de Previsión para el Personal del Estado y Servicios Públicos",2,ok
 329_p5520,329,LibroVol329.4.md,5520,5525,24103,24287,"Instituto de Seguridad Social (Luna, Nicolás Celindo c/) | Luna, Nicolás Celindo c/ Instituto de Seguridad Social",2,ok
 329_p5525,329,LibroVol329.4.md,5525,5528,24288,24404,"ANSeS (Pellegrini, Américo c/) | Pellegrini, Américo c/ ANSeS",2,ok
-329_p5528,329,LibroVol329.4.md,5528,5531,24405,24510,"Altopiedi, Hilda Isabel y otros c/ Ministerio del Interior | Ministerio de Trabajo y otros (Rizzo, Jorge Gabriel y otros c/:) p. 1385. Ministerio del Interior (Altopiedi, Hilda Isabel y otros c/)",2,ok
+329_p5528,329,LibroVol329.4.md,5528,5531,24405,24510,"Altopiedi, Hilda Isabel y otros c/ Ministerio del Interior | Ministerio del Interior (Altopiedi, Hilda Isabel y otros c/)",2,ok
 329_p5531,329,LibroVol329.4.md,5531,5534,24511,24619,"De Cristófaro, Horacio José c/ Provincia de Buenos Aires (I.P.S.) | Provincia de Buenos Aires (I.P.S.) (De Cristófaro, Horacio José c/)",2,ok
 329_p5534,329,LibroVol329.4.md,5534,5543,24620,24885,"Kasansew, Nicolás y otros c/ Ministerio de Desarrollo Social y Medio Ambiente – Comisión Nacional de Pensiones Asistenciales | Ministerio de Desarrollo Social y Medio Ambiente – Comisión Nacional de Pensiones Asistenciales (Kasansew, Nicolás y otros c/)",2,ok
 329_p5543,329,LibroVol329.4.md,5543,5550,24886,25164,"Aragnelli, Carmen Ana c/ Nación Argentina y otros (Buenos Aires citada como tercero) | Nación Argentina y otros (Buenos Aires citada como tercero) (Aragnelli, Carmen Ana c/)",2,ok
@@ -1197,7 +1199,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 330_p743,330,LibroVol330.1.md,743,745,28142,28212,"Altube, Fernanda B. y otros",1,ok
 330_p745,330,LibroVol330.1.md,745,747,28213,28283,"Ministerio de Relaciones Exteriores, Comercio Internacional y Culto de la Nación",1,ok
 330_p747,330,LibroVol330.1.md,747,748,28284,28311,"Amadeo de Roth, Angélica Lía c/ Provincia de Salta | Provincia de Salta (Amadeo de Roth, Angélica Lía c/) | Roth, Angélica Lía Amadeo de c/ Provincia de Salta",3,ok
-330_p748,330,LibroVol330.1.md,748,778,28312,29540,"Provincia de Buenos Aires (Albornoz, Luis Roberto c/)",1,ok
+330_p748,330,LibroVol330.1.md,748,778,28312,29540,"Albornoz, Luis Roberto y otro c/ Provincia de Buenos Aires | Provincia de Buenos Aires (Albornoz, Luis Roberto c/)",2,ok
 330_p778,330,LibroVol330.1.md,778,780,29541,29615,Dimensión Integral de Radiodifusión S.R.L. c/ Provincia de San Luis | Provincia de San Luis (Dimensión Integral de Radiodifusión S.R.L. c/),2,ok
 330_p780,330,LibroVol330.1.md,780,785,29616,29805,Instituto de Servicios Sociales Bancarios c/ Provincia de Tucumán y otros | Provincia de Tucumán y otros (Instituto de Servicios Sociales Bancarios c/),2,ok
 330_p785,330,LibroVol330.1.md,785,789,29806,29955,"Provincia de Santa Fe y otro (Silva, Rosa Isabel c/) | Silva, Rosa Isabel c/ Provincia de Santa Fe y otro",2,ok
@@ -1223,7 +1225,7 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 330_p971,330,LibroVol330.1.md,971,1008,37088,38581,EMM S.R.L. c/ Tía S.A. | Tía S.A. (EMM S.R.L. c/),2,ok
 330_p1008,330,LibroVol330.1.md,1008,1013,38582,38760,"Fiore, Sabina Inés",1,ok
 330_p1013,330,LibroVol330.1.md,1013,1016,38761,38862,"P.E.N. – B.C.R.A. y B.N.A. (Risueño, Salvador Esteban y otro c/) | Risueño, Salvador Esteban y otra c/ P.E.N. – B.C.R.A. y otro/a.",2,ok
-330_p1016,330,LibroVol330.1.md,1016,1025,38863,39217,"Albornoz, Luis Roberto y otro c/ Provincia de Buenos Aires p. 748. Alcaráz, Oscar A.",1,ok
+330_p1016,330,LibroVol330.1.md,1016,1025,38863,39217,"Alcaráz, Oscar A.",1,ok
 330_p1025,330,LibroVol330.1.md,1025,1026,39218,39247,"Barone, Miryan E.",1,ok
 330_p1026,330,LibroVol330.1.md,1026,1034,39248,39544,Banco Extrader S.A.,1,ok
 330_p1034,330,LibroVol330.1.md,1034,1035,39545,39574,"Antonini Modet, Martiniano Edmundo y otra (Banco Hipotecario S.A. y otro c/) | Banco Hipotecario S.A. y otro c/ Antonini Modet, Martiniano Edmundo y otra",2,ok
@@ -2753,7 +2755,8 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 333_p1942,333,LibroVol333.3.md,1942,1946,2260,2414,ATCO I S.A. (TF 18.015-I) | D.G.I.,2,ok
 333_p1946,333,LibroVol333.3.md,1946,1951,2415,2597,Arcaval S.A.,1,ok
 333_p1951,333,LibroVol333.3.md,1951,1959,2598,2909,Universidad Nacional de Córdoba | Estado Nacional,2,ok
-333_p1959,333,LibroVol333.3.md,1959,1979,2910,3665,"Administración de Parques Nacionales | San Luis, Provincia de",2,ok
+333_p1959,333,LibroVol333.3.md,1959,1966,2910,3174,"Administración de Parques Nacionales | San Luis, Provincia de",2,ok
+333_p1966,333,LibroVol333.3.md,1966,1979,3175,3665,"Lombardi, Ricardo Jorge s/ extradición",1,ok
 333_p1979,333,LibroVol333.3.md,1979,1987,3666,3983,"Cavaliere, Francisco | Esso S.A.P.A.",2,ok
 333_p1987,333,LibroVol333.3.md,1987,2001,3984,4526,"Oliva Gerli, Carlos Atilio y otro",1,ok
 333_p2001,333,LibroVol333.3.md,2001,2010,4527,4863,"Ruíz, Daniel",1,ok
@@ -6107,7 +6110,8 @@ caso_id_canonico,tomo,archivo,pagina_inicio,pagina_fin,linea_inicio,linea_fin,no
 349_p25,349,LibroVol349-1.md,25,28,940,1043,"Obra Social para la Actividad Docente (OSPLAD) c/ Salta, Provincia de s/ ejecución fiscal",1,ok
 349_p28,349,LibroVol349-1.md,28,34,1044,1268,"Lavrentiev, Dmitri s/ extradición",1,ok
 349_p34,349,LibroVol349-1.md,34,40,1269,1502,"Arias, Alan Nicolás c/ Asociart S.A. ART s/ accidente - ley especial",1,ok
-349_p40,349,LibroVol349-1.md,40,53,1503,1980,"Décima, Verónica Mabel c/ ISS Argentina S.A. y otro s/ despido",1,ok
+349_p40,349,LibroVol349-1.md,40,43,1503,1600,"Décima, Verónica Mabel c/ ISS Argentina S.A. y otro s/ despido",1,ok
+349_p43,349,LibroVol349-1.md,43,53,1601,1980,Y.P.F. S.A. c/ Mercante Hnos. S.A.C.I. y otros s/ cobro de sumas de dinero,1,ok
 349_p53,349,LibroVol349-1.md,53,60,1981,2256,"Becerra, Maximiliano Sebastián c/ EN – M Seguridad – PFA s/ Personal Militar y Civil de las FFAA y de Seg.",1,ok
 349_p60,349,LibroVol349-1.md,60,62,2257,2328,"Vargas, Luciano Sebastián s/ incidente de recurso extraordinario",1,ok
 349_p62,349,LibroVol349-1.md,62,73,2329,2766,"Martín, Ava y otros c/ Estado Nacional Ministerio de Justicia y otros s/ responsabilidad extracontractual del Estado",1,ok

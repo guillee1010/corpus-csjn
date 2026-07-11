@@ -237,7 +237,8 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p1440,Telecom Argentina Stet France – Telecom S.A.,,Hugo Barrientos y otros,,no,epilogo,epilogo:recurso+traslado
 329_p1447,José Horacio Olmos y Guillermo Augusto De Guernica,,Alberto M. Tribug,mp_fiscal,no,epilogo,epilogo:recurso+traslado
 329_p1473,Dora Cristina Sánchez,,Estado Nacional,,no,epilogo,epilogo:recurso+traslado
-329_p1480,Jockey Club,codemandada,,,no,epilogo,epilogo:recurso
+329_p1480,,,,,,epilogo,sin_marcador_recurso
+329_p1484,Jockey Club,codemandada,,,no,epilogo,epilogo:recurso
 329_p1487,,demandada,,,no,caratula,caratula:rol_sin_nombre
 329_p1488,Wal Mart Argentina S.A.,,,,no,epilogo,epilogo:recurso
 329_p1490,Perlui S.A.,,,,no,epilogo,epilogo:recurso
@@ -369,7 +370,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p2206,Jorge Aníbal Gobet,,Estado Nacional,,no,epilogo,epilogo:recurso+traslado
 329_p2212,Fiscalía de Estado de la Provincia del Neuquén,actora,Y.P.F. S.A.,demandada,no,epilogo,epilogo:recurso+traslado
 329_p2217,Musa Antonio Azar,,,,no,epilogo,epilogo:recurso
-329_p2218,Musa Antonio Azar,,,,no,epilogo,epilogo:recurso
+329_p2218,Jorge Antonio Bergés,penal,el,penal,no,epilogo,epilogo:recurso+traslado
 329_p2219,Omar Emir Chabán,,,,no,epilogo,epilogo:recurso
 329_p2221,imputado Omar Emir Chabán,penal,,,no,epilogo,epilogo:recurso
 329_p2223,"Nélida del Carmen Pizarro de Fidalgo, Daniel Tarnopolsky, Angélica Paula Sosa de Mignone, Sara y Mauricio Brodsky, Gladys y Angel Lepiscopo y León Ferrari del Pardo, Marina Girondo y Horacio Verbitsky",,,,no,epilogo,epilogo:recurso
@@ -517,6 +518,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p2946,,,,,,sin_epilogo,sin_zona
 329_p2948,,,,,,epilogo,sin_marcador_recurso
 329_p2949,,,,,,epilogo,sin_marcador_recurso
+329_p2965,1) Conapa Compañía Naviera Paraná S.A.; 2) El síndico Horacio O. Araya; 3) Alnavi S.A.,,,,no,epilogo,epilogo:recurso
 329_p2967,Cruz Suiza Compañía de Seguros de Vida y Salud S.A.,,Superintendencia de Seguros de la Nación,,no,epilogo,epilogo:recurso+traslado
 329_p2975,Empresa Distribuidora Sur Sociedad Anónima (EDESUR S.A.),,Estado Nacional – Ministerio de Economía,penal,no,epilogo,epilogo:recurso+traslado
 329_p2985,Araldo Alfredo Medina y Alicia María Gómez,,,,no,epilogo,epilogo:recurso
@@ -2753,7 +2755,8 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 333_p1942,,,,,,epilogo,sin_marcador_recurso
 333_p1946,"Artemia Estévez Paradelo, Vda. De Prada, Susana Prada Estévez y María José Prada Estévez",demandada,Patricia Li Rosi,actora,no,epilogo,epilogo:recurso+traslado
 333_p1951,Universidad Nacional de Córdoba,,G. T.,,no,epilogo,epilogo:recurso+traslado
-333_p1959,Ricardo Jorge Lombardi,,el,penal,no,epilogo,epilogo:recurso+traslado
+333_p1959,,,,,,epilogo,sin_marcador_recurso
+333_p1966,Ricardo Jorge Lombardi,,el,penal,no,epilogo,epilogo:recurso+traslado
 333_p1979,Francisco Cavaliere,actora,,,no,epilogo,epilogo:recurso
 333_p1987,"Carlos Atilio Oliva Gerli y Carlos Javier Barbará, por sus propios derechos",,,,no,epilogo,epilogo:recurso
 333_p2001,Dirección General de Aduanas,,,,no,epilogo,epilogo:recurso
@@ -5853,6 +5856,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 349_p28,Dmitri Lavrentiev,penal,,,no,epilogo,epilogo:recurso
 349_p34,Asociart S.A. Aseguradora de Riesgos del Trabajo -demandada-,demandada,,,no,epilogo,epilogo:recurso
 349_p40,MTV Networks Argentina S.R.L.,demandada,,,no,epilogo,epilogo:recurso
+349_p43,Mercante Hermanos Sociedad Anónima,,,,no,epilogo,epilogo:recurso
 349_p53,Estado Nacional – Ministerio de Seguridad – Policía Federal Argentina -,demandada,Maximiliano Sebastián Becerra,actora,no,epilogo,epilogo:recurso+traslado
 349_p60,Nicolás Amelotti,mp_fiscal,,,no,epilogo,epilogo:recurso
 349_p62,Estado Nacional - Ministerio de Justicia y DDHH - Poder Judicial de la Nación,demandada,,,no,epilogo,epilogo:recurso
