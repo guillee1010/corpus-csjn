@@ -1,14 +1,14 @@
 {
   "schema_version": 4,
   "manifest_generator_version": "1.8",
-  "generated_at": "2026-07-11T07:47:43.351275+00:00",
+  "generated_at": "2026-07-11T22:36:55.859506+00:00",
   "git": {
-    "commit": "cd0e8b662946eedbc08cc65fac13299e4630511b",
+    "commit": "e5ef0ebebcf3984b10afdd5c9c86c9fd78bd6f6b",
     "dirty": true
   },
   "pipeline_scripts": {
     "detectar_paginas.py": "1.01",
-    "construir_catalogo.py": "1.03",
+    "construir_catalogo.py": "1.04",
     "cruzar_catalogo_y_mapa.py": "1.0",
     "parser.py": "26.1",
     "parser_editorial.py": "1.0",
@@ -305,7 +305,7 @@
     "catalogo.csv": {
       "path": "output/catalogo/catalogo.csv",
       "generated_by": "construir_catalogo.py",
-      "generator_version": "1.03",
+      "generator_version": "1.04",
       "sha256": "9d96d42edddf0181f13260ae430666ee9c9fc6a3f50b2255f8c3c0196705a782",
       "n_rows": 6149,
       "n_bytes": 682752
@@ -313,7 +313,7 @@
     "secciones_indices.csv": {
       "path": "output/catalogo/secciones_indices.csv",
       "generated_by": "construir_catalogo.py",
-      "generator_version": "1.03",
+      "generator_version": "1.04",
       "sha256": "209aa6ad84260dd5f455a8cdb3e86f85d7e86bdaa4bdb2d74e23fe1d7e3df3c2",
       "n_rows": 147,
       "n_bytes": 6332
