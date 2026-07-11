@@ -86,7 +86,7 @@ USO
       --verbose
 """
 
-__version__ = "1.03"  # H189 (suplemento editorial): merge de _meta/catalogo_suplemento_editorial.csv — entradas curadas por lectura para fallos que el índice oficial de la Secretaría de Jurisprudencia OMITE (error editorial de origen, no del parser; testigos: Lombardi 333:1973, YPF c/Mercante 349). Dato versionado en git, no heurística: cero regex, cero body-scan, cada fila con fuente_verificacion. Se agrupa por (tomo,página) en el flujo normal → pagina_fin por inferencia global, cruce/parser sin cambios. Idempotente si la página ya existe (merge de nombres). // v1.02 H189 (B151): rescate de entradas con ancla degradada por OCR — 2ª pasada RE_ANCLA_DEG dentro de parsear_indice_nombres, sobre las carátulas que dejó la pasada estricta (RE_ANCLA intacta). Variantes: ':' sin 'p.' (": 1484.") y 'p.' sin ':' ("p. 748."). Guards: 1-4 dígitos, punto final obligatorio, página en rango [min,max] de las anclas estrictas del mismo bloque, carátula ≥8 chars con letras. Flip-set medido por PoC en disco (poc_b151_ancla_degradada v0.1, H189): 10 rescates / 14.406 entradas (0,07%) = 2 páginas nuevas (329:1484 Albornoz, 329:2965 Alnavi — fallos fantasma B012/B045 verificados por lectura) + polución de nombre limpiada en 329:1385 y 330:748. // v1.01 H109 (B115)
+__version__ = "1.04"  # H189-b: path del suplemento robusto — el default CWD-relative fallaba SILENCIOSO al correr desde la raíz del repo (../../_meta resolvía fuera del repo); ahora fallback anclado al script (parents[2]/_meta) + aviso explícito SIEMPRE (cargado con conteo, o "no encontrado — se omite"; un no-op silencioso viola el contrato de adjudicación). // v1.03 H189 (suplemento editorial): merge de _meta/catalogo_suplemento_editorial.csv — entradas curadas por lectura para fallos que el índice oficial de la Secretaría de Jurisprudencia OMITE (error editorial de origen, no del parser; testigos: Lombardi 333:1973, YPF c/Mercante 349). Dato versionado en git, no heurística: cero regex, cero body-scan, cada fila con fuente_verificacion. Se agrupa por (tomo,página) en el flujo normal → pagina_fin por inferencia global, cruce/parser sin cambios. Idempotente si la página ya existe (merge de nombres). // v1.02 H189 (B151): rescate de entradas con ancla degradada por OCR — 2ª pasada RE_ANCLA_DEG dentro de parsear_indice_nombres, sobre las carátulas que dejó la pasada estricta (RE_ANCLA intacta). Variantes: ':' sin 'p.' (": 1484.") y 'p.' sin ':' ("p. 748."). Guards: 1-4 dígitos, punto final obligatorio, página en rango [min,max] de las anclas estrictas del mismo bloque, carátula ≥8 chars con letras. Flip-set medido por PoC en disco (poc_b151_ancla_degradada v0.1, H189): 10 rescates / 14.406 entradas (0,07%) = 2 páginas nuevas (329:1484 Albornoz, 329:2965 Alnavi — fallos fantasma B012/B045 verificados por lectura) + polución de nombre limpiada en 329:1385 y 330:748. // v1.01 H109 (B115)
 
 
 import argparse
@@ -762,14 +762,25 @@ def main():
     # Fallos que el índice oficial omite, adjudicados por lectura. Entra al
     # mismo agrupado por (tomo, página): pagina_fin por inferencia global,
     # cruce y parser sin cambios. Idempotente si la página ya tiene entrada.
-    suplemento = cargar_suplemento_editorial(args.suplemento)
+    ruta_sup = args.suplemento
+    if not ruta_sup.is_file():
+        # v1.04: el default era CWD-relative y fallaba silencioso al correr
+        # desde la raíz del repo. Fallback anclado al script (scripts/pipeline/
+        # → raíz = parents[2]).
+        alt = Path(__file__).resolve().parents[2] / '_meta' / 'catalogo_suplemento_editorial.csv'
+        if alt.is_file():
+            ruta_sup = alt
+    suplemento = cargar_suplemento_editorial(ruta_sup)
     if suplemento:
         n_sup = sum(len(v) for v in suplemento.values())
-        print(f"[suplemento editorial] {args.suplemento}: {n_sup} entrada(s) "
+        print(f"[suplemento editorial] {ruta_sup}: {n_sup} entrada(s) "
               f"en tomos {sorted(suplemento)}", file=sys.stderr)
         for tomo, entradas_sup in suplemento.items():
             clave = (tomo, "_suplemento_editorial")
             entradas_por_archivo.setdefault(clave, []).extend(entradas_sup)
+    else:
+        print(f"[suplemento editorial] no encontrado ({ruta_sup}) — se omite",
+              file=sys.stderr)
 
     filas_catalogo = construir_filas_catalogo(entradas_por_archivo)
 
