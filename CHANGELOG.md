@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H192 (2026-07-12)
+
+- `_meta/jueces/jueces_csjn.csv`: 74→87 entradas — B154 CERRADO: +13 conjueces (Müller, Aranguren B.E., Irurzun, Lozano, Boldú, Sánchez A.G., Barreiro, Sotelo de Andreau, Bejas, Candisano Mera, Llorens, Moltini, González R.L.) + 2 ensanches (Leal de Ibarra inicial «M.»; Tazza OCR «Alejando»). Ciclo de DATO: parser v28.0 sin cambio de código.
+- `output/parser/csjn_casos.csv`: 5894 filas (sin Δ de filas) — n_jueces/jueces/conocidos/desconocidos/posiciones en 24 casos; 1 flip voting_pattern TP (344_p1557 → mixed).
+- `output/parser/csjn_casos_votos.csv`: 27818 filas (+45).
+- `output/parser/csjn_casos_zonas.csv`: 138648 filas (+10; 7 casos — 2 TP + 5 FP clase-B148 con constancia, daño canónico cero).
+- `output/parser/csjn_casos_textos.csv`: byte-idéntico a H191 (candado blind intacto por construcción).
+- Golden re-congelado + `_manifest.json` re-sellado [CLEAN] 64.
+- `scripts/diagnostico/H192/`: diff_casos_b154.py · diff_zonas_b154.py (diff alineado por caso_id, reusable en ciclos MAJOR) · poc_b148_cardinalidad.py v0.1 · dump_b148_tramos.py v0.1 (scratch de sesión, no canónico).
+
 ## H191 (2026-07-11)
 
 - `scripts/pipeline/parser.py` v27.1→**v28.0** (MAJOR): (i) `JUECES_CONOCIDOS` externalizado a dato — loader `_cargar_jueces_conocidos()` desde `_meta/jueces/jueces_csjn.csv`, fail-fast; (ii) columna `jueces_desconocidos` re-conectada (muerta por construcción desde su creación). 35 casos con panel corregido (+48 jueces, 0 pérdidas) + ripple de frontera TP (firma_raw recuperada en 5 casos).

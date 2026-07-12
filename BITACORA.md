@@ -19685,3 +19685,49 @@ Ciclo consciente corrido; **falla de método documentada: el `--regolden` corri�
 **Pendiente de cierre:** candado blind (textos.csv cambió en 5 filas de firma_raw; correr `build_m20` + `git status` — esperado byte-idéntico porque la clave no lee firma_raw; si aparece modificada, FRENAR y re-validar).
 
 **Commits:** 2 (① pipeline+dato+golden+manifest+scripts H191; ② docs: DEUDA/BITACORA/CHANGELOG).
+
+## H192 — B154 CERRADO (jueces: ciclo de dato 74→87) + diagnóstico B148 completo, fix A diseñado (2026-07-12)
+
+**Objetivo:** cerrar B154 (conjueces residuales del ciclo H191) con el dispositivo dato-curado de B153, y dejar B148 medido y con fix diseñado como pre-requisito de la sesión de materia.
+
+### H192-01 — Unidad A / B154: adjudicación sobre firma_raw real
+
+Sellos de entrada verificados contra H191 (casos 031b5759912b · textos 5ffeb7375850 · zonas 8e267ad87e14 — trabajo sobre canónico). Testigos del PROMPT leídos en dato: corrección de constancia — en 3221/3235 el panel real es 9 (solo falta Müller; Leal-«MARÍA» ya matcheaba) y la Ü de MÜLLER rompe el token del colector (aparece «CARLOS ANTONIO» truncado en desconocidos). Adjudicación de candidatos: **Beatriz Estela Aranguren = CONJUEZ real** (5 firmas; persona distinta de Juan José Aranguren, ministro PEN, que aparece solo en bleed 339_p1223 → descarte con constancia); **Martín Irurzun = CONJUEZ real** (2 firmas con calificador; el PROMPT sospechaba bleed — el dato lo desmintió). La lectura de contextos destapó en bola de nieve el cluster de paneles con conjueces t.348-349 (Tabacalera Sarandí y otros): Lozano (el conjuez de H189/Mercante — la corrección H191 leía el firma_raw viejo pre-ripple; H189 tenía razón), Sánchez A.G. (3), Boldú (con tilde y orden invertido), Barreiro (distinto del letrado Barreiro Deymonnaz, bleed 330_p2527 → descarte), Sotelo de Andreau, Bejas, Candisano Mera (invertido ×2), Llorens (5), Moltini (invertida ×3), González R.L. Alcance (b) ensanchado adjudicado por Guillermo. Caso ambiguo 331_p1397 resuelto por `.md` extraído: **la firma real es de 7** (Fayt/Petracchi/Maqueda/Zaffaroni + Poclava Lafuente/Irurzun/Pereyra González) pero firma_raw ancló en el POR ELLO («…y hágase saber») — mecanismo BUG-2 de B148 en vivo; Irurzun entra a la tabla con constancia de que el flip 1→2 corre sobre ancla errónea y la reparación completa la trae B148 (testigo cedido a la Unidad B). Destape colateral: en 348_p1553 el patrón titular de Belluscio matchea al LETRADO patrocinante en el bleed → n_jueces cuenta un letrado como juez (evidencia grave nueva → B155). «Guillermo Antelo» conjuez suplente nombrado en 348_p841 sin firma vista → constancia, no fila.
+
+### H192-02 — B154: CSV, flip-set y ciclo sellado
+
+CSV nuevo: 87 entradas (13 filas + ensanches Leal `(?:mar[íi]al?\s+|m\.\s+)?` y Tazza `alejandr?o` [OCR «Alejando» 348_p1357]). Flip-set medido en sandbox reusando `parse_firma_replica` del PoC B153, convergido en 3 iteraciones (cada sorpresa fuera del pool → lectura → adjudicación → re-medición): **24 casos / +45 jueces / 0 pérdidas / 0 full_bench / 0 fuera del pool**. E0 réplica-vigente = 0/5703 (instrumento válido). Instalación en disco con backup verificado (`jueces_csjn_pre_h192.bak`, 74); PoC en disco: E0-diffs = 24 == flip-set. Ciclo `--consciente --ignorar-corpus-drift` (el gate de corpus-drift abortó la primera corrida por 335/336, exclusión conocida — precedente H187). Adjudicación con **diffs ALINEADOS por caso_id** (instrumentos nuevos `diff_casos_b154.py`/`diff_zonas_b154.py` — el diff del gate es posicional y se corta en 25): casos.csv exactamente los 24 · votos 27818 = +45 exactos (sin overshoot; los diffs en cascada del gate eran artefactos posicionales, clase H191) · **contrato: 1 flip de decisión, TP adjudicado** (344_p1557 voting_pattern segun_su_voto→mixed = calificadores Irurzun/Sotelo recuperados) · zonas +10 = 7 casos: 2 TP (338_p1433 firma real separada del dispositivo; 344_p1557 firmas de votos separadas) + **5 FP clase-B148 aceptados con constancia** (329_p5317, 348_p569, 346_p1564, 348_p61, 348_p841 — los nombres nuevos gatillan `linea_es_firma_de_juez` sobre cuerpo; daño canónico CERO verificado: 0 columnas de casos.csv tocadas; pasan al pool B148). Corrección de constancia post-lectura de Pasada 3: el word_count +5 de 338_p1433 es la cola de firma del caso ANTERIOR reclasificada residuo→firma (clase FP-A M45, cuenta 5 palabras ajenas), no ripple TP. `--regolden`: golden congelado, invariante golden==producción [OK] 5/5, manifest re-sellado [CLEAN] 64; regresión propia E0 = 0/5703. **Candado blind intacto POR CONSTRUCCIÓN: textos.csv byte-idéntico al sello H191 (5ffeb7375850) — la clave n300 no se re-corrió porque su insumo no cambió.**
+
+### H192-03 — Decisiones de infraestructura
+
+- **M51 (nueva):** el gate de corpus-drift obliga el flag en cada corrida por una exclusión ya documentada → decisión de Guillermo: reconsiderar. Diseño encolado: exclusiones como DATO (`_meta/corpus_exclusiones.csv`, patrón M46) consultado por el pre-flight; el flag queda para drift genuino.
+- **M50 (nueva, semántica):** observación de Guillermo demostrada en el diff — la zona firma entra a word_count/wc_mayoria (338_p1433 +5), sesgo sistemático que correlaciona wc con tamaño de panel (variable de H5). Gate: leer el cómputo antes de diseñar.
+- Constancia de método: paths COMPLETOS siempre (placeholder `<descarga>` causó ParserError de PowerShell; corregido a rutas reales con `C:\Users\guill\Downloads`).
+
+### H192-04 — Unidad B / B148: diagnóstico completo y fix A diseñado
+
+Lecturas ENTERAS (primera vez): `linea_es_firma_de_juez` L1842-1876 (agujero motor: `es_corta ≤80` — el OCR wrapea el cuerpo a ~70-85 chars, casi cualquier línea con un juez pasa) · Pasadas 1-3 de `zonificar_bloque` (supresión solo en sumario L3019; el ancla tiñe hasta la próxima ancla L3078) · `linea_es_header_sumario` L1806 · `RE_HEADER_VOTO_DISIDENCIA` L1832. **Dos causas raíz exactas:** (1) el `^` de RE_HEADER_VOTO_DISIDENCIA no tolera el guión/paréntesis de las atribuciones editoriales («-Disidencia del juez X-», «(Voto del Dr. X)», cola parentética); (2) linea_es_header_sumario exige «./:» que las voces caps no tienen → `_en_sumario` (B076) inerte donde más se necesita. Pool medido (`poc_b148_cardinalidad` v0.1, post-B154, en disco): **217 casos / 398 tramos** firma-pre-primer-dispositivo (A>200wc 48 ≈ los 49 BUG-1 de M45 · B 21 · C 18 · D 130 dominado por FP-A); testigos H188 5/5; **limitación documentada: la vista pre-primer-dispositivo subcuenta multi-voto** (346_p1564/348_p841 fuera → doble vista en el PoC del fix). Adjudicación por lectura de 34 casos / 99 tramos (`dump_b148_tramos.py` → `dump_b148_tramos.md`, reusa `cargar_parser_funcs` de extraer_caso): **15 SUMARIO-atribución (dominante) + 9 CUERPO-denso + 5 no-B148** (frontera/FP-A + 330_p3801 = firma real con dispositivo no detectado → evidencia B149). Verificado: **firma_raw mayormente desacoplado del daño de zona** (5/6 — fin_real ancla en la firma final real); excepción 346_p965 (dispositivo en el colector). **Decisión (pregunta REE de Guillermo): fix A — causa raíz en el detector** (guard de atribución cerrado, sin umbral + predicado residuo-forma-de-nombre con peligro explícito de no re-romper firmas de conjueces desconocidos [clase B153/v27.1]); **la opción B (pasada correctiva por umbral wc) DESCARTADA como parche, no encolada** — el residuo post-A decide lo que siga. Radio mapeado (10 call-sites, incl. la trampa L2029 donde el detector se usa como exclusión). Implementación → **PROMPT_H193** (headers del sello real del regolden pegado en sesión).
+
+### H192 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 157 sumario_con_link + 34 sumario_editorial).
+- **Votos:** 27818 filas (+45 vs 27773).
+- **Zonas:** 138648 segmentos (+10).
+- **is_merit / gate:** 2967 sin cambio. **is_originaria:** 596 sin cambio. **Outcome:** distribución sin cambio.
+- **Partes:** recurrente_ok 3886 (68,1%); mérito 2679/2967 = 90,3% (sin cambio).
+- **Materia:** 77,0% (3933/5107); sin_ancla 1102 (sin cambio).
+- **voting_pattern:** 1 flip TP (344_p1557 → mixed; mixed 296→297).
+
+**Outputs canónicos (manifest [CLEAN] 64):**
+- `output/parser/csjn_casos.csv` — 5894 filas · ec43b47d9729… · v28.0
+- `output/parser/csjn_casos_textos.csv` — 5894 filas · 5ffeb7375850… · v28.0 (byte-idéntico H191)
+- `output/parser/csjn_casos_votos.csv` — 27818 filas · 3896b7f9101b… · v28.0
+- `output/parser/csjn_casos_zonas.csv` — 138648 filas · dd31ce4a0fbd… · v28.0
+- `output/parser/csjn_casos_editorial.csv` — 152 filas · 30a6da652e3a… · v28.0
+- Sidecars re-derivados sin cambio de sha: materia 0123e16b14b2… v3.2 · recursos 2fdb87efd992… v0.6 · epilogo 9f16ad71bf71… v0.4 · partes f39c7d15e3dd… v0.18
+
+**Dato modificado en provenance:** `_meta/jueces/jueces_csjn.csv` — 74→87 entradas (backup `jueces_csjn_pre_h192.bak`, no commitear).
+
+**Scripts creados:** `scripts/diagnostico/H192/` — `diff_casos_b154.py`, `diff_zonas_b154.py`, `poc_b148_cardinalidad.py` v0.1 (+ `poc_b148_pool.csv` baseline), `dump_b148_tramos.py` v0.1 (+ `dump_b148_tramos.md`), `adjudicacion_b154.csv`, `poc_b154_flipset_out.csv` (baseline diffeable), `331_p1397.md`. Pipeline: SIN cambio de código (ciclo de dato).
+
+**Commits:** 2 (① dato jueces + outputs + golden + manifest + scripts H192; ② docs: DEUDA/BITACORA/CHANGELOG + PROMPT_H193).
