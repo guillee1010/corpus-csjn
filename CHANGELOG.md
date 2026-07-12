@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H191 (2026-07-11)
+
+- `scripts/pipeline/parser.py` v27.1→**v28.0** (MAJOR): (i) `JUECES_CONOCIDOS` externalizado a dato — loader `_cargar_jueces_conocidos()` desde `_meta/jueces/jueces_csjn.csv`, fail-fast; (ii) columna `jueces_desconocidos` re-conectada (muerta por construcción desde su creación). 35 casos con panel corregido (+48 jueces, 0 pérdidas) + ripple de frontera TP (firma_raw recuperada en 5 casos).
+- `_meta/jueces/jueces_csjn.csv` **NUEVO** (74 entradas: 56 migradas verbatim + 18 nuevas + 2 ensanches; `periodo_*` reservadas → M47). Entra a provenance del manifest.
+- `output/parser/csjn_casos.csv` — 5894 filas (columnas jueces/n_jueces/posiciones/n_titulares/voting_pattern/is_full_bench en 35 casos; jueces_desconocidos ahora viva).
+- `output/parser/csjn_casos_votos.csv` — 27773 filas (+61).
+- `output/parser/csjn_casos_zonas.csv` — 138638 segmentos (+10, re-zonificación por firmas reconocidas).
+- `output/parser/csjn_casos_textos.csv` — firma_raw recuperada en 329_p1303/1305/2830/3221/3235.
+- Sidecars re-derivados sin cambio de métrica (partes 3886, materia 77,0%, recursos gate 2967).
+
 ## H190 (2026-07-11)
 
 - `parser.py` v26.1→**27.1**: B147-1A — `retroceder_frontera` sobre los fines de Pistas 1/3/4 de `detectar_fin_real` (etapas A/B, guards firma-versales/header-voto/nombre-propio/continuación-de-wrap; +1 arg opcional `tokens_nombre_propio`, 1 call-site). ~1830 casos mueven `linea_fin_real`; votos/outcome/is_merit sin cambio. v27.0 intermedio FRENADO en consciente (fragmento de firma wrapeada) — nunca llegó a golden.

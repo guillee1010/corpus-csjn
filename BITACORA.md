@@ -19637,3 +19637,51 @@ Guard general `_es_continuacion_wrap`: `rotulo_caps` corto que cierra en «.» i
 **Scripts creados:** `scripts/diagnostico/H190/` — `poc_b147_1a_retroceso.py` v0.4 (+ baseline `poc_b147_1a_out.csv`, extractos de 8 testigos). Scratch de sesión, no canónico.
 
 **Commits:** 2 — (1) parser v27.1 + outputs + golden + manifest [ciclo B147-1A]; (2) docs (DEUDA + BITACORA + CHANGELOG).
+
+## H191 — Unidad B (auditoría derivers post-1A) + B153 CERRADO: jueces como dato (2026-07-11)
+
+**Objetivo:** cobrar el dividendo de H190 (auditoría read-only de coberturas de derivers) y cerrar B153 (conjueces en la firma, paneles subcontados) con el patrón dato-curado M46.
+
+### H191-01 — Unidad B: auditoría de derivers post-B147-1A (read-only)
+
+Tabla pre/post reproducida en disco replicando las métricas de cada deriver (leídas de `clasificar_cobertura`/`_reporte`, no asumidas). Veredicto: **0 degradación — el re-derivado sobre fronteras limpias no movió ninguna cobertura.** Partes: recurrente_ok 3882→3885 (mérito 2677/2965→2678/2967, 90,3% plano). Materia: 77,2→77,0% con cambio de composición real — originaria 546→596 (+50), verificado 1:1 contra `is_originaria` del parser (0 mismatch; el salto es frente parser, no deriver). Recursos: gate `es_revision_fondo`=si == is_merit = 2967, consistente. Headroom nuevo → M48 (5 clases; la mayor: materia `sin_ancla` 1102). Corrección de tablero: el «50% ralo» de causa_inadmisibilidad ya no es campo vacío (0% vacío post-M26 v0.5) — migró al catch-all `INADMISIBLE_SIN_CAUSAL_EXPLICITA` (467/1115 = 41,9% de inadmite). Dos discrepancias PROMPT-vs-disco documentadas (split tipo_entrada; votos sello 27724 vs golden 27712) → constancia en M48.
+
+### H191-02 — Hallazgo: columna `jueces_desconocidos` muerta por construcción
+
+Leído en código antes de proponer: `extraer_jueces_de_firma` hardcodea `conocido=True` en cada juez (L1127) y el writer filtra `not conocido` (L3892) → conjunto vacío desde siempre; la lista real del colector solo iba a `desconocidos_global` (print de consola). Explica el `jueces_desconocidos poblado = 0` corpus-wide que invalidaba el detector 1 del PROMPT. Re-conectada en el fix (v28.0): ahora es el instrumento permanente de detección de conjueces en tomos futuros. Ruido documentado: colector laxo (TitleCase 2-4 tokens) + bleed de epílogo en ~157 casos (→ B155) puebla la columna con partes/letrados — instrumento de auditoría, no dato analítico.
+
+### H191-03 — B153: PoC read-only con triple candado + curación
+
+Cardinalidad medida sobre `firma_raw` real (mask con las regex reales del set, no filtro paralelo): pool 47 tokens / 35 casos / ~24 nombres. Curación adjudicada por lectura de contextos: 18 entradas nuevas (2 titulares históricos — Moliné O'Connor ×4, Bossert ×1, fallos 1998-2003 publicados tardíamente, hipótesis de Guillermo confirmada — + 16 conjueces) + 2 ensanches de variante (Otero, Leal de Ibarra) + 5 descartes con constancia (RICARDO LUIS ×2 = truncamiento upstream → B158; HIGTHON = ya contada, metátesis OCR cosmética; ASOCIART/DARIMAR = bleed → B155). Corrección de constancia sobre el PROMPT: 349_p43 (Lozano) NO es testigo válido — panel en disco Rosatti|Lorenzetti; Rodríguez Basavilbaso y «Fernández» (=Cavallo/Najurieta) estaban parcialmente resueltos pre-H191 (H189/v27.1). Candados: **E0** réplica de `extraer_jueces_de_firma` con set vigente vs columnas publicadas = 0 diffs/5703 (sandbox Y disco); **flip-set** 35 casos / +48 jueces / 0 pérdidas / 0 FP fuera del pool; **E1** set-CSV == espec; **E2** loader instalado == espec.
+
+### H191-04 — B153: fix (parser v28.0) + ciclo + adjudicación retroactiva
+
+Fix: `_meta/jueces/jueces_csjn.csv` (74 filas: 56 migradas verbatim — regex extraídas programáticamente del código —, columnas `periodo_*` reservadas VACÍAS → M47) + loader `_cargar_jueces_conocidos` fail-fast + cable de `jueces_desconocidos`. Radio mapeado ANTES del fix (lección v27.0): el set alimenta parse_firma, `detectar_juez_en_voto_header`, firma inversa A001 y `linea_es_firma_de_juez` (guards de frontera H190, B141 peek, extender_firma, votos) → contrato con ripple de frontera declarado.
+
+Ciclo consciente corrido; **falla de método documentada: el `--regolden` corrió pegado al consciente porque los comandos entregados iban en un solo bloque copiable (error de armado del asistente, no del operador). Adjudicación ejecutada RETROACTIVA antes del commit:** outcome PRE-vs-POST = 0 diferencias en la distribución completa (los «flips» del diff de votos eran artefactos posicionales por +61 filas); is_merit 2967=2967 (por construcción M39); is_originaria 596=596. **Contrato de decisiones sostenido.** voting_pattern: 2 flips reales adjudicados TP (unanime→mixed en 329_p3221/3235 = calificadores «en disidencia»/«según su voto» recuperados). **Ripple de frontera MAYOR que el PoC y adjudicado TP:** reconocer conjueces extiende `collect_firma_lines` → `firma_raw` recupera texto que el PoC (corrido sobre el firma_raw viejo) no podía ver: 329_p1303 nj 1→5 (PoC predecía 1→2), 1305 2→6, 2830/3221/3235 ganan nombres enteros; votos +61 (cota PoC +48). Bonus de constancia: el «Otero sin LUIS» era artefacto de truncamiento — la firma completa dice «LUIS CÉSAR OTERO»; el ensanche queda inofensivo. is_full_bench flips = 2 adjudicados: 329_p4178 1→0 (corrige FP) + 330_p224 0→1 (FP aceptado → B156; caso con fecha imposible → B157). Destape en caliente vía la columna nueva: **Müller** (conjuez sin tabla, 4 casos), Leal-«M.» (variante), Aranguren/Irurzun candidatos → B154. Golden re-congelado + manifest re-sellado [CLEAN] 64.
+
+### H191 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 157 sumario_con_link + 34 sumario_editorial).
+- **Votos:** 27773 filas (+61 vs golden previo 27712).
+- **Zonas:** 138638 segmentos (+10).
+- **Partes:** recurrente_ok 3886 (68,1%); mérito 2679/2967 = 90,3%.
+- **Materia:** 77,0% (3933/5107 clasificable); originaria 596.
+- **is_merit / gate:** 2967. **is_originaria:** 596. **Outcome:** distribución sin cambio vs H190.
+- **Trayectoria recurrente_ok:** …→3846→3848→3882→3885/3886.
+
+**Outputs canónicos (manifest [CLEAN] 64):**
+- `output/parser/csjn_casos.csv` — 5894 filas · 031b5759912b… · v28.0
+- `output/parser/csjn_casos_textos.csv` — 5894 filas · 5ffeb7375850… · v28.0
+- `output/parser/csjn_casos_votos.csv` — 27773 filas · 367e1cdaca5e… · v28.0
+- `output/parser/csjn_casos_zonas.csv` — 138638 filas · 8e267ad87e14… · v28.0
+- `output/parser/csjn_casos_editorial.csv` — 152 filas · 30a6da652e3a… · v28.0
+- `output/parser/csjn_casos_materia.csv` — 5894 · 0123e16b14b2… · v3.2 · `csjn_casos_recursos.csv` — 5894 · 2fdb87efd992… · v0.6 · `csjn_casos_epilogo.csv` — 5703 · 9f16ad71bf71… · v0.4 · `csjn_casos_partes.csv` — 5894 · f39c7d15e3dd… · v0.18
+
+**Dato nuevo en provenance:** `_meta/jueces/jueces_csjn.csv` (74 entradas).
+
+**Scripts creados:** `scripts/diagnostico/H191/` — `poc_b153_conjueces.py` v0.1, `adjudicacion_b153.csv`, `adjudicacion_b153_descartes.csv`, `poc_b153_flipset_out.csv` (baseline diffeable).
+
+**Pendiente de cierre:** candado blind (textos.csv cambió en 5 filas de firma_raw; correr `build_m20` + `git status` — esperado byte-idéntico porque la clave no lee firma_raw; si aparece modificada, FRENAR y re-validar).
+
+**Commits:** 2 (① pipeline+dato+golden+manifest+scripts H191; ② docs: DEUDA/BITACORA/CHANGELOG).
