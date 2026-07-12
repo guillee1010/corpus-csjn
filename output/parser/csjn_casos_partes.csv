@@ -2994,7 +2994,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 334_p1795,José Manuel García,actora,Estado Nacional – Estado Mayor General del Ejército,codemandada,no,epilogo,epilogo:recurso+traslado
 334_p1804,Roberto González,,,,no,epilogo,epilogo:recurso
 334_p1808,Grupo República S.A.,,Fisco Nacional (AFIP-DGI),,no,epilogo,epilogo:recurso+traslado
-334_p1815,Elsa Marta Rodríguez Romero y de sus hijos Daniel Parra y,,,,no,epilogo,epilogo:recurso
+334_p1815,"Elsa Marta Rodríguez Romero y de sus hijos Daniel Parra y Victoria Parra, con el patrocinio letrado del Dr. Gustavo A. Bossert",,,,no,epilogo,epilogo:recurso
 334_p1821,,,,,,epilogo,sin_marcador_recurso
 334_p1842,Central Térmica Sorrento S.A.,,,,no,epilogo,epilogo:recurso
 334_p1848,R.I.N. y H.M.R.,actora,,,no,epilogo,epilogo:recurso
@@ -3237,7 +3237,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 338_p845,,,,,,epilogo,sin_marcador_recurso
 338_p868,,,,,,epilogo,sin_marcador_recurso
 338_p875,Gustavo Osvaldo Béliz,,,,no,epilogo,epilogo:recurso
-338_p884,"Martín Manzano Cornejo, Ricardo Ramírez Calvo y Jorge Oscar Ramírez",,,,no,epilogo,epilogo:recurso
+338_p884,"Martín Manzano Cornejo, Ricardo Ramírez Calvo y Jorge Oscar Ramírez",,Comisión Nacional de Valores,,si,epilogo,epilogo:recurso+traslado
 338_p896,Erma Petenik - querellante,querellante,,,no,epilogo,epilogo:recurso
 338_p902,,,,,,epilogo,sin_marcador_recurso
 338_p911,Fernando Gabriel Roberto Latrille,,,,no,epilogo,epilogo:recurso

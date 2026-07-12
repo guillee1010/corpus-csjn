@@ -1,16 +1,16 @@
 {
   "schema_version": 4,
   "manifest_generator_version": "1.8",
-  "generated_at": "2026-07-12T03:26:10.666575+00:00",
+  "generated_at": "2026-07-12T05:48:36.170598+00:00",
   "git": {
-    "commit": "cc724c0827fbf5c64ca76e61c38b7b47c37be7c4",
+    "commit": "18e46a7536853ec20906c3dbd2618fa1062cc54a",
     "dirty": true
   },
   "pipeline_scripts": {
     "detectar_paginas.py": "1.01",
     "construir_catalogo.py": "1.04",
     "cruzar_catalogo_y_mapa.py": "1.0",
-    "parser.py": "28.0",
+    "parser.py": "29.0",
     "parser_editorial.py": "1.0",
     "derivar_materia.py": "3.2",
     "derivar_recursos.py": "0.6",
@@ -331,39 +331,39 @@
     "csjn_casos.csv": {
       "path": "output/parser/csjn_casos.csv",
       "generated_by": "parser.py",
-      "generator_version": "28.0",
-      "sha256": "ec43b47d9729647d584a1ae8dfc4ffde74bda138856f4d056428e741f98f2622",
+      "generator_version": "29.0",
+      "sha256": "06054f05b2748b07b29bf2d52a361c0113bdda1c9f708f1efa6400c15e50f9c4",
       "n_rows": 5894,
-      "n_bytes": 4330363
+      "n_bytes": 4330355
     },
     "csjn_casos_textos.csv": {
       "path": "output/parser/csjn_casos_textos.csv",
       "generated_by": "parser.py",
-      "generator_version": "28.0",
-      "sha256": "5ffeb7375850c8a8b7aa1b5d865569828cbc21b2bc2abc4026d7828e49698223",
+      "generator_version": "29.0",
+      "sha256": "226671eb4134a3e2d377a455e261885ccc1bfdc148185d8c89421f83f1cdc04c",
       "n_rows": 5894,
-      "n_bytes": 31913420
+      "n_bytes": 31904274
     },
     "csjn_casos_votos.csv": {
       "path": "output/parser/csjn_casos_votos.csv",
       "generated_by": "parser.py",
-      "generator_version": "28.0",
-      "sha256": "3896b7f9101b77b9801a01892c931202cc44d4908d8e01a147d51dfa4dac9831",
+      "generator_version": "29.0",
+      "sha256": "0e1270a8f71d49606e325beceea4f5c52cfc4fff70b0a580e43d06cbd2ba275f",
       "n_rows": 27818,
-      "n_bytes": 10685792
+      "n_bytes": 10684602
     },
     "csjn_casos_zonas.csv": {
       "path": "output/parser/csjn_casos_zonas.csv",
       "generated_by": "parser.py",
-      "generator_version": "28.0",
-      "sha256": "dd31ce4a0fbde6af1d34424895c59134b533f38a0bb0e02d72c83ae8ef4c5056",
-      "n_rows": 138648,
-      "n_bytes": 5461876
+      "generator_version": "29.0",
+      "sha256": "fda8e6045c806056966f2f6feda5eb14007358ebb251c43a014f76b4206c11b5",
+      "n_rows": 137999,
+      "n_bytes": 5442714
     },
     "csjn_casos_editorial.csv": {
       "path": "output/parser/csjn_casos_editorial.csv",
       "generated_by": "parser.py",
-      "generator_version": "28.0",
+      "generator_version": "29.0",
       "sha256": "30a6da652e3a9d2a0030192cd32a8f3f00dde8fcf57abb2cc5bffbda8e56ab8b",
       "n_rows": 152,
       "n_bytes": 8552
@@ -372,9 +372,9 @@
       "path": "output/parser/csjn_casos_materia.csv",
       "generated_by": "derivar_materia.py",
       "generator_version": "3.2",
-      "sha256": "0123e16b14b2b9a0e359670c7d7ca7b090b186adbb0b042a677fb20c3ed1a085",
+      "sha256": "98f79ddc33f384acb0ada8953cca197b32d8a0248b1e5a5b1d0e2dc95883d55d",
       "n_rows": 5894,
-      "n_bytes": 279787
+      "n_bytes": 279751
     },
     "csjn_casos_recursos.csv": {
       "path": "output/parser/csjn_casos_recursos.csv",
@@ -388,17 +388,17 @@
       "path": "output/parser/csjn_casos_epilogo.csv",
       "generated_by": "extraer_epilogos.py",
       "generator_version": "0.4",
-      "sha256": "9f16ad71bf712d2218ac51f6c5f18f469f6fb0519d7b57d651a238fdd11cf930",
+      "sha256": "4e888b0d363954910759ad793dfd38da0dce8ceaacde59b83036b2d873ce8cee",
       "n_rows": 5703,
-      "n_bytes": 2114924
+      "n_bytes": 2126651
     },
     "csjn_casos_partes.csv": {
       "path": "output/parser/csjn_casos_partes.csv",
       "generated_by": "derivar_partes.py",
       "generator_version": "0.18",
-      "sha256": "f39c7d15e3dd4c1230f9e5901ee533a78e0779796777187b2de109d81c96690b",
+      "sha256": "9fd808bae45c1545af9f44745b317b98ebb25fdad59eaf554f2803f8d08b6aed",
       "n_rows": 5894,
-      "n_bytes": 445339
+      "n_bytes": 445448
     }
   }
 }
