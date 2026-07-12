@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H198 (2026-07-12)
+
+- `parser.py`: v32.0→32.1 (MINOR, M52) — prefiltro de literales obligatorios para JUECES_CONOCIDOS (helper `hay_juez_conocido`, literales derivados del árbol de parseo del mismo CSV; 6 sitios de existencia pura reemplazados, 3 de extracción intactos). Salida byte-idéntica verificada por triple vía (sha 5/5, gate [CLEAN], invariante c); etapa parser ~208→107,8 s.
+- Outputs canónicos, golden y manifest: sin cambio (sha del sello H197 intactos).
+- Housekeeping: `parser_v27.1_bak.py` movido de `scripts/pipeline/` a `archivo/`; scratch H195/ unificado en `scripts/diagnostico/H196/`.
+
 ## H197 (2026-07-12)
 
 - `parser.py` v31.0→32.0 (MAJOR, B162): `{en_consecuencia, atento_a}` movidas de `RE_DISPOSITIVO_VARIANTES` a `RE_DISPOSITIVO_VARIANTES_ZONIF_PERF` — perf-gated (RE_PERF en cola+wrap) SOLO en el zonificador (`detectar_apertura_dispositivo` +kwarg `zonif=False`, único call-site `zonif=True`); resolutor incondicional. 423 casos con zonas descontaminadas; 0 flips de decisión. Absorbe M53(b): header del módulo reescrito (estaba en «v17 beta»).

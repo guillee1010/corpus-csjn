@@ -19929,3 +19929,38 @@ Fix: `RE_DISPOSITIVO_VARIANTES_ZONIF_PERF` nueva (las 2 movidas de T1) + `detect
 **Scripts creados:** `scripts/diagnostico/H197/` — `poc_b162_superficie.py` v0.2 · `poc_b162_flipset.py` v0.2 (regresión viva: `--esperar-version 32.0` → E0 limpio + flip-set VACÍO) · `diff_perimetro_b162.py` v0.1 · dumps/baselines (superficie 4607, flipset 423) · resúmenes · 5 extractos nuevos (330_p2520, 329_p2985, 341_p774, 346_p1117, 347_p109) + 344_p1952/344_p2123 re-extraídos.
 
 **Commits:** 3 — (1) fix parser v32 + outputs + golden + manifest; (2) PoCs, baselines, perímetro y extractos H197; (3) docs (DEUDA/BITACORA/CHANGELOG).
+
+## H198 — M52 cerrado: prefiltro de literales para JUECES_CONOCIDOS (2026-07-12)
+
+**Objetivo:** cerrar M52 (perf del hot spot `linea_es_firma_de_juez`, ~55% del runtime según perfil H196) bajo contrato de refactor byte-idéntico, y saldar los tres micro-items arrastrados (housekeeping H195, `dir archivo\`, constancia de cierre H197).
+
+### H198-01 — Micro-items de la cola
+
+(1) Housekeeping H195: decidido y ejecutado UNIFICAR en H196/ — el scratch (7 extractos B159, `parser.prof` v30.0, `poc_b159_{superficie,flipset}` .py/.csv) es todo constancia del ciclo B159/perfil nacido en H196; H195/ eliminado; inventario post-move verificado con `dir` (quedó un `_tmp/` heredado a revisar/purgar). (2) `dir archivo\parser_v*_bak.py` corrido: solo v31.0 y v32.0; el barrido fuera de `archivo\` destapó `parser_v27.1_bak.py` huérfano en `scripts/pipeline/` (dos MAJOR atrás) → movido; `archivo\` queda {v27.1, v31.0, v32.0}. (3) Cierre H197 constatado: 3 commits (fix v32 + PoCs + docs) en `origin/main`, HEAD sincronizado.
+
+### H198-02 — Gate 2 + FRENO al diseño candidato de M52 (con dato, antes de codear)
+
+Gate 2 completo: `linea_es_firma_de_juez` + `_cargar_jueces_conocidos` leídos enteros, los 9 loops sobre JUECES_CONOCIDOS mapeados y clasificados — 6 de existencia pura (collect_firma_lines ×2, _firma_nucleo, linea_es_firma_de_juez ×2, frontera de firma) vs 3 de extracción de nombre (parse_firma finditer, detectar_juez_en_voto_header, _firma_residuo_es_prosa sub; corren por caso o post-match, no por línea). Corrección de cita: el «~74 patrones» de M52/H196 estaba stale desde H192/B154 — la tabla tiene 87. PoC sandbox del diseño DEUDA (unión de alternación única): equivalencia OK (0 mismatches, batería + fuzz) pero **1.0x en el caso negativo dominante** — `re` stdlib no optimiza alternaciones grandes (sin Aho-Corasick, prueba las 87 ramas por posición = mismo O(87·n) que el loop); el 3.1x en positivos no mueve la aguja (positivos ≈ 1,2% de las líneas, medido después en E3). El diseño original habría pasado el contrato byte-idéntico entregando ~0 segundos.
+
+### H198-03 — Diseño enmendado e implementación (parser v32.0→32.1, MINOR)
+
+Prefiltro de LITERALES OBLIGATORIOS: de cada patrón del CSV se deriva mecánicamente (árbol `re._parser`, fallback `sre_parse` — ambos vivos en Python 3.14, verificado) un literal que cualquier match debe contener; garantía por construcción del árbol (solo runs LITERAL no-opcionales; BRANCH exige que todas las ramas aporten). Helper `hay_juez_conocido(texto)`: etapa 1 `lit in texto.lower()` (substring en C) → etapa 2 el loop existente intacto; patrón sin literal ≥4 cae a chequeo incondicional (hoy 0/87); literal genérico único «ctor» (Méndez) documentado — dispara etapa 2 en «Doctor/doctora», costo de velocidad, no de corrección. Los 6 sitios de existencia reemplazados por el helper; los 3 de extracción intactos. Verificación sandbox pre-entrega: v32.0 y v32.1 reales importados contra el CSV real — 0 mismatches en 9933 líneas (batería + fuzz) sobre `hay_juez_conocido`, `linea_es_firma_de_juez`, `collect_firma_lines`, `_firma_nucleo`; anclas de constancias previas preservadas (`"LORENZETTI."` → False, H190-b).
+
+### H198-04 — Validación en disco: equivalencia + contrato triple + perf medida
+
+`poc_m52_literales` v0.1: E1 versión 32.1 OK · E2 87 patrones → 74 literales, 0 sin garantía · **E3 equivalencia sobre corpus completo: 0 mismatches / 2.207.636 líneas / 50 `.md`** (26.356 positivos ≈ 1,2% — la constancia de por qué el negativo dominaba el perfil) · E4 predicado aislado 143,1→25,2 s (5.7x). Contrato byte-idéntico por TRIPLE vía: 5/5 sha del perfil `_tmp` == producción · `check_regresion` [CLEAN] · invariante (c) golden==producción con los sha del sello H197 intactos (casos 71586cb1fd95… / textos 7bac60b39d64… / votos bac640565cfd… / zonas dc1522e5c7f1… / editorial 30a6da652e3a…) · manifest [CLEAN] 64. **Perf medida, no prometida:** `re.Pattern.search` 133,8M→10,6M llamadas (−92%) · `linea_es_firma_de_juez` 162,4→66,1 s cumulative (perfiles v32.0/v32.1, mismo día y máquina) · perfil total 218,8→195,6 s · **etapa parser del orquestador sin profiler: 107,8 s** vs ~208 s histórico. Margen futuro asentado en M52: el genexpr del prefiltro es ahora el costo visible del filtro (109,7M llamadas / 21 s tottime; micro-opt loop plano, unidad propia). Constancia de método: dos corridas de perfil quemadas contra v32.0 porque el copy Descargas→`scripts/pipeline/` no se había ejecutado; el pin del orquestador (`[ABORT]`) y el E1 del PoC frenaron como debían — verificación `Select-String __version__` en DESTINO adoptada como reflejo pre-corrida.
+
+### H198 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumario_con_link) — sin cambio.
+- **Sin firma:** 18. **Votos:** 27.818 filas — sin cambio.
+- **Zonas:** 137.979 segmentos — sin cambio. **Editorial:** 152 — sin cambio.
+- **Byte-idéntico:** los 5 CSV con los mismos sha del sello H197; golden y manifest sin re-sello.
+
+**Outputs canónicos:** sin cambio (refactor byte-idéntico; ver sha arriba).
+
+**Scripts modificados:** `scripts/pipeline/parser.py` → **v32.1**.
+
+**Scripts creados:** `scripts/diagnostico/H198/` — `poc_m52_literales.py` (v0.1, regresión propia viva), `poc_m52_literales_tabla.csv`, `parser_v32.1.prof` (baseline post-fix); `_tmp/` con los 5 CSV del perfil purgado tras el sellado por hash.
+
+**Commits:** 3 — (1) fix M52: parser v32.1; (2) housekeeping: bak v27.1 rescatado a archivo\; (3) docs: DEUDA + BITACORA + CHANGELOG.
