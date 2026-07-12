@@ -19774,3 +19774,60 @@ Blind [CLEAN] (clave n300 byte-idéntica). `--regolden`: golden re-congelado, in
 **Scripts creados:** `scripts/diagnostico/H193/` — `poc_b148_flipset.py` v0.3 · `poc_b148_flipset_baseline_v03.csv` (flip-set sellado, insumo de adjudicaciones futuras) · `poc_b148_pool_post.csv` · `337_p505.md` / `340_p1070.md` (extracciones de adjudicación) · `diff_casos_h193.txt` / `diff_zonas_h193.txt` · copias de `diff_casos_b154.py`/`diff_zonas_b154.py`.
 
 **Commits:** 2 (① parser v29.0 + outputs + golden + manifest; ② docs: DEUDA/BITACORA/CHANGELOG + scripts H193).
+
+## H194 — Adjudicación completa del residuo B148 → B149 CERRADO (fix A, parser v30.0) (2026-07-12)
+
+**Objetivo:** adjudicar el residuo del pool B148 (7 A/C + D-87) para que la evidencia diseñe la unidad siguiente — la evidencia diseñó B149 y el fix se ejecutó y selló en la misma sesión.
+
+### H194-01 — Lectura de los 7 A/C no adjudicados
+
+Los 7 extraídos y alineados tramo-a-tramo contra el texto real. Veredicto en TRES familias:
+- **FP del detector (4):** 348_p1751 y 339_p270 = *enumeración-de-recusados-wrapeada* (el wrap deja una línea de cuerpo con solo nombres del catálogo + conectores — residuo genuinamente vacío, indistinguible localmente de una firma); 339_p323 = **carátula-con-juez** (Boggiano actor, la carátula dispara y P2 absorbe título+sumarios); 329_p4446 = variante excusación (semilla exacta requiere leer el guard v29 — no presupuesta).
+- **FP del pool (2):** 329_p4140 = firma REAL del caso principal en estructura patológica (fallo de 2004 transcripto entero en nota al pie «(*) Dicha sentencia dice así», interleaved por páginas; el primer «dispositivo» detectado y la firma con Belluscio/Boggiano son del fallo TRANSCRIPTO — constancia data-quality: las zonas del caso mezclan dos fallos, familia B152); 331_p364 = frontera B147/M45 (firma+epílogo del previo, residuo cortó en línea 3).
+- **B149 (1):** 331_p2363 — `sin_dispositivo=1` con dispositivo real embebido: «…oído el señor Procurador Fiscal, **el Tribunal resuelve:** revocar…» sin «Por ello»; el sidecar POR_ELLO lo veía, la zonificación no. 4º testigo.
+
+Constancias laterales: cabeceras de recusación (carátula+rubros+sumarios) zonificadas como `residuo_caso_anterior` en 339_p270/348_p1751 (2ª observación); colector absorbiendo epílogos en 3/7.
+
+### H194-02 — Clasificación mecánica del D-87 + muestra estratificada
+
+`poc_b148_clasificar_d.py` v0.1→v0.2 (corrida sandbox == corrida local, reproducción exacta): epílogo pasó a cierre tras detectar que la v0.1 mandaba a MEDIO la forma «firma real + epílogo» (la de 331_p2363); se sumó vecindario zona-previa>zona-siguiente por tramo. Resultado: **FRONTERA_FPA 30** (ady_residuo 30/30) · **COLA_B149 32** · **MEDIO 23** (21 con voto_separado en el vecindario) · **MIXTA 2**.
+
+Muestra seed-194, 15/15 leídos: COLA 7/7 = **B149 confirmado** con catálogo de anclas faltantes por lectura («Así se resuelve.» 330_p22 · «Lo que así se resuelve.» 330_p4590 · «Por ello» mid-línea 330_p4322 · «el Tribunal resuelve:» 334_p362 · «En virtud de lo expuesto» 341_p739/344_p2779 · «Por lo tanto» 343_p720 · competencia embebida 344_p776). MEDIO = **B149-multivoto** (dispositivo de mayoría/voto no zonificado antes de firma real: 344_p1102 ×2, 344_p2779 ×2 ninguno detectado; 347_p1084 = estructura todos-votos, firmas reales). FRONTERA 2/2 spot-checks confirmados. MIXTA = fronteras graves: **329_p3444 (Mendoza/Riachuelo): el bloque arranca ~46 líneas antes de la carátula con dos colas de casos previos adentro** · 329_p2179 (disidencia entera del previo + FP nuevo header-de-voto-wrapeado). 329_p3148 = FP cita-de-disidencia wrapeada.
+
+### H194-03 — Doble vista (cardinalidad v0.2)
+
+`poc_b148_cardinalidad` v0.1→v0.2: vista 2 = tramos firma wc>200 en CUALQUIER posición. Corrida sobre zonas v29.0: vista 1 reproduce el pool H193 exacto (101/125); vista 2 = **51 casos / 148 tramos, 46 solo-post-dispositivo** (población nueva SIN adjudicar; monstruos de 12 tramos: 329_p6087, 342_p1665). Corrección de expectativa del PROMPT: **346_p1564 y 348_p841 ya estaban reparados** (tramos firma wc 8/13) — la limitación de vista ocultaba residuo CERO. Conciliación 148-vs-142 con la bandera del explorador PENDIENTE (leer su métrica).
+
+### H194-04 — Ciclo B149-A: causa raíz leída, PoC, fix v30.0
+
+GATE del PROMPT cumplido: `detectar_apertura_dispositivo` (L122-148, 17 variantes + guard argumental, todas line-start), `collect_firma_lines` (L974-1030 — breaks sin «Abogado:»/«Tribunal interviniente:» → B160), `resolver_dispositivo` (L3524-3584, cascada T1→2→3→3b→4 con T2 mid-línea y T4 `_RE_ASI`), call-sites del zonificador (L3109 = SOLO T1), secuencia `procesar_archivo` (zonificar L3729 → resolver L3849 → extraer_segmentos L4027). **Causa raíz: el resolutor de outcome usa la cascada completa; el zonificador un solo tier.**
+
+`poc_b149_anclas.py` v0.1 (importa el parser real; réplica verbatim de L3729→3849 con candado E0 réplica==zonas-publicadas): **E0 5703/5703, 0 mismatch**. Medición A1 (herencia): flip-set 32 = **25 cuerpo (25/25 TP, cierre en firma, rangos 1-11 líneas, incluye 329_p2596)** + 7 dictamen (dictamen-sin-cierre, rangos 111-1213 → B159, excluidos por guard). Medición A2 (riesgo de anclas): en_virtud 268 matches / 204 en dictamen / perf-gated **16 = 16/16 TP** (8 dispositivos de VOTO; **testigo B067 original 348_p443**) · por_lo_tanto 640 / perf 5 / rinde 2-3 → **DESCARTADA con constancia** (H039 «70% argumental» confirmado a escala; borde 341_p250 indecidible; residuales 343_p720, 346_p1068) · que_de_conf 29 / 1 TP (344_p776).
+
+Fix v30.0 (5 edits): `RE_DISPOSITIVO_VARIANTES_PERF` (en_virtud_perf + que_de_conf_perf, guard RE_PERF fuente única) · `detectar_apertura_dispositivo` +1 arg opcional `cola_wrap` (precedente H181/H190) · peek de wrap SOLO en el zonificador · bloque A1 de herencia post-resolver con guard zona=='cuerpo'. Smoke sintético: detector 8/8, ancla A2 viva en Pasada 1, **guarda-dictamen H052 verificada como red extra** (perf-variante dentro de dictamen no ancla). Incidente de armado corregido en sesión: el contrato inicial decía «textos byte-idéntico» — los re-picks A2 mueven por_ello_text/fin_cons → candado blind declarado obligatorio.
+
+### H194-05 — Ciclo consciente adjudicado + regolden + sello
+
+Consciente: **100% dentro del contrato.** casos/textos/votos 3/3 TP: 341_p739 sin_dispositivo→otro + **is_merit 0→1** («se modifica la sentencia apelada» — fondo real vía gate) · 344_p776 →competencia · 348_p443 →rechaza (**B067 cierra su arco de ~150 sesiones en su testigo original**). 0 re-picks. sin_dispositivo 27→24; universo mérito 2967→2968. Zonas adjudicadas con diff ALINEADO (`diff_zonas_b149.py` v0.1, el gate posicional corta en 25): **41/41 = 25 A1 + 16 A2, 0 fuera de contrato, +38 filas exactas, +46 tramos dispositivo (36×+1 + 5×+2), 0 formas raras, 342_p1393 redundante-inocuo ausente**; los 7 A1-sin-cambio == los 7 dictamen excluidos por diseño. Blind **[CLEAN]** (clave n300 byte-idéntica). Regolden (con `--ignorar-corpus-drift`; primer intento abortó por el gate de drift — el flag aplica también al regolden): golden congelado, invariante golden==producción [CLEAN] 5/5, manifest re-sellado **[CLEAN] 64**. Regresión propia post-fix: e0_mismatch=25 EXACTOS (la réplica corta pre-relabel) + A1=7 + matches 937→936 (−1 contabilizado: match no-perf de «Por lo tanto» en caso A1 excluido por E0).
+
+Constancia de método: la corrida de regresión SOBRESCRIBIÓ los CSV del PoC en disco → baselines restaurados desde la sesión y par conservado (`*_v29_baseline` 32/937 · `*_postfix` 7/936); `diff_zonas_b149.py` re-corridas requieren `--a1 …_v29_baseline.csv`. Colisión «(1)» en Downloads verificada inocua (mismo archivo, 3702 bytes ambos).
+
+### H194 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 157 sumario_con_link + 34 sumario_editorial).
+- **Votos:** 27818 filas (identidad intacta, Δ0).
+- **Outcomes:** sin_dispositivo 27→24; is_merit (universo SCDB) 2967→2968.
+- **Parser:** v29.0→**v30.0** (B149 fix A, MAJOR).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5894 filas, sha 027da57d0064…
+- `output/parser/csjn_casos_textos.csv` — 5894 filas, sha e8857f5a385c…
+- `output/parser/csjn_casos_votos.csv` — 27818 filas, sha 4574b3c668bd…
+- `output/parser/csjn_casos_zonas.csv` — **138037** segmentos (Δ+38), sha cf034c6cf950…
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones, sha 30a6da652e3a… (sin cambio)
+- `csjn_casos_recursos.csv` — sha 57dca1d14947… (re-derivado, ripple esperado del outcome nuevo); materia/epilogo/partes **byte-idénticos** al sello H193.
+- Manifest **[CLEAN] 64**.
+
+**Scripts creados:** `scripts/diagnostico/H194/` — `poc_b148_clasificar_d.py` v0.2 (+ `poc_b148_d87_clasif.csv`) · `poc_b149_anclas.py` v0.1 (+ baselines/postfix A1 y A2, 4 CSV) · `diff_zonas_b149.py` v0.1 (+ `diff_zonas_b149.csv`) · `muestra_d87/` + `muestra_d87_seed194.md` (15 extracciones) · 7 extracciones A/C. `scripts/diagnostico/H192/poc_b148_cardinalidad.py` v0.1→**v0.2** (+ `poc_b148_pool_v2.csv`).
+
+**Commits:** 3 — (1) parser v30.0 + outputs canónicos + golden + manifest; (2) scripts/CSVs de diagnóstico H194 + cardinalidad v0.2; (3) docs (DEUDA/BITACORA/CHANGELOG).

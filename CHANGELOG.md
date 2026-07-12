@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H194 (2026-07-12)
+
+- `parser.py` v29.0→**v30.0** (B149 fix A, MAJOR): (A1) herencia del ancla del resolutor — relabel cuerpo→dispositivo desde `por_ello_idx` hasta la primera zona de cierre, guard de alcance zona=='cuerpo' (25 casos; los 7 zona=dictamen → B159, excluidos por diseño); (A2) `RE_DISPOSITIVO_VARIANTES_PERF` — 2 anclas T1 condicionales-a-performativo (`en_virtud_perf` = B067 resucitada perf-gated, 16 TP; `que_de_conf_perf`, 1 TP), `detectar_apertura_dispositivo` +1 arg opcional `cola_wrap`, peek de wrap solo en el zonificador. «Por lo tanto» descartada con constancia. 41 casos de zonas + 3 de outcome/is_merit afectados.
+- `output/parser/csjn_casos_zonas.csv`: 137999→**138037** filas (Δ+38; +46 tramos dispositivo en 41 casos).
+- `output/parser/csjn_casos.csv`: 3 casos recuperan outcome (341_p739 otro + is_merit 0→1 · 344_p776 competencia · 348_p443 rechaza); sin_dispositivo 27→24; mérito 2967→2968.
+- `output/parser/csjn_casos_textos.csv`: 3 filas (considerando/por_ello de los mismos 3). Candado blind [CLEAN].
+- `output/parser/csjn_casos_votos.csv`: denormalización de outcome/is_merit en las filas de los 3 casos (identidad intacta, 27818).
+- `output/parser/csjn_casos_recursos.csv`: re-derivado (ripple del outcome nuevo). materia/epilogo/partes byte-idénticos.
+- Golden re-congelado + `_manifest.json` re-sellado [CLEAN] 64.
+- Diagnóstico (no pipeline): `scripts/diagnostico/H194/` — `poc_b148_clasificar_d.py` v0.2, `poc_b149_anclas.py` v0.1, `diff_zonas_b149.py` v0.1, baselines/postfix; `scripts/diagnostico/H192/poc_b148_cardinalidad.py` v0.1→v0.2 (doble vista).
+
 ## H193 (2026-07-12)
 
 - `parser.py` v28.0→v29.0: B148 fix A — guards en `linea_es_firma_de_juez` (RE_ATRIBUCION_SUMARIO + _firma_nucleo con juez-sobrevive + _firma_residuo_es_prosa). Flip-set sellado 3799 líneas / 1303 casos; espec = poc_b148_flipset v0.3 verbatim.
