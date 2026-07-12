@@ -2,6 +2,14 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H190 (2026-07-11)
+
+- `parser.py` v26.1→**27.1**: B147-1A — `retroceder_frontera` sobre los fines de Pistas 1/3/4 de `detectar_fin_real` (etapas A/B, guards firma-versales/header-voto/nombre-propio/continuación-de-wrap; +1 arg opcional `tokens_nombre_propio`, 1 call-site). ~1830 casos mueven `linea_fin_real`; votos/outcome/is_merit sin cambio. v27.0 intermedio FRENADO en consciente (fragmento de firma wrapeada) — nunca llegó a golden.
+- `output/parser/csjn_casos.csv` — 5894 filas (sin Δ de cardinalidad; `linea_fin_real`/`wc_*` movidos).
+- `output/parser/csjn_casos_zonas.csv` — 138628 segmentos (Δ −1847).
+- `output/parser/csjn_casos_votos.csv` — 27724 filas (sin cambio).
+- Sidecars epilogo/partes re-derivados; manifest re-sellado [CLEAN].
+
 ## H189 (2026-07-11)
 
 - `construir_catalogo.py`: v1.01→v1.04. B151: `RE_ANCLA_DEG` (2ª pasada de rescate de anclas degradadas por OCR; 10 rescates corpus-wide, 2 páginas recuperadas). M46: merge de `_meta/catalogo_suplemento_editorial.csv` (omisiones del índice oficial); v1.04 = path robusto + aviso obligatorio.

@@ -4,8 +4,6 @@ Registro de hipótesis, diagnósticos, falsos positivos e iteraciones de pensami
 
 Formato por entrada: hipótesis o hallazgo, evidencia, conclusión (válido / invalidado / parcialmente válido), implicancias.
 
-
-
 ---
 
 ## Sesión 2026-05-02
@@ -19596,3 +19594,46 @@ Lombardi y Mercante NO están en el índice oficial (verificado: índice del t.3
 **Scripts creados:** `scripts/diagnostico/H189/` — `extraer_lote_h189.py`, `poc_b151_ancla_degradada.py` v0.1 (+ `fantasmas_b147_lote.md`, `poc_b151_rescates.csv`, `adjudicacion_b147_h189.csv`). Pipeline: `construir_catalogo.py` v1.01→v1.04. Dato nuevo: `_meta/catalogo_suplemento_editorial.csv`.
 
 **Commits:** 3 (① pipeline: construir_catalogo v1.04 + _meta/suplemento + scripts H189; ② outputs + golden + manifest de los dos ciclos; ③ docs: DEUDA/BITACORA/CHANGELOG).
+
+
+## H190 — B147-1A: retroceso de frontera fina (parser v26.1→27.1) (2026-07-11)
+
+**Objetivo:** cerrar el frente 1A de B147 (carátula-suelta / bleed de frontera fina), primero de los tres fixes de frontera encolados en H189.
+
+### H190-01 — Apertura: el mecanismo de la DEUDA no cierra contra los datos
+
+Cruce de la clase `caratula_suelta_1A` del diag H188 (51) contra el `pista_fin` real del output: solo 13/51 cortaron por Pistas 3/4 (el mecanismo registrado); **37/51 cortaron por Pista 1**, 1 editorial. El modelo de H188 venía de la bandera del explorador, no del código. La clase es bimodal: Pista 1 con extensión +1 (carátula pegada), Pistas 3/4 con extensión +18/+39 y gap NEGATIVO al vecino (solape). Acople leído en código: `refinar_inicio_por_titulo` (parser 3451) re-ancla al siguiente en su propia carátula → el material absorbido está DUPLICADO en la frontera, no robado → el retroceso del previo es unilateralmente seguro.
+
+### H190-02 — Adjudicación del mecanismo sobre texto real (8 testigos)
+
+5 testigos extraídos con borde mapeado línea a línea (339_p399, 332_p2425, 333_p380 [Pista 1]; 338_p176, 334_p398 [Pistas 3/4]) + 3 de la clase «1A sin recorte» (345_p683, 330_p2892, 330_p3126). Doble corrección de constancia contra H188: **(i)** en Pista 1 la carátula NO se absorbe — cuelga el material PRE-carátula del siguiente (rótulos temáticos, banners, apertura de su dictamen por orden OCR revuelto, strays «NOVIEMBRE»/«Considerando:»); **(ii)** en Pistas 3/4 se absorbe carátula+rótulo+SUMARIO ENTERO (~12-14 líneas) — perfil causado por miss de Pista 1: token corto («Lumi» len 4 < umbral 5, L2538) o divergencia OCR índice/cuerpo («Hurting» en índice vs «HURTIG» en cuerpo, 334_p405) → decisión de diseño: el fix debe ser INDEPENDIENTE del token. Daño verificado en zonas.csv: epilogo de 338_p176 con wc 307 (sumario de Lumi adentro), segmentos `dictamen`/`sumario` espurios del siguiente en 332/333. Los 3 «sin recorte» = FP de la bandera-1 (frontera perfecta, carátula del siguiente en lfr+1).
+
+### H190-03 — PoC v0.1→v0.3: el flip-set adjudica los guards
+
+`poc_b147_1a_retroceso.py` (read-only, etapas A/B medidas por separado, anclas hard-codeadas, CSV determinista por caso_id para diff pre/post). v0.2 en disco: 2829 recortes, B=1158 → adjudicación destapa clase de FP catastrófica: **la firma en VERSALES de los tomos viejos matchea `_parece_caratula`** (958 FP de B amputando firma+disidencias+epílogo, 420 de A). v0.3: guards `linea_es_firma_de_juez` + `RE_HEADER_VOTO_DISIDENCIA` (reuso) + scan de B frenado en la primera firma + guard nombre-propio (apéndices 1C, flageados en columna `b_descarto_propio`). Resultado: 1866 recortes = 1197 solo-banner + 669 sustantivos; **B 91/91 TP** (79 auto-match nombre del vecino + 12 leídos); 0 fantasmas nuevos (3 sospechosos = vecinos `sumario_con_link`); **corrección de cardinalidad: 1A real = 1866, no 51** (la bandera-1 solo veía el bleed caído en zona epilogo).
+
+### H190-04 — Fix v27.0 y FRENO del ciclo consciente (violación de contrato)
+
+`retroceder_frontera` en parser (Pistas 1/3/4; editorial/firma_actual/fallback intactos), verificado 8/8 + guards sintéticos, equivalencia exacta con la espec del PoC. **El consciente VIOLÓ el contrato: votos −42 filas, 329_p83 pierde a Lorenzetti (n_jueces 6→5, is_full_bench flip), firma_raw truncada ~34 casos → FRENO, sin regolden.** Causa raíz verificada empíricamente: los patrones de `JUECES_CONOCIDOS` son nombre+apellido → el fragmento final de la firma wrapeada («LORENZETTI.», «M. ARGIBAY.») no matchea → `rotulo_caps` → la etapa A lo comía. La clase estaba en el baseline del PoC (34 casos) y el detector de fuga de la adjudicación la dejó pasar por exigir raya. Lección repetida: `linea_es_firma_de_juez` se usó habiendo leído solo su cabecera.
+
+### H190-05 — v27.1: guard continuación-de-wrap, re-ciclo y sello
+
+Guard general `_es_continuacion_wrap`: `rotulo_caps` corto que cierra en «.» inmediatamente después de una línea sustantiva ABIERTA = continuación del wrap → sustantivo. Cubre firma-fragmento Y wrap de epílogo (331_p2099 «S.A. – AGROPERFO S.A.»); **repara de rebote 329_p4506** («LORENZETTI — EMILIO L. FERNÁNDEZ.», conjuez → evidencia nueva a B153) sin conocer al conjuez; no toca los recortes buenos (rótulos ajenos siguen a líneas CERRADAS; banners nunca cierran en «.»). PoC v0.4 en paridad. Gate de instalación atrapó una reinstalación de v27.0 (Select-String — lección H189 operativa). Consciente v27.1: votos 27724 exactos (Δ=0), cero firma_raw truncada, 0 flips outcome/is_merit/gate → **regolden + manifest [CLEAN] + regresión propia del PoC = 0 recortes corpus-wide.**
+
+### H190 — Estado final
+
+- **Corpus:** 5894 casos (5701 fallos + 160 sumario_con_link + 33 sumario_editorial).
+- **Votos:** 27724 filas (idéntico pre-fix; la clase fragmento-de-firma protegida).
+- **B147:** fantasmas CERRADO (H189) · **1A CERRADO (H190)** · 1C abierto con 3 candidatos flageados.
+- **Residuales documentados:** under-trim 345_p1219 (≤1 línea) · conjueces B153 (evidencia +1).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5894 filas (linea_fin_real/status_fin/wc_* movidos en ~1830 casos).
+- `output/parser/csjn_casos_votos.csv` — 27724 filas (sin cambio).
+- `output/parser/csjn_casos_zonas.csv` — 138628 segmentos (Δ −1847 vs 140475: segmentos espurios de frontera eliminados).
+- `output/parser/csjn_casos_textos.csv` — 5890 filas (epilogo/considerando descontaminados).
+- Sidecars epilogo/partes re-derivados; manifest [CLEAN] re-sellado.
+
+**Scripts creados:** `scripts/diagnostico/H190/` — `poc_b147_1a_retroceso.py` v0.4 (+ baseline `poc_b147_1a_out.csv`, extractos de 8 testigos). Scratch de sesión, no canónico.
+
+**Commits:** 2 — (1) parser v27.1 + outputs + golden + manifest [ciclo B147-1A]; (2) docs (DEUDA + BITACORA + CHANGELOG).
