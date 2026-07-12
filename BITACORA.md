@@ -20022,3 +20022,7 @@ Una unidad = un flip-set = un ciclo. **D1 (H200):** fix CABEZA en `refinar_inici
 
 - `output/parser/_manifest.json`: re-sello de procedencia — `parser.py` 32.0→32.1 en el registro de scripts y `generator_version` de los 5 CSV (bytes de los outputs SIN cambio, sha 5/5 idénticos al sello H197; cierra el micro-item de invariante de H198).
 - Sin cambios en scripts del pipeline ni en outputs canónicos (sesión de diagnóstico).
+
+### H199 — Corrección de constancia (mismo día, post-push)
+
+El campo **Commits** del bloque de arriba decía 3; fueron **2** (manifest + docs): `scripts/diagnostico/H199/` está gitignoreado (política scratch-por-sesión) y queda como scratch local, no commiteado. Corrección de método: el "patrón H194" citado en sesión (commitear diagnósticos) no sobrevive al gitignore vigente — las constancias viejas que registran commits de `diagnostico/HNN/` son pre-gitignore o con `-f`. Destapes del `git status` → micro-items H200: (a) `.pyc` TRACKEADO borrado (`scripts/diagnostico/H196/__pycache__/…`) — commitear la deleción + ignorar `__pycache__`; (b) explorador v8 UNTRACKED desde H186 (`scripts/explorador/{exploradorv8.py,README.md}`) + `README_explorador.md` suelto en la RAÍZ (violación de schema) — adjudicar: commitear el explorador y mover/borrar el de raíz.
