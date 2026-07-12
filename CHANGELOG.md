@@ -2,6 +2,15 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H197 (2026-07-12)
+
+- `parser.py` v31.0→32.0 (MAJOR, B162): `{en_consecuencia, atento_a}` movidas de `RE_DISPOSITIVO_VARIANTES` a `RE_DISPOSITIVO_VARIANTES_ZONIF_PERF` — perf-gated (RE_PERF en cola+wrap) SOLO en el zonificador (`detectar_apertura_dispositivo` +kwarg `zonif=False`, único call-site `zonif=True`); resolutor incondicional. 423 casos con zonas descontaminadas; 0 flips de decisión. Absorbe M53(b): header del módulo reescrito (estaba en «v17 beta»).
+- `output/parser/csjn_casos.csv`: 5894 filas — word_count/wc_mayoria corregidos en 17 casos (bleed excluido vía residuo).
+- `output/parser/csjn_casos_votos.csv`: 27.818 filas — solo wc_mayoria denormalizada en los mismos 17.
+- `output/parser/csjn_casos_zonas.csv`: 138.078→137.979 (−99; merge de segmentos dispositivo espurios).
+- `csjn_casos_textos.csv` / `csjn_casos_editorial.csv` / `csjn_casos_recursos.csv`: byte-idénticos.
+- golden re-congelado + `_manifest.json` re-sellado [CLEAN] 64.
+
 ## H196 (2026-07-12)
 
 - `parser.py` 30.0 → 31.0 (MAJOR): `RE_DICT_HDR` pasa de prefijo-abierto a forma-título laxa (B159 clase B). Mata 15 FP narrativos corpus-wide (wrap OCR + re.I); 7 casos descontaminados, 0 flips de outcome, radio fin_real vacío (medido). re.I se conserva (títulos en versalitas-OCR de 336.1).

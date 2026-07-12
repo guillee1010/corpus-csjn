@@ -19874,3 +19874,58 @@ El "dictamen sin cierre" de la constancia H194 era el síntoma. Causa real, dos 
 **Scripts creados:** `scripts/diagnostico/H196/` — poc_b159_superficie.py v0.1 (+ dump 3810 filas), poc_b159_flipset.py v0.2 (+ baseline 7 casos), extractos .md de los 7 testigos. Scratch de perfil (parser.prof) unificado desde H195/.
 
 **Commits:** 3 — (1) pipeline: parser v31.0 + outputs + golden + manifest; (2) diagnóstico H196: PoCs + baselines + extractos; (3) docs + housekeeping (baks a archivo/, scratch unificado).
+
+## H197 — B162 CERRADO: perf-gate zonificador-solo para variantes T1 FP-narrativas (parser v32.0) (2026-07-12)
+
+**Objetivo:** cerrar B162 (`en_consecuencia` T1 argumental sobre-extiende dispositivo) por el camino GATE de superficie → flip-set → fix, con los micro-items de H196 primero.
+
+### H197-01 — Micro-items de arrastre
+
+- **p1952 L923 LEÍDO (constancia B162 cerrada, con hallazgo):** el ancla del segmento dispositivo 923-972 (voto de Highton) NO era `en_consecuencia` sino **`atento_a`** — wrap del OCR deja «atento el carácter nacional del Código Penal”…» a inicio de línea (b922 abierta, mitad de cita) y `re.I` matchea. Ensanchó el alcance de B162 con dato. Constancia madre encontrada: **H041** (BITACORA L4028/L4055) ya marcaba el trío {de_conformidad, en_consecuencia, atento_a} como peligroso y lo excluyó del Tier 2 mid-line; línea-inicial quedó incondicional desde entonces.
+- **Housekeeping H196 PARCIAL:** commit de docs pusheado (375f630) ✓ · `.py` en H196/ ✓ · pero H195/ sigue vivo (7 extractos, parser.prof, poc_b159_superficie.csv, _tmp/) y `dir archivo\` no se corrió — decisión del operador pendiente para H198.
+
+### H197-02 — GATE: superficie corpus-wide (poc_b162_superficie v0.1→v0.2)
+
+Dump de las **16 variantes T1** (mismo costo que 1; el alcance del fix lo decide el dato), importando el parser real v31.0 (regex fuente única). v0.1 crasheó por `csv.field_size_limit` (textos.csv trae el considerando completo desde H113) → v0.2 con el patrón `extraer_caso`. Resultado: **4607 matches / testigos 4/4 [OK]**. Hallazgos que decidieron el diseño:
+- **Gate de resolutor MUERTO con dato:** el performativo vive ADENTRO del chunk, no en la línea del ancla — `por_los_fund` 342/342 picks sin perf en línea, `de_conformidad` 212. Las variantes pesadas quedan incondicionales, fuera de la unidad.
+- **en_consecuencia = perfil B067:** 1411 matches / 471 anclas de zona / solo 10 picks de outcome. atento_a: 74/30/5.
+- 497 anclas espurias / 431 casos; ejes minúscula/prev_abierta/perf medidos por match.
+
+### H197-03 — Lectura de 5 extractos (adjudicación pre-flipset)
+
+330_p2520, 329_p2985, 341_p774, 346_p1117, 347_p109 extraídos y leídos:
+- **341_p774 falsifica la arquitectura H194-A2 pura:** dispositivo principal genuino (outcome=revoca correcto) con «se resuelve» wrapeado a la línea siguiente (perfW=1/perfL=0) — un gate misma-línea en el resolutor lo pierde y la cascada T2/T4 no rescata.
+- **330_p2520/329_p2985 = clase atento_a genuina** (resoluciones procesales cortas «Autos y Vistos: Atento a…»): perf a 5 líneas o ENCLÍTICO («hágase saber», fuera de RE_PERF) — inalcanzable por diseño; outcome hoy `otro`. El doble pick de 2985 = colisión del proxy de 40 chars (el sumario editorial duplica el texto del fallo).
+- **347_p109 = bloque DOCTRINAL** («podríamos decir, conforme Carrió»), outcome fabricado de narración → **B164** nueva.
+- **Decisión de diseño:** perf-gate **zonificador-solo** + red A1 de H194 (los genuinos pickeados que pierden el ancla de Pasada 1 recuperan la zona vía el relabel del pick). 0 flips de outcome POR CONSTRUCCIÓN.
+
+### H197-04 — Flip-set (poc_b162_flipset v0.1) + FRENAR adjudicado
+
+Réplica fiel v31 con relabel A1, patcheo de listas SOLO alrededor de `zonificar_bloque` (try/finally), contrato leído del dump sellado (no hardcodeado). **E0 5703/5703 · 423 flips · 0 outcome/por_ello · A1 activo en 4 · 9 ancla==pick sin flip (incl. 329_p3493 = FN del proxy, adjudicado por construcción).** Un FRENAR: **330_p2122 fuera de contrato** → adjudicado TP con el dato (linea_inicio inferida 30419; el ancla caída de file_linea 30424 pertenece al vecino 330_p2115 por solape `fin_extendido_pag_compartida`; las 16 líneas compartidas pasan a residuo, correcto) → contrato real: flips ⊆ {423} ∪ vecinos-por-solape.
+
+### H197-05 — Fix v32.0 (MAJOR) + ciclo consciente + perímetro completo
+
+Fix: `RE_DISPOSITIVO_VARIANTES_ZONIF_PERF` nueva (las 2 movidas de T1) + `detectar_apertura_dispositivo(+kwarg zonif=False)`, único call-site `zonif=True` en el zonificador. **Absorbe M53(b)** (header «v17 beta» reescrito, ahora sin versión). Smoke semántico 11/11 sobre textos reales. Ciclo `--consciente`: [FAIL] esperado, adjudicado con **perímetro COMPLETO programático** (`diff_perimetro_b162` v0.1, el check corta en 25): casos.csv **17 casos**, columnas SOLO {word_count, wc_mayoria}, **candado de decisión 0 flips**; votos.csv 27.818 filas idénticas, SOLO wc_mayoria denormalizada (corrección de constancia: el contrato decía «votos sin cambio» y olvidó la columna denormalizada; identidad de voto intacta); zonas 423 ⊆ flip-set, 138.078→**137.979** (−99). **Mecanismo del wc = TP puro:** los 17 son la clase `dispositivo→residuo_caso_anterior` y el residuo se excluye del wc (H055/B083) — el golden contaba bleed como mayoría (339_p704 wc 2210→583, 164 líneas de bleed; 340_p549 408) = clase **M50 parcialmente autocorregida**. textos.csv **byte-idéntico** (candado blind por construcción) · recursos byte-idéntico · editorial sin cambio. `--regolden`: golden congelado, invariante c [CLEAN], manifest **[CLEAN] 64**. Regresión propia: flipset v0.2 detecta layout v32 → E0 5703/5703, **flip-set VACÍO**.
+
+### H197 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumario_con_link).
+- **Sin firma:** 18. **Votos:** 27.818 filas (identidad intacta).
+- **Zonas:** 137.979 segmentos (−99 vs H196: merge de segmentos dispositivo espurios).
+- **Decisión:** 0 flips en outcome/is_merit/is_originaria/es_queja/voting_pattern/n_jueces (perímetro verificado corpus-wide). sin_dispositivo 24 · is_originaria 596.
+- **wc:** 17 casos descontaminados de bleed (word_count/wc_mayoria).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5894 filas · sha 71586cb1fd95…
+- `output/parser/csjn_casos_textos.csv` — 5894 filas · sha 7bac60b39d64… (SIN cambio)
+- `output/parser/csjn_casos_votos.csv` — 27.818 filas · sha bac640565cfd…
+- `output/parser/csjn_casos_zonas.csv` — 137.979 filas · sha dc1522e5c7f1…
+- `output/parser/csjn_casos_editorial.csv` — 152 filas · sha 30a6da652e3a… (SIN cambio)
+- Derivados re-corridos: epilogo 750584205647… · partes 9956e877acae… · materia 691d563e7a75… · recursos 57dca1d14947… (byte-idéntico)
+- `_manifest.json` re-sellado **[CLEAN] 64**.
+
+**Scripts modificados (versión resultante):** `scripts/pipeline/parser.py` 31.0→**32.0**.
+
+**Scripts creados:** `scripts/diagnostico/H197/` — `poc_b162_superficie.py` v0.2 · `poc_b162_flipset.py` v0.2 (regresión viva: `--esperar-version 32.0` → E0 limpio + flip-set VACÍO) · `diff_perimetro_b162.py` v0.1 · dumps/baselines (superficie 4607, flipset 423) · resúmenes · 5 extractos nuevos (330_p2520, 329_p2985, 341_p774, 346_p1117, 347_p109) + 344_p1952/344_p2123 re-extraídos.
+
+**Commits:** 3 — (1) fix parser v32 + outputs + golden + manifest; (2) PoCs, baselines, perímetro y extractos H197; (3) docs (DEUDA/BITACORA/CHANGELOG).
