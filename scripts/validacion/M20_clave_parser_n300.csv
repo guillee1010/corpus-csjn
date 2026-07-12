@@ -148,7 +148,7 @@ caso_id_canonico,parser_es_revision_fondo,parser_disposicion,parser_reenvia,pars
 332_p2604,si,revoca,si,recurrente_gana,recurso_extraordinario,no,hace_lugar,1
 332_p2625,si,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,desestima,1
 332_p2797,no,no_revision_procesal,no,no_aplica,recurso_ordinario,si,revoca,0
-333_p9,si,no_revision_demanda,no,no_aplica,recurso_extraordinario,no,rechaza,1
+333_p9,si,no_revision_demanda,no,no_aplica,,no,rechaza,1
 333_p60,no,no_fondo,no,no_aplica,,no,otro,0
 333_p215,si,no_revision_demanda,no,no_aplica,,no,hace_lugar,1
 333_p241,no,no_fondo,no,no_aplica,recurso_extraordinario,no,desestima,0

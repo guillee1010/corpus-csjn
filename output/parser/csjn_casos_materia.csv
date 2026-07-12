@@ -810,7 +810,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 329_p4804,contencioso_administrativo,capa2,provincia:ca
 329_p4808,contencioso_administrativo,capa2,provincia:ca
 329_p4811,,originaria,originaria
-329_p4815,contencioso_administrativo,capa2,provincia:ca
+329_p4815,tributario,capa2,kw(2)
 329_p4817,contencioso_administrativo,capa2,provincia:ca
 329_p4822,,originaria,originaria
 329_p4826,contencioso_administrativo,capa2,provincia:ca
@@ -1394,7 +1394,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 330_p1943,,pendiente_capa2,sin_ancla
 330_p1945,,pendiente_capa2,sin_ancla
 330_p1947,previsional,capa1,regla:seguridad social
-330_p1950,previsional,capa1,regla:seguridad social
+330_p1950,,pendiente_capa2,sin_ancla
 330_p1961,penal,capa1,regla:criminal y correccional
 330_p1971,penal,capa1,regla:criminal y correccional
 330_p1975,civil_comercial,capa1,regla:\ben lo civil\b
@@ -5042,7 +5042,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 345_p688,civil_comercial,capa2,objeto(1)
 345_p694,penal,capa1,regla:criminal y correccional
 345_p702,contencioso_administrativo,capa1,regla:contencioso administrativo
-345_p715,contencioso_administrativo,capa1,regla:contencioso administrativo
+345_p715,,no_aplica,tipo_entrada=sumario_editorial
 345_p716,,no_aplica,tipo_entrada=sumario_con_link
 345_p722,laboral,capa1,regla:\bdel trabajo\b
 345_p728,laboral,capa2,kw+norma:24557+parte(3)
