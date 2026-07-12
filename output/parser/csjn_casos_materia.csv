@@ -1673,7 +1673,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 330_p4354,civil_comercial,capa1,regla:\ben lo comercial\b
 330_p4358,penal,capa2,objeto(1)
 330_p4364,civil_comercial,capa1,regla:\ben lo civil\b
-330_p4365,,no_aplica,tipo_entrada=sumario_editorial
+330_p4365,civil_comercial,capa2,norma:25798(1)
 330_p4368,contencioso_administrativo,capa2,provincia:ca
 330_p4372,,originaria,originaria
 330_p4389,,pendiente_capa2,sin_ancla
@@ -2737,7 +2737,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 333_p1789,penal,capa2,objeto(1)
 333_p1805,penal,capa2,norma:23737(1)
 333_p1808,,pendiente_capa2,sin_ancla
-333_p1812,contencioso_administrativo,capa1,regla:contencioso administrativo
+333_p1812,,pendiente_capa2,sin_ancla
 333_p1817,tributario,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 333_p1820,tributario,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 333_p1828,laboral,capa1,regla:\bdel trabajo\b
@@ -3463,7 +3463,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 339_p888,,originaria,originaria
 339_p889,,pendiente_capa2,sin_ancla
 339_p891,,pendiente_capa2,sin_ancla
-339_p893,contencioso_administrativo,capa1,regla:contencioso administrativo
+339_p893,,pendiente_capa2,sin_ancla
 339_p897,tributario,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 339_p901,,pendiente_capa2,sin_ancla
 339_p906,penal,capa2,kw+norma:24767+objeto(3)
@@ -5189,7 +5189,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 346_p236,laboral,capa2,norma:23551(1)
 346_p247,,no_aplica,tipo_entrada=sumario_con_link
 346_p249,laboral,capa1,regla:\bdel trabajo\b
-346_p253,,no_aplica,tipo_entrada=sumario_con_link
+346_p253,,no_aplica,tipo_entrada=sumario_editorial
 346_p254,,no_aplica,tipo_entrada=sumario_con_link
 346_p256,,no_aplica,tipo_entrada=sumario_con_link
 346_p257,laboral,capa1,regla:\bdel trabajo\b
@@ -5283,7 +5283,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 346_p970,contencioso_administrativo,capa1,regla:contencioso administrativo
 346_p1015,,originaria,originaria
 346_p1039,tributario,capa1_refinado,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
-346_p1062,,no_aplica,tipo_entrada=sumario_con_link
+346_p1062,,no_aplica,tipo_entrada=sumario_editorial
 346_p1063,,no_aplica,tipo_entrada=sumario_con_link
 346_p1065,contencioso_administrativo,capa1,regla:contencioso administrativo
 346_p1068,contencioso_administrativo,capa2,provincia:ca
@@ -5642,7 +5642,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 348_p276,,pendiente_capa2,sin_ancla
 348_p286,,no_aplica,tipo_entrada=sumario_con_link
 348_p287,penal,capa2,objeto(1)
-348_p289,contencioso_administrativo,capa1,regla:contencioso administrativo
+348_p289,,pendiente_capa2,sin_ancla
 348_p291,contencioso_administrativo,capa1,regla:contencioso administrativo
 348_p293,,no_aplica,tipo_entrada=sumario_con_link
 348_p294,,no_aplica,tipo_entrada=sumario_con_link
@@ -5798,7 +5798,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 348_p1505,penal,capa1,regla:casacion penal
 348_p1511,,pendiente_capa2,sin_ancla
 348_p1516,laboral,capa1,regla:\bdel trabajo\b
-348_p1519,,no_aplica,tipo_entrada=sumario_con_link
+348_p1519,civil_comercial,capa1,regla:\ben lo comercial\b
 348_p1523,,no_aplica,tipo_entrada=sumario_editorial
 348_p1524,civil_comercial,capa1,regla:\ben lo civil\b
 348_p1533,,no_aplica,tipo_entrada=sumario_con_link

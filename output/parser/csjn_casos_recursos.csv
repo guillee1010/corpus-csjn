@@ -5798,7 +5798,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 348_p1505,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 348_p1511,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 348_p1516,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
-348_p1519,no_fondo,no,no_aplica,,no,no,sin_marcador,,0
+348_p1519,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 348_p1523,no_fondo,no,no_aplica,,no,no,sin_marcador,,0
 348_p1524,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 348_p1533,no_fondo,no,no_aplica,,no,no,sin_marcador,,0
