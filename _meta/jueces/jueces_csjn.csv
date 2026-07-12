@@ -24,7 +24,7 @@ Petrone,conjuez,daniel\s+a\.?\s*petrone,,,parser<=27.1 (migrada verbatim),,
 Ledesma,conjuez,angela\s+e\.?\s*ledesma,,,parser<=27.1 (migrada verbatim),,
 Barroetaveña,conjuez,diego\s+g\.?\s*barroetave[ñn]a,,,parser<=27.1 (migrada verbatim),,
 Hornos,conjuez,gustavo\s+m\.?\s*hornos,,,parser<=27.1 (migrada verbatim),,
-Leal de Ibarra,conjuez,javier\s+(?:mar[íi]al?\s+)?leal\s+de\s+ibarra,,,parser<=27.1 + ensanche H191 (B153),OCR 'MARIAL' (María L.) 329_p5261,
+Leal de Ibarra,conjuez,javier\s+(?:mar[íi]al?\s+|m\.\s+)?leal\s+de\s+ibarra,,,parser<=27.1 + ensanche H191 (B153) + ensanche H192 (B154),OCR 'MARIAL' (María L.) 329_p5261; inicial 'M.' 329_p1303/1305,
 Catucci,conjuez,liliana\s+(catucci|cattucci),,,parser<=27.1 (migrada verbatim),,
 Riggi,conjuez,eduardo\s+r\.?\s*riggi,,,parser<=27.1 (migrada verbatim),,
 Yacobucci,conjuez,guillermo\s+yacobucci,,,parser<=27.1 (migrada verbatim),,
@@ -71,5 +71,18 @@ Madueño,conjuez,ra[úu]l\s+madue[ñn]o,,,H191 (B153) — adjudicado sobre firma
 Niremperger,conjuez,zunilda\s+niremperger,,,H191 (B153) — adjudicado sobre firma_raw,,329_p4446
 "Fernández, Emilio L.",conjuez,emilio\s+l\.?\s*fern[áa]ndez,,,H191 (B153) — adjudicado sobre firma_raw,,329_p4506
 "Fernández, María Beatriz",conjuez,mar[íi]a\s+beatriz\s+fern[áa]ndez,,,H191 (B153) — adjudicado sobre firma_raw,,329_p4663
-Tazza,conjuez,alejandro\s+o(?:\.|svaldo)?\s*tazza,,,H191 (B153) — adjudicado sobre firma_raw,,329_p5261;346_p1426;347_p1891;348_p61;348_p635
+Tazza,conjuez,alejandr?o\s+o(?:\.|svaldo)?\s*tazza,,,H191 (B153) — adjudicado sobre firma_raw + ensanche H192 (B154),OCR 'Alejando' sin R en 348_p1357,329_p5261;346_p1426;347_p1891;348_p61;348_p635
 Lugones,conjuez,narciso\s+juan\s+lugones,,,H191 (B153) — adjudicado sobre firma_raw,,330_p1436
+Müller,conjuez,carlos\s+antonio\s+m[üu]ller,,,H192 (B154) — adjudicado sobre firma_raw,variantes MULLER/MÜLLER en disco (la Ü rompe el token del colector),329_p1303;329_p1305;329_p3221;329_p3235
+Aranguren,conjuez,(?:beatriz\s+estela\s+aranguren|aranguren\s+beatriz\s+estela),,,H192 (B154) — adjudicado sobre firma_raw,"orden invertido en 348_p563; NO confundir con Juan José Aranguren (ministro PEN, bleed 339_p1223)",347_p1166;348_p563;348_p879;348_p1553;349_p43
+Irurzun,conjuez,mart[íi]n\s+irurzun,,,H192 (B154) — adjudicado sobre firma_raw,"en 331_p1397 el ancla de firma es errónea (B148, .md leído: firmó; panel real 7)",338_p1433;344_p1557;331_p1397
+Lozano,conjuez,mariano\s+roberto\s+lozano,,,H192 (B154) — adjudicado sobre firma_raw,el conjuez de H189/Mercante; visible post-ripple v28.0,348_p1553;349_p43
+Boldú,conjuez,(?:mario\s+osvaldo\s+bold[úu]|bold[úu]\s+mario\s+osvaldo),,,H192 (B154) — adjudicado sobre firma_raw,orden invertido en 348_p563; con tilde en 348_p841/955,348_p563;348_p1553;348_p841;348_p955
+Sánchez,conjuez,abel\s+guillermo\s+s[áa]nchez,,,H192 (B154) — adjudicado sobre firma_raw,,349_p43;349_p53;349_p81
+Barreiro,conjuez,ricardo\s+guido\s+barreiro,,,H192 (B154) — adjudicado sobre firma_raw,"distinto de Barreiro Deymonnaz, letrado en bleed 330_p2527",338_p1433
+Sotelo de Andreau,conjuez,mirta\s+gladis\s+sotelo(?:\s+de\s+andreau)?,,,H192 (B154) — adjudicado sobre firma_raw,"sufijo opcional, patrón tipo Tyden",344_p1557
+Bejas,conjuez,ra[úu]l\s+daniel\s+bejas,,,H192 (B154) — adjudicado sobre firma_raw,,349_p53
+Candisano Mera,conjuez,(?:pablo\s+alejandro\s+candisano\s+mera|candisano\s+mera\s+pablo\s+alejandro),,,H192 (B154) — adjudicado sobre firma_raw,orden invertido en 348_p716/755,348_p1262;349_p81;349_p95;348_p716;348_p755
+Llorens,conjuez,(?:mariano\s+llorens|llorens\s+mariano),,,H192 (B154) — adjudicado sobre firma_raw,orden invertido en 348_p569,348_p569;348_p635;348_p841;348_p955;348_p1262
+Moltini,conjuez,(?:patricia\s+marcela\s+moltini|moltini\s+patricia\s+marcela),,,H192 (B154) — adjudicado sobre firma_raw,orden invertido en 348_p569,348_p569;348_p841;348_p955
+González R.L.,conjuez,ram[óo]n\s+luis\s+gonz[áa]lez,,,H192 (B154) — adjudicado sobre firma_raw,nombre completo para no colisionar con Pereyra González,349_p95
