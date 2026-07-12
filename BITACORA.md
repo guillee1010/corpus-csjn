@@ -19964,3 +19964,61 @@ Prefiltro de LITERALES OBLIGATORIOS: de cada patrón del CSV se deriva mecánica
 **Scripts creados:** `scripts/diagnostico/H198/` — `poc_m52_literales.py` (v0.1, regresión propia viva), `poc_m52_literales_tabla.csv`, `parser_v32.1.prof` (baseline post-fix); `_tmp/` con los 5 CSV del perfil purgado tras el sellado por hash.
 
 **Commits:** 3 — (1) fix M52: parser v32.1; (2) housekeeping: bak v27.1 rescatado a archivo\; (3) docs: DEUDA + BITACORA + CHANGELOG.
+
+## H199 — Sub-frente D de B147/M45: adjudicación de la vista CABEZA + B018 resucitada (2026-07-12)
+
+**Objetivo:** abrir el sub-frente D (30 FRONTERA_FPA + 2 MIXTA del D-87 de H194, Mendoza prioritaria) — la sesión adjudicó el mecanismo completo por lectura y decidió partir el fix en unidades D1-D5 sin implementar nada (diagnóstico + diseño como cierre válido, según PROMPT).
+
+### H199-01 — Micro-items H198 saldados
+
+(1) **Invariante de procedencia:** `_manifest.json` registraba `parser.py: 32.0` con disco en 32.1 (el ciclo H198 fue byte-idéntico y el orquestador no re-selló). Re-sello con `generar_manifiesto.py` [OK]: sha **5/5 idénticos al sello H197** (casos 71586cb1fd95… / textos 7bac60b39d64… / votos bac640565cfd… / zonas dc1522e5c7f1… / editorial 30a6da652e3a…), derivers verificados (materia v3.2 / recursos v0.6 / epilogo v0.4 / partes v0.18), commit propio pusheado. (2) **`_tmp/` de H196** adjudicado: los 5 CSV de la corrida de perfil H198 (vía 1 del contrato triple, 12/7 05:22, ~52 MB); sha ya sellados en la constancia H198 → purgado sin pérdida de evidencia. (3) **Cierre H198 constatado:** 3 commits (fix v32.1 / housekeeping bak / docs) en origin/main.
+
+### H199-02 — Apertura: instrumento de estado sobre los 32 D + 329_p4815
+
+`diag_frontera_d_status.py` v0.1 (read-only, H199/): para los 32 D-frontera + el testigo H197, ancla de inicio (de `status_localizacion`) y solape con el vecino previo (`prev_lfr − inicio`). Resultado: **anclas titulo 31 / catalogo 2** (mata la hipótesis ancla_catalogo para la clase dominante: `refinar` SÍ corrió y encontró el token) · **solape ≥0 (duplicado) 19 / <0 (solo nuestro) 14**. Los 2 catalogo = 329_p3444 y 329_p4988.
+
+### H199-03 — Mecanismo adjudicado por lectura (7 extractos .md)
+
+Extraídos con `extraer_caso` v2.3 (CLI verificada; `--cola` para espiar desde el previo): 329_p3444, 329_p2179, 329_p4815, 329_p4811+cola80, 330_p1158, 330_p1135+cola20, 329_p2645. Veredicto:
+
+- **Clase dominante (falso-match-temprano):** el tier base de `refinar_inicio_por_titulo` (parser L2470-2478/2486-2491) toma el PRIMER match del token del título SIN guards (`_es_texto_corriente`/stoplist/retry existen SOLO en Tier 4). «Banco» matchea «Banco de la Ciudad de Bue-» = cola de Pontoriero (329_p2645); «Mendoza» matchea «Provincia de Mendoza» = dispositivo de Lavado c/ Mendoza (330_p1158, **el Mendoza real del pool: saga Riachuelo, resolución de terceros**); «Nuevo» re.I matchea «un nuevo fallo» (329_p2179, disidencia entera de Argibay del previo en la cabeza, confirma H194). Verificado en código: `primer_token_de_caratula` devuelve esos tokens («banco» NO está en `_GENERICOS`).
+- **El MISMO token rompe el lado FIN:** Pista 1 de `detectar_fin_real` matchea «Mendoza» (token del siguiente) dentro del dispositivo del PREVIO y lo trunca a mitad de oración (330_p1135 lfr=44304 «…a la Suprema Corte de la ⏎»; `_es_texto_corriente` no atrapa arranque en mayúscula). → La sub-clase solape<0 = **previo truncado + cola huérfana heredada**, NO orden OCR revuelto.
+- **CORRECCIÓN DE CONSTANCIA H194: 329_p3444 NO es Mendoza/Riachuelo — es Melchiori c/ Provincia de Santa Fe.** Divergencia índice/cuerpo «Melchiori»→«MELCHORI» (OCR pierde una i) → todos los tiers fallan → `_ancla_catalogo`, recorte 0 (espejo «Hurting/HURTIG» de H190 en la cabeza). Su cabeza trae la cola de Ferrari de Grand (= 329_p3403 de B135c), cuyo propio epílogo quedó FUERA de su rango. Las «~46 líneas antes de la carátula» son ~21 (el bloque mide 46 en total).
+- **329_p4815 (Lago Espejo) = interleave OCR real** (familia B152/329_p4140): el cuerpo del caso vive físicamente ANTES del banner de su página, en un gap de 64 líneas que ningún bloque posee (tras el fin CORRECTO de García 329_p4811 por firma_actual); el bloque publicado son 8 líneas de cola de dispositivo (`refinar` ancló en el «Lago» del wrap del dispositivo). Fuera del alcance de frontera-fina.
+- **Convergencia: B018 componentes 1+2** (DEUDA L1337) — dormida desde H068 por «sin señal medible desde el CSV»; la señal era la gramática de zonas. Comp. 2 opera además en `refinar_inicio_por_titulo`, fuera del alcance original de la entrada.
+
+### H199-04 — PoC corpus-wide `poc_b147_d_cabeza` v0.1 + muestra adjudicada
+
+Réplica con funciones REALES importadas (refinar / cargar_localizados / construir_bloque / `_parece_caratula`; pin `--esperar-version 32.1`). Clave de fidelidad: reusar `cargar_localizados` (MUTA linea_inicio en los `pagina_no_en_mapa`). **Candado E0: 5894/5894** (li_catalogo + offset == li_publicado). Medición: anclas titulo 5850 / catalogo 40 / vistos 4; clases OK 4790 / TITULO_PROSA_SIN_FORMA_POST 962 / CAT_FORMA_SIN_TOKEN 37 / **FLIP_TITULO_PROSA 105** (∩ D-frontera 19/32; delta_recorte 1/7/114 min/p50/max; tokens top: Restitución 12, Banco 7, Luis 6, Asociación 6, Aires 5, Cámara 4).
+
+Muestra seed-199 (13 D-sin-flip + 10 FLIP + 10 PROSA + 8 SIN_TOKEN) adjudicada:
+- **13 D sin flip = 3 sub-clases explicadas:** (a) ancla en FIRMA-versales del previo que `_parece_caratula` acepta, con «Santiago»/«Juan» matcheando NOMBRES DE JUECES (329_p1898, 330_p2478) — el mismo FP que reventó el PoC v0.2 de H190 (958 casos); (b) vecinos HOMÓNIMOS: 4 Boggiano consecutivos, el token no discrimina carátula propia de la hermana (la clase que rompió extraer_caso v1 con «los Mendoza de ejecución»); (c) carátula propia mixta/anonimizada que el detector de forma del PoC no reconoce (334_p965, 341_p2019, 345_p905, 345_p1519 — TP del bug, FN del instrumento). Bonus: tokens basura destapados («Autos», «Civil» como primer token = B018 comp. 1 puro).
+- **10 FLIP nuevos ≈ 6 TP / 4 FP del instrumento:** TP = anclas en el epílogo del previo («Tribunal de origen: Cámara…», «interpuesto por la Asociación…», «Traslado contestado por la Municipalidad…»). FP peligrosos = ancla en la carátula REAL anonimizada («R. P., C. A. c/ M. O., N. D. R. s/ Restitución…») con k_forma = RUBRO temático en caps (las 12 «Restitución» del top) — un avance ingenuo amputaría la carátula verdadera; peor: 330_p2584 ancla en considerando propio.
+- **962 TITULO_PROSA = BENIGNA** (carátula real mixta/anonimizada, ancla correcta). Descartada como bug. Constancia: `_parece_caratula` NO sirve como discriminador de carátula (diseñado para otra cosa, H111).
+- **37 CAT_FORMA_SIN_TOKEN = clase Melchiori dimensionada** (inicio sin refinar, ancla en el banner de página; 8/8 de la muestra).
+
+### H199-05 — Decisión: fix partido en D1-D5 (plan sellado en DEUDA/B147)
+
+Una unidad = un flip-set = un ciclo. **D1 (H200):** fix CABEZA en `refinar_inicio_por_titulo` — discriminador carátula v2 (caps ∨ conector «c/»/«s/»/«V.») + guard firma-versales (reuso `linea_es_firma_de_juez`, calcado H190) + regla primer-match-CON-forma; PoC v0.2 → flip-set sellado → ciclo consciente (MAJOR). **D2:** vista FIN (mismo discriminador en Pista 1; repara previos truncados). **D3:** exclusión de tokens en `primer_token_de_caratula` (B018 comp. 1, con la validación H068). **D4:** vecinos homónimos (diseño abierto, residuo post-D1/D2 decide). **D5:** interleave = data-quality B152, fuera de frontera-fina. Los guards de D1 salieron de los FP de la muestra — la lección M52/H190 aplicada: el flip-set adjudicado diseña el fix ANTES de codear.
+
+### H199 — Estado final
+
+- **Corpus:** 5894 casos (sin cambio). **Votos:** 27.818 filas. **Zonas:** 137.979 segmentos. **Editorial:** 152.
+- **Parser:** v32.1 (SIN cambio — sesión de diagnóstico, pipeline intocado).
+- **Manifest:** re-sellado [OK], procedencia v32.1, sha 5/5 idénticos al sello H197.
+- **B147:** fantasmas CERRADO (H189) · 1A CERRADO (H190) · 1C abierto · **sub-frente D ADJUDICADO (H199), fix partido D1-D5, D1 → H200**.
+- **B018:** RESUCITADA con dato (H199).
+
+**Outputs canónicos:** sin cambio (solo `_manifest.json` re-sellado).
+
+**Scripts creados:** `scripts/diagnostico/H199/` — `diag_frontera_d_status.py` v0.1 (+ `diag_frontera_d_status.csv`) · `poc_b147_d_cabeza.py` v0.1 (+ `poc_b147_d_cabeza.csv`, 1111 filas) · 7 extractos `.md` (329_p3444, 329_p2179, 329_p4815, 329_p4811_cola80, 330_p1158, 330_p1135_cola20, 329_p2645).
+
+**Commits:** 3 — (1) re-sello manifest (procedencia 32.1, bytes sin cambio); (2) scripts/CSVs/extractos de diagnóstico H199 + purge `_tmp/` H196; (3) docs (DEUDA/BITACORA/CHANGELOG).
+
+
+# APPEND para CHANGELOG.md — pegar al final
+
+## H199 (2026-07-12)
+
+- `output/parser/_manifest.json`: re-sello de procedencia — `parser.py` 32.0→32.1 en el registro de scripts y `generator_version` de los 5 CSV (bytes de los outputs SIN cambio, sha 5/5 idénticos al sello H197; cierra el micro-item de invariante de H198).
+- Sin cambios en scripts del pipeline ni en outputs canónicos (sesión de diagnóstico).
