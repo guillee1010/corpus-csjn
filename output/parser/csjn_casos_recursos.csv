@@ -4016,7 +4016,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 341_p723,no_revision_competencia,no,no_aplica,,no,no,sin_marcador,,0
 341_p726,no_fondo,no,no_aplica,,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,1
 341_p727,confirma,no,recurrente_pierde,recurso_extraordinario,no,si,admite,,0
-341_p739,no_fondo,no,no_aplica,recurso_extraordinario,si,no,sin_marcador,,0
+341_p739,modifica,no,recurrente_gana,recurso_extraordinario,si,si,admite,,0
 341_p745,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 341_p762,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 341_p764,no_revision_competencia,no,no_aplica,,no,no,sin_marcador,,0
@@ -4687,7 +4687,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 344_p757,no_fondo,no,no_aplica,,no,no,sin_marcador,,0
 344_p759,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 344_p769,no_revision_competencia,no,no_aplica,,no,no,sin_marcador,,0
-344_p776,no_fondo,no,no_aplica,,no,no,sin_marcador,,0
+344_p776,no_revision_competencia,no,no_aplica,,no,no,sin_marcador,,0
 344_p782,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,ART_280,1
 344_p791,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 344_p802,confirma,no,recurrente_pierde,recurso_extraordinario,no,si,admite,,1
@@ -5669,7 +5669,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 348_p434,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,CUESTION_ABSTRACTA,1
 348_p437,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 348_p439,no_revision_procesal,no,no_aplica,recurso_extraordinario,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,0
-348_p443,no_fondo,no,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
+348_p443,no_revision_procesal,no,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
 348_p452,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 348_p461,no_revision_demanda,no,no_aplica,,no,si,no_aplica,,0
 348_p473,no_revision_demanda,no,no_aplica,,no,no,sin_marcador,,0
