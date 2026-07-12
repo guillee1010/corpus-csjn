@@ -2,6 +2,15 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H200 (2026-07-12)
+
+- `scripts/pipeline/parser.py` v32.1→**33.0** (MAJOR, B147/D1): guards de forma en los tiers exact/prefix de `refinar_inicio_por_titulo` — `_es_caratula_v2` (caps-ratio ∨ conector c//s//V.) + rechazo de firma; fall-through a 5b/T4/vistos/catalogo sin cambio. Flip-set 93 casos (espec = `poc_b147_d1_v03.py` VERBATIM).
+- `output/parser/csjn_casos.csv`: 5894 filas (sin delta) — `linea_inicio` en 93 casos; 2 flips de outcome adjudicados TP (329_p4815 otro→rechaza; 345_p715 →sumario_editorial).
+- `output/parser/csjn_casos_zonas.csv`: 137.979→**137.905** (−74, merges de segmentos en el flip-set).
+- `output/parser/csjn_casos_textos.csv`: 13 casos (considerando/por_ello descontaminados).
+- `output/parser/csjn_casos_votos.csv`: 27.818 (identidad intacta; denormalizadas en 44 casos del set).
+- Derivers re-corridos (epilogo/partes/materia/recursos, sin cambio de versión); golden congelado; `_manifest.json` re-sellado [CLEAN] 64; `scripts/validacion/M20_clave_parser_n300.csv` regenerada (1 caso ⊆ flip-set, adjudicado).
+
 ## H198 (2026-07-12)
 
 - `parser.py`: v32.0→32.1 (MINOR, M52) — prefiltro de literales obligatorios para JUECES_CONOCIDOS (helper `hay_juez_conocido`, literales derivados del árbol de parseo del mismo CSV; 6 sitios de existencia pura reemplazados, 3 de extracción intactos). Salida byte-idéntica verificada por triple vía (sha 5/5, gate [CLEAN], invariante c); etapa parser ~208→107,8 s.

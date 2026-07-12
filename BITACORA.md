@@ -20026,3 +20026,50 @@ Una unidad = un flip-set = un ciclo. **D1 (H200):** fix CABEZA en `refinar_inici
 ### H199 — Corrección de constancia (mismo día, post-push)
 
 El campo **Commits** del bloque de arriba decía 3; fueron **2** (manifest + docs): `scripts/diagnostico/H199/` está gitignoreado (política scratch-por-sesión) y queda como scratch local, no commiteado. Corrección de método: el "patrón H194" citado en sesión (commitear diagnósticos) no sobrevive al gitignore vigente — las constancias viejas que registran commits de `diagnostico/HNN/` son pre-gitignore o con `-f`. Destapes del `git status` → micro-items H200: (a) `.pyc` TRACKEADO borrado (`scripts/diagnostico/H196/__pycache__/…`) — commitear la deleción + ignorar `__pycache__`; (b) explorador v8 UNTRACKED desde H186 (`scripts/explorador/{exploradorv8.py,README.md}`) + `README_explorador.md` suelto en la RAÍZ (violación de schema) — adjudicar: commitear el explorador y mover/borrar el de raíz.
+
+## H200 — B147/D1 CERRADO: guards de forma en refinar_inicio_por_titulo (parser v33.0, MAJOR) (2026-07-12)
+
+**Objetivo:** ejecutar D1 según el plan sellado en H199 (PoC v0.2 con guards → flip-set sellado → ciclo consciente), Opción A del PROMPT.
+
+### H200-01 — Micro-items
+
+(1) `__pycache__/` YA estaba en .gitignore (L4) — el append duplicado y su commit se revirtieron (reset local pre-push). (2) Explorador huérfano adjudicado: `git diff --no-index` vacío → duplicado de raíz borrado; el commit de `scripts/explorador/{exploradorv8.py,README.md}` queda para el cierre (item 3). (3) Cierre H199 constatado por palabra del operador (branch up-to-date con origin).
+
+### H200-02 — PoC v0.2: calibración del discriminador (y sus límites)
+
+`poc_b147_d1_v02.py` (H200/): guards (i) `es_caratula_v2` = `_parece_caratula` ∨ conector « c/ »/« s/ »/« V. » + (ii) `linea_es_firma_de_juez` + (iii) primer-match-con-forma, sobre el alcance real del bug (tiers exact+prefix, L2472-2478/2486-2491 — el prefix también era guardless). Candados E0 5894/5894 + E1 (réplica raw == publicado) 0 infieles. Resultado: flip-set candidato 84 (∩D 26), testigos 11/12 (FP «Restitución» muertos, clase a y c adentro, TPs sostenidos). Hallazgos que enmendaron el diseño: **CAE_DE_BASE (58) era artefacto del instrumento** — el fix real cae a Tier 4/vistos/catalogo, había que simular la función completa; **bug regex** «c/» a fin de línea (339_p1048, carátula wrapeada) → conector v2.1 `[cs]/(?:\s|$)`; NO se ensanchó a title-case (lección H190 — el fall-through decide).
+
+### H200-03 — PoC v0.3: flip-set REAL sellado
+
+`poc_b147_d1_v03.py` = réplica VERBATIM de `refinar_inicio_por_titulo` completa (6 tiers, fall-through por construcción) en dos variantes; los DOS `continue` de guards son la espec. **E0 5894/5894 · E0'' (réplica==real) 5894/5894 · FLIP-SET 93** (base→base 84 / →t4a 4 / →catalogo 4 / →vistos 1), ∩D 27, delta -48/7/43. Fall-through medido: MARINCCIONI/TELECOM SpA (caps-ratio 0.5) y Boggiano juez-parte re-anclan idéntico (no-flip). Dimensión D1b (prev_es_caratula): 5 + 340_p1263 = 6 casos.
+
+### H200-04 — Adjudicación del flip-set (líneas + 7 dumps de cabeza)
+
+Clase dominante = ancla publicada en EPÍLOGO del previo → carátula real con conector («Recursos… interpuestos por» → «BANCO CASEROS S.A. s/ Quiebra», etc.): el veredicto «962 BENIGNA» de H199 era sub-muestreo, ~13 TP latentes. `dump_cabezas_h200.py` v0.1 (reconstruye el bloque REAL con `construir_bloque_desde_localizacion` + marcas PUB/FIX — muestra el tramo [li_catalogo, li_publicado) que extraer_caso no alcanza): 329_p5691 «FISCAL» = carátula propia; catalogo-falls 2733/583/1789 = recuperación de cabeza propia (ARGÜELLO/CAJAL) con costo de bleed conocido (→ D2); **corrección de constancia H199: 330_p2584 era V-wrap TP** (el «ancla en considerando propio» era bleed del previo, el fix recupera 19 líneas); 330_p224 = familia B161 nota-al-pie — **explica la fecha imposible de B153/H191**; 340_p1263 = regresión Δ1 confirmada (línea 1 de carátula wrapeada falla el discriminador) → D1b.
+
+### H200-05 — Ciclo consciente: perímetro completo y candados
+
+Fix instalado (v32.1→33.0; verificación barata `Select-String __version__` en destino, reflejo H198) → `--consciente` [FAIL] esperado → **`diff_perimetro_d1.py` v0.1** (patrón H196/H197; parche field_size_limit para textos): casos **93/93 ⊆ set, 0 fuera** · votos identidad INTACTA (27.818, 0±; 44 denormalizadas ⊆ set) · zonas 93 ⊆ set (−74 merges) · textos 13 ⊆ set. **Candado de decisión: 2 flips, ambos TP** — 329_p4815 outcome otro→rechaza (la caída a catalogo recuperó el «Por ello, se resuelve: Mantener… y rechazar…» completo) · 345_p715 tipo_entrada fallo→sumario_editorial, outcome/voting a ∅ (las 337 palabras eran bleed B161 íntegro: dejó de fabricar un fallo). **Regresiones de metadata = 2** (los otros 3 status-changes son etiquetado honesto ok→ok_ancla_*): 329_p1303 (carátula del juez-PARTE muerta por guard firma + cita con «s/» pasa el conector, Δ32) y 329_p1930 (salto a Vistos sobre la apertura). **ACEPTADAS con constancia y sucesor (patrón H178) → B165** (diseño candidato: fullname-del-caso exime guard firma — la identidad juez/parte se resuelve por forma, no por vigencia). Balance: **91/93 TP-o-mejora / 2 residuales / 0 flips de decisión regresivos.**
+
+### H200-06 — Blind, regolden y regresiones
+
+Candado BLIND: `build_m20` → clave n300 MODIFICADA → adjudicación contra el flip-set: **1 caso cambiado, ⊆ {93}** = intersección esperada (textos cambiaba en ⊆ set); nota para M43. `--regolden`: golden congelado, invariante (c) sostenido, manifest re-sellado **[CLEAN] 64**. Regresiones propias post-regolden: `poc_b147_d1_v03 --esperar-version 33.0` → E0 5894/5894 / **E0'' mismatch = 93 EXACTOS** (réplica unguarded ES v32.1 — esperado, el [FRENO] del print es cosmético) / flip-set VACÍO; `poc_m52_literales` E1-E4 sin FRENOS (E4 5.4x). **Constancia de método:** la corrida de regresión PISÓ el baseline del flip-set (mismo path de salida) — restaurado como `poc_b147_d1_v03_baseline.csv`; lección para el skill de cierre: las regresiones post-fix corren con `--out` propio.
+
+### H200-07 — M54 (destape del operador)
+
+Pregunta sobre Boggiano post-destitución → scan sobre votos.csv publicado: **9 firmas temporalmente anómalas** (Boggiano ×7 en 329-330, Bossert ×1, Nazareno ×1). Tres hipótesis (publicación tardía / transcripción B161 / voto-fantasma del juez-parte) → M54: vigencia como DATO de auditoría, NUNCA como gate del detector (fabricaría FN sobre firmas genuinas — la clase que B153 tuvo que agregar).
+
+### H200 — Estado final
+
+- **Corpus:** 5894 casos (sin cambio). **Votos:** 27.818 filas (identidad intacta). **Zonas:** 137.905 segmentos (−74). **Editorial:** 152.
+- **Parser:** v33.0 (MAJOR — B147/D1). Derivers sin cambio de versión (materia 3.2 / recursos 0.6 / epilogo 0.4 / partes 0.18).
+- **Manifest:** [CLEAN] 64 — casos f1ffc9ec6af0… / textos c9fc2dea9bd5… / votos cbee28f6e566… / zonas b65f77520cd4… / editorial 30a6da652e3a… (sin cambio).
+- **B147:** fantasmas CERRADO (H189) · 1A CERRADO (H190) · 1C abierto · **D1 CERRADO (H200)** · D1b nuevo (6 casos) · D2-D5 abiertos.
+- **B018:** comp. 2 lado-cabeza CERRADO (H200); comp. 2 lado-fin (D2) y comp. 1 (D3) abiertos.
+- **Nuevos:** B165 (2 residuales de metadata, diseño candidato) · M54 (auditoría vigencia, pool 9).
+
+**Outputs canónicos:** los 5 del parser + epilogo/materia/partes/recursos re-derivados + `_manifest.json` re-sellado + golden congelado + `M20_clave_parser_n300.csv` (1 caso ⊆ flip-set).
+
+**Scripts creados:** `scripts/diagnostico/H200/` — `poc_b147_d1_v02.py` (+ .csv, 147 filas) · `poc_b147_d1_v03.py` (+ `poc_b147_d1_v03_baseline.csv`, 103 filas — el .csv vivo queda pisado por la regresión, es esperado) · `dump_cabezas_h200.py` (+ 7 `cabeza_*.md`) · `diff_perimetro_d1.py` (+ .csv, 199 filas). Pipeline: `parser.py` v33.0.
+
+**Commits:** 3 — (1) fix parser v33.0 + outputs canónicos + golden + manifest + clave M20; (2) explorador v8 (herramienta M16, huérfana desde H186) + deleción del duplicado de raíz; (3) docs (DEUDA/BITACORA/CHANGELOG).
