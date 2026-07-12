@@ -2812,7 +2812,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 334_p53,YPF S.A. como continuadora de ASTRA CAPSA,,Fisco Nacional (AFIP-DGI),,no,epilogo,epilogo:recurso+traslado
 334_p62,Alberto Eduardo Girondo,actora,Estado Nacional,demandada,no,epilogo,epilogo:recurso+traslado
 334_p95,Ingenio Río Grande S.A.,actora,,,no,epilogo,epilogo:recurso
-334_p109,,,,,,sin_epilogo,sin_zona
+334_p109,Estado Nacional,,"Luis Angel Moretti, vicepresidente y apoderado de Editorial Perfil S.A. y de Diario Perfil S.A.",,no,epilogo,epilogo:recurso+traslado
 334_p120,Estela Mónica Guerrero,,CNA Asegurador de Riesgos del Trabajo S.A.,,no,epilogo,epilogo:recurso+traslado
 334_p128,AFIP – DGA,,Expreso Brújula Sociedad Anónima de Transporte y Turismo,,no,epilogo,epilogo:recurso+traslado
 334_p139,Gobierno de la Ciudad de Bs. As,,Global Crossing Argentina SA,,no,epilogo,epilogo:recurso+traslado
@@ -3023,7 +3023,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 337_p133,Claren Corporation,,Estado Nacional-Ministerio de Economía y Finanzas,,no,epilogo,epilogo:recurso+traslado
 337_p149,"Luis Eduardo Russo y Pablo Alberto Berdasco, Presidente y Secretario interinos del club",actora,,,no,epilogo,epilogo:recurso
 337_p154,Rebeca C. Benfeld,,,,no,epilogo,epilogo:recurso
-337_p166,,,,,,sin_epilogo,sin_zona
+337_p166,Colegio Público de Abogados de la Capital Federal,,Estado Nacional,penal,si,epilogo,epilogo:recurso+traslado
 337_p179,Fortbenton Co. Laboratories S.A.,,Carlos Eugenio Mansilla,,no,epilogo,epilogo:recurso+traslado
 337_p191,G. P. T.,,,,no,epilogo,epilogo:recurso
 337_p196,Unión de Usuarios y Consumidores,actora,,,no,epilogo,epilogo:recurso
@@ -3087,7 +3087,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 337_p948,Fisco Nacional (AFIP-DGI),,,,no,epilogo,epilogo:recurso
 337_p966,Estado Nacional –Superintendencia de Servicios de Salud,demandada,Obra Social del Personal de la Construcción,actora,no,epilogo,epilogo:recurso+traslado
 337_p993,Fisco Nacional (AFIP – DGI),,,,no,epilogo,epilogo:recurso
-337_p1006,,,,,,sin_epilogo,sin_zona
+337_p1006,Ana de las Mercedes De Maio y Eleonora Lucia De Maio,,Estado Nacional,,no,epilogo,epilogo:recurso+traslado
 337_p1013,Sergio Einaudi,,Fisco Nacional (AFIP-DGI),,no,epilogo,epilogo:recurso+traslado
 337_p1024,Cablevisión S.A.,,,,no,epilogo,epilogo:recurso
 337_p1037,Másima Tapia,,,,no,epilogo,epilogo:recurso
@@ -3422,7 +3422,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 339_p652,,,,,,sin_epilogo,sin_zona
 339_p656,César Armando Pace,penal,,,no,epilogo,epilogo:recurso
 339_p658,F. H. R.,,,,no,epilogo,epilogo:recurso
-339_p662,el,penal,,,no,caratula,caratula:recurso
+339_p662,Ramiro R. Rodríguez Bosch,mp_fiscal,,,no,epilogo,epilogo:recurso
 339_p676,"Curadora Pública María Ceumar Barral, curadora provisoria de V.A.P",,,,no,epilogo,epilogo:recurso
 339_p680,"Gustavo Antonio Ramos Martínez, actor en autos",por_derecho_propio,Universidad Nacional de Córdoba,demandada,no,epilogo,epilogo:recurso+traslado
 339_p683,Estado Nacional (Ministerio de Justicia y Derechos Humanos),,,,no,epilogo,epilogo:recurso
@@ -4797,7 +4797,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 344_p1928,,,,,,epilogo,sin_marcador_recurso
 344_p1930,Carlos Alfredo Gómez,,,,no,epilogo,epilogo:recurso
 344_p1936,Pedro Alejandro Juárez,actora,,,no,epilogo,epilogo:recurso
-344_p1952,,,,,,sin_epilogo,sin_zona
+344_p1952,Oscar Méndez,querellante,Emilio Porras Hernández,mp_fiscal,no,epilogo,epilogo:recurso+traslado
 344_p2002,La Meridional Compañía Argentina de Seguros S.A.,,,,no,epilogo,epilogo:recurso
 344_p2011,Ricardo Gustavo Wechsler,mp_fiscal,,,no,epilogo,epilogo:recurso
 344_p2015,Banco Central de la República Argentina,,,,no,epilogo,epilogo:recurso
@@ -4814,7 +4814,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 344_p2109,,,,,,sin_epilogo,sin_zona
 344_p2113,C.B.G. S.R.L.,demandada,,,no,epilogo,epilogo:recurso
 344_p2115,,,,,,no_aplica,tipo_entrada=sumario_editorial
-344_p2123,Esso Petrolera Argentina S.R.L. y otro,actora,,,no,caratula,caratula:rol_causa
+344_p2123,Axion Energy Argentina SA (ex Esso Petrolera Argentina SRL),,,,no,epilogo,epilogo:recurso
 344_p2172,Miguel Ángel Mazzoni,actora,,,no,epilogo,epilogo:recurso
 344_p2175,Molinos Río de la Plata S.A.,,Fisco Nacional (AFIP-DGI),,no,epilogo,epilogo:recurso+traslado
 344_p2251,Banco de San Juan S.A.,,,,no,epilogo,epilogo:recurso

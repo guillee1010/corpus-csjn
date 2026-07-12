@@ -4797,7 +4797,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 344_p1928,,originaria,originaria
 344_p1930,penal,capa2,kw(1)
 344_p1936,,pendiente_capa2,sin_ancla
-344_p1952,penal,capa2,objeto(1)
+344_p1952,penal,capa2,kw+objeto(2)
 344_p2002,civil_comercial,capa1,regla:\ben lo civil\b
 344_p2011,penal,capa1,regla:casacion penal
 344_p2015,penal,capa1,regla:casacion penal
