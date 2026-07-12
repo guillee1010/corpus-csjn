@@ -2,6 +2,15 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H193 (2026-07-12)
+
+- `parser.py` v28.0→v29.0: B148 fix A — guards en `linea_es_firma_de_juez` (RE_ATRIBUCION_SUMARIO + _firma_nucleo con juez-sobrevive + _firma_residuo_es_prosa). Flip-set sellado 3799 líneas / 1303 casos; espec = poc_b148_flipset v0.3 verbatim.
+- `output/parser/csjn_casos.csv`: 5894 filas (94 casos con wc_* descontaminados; 0 flips de decisión).
+- `output/parser/csjn_casos_zonas.csv`: 137999 filas (−649; 552 casos re-zonificados, todos ⊆ flipset).
+- `output/parser/csjn_casos_textos.csv`: 2 filas (considerando 340_p204/340_p345 descontaminados).
+- `output/parser/csjn_casos_votos.csv`: 27818 filas (Δ 0; solo wc_mayoria denormalizado).
+- Derivers re-derivados y re-sellados (epilogo/partes/materia); recursos byte-idéntico. Manifest [CLEAN] 64.
+
 ## H192 (2026-07-12)
 
 - `_meta/jueces/jueces_csjn.csv`: 74→87 entradas — B154 CERRADO: +13 conjueces (Müller, Aranguren B.E., Irurzun, Lozano, Boldú, Sánchez A.G., Barreiro, Sotelo de Andreau, Bejas, Candisano Mera, Llorens, Moltini, González R.L.) + 2 ensanches (Leal de Ibarra inicial «M.»; Tazza OCR «Alejando»). Ciclo de DATO: parser v28.0 sin cambio de código.

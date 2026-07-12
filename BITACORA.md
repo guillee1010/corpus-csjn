@@ -19731,3 +19731,46 @@ Lecturas ENTERAS (primera vez): `linea_es_firma_de_juez` L1842-1876 (agujero mot
 **Scripts creados:** `scripts/diagnostico/H192/` — `diff_casos_b154.py`, `diff_zonas_b154.py`, `poc_b148_cardinalidad.py` v0.1 (+ `poc_b148_pool.csv` baseline), `dump_b148_tramos.py` v0.1 (+ `dump_b148_tramos.md`), `adjudicacion_b154.csv`, `poc_b154_flipset_out.csv` (baseline diffeable), `331_p1397.md`. Pipeline: SIN cambio de código (ciclo de dato).
 
 **Commits:** 2 (① dato jueces + outputs + golden + manifest + scripts H192; ② docs: DEUDA/BITACORA/CHANGELOG + PROMPT_H193).
+
+## H193 — B148 fix A: guards del detector de firma (2026-07-12)
+
+**Objetivo:** implementar el fix A de B148 diseñado en H192 (guards en `linea_es_firma_de_juez`), con PoC flip-set a nivel línea, ciclo consciente MAJOR y re-sello.
+
+### H193-01 — PoC flip-set a nivel línea (v0.1) y adjudicación
+
+`poc_b148_flipset.py` v0.1 (scripts/diagnostico/H193/): importa el parser real (patrón `cargar_parser_funcs`), reconstruye cada bloque como el parser (`source_file` + rango, lectura con `.split("\n")` — parser L3530, no `splitlines`) y escanea 19930 líneas viejo=True corpus-wide. Espec H192 + guard iii nuevo (cola parentética wrapeada, destapada leyendo el dump: «(Voto del Dr. ⏎ Nombre).»). Flip-set v0.1: 4383 líneas / 1432 casos. La adjudicación atrapó DOS clases de FP sistemáticas ANTES del parser: (a) g2 mataba ~521 firmas reales con calificador partido por el wrap («…NOLASCO (según su»); (b) g3 mataba 71 continuaciones de firma («cia) — LORENZETTI…»). La clase FRENO v27.0 a escala: implementar la espec H192 tal cual habría violado el contrato de votos. Colateral: g1 no cubría plurales ni «parcial».
+
+### H193-02 — Espec v2/v3: núcleo de firma con juez-sobrevive
+
+Discriminador unificado en vez de parches por clase: recortar los fragmentos parentéticos wrapeados (prefijo hasta «)» colgante / sufijo desde «(» colgante, tras quitar calificadores) y exigir que el match de JUECES_CONOCIDOS sobreviva en el núcleo; prosa-minúscula se evalúa sobre el núcleo. v0.2 en disco: 3804/1305, con 5 firmas reales residuales por calificadores fuera de catálogo («según MI voto», «ampliación de fundamentos» ×3, «en disiden­cia» con soft-hyphen U+00AD que rompe RE_CALIFICADOR sin verse). v0.3: strip de paréntesis balanceados SIN juez (RE_CALIFICADOR intacta — otros consumidores); un paréntesis CON juez se conserva («(Del voto del Dr. X).» sigue muerta). **Flip-set SELLADO: 3799 líneas / 1303 casos** (g1_atribucion 1671 / gU_juez_solo_en_fragmento 1401 / g2_residuo_prosa 727); delta v0.2→v0.3 = exactamente los 5 nominados. Controles: clase-1 15/15 caen, clase-2 8/9 (5317 sobrevive por diseño), NO-B148 17/17 TP (corrección de expectativa: kills en bleed son TP — el control pasa de «esperado 0» a «leer siempre»), hdr_sumario 0 (call-site L2029 sin efecto), inciertos-conjueces resueltos por la tabla real de 87.
+
+### H193-03 — Parser v29.0 + regresión propia
+
+Fix replicando la espec v0.3 verbatim: `RE_ATRIBUCION_SUMARIO` + `_firma_nucleo` + `_firma_residuo_es_prosa` (+96 líneas, todo local al detector; RE_HEADER_VOTO_DISIDENCIA y RE_CALIFICADOR intactas). E2 en sandbox 32/32 contra la suite adjudicada. Regresión propia en disco: flip-set 0 / viejo=True 19930→16131 = **−3799 exacto** (cero deriva espec↔código). Incidente de instalación documentado: la primera corrida "v0.2" era v0.1 por colisión de nombre en Downloads («(1).py») — el gate `Select-String __version__` lo atrapó; aplica también a los PoC, no solo al parser.
+
+### H193-04 — Ciclo consciente adjudicado 100% TP
+
+`--consciente --ignorar-corpus-drift` → diffs alineados por caso_id (instrumentos H192 reusados desde H193): **contrato 0 flips** en outcome/voting_pattern/is_originaria/is_full_bench/is_merit_decision · votos 27818 = golden (identidad intacta) · **zonas −649 filas / 552 casos, 552/552 ⊆ flipset, 0 ripple externo, 0 casos sin zona firma** · casos.csv 94 casos (word_count/wc_mayoria a la baja = evidencia masiva nueva de M50: el sumario etiquetado firma inflaba el conteo; p.ej. 333_p2445 7859→5124) · textos.csv 2 filas (considerando 340_p204/340_p345 descontaminados a ojo) · 346_p965 zonas reparadas por completo (cuerpo/dispositivo/firma [110-111]). **Los 2 linea_fin_real (337_p505, 340_p1070) adjudicados contra .md extraído: reparación de FRONTERA de rebote** — lo soltado era carátula+sumario del caso siguiente cuya atribución editorial era el ancla falsa de fin_real (sub-clase frontera-por-atribución de la familia B147, no encolada, reparada gratis). **Corrección de constancia H192:** firma_raw de 346_p965 NO se reparó — la línea semilla no menciona juez del set, el veneno es del colector y no del detector → evidencia a B149.
+
+### H193-05 — Candado blind + regolden + regresión del pool
+
+Blind [CLEAN] (clave n300 byte-idéntica). `--regolden`: golden re-congelado, invariante golden==producción sostenido (5 CSV), manifest re-sellado y verificado **[CLEAN] 64**. Regresión del pool (`poc_b148_cardinalidad` sobre zonas nuevas): **217/398 → 101/125** — A>200 48→5 (los 5: 339_p602 ya adjudicado NO-B148 + 4 a leer) · B 21→1 (5317, por diseño) · C 18→8 · D 130→87 (FP-A M45, fuera del alcance de B148). El detector deja de ser la causa dominante del pool; el residuo no adjudicado (329_p4140, 339_p270, 339_p323, 348_p1751, 329_p4446, 331_p2363, 331_p364) diseña la unidad siguiente.
+
+### H193 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 157 sumario_con_link + 34 sumario_editorial).
+- **Votos:** 27818 filas (Δ 0 — identidad intacta).
+- **Zonas:** 137999 segmentos (Δ −649, descontaminación B148).
+- **Parser:** v29.0. Manifest **[CLEAN] 64**.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5894 filas · sha 06054f05b274.
+- `output/parser/csjn_casos_textos.csv` — 5894 filas · sha 226671eb4134.
+- `output/parser/csjn_casos_votos.csv` — 27818 filas · sha 0e1270a8f71d.
+- `output/parser/csjn_casos_zonas.csv` — 137999 filas · sha fda8e6045c80.
+- `output/parser/csjn_casos_editorial.csv` — 152 filas · sha 30a6da652e3a (sin cambio).
+- Derivers re-sellados: materia 98f79ddc33f3 · epilogo 4e888b0d3639 · partes 9fd808bae45c · recursos 2fdb87efd992 (byte-idéntico, el gate no consume lo tocado).
+
+**Scripts creados:** `scripts/diagnostico/H193/` — `poc_b148_flipset.py` v0.3 · `poc_b148_flipset_baseline_v03.csv` (flip-set sellado, insumo de adjudicaciones futuras) · `poc_b148_pool_post.csv` · `337_p505.md` / `340_p1070.md` (extracciones de adjudicación) · `diff_casos_h193.txt` / `diff_zonas_h193.txt` · copias de `diff_casos_b154.py`/`diff_zonas_b154.py`.
+
+**Commits:** 2 (① parser v29.0 + outputs + golden + manifest; ② docs: DEUDA/BITACORA/CHANGELOG + scripts H193).
