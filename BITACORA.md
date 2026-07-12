@@ -19831,3 +19831,46 @@ Constancia de método: la corrida de regresión SOBRESCRIBIÓ los CSV del PoC en
 **Scripts creados:** `scripts/diagnostico/H194/` — `poc_b148_clasificar_d.py` v0.2 (+ `poc_b148_d87_clasif.csv`) · `poc_b149_anclas.py` v0.1 (+ baselines/postfix A1 y A2, 4 CSV) · `diff_zonas_b149.py` v0.1 (+ `diff_zonas_b149.csv`) · `muestra_d87/` + `muestra_d87_seed194.md` (15 extracciones) · 7 extracciones A/C. `scripts/diagnostico/H192/poc_b148_cardinalidad.py` v0.1→**v0.2** (+ `poc_b148_pool_v2.csv`).
 
 **Commits:** 3 — (1) parser v30.0 + outputs canónicos + golden + manifest; (2) scripts/CSVs de diagnóstico H194 + cardinalidad v0.2; (3) docs (DEUDA/BITACORA/CHANGELOG).
+
+## H196 — B159 clase B: FP narrativo de RE_DICT_HDR (2026-07-12)
+
+**Objetivo:** cerrar B159 (los 7 casos dictamen-terminal excluidos por el guard A1 en H194), con perfil de performance del parser como apertura.
+
+### H196-01 — Perfil de performance v30.0 (insumo, no unidad)
+
+cProfile sobre la corrida completa: 208,5 s / 301M llamadas. `zonificar_bloque` 136 s (65%); hot spot dominante `linea_es_firma_de_juez`: 1.701.762 llamadas / 114,7 s (55% del total) — cada llamada negativa paga las ~74 `re.search` de JUECES_CONOCIDOS (≈134M searches, 93 s). Decisión: optimización REEL encolada como mejora (prefiltro de alternación única compilada desde el mismo CSV), NO unidad de hoy. Anotaciones REEL adicionales para DEUDA: (a) `RUIDO_FIRMA` hardcodea apellidos de jueces mientras JUECES_CONOCIDOS es dato (M46) — divergencia latente; (b) docstring de cabecera de parser.py clavado en "v17 (beta)".
+
+### H196-02 — Causa raíz B159 leída en texto real (7/7 testigos extraídos)
+
+El "dictamen sin cierre" de la constancia H194 era el síntoma. Causa real, dos clases: **clase B (6/7)** — FP narrativo de `RE_DICT_HDR`: el wrap del OCR deja «dictamen de la/del Procura…» a inicio de línea y `re.I` lo matcheaba → `dictamen_inicio` espurio → guarda H052 engulle dispositivo/firma/votos (334_p109, 337_p166, 337_p1006, 339_p662, 344_p1952, 344_p2123; en 344_p1952 el wrap cruza el banner de página). **Clase A (1/7)** — dictamen genuino como nota al pie «(*) Dicho dictamen dice así:» intercalado a pie de página, nunca cierra (332_p2418, remisión al dictamen de Barreiro).
+
+### H196-03 — PoC de superficie (calibración del discriminador)
+
+`poc_b159_superficie` v0.1: 3804 matches de RE_DICT_HDR / 50 archivos + 6 notas al pie. Discriminadores adjudicados con dato: **capitalización à la H139 MUERTA** (8 títulos genuinos en minúscula: versalitas-OCR «diCtameN de la proCuraCióN GeNeral», todos en 336.1 — tomo hoy excluido pero futuro); **prev_abierta MUERTA** (565 títulos genuinos con línea previa abierta); **forma-título LAXA GANA**: 0 pérdidas / 0 FP sobre el universo (slot de 1 token tolera títulos OCR-dañados «Geberal» 336.1 / «Genera» 338.1). FP corpus-wide = 15 (los 6 testigos + 329_p1638, 338_p1009, 340_p1542, 342_p1735, 344_p2307, 344_p3249, 347_p1944, 348_p763). Los 8 nuevos = NO-OP adjudicado con dato: la línea FP cae dentro de dictamen genuino (dictamen_inicio exento en Pasada 2) — mina latente, sin síntoma. Notas al pie (clase A) = 6: 329_p879, 329_p3089, 329_p4032, 332_p1963, 332_p2418, 334_p419.
+
+### H196-04 — PoC flip-set (réplica fiel v30.0)
+
+`poc_b159_flipset` v0.2: réplica de procesar_archivo CON el relabel A1 de H194 → candado E0 5703/5703, 0 mismatch. Flip-set del reemplazo: **7 casos, 7/7 en contrato, 0 flips de outcome, 0 de por_ello_idx**. Lectura del layout recuperado de 344_p1952/344_p2123: mayoría dispositivo→firma→votos→epílogo de manual; **residual destapado**: dispositivo sobre-extendido en votos por `en_consecuencia` T1 argumental sin guard performativo (p1952 L1586 ~360 líneas; p2123 L1237 [wrap en minúscula] y L1596; p1952 L923 ancla sin identificar, lectura pendiente). Mecánica preexistente, visible recién al destapar el dictamen espurio.
+
+### H196-05 — Fix v31.0 + ciclo consciente + sello
+
+`RE_DICT_HDR` → gramática forma-título laxa en L188 (fuente única, cubre los 3 call-sites; grupos no-capturantes verificados sin consumidores). Ciclo `--consciente` (pins parser=31.0/clasificador=1.18): diff adjudicado ⊆ {7}, con perímetro COMPLETO verificado por diff programático de casos.csv y zonas.csv contra golden → 7/7 exactos, ningún 8vo caso. Corolario medido: **radio fin_real/frontera VACÍO** (ningún vecino movió linea_fin_real). Blind n300 byte-idéntica (build_m20 + git status limpio). Adjudicaciones puntuales: `tipo_cuestion_federal` arbitrariedad→mixto en 334_p109 (TP, considerando destapado con ambas señales); `dictamen_presente` True→False en 334_p109 y 340_p691 (TP); votos SIN +filas (27.818 idéntico) — se recupera contenido, no cardinalidad: texto_voto/wc_voto/tipo_voto_sep poblados en 334_p109 (votos Petracchi-Argibay y Maqueda de Editorial Perfil). ⚠ is_merit: 0 flips [verificado por diff de columna pre-append]. Constancia: en 334_p109 el dictamen real (Righi) está zonificado como `sumario` desde siempre (título no línea-inicial en el OCR) — preexistente, no lo crea el fix. Regolden: golden congelado, invariante c [CLEAN], manifest re-sellado **[CLEAN] 64**. Regresión propia post-regolden: flip-set VACÍO / E0 0 mismatch. Superficie post-fix: sin cambio por diseño (instrumento con la regex vieja hardcodeada, baseline histórico).
+
+### H196 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumario_con_link).
+- **Sin firma:** 18 / 5703 (0,3%).
+- **Votos:** 27.818 filas.
+- **Outcomes / gate / is_originaria (596):** agregados idénticos al sello v30.0 salvo derivadas de {7} (cuestión federal: arbitrariedad 883→882, mixto 677→678).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5894 filas (v31.0, sha b27ca03940dd…).
+- `output/parser/csjn_casos_textos.csv` — 5894 filas (7bac60b39d64…).
+- `output/parser/csjn_casos_votos.csv` — 27.818 filas (aae443cdd1fb…).
+- `output/parser/csjn_casos_zonas.csv` — 138.078 segmentos (71359e8fec79…).
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones (30a6da652e3a…).
+- Manifest re-sellado, `--verify` [CLEAN] 64.
+
+**Scripts creados:** `scripts/diagnostico/H196/` — poc_b159_superficie.py v0.1 (+ dump 3810 filas), poc_b159_flipset.py v0.2 (+ baseline 7 casos), extractos .md de los 7 testigos. Scratch de perfil (parser.prof) unificado desde H195/.
+
+**Commits:** 3 — (1) pipeline: parser v31.0 + outputs + golden + manifest; (2) diagnóstico H196: PoCs + baselines + extractos; (3) docs + housekeeping (baks a archivo/, scratch unificado).

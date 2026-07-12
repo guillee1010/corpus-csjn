@@ -2,6 +2,15 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H196 (2026-07-12)
+
+- `parser.py` 30.0 → 31.0 (MAJOR): `RE_DICT_HDR` pasa de prefijo-abierto a forma-título laxa (B159 clase B). Mata 15 FP narrativos corpus-wide (wrap OCR + re.I); 7 casos descontaminados, 0 flips de outcome, radio fin_real vacío (medido). re.I se conserva (títulos en versalitas-OCR de 336.1).
+- `output/parser/csjn_casos_zonas.csv`: 138.037 → 138.078 segmentos (+41).
+- `csjn_casos.csv` / `csjn_casos_textos.csv` / `csjn_casos_votos.csv`: mismas filas (5894 / 5894 / 27.818), celdas cambiadas ⊆ {334_p109, 337_p166, 337_p1006, 339_p662, 340_p691, 344_p1952, 344_p2123}.
+- Golden re-congelado + `_manifest.json` re-sellado, `--verify` [CLEAN] 64.
+- PoCs de la unidad: `scripts/diagnostico/H196/` (poc_b159_superficie v0.1, poc_b159_flipset v0.2 + baselines + extractos de los 7 testigos).
+- Housekeeping: `parser_v30.0_bak.py` → `archivo/`.
+
 ## H194 (2026-07-12)
 
 - `parser.py` v29.0→**v30.0** (B149 fix A, MAJOR): (A1) herencia del ancla del resolutor — relabel cuerpo→dispositivo desde `por_ello_idx` hasta la primera zona de cierre, guard de alcance zona=='cuerpo' (25 casos; los 7 zona=dictamen → B159, excluidos por diseño); (A2) `RE_DISPOSITIVO_VARIANTES_PERF` — 2 anclas T1 condicionales-a-performativo (`en_virtud_perf` = B067 resucitada perf-gated, 16 TP; `que_de_conf_perf`, 1 TP), `detectar_apertura_dispositivo` +1 arg opcional `cola_wrap`, peek de wrap solo en el zonificador. «Por lo tanto» descartada con constancia. 41 casos de zonas + 3 de outcome/is_merit afectados.
