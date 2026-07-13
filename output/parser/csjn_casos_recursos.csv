@@ -1673,7 +1673,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 330_p4354,confirma,no,recurrente_pierde,recurso_extraordinario,no,si,admite,,0
 330_p4358,no_revision_procesal,no,no_aplica,recurso_extraordinario,no,no,inadmite,ART_280,1
 330_p4364,no_revision_procesal,no,no_aplica,recurso_extraordinario,no,no,admite,,1
-330_p4365,no_fondo,no,no_aplica,,no,no,sin_marcador,,0
+330_p4365,no_fondo,no,no_aplica,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 330_p4368,no_fondo,no,no_aplica,,no,no,sin_marcador,,0
 330_p4372,no_fondo,no,no_aplica,recurso_extraordinario,no,no,no_aplica,,0
 330_p4389,no_revision_procesal,no,no_aplica,,no,no,sin_marcador,,0
@@ -2707,7 +2707,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 333_p1401,no_revision_competencia,no,no_aplica,,no,no,sin_marcador,,0
 333_p1404,confirma,no,recurrente_pierde,recurso_ordinario,si,si,admite,,0
 333_p1433,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,0
-333_p1442,no_fondo,no,no_aplica,,no,no,sin_marcador,,0
+333_p1442,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 333_p1446,no_fondo,no,no_aplica,,no,no,no_aplica,,0
 333_p1460,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 333_p1464,no_revision_procesal,no,no_aplica,,no,no,inadmite,ACORDADA_4_2007,1
@@ -4713,7 +4713,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 344_p1062,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 344_p1070,no_fondo,no,no_aplica,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 344_p1082,no_fondo,no,no_aplica,,no,no,admite,,0
-344_p1102,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
+344_p1102,confirma,no,recurrente_pierde,recurso_extraordinario,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 344_p1137,no_fondo,no,no_aplica,,no,no,no_aplica,,0
 344_p1142,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 344_p1146,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,0
