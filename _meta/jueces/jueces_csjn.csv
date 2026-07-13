@@ -24,7 +24,7 @@ Petrone,conjuez,daniel\s+a\.?\s*petrone,,,parser<=27.1 (migrada verbatim),,
 Ledesma,conjuez,angela\s+e\.?\s*ledesma,,,parser<=27.1 (migrada verbatim),,
 Barroetaveña,conjuez,diego\s+g\.?\s*barroetave[ñn]a,,,parser<=27.1 (migrada verbatim),,
 Hornos,conjuez,gustavo\s+m\.?\s*hornos,,,parser<=27.1 (migrada verbatim),,
-Leal de Ibarra,conjuez,javier\s+(?:mar[íi]al?\s+|m\.\s+)?leal\s+de\s+ibarra,,,parser<=27.1 + ensanche H191 (B153) + ensanche H192 (B154),OCR 'MARIAL' (María L.) 329_p5261; inicial 'M.' 329_p1303/1305,
+Leal de Ibarra,conjuez,(?:javier\s+(?:mar[íi]al?\s+|m\.\s+)?leal\s+de\s+ibarra|leal\s+de\s+ibarra\s+javier\s+m\.?),,,parser<=27.1 + ensanche H191 (B153) + ensanche H192 (B154) + ensanche H202 (B154-bis),OCR 'MARIAL' (María L.) 329_p5261; inicial 'M.' 329_p1303/1305; orden invertido en 344_p3070,344_p3070
 Catucci,conjuez,liliana\s+(catucci|cattucci),,,parser<=27.1 (migrada verbatim),,
 Riggi,conjuez,eduardo\s+r\.?\s*riggi,,,parser<=27.1 (migrada verbatim),,
 Yacobucci,conjuez,guillermo\s+yacobucci,,,parser<=27.1 (migrada verbatim),,
@@ -40,10 +40,10 @@ Ferro,conjuez,jorge\s+ferro,,,parser<=27.1 (migrada verbatim),,
 Pacilio,conjuez,antonio\s+pacilio,,,parser<=27.1 (migrada verbatim),,
 Argañaraz,conjuez,[áa]ngel\s+a\.?\s*arga[ñn]araz,,,parser<=27.1 (migrada verbatim),,
 Mill de Pereyra,conjuez,rita\s+(mill|m\.?)\s+de\s+pereyra,,,parser<=27.1 (migrada verbatim),,
-García Lema,conjuez,alberto\s+manuel\s+garc[íi]a\s+lema,,,parser<=27.1 (migrada verbatim),,
+García Lema,conjuez,(?:alberto\s+manuel\s+garc[íi]a\s+lema|garc[íi]a\s+lema\s+alberto\s+manuel),,,parser<=27.1 (migrada verbatim) + ensanche H202 (B154-bis),orden invertido en 344_p3070; en firma de mayoría de 1847 wrapea «García ⏎ Lema»,342_p1847;344_p3070;329_p1092
 Rabbi-Baldi Cabanillas,conjuez,luis\s+renato\s+rabbi[\s—-]+baldi\s+cabanillas,,,parser<=27.1 (migrada verbatim),,
-Méndez,conjuez,h[ée]ctor\s+(oscar\s+)?m[ée]ndez,,,parser<=27.1 (migrada verbatim),,
-Montesi,conjuez,graciela\s+susana\s+montesi,,,parser<=27.1 (migrada verbatim),,
+Méndez,conjuez,(?:h[ée]ctor\s+(oscar\s+)?m[ée]ndez|m[ée]ndez\s+h[ée]ctor\s+oscar),,,parser<=27.1 (migrada verbatim) + ensanche H202 (B154-bis),orden invertido en 344_p3070,344_p3070;329_p1092
+Montesi,conjuez,(?:graciela\s+susana\s+montesi|montesi\s+graciela\s+susana),,,parser<=27.1 (migrada verbatim) + ensanche H202 (B154-bis),invertido y wrapeado «Montesi ⏎ Graciela Susana» en 344_p3070 (matchea en firma_raw multi-línea vía \s+),344_p3070
 Cossio,conjuez,marina\s+(josefa\s+)?cossio|cossio\s+marina,,,parser<=27.1 (migrada verbatim),,
 Pérez Petit,conjuez,arturo\s+p[ée]rez\s+petit,,,parser<=27.1 (migrada verbatim),,
 Romano,conjuez,otilio\s+roque\s+romano,,,parser<=27.1 (migrada verbatim),,
@@ -86,3 +86,7 @@ Candisano Mera,conjuez,(?:pablo\s+alejandro\s+candisano\s+mera|candisano\s+mera\
 Llorens,conjuez,(?:mariano\s+llorens|llorens\s+mariano),,,H192 (B154) — adjudicado sobre firma_raw,orden invertido en 348_p569,348_p569;348_p635;348_p841;348_p955;348_p1262
 Moltini,conjuez,(?:patricia\s+marcela\s+moltini|moltini\s+patricia\s+marcela),,,H192 (B154) — adjudicado sobre firma_raw,orden invertido en 348_p569,348_p569;348_p841;348_p955
 González R.L.,conjuez,ram[óo]n\s+luis\s+gonz[áa]lez,,,H192 (B154) — adjudicado sobre firma_raw,nombre completo para no colisionar con Pereyra González,349_p95
+Rivera J.C.,conjuez,(?:julio\s+c[ée]sar\s+rivera|rivera\s+julio\s+c[ée]sar),,,H202 (B154-bis) — adjudicado sobre .md 342_p1847/344_p2752 + PDF oficial (H201),saga art. 110; orden invertido en 344_p2752; frecuente como LETRADO en epílogos (guard B148 debe rechazar),342_p1847;344_p2752
+Botana,conjuez,(?:diego\s+botana|botana\s+diego),,,H202 (B154-bis) — adjudicado sobre .md 342_p1847/344_p2752,saga art. 110; orden invertido en 344_p2752,342_p1847;344_p2752
+Torres V.N.,conjuez,(?:ver[óo]nica\s+nidia\s+torres|torres\s+ver[óo]nica\s+nidia),,,H202 (B154-bis) — adjudicado sobre .md 342_p1847/344_p2752,saga art. 110; orden invertido y sin acentos en 344_p2752,342_p1847;344_p2752
+Caballero,conjuez,(?:mar[íi]a\s+rosa\s+caballero|caballero\s+mar[íi]a\s+rosa),,,H202 (B154-bis) — adjudicado sobre .md 342_p1847/344_p2752,saga art. 110; firma su voto «María Rosa Caballero.» en 1847; invertida en 2752,342_p1847;344_p2752
