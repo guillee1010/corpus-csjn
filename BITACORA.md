@@ -20182,3 +20182,41 @@ Re-corrida post-ciclo: **pool 48→46, bajas exactas {342_p1847, 344_p3070}, 0 a
 **Scripts creados:** `scripts/validacion/check_m55_quorum.py` v0.1 · `scripts/diagnostico/H202/` — poc_b154bis_conjueces.py v0.1, jueces_csjn_propuesto.csv, poc_b154bis_flipset_baseline.csv, m55_pool_post.csv, extractos ×5 (1847, 1102, 2752, 3070, 345_p12), grep_saga.txt. Baseline canónico: `output/validacion/m55_pool_baseline.csv`.
 
 **Commits:** 3 (M55: instrumento + baseline · B154-bis: tabla + outputs + golden + manifest + scripts H202 · docs: DEUDA/BITACORA/CHANGELOG).
+
+## H203 — B166: mecánica real adjudicada + fix parcial vocabulario `en_orden_expuesto` (parser v35.0, MAJOR) (2026-07-13)
+
+**Objetivo:** Opción A del PROMPT_H203 — adjudicar la mecánica de B166 (dato publicado → código → extracto), dimensionar la clase, cerrar la unidad que el dato mandara.
+
+### H203-01 — Paso 1: mecánica adjudicada de punta a punta
+
+Queries read-only sobre publicado (`query_1102.py`): los headers de voto de 1102 SÍ están zonificados (voto_separado seg1 wc 8 Rosatti · seg2 wc 9 con el wrap del header ABSORBIDO) y la estructura de zonas es correcta, incluida la firma de mayoría 910-912 (wc 21) — **hipótesis header-wrap de la entrada B166 MUERTA con dato**; la falla es aguas abajo, en los picks. Código v34.0 leído entero (resolver_dispositivo, _barrer, collect_firma_lines, parse_firma, writer de votos, zonificador): **«último performativo» MUERTA con código** (`_barrer` devuelve el PRIMER performativo-con-firma, L3654); el techo de votos rige SOLO en T1/T2 (L3761-3765); **T3 re-barre sin techo** (L3781); **el panel se colecta forward-only desde el pick** (L4117); el writer de votos itera SOLO los jueces de la firma pickeada (L4271). Extracto leído (`caso_344_p1102.md`, mapeo rel = línea−18 sellado contra la constancia H202): mayoría (rel 900) y voto Rosatti (rel 1146) cierran con **«En orden a lo que hasta aquí se ha expuesto»** — fórmula idéntica, invisible a T1-T4 → T1/T2 vacíos → T3 pesca el `por_todo_ello` GENUINO de la disidencia (rel 1388, firma solitaria 1391 en ventana + «se rechaza» RE_PERF) → outcome/nj/vp = los del voto perdidoso; Rosatti sin fila y Rosenkrantz `posicion=mayoria` con texto de disidencia = la contradicción publicada, explicada línea por línea. Colateral: la zona dispositivo publicada 1328-1390 era ancla de Pasada 1 sobre «…Corresponde ⏎ **por ello desestimar** la queja interpuesta.» — wrap-FP de RE_POR_ELLO (→ B167). Correcciones de constancia aplicadas a la entrada B166 en DEUDA.
+
+### H203-02 — Paso 2: dimensionado (instrumentos read-only)
+
+`superficie_b166.py`: **[A]** «^En orden a lo» = 16 matches corpus-wide / 14 argumental-dictamen («opino que», «entiendo que V.E. puede desestimar») → **variante amplia MUERTA**; forma estricta = **2/2 TP, ambos 1102, 0 FP**. **[B]** «^por ello» minúscula estricta = **76 líneas** (primera-palabra dominada por continuaciones fuera de POR_ELLO_ARGUMENTAL) → **B167 nueva, cuantificada**. `clase_b166_zonas.py`: **constancia — la huella de zonas firma-pre-voto ∧ dispositivo-post-voto NO discrimina** (2096 casos = layout normal multivoto: cada voto zonifica SU dispositivo; la clase solo es visible con el pick) · **C2 (nj=1 ∧ hay votos) = 16, TODOS ⊂ pool M55** — gemelos evidentes 344_p441 y 344_p575; 4 C-sin-huella (2779/441/1396/708, incl. el gemelo 441) → mecánica posiblemente distinta, adjudicar por extracto · **C1-no-M55 = 8** (unanime∧nd≥1 con nj≥3, clase blanda). Baseline: `clase_b166_zonas_out.csv` (H203/).
+
+### H203-03 — Mini-ciclo vocabulario (parser v34.0→35.0, MAJOR)
+
+PoC `poc_b166_variante.py` v0.1→v0.2 — diseño A/B FUENTE ÚNICA (parser importado como módulo + harness de main() replicado; brazo B = tabla + variante parcheada en memoria, cero réplica manual): **E0 0/5894 · flip-set {344_p1102} EXACTO** (baseline `poc_b166_flipset.csv`). Fix: variante T1 **incondicional** `en_orden_expuesto` (`^En orden a lo que hasta aqu[íi] se ha expuesto\b` re.I) — perf-gate DESCARTADO con dato: el performativo wrapea a la línea siguiente y el resolutor no peekea (constancia H194). Consciente adjudicado ⊆ {1102}: candado de decisión COMPLETO (outcome rechaza→**hace_lugar** · vp unanime→**mixed** · nj/n_titulares 1→**5** · is_full_bench 0→1 · is_merit 0→1 · queja_resultado→hace_lugar · posiciones = panel real) + **bonus TP: considerando descontaminado** (−95 wc; el golden traía dispositivo+firma de mayoría DENTRO del considerando) · votos 27.846→**27.850** (+4: Highton/Maqueda/Lorenzetti/Rosatti, Rosatti con texto de su voto; Rosenkrantz corrige a en-disidencia) · zonas 137.988→**137.990** (+2: dispositivo de mayoría 900-909 en 2 segmentos + dispositivo del voto Rosatti; **la zona FP 1328-1390 QUEDA** — B167, declarado) · recursos re-deriva (universo mérito 2969→2970; cobertura partes-sobre-mérito 90,6% sostenida). Candado BLIND: clave n300 byte-idéntica (ausente de git status). `--regolden` [CLEAN]: invariante (c) 5/5, manifest re-sellado **[CLEAN] 64**. **Gate M55: pool 46→45, baja exacta {344_p1102}, 0 altas** (diff contra baseline 48 = {1847, 3070, 1102}; nj=1 19→16, subclase unánime 44/45 con 339_p323 única excepción). Regresión propia post-fix: **E0 0/5894 · flip-set VACÍO**. Etiqueta de constancia: `is_originaria=596` ya era el valor v34.0 (diff programático contra golden: 0 flips; la cifra 595 de memoria estaba desactualizada — el golden-diff manda).
+
+### H203 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumario_con_link).
+- **Sin firma:** 12/5703 fallos (0,21%).
+- **Votos:** 27.850 filas (+4).
+- **Zonas:** 137.990 segmentos (+2).
+- **Pool M55:** 46→45.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5894 filas, sha 457cdc863dbb….
+- `output/parser/csjn_casos_textos.csv` — 5894 filas, sha 988a089b0094….
+- `output/parser/csjn_casos_votos.csv` — 27.850 filas, sha 2e662dc8e5ea….
+- `output/parser/csjn_casos_zonas.csv` — 137.990 segmentos, sha 0fd3c38237e3….
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones, sha 30a6da652e3a… (sin cambio).
+- `output/parser/csjn_casos_recursos.csv` — sha 676ca037a1d8… (re-derivado). Manifest [CLEAN] 64.
+
+**Scripts creados:** `scripts/pipeline/parser.py` v35.0 · `scripts/diagnostico/H203/` — query_1102.py, query_1102_textos.py (sin corrida válida: salida 0 bytes, innecesaria tras el extracto), superficie_b166.py, clase_b166_zonas.py, poc_b166_variante.py v0.2; baselines: poc_b166_flipset.csv (sellado), clase_b166_zonas_out.csv, m55_pool_post_h203.csv, poc_b166_flipset_regresion.csv; salidas txt de instrumentos.
+
+**Commits:** 2 (B166 vocabulario: parser v35.0 + outputs + golden + manifest + scripts/baselines H203 · docs: DEUDA/BITACORA/CHANGELOG).
+
+**Lección ops:** el canal de pegado de consola a chat se rompió a mitad de sesión (documentos llegaban vacíos) — las salidas que deciden viajan como ARCHIVO adjunto, no como texto pegado.

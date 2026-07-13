@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H203 (2026-07-13)
+
+- `parser.py` v34.0→35.0 (MAJOR): nueva variante T1 incondicional `en_orden_expuesto` en RE_DISPOSITIVO_VARIANTES (B166 fix parcial, componente vocabulario). Flip-set corpus-wide: 1 caso (344_p1102).
+- `output/parser/csjn_casos.csv`: 5894 filas; 11 columnas de 344_p1102 (outcome hace_lugar, vp mixed, panel 5, is_merit 1).
+- `output/parser/csjn_casos_textos.csv`: 5894 filas; por_ello_text/firma_raw/considerando_text de 344_p1102 (considerando descontaminado −95 wc).
+- `output/parser/csjn_casos_votos.csv`: 27.846→27.850 (+4, panel de 344_p1102).
+- `output/parser/csjn_casos_zonas.csv`: 137.988→137.990 (+2, dispositivos de mayoría y voto Rosatti en 344_p1102).
+- `output/parser/csjn_casos_recursos.csv`: re-derivado (universo mérito 2969→2970).
+- Golden re-congelado + `_manifest.json` re-sellado [CLEAN] 64. Gate M55: pool 45.
+
+
 ## H202 (2026-07-12)
 
 - `_meta/jueces/jueces_csjn.csv`: 87→91 (B154-bis: +4 conjueces saga art. 110 con alternación invertida; ensanches invertidos García Lema/Méndez/Montesi/Leal de Ibarra). Ciclo de DATO — parser v34.0 sin cambio de código.
