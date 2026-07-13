@@ -4713,7 +4713,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 344_p1062,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 344_p1070,no_fondo,no,no_aplica,,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
 344_p1082,no_fondo,no,no_aplica,,no,no,admite,,0
-344_p1102,confirma,no,recurrente_pierde,recurso_extraordinario,no,no,inadmite,INADMISIBLE_REMITE_DICTAMEN,1
+344_p1102,revoca,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 344_p1137,no_fondo,no,no_aplica,,no,no,no_aplica,,0
 344_p1142,deja_sin_efecto,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 344_p1146,deja_sin_efecto,no,recurrente_gana,recurso_extraordinario,no,si,admite,,0
