@@ -2,6 +2,15 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H202 (2026-07-12)
+
+- `_meta/jueces/jueces_csjn.csv`: 87→91 (B154-bis: +4 conjueces saga art. 110 con alternación invertida; ensanches invertidos García Lema/Méndez/Montesi/Leal de Ibarra). Ciclo de DATO — parser v34.0 sin cambio de código.
+- `scripts/validacion/check_m55_quorum.py`: nuevo, v0.1 (M55 invariante de quórum; baseline en output/validacion/).
+- `output/parser/csjn_casos.csv`: 5894 filas; panel/voting_pattern flipean en {342_p1847, 344_p2752, 344_p3070}; 0 flips outcome.
+- `output/parser/csjn_casos_votos.csv`: 27.846 filas (+12).
+- `output/parser/csjn_casos_zonas.csv`: 137.988 segmentos (+9: 3 TP testigos + 3 FP letrado-Rivera(h) con constancia).
+- `output/parser/csjn_casos_textos.csv`: firma_raw reconstruido en los 3 testigos; clave n300 byte-idéntica.
+
 ## H201 — B147/D2: guard-con-fallback en Pista 1 de detectar_fin_real (parser v34.0, MAJOR) (2026-07-12)
 
 - `scripts/pipeline/parser.py` 33.0→34.0: Pista 1 de `detectar_fin_real` prefiere el primer match del token CON forma de carátula (`_es_caratula_v2` ∧ no-firma incondicional) y hace fallback al primer match a secas si ningún candidato tiene forma (comportamiento v33.0 intacto en ese caso). Flip-set 50 casos, 50/50 TP-o-mejora; B018 comp. 2 cerrado en ambos lados.

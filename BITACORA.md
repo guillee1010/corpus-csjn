@@ -20144,3 +20144,41 @@ CSJN – Consejo de la Magistratura – art. 110 s/ empleo público», 5/11/2019
    (592 accionantes) ante el mismo tribunal de conjueces → grep del cluster en t.342+ al abrir la
    unidad.
 
+## H202 — Tándem M55 + B154-bis: instrumento de quórum + ciclo de dato conjueces saga art. 110 (2026-07-12)
+
+**Objetivo:** Opción A del PROMPT_H202 — instrumento primero, fix después, re-medición al final: la unidad se auto-valida.
+
+### H202-01 — M55: instrumento y medición de población
+
+`check_m55_quorum.py` v0.1 (`scripts/validacion/`, read-only, stdlib, orden caso_id, LF, `--esperar-filas`, `--out` obligatorio). Insumo sha-verificado contra el manifest (casos == eb688bf81bb7… sellado H201). **Población: 48** (nj=1: 19 · nj=2: 29) sobre 5703 fallos — los 2 testigos eran cota inferior ×24; subclase unanime∧nj<3 = 47/48 (excepción 339_p323). Baseline sellado `output/validacion/m55_pool_baseline.csv`, corrida canónica en disco idéntica al preview.
+
+### H202-02 — Adjudicación por lectura (5 extractos .md) y correcciones de constancia
+
+1847: hipótesis firma-estampada MUERTA — mundo (a), mayoría tipografiada wrapeada en 3 líneas. **Corrección a H201/B154-bis: García Lema contado vía su FILA (existía <=27.1), no «vía colector de desconocidos» (columna vacía); ciclo real = 4 filas + 4 ensanches.** 1102: **corrección GRAVE al candado H201** — el flip desestima→rechaza leyó el dispositivo de la DISIDENCIA de Rosenkrantz; la mayoría (5 titulares, Rosatti concurrente) dice «se hace lugar… se revoca» → outcome publicado incorrecto → **B166 nuevo**; 1102 no sana con la tabla, queda en pool M55 adjudicado. Grep saga + cruce de rangos: cluster INVERTIDO «Apellido Nombre» sin acentos (2752 panel 4 publicado sin_firma; 3070 panel 5 publicado nj=1 con Méndez/Montesi/Leal de Ibarra invertidos fuera de patrón); 345_p12 nj=4 CORRECTO (control guards B148 sobre prosa); 329_p1092 ya completo (control no-flip).
+
+### H202-03 — B154-bis: tabla 87→91 + PoC + ciclo consciente
+
+Tabla: +Rivera J.C., +Botana, +Torres V.N., +Caballero (alternación invertida sellada contra 2752) + ensanches invertidos García Lema/Méndez/Montesi/Leal de Ibarra (sellados contra 3070). PoC `poc_b154bis_conjueces.py` v0.1 (adaptación post-externalización de poc_b153: A/B CSV-vigente vs CSV-propuesto; réplica parse_firma L1191-1204 + loader L865-874 leídos): E0 0/5703 · E1 == espec · flip-set 1 (3070, límite declarado: 1847/2752 recuperan vía frontera, patrón H191). Consciente (--ignorar-corpus-drift, exclusión 335/336): casos.csv SOLO {1847 nj 1→5 mixed · 2752 nj 0→4 unanime · 3070 nj 1→5}, 0 flips decisión corpus-wide; votos +12 (4+4+4 exacto); zonas +9 contabilidad COMPLETA vía diff alineado H192: 3 TP (firma de mayoría 1074-1076 + Caballero 1337 en 1847 · 473-474 en 2752 · extensión 284 en 3070) + **3 FP zona-label letrado-Rivera(h)** (334_p38 «Dr. Julio César Rivera (h).» leído · 339_p194 idx237 · 344_p782 idx339, texto verbatim del grep + contención de rango verificada) aceptados con constancia patrón H192 — daño canónico CERO (casos/textos intactos, firma real intacta, marker de epílogo queda, partes 3897 sostenido); mecanismo: título+nombre+«(h)» sobrevive residuo-guard B148 → pool B148/B155, discriminador candidato «Dr./Dres. pre-nombre». Micro-destape: filtro anti-dup de desconocidos usa nombre_canonico como substring → canónicos con inicial dejan pasar el token (ruido cosmético 1847/2752). Blind byte-idéntica (M20 ausente de git status) · regolden [CLEAN] · invariante (c) sostenido · manifest re-sellado [CLEAN] 64. Regresión propia: convergencia total (E1 0/0/0 · E0 0 · flip-set VACÍO); baseline renombrado.
+
+### H202-04 — Paso 5: gate M55 estrenado
+
+Re-corrida post-ciclo: **pool 48→46, bajas exactas {342_p1847, 344_p3070}, 0 altas** (diff contra baseline). Pool restante 46 = tablero (caras: 338_p1060/B019, 330_p3801/B149, 348_p473 re-mirar constancia fantasma H181, 1102/B166).
+
+### H202 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumario_con_link).
+- **Sin firma:** 12/5703 fallos (0,21%).
+- **Votos:** 27.846 filas (+12).
+- **Pool M55:** 48→46.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5894 filas, sha 265883cb5cd0….
+- `output/parser/csjn_casos_textos.csv` — 5894 filas, sha 463172ca4c04….
+- `output/parser/csjn_casos_votos.csv` — 27.846 filas, sha 7da36587ba5b….
+- `output/parser/csjn_casos_zonas.csv` — 137.988 segmentos, sha 30ce7cdc76ee….
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones, sha 30a6da652e3a… (sin cambio).
+- `_meta/jueces/jueces_csjn.csv` — 91 filas (87+4). Manifest [CLEAN] 64.
+
+**Scripts creados:** `scripts/validacion/check_m55_quorum.py` v0.1 · `scripts/diagnostico/H202/` — poc_b154bis_conjueces.py v0.1, jueces_csjn_propuesto.csv, poc_b154bis_flipset_baseline.csv, m55_pool_post.csv, extractos ×5 (1847, 1102, 2752, 3070, 345_p12), grep_saga.txt. Baseline canónico: `output/validacion/m55_pool_baseline.csv`.
+
+**Commits:** 3 (M55: instrumento + baseline · B154-bis: tabla + outputs + golden + manifest + scripts H202 · docs: DEUDA/BITACORA/CHANGELOG).
