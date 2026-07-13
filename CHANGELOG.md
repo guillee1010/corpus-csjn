@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H201 — B147/D2: guard-con-fallback en Pista 1 de detectar_fin_real (parser v34.0, MAJOR) (2026-07-12)
+
+- `scripts/pipeline/parser.py` 33.0→34.0: Pista 1 de `detectar_fin_real` prefiere el primer match del token CON forma de carátula (`_es_caratula_v2` ∧ no-firma incondicional) y hace fallback al primer match a secas si ningún candidato tiene forma (comportamiento v33.0 intacto en ese caso). Flip-set 50 casos, 50/50 TP-o-mejora; B018 comp. 2 cerrado en ambos lados.
+- `output/parser/csjn_casos.csv`: 5894 filas (50 con linea_fin_real/status y metadata derivada actualizadas; 333_p1442 sumario_editorial→fallo).
+- `output/parser/csjn_casos_votos.csv`: 27.818→27.834 filas (+16: paneles recuperados en 5 casos).
+- `output/parser/csjn_casos_zonas.csv`: 137.905→137.979 segmentos (+74).
+- `output/parser/csjn_casos_textos.csv`: 6 filas (considerando/por_ello/firma_raw destapados).
+- Sidecars re-derivados sin cambio de versión: epilogo/partes/materia/recursos (partes recurrente_ok 3885→3897; mérito 90,6%).
+- Golden re-congelado; `_manifest.json` re-sellado [CLEAN] 64, procedencia v34.0.
+
 ## H200 (2026-07-12)
 
 - `scripts/pipeline/parser.py` v32.1→**33.0** (MAJOR, B147/D1): guards de forma en los tiers exact/prefix de `refinar_inicio_por_titulo` — `_es_caratula_v2` (caps-ratio ∨ conector c//s//V.) + rechazo de firma; fall-through a 5b/T4/vistos/catalogo sin cambio. Flip-set 93 casos (espec = `poc_b147_d1_v03.py` VERBATIM).

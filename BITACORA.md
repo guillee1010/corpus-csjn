@@ -20073,3 +20073,74 @@ Pregunta sobre Boggiano post-destitución → scan sobre votos.csv publicado: **
 **Scripts creados:** `scripts/diagnostico/H200/` — `poc_b147_d1_v02.py` (+ .csv, 147 filas) · `poc_b147_d1_v03.py` (+ `poc_b147_d1_v03_baseline.csv`, 103 filas — el .csv vivo queda pisado por la regresión, es esperado) · `dump_cabezas_h200.py` (+ 7 `cabeza_*.md`) · `diff_perimetro_d1.py` (+ .csv, 199 filas). Pipeline: `parser.py` v33.0.
 
 **Commits:** 3 — (1) fix parser v33.0 + outputs canónicos + golden + manifest + clave M20; (2) explorador v8 (herramienta M16, huérfana desde H186) + deleción del duplicado de raíz; (3) docs (DEUDA/BITACORA/CHANGELOG).
+
+## H201 — B147/D2 CERRADO: guard-con-fallback en Pista 1 de detectar_fin_real (parser v34.0, MAJOR) (2026-07-12)
+
+**Objetivo:** abrir el tramo a H300 con la unidad D2 (vista FIN de la frontera de caso, B147/M45), Opción A del PROMPT_H201.
+
+### H201-01 — Micro-items H200 saldados
+
+(1) Cierre H200 constatado: `git log --oneline` muestra los 3 commits en origin/main (docs · explorador v8 · fix v33.0); `a51a912` NO aparece — el reset local pre-push funcionó. (2) Baseline-pisado: la constancia ya vivía en DEUDA/B147; el micro-fix `--out` de `poc_b147_d1_v03.py` queda encolado para cuando se toque ese script (no estaba en uploads — Gate 2). (3) Regla nueva entregada para el skill `cierre-sesion-corpus`: «regresiones post-fix corren con `--out` propio; el baseline sellado NUNCA es el path de salida vivo» — ESTRENADA en esta misma sesión (H201-05).
+
+### H201-02 — Gate 2 de D2 (constancias madre + código)
+
+Leídos ANTES de proponer: `detectar_fin_real` ENTERA (Pistas 1-5 + retroceso H190 + extender_firma B019), `retroceder_frontera`/`_clase_linea_frontera`/`_es_continuacion_wrap`, `_es_caratula_v2`, `_es_texto_corriente`, y el call-site completo (`procesar_archivo` L3825-3870 + `main()` L4412-4444: `_li_for_dfr` B074, dicts de vecindad, headers por unión-de-tomos L4468-4472 — este último corrigió el primer borrador de la réplica). Constancias: B018 (comp. 2 = «es_caratula sin estructura»; matriz de fixes H023), B070/B071 (guards vigentes de Pista 1, el fix se les SUMA), Cierre D1, H199-03 (330_p1135 leído), H190 (retroceso NO se toca).
+
+### H201-03 — PoC v0.1 (rechazo duro): MUERTO con dato
+
+`poc_b147_d2_v01.py` (réplica fiel, brazo baseline = función real importada): **candado E0 5894/5894** — la reconstrucción de insumos es exacta. Superficie: pista `caratula_siguiente` = 5203 casos. Flip-set del rechazo duro (espejo literal de D1): **96**, de los cuales **46 CAÍDAS DE PISTA** — y el fall-through de Pista 1 NO es benigno como el de los tiers de D1. Adjudicación sobre 6 extractos `.md`: 341_p868 (−16) y 339_p599 (−25) = la carátula genuina del siguiente falla `_es_caratula_v2` (wrapeada con conector en línea 2 / mixta institucional) → Pista 4 ancla el «FALLO DE LA CORTE SUPREMA» PROPIO pasado el lfc → amputa sentencia+firma propias; 334_p763 (−28, token basura «Autos») → firma_actual en la firma de mayoría → amputa el VOTO entero de Highton; 343_p2135 (−3) y ~10 hermanos → epílogo propio huérfano. TP del duro perdidos con constancia: 330_p5251 (token wrapeado en prosa del dictamen ajeno). 340_p660 sin flip = CORRECTO (su carátula siguiente pasa el guard; su solape −5 es GAP DE BANNER → **corrección de constancia al diag H199: la sub-clase solape<0 mezcla truncamientos con gaps benignos**). Patrón M52/B067 aplicado: el flip-set adjudicado mató el diseño antes de codear.
+
+### H201-04 — PoC v0.2 (guard-con-fallback): flip-set 50 SELLADO
+
+Diseño adjudicado: k_plain = primer match con guards viejos (= ancla v33.0 exacta) · k_forma = primer match que además pasa no-firma incondicional ∧ `_es_caratula_v2` · ancla = k_forma ∨ fallback k_plain — cero caída de pista inducida. Candados: **E0 5894/5894** + **E1 = 0** (todo flip es c→c con k_forma, por construcción). **Flip-set 50** (deltas +1..+32, p50 +6, delta<0 = 0), **50/50 TP-o-mejora adjudicados desde el propio CSV** (columnas ancla_plain/ancla_forma): 33 ancla-en-EPÍLOGO-propio (el fin avanza y el epílogo entra al bloque) + 16 prosa (incl. 330_p1135, el testigo H199, y 341_p2015 con el fin a mitad del dispositivo) + 1 firma versal (329_p1301 Boggiano, +32). Sub-clase acoplada **D1b-en-FIN = 3** (1762/6071/1259, sus siguientes son casos D1b): 1762/6071 bleed CERO (la línea 1 all-caps la recorta `retroceder_frontera` como rotulo_caps), 1259 absorbe 1 línea mixta — residual mínimo, sana con D1b. X-ref solape<0: 9/14 cubiertos, los 5 sin flip adjudicados (660 gap · 4811 interleave/D5 · 1303/3218/3221 Boggiano-D4, d+1..+5). **Corrección de constancia al PROMPT_H201:** el costo-bleed de las caídas-a-catalogo de D1 NO es Pista 1 — los previos reales (329_p2731, 331_p570, 333_p1784) anclan por `sumario_siguiente` (Pista 3; 570/1784 con solape POSITIVO +4/+11) → fuera del alcance de D2 por diseño.
+
+### H201-05 — Fix v34.0 + ciclo consciente adjudicado + regolden
+
+Fix = bloque [D2v2] del PoC VERBATIM en Pista 1 (diff confinado a docstring + Pista 1 + `__version__`; B094 conserva verbatim, subsumida). Ciclo `--consciente` (pin parser=34.0): **perímetro COMPLETO programático** (`diff_perimetro_d2.py` v0.1→v0.2: field_size_limit para textos H113 + freno re-especificado — `status_localizacion`/`tipo_entrada` derivan del contenido del bloque; el invariante fino es el componente `_ancla_*` + `linea_inicio`, ambos 0 flips): casos **50/50 ⊆ set, 0 fuera** · **candado de decisión 22 flips, 22/22 TP** — 330_p4365 sin_dispositivo→desestima con panel 0→4 · **333_p1442 sumario_editorial→FALLO (espejo inverso del 345_p715 de H200: un fallo entero dado de baja vuelve al corpus — hace_lugar unánime full-bench 5, is_merit 0→1)** · 341_p2015 firma de 5 recuperada (extract-confirmada) · 344_p1102 outcome lee el dispositivo real (desestima→rechaza) · 342_p1847 frontera TP con costo conocido → **constancia B155** (n_jueces 0→1 sobre «Alberto Manuel García Lema», no-juez) · textos 6 ⊆ set · votos 27.818→**27.834** (+16 = 4+5+5+1+1; tres fallos mudos ganan panel completo) · zonas 137.905→**137.979** (+74) ⊆ set, **0 vecinos-por-solape**. Constancia B161: 329_p1928 absorbe la nota «(*) Dicha sentencia dice así» (Halper) — variante hermana del marcador. Ripple derivers: partes recurrente_ok 3885→**3897**, mérito **2690/2969 = 90,6%** (universo de mérito +4). Candado BLIND: `build_m20` → clave n300 **byte-idéntica** (`git status` vacío). `--regolden`: golden congelado, invariante (c) [CLEAN] 5/5, manifest **[CLEAN] 64**. Regresión propia post-regolden con `--out` propio (regla nueva, baseline intacto): **E0 5894/5894 / E1 0 / flip-set VACÍO** — a diferencia de D1, ambos brazos convergen (la réplica guarded ES v34.0).
+
+### H201 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumario_con_link — 333_p1442 pasó de sumario_editorial a fallo dentro de tipo_entrada, conteo global sin cambio de N).
+- **Votos:** 27.834 filas (+16).
+- **Zonas:** 137.979 segmentos (+74). **Editorial:** 152 (sin cambio).
+- **Parser:** v34.0 (MAJOR). Derivers sin cambio de versión (re-derivados: epilogo v0.4 / partes v0.18 / materia v3.2 / recursos v0.6).
+- **B147:** fantasmas ✔(H189) · 1A ✔(H190) · D1 ✔(H200) · **D2 ✔(H201)** · 1C abierto · D1b abierto (ahora también sana el residual 1259) · D3/D4/D5 abiertos.
+- **B018:** comp. 2 CERRADO EN AMBOS LADOS (cabeza D1/H200 · fin D2/H201) · comp. 1 = D3 abierto.
+- **Manifest:** [CLEAN] 64 — sha casos eb688bf81bb7… / textos 6afc4bce6d14… / votos 0039201b129f… / zonas cff2f828af56… / editorial 30a6da652e3a… / materia 89eb50fef37b… / recursos 6ecd07e95f55… / epilogo 238d90f6bd50… / partes 2906dbc23c8a….
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5894 filas.
+- `output/parser/csjn_casos_textos.csv` — 5894 filas.
+- `output/parser/csjn_casos_votos.csv` — 27.834 filas.
+- `output/parser/csjn_casos_zonas.csv` — 137.979 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones.
+- Sidecars re-derivados: epilogo 5703 · partes 5894 · materia 5894 · recursos 5894.
+
+**Scripts creados:** `scripts/diagnostico/H201/` (gitignoreado, scratch) — `poc_b147_d2_v01.py` (+ .csv) · `poc_b147_d2_v02.py` (+ `poc_b147_d2_v02_baseline.csv` sellado + `_regresion.csv`) · `diff_perimetro_d2.py` v0.2 · 6 extractos `.md` (341_p868, 339_p599, 334_p763, 343_p2135, 330_p5251, 340_p660).
+
+**Commits:** 2 — (1) fix parser v34.0 + outputs canónicos + golden + manifest; (2) docs (DEUDA/BITACORA/CHANGELOG). Scratch H201 gitignoreado, no se commitea (política vigente desde H199).
+
+### H201 — Corrección de constancia (misma sesión, post-cierre)
+
+La adjudicación del flip de decisión de **342_p1847** estaba errada en dos niveles y se corrige
+contra el **PDF oficial del fallo** (CSJ 7/2007 (43-A)/CS1 «Álvarez, Gladys Stella y otros c/ EN –
+CSJN – Consejo de la Magistratura – art. 110 s/ empleo público», 5/11/2019, subido y leído en sesión):
+
+1. **«Alberto Manuel García Lema» NO es letrado: es CONJUEZ** (firma la disidencia). El caso es la
+   saga art. 110/intangibilidad resuelta por **tribunal de conjueces íntegro** (titulares excusados
+   por interés propio): Julio César Rivera, Diego Botana, Verónica Nidia Torres, María Rosa
+   Caballero (por su voto) y Alberto Manuel García Lema (en disidencia) — **panel real 5 / voting
+   mixed**. La constancia que lo mandaba a B155 (clase Belluscio, letrado-contado-como-juez) se
+   RETIRA; la evidencia va a **B154 (constancia H201, ciclo de dato candidato «B154-bis»)**.
+2. El flip publicado (sin_firma/0 → unanime/1) **no es TP**: golden y v34.0 están AMBOS mal →
+   se reclasifica como **regresión de metadata aceptada con constancia y sucesor** (patrón
+   H178/B165). La frontera sí es correcta (el fix D2 no se toca). El balance del candado de
+   decisión de H201-05 pasa de «22/22 TP» a **«21/22 TP + 1 regresión de metadata aceptada (1847)»**.
+3. **Sucesor sellado (B154-bis, ciclo de dato):** sumar los 5 conjueces a
+   `_meta/jueces/jueces_csjn.csv` (patrón B153/B154) + leer el `.md` de 1847 para adjudicar por qué
+   la firma de mayoría (Rivera/Botana/Torres/Caballero) no entró al conteo (solo García Lema, vía
+   el colector de desconocidos — la columna `jueces_desconocidos` re-conectada en H191 detectando
+   como se diseñó). **Rinde potencial:** el propio fallo registra **54 causas gemelas** de la saga
+   (592 accionantes) ante el mismo tribunal de conjueces → grep del cluster en t.342+ al abrir la
+   unidad.
+
