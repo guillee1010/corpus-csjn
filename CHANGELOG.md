@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H205 (2026-07-14)
+
+- `parser.py`: v35.0 → **v36.0** (MAJOR) — B166 (c) fix: consumidor `panel_cprima` (panel por evidencia de zonas, predicado verbatim PoC H204) cableado antes de collect(pick+1)/A001; sin candidata → comportamiento v35.0 verbatim. 34 casos afectados (31 TP + 3 costos B169).
+- `output/parser/csjn_casos.csv`: 5894 filas (sin delta) — columnas de panel en {34}.
+- `output/parser/csjn_casos_textos.csv`: 5894 filas (sin delta) — firma_raw en {34}.
+- `output/parser/csjn_casos_votos.csv`: 27.850 → **27.916** filas (+66).
+- `output/parser/csjn_casos_zonas.csv` / `csjn_casos_editorial.csv` / `csjn_casos_recursos.csv`: byte-idénticos.
+- `output/parser/_manifest.json`: re-sellado [CLEAN] 64 (v36.0).
+- `scripts/tests/golden/`: re-congelado (casos/textos/votos).
+- `scripts/diagnostico/H205/`: `poc_b166_c_replica.py` v0.1 · `adjudicar_h205.py` v0.1 (nuevos, no canónicos).
+
 ## H203 (2026-07-13)
 
 - `parser.py` v34.0→35.0 (MAJOR): nueva variante T1 incondicional `en_orden_expuesto` en RE_DISPOSITIVO_VARIANTES (B166 fix parcial, componente vocabulario). Flip-set corpus-wide: 1 caso (344_p1102).

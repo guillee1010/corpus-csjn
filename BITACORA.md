@@ -20220,3 +20220,92 @@ PoC `poc_b166_variante.py` v0.1→v0.2 — diseño A/B FUENTE ÚNICA (parser imp
 **Commits:** 2 (B166 vocabulario: parser v35.0 + outputs + golden + manifest + scripts/baselines H203 · docs: DEUDA/BITACORA/CHANGELOG).
 
 **Lección ops:** el canal de pegado de consola a chat se rompió a mitad de sesión (documentos llegaban vacíos) — las salidas que deciden viajan como ARCHIVO adjunto, no como texto pegado.
+
+## H204 — Unidad B166 (c): gemelos C2 adjudicados + regla panel-por-evidencia-de-zonas medida corpus-wide (2026-07-13)
+
+**Objetivo:** ejecutar el plan de PROMPT_H204 — adjudicar la mecánica de los gemelos C2 (344_p441 / 344_p575) leyendo publicado + extracto, y abrir B166 (c) con su medición barata corpus-wide. Sesión READ-ONLY: parser v35.0 sin cambio, outputs canónicos intactos, manifest [CLEAN] 64 de H203 vigente.
+
+### H204-01 — Insumos de los gemelos (query publicado + extractos)
+
+`query_publicado_gemelos.py` (H204/) reventó con `_csv.Error: field larger than field limit (131072)` — el default de 128 KB del módulo csv contra campos de textos.csv (el propio extracto de 441 mide 128.011 chars). Fix: `csv.field_size_limit(sys.maxsize)` con fallback `2**31-1` (Windows, C long). Nota de canal: la primera corrida post-fix repitió el traceback byte-idéntico → la edición manual no se había guardado; se resolvió con Claude entregando el archivo entero (refuerza la regla: snippets de .py nunca a mano). Extractos con `extraer_caso.py --cola 20`; el de 575 tiró WARN de drift sidecar↔.md (ancla del considerando ausente del bloque) — anotado, no perseguido (unidad atómica).
+
+### H204-02 — 344_p575 (Grindetti) adjudicado: clase 1102 vía el residual-wrap DOCUMENTADO de en_virtud_perf (H194-A2/B067), NO variante nueva
+
+Texto real: la mayoría (Rosenkrantz–Highton) cierra en 759 con «En virtud de lo expuesto, de conformidad con lo dictaminado por ⏎ la señora Procuradora Fiscal, se hace lugar…» — performativo wrapeado a 760. La variante `en_virtud_perf` YA existe (parser L114-115) pero el peek de wrap es zonificador-solo (`cola_wrap`, único call-site L3333-3334); el resolutor exige perf en línea (L135/L142) → T1 vacío → T3 sin techo pesca el «Por ello» del voto de Maqueda (774-777, coincide VERBATIM con el por_ello_text publicado hasta el «fs. 26») → panel forward-only = «Juan Carlos Maqueda.» (778) == firma_raw publicado (20 chars exactos). Zonas: dispositivo 759-763 + firma 764-765 = la huella 1102 COMPLETA (la regla (c) original lo cubre). Ground truth: panel 4 (Rosenkrantz · Highton · Maqueda según su voto · Rosatti EN DISIDENCIA parcial, dispositivo propio 1036-1041: deja parcialmente sin efecto + inoficioso), vp mixed. El outcome hace_lugar coincide de casualidad (Maqueda adhiere al mismo resultado); el pe es del dispositivo equivocado.
+
+### H204-03 — 344_p441 (Comunidad Mapuche Catalán) adjudicado: mecánica NUEVA firma-colectiva-post-voto — pick correcto, panel roto
+
+El vocabulario NO falló: T1 clásico «Por ello, y conforme con lo dictaminado, corresponde:» (1091) == pe publicado → outcome revoca CORRECTO. Lo roto es solo el panel: la mayoría no lleva firma tras su dispositivo — la firma colectiva del panel de 5 («Rosenkrantz (en disidencia) – Highton – Maqueda – Lorenzetti – Rosatti.», 1382-1384, zonificada z80) está impresa DESPUÉS del voto concurrente de Rosatti (1121-1381). `collect_firma_lines(pick+1)` se topa primero con el header del voto (1121) → nj=1, Rosatti «mayoria», firma_raw 1830 chars de basura, jueces_desconocidos contaminados. Bonus: el header de la disidencia está WRAPEADO («…Don Carlos Fernando ⏎ Rosenkrantz», 1389-1390) → la extracción del juez del header falló («Señor Ministro Doctor Don» en desconocidos); nv/nd (conteo de headers) correctos. Ground truth: full bench 5, mayoría Highton+Maqueda+Lorenzetti, voto Rosatti, disidencia TOTAL Rosenkrantz (rechaza el REX y confirma, 2110-2114), vp mixed. Implicancia: la regla (c) original (firma pre-primer-voto_separado) NO cubre 441 → ENMIENDA c′.
+
+### H204-04 — PoC de la regla, v0.1: dos defectos propios muertos con dato
+
+`poc_b166_c_regla.py` v0.1 (H204/, read-only, fuente única: parser importado — parse_firma/RE_CALIFICADOR/construir_bloque; pin --esperar-version 35.0): regla c = primera zona firma post-apertura PRE-primer-voto_separado; c′ = primera firma-de-panel (nj≥2 ∨ calificador). Corrida: c full match 5532 / mismatch 155; c′ 163 (PEOR — señal de defecto). Adjudicación contra el CSV: (i) c′ NO filtraba post-apertura → pescaba firmas del bleed/residuo (11 casos con cp_ini<<c_ini, ej. 329_p432 cp_ini=21 vs c_ini=189); (ii) la clase dominante de mismatches (134 delta-negativo, tomos 329/330, patrón pub-nj6→regla-nj5 perdiendo siempre el juez wrapeado) = ARTEFACTO del consumidor: el panel se leía del span VERBATIM de la zona, pero el firma_raw publicado sale de collect_firma_lines que cruza el wrap (clase H190-b «…CARMEN ⏎ M. ARGIBAY.»). Dato clave: pub_nj=1 ∧ regla≥3 fuera de C2 = 0 (no hay C2 escondidos).
+
+### H204-05 — PoC v0.2: colapso de artefactos y flip-set candidato
+
+v0.2 = c′ con filtro post-apertura + panel medido con `collect_firma_lines(bloque, zona_ini)` (la semántica EXACTA del fix), conteo verbatim conservado en *_nj_zona. Resultado: mismatches 155→44 · **full match 5643/5687 = 99,2%** · ancla 1102 match 1/1/1 · flip-pool candidato (c_nj>pub_nj) = 21. Tablero C2: 13/16 panel completo vía c a secas; 441 y 1396 vía c′; 347_p520 anómalo (zona_nj=4 pero collect=1 == pub); 348_p708 con única zona firma post-primer-voto (nj1 conjuez Rabbi-Baldi — puede ser dato correcto, extracto pendiente). Corrección de constancia intra-sesión: se había dicho «708 sin zona firma» — el CSV dice 1 zona.
+
+### H204-06 — Clase A adjudicada con firma_raw publicado: 14/14 pub-INFLADO por voto tragado → B168; +4 por prosa-con-juez
+
+`query_firma_raw_clase_a.py` (H204/, 24 casos = 23 no-flip-pool + 520): canastas con_duplicado 14 / sin_duplicado 10 / sin_firma_raw 0. Testigo 331_p1028: firma_raw (526 chars) = firma del panel (7) + el VOTO COMPLETO de Argibay + su firma — el colector no frena en «Voto la señora ministra doctora doña …» (variante invisible a RE_VOTO_HDR) → parse_firma dedup por POSICIÓN + n_jueces=len(lista) (L4236, verificado en código) → pub nj9, columna jueces «…| Argibay | Argibay | Argibay». Los 14 = flips de MEJORA para (c); destape colateral: posible fila de voto perdida en votos.csv (adjudicar en el ciclo del fix) → **B168 nueva en DEUDA**. Sin_duplicado adjudicados: 330_p2799/340_p1510/347_p2154 = collect ARRANCÓ en prosa-con-nombre-de-juez (pub inflado, regla correcta); 346_p965 = la expectativa B160 exacta (Figueroa contada desde prosa donde es PARTE); 347_p520 resuelto (zona arranca en línea-prosa «…Doctor Don Horacio Rosatti.», la guarda _RE_FIRMA_COMPLETA corta a nj1 con el panel real una línea abajo); residuo con clase: 329_p3148/4426/4446 (primera-zona-firma-FP en sagas conjuez) · 329_p4140 (dos firmas de 7, sets distintos) · 339_p270 (zona arranca 1 línea tarde, pierde juez wrapeado).
+
+**Flip-set candidato del fix (c) ≈ 41** = pool 21 (11 C2 + 330_p3801 [C1-no-M55] + 330_p3141/331_p1397/332_p5 + sin_firma recuperados 330_p2794/345_p378/347_p1084 + conjuez 329_p3649/329_p5317 + 340_p1993 [1C H190, leer]) + clase A 14 + prosa 4 + {441, 1396} vía c′.
+
+### H204 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumario_con_link) — SIN CAMBIO (sesión read-only).
+- **Sin firma:** 12 (0,21%). **Votos:** 27.850. **Zonas:** 137.990. **Pool M55:** 45. **Mérito:** 2970.
+- Manifest **[CLEAN] 64** de H203 VIGENTE — sha casos 457cdc863dbb… / textos 988a089b0094… / votos 2e662dc8e5ea… / zonas 0fd3c38237e3… / editorial 30a6da652e3a… / recursos 676ca037a1d8….
+
+**Outputs canónicos:** sin cambio (0 corridas de pipeline).
+
+**Scripts creados:** `scripts/diagnostico/H204/` — `query_publicado_gemelos.py` (+fix field_size_limit) · `poc_b166_c_regla.py` v0.1→v0.2 (baseline `poc_b166_c_regla_v02_out.csv` + resumen) · `query_firma_raw_clase_a.py` (+`firma_raw_clase_a_out.txt`) · extractos 344_p441 / 344_p575.
+
+**DEUDA:** header H204 + Prioridad H204 + bloque ADJUDICACIÓN H204 en B166 + **B168 nueva** (colector traga voto; 14 casos) + cross-refs B160 (+4 casos).
+
+**Commits:** 1 (docs: DEUDA + BITACORA + PROMPT_H205; los scripts H204/ son scratch gitignoreado).
+
+## H205 — B166 (c) fix real: panel por evidencia de zonas (parser v36.0) (2026-07-14)
+
+**Objetivo:** cablear el consumidor c′ diseñado y adjudicado en H204 en el camino del panel de `procesar_archivo`, con PoC-réplica A/B código-vs-código, flip-set sellado y ciclo completo.
+
+### H205-01 — Paso 1: diseño en código (leído sobre v35.0)
+
+Secuencia L3833→4143 leída completa: `_zonas_linea` (L3954) es la estructura de zonas disponible en el camino del panel, ya mutada por el relabel A1 (L4089-4096) — misma vista que persiste `extraer_segmentos` (L4273, runs contiguos bloque-relativos). Predicado c′ tomado VERBATIM de `poc_b166_c_regla.py` v0.2 (pedido y leído, no reconstruido): candidatas = inicios de runs contiguos de zona `firma` con inicio > primer índice de zona `apertura` (−1 si no hay apertura → todas candidatas, al revés de la hipótesis inicial — el dato mandó), panel-ness = nj DEDUPED por nombre ≥ 2 ∨ calificador, medido con `collect_firma_lines(bloque, zona_ini)`. Tres hallazgos declarados pre-código: (i) el nj de calificación es deduped pero `n_jueces` publicado es posicional (L4236) — se replica la calificación, no se toca `parse_firma`; (ii) expectativa clase A corregida: si collect(pick+1) ya arrancaba en la misma zona, el texto es idéntico y no hay flip (el «nj baja» de H204 era el dedup del contador del PoC); (iii) fallback del fix (comportamiento actual) ≠ fallback del PoC (regla c), costo 0 medido (los 2 `fallback_c` y el `sin_candidata` ya matcheaban publicado). Rama `calificador` del predicado: 0 disparos corpus-wide en H204 — se replica igual por fidelidad.
+
+### H205-02 — Paso 2: PoC-réplica A/B (`poc_b166_c_replica.py` v0.1)
+
+Patrón poc_b166_variante: parser importado + harness de L3954-4159 replicado (zonificar → dictamen/residuo/excluir → detectar_votos → apertura → resolver → relabel A1 verbatim → wc para B087), brazo A = camino v35.0 verbatim (collect(pick+1) + A001), brazo B = c′ vía `panel_cprima` (la espec que después se copió al parser). Candados: **E0 = 0/5894** (brazo A == publicado en las 9 columnas de panel: casos + firma_raw de textos + multiset juez::posicion de votos) · decisión compartida por construcción. **FLIP-SET SELLADO 34** (baseline `poc_b166_c_replica_out.csv`): EXTRAS = 0 (todo flip predicho por H204), 33/34 convergen exacto con cp_* de H204; el 34° (329_p2063) adjudicado con dato = mismo pick que H204, diferencia = conteo posicional con duplicados (clase B168) + guard B087 que el PoC H204 no aplicaba. AUSENCIAS = 12 (clase A: c′ elige la misma zona que collect(pick+1) ya alcanzaba → output idéntico) → corrección de constancia al candidato ≈41 de H204 y a la entrada B168.
+
+### H205-03 — Adjudicación de los 4 residuales declarados (3 costos + 1 TP por extracto)
+
+Los 4 residuales declarados aparecieron en el flip-set. **329_p4140 adjudicado por extracto = TP**: el bloque contiene una sentencia de 2004 embebida como nota al pie «(*) Dicha sentencia dice así» (Ursina c/ Chianese); la firma publicada (Petracchi–Belluscio–Fayt–Boggiano–Maqueda–Zaffaroni–Highton, banco dic-2004) cerraba el dispositivo de la EMBEBIDA; c′ recupera el panel PROPIO 2006 (con Lorenzetti/Argibay, disidencia→mixed, calificadores que calzan con los votos propios del bloque). Constancia colateral: outcome/pe de 4140 SIGUEN siendo los de la embebida (el pick no se toca — residual B166(b)/familia B161). **3 costos ACEPTADOS con clase única** (primera-zona-firma-FP de prosa densa en nombres → **B169 nueva**): 339_p270 nj3→2 (prosa de recusación 2.175 chars, pierde «Luis Lorenzetti» wrapeado sin RICARDO) · 329_p3148 nj9→3 (cita de precedente) · 329_p4446 nj7→9 (infla desde prosa de excusación). Balance 31 TP / 3 costos.
+
+### H205-04 — Paso 3: fix (parser v35.0→36.0, MAJOR) + ciclo completo
+
+Tres cambios y nada más (diff auditado): versión+changelog, `panel_cprima` (L1273), cableado en L4174 (c′ antes del camino forward-only, independiente de por_ello_idx; sin candidata → bloque v35.0 verbatim en el `else`). Ciclo: `--consciente` (corpus-drift 335/336 = exclusión deliberada conocida, `--ignorar-corpus-drift`; los «diffs de 329_p2064» del reporte = artefacto de alineación posicional por las +filas — patrón H192) → **adjudicación completa keyed-by-caso con `adjudicar_h205.py` v0.1** (instrumento nuevo, H205/): diff EXACTO ⊆ {34} en los 3 CSV, solo columnas de panel, **0 flips de decisión corpus-wide** → [OK] → `--regolden` → invariante (c) sostenido → manifest **[CLEAN] 64**. Blind: `M20_clave_parser_n300.csv` ausente de git status = byte-idéntica. Contabilidad: votos +66 == predicción exacta de la réplica caso por caso.
+
+### H205-05 — Gate M55 + regresiones
+
+**Pool 45→29**: 17 bajas ⊆ flip-set (13 nj=1 + 4 nj=2 — el tablero C2 prácticamente vaciado) + **1 alta ADJUDICADA = 339_p270** (el costo aceptado B169 entrando al radar — detección correcta, no regresión desconocida; nj=1 16→3, subclase unánime 28/29). Regresión propia post-fix: réplica `--esperar-version 36.0 --post-fix` → E0 0/5894, flip-set VACÍO (sin línea [FRENAR]). **Pin de las regresiones vivas H200-H203: ajustar a 36.0.** Regla operativa M55 actualizada: alta ≠ {270} en corridas futuras = FRENAR.
+
+### H205 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumarios).
+- **Sin firma:** 8 / 5703 fallos (0,14%). Trayectoria reciente: 12 (v35.0) → **8** (v36.0).
+- **Votos:** 27.916 filas (+66).
+- **Zonas:** 137.990 segmentos (byte-idéntico — c′ solo lee). **Editorial:** 152 (sin cambio).
+- **Pool M55:** 29 (45→29; alta única 339_p270 adjudicada).
+- **Manifest:** [CLEAN] 64.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5894 filas · sha 5faa27f472cf…
+- `output/parser/csjn_casos_textos.csv` — 5894 filas · sha 390ace04abf1…
+- `output/parser/csjn_casos_votos.csv` — 27.916 filas · sha 73700c5ef7a8…
+- `output/parser/csjn_casos_zonas.csv` — 137.990 filas · sha 0fd3c38237e3… (sin cambio)
+- `output/parser/csjn_casos_editorial.csv` — 152 filas · sha 30a6da652e3a… (sin cambio)
+- `output/parser/csjn_casos_recursos.csv` — sha 676ca037a1d8… (sin cambio — el gate no consume el panel)
+
+**Scripts creados:** `scripts/diagnostico/H205/` — `poc_b166_c_replica.py` v0.1 (espec del fix + regresión propia) · `adjudicar_h205.py` v0.1 (adjudicación keyed-by-caso del consciente) · baselines `poc_b166_c_replica_out.csv` (+resumen), `adjudicacion_h205.txt`, `m55_pool_post_h205.csv`, `poc_b166_c_replica_post.csv` (+resumen) · extracto `329_p4140.md`.
+
+**Commits:** 2 (1: parser v36.0 + outputs + golden + manifest + scripts H205 — el fix con su contrato completo; 2: DEUDA + BITACORA + CHANGELOG — documentación del cierre).
