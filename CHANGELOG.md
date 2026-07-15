@@ -2,6 +2,13 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H210 (2026-07-15)
+
+- `derivar_materia.py` v3.3→**4.0** (MAJOR, M49): rename semántico de `materia_capa` — `capa1`→`lectura_tribunal` · `capa1_refinado`→`lectura_tribunal_refinada` · `capa2`→`lectura_texto` · `pendiente_capa2`→`sin_clasificar`; terminales (originaria/sui_generis/residual/no_aplica) y `materia_fuente` intactos; `MAPEO_M49` como contrato importable (lo consume `verificar_m49.py`, scratch H210/); nomenclatura interna TIER 1/3 → router de partes / motor de co-ocurrencia (solo comentarios).
+- `output/parser/csjn_casos_materia.csv`: 5894 filas (sin delta); SOLO la columna `materia_capa` cambia, mapeada 1:1 (candado `verificar_m49` [OK]: cross-tab exacta, 0 pares fuera); sha `89eb50fe…`→`607793de53ed…`.
+- Resto de la cadena byte-idéntico (parser v37.0 sin cambio); `_manifest.json` re-sellado **[CLEAN] 65**.
+- Retroactivo (Tarea 0, ver BITACORA H209/H210): backlog git H207–H209 commiteado y pusheado en esta sesión — incluye `parser.py` v37.0 (H207), `extraer_normas.py` v1.0 + `csjn_casos_normas.csv` (H209).
+
 ## H209 (2026-07-15)
 
 - `extraer_normas.py`: v0.2→v1.0 — promoción a etapa canónica (`scripts/pipeline/`); 4 ámbitos (caratula, considerando, dispositivo, voto); emite `csjn_casos_normas.csv`.

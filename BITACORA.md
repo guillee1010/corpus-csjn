@@ -20471,3 +20471,36 @@ El operador objetó los valores `capa1/capa1_refinado/capa2/pendiente_capa2` com
 
 **Commits:** [VERIFICAR con git log si se hicieron en H209 o van con este cierre] — (1) pipeline: extraer_normas v1.0 + derivar_materia v3.3 + correr_pipeline v1.1 + generar_manifiesto v1.9 + MAPA + outputs + golden + manifest 65; (2) documentación: DEUDA editada + BITACORA/CHANGELOG appends + PROMPT_H210.
 
+## H210 — Cierre retroactivo H209 sellado en disco + M49: rename semántico de `materia_capa` (2026-07-15)
+
+**Objetivo:** Tarea 0 — verificar en disco y sellar el cierre reconstruido de H209 (PROMPT_H210); Tarea 1 — aplicar M49 (`derivar_materia` v4.0) con candado 1:1.
+
+### H210-01 — Tarea 0: verificación en disco y backlog git
+
+Docs post-H208 sin H209 confirmado (única mención = `PROMPT_H209` en la línea de commits de H208). Verificación de lo reconstruido, TODO PASÓ: versiones en disco `extraer_normas` 1.0 / `derivar_materia` 3.3 / `correr_pipeline` 1.1 / `generar_manifiesto` 1.9 · candado M59 sha `89EB50FEF37B…` idéntico · baselines 4 ámbitos exactos (caratula 411 · considerando 5.562 · dispositivo 161/78/145 · voto 1.562/580/825) · atadura v0.2↔v1.0 por unión caratula+considerando = 5.973 pares / 1.393 normas / 2.643 casos (idéntico a H208) · gap carátula 265 replicado desde la DEFINICIÓN del código (`extraer_normas` L192-193: `not ns <= por_caso_cons`) · gate `[CLEAN] 65 + procedencia` corrido (el rótulo no vive en el JSON: lo imprime el gate). **HALLAZGO:** HEAD en el cierre de H205, origin 1 atrás — nada commiteado desde H205: parser v37.0 (H207), docs H207/H208 y todo H209 (untracked). **Corrección de constancia:** los «Commits: 2» declarados en el cierre H208 se describieron pero nunca se ejecutaron. Reconstrucción: commit pipeline-H209 (14 files, incl. `extraer_normas.py` y el sidecar nuevos) · commit docs-H209 · **parser v37.0 detectado FUERA del primer add** (estado commiteado inconsistente golden-v37/parser-v36, corregido con commit retroactivo H207 propio ANTES del push) · push, tree limpio, origin al día. Los dos `[VERIFICAR]` sellados en el append H209 quedaron DEMOSTRADOS en esta sesión (Get-FileHash + `gate_manifiesto.py`); constancia acá porque BITACORA es append-only.
+
+### H210-02 — M49 aplicado (unidad de la sesión)
+
+Censo previo (Gate 2, deriver leído entero): 28 sitios de código en `derivar_materia`; **explorador v8: 0 literales** (multiselect dinámico L571, los valores salen del CSV); **`csjn_analisis_v4`: 0 literales** → el alcance real es SOLO el deriver. `derivar_materia` v3.3→**v4.0** (MAJOR): constantes `CAPA_TRIBUNAL`/`CAPA_TRIBUNAL_REFINADA`/`CAPA_TEXTO`/`SIN_CLASIFICAR` + **`MAPEO_M49` como contrato importable** (fuente única; patrón M59/`_norm`); «TIER 1/3» → «router de partes» / «motor de co-ocurrencia» (comentarios/docstrings); nombres de función y prosa «capa 1/2» quedan (fuera del alcance sellado); `materia_fuente` INTACTA incl. `conflicto_capa2:` (residuo deliberado, constancia en M49). Instrumento `verificar_m49.py` v0.1 (H210/): candados E1-E6, smokeado en ambos sentidos (PASS limpio + FAIL con 3 sabotajes detectados). Ciclo: `--consciente` ABORTÓ por corpus-drift → drift verificado = exactamente los 4 `.md` de 335/336 → relanzado con `--ignorar-corpus-drift` (segunda evidencia de ergonomía → constancia M51). **Nota de método: el `--regolden` se corrió ANTES del candado (orden invertido); el candado corrido después PASÓ → sello convalidado post-hoc. Orden canónico: candado→sello.** Candado: 5.894 filas, cross-tab exacta {capa1→lectura_tribunal 2.301 · capa2→lectura_texto 1.472 · pendiente_capa2→sin_clasificar 1.161 · capa1_refinado→lectura_tribunal_refinada 159 + identidades 596/191/8/6}, cero pares fuera, materias/fuentes/orden idénticos. Convergencias independientes: 1.161 = 1.104 sin_ancla + 57 conflicto_capa2 (H208/M58) · cobertura 77,0% (3.932/5.107) reproducida. Smoke del explorador en pantalla: 8 valores nuevos / 0 viejos; 159 en refinada; fuentes `refinamiento:fiscal(…)` intactas (afip/agip/dgi — diseño v3.1/H114). Tabla de equivalencias vieja→nueva entregada como texto (espera refresh CODEBOOK/Dataverse, M43/M35).
+
+### H210-03 — Yapa no canónica: explorador v8.1→v8.2
+
+El ID de la tabla pasa a `LinkColumn` con `?caso=ID`: click sobre el ID abre SOLO ese caso (pestaña nueva; `st.query_params` al arranque, limpieza anti-reapertura, aviso explícito si los filtros de la sesión nueva excluyen el caso). Los ticks quedan intactos para multi-selección y descargas. Restricción honesta: Streamlit no emite eventos de click sobre celdas de texto — el clickeable es el ID vía LinkColumn, no la carátula. Herramienta no canónica (gitignoreada): sin manifest ni commit.
+
+### H210-04 — Documentación
+
+DEUDA (editada directamente): M49 → **APLICADO H210** · constancia H210 en M51 · **M60 nueva** (`csjn_analisis` reescritura post-madurez — decisión del operador al abrir; no resucita el «M60» duplicado advertido en H209) · Prioridad H210 · header. BITACORA/CHANGELOG appends (este texto). PROMPT_H211 armado (M58 como unidad).
+
+### H210 — Estado final
+
+- **Corpus:** 5.894 casos. Parser **v37.0 INTACTO** (sha casos `19028de5412d…` · textos `dc724eebd435…` · votos `b64f241085fe…` · zonas `0fd3c38237e3…` · editorial `30a6da652e3a…`).
+- **materia v4.0:** `607793de53ed…` — 5.894 filas (sin delta); capas: lectura_tribunal 2.301 · lectura_tribunal_refinada 159 · lectura_texto 1.472 · sin_clasificar 1.161 · originaria 596 · no_aplica 191 · sui_generis 8 · residual 6. Cobertura 77,0% (3.932/5.107).
+- **Resto de la cadena byte-idéntico:** normas 7.696 (`8e838c49f7e3…`) · recursos `433006ff0f68…` · epilogo 5.703 · partes 5.894.
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos_materia.csv` — 5.894 filas (única que cambia; solo la columna `materia_capa`, mapeada 1:1).
+- `output/parser/_manifest.json` — re-sellado **[CLEAN] 65** (10 CSV).
+
+**Scripts creados:** `scripts/diagnostico/H210/` — `verificar_m49.py` v0.1 + `materia_v33_baseline.csv` (baseline del candado). `scripts/explorador/exploradorv8.py` v8.2 (no canónico).
+
+**Commits:** 5 — (1)-(3) retroactivos de Tarea 0 [pipeline H209 · docs H209 · parser v37.0 de H207] + push; (4) M49: deriver v4.0 + materia.csv + manifest; (5) documentación H210 (DEUDA editada + BITACORA/CHANGELOG appends + PROMPT_H211).
