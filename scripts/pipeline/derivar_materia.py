@@ -11,12 +11,12 @@ Se re-corre y se refina por capa sin reparsear ni ensuciar el golden.
 Capas de extraccion (orden = limpieza de senal):
   - Capa 1: tribunal_origen -> fuero -> materia (deterministica). SIN cambios.
     Solo fuero nacional/federal ESPECIALIZADO (tribunal == materia).
-  - Capa 2 (H113-H114): para los casos que capa 1 deja en `pendiente_capa2`
+  - Capa 2 (H113-H114): para los casos que capa 1 deja en `sin_clasificar`
     (provincial + SIN_TRIBUNAL, donde el tribunal NO desambigua), aplica
     VOCABULARIOS CONTROLADOS leidos de _meta/vocab_materia/. Cascada por
     limpieza de senal:
         norma citada -> keyword-ancla -> parte-ancla -> objeto-ancla
-        -> (TIER 1 H114) Estado litigante en caratula => contencioso_administrativo
+        -> (router de partes, H114) Estado litigante en caratula => contencioso_administrativo
         -> sin_ancla.
     Vocab COMO DATO: se itera sin tocar este codigo.
     M59 (H209): el canal `norma citada` ya NO extrae del texto — CONSUME el
@@ -29,8 +29,16 @@ Capas de extraccion (orden = limpieza de senal):
   - Capa 3: originaria (art. 117). La determina el PARSER por texto
     (is_originaria via art.117 CN / "competencia originaria"); 1:1 con
     tribunal_origen_status=='originaria'. Por construccion ningun
-    pendiente_capa2 es originaria, por eso el router Tier 1 NO intenta
+    sin_clasificar es originaria, por eso el router de partes NO intenta
     reclasificar a capa3 (seria contradecir una senal autoritativa upstream).
+
+Valores de `materia_capa` (M49, H210 — semantica en lugar de orden de
+implementacion; mapeo 1:1 en MAPEO_M49, fuente unica del rename):
+  lectura_tribunal (ex capa1) · lectura_tribunal_refinada (ex capa1_refinado)
+  · lectura_texto (ex capa2) · sin_clasificar (ex pendiente_capa2) ·
+  terminales sin rename: originaria / sui_generis / residual / no_aplica.
+  `lectura_dictamen` RESERVADO para M58. `materia_fuente` NO cambia
+  (incluido el prefijo historico 'conflicto_capa2:').
 
 Vocabularios (autorados, versionados en git; NO se regeneran -> viven en _meta,
 no en output/):
@@ -42,7 +50,7 @@ matchear. Solo se usan filas tier=ancla (materia != EXCLUIDA). Los
 desambiguadores y triggers se cargan pero los desambiguadores NO se aplican aun
 (reglas de co-ocurrencia pendientes, ver DEUDA).
 
-NOTA: capa 2 es ADITIVA — solo toca casos pendiente_capa2. NO refina capa 1.
+NOTA: capa 2 es ADITIVA — solo toca casos sin_clasificar. NO refina capa 1.
 Reclasificar capa 1 (p.ej. CA->tributario cuando la norma/parte lo indica:
 ~165 casos AFIP, ~77 por norma) es una decision DELIBERADA aparte, porque
 cambia resultados de capa 1 y exige re-validacion. Ver DEUDA "refinamiento capa1".
@@ -63,7 +71,7 @@ import unicodedata
 from collections import Counter
 from pathlib import Path
 
-__version__ = "3.3"  # H209 (M59 paso 1): REFACTOR BYTE-IDENTICO — el canal norma de clasificar_capa2 deja de correr RE_LEY sobre el considerando y consume el sidecar csjn_casos_normas.csv (etapa previa extraer_normas.py; filtro ambito=considerando AND tipo=ley, doble filtro explicito para que ampliaciones futuras del sidecar no entren en silencio). RE_LEY movida a extraer_normas.py (unico consumidor historico). Candado: csjn_casos_materia.csv byte-identico (sha sellado H207), patron M52/H198. CLI nueva --normas. // 3.2 H115 TIER 3 motor de co-ocurrencia: vocab_coocurrencia.csv (reglas dato (A,B)->materia con excluye y ambito por senal); desambiguar_co_ocurrencia desempata conflicto_capa2 y rescata sin_ancla ANTES del trigger CA. Reglas: tributario_disfrazado, corralito_emergencia(->CA, gt14/14), accion_civil_accidente, indemniz_despido, danos_transito, salud_amparo. Relabel originaria (pendiente_capa3 -> 'originaria', categoria terminal; cobertura sobre universo clasificable=fallos-originaria). Familia->civil_comercial via objeto-anclas. // 3.1 H114 REFINAMIENTO CAPA1: override CA->tributario por autoridad fiscal. // 3.0 H114: TIER 1 router de partes -> CA + anclas. // 2.1 H113: capa objeto. // 2.0: capa 2 vocabularios ADITIVA. // H112: capa 1.
+__version__ = "4.0"  # H210 (M49): RENAME SEMANTICO de materia_capa (MAJOR: valores publicados) — capa1->lectura_tribunal · capa1_refinado->lectura_tribunal_refinada · capa2->lectura_texto · pendiente_capa2->sin_clasificar; terminales intactas (originaria/sui_generis/residual/no_aplica); lectura_dictamen RESERVADO M58; materia_fuente INTACTA (incl. prefijo historico conflicto_capa2:); mapeo 1:1 = MAPEO_M49 (fuente unica — lo importa verificar_m49.py); nomenclatura interna TIER 1/3 -> router de partes / motor de co-ocurrencia (solo comentarios). Candado: CSV identico salvo materia_capa mapeada 1:1 (cross-tab exacta contra MAPEO_M49, cero pares fuera). // H209 (M59 paso 1): REFACTOR BYTE-IDENTICO — el canal norma de clasificar_capa2 deja de correr RE_LEY sobre el considerando y consume el sidecar csjn_casos_normas.csv (etapa previa extraer_normas.py; filtro ambito=considerando AND tipo=ley, doble filtro explicito para que ampliaciones futuras del sidecar no entren en silencio). RE_LEY movida a extraer_normas.py (unico consumidor historico). Candado: csjn_casos_materia.csv byte-identico (sha sellado H207), patron M52/H198. CLI nueva --normas. // 3.2 H115 TIER 3 motor de co-ocurrencia: vocab_coocurrencia.csv (reglas dato (A,B)->materia con excluye y ambito por senal); desambiguar_co_ocurrencia desempata conflicto_capa2 y rescata sin_ancla ANTES del trigger CA. Reglas: tributario_disfrazado, corralito_emergencia(->CA, gt14/14), accion_civil_accidente, indemniz_despido, danos_transito, salud_amparo. Relabel originaria (pendiente_capa3 -> 'originaria', categoria terminal; cobertura sobre universo clasificable=fallos-originaria). Familia->civil_comercial via objeto-anclas. // 3.1 H114 REFINAMIENTO CAPA1: override CA->tributario por autoridad fiscal. // 3.0 H114: TIER 1 router de partes -> CA + anclas. // 2.1 H113: capa objeto. // 2.0: capa 2 vocabularios ADITIVA. // H112: capa 1.
 
 # csjn_casos_textos.csv tiene considerando_text completo (post-split #1). Subir
 # el limite de campo csv a un valor amplio pero seguro en Windows.
@@ -85,6 +93,26 @@ REQUIRED_TEXTOS  = ("caso_id_canonico", "considerando_text")
 REQUIRED_NORMAS  = ("caso_id_canonico", "tipo", "norma", "ambito")
 
 SENTINEL_SIN_TRIBUNAL = "SIN_TRIBUNAL_ORIGEN"
+
+# --- M49 (H210): valores SEMANTICOS de materia_capa -------------------------
+# Rename 1:1 de los nombres historicos (nombraban el orden de implementacion,
+# no la semantica). MAPEO_M49 es el CONTRATO del rename: el verificador del
+# candado (scripts/diagnostico/H210/verificar_m49.py) lo importa de aca —
+# fuente unica, no duplicar el dict.
+CAPA_TRIBUNAL          = "lectura_tribunal"           # ex "capa1"
+CAPA_TRIBUNAL_REFINADA = "lectura_tribunal_refinada"  # ex "capa1_refinado"
+CAPA_TEXTO             = "lectura_texto"              # ex "capa2"
+SIN_CLASIFICAR         = "sin_clasificar"             # ex "pendiente_capa2"
+MAPEO_M49 = {
+    "capa1":           CAPA_TRIBUNAL,
+    "capa1_refinado":  CAPA_TRIBUNAL_REFINADA,
+    "capa2":           CAPA_TEXTO,
+    "pendiente_capa2": SIN_CLASIFICAR,
+}
+# Terminales SIN rename: originaria (art. 117, no es una lectura) /
+# sui_generis / residual / no_aplica. 'lectura_dictamen' RESERVADO para M58
+# (el dictamen NO clasifica hoy). materia_fuente NO se toca (incluido el
+# prefijo historico 'conflicto_capa2:').
 
 
 def _norm(s: str) -> str:
@@ -152,15 +180,15 @@ def clasificar_capa1(tribunal_origen: str, status: str, tipo_entrada: str
     to = (tribunal_origen or "").strip()
     n = _norm(to)
     if to == SENTINEL_SIN_TRIBUNAL or n == "":
-        return ("", "pendiente_capa2", "sin_tribunal")
+        return ("", SIN_CLASIFICAR, "sin_tribunal")
     for materia, pats in _REGLAS:
         for p in pats:
             if p.search(n):
-                return (materia, "capa1", f"regla:{p.pattern}")
+                return (materia, CAPA_TRIBUNAL, f"regla:{p.pattern}")
     if _RE_SUIGENERIS.search(n):
         return ("", "sui_generis", to[:80])
     if _RE_GENERAL.search(n):
-        return ("", "pendiente_capa2", "jurisdiccion_general")
+        return ("", SIN_CLASIFICAR, "jurisdiccion_general")
     return ("", "residual", to[:80])
 
 
@@ -168,7 +196,7 @@ def clasificar_capa1(tribunal_origen: str, status: str, tipo_entrada: str
 # REFINAMIENTO CAPA 1 (H114) — override CA -> tributario por autoridad fiscal
 # ============================================================================
 # DECISION DELIBERADA del usuario (anula la nota "fuera de alcance" del prompt):
-# los casos capa1=contencioso_administrativo cuya caratula nombra una autoridad
+# los casos lectura_tribunal=contencioso_administrativo cuya caratula nombra una autoridad
 # fiscal (AFIP/DGI/DGA nacional, ARBA/AGIP/DGR provincial — las parte-anclas que
 # mapean a tributario) son tributario disfrazado de CA: AFIP/DGI suben por CNACAF
 # y el tribunal los etiqueta CA, enmascarando la sustancia (hallazgo de tesis).
@@ -178,8 +206,8 @@ def clasificar_capa1(tribunal_origen: str, status: str, tipo_entrada: str
 #     NO se tocan).
 #   - EXCLUYE co-ocurrencia penal (contrabando / ley penal tributaria 24.769):
 #     esos son penal/penal_tributario, no tributario.
-#   - Marca materia_capa='capa1_refinado' (NO 'capa1'): el override es visible y
-#     contable, no muta silenciosamente capa1.
+#   - Marca materia_capa=lectura_tribunal_refinada (NO lectura_tribunal): el override es visible y
+#     contable, no muta silenciosamente lectura_tribunal.
 _RE_PENAL_FISCAL = re.compile(
     r"contrabando|ley penal tributaria|24\.?769|evasi[o]n (agravada|simple)|"
     r"asociaci[o]n il[i]cita")
@@ -187,16 +215,16 @@ _RE_PENAL_FISCAL = re.compile(
 
 def refinar_capa1(materia: str, capa: str, caratula: str, considerando: str,
                   partes_trib: list) -> tuple[str, str, str]:
-    """Si capa1=CA y hay autoridad fiscal en caratula sin co-ocurrencia penal,
-    override -> tributario (capa1_refinado). Si no, devuelve la entrada igual."""
-    if capa != "capa1" or materia != "contencioso_administrativo":
+    """Si lectura_tribunal=CA y hay autoridad fiscal en caratula sin co-ocurrencia
+    penal, override -> tributario (lectura_tribunal_refinada). Si no, devuelve la entrada igual."""
+    if capa != CAPA_TRIBUNAL or materia != "contencioso_administrativo":
         return (materia, capa, "")
     c = _norm(caratula)
     for rx in partes_trib:
         if rx.search(c):
             if _RE_PENAL_FISCAL.search(_norm(considerando)):
                 return (materia, capa, "")  # contrabando/penal: no flip
-            return ("tributario", "capa1_refinado", f"refinamiento:fiscal({rx.pattern[:18]})")
+            return ("tributario", CAPA_TRIBUNAL_REFINADA, f"refinamiento:fiscal({rx.pattern[:18]})")
     return (materia, capa, "")
 
 
@@ -239,7 +267,7 @@ def cargar_vocabularios(vocab_dir: Path) -> dict:
     desambig = [(re.compile(r["patron"]), r["materia"])
                 for r in _leer_csv(vocab_dir / "vocab_keywords.csv")
                 if r["tier"] == "desambiguador"]
-    # H115 TIER 3: reglas de co-ocurrencia como DATO. Cada regla es
+    # H115 motor de co-ocurrencia (ex «TIER 3»): reglas como DATO. Cada regla es
     # (signal_a, signal_b, excluye?) -> materia, ordenadas por prioridad.
     # Una senal debil se vuelve ancla cuando co-ocurre con otra corroborante.
     coocur = []
@@ -266,7 +294,7 @@ def cargar_vocabularios(vocab_dir: Path) -> dict:
 
 def desambiguar_co_ocurrencia(caratula: str, considerando: str, vocab: dict
                               ) -> tuple[str, str]:
-    """H115 TIER 3. Evalua las reglas de co-ocurrencia (vocab['coocur']) en orden
+    """H115 motor de co-ocurrencia (ex «TIER 3»). Evalua las reglas de co-ocurrencia (vocab['coocur']) en orden
     de prioridad. Una regla dispara si signal_a Y signal_b co-ocurren en su
     `ambito` y NO matchea `excluye`. Devuelve (materia, nombre_regla) o ('', '').
 
@@ -303,7 +331,7 @@ def desambiguar_co_ocurrencia(caratula: str, considerando: str, vocab: dict
 
 def clasificar_capa2(considerando: str, caratula: str, vocab: dict,
                      normas: set[str]) -> tuple[str, str, str]:
-    """(materia, materia_capa, materia_fuente) para un caso pendiente_capa2.
+    """(materia, materia_capa, materia_fuente) para un caso sin_clasificar.
     Cascada: norma -> keyword-ancla -> parte-ancla -> provincia -> sin_ancla.
     Regla de empate: voto dominante; empate real -> conflicto (queda pendiente).
 
@@ -342,27 +370,27 @@ def clasificar_capa2(considerando: str, caratula: str, vocab: dict,
         top = votos.most_common()
         if len(top) > 1 and top[0][1] == top[1][1]:
             # EMPATE: antes de declararlo conflicto, intentar desempate por
-            # co-ocurrencia (TIER 3 H115). Resuelve p.ej. CA/tributario y
+            # co-ocurrencia (motor H115). Resuelve p.ej. CA/tributario y
             # constitucional/tributario (tributario disfrazado), civil/laboral.
             mat_co, regla_co = desambiguar_co_ocurrencia(c, t, vocab)
             if mat_co:
-                return (mat_co, "capa2", f"coocur:{regla_co}(desempate)")
+                return (mat_co, CAPA_TEXTO, f"coocur:{regla_co}(desempate)")
             empate = "/".join(sorted(m for m, n in top if n == top[0][1]))
-            return ("", "pendiente_capa2", f"conflicto_capa2:{empate}")
+            return ("", SIN_CLASIFICAR, f"conflicto_capa2:{empate}")  # fuente: prefijo historico INTACTO (M49 no toca materia_fuente)
         mat = top[0][0]
         fuentes = "+".join(sorted(set(fuente_de[mat])))
-        return (mat, "capa2", f"{fuentes}({top[0][1]})")
+        return (mat, CAPA_TEXTO, f"{fuentes}({top[0][1]})")
 
-    # SIN anclas duras: TIER 3 H115 — co-ocurrencia ANTES del trigger CA, para
+    # SIN anclas duras: motor de co-ocurrencia (H115) ANTES del trigger CA, para
     # que amparo+salud o acc.declarativa+tributo ganen al generico Estado->CA.
     mat_co, regla_co = desambiguar_co_ocurrencia(c, t, vocab)
     if mat_co:
-        return (mat_co, "capa2", f"coocur:{regla_co}")
+        return (mat_co, CAPA_TEXTO, f"coocur:{regla_co}")
 
-    # TIER 1 (H114): relacion de partes -> contencioso_administrativo.
+    # Router de partes (H114, ex «TIER 1»): relacion de partes -> contencioso_administrativo.
     # El parser ya separo competencia originaria por TEXTO (is_originaria via
     # art. 117 CN / "competencia originaria"): is_originaria==1 <=> capa3, 477/477.
-    # Por construccion NINGUN pendiente_capa2 es originaria, asi que la rama
+    # Por construccion NINGUN sin_clasificar es originaria, asi que la rama
     # "estado c/ estado -> originaria" del diseno contradeciria una senal
     # autoritativa del parser. Resolucion: si hay un Estado como litigante en la
     # caratula (y no es "banco (de la) provincia"), el caso es CA. Las anclas
@@ -373,8 +401,8 @@ def clasificar_capa2(considerando: str, caratula: str, vocab: dict,
     c_estado = _RE_BANCO_PROV.sub(" ", c)
     for rx in vocab["triggers"]:
         if rx.search(c_estado):
-            return ("contencioso_administrativo", "capa2", "provincia:ca")
-    return ("", "pendiente_capa2", "sin_ancla")
+            return ("contencioso_administrativo", CAPA_TEXTO, "provincia:ca")
+    return ("", SIN_CLASIFICAR, "sin_ancla")
 
 
 # ============================================================================
@@ -433,14 +461,14 @@ def derivar(input_path: Path, textos_path: Path, normas_path: Path,
         materia, capa, fuente = clasificar_capa1(
             r["tribunal_origen"], r["tribunal_origen_status"], r["tipo_entrada"])
 
-        if capa == "capa1":
+        if capa == CAPA_TRIBUNAL:
             # Refinamiento H114: CA -> tributario por autoridad fiscal.
             materia, capa, fref = refinar_capa1(
                 materia, capa, caratula, considerandos.get(cid, ""),
                 vocab["partes_trib"])
             if fref:
                 fuente = fref
-        elif capa == "pendiente_capa2":
+        elif capa == SIN_CLASIFICAR:
             materia, capa, fuente = clasificar_capa2(
                 considerandos.get(cid, ""), caratula, vocab,
                 normas_cons.get(cid, _vacio))
@@ -452,13 +480,13 @@ def derivar(input_path: Path, textos_path: Path, normas_path: Path,
             "materia_fuente": fuente,
         })
         cobertura[capa] += 1
-        if capa == "capa1":
+        if capa == CAPA_TRIBUNAL:
             materias1[materia] += 1
-        elif capa == "capa1_refinado":
+        elif capa == CAPA_TRIBUNAL_REFINADA:
             materias1[materia] += 1
-        elif capa == "capa2":
+        elif capa == CAPA_TEXTO:
             materias2[materia] += 1
-        elif capa == "pendiente_capa2":
+        elif capa == SIN_CLASIFICAR:
             pend2_motivo[fuente.split(":")[0]] += 1
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -483,29 +511,29 @@ def _reporte(stats: dict, fallos: int) -> None:
     print(f"  filas escritas: {stats['n']}  (fallos: {fallos})")
     print(f"  originaria (terminal, fuera del denominador): {originaria}")
     print(f"  universo clasificable (fallos - originaria): {clasificable}")
-    clasificadas = (cov.get("capa1", 0) + cov.get("capa1_refinado", 0)
-                    + cov.get("capa2", 0))
+    clasificadas = (cov.get(CAPA_TRIBUNAL, 0) + cov.get(CAPA_TRIBUNAL_REFINADA, 0)
+                    + cov.get(CAPA_TEXTO, 0))
     if clasificable:
         print(f"  COBERTURA: {clasificadas}/{clasificable} = "
               f"{100*clasificadas/clasificable:.1f}%")
     print("\n  === cobertura (capas) ===")
-    orden = ["capa1", "capa1_refinado", "capa2", "pendiente_capa2",
+    orden = [CAPA_TRIBUNAL, CAPA_TRIBUNAL_REFINADA, CAPA_TEXTO, SIN_CLASIFICAR,
              "originaria", "sui_generis", "residual", "no_aplica"]
     for k in orden:
         v = cov.get(k, 0)
-        base = clasificable if k in ("capa1", "capa1_refinado", "capa2",
-                                     "pendiente_capa2") else fallos
+        base = clasificable if k in (CAPA_TRIBUNAL, CAPA_TRIBUNAL_REFINADA, CAPA_TEXTO,
+                                     SIN_CLASIFICAR) else fallos
         if k == "no_aplica":
             base = stats["n"]
         pct = f"({100*v/base:5.1f}%)" if base else ""
         print(f"    {k:18s} {v:5d}  {pct}")
-    print("\n  === materia capa 1 (tribunal) ===")
+    print("\n  === materia lectura_tribunal (incl. refinada) ===")
     for m, v in sorted(stats["materias1"].items(), key=lambda kv: -kv[1]):
         print(f"    {m:30s} {v:5d}")
-    print("\n  === materia capa 2 (vocabularios) ===")
+    print("\n  === materia lectura_texto (vocabularios) ===")
     for m, v in sorted(stats["materias2"].items(), key=lambda kv: -kv[1]):
         print(f"    {m:30s} {v:5d}")
-    print("\n  === pendiente_capa2 por motivo ===")
+    print("\n  === sin_clasificar por motivo ===")
     for m, v in sorted(stats["pend2_motivo"].items(), key=lambda kv: -kv[1]):
         print(f"    {m:30s} {v:5d}")
 
