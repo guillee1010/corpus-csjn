@@ -4,6 +4,11 @@ Explorador del Corpus CSJN v8 — auditoría de zonificación y sidecars del der
 Streamlit app para explorar los fallos parseados del corpus CSJN.
 
 Cambios v8 respecto de v7 (diseño H186, cierra pendiente M16):\n  - v8.1 (misma sesion): tabla con MULTI-seleccion (los ticks eligen, no\n    abren; boton «Abrir caso» con 1 tickeado), export de casos crudos .md\n    (anclaje canonico source_file+lineas, leccion B102) y generador de\n    reporte de auditoria .md (filtros + banderas + muestra + marcas +\n    crudos) como insumo directo de la sesion H siguiente.
+  - v8.2 (H210): el ID de la tabla es LINK (?caso=ID, LinkColumn) — click
+    sobre el ID abre SOLO ese caso (pestana nueva via query param, leido
+    con st.query_params al arranque; se limpia para no re-abrir pegajoso).
+    Los ticks quedan intactos para multi-seleccion y descargas. Si los
+    filtros activos excluyen el caso, aviso explicito (no falla en silencio).
   - Capa de datos: left-join graceful de TODOS los sidecars del deriver
     (recursos, partes, epilogo, materia) sobre csjn_casos.csv. Schema
     verificado contra parser v26.1 (39 cols, sin causa_inadmisibilidad:
@@ -770,6 +775,9 @@ def render_table(df: pd.DataFrame):
     })
     if "Caratula" in df_display.columns:
         df_display["Caratula"] = df_display["Caratula"].str[:80]
+    # v8.2: ID -> URL relativa; se renderiza como LinkColumn en el call-site.
+    if "ID" in df_display.columns:
+        df_display["ID"] = "?caso=" + df_display["ID"].astype(str)
     return df_display
 
 
@@ -1333,6 +1341,21 @@ def main():
     if "selected_idx" not in st.session_state:
         st.session_state.selected_idx = None
 
+    # v8.2: apertura directa por query param (?caso=ID). El ID de la tabla es
+    # LinkColumn: el click navega aca (pestana nueva = sesion fresca, filtros
+    # default). Se limpia el param para que el rerun no re-abra pegajoso.
+    qp_caso = st.query_params.get("caso")
+    if qp_caso:
+        st.query_params.clear()
+        hit = df.index[df["caso_id_canonico"] == qp_caso].tolist()
+        if not hit:
+            st.warning(f"?caso={qp_caso}: no existe en csjn_casos.csv")
+        elif hit[0] not in filtered.index:
+            st.info(f"El caso {qp_caso} existe pero los filtros activos lo "
+                    f"excluyen — limpia filtros para abrirlo.")
+        else:
+            st.session_state.selected_idx = hit[0]
+
     if st.session_state.selected_idx is not None:
         idx = st.session_state.selected_idx
         indices = filtered.index.tolist()
@@ -1405,6 +1428,11 @@ def main():
             hide_index=True,
             on_select="rerun",
             selection_mode="multi-row",
+            column_config={
+                "ID": st.column_config.LinkColumn(
+                    "ID", display_text=r"caso=(.+)$",
+                    help="Click abre SOLO ese caso (pestana nueva)"),
+            },
         )
 
         # Los ticks SELECCIONAN (no abren): multi-seleccion para acciones.
@@ -1437,8 +1465,8 @@ def main():
             help="Filtros + banderas + muestra + marcas + crudos tickeados",
         )
         c_info.caption(
-            f"{len(sel_indices)} tickeados · los ticks seleccionan; "
-            f"«Abrir caso» entra al detalle con 1 tickeado"
+            f"{len(sel_indices)} tickeados · click en el ID abre ese caso · "
+            f"los ticks seleccionan para descargas («Abrir caso» con 1 tickeado)"
         )
 
     with tab_resumen:
