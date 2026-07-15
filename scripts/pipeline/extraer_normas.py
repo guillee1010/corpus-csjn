@@ -59,7 +59,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-__version__ = "1.0"  # H209 (M59 paso 1): promocion de la diagnostica v0.2 (H208) a etapa canonica. CUATRO ambitos (caratula/considerando/dispositivo/voto), columna tipo desde v1 (solo 'ley'), RE_LEY movida VERBATIM de derivar_materia v3.2 L198 (unico consumidor historico), _norm importado de derivar_materia (fuente unica). Salida determinista LF. Solo `ambito=considerando` alimenta la cascada de materia en este paso (candado byte-identico, ver derivar_materia v3.3).
+__version__ = "1.1"  # H211 (M58 paso 2): 5o ambito `dictamen` (dictamen_text de textos.csv, parser >= 38.0), AL FINAL de AMBITOS — el subset ambito!=dictamen preserva orden y bytes del sellado H209 (candado N1). Filas nuevas INERTES para la cascada por el doble filtro de derivar_materia hasta v4.1, que las consume via su propio filtro ambito=dictamen. // 1.0 H209 (M59 paso 1): promocion de la diagnostica v0.2 (H208) a etapa canonica. CUATRO ambitos (caratula/considerando/dispositivo/voto), columna tipo desde v1 (solo 'ley'), RE_LEY movida VERBATIM de derivar_materia v3.2 L198 (unico consumidor historico), _norm importado de derivar_materia (fuente unica). Salida determinista LF. Solo `ambito=considerando` alimenta la cascada de materia en este paso (candado byte-identico, ver derivar_materia v3.3).
 
 # textos.csv (considerando completo) y votos.csv (texto_voto) traen campos
 # grandes: regla de proyecto — field_size_limit en TODO script que los lea.
@@ -88,11 +88,14 @@ DEFAULT_OUTPUT = REPO_ROOT / "output" / "parser" / "csjn_casos_normas.csv"
 
 # Columnas requeridas (falla ruidoso si falta alguna — patron derivar_materia).
 REQUIRED_CASOS  = ("caso_id_canonico", "case_name_cuerpo", "case_name_indice")
-REQUIRED_TEXTOS = ("caso_id_canonico", "considerando_text", "por_ello_text")
+REQUIRED_TEXTOS = ("caso_id_canonico", "considerando_text", "por_ello_text",
+                   "dictamen_text")  # exige parser >= 38.0 (M58 paso 1)
 REQUIRED_VOTOS  = ("caso_id_canonico", "texto_voto")
 
 FIELDNAMES = ["caso_id_canonico", "tipo", "norma", "ambito", "n_menciones"]
-AMBITOS    = ("caratula", "considerando", "dispositivo", "voto")  # orden fijo
+AMBITOS    = ("caratula", "considerando", "dispositivo", "voto",
+              "dictamen")  # orden fijo; dictamen AL FINAL (H211: el subset
+                           # sin dictamen preserva el orden sellado H209)
 
 
 def extraer(texto_norm: str) -> Counter:
@@ -133,10 +136,11 @@ def main(argv: list[str] | None = None) -> int:
                       f'{r.get("case_name_cuerpo", "")} {r.get("case_name_indice", "")}'))
 
     # -- textos: considerando + dispositivo por caso ----------------------------
-    textos: dict[str, tuple[str, str]] = {}
+    textos: dict[str, tuple[str, str, str]] = {}
     for r in _abrir_verificado(args.textos, REQUIRED_TEXTOS):
         textos[r["caso_id_canonico"]] = (r.get("considerando_text", ""),
-                                         r.get("por_ello_text", ""))
+                                         r.get("por_ello_text", ""),
+                                         r.get("dictamen_text", ""))
 
     # -- votos: extraccion por fila, AGREGADA por caso (suma de menciones) ------
     votos_agg: dict[str, Counter] = {}
@@ -160,11 +164,12 @@ def main(argv: list[str] | None = None) -> int:
     por_caso_car: dict[str, set] = {}
 
     for cid, caratula in casos:
-        cons, disp = textos.get(cid, ("", ""))
+        cons, disp, dictx = textos.get(cid, ("", "", ""))
         fuentes = (("caratula",     extraer(_norm(caratula))),
                    ("considerando", extraer(_norm(cons))),
                    ("dispositivo",  extraer(_norm(disp))),
-                   ("voto",         votos_agg.get(cid, Counter())))
+                   ("voto",         votos_agg.get(cid, Counter())),
+                   ("dictamen",     extraer(_norm(dictx))))
         for ambito, cnt in fuentes:
             for norma, n in sorted(cnt.items()):
                 filas.append({"caso_id_canonico": cid, "tipo": "ley",
