@@ -4856,7 +4856,7 @@ caso_id_canonico,disposicion,reenvia,parte_ganadora,via_recurso,multi_recurso,es
 344_p2728,revoca,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
 344_p2752,revoca,no,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 344_p2765,revoca,si,recurrente_gana,recurso_extraordinario,no,si,admite,,1
-344_p2779,no_fondo,no,no_aplica,recurso_extraordinario,no,no,sin_marcador,,0
+344_p2779,no_fondo,no,no_aplica,recurso_extraordinario,no,no,inadmite,INADMISIBLE_SIN_CAUSAL_EXPLICITA,0
 344_p2791,confirma,no,recurrente_pierde,,no,si,admite,,0
 344_p2811,revoca,si,recurrente_gana,recurso_extraordinario,no,si,admite,,0
 344_p2830,revoca,no,recurrente_gana,recurso_extraordinario,no,si,admite,,1

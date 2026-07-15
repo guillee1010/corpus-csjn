@@ -19,6 +19,13 @@ Capas de extraccion (orden = limpieza de senal):
         -> (TIER 1 H114) Estado litigante en caratula => contencioso_administrativo
         -> sin_ancla.
     Vocab COMO DATO: se itera sin tocar este codigo.
+    M59 (H209): el canal `norma citada` ya NO extrae del texto — CONSUME el
+    sidecar csjn_casos_normas.csv (etapa previa extraer_normas.py), filtrado
+    ambito=considerando AND tipo=ley: exactamente lo que RE_LEY extraia del
+    considerando normalizado. Refactor byte-identico (candado sha de este
+    sidecar, patron M52/H198). Los ambitos caratula/dispositivo/voto quedan
+    EXTRAIDOS PERO INERTES para la cascada; habilitarlos = unidad propia con
+    flip-set (M59 paso 2). RE_LEY vive ahora en extraer_normas.py.
   - Capa 3: originaria (art. 117). La determina el PARSER por texto
     (is_originaria via art.117 CN / "competencia originaria"); 1:1 con
     tribunal_origen_status=='originaria'. Por construccion ningun
@@ -56,7 +63,7 @@ import unicodedata
 from collections import Counter
 from pathlib import Path
 
-__version__ = "3.2"  # H115 TIER 3 motor de co-ocurrencia: vocab_coocurrencia.csv (reglas dato (A,B)->materia con excluye y ambito por senal); desambiguar_co_ocurrencia desempata conflicto_capa2 y rescata sin_ancla ANTES del trigger CA. Reglas: tributario_disfrazado, corralito_emergencia(->CA, gt14/14), accion_civil_accidente, indemniz_despido, danos_transito, salud_amparo. Relabel originaria (pendiente_capa3 -> 'originaria', categoria terminal; cobertura sobre universo clasificable=fallos-originaria). Familia->civil_comercial via objeto-anclas. // 3.1 H114 REFINAMIENTO CAPA1: override CA->tributario por autoridad fiscal. // 3.0 H114: TIER 1 router de partes -> CA + anclas. // 2.1 H113: capa objeto. // 2.0: capa 2 vocabularios ADITIVA. // H112: capa 1.
+__version__ = "3.3"  # H209 (M59 paso 1): REFACTOR BYTE-IDENTICO — el canal norma de clasificar_capa2 deja de correr RE_LEY sobre el considerando y consume el sidecar csjn_casos_normas.csv (etapa previa extraer_normas.py; filtro ambito=considerando AND tipo=ley, doble filtro explicito para que ampliaciones futuras del sidecar no entren en silencio). RE_LEY movida a extraer_normas.py (unico consumidor historico). Candado: csjn_casos_materia.csv byte-identico (sha sellado H207), patron M52/H198. CLI nueva --normas. // 3.2 H115 TIER 3 motor de co-ocurrencia: vocab_coocurrencia.csv (reglas dato (A,B)->materia con excluye y ambito por senal); desambiguar_co_ocurrencia desempata conflicto_capa2 y rescata sin_ancla ANTES del trigger CA. Reglas: tributario_disfrazado, corralito_emergencia(->CA, gt14/14), accion_civil_accidente, indemniz_despido, danos_transito, salud_amparo. Relabel originaria (pendiente_capa3 -> 'originaria', categoria terminal; cobertura sobre universo clasificable=fallos-originaria). Familia->civil_comercial via objeto-anclas. // 3.1 H114 REFINAMIENTO CAPA1: override CA->tributario por autoridad fiscal. // 3.0 H114: TIER 1 router de partes -> CA + anclas. // 2.1 H113: capa objeto. // 2.0: capa 2 vocabularios ADITIVA. // H112: capa 1.
 
 # csjn_casos_textos.csv tiene considerando_text completo (post-split #1). Subir
 # el limite de campo csv a un valor amplio pero seguro en Windows.
@@ -68,12 +75,14 @@ REPO_ROOT  = SCRIPT_DIR.parent.parent                  # raiz del repo
 VOCAB_DIR_DEFAULT = REPO_ROOT / "_meta" / "vocab_materia"
 DEFAULT_INPUT  = REPO_ROOT / "output" / "parser" / "csjn_casos.csv"
 DEFAULT_TEXTOS = REPO_ROOT / "output" / "parser" / "csjn_casos_textos.csv"
+DEFAULT_NORMAS = REPO_ROOT / "output" / "parser" / "csjn_casos_normas.csv"
 DEFAULT_OUTPUT = REPO_ROOT / "output" / "parser" / "csjn_casos_materia.csv"
 
 # Columnas requeridas (falla ruidoso si falta alguna).
 REQUIRED_COLS    = ("caso_id_canonico", "tribunal_origen", "tribunal_origen_status",
                     "tipo_entrada", "case_name_cuerpo", "case_name_indice")
 REQUIRED_TEXTOS  = ("caso_id_canonico", "considerando_text")
+REQUIRED_NORMAS  = ("caso_id_canonico", "tipo", "norma", "ambito")
 
 SENTINEL_SIN_TRIBUNAL = "SIN_TRIBUNAL_ORIGEN"
 
@@ -194,8 +203,9 @@ def refinar_capa1(materia: str, capa: str, caratula: str, considerando: str,
 # ============================================================================
 # CAPA 2 — vocabularios controlados (H113)
 # ============================================================================
-# leyes numeradas (24.241 / 11683); anclar por presencia, no contar.
-RE_LEY = re.compile(r"ley(?:es)?\s+(?:n[ºo]?\.?\s*)?(\d{1,3}(?:\.\d{3})+|\d{4,6})")
+# M59 (H209): RE_LEY vivio aca (v2.0-v3.2) con un unico consumidor, el canal
+# norma de clasificar_capa2. Movida VERBATIM a extraer_normas.py, que la corre
+# como etapa previa del pipeline; esta capa consume su sidecar (ver derivar()).
 
 
 def _leer_csv(path: Path) -> list[dict]:
@@ -291,17 +301,24 @@ def desambiguar_co_ocurrencia(caratula: str, considerando: str, vocab: dict
     return ("", "")
 
 
-def clasificar_capa2(considerando: str, caratula: str, vocab: dict
-                     ) -> tuple[str, str, str]:
+def clasificar_capa2(considerando: str, caratula: str, vocab: dict,
+                     normas: set[str]) -> tuple[str, str, str]:
     """(materia, materia_capa, materia_fuente) para un caso pendiente_capa2.
     Cascada: norma -> keyword-ancla -> parte-ancla -> provincia -> sin_ancla.
-    Regla de empate: voto dominante; empate real -> conflicto (queda pendiente)."""
+    Regla de empate: voto dominante; empate real -> conflicto (queda pendiente).
+
+    `normas` (M59): normas citadas en el CONSIDERANDO del caso, leidas del
+    sidecar csjn_casos_normas.csv (ambito=considerando, tipo=ley) — el mismo
+    conjunto que RE_LEY extraia del considerando normalizado hasta v3.2.
+    sorted() = higiene deterministica; el output es orden-independiente por
+    construccion (fuentes y empates se serializan con sorted, ganador sin
+    empate unico)."""
     t = _norm(considerando)
     c = _norm(caratula)
     votos: Counter = Counter()
     fuente_de: dict[str, list[str]] = {}
 
-    for num in {m.replace(".", "") for m in RE_LEY.findall(t)}:
+    for num in sorted(normas):
         mat = vocab["indice"].get(num)
         if mat:
             votos[mat] += 1
@@ -363,8 +380,8 @@ def clasificar_capa2(considerando: str, caratula: str, vocab: dict
 # ============================================================================
 # Orquestacion
 # ============================================================================
-def derivar(input_path: Path, textos_path: Path, output_path: Path,
-            vocab_dir: Path) -> dict:
+def derivar(input_path: Path, textos_path: Path, normas_path: Path,
+            output_path: Path, vocab_dir: Path) -> dict:
     if not input_path.exists():
         sys.exit(f"[FATAL] no existe el input: {input_path}")
     with input_path.open(encoding="utf-8", newline="") as fh:
@@ -384,6 +401,24 @@ def derivar(input_path: Path, textos_path: Path, output_path: Path,
             sys.exit(f"[FATAL] faltan columnas en {textos_path}: {faltan}")
         considerandos = {r["caso_id_canonico"]: r["considerando_text"] for r in rd}
 
+    # M59: normas citadas desde el sidecar de la etapa previa extraer_normas.
+    # DOBLE FILTRO explicito (ambito AND tipo): cuando el sidecar sume filas
+    # nuevas (decretos, ambito dictamen...), NO entran a la cascada en silencio
+    # — habilitarlas es una unidad propia con flip-set.
+    if not normas_path.exists():
+        sys.exit(f"[FATAL] no existe el sidecar de normas: {normas_path}\n"
+                 f"        (correr antes scripts/pipeline/extraer_normas.py — "
+                 f"etapa M59, ver MAPA.md)")
+    normas_cons: dict[str, set[str]] = {}
+    with normas_path.open(encoding="utf-8", newline="") as fh:
+        rd = csv.DictReader(fh)
+        faltan = [c for c in REQUIRED_NORMAS if c not in (rd.fieldnames or [])]
+        if faltan:
+            sys.exit(f"[FATAL] faltan columnas en {normas_path}: {faltan}")
+        for r in rd:
+            if r["ambito"] == "considerando" and r["tipo"] == "ley":
+                normas_cons.setdefault(r["caso_id_canonico"], set()).add(r["norma"])
+
     vocab = cargar_vocabularios(vocab_dir)
 
     salida = []
@@ -391,6 +426,7 @@ def derivar(input_path: Path, textos_path: Path, output_path: Path,
     materias1: Counter = Counter()
     materias2: Counter = Counter()
     pend2_motivo: Counter = Counter()
+    _vacio: set[str] = set()
     for r in filas:
         cid = r["caso_id_canonico"]
         caratula = f'{r.get("case_name_cuerpo","")} {r.get("case_name_indice","")}'
@@ -406,7 +442,8 @@ def derivar(input_path: Path, textos_path: Path, output_path: Path,
                 fuente = fref
         elif capa == "pendiente_capa2":
             materia, capa, fuente = clasificar_capa2(
-                considerandos.get(cid, ""), caratula, vocab)
+                considerandos.get(cid, ""), caratula, vocab,
+                normas_cons.get(cid, _vacio))
 
         salida.append({
             "caso_id_canonico": cid,
@@ -479,13 +516,16 @@ def main(argv: list[str] | None = None) -> int:
                     help=f"tabla primaria (default: {DEFAULT_INPUT})")
     ap.add_argument("--textos", type=Path, default=DEFAULT_TEXTOS,
                     help=f"sidecar de textos, considerando (default: {DEFAULT_TEXTOS})")
+    ap.add_argument("--normas", type=Path, default=DEFAULT_NORMAS,
+                    help=f"sidecar de normas citadas, M59 (default: {DEFAULT_NORMAS})")
     ap.add_argument("--output", type=Path, default=DEFAULT_OUTPUT,
                     help=f"sidecar de salida (default: {DEFAULT_OUTPUT})")
     ap.add_argument("--vocab-dir", type=Path, default=VOCAB_DIR_DEFAULT,
                     help=f"vocabularios controlados (default: {VOCAB_DIR_DEFAULT})")
     args = ap.parse_args(argv)
 
-    stats = derivar(args.input, args.textos, args.output, args.vocab_dir)
+    stats = derivar(args.input, args.textos, args.normas, args.output,
+                    args.vocab_dir)
     fallos = stats["n"] - stats["cobertura"].get("no_aplica", 0)
     _reporte(stats, fallos)
     print(f"\n  -> {args.output}")

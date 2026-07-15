@@ -11,9 +11,9 @@ no reconstruidas). Mata la clase de errores de H174/H178: invocación de
 memoria, secuencia que sigue tras un fallo, golden congelado sin refrescar
 producción, manifest fuera de orden.
 
-Alcance v1 (H179): parser → extraer_epilogos → derivar_partes →
-derivar_materia → derivar_recursos → check_regresion → manifest.
-Las etapas UPSTREAM (construir_catalogo / detectar_paginas /
+Alcance v1.1 (H179 + M59/H209): parser → extraer_epilogos → derivar_partes →
+extraer_normas → derivar_materia → derivar_recursos → check_regresion →
+manifest. Las etapas UPSTREAM (construir_catalogo / detectar_paginas /
 cruzar_catalogo_y_mapa) quedan FUERA del ejecutable v1 (sus CLIs no se
 leyeron; zonas ⚠ en MAPA.md): se corren a mano según MAPA.md §orden 1-3, en
 sesión propia. El pre-flight detecta corpus-drift (.md en corpus/ ausentes
@@ -24,7 +24,7 @@ fuentes_corpus() de generar_manifiesto) y ABORTA: la cadena v1 nunca corre
 Invariantes cableados (lecciones H178):
   (a) FAIL-FAST total: returncode != 0 en cualquier etapa → abort inmediato
       con el estado documentado. Nada sigue tras un fallo.
-  (b) Versiones: pre-flight lee __version__ de los 10 módulos de la cadena
+  (b) Versiones: pre-flight lee __version__ de los 11 módulos de la cadena
       (el Select-String que salvó H178, cableado) + pin opcional --esperar.
       Post-etapa: frescura de outputs (existe + mtime >= arranque de etapa).
   (c) golden == producción: assert final por sha256 de los 5 CSV del parser
@@ -41,7 +41,7 @@ Modos:
                     manifest; assert (c); manifest --verify (re-sella solo
                     si --verify falla: la decisión sello-vs-verify deja de
                     ser de memoria).
-  --solo-derivers   saltea el parser (epilogos → partes → materia →
+  --solo-derivers   saltea el parser (epilogos → partes → normas → materia →
                     recursos → gate → manifest).
   --consciente      post-fix deliberado: tolera [FAIL] del check, imprime
                     el diff y FRENA (exit 3) SIN tocar golden ni manifest.
@@ -80,7 +80,7 @@ import sys
 import time
 from pathlib import Path
 
-__version__ = "1.0"  # H179 (M42): orquestador inicial. Alcance parser→derivers→gate→manifest; upstream fuera (v2 cuando haya tomos nuevos reales). Invariantes (a)-(d) del docstring. Validado reproduciendo el sello H178 en 0 cambios.
+__version__ = "1.1"  # H209 (M59 paso 1): etapa extraer_normas cableada entre derivar_partes y derivar_materia (que gana --normas); NORMAS constante; VERSION_FILES 10->11 modulos. // 1.0 H179 (M42): orquestador inicial. Alcance parser→derivers→gate→manifest; upstream fuera (v2 cuando haya tomos nuevos reales). Invariantes (a)-(d) del docstring. Validado reproduciendo el sello H178 en 0 cambios.
 
 # El orquestador imprime → sujeto a la misma clase charmap que el parser
 # (H174): degradar a '?' antes que morir por un print, en cualquier entorno.
@@ -115,6 +115,7 @@ ZONAS    = OUT_DIR / "csjn_casos_zonas.csv"
 EDITORIAL = OUT_DIR / "csjn_casos_editorial.csv"
 EPILOGO  = OUT_DIR / "csjn_casos_epilogo.csv"
 PARTES   = OUT_DIR / "csjn_casos_partes.csv"
+NORMAS   = OUT_DIR / "csjn_casos_normas.csv"   # M59 (H209)
 MATERIA  = OUT_DIR / "csjn_casos_materia.csv"
 RECURSOS = OUT_DIR / "csjn_casos_recursos.csv"
 
@@ -125,11 +126,13 @@ PARSER_CSVS = [CASOS, TEXTOS, VOTOS, ZONAS, EDITORIAL]
 PY = sys.executable
 
 # ── Etapas: (nombre, comando verbatim, outputs esperados) ────────────────────
-# Comandos cableados desde la CLI REAL de cada script (leída H179). Nota: las
-# flags NO son uniformes (--out en recursos, --input en materia) a propósito:
-# verbatim, no normalizado. cwd=PIPELINE en todas (el parser lo requiere para
-# `from parser_editorial import ...`; a los derivers, que resuelven por
-# __file__, no los afecta).
+# Comandos cableados desde la CLI REAL de cada script (leída H179; etapa
+# extraer_normas leída H209). Nota: las flags NO son uniformes (--out en
+# recursos, --input en materia) a propósito: verbatim, no normalizado.
+# cwd=PIPELINE en todas (el parser lo requiere para
+# `from parser_editorial import ...`; extraer_normas importa derivar_materia
+# con sys.path propio; a los derivers, que resuelven por __file__, no los
+# afecta).
 ETAPA_PARSER = ("parser", [
     PY, str(PIPELINE / "parser.py"),
     "--localizados", str(LOCALIZADOS),
@@ -152,10 +155,20 @@ ETAPAS_DERIVERS = [
         "--epilogo", str(EPILOGO),
         "--output", str(PARTES),
     ], [PARTES]),
+    # M59 (H209): extractor canónico de normas citadas — ANTES de materia,
+    # que consume su sidecar (ambito=considerando).
+    ("extraer_normas", [
+        PY, str(PIPELINE / "extraer_normas.py"),
+        "--casos", str(CASOS),
+        "--textos", str(TEXTOS),
+        "--votos", str(VOTOS),
+        "--output", str(NORMAS),
+    ], [NORMAS]),
     ("derivar_materia", [
         PY, str(PIPELINE / "derivar_materia.py"),
         "--input", str(CASOS),
         "--textos", str(TEXTOS),
+        "--normas", str(NORMAS),
         "--output", str(MATERIA),
         "--vocab-dir", str(VOCAB_DIR),
     ], [MATERIA]),
@@ -178,6 +191,7 @@ VERSION_FILES = {
     "parser":                   PIPELINE / "parser.py",
     "extraer_epilogos":         PIPELINE / "extraer_epilogos.py",
     "derivar_partes":           PIPELINE / "derivar_partes.py",
+    "extraer_normas":           PIPELINE / "extraer_normas.py",   # M59 (H209)
     "derivar_materia":          PIPELINE / "derivar_materia.py",
     "derivar_recursos":         PIPELINE / "derivar_recursos.py",
     "clasificador_disposicion": PIPELINE / "clasificador_disposicion.py",
@@ -224,7 +238,7 @@ def preflight(args) -> dict[str, str | None]:
     if args.solo_derivers or args.regolden:
         # los derivers consumen la salida del parser; --regolden asume
         # producción ya refrescada por la corrida --consciente previa.
-        requeridos += [CASOS, TEXTOS, ZONAS]
+        requeridos += [CASOS, TEXTOS, VOTOS, ZONAS]
     faltan = [p for p in requeridos if not p.exists()]
     if faltan:
         print("[pre-flight] paths faltantes:")
@@ -393,7 +407,7 @@ def main() -> int:
     ap.add_argument("--plan", action="store_true",
                     help="imprime la secuencia exacta sin ejecutar nada")
     ap.add_argument("--solo-derivers", action="store_true",
-                    help="saltea el parser (epilogos→partes→materia→recursos)")
+                    help="saltea el parser (epilogos→partes→normas→materia→recursos)")
     ap.add_argument("--consciente", action="store_true",
                     help="tolera [FAIL] del check: imprime el diff y frena "
                          "(exit 3) sin tocar golden ni manifest")

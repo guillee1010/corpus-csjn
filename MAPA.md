@@ -7,6 +7,8 @@ script ni adivinar el orden.
 **Verificado en disco (jun-2026)** por inspección de los `DEFAULT_*`, los `.open()`
 y los imports de cada script (greps + lectura de `derivar_partes.py` y
 `check_regresion.py`). Lo que NO se pudo confirmar está marcado con ⚠.
+**Actualizado H209 (jul-2026):** etapa `extraer_normas.py` (M59 paso 1) — sidecar
+de normas citadas, insumo de `derivar_materia` v3.3.
 
 ---
 
@@ -28,7 +30,8 @@ parser.py   [fallos_localizados, mapa_paginas, corpus]
 
 extraer_epilogos.py  [casos, zonas]                → csjn_casos_epilogo.csv
 derivar_partes.py    [casos, epilogo]              → csjn_casos_partes.csv
-derivar_materia.py   [casos, textos]               → csjn_casos_materia.csv
+extraer_normas.py    [casos, textos, votos]        → csjn_casos_normas.csv   (M59, H209)
+derivar_materia.py   [casos, textos, normas]       → csjn_casos_materia.csv
 derivar_recursos.py  [casos, textos] + clasif.(lib) → csjn_casos_recursos.csv
 
 ⚠ parser_editorial.py  [catalogo]                  → csjn_editorial_indice_partes.csv
@@ -48,9 +51,11 @@ generar_manifiesto.py  [lee toda la cadena]        → _manifest.json   (sella, 
 3. `cruzar_catalogo_y_mapa.py`  — catalogo + mapa → `fallos_localizados.csv`
 4. `parser.py`                  — localizados + mapa + corpus → los 5 CSV del parser
 5. `extraer_epilogos.py`        — casos + zonas → `csjn_casos_epilogo.csv`
-6. derivers (independientes entre sí, todos dependen de `parser.py`):
+6. derivers (todos dependen de `parser.py`; desde H209 **materia depende además
+   de extraer_normas** — el resto son independientes entre sí):
    - `derivar_partes.py`    — casos + epilogo → `csjn_casos_partes.csv`
-   - `derivar_materia.py`   — casos + textos → `csjn_casos_materia.csv`
+   - `extraer_normas.py`    — casos + textos + votos → `csjn_casos_normas.csv` (M59)
+   - `derivar_materia.py`   — casos + textos + **normas** → `csjn_casos_materia.csv`
    - `derivar_recursos.py`  — casos + textos → `csjn_casos_recursos.csv`
 7. `generar_manifiesto.py`      — relee todo y sella `_manifest.json` (último paso)
 
@@ -61,12 +66,13 @@ generar_manifiesto.py  [lee toda la cadena]        → _manifest.json   (sella, 
 ## Cómo correr la cadena
 
 Desde H179 la cadena canónica se corre con el **orquestador**
-`scripts/pipeline/correr_pipeline.py` (M42), que implementa este grafo:
+`scripts/pipeline/correr_pipeline.py` (M42; v1.1 desde H209), que implementa
+este grafo:
 
 ```powershell
 python scripts\pipeline\correr_pipeline.py --plan            # dry-run: secuencia exacta, nada se ejecuta
 python scripts\pipeline\correr_pipeline.py                   # cadena completa: parser → derivers → gate → manifest
-python scripts\pipeline\correr_pipeline.py --solo-derivers   # sin parser (epilogos → partes → materia → recursos)
+python scripts\pipeline\correr_pipeline.py --solo-derivers   # sin parser (epilogos → partes → normas → materia → recursos)
 python scripts\pipeline\correr_pipeline.py --consciente      # post-fix: tolera [FAIL], muestra el diff y FRENA
 python scripts\pipeline\correr_pipeline.py --regolden        # tras adjudicar: congela golden + assert + re-sello
 ```
@@ -93,10 +99,17 @@ tomos nuevos reales (leyendo las CLIs de esas etapas, hoy no leídas).
 | `parser.py` | `fallos_localizados.csv`, `mapa_paginas.csv`, `corpus/*.md` | `csjn_casos`, `_textos`, `_votos`, `_zonas`, `_editorial` | etapa |
 | `extraer_epilogos.py` | `csjn_casos.csv`, `csjn_casos_zonas.csv` | `csjn_casos_epilogo.csv` | etapa |
 | `derivar_partes.py` | `csjn_casos.csv`, `csjn_casos_epilogo.csv` | `csjn_casos_partes.csv` | etapa |
-| `derivar_materia.py` | `csjn_casos.csv`, `csjn_casos_textos.csv` | `csjn_casos_materia.csv` | etapa |
+| `extraer_normas.py` | `csjn_casos.csv`, `csjn_casos_textos.csv`, `csjn_casos_votos.csv` (+ `_norm` importado de `derivar_materia`) | `csjn_casos_normas.csv` | etapa (M59, H209) |
+| `derivar_materia.py` | `csjn_casos.csv`, `csjn_casos_textos.csv`, `csjn_casos_normas.csv` | `csjn_casos_materia.csv` | etapa |
 | `derivar_recursos.py` | `csjn_casos.csv`, `csjn_casos_textos.csv` + clasificadores | `csjn_casos_recursos.csv` | etapa |
 | `parser_editorial.py` | `catalogo.csv` | `csjn_editorial_indice_partes.csv` | ⚠ librería |
 | `generar_manifiesto.py` | toda la cadena | `_manifest.json` | sello |
+
+Nota M59: `extraer_normas` importa `derivar_materia` **como librería** (solo
+`_norm`, fuente única de normalización) — dependencia de código, no de datos;
+no hay ciclo: `derivar_materia` consume el **CSV** de `extraer_normas`, no su
+módulo. RE_LEY (extracción de leyes numeradas) vive en `extraer_normas.py`
+desde H209.
 
 ### Clasificadores = librerías, no etapas
 

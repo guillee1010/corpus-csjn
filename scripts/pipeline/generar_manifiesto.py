@@ -8,9 +8,9 @@ Escribe `output/parser/_manifest.json` con la procedencia COMPLETA de la cadena:
      (todos los scripts del pipeline, transitivamente) cuando dirty=false.
   B) pipeline_scripts: __version__ de los scripts de la cadena, en orden
      (detectar_paginas -> construir_catalogo -> cruzar -> parser/_editorial ->
-     derivar_materia -> derivar_recursos), seguidos de los clasificadores fuente-única
-     de la capa-deriver (disposicion/via/admision/causa). Capa legible, redundante con
-     el commit.
+     extraer_normas -> derivar_materia -> derivar_recursos), seguidos de los
+     clasificadores fuente-única de la capa-deriver (disposicion/via/admision/causa).
+     Capa legible, redundante con el commit.
   C) corpus / vocabularios / inputs / outputs: hash + bytes (+ filas en CSV) de
      los artefactos, de la fuente cruda a los finales. Captura el DATO (cambios de
      corpus / vocabularios / intermedios que el commit no distingue). Cada
@@ -58,7 +58,7 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
-__version__ = "1.8"  # H167 (M35): -csjn_editorial_indice_partes.csv (fósil) de OUTPUTS, 10->9 canónicos
+__version__ = "1.9"  # H209 (M59 paso 1): +extraer_normas.py a la capa B; +csjn_casos_normas.csv a OUTPUTS (9->10 canonicos). // 1.8 H167 (M35): -csjn_editorial_indice_partes.csv (fósil) de OUTPUTS, 10->9 canónicos
 
 # csjn_casos.csv tiene campos de texto grandes (considerando_text). Subimos el
 # límite de campo de csv a un valor amplio pero seguro en Windows (sys.maxsize
@@ -86,6 +86,7 @@ PIPELINE_SCRIPTS = [
     "derivar_recursos.py",
     "extraer_epilogos.py",   # M29: extrae la zona epílogo del .md (insumo de partes)
     "derivar_partes.py",     # M29: deriva recurrente/recurrido + rol del epílogo
+    "extraer_normas.py",     # M59 (H209): sidecar caso x norma x ambito (insumo de materia)
     # capa-deriver: módulos fuente-única que importa derivar_recursos. Su lógica no
     # cuelga de la versión del deriver, así que se sellan aparte (gap de provenance
     # de capa B, H146/H148). No cuentan como artefactos (--verify suma solo datos).
@@ -96,7 +97,8 @@ PIPELINE_SCRIPTS = [
 ]
 
 # ── Capa C: artefactos del pipeline. (ruta relativa a output/, generador) ────
-# inputs = intermedios de la cadena; outputs = los diez CSV canónicos finales.
+# inputs = intermedios de la cadena; outputs = los diez CSV canónicos finales
+# (9->10 en H209: +csjn_casos_normas.csv, M59).
 # Allow-list explícita a propósito (no glob): excluye BASELINE/_manifest.json,
 # y si falta un canónico el script grita en vez de manifestar parcial en silencio.
 # El corpus crudo NO va acá: se deriva de source_file (ver fuentes_corpus()).
@@ -116,6 +118,7 @@ OUTPUTS = [
     ("parser/csjn_casos_recursos.csv",          "derivar_recursos.py"),
     ("parser/csjn_casos_epilogo.csv",           "extraer_epilogos.py"),
     ("parser/csjn_casos_partes.csv",            "derivar_partes.py"),
+    ("parser/csjn_casos_normas.csv",            "extraer_normas.py"),   # M59 (H209)
 ]
 
 # ── Capa C': vocabularios controlados que lee derivar_materia.py ─────────────

@@ -1,21 +1,22 @@
 {
   "schema_version": 4,
-  "manifest_generator_version": "1.8",
-  "generated_at": "2026-07-14T03:52:52.286973+00:00",
+  "manifest_generator_version": "1.9",
+  "generated_at": "2026-07-15T04:55:46.646219+00:00",
   "git": {
-    "commit": "bbe7c87df59b3fe8b454b65b857e47f5debb0a46",
+    "commit": "ad0f0771600fb6316686625d323e3b4a026e8729",
     "dirty": true
   },
   "pipeline_scripts": {
     "detectar_paginas.py": "1.01",
     "construir_catalogo.py": "1.04",
     "cruzar_catalogo_y_mapa.py": "1.0",
-    "parser.py": "36.0",
+    "parser.py": "37.0",
     "parser_editorial.py": "1.0",
-    "derivar_materia.py": "3.2",
+    "derivar_materia.py": "3.3",
     "derivar_recursos.py": "0.6",
     "extraer_epilogos.py": "0.4",
     "derivar_partes.py": "0.18",
+    "extraer_normas.py": "1.0",
     "clasificador_disposicion.py": "1.18",
     "clasificador_via.py": "0.1",
     "clasificador_admision.py": "0.2",
@@ -331,31 +332,31 @@
     "csjn_casos.csv": {
       "path": "output/parser/csjn_casos.csv",
       "generated_by": "parser.py",
-      "generator_version": "36.0",
-      "sha256": "5faa27f472cf2e841e7ed10353b1367e529d629369e2da5b380a75adc10c3fef",
+      "generator_version": "37.0",
+      "sha256": "19028de5412dcb397edb9a89eb4c088a5c8345166b8ab08cbaf1765ceab48226",
       "n_rows": 5894,
-      "n_bytes": 4336893
+      "n_bytes": 4336887
     },
     "csjn_casos_textos.csv": {
       "path": "output/parser/csjn_casos_textos.csv",
       "generated_by": "parser.py",
-      "generator_version": "36.0",
-      "sha256": "390ace04abf1ef08959d92a4d203b975bf8895364b9c044ecbba3057aa542d4a",
+      "generator_version": "37.0",
+      "sha256": "dc724eebd43519031329e59b1c3338c583406964965ebcd57a0ffd6a5adda710",
       "n_rows": 5894,
-      "n_bytes": 31937202
+      "n_bytes": 31935673
     },
     "csjn_casos_votos.csv": {
       "path": "output/parser/csjn_casos_votos.csv",
       "generated_by": "parser.py",
-      "generator_version": "36.0",
-      "sha256": "73700c5ef7a8d63fd8605337d0c23a8d5e03ccc4fe88c4f38eb26876d2b4901c",
+      "generator_version": "37.0",
+      "sha256": "b64f241085fe6793efe6fa7a28d676640146dae1e2e72fb8eba611793d915dec",
       "n_rows": 27916,
-      "n_bytes": 10808916
+      "n_bytes": 10808892
     },
     "csjn_casos_zonas.csv": {
       "path": "output/parser/csjn_casos_zonas.csv",
       "generated_by": "parser.py",
-      "generator_version": "36.0",
+      "generator_version": "37.0",
       "sha256": "0fd3c38237e368cb1643842cdb904bc39071f8887fc2b9a378a42afab313a6a9",
       "n_rows": 137990,
       "n_bytes": 5437440
@@ -363,7 +364,7 @@
     "csjn_casos_editorial.csv": {
       "path": "output/parser/csjn_casos_editorial.csv",
       "generated_by": "parser.py",
-      "generator_version": "36.0",
+      "generator_version": "37.0",
       "sha256": "30a6da652e3a9d2a0030192cd32a8f3f00dde8fcf57abb2cc5bffbda8e56ab8b",
       "n_rows": 152,
       "n_bytes": 8552
@@ -371,7 +372,7 @@
     "csjn_casos_materia.csv": {
       "path": "output/parser/csjn_casos_materia.csv",
       "generated_by": "derivar_materia.py",
-      "generator_version": "3.2",
+      "generator_version": "3.3",
       "sha256": "89eb50fef37bbbb55ef3edc0433122602251301783ab3d48a274f51f0dfb97ea",
       "n_rows": 5894,
       "n_bytes": 279685
@@ -380,9 +381,9 @@
       "path": "output/parser/csjn_casos_recursos.csv",
       "generated_by": "derivar_recursos.py",
       "generator_version": "0.6",
-      "sha256": "676ca037a1d821e285a6f8eacedbe8004ee75489cd046d697c02b42ff621869e",
+      "sha256": "433006ff0f68afd9095d400b8005dc2d8b1a59eacd7c99c9cd506e42c76de7ec",
       "n_rows": 5894,
-      "n_bytes": 445708
+      "n_bytes": 445736
     },
     "csjn_casos_epilogo.csv": {
       "path": "output/parser/csjn_casos_epilogo.csv",
@@ -399,6 +400,14 @@
       "sha256": "2906dbc23c8a0d7a4c66751a181ed06df8dc2fa849e3d73ef22947aeaf5d9f05",
       "n_rows": 5894,
       "n_bytes": 447241
+    },
+    "csjn_casos_normas.csv": {
+      "path": "output/parser/csjn_casos_normas.csv",
+      "generated_by": "extraer_normas.py",
+      "generator_version": "1.0",
+      "sha256": "8e838c49f7e3f251b231c96af2e9f1fd1ebc564539f9bdba86418e0a9c8acb02",
+      "n_rows": 7696,
+      "n_bytes": 250770
     }
   }
 }
