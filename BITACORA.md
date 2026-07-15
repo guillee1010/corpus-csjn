@@ -20309,3 +20309,50 @@ Tres cambios y nada más (diff auditado): versión+changelog, `panel_cprima` (L1
 **Scripts creados:** `scripts/diagnostico/H205/` — `poc_b166_c_replica.py` v0.1 (espec del fix + regresión propia) · `adjudicar_h205.py` v0.1 (adjudicación keyed-by-caso del consciente) · baselines `poc_b166_c_replica_out.csv` (+resumen), `adjudicacion_h205.txt`, `m55_pool_post_h205.csv`, `poc_b166_c_replica_post.csv` (+resumen) · extracto `329_p4140.md`.
 
 **Commits:** 2 (1: parser v36.0 + outputs + golden + manifest + scripts H205 — el fix con su contrato completo; 2: DEUDA + BITACORA + CHANGELOG — documentación del cierre).
+
+## H206 — Sesión read-only triple: superficie B169 adjudicada + superficie B166 (b) sellada y adjudicada 13/13 + M57 registrada + B170 nueva (2026-07-14)
+
+**Objetivo:** dimensionar con dato dos frentes antes de diseñar fix alguno — la clase FP-prosa que c′ consume (B169, opción B del PROMPT) y el residual sin-techo-de-votos del resolutor (B166 (b), arranque de la opción A) — más el housekeeping M57. Parser v36.0 SIN cambio; outputs, golden y manifest INTACTOS.
+
+### H206-01 — Housekeeping: M57 registrada en DEUDA
+
+Entrada nueva «Zonas como fuente única de alcance para los extractores» con los 5 consumidores pendientes (fecha del fallo · find_tribunal_origen→epílogo · breaks del colector [= opción C, absorbe B168] · A001 · frontera FUERA de alcance por H131) y el prerequisito de calidad B169/B163. Corrección de constancia al PROMPT_H206: la mejora-futura de la fecha vive en el comentario del parser L4033-4035 (v36.0, verificado), no en L~3989.
+
+### H206-02 — Unidad 1: superficie B169 (`superficie_b169.py` v0.2, H206/)
+
+Instrumento read-only sobre canónicos (casos + zonas + corpus) con parser importado como fuente única (collect_firma_lines / parse_firma / panel_cprima). Cuatro candados, todos 0: E1 pin 36.0 · E0t tiling (segmentos de zonas.csv cubren el bloque exacto, 0/5703) · E0c pick-del-script == `panel_cprima` real (0) · **E2 corpus-wide: pick c′ == `b_firma_raw` del baseline H205 en todo caso donde c′ dispara (0)**. Universo: 9.752 runs de zona firma / 5.689 picks c′. v0.1→v0.2 intra-sesión: fix de `parents[2]`→`parents[3]` en la resolución de raíz (el script vive un nivel más profundo que el parser).
+
+**Adjudicación (decisión del operador): clase B169 sobre picks = EXACTAMENTE los 3 costos conocidos, 0 nuevos → costo sostenido, fix diferido sin unidad propia.** Picks con señal (chars≥300 ∧ frac_lower4≥0,30 ∧ sin dup) = 5; los 2 no-anclas se adjudican con lo sellado H205: 348_p1751 = clase-A curada (firma real de 3 + cola «en los términos…», familia colector) y 329_p5317 = enumeración de conjueces sobreviviente por-diseño B148. Franja corta 150-299 barrida: 6, todas firmas legítimas con «según su voto» (el piso de frac de firma-con-calificadores). Anclas E3: 3/3 presentes con magnitudes exactas (270=2.175 · 3148=428 · 4446=866 chars).
+
+**Destape 1 (prerequisito C/M57 CUANTIFICADO):** runs firma no-pick = 4.063 → **1.243 califican panel** · 807 con raw≥300 · ~86% de esos con head clase header-de-voto-wrapeado + «Considerando:» (heurística de instrumento, sin adjudicar). Pool latente inerte hoy; letal para consumidores nuevos de bordes de zona firma.
+
+**Destape 2 (B168 reconfirmado por segunda vía):** dup_nombres en picks = **13 exactos == pool B168** (los 12 de clase A + 329_p2063; 419/1751 correctamente ausentes).
+
+### H206-03 — Unidad 2: superficie B166 (b) (`poc_b166_b_superficie.py` v0.1, H206/)
+
+Tronco verbatim de `poc_b166_c_replica` (H205) + réplica-con-atribución-de-tier de las 5 llamadas de `resolver_dispositivo` (L3806-3852, leídas: el techo `fin_busqueda = ivi` rige SOLO T1/T2; T3 barre sin techo por diseño B067; T3b barre (0, len) sin excluir dictamen; T4 sin techo; ningún tier chequea pertenencia). Candados 0/5703 en ambos: E0 (pe canónico == textos.csv publicado) y Etier (réplica-con-tier == resolutor canónico en idx y texto — el tier se lee de la réplica, el dato del canónico).
+
+**Distribución de tier del pick:** t1 5642 · t2 13 · t3 13 · t3b 1 · t4 12 · none 22. **Pool expuesto (pick ≥ ivi ∨ zona pre-relabel voto_separado) = 13, TODOS t3-post-techo con pick en zona dispositivo; T3b y T4 aportan 0.** Sub-pool nd≥1 = 6. Baseline `poc_b166_b_superficie_out.csv`.
+
+**E3 adjudica la partición de (b):** 329_p4140 NO está en el pool — su fila muestra pick t1 DENTRO de la ventana (pick 140 < ivi 146): el dispositivo de la sentencia embebida está zonificado como dispositivo válido → invisible a cualquier techo/pertenencia POR CONSTRUCCIÓN. **(b) se parte: (b1) t3-post-techo (pool 13) y (b2) sentencia-embebida-en-nota (4140 → su fix es el des-intercalado B161).** Corrección de constancia a la entrada B166: el «testigo vigente 4140» estaba en la clase equivocada.
+
+### H206-04 — Unidad 3: adjudicación 13/13 por extracto (6 nd≥1 + 7 nd=0)
+
+Los 13 extraídos con `extraer_caso.py` (crudo) y leídos. TRES sub-clases:
+
+- **A — perf-wrap «En virtud de lo expuesto» (3): 344_p575, 340_p1940, 347_p2160.** El residual documentado H194: el performativo wrapea a la línea siguiente y las perf-variantes del resolutor exigen perf en la MISMA línea → T1 vacío, T3 pesca el «Por ello» del voto concurrente. Valor COINCIDENTE en los 3 (dispositivo casi calcado al de mayoría). **Candidato de fix más barato del frente: peek de wrap en el guard RE_PERF de las perf-variantes del resolutor** (espejo del peek del zonificador H194/H197) — flips esperados de texto/pe sin flips de decisión en los 3; superficie propia obligatoria (el peek puede re-pickear otros casos corpus-wide).
+- **B — fórmula de mayoría no catalogada / mid-línea (7): 330_p3141, 330_p3801, 332_p2237, 343_p300, 332_p5, 340_p204, 344_p757.** Todo el daño real vive acá: **332_p2237 outcome INVERTIDO** (publicado `desestima`; la mayoría DISPONE solicitar opinión consultiva al TPR — cierra con «Por lo tanto», la variante con constancia de muerte H194, que acá era el dispositivo real) · **343_p300 INCORRECTO** (`otro` por pe truncado en la habilitación de feria; real = `competencia`; pe = disidencia Rosenkrantz cuyo mandato además difiere) · **330_p3141** pe con mandato INVERSO y etiqueta salvada (`competencia` coincide; el pe dice Garantías Quilmes, la mayoría remite al Federal Nº 4 — cierre «; por lo que deberán remitirse» mid-línea) · **332_p5** etiqueta divergente (`improcedente`-280 del voto vs mal-concedido de la mayoría, desenlace igual) · 340_p204/344_p757 = clase honorarios («Autos y Vistos: En atención a…» sin fórmula; el voto regula las MISMAS sumas — coincidentes) · 330_p3801 coincidente en sentido (mayoría «Conforme lo señalado en los considerandos precedentes… se re-⏎suelve», dispositivo real más rico: 2× mal concedido + rechaza). **Daño de decisión total del pool = 4/5894 = 0,07%, enumerado con clase.** Vocabulario NO escala.
+- **C — pick tardío CORRECTO (3): 348_p728** (ivi=307 ESPURIO: cita «…(Fallos: 342:1061, ⏎ disidencia de los señores jueces Maqueda y Rosatti).» wrapeada dispara header → el techo con ivi falso excluyó el dispositivo real de la ventana y T3-sin-techo lo RESCATÓ, outcome `competencia` correcto → **B170 nueva**) · **347_p1084** (fallo per-votos: el dispositivo CONSOLIDADO del Tribunal está impreso DESPUÉS de todos los votos, «de acuerdo con los argumentos expresados en cada uno de los votos, se resuelve…» — pick correcto con ivi genuino) · **343_p1024** (la mayoría NO tiene dispositivo impreso — considerandos → firma; el del voto de Rosenkrantz es la única fuente del bloque). **Constancia dura de diseño: techo duro en T3 y chequeo-de-pertenencia naive MUERTOS con dato** — matarían 728, 1084 y 1024; el mismo mecanismo que expone a B rescata a C y solo se distinguen por lectura.
+
+### H206 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumarios) — SIN cambio.
+- **Sin firma:** 8 / 5703 (0,14%) — sin cambio. **Votos:** 27.916 — sin cambio. **Zonas:** 137.990 — sin cambio. **Pool M55:** 29 — sin cambio.
+- **Manifest:** [CLEAN] 64 VIGENTE de H205 (sha casos 5faa27f472cf… / textos 390ace04abf1… / votos 73700c5ef7a8… / zonas 0fd3c38237e3… / editorial 30a6da652e3a… / recursos 676ca037a1d8…). Nada re-sellado: sesión read-only, 0 outputs tocados, 0 `__version__` de la cadena tocados.
+- **Regresiones vivas:** las de H200-H205 sin cambio (pin 36.0). Nueva de radar: `poc_b166_b_superficie --esperar-version 36.0 --out propio` → E0/Etier 0 y pool == 13 con la misma distribución de tiers; desvío = señal de cambio en el resolutor.
+
+**Outputs canónicos:** sin cambio (los 6 CSV + manifest byte-idénticos a H205).
+
+**Scripts creados:** `scripts/diagnostico/H206/` — `superficie_b169.py` v0.2 · `poc_b166_b_superficie.py` v0.1 · baselines `superficie_b169_out.csv` (+`_resumen.txt`), `poc_b166_b_superficie_out.csv` (+`_resumen.txt`) · extractos ×13 (`330_p3141`, `330_p3801`, `332_p2237`, `343_p300`, `344_p575`, `348_p728`, `332_p5`, `340_p204`, `340_p1940`, `343_p1024`, `344_p757`, `347_p1084`, `347_p2160`).
+
+**Commits:** 2 (1: scripts + baselines + extractos H206 — los instrumentos con sus datos sellados; 2: DEUDA + BITACORA — documentación del cierre. Sin CHANGELOG: cero cambios a pipeline/outputs).
