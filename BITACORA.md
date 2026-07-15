@@ -20356,3 +20356,118 @@ Los 13 extraídos con `extraer_caso.py` (crudo) y leídos. TRES sub-clases:
 **Scripts creados:** `scripts/diagnostico/H206/` — `superficie_b169.py` v0.2 · `poc_b166_b_superficie.py` v0.1 · baselines `superficie_b169_out.csv` (+`_resumen.txt`), `poc_b166_b_superficie_out.csv` (+`_resumen.txt`) · extractos ×13 (`330_p3141`, `330_p3801`, `332_p2237`, `343_p300`, `344_p575`, `348_p728`, `332_p5`, `340_p204`, `340_p1940`, `343_p1024`, `344_p757`, `347_p1084`, `347_p2160`).
 
 **Commits:** 2 (1: scripts + baselines + extractos H206 — los instrumentos con sus datos sellados; 2: DEUDA + BITACORA — documentación del cierre. Sin CHANGELOG: cero cambios a pipeline/outputs).
+
+## H207 — B166 (b1) sub-clase A CERRADA: peek de wrap en las perf-variantes del resolutor (parser v37.0, MAJOR) (2026-07-14)
+
+**Objetivo:** cerrar la sub-clase A del residual (b1) de B166 — el candidato más barato del frente, adjudicado 13/13 en H206 — con superficie propia, flip-set sellado y ciclo completo.
+
+### H207-01 — Superficie del peek (`poc_b166_b1a_peek.py` v0.1, H207/)
+
+Gate 2 sobre v36.0 confirmó el dato estructural que el diseño necesitaba: el peek de `cola_wrap` existe solo en el zonificador (Pasada 1, `bloque[k+1].strip()`); los `_cand_*` del resolutor llaman `detectar_apertura_dispositivo` con el default `""` (perf en la MISMA línea, el residual documentado H194), y `_barrer` llama `es_candidato(stripped)` — la interfaz del candidato no puede acarrear el peek. Consecuencias de diseño: (i) el instrumento exige réplica verbatim de `_barrer` además de la cascada (detectores importados del parser, solo flujo de control copiado), con candado propio **E0'' = réplica-sin-peek == canónico**; (ii) el cambio es MONÓTONO por construcción (la cola de línea ya estaba en el guard: agregar `cola_wrap` solo convierte no-candidato → candidato, ningún caso pierde el suyo — el riesgo medible es re-pick); (iii) alcance exacto = `RE_DISPOSITIVO_VARIANTES_PERF` (las `ZONIF_PERF` son incondicionales con `zonif=False`, el peek no las toca — la distinción con el descarte H203 queda limpia: agrega candidatos a variantes YA perf-gated, no gatea incondicionales).
+
+Corrida sobre v36.0: **E0 0/5703 · E0'' 0/5703 · FLIP-SET CANDIDATO = 4** (t3→t1 ×3 + none→t1 ×1, los 4 vía `en_virtud_perf`), **E3 anclas 3/3** (575: idx 774→759 · 1940: 743→592 · 2160: 665→372; exposición post-ivi 1→0 en los 3), **E4 anclas negativas sub-clase C (728/1084/1024) sin flip 3/3**, y **0 re-picks intra-T1** — el riesgo que el PROMPT advertía quedó vacío con dato. Baseline `poc_b166_b1a_peek_out.csv`.
+
+### H207-02 — Adjudicación del 4º flip por extracto: 344_p2779 = recuperación TP
+
+Caamaño, Analía c/ EN (t.344, extraído con `extraer_caso.py` y leído entero): la MAYORÍA (Rosenkrantz–Highton–Lorenzetti, Maqueda en disidencia) cierra «En virtud de lo expuesto y oída la señora Procuradora Fiscal, se ⏎ desestima el recurso extraordinario interpuesto…» — el performativo wrapea, exactamente la mecánica de la clase; la DISIDENCIA de Maqueda cierra «Por lo tanto, y oída la señora Procuradora Fiscal, se declara admisible…» — la variante descartada con constancia (H194/H039), invisible a T1-T4 por diseño. Por eso el caso publicaba `sin_dispositivo` con tier none: ninguno de los dos cierres era ancla. El pick nuevo (191, PRE-ivi 197, línea que el zonificador ya etiquetaba `dispositivo` desde H194) es el dispositivo real de la mayoría → outcome `sin_dispositivo`→`desestima`. Flip-set sellado 4/4 adjudicado = 4 TP (3 texto-coincidente + 1 recuperación de decisión).
+
+### H207-03 — Fix v37.0 + ciclo completo
+
+Fix (MAJOR): `_barrer` computa `cola_wrap = bloque[k+1].strip() if k+1 < len(bloque) else ""` (espejo verbatim del call-site del zonificador) y la pasa a `es_candidato`; los 4 `_cand_*` ganan el parámetro con default `""` (t2/t4 lo ignoran; `_cand_estructural`/`_cand_t3b` lo forwardean). Cero regex nueva. Comentarios actualizados: residual H194 marcado CERRADO en `detectar_apertura_dispositivo` y en la tabla `RE_DISPOSITIVO_VARIANTES_PERF`; corrección de constancia en `en_orden_expuesto` (la razón vigente de su incondicionalidad ya no es «el resolutor no peekea» sino el 2/2 TP + 0 FP medido en H203 — un perf-gate no compra precisión y re-abriría 1102).
+
+Ciclo consciente adjudicado 100% en contrato: **casos.csv 5 celdas ⊆{4}** (wc_considerando a la baja ×4: 1940 1386→1268 · 575 3756→3685 · 2779 963→912 · 2160 2888→2857 + outcome SOLO 2779 sin_dispositivo→desestima; is_merit/es_queja/queja_resultado sin flip — desestima por falta de fundamentación autónoma no toca el gate) · **textos.csv SOLO {4}** (pe + considerando; los 3 pe de testigos verificados coincidentes en valor contra el viejo EN PRODUCCIÓN, no solo en el PoC) · **votos.csv identidad INTACTA (27.916)**, solo denormalizado outcome en las 4 filas de 2779 · **zonas.csv y editorial BYTE-IDÉNTICOS** — la predicción del relabel-A1-no-op se cumplió exacta. Blind byte-idéntica (build_m20 corrido; clave n300 ausente de git status). Regolden [CLEAN] · invariante (c) sostenido · manifest **[CLEAN] 64** — sha casos 19028de5412d… / textos dc724eebd435… / votos b64f241085fe… / zonas 0fd3c38237e3… (sin cambio) / editorial 30a6da652e3a… (sin cambio) / recursos 433006ff0f68… (re-derivado del pe nuevo de 2779; materia/epilogo/partes con sha estables). **Gate M55: pool 29 sin movimiento (0 altas / 0 bajas)** — el fix no toca panel, predicho. Outcome `sin_dispositivo` 22→21 en el agregado.
+
+Regresión propia (`--esperar-version 37.0 --post-fix --out propio`, PoC v0.2): E0 0 · flip-set VACÍO · **E0'' == flip-set sellado {4}** (la réplica sin peek ES v36.0 — patrón H200, esperado, no FRENO; el candado de igualdad exacta contra el set sellado quedó cableado en v0.2). Radar H206 (`poc_b166_b_superficie --esperar-version 37.0 --out propio`): pool expuesto 13→**10** · t1 5646 · t2 13 · t3 10 · t3b 1 · t4 12 · none 21 — los 6 números exactos de la predicción. **El residual documentado H194 queda cerrado; el residual de B166 tras (b1)-A: (b1)-B enumerada-con-clase (7 casos, daño de decisión 4 = 0,07%, vocabulario no escala) · (b2)→B161 · (d)=B167.**
+
+### H207 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumarios) — sin cambio.
+- **Sin firma:** 8 / 5703 (0,14%) — sin cambio. **Votos:** 27.916 filas — sin cambio de identidad. **Zonas:** 137.990 — byte-idéntico. **Pool M55:** 29 — sin movimiento.
+- **Outcome:** `sin_dispositivo` 22→21 (recuperación 2779); `desestima` 808→809.
+- **Manifest:** [CLEAN] 64 re-sellado — sha casos 19028de5412d… / textos dc724eebd435… / votos b64f241085fe… / zonas 0fd3c38237e3… / editorial 30a6da652e3a… / recursos 433006ff0f68… — outputs del parser a v37.0.
+- **Regresiones vivas:** las de H200-H205 con pin ajustado a 37.0 + `poc_b166_b1a_peek --post-fix` (flip-set VACÍO, E0''=={4}) + radar `poc_b166_b_superficie` (pool == 10 con la distribución de arriba; desvío = FRENAR).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5894 filas.
+- `output/parser/csjn_casos_textos.csv` — 5894 filas.
+- `output/parser/csjn_casos_votos.csv` — 27.916 filas.
+- `output/parser/csjn_casos_zonas.csv` — 137.990 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones.
+
+**Scripts creados:** `scripts/diagnostico/H207/` — `poc_b166_b1a_peek.py` v0.2 · baselines `poc_b166_b1a_peek_out.csv` (+`_resumen.txt`, flip-set sellado) · `poc_b166_b1a_peek_regresion_out.csv` (+`_resumen.txt`) · `poc_b166_b_superficie_post_h207.csv` (+`_resumen.txt`, radar con pin 37.0) · `m55_pool_post_h207.csv` · extracto `344_p2779.md`.
+
+**Commits:** 2 (1: parser v37.0 + outputs canónicos + golden + manifest — el fix con su contrato de regresión; 2: DEUDA + BITACORA + CHANGELOG — documentación del cierre).
+
+## H208 — Frente MATERIA: diagnóstico sin_ancla + canal dictamen + extractor de normas (read-only triple) (2026-07-15)
+
+**Objetivo:** adjudicar la composición del pool `sin_ancla` (1.104, estable H191→H207) contra las hipótesis insumo-roto / vocabulario-faltante / irreducible-H115, y dimensionar caminos de fix — sin tocar el pipeline.
+
+### H208-01 — Diagnóstico del pool sin_ancla
+
+`diagnostico_sin_ancla.py` v0.1 (H208/): candado E0 = réplica vía `dm.derivar()` importado == sidecar publicado, **0 diffs / 5894**. Pool 1104 exacto; motivo capa-1 recomputado con `clasificar_capa1` real (el sidecar lo pisa): sin_tribunal 600 / jurisdiccion_general 504. **Hipótesis insumo-roto MUERTA**: 0 considerandos wc=0, 0 carátulas vacías (bleed presente en ~6/73 de la muestra pero no causa el sin_ancla — el nombre de índice viene limpio). Muestra estratificada 73 (seed 208, motivo×bucket-wc, mín 4/estrato) **adjudicada 73/73** (baseline `sin_ancla_muestra_adjudicada.csv`, validación del operador pendiente): **vocab_faltante 30 (41%) · competencia_dirimente 16 (22%) · procesal_propio 14 (19%) · remisión-al-dictamen 13 (18%)**. Corrección con dato al veredicto H115: el irreducible real es una fracción, no el pool. Decisión de diseño registrada: la codificación de competencia/procesal (materia subyacente à la SCDB vs categoría terminal) es **decisión taxonómica del operador, PENDIENTE** — bloquea ~40% del pool y redefine el denominador de cobertura (77,0% hoy).
+
+### H208-02 — Canal dictamen: rinde medido (observación estructural del operador)
+
+Constatado en código: el parser detecta remisión (RE_TIPO_A L1683-1711) y zonifica el dictamen (16.924 segmentos / 3.434 casos), pero **textos.csv no lo exporta** (fieldnames L4649) → `derivar_materia` es ciego al dictamen por diseño de insumos. `diagnostico_dictamen.py` v0.1→v0.2 (H208/): **v0.1 FRENÓ (E1 2705/3060)** por réplica no-verbatim del contador — el parser cuenta `\b\w+\b` por línea (extraer_segmentos L3541), el instrumento contaba `split()`; deltas chicos bidireccionales delatores. v0.2 fórmula verbatim → **E1 = 0/3060**: indexación bloque-relativa demostrada. Rinde con cascada capa-2 REAL sobre el texto reconstruido (carátula real, que ya daba sin_ancla → aporte puro del canal): **215/748 con-zona clasifican con vocabulario VIGENTE** (penal 105 · laboral 31 · cc 30 · consumo 14 · trib 10 · amb 9 · resto 26; canales kw 138 / norma 44 / kw+norma 29 / coocur 4; conflicto 8; **525 mudos aun con dictamen = techo del canal**; remisión-sin-zona 7). Spot-check 35 adjudicado (`dictamen_spotcheck_adjudicado.csv`): **≈80% precisión puntual; canal norma 13/13 TP; los 4 FP TODOS en kw** (contrabando→tributario, condena penal→tributario, cita ajena→lesa, contexto ajeno) → el fix M58 exige diseño tiered. Convergencia independiente con H208-01: 330_p4182 y 330_p2249 confirman veredictos «débil» de la muestra.
+
+### H208-03 — `extraer_normas` v0.1→v0.2 (propuesta operador + tercero)
+
+Sidecar caso×norma×ámbito{caratula, considerando} con RE_LEY verbatim del canal vigente. Candado E2 (toda fuente `norma:` de materia_fuente ⊆ extraído) = **0/5894**. Números: **5.973 pares · 1.393 normas distintas · 2.643/5894 casos con ≥1 norma · gap RE_LEY-sobre-carátula = 265 casos** corpus-wide. v0.2 = legibilidad del resumen (normas distintas + cobertura, reclamo del operador) + nota de alcance: solo «ley N»; decreto-ley entra de rebote por substring (explica 1285/58 top con 323); decretos/resoluciones = ampliación futura con superficie propia, columna `tipo` prevista.
+
+### H208-04 — Documentación
+
+DEUDA: entradas nuevas **M58** (dictamen_text + tier, diseñado con rinde), **M59** (promoción de extraer_normas + refactor byte-idéntico, diseñado), **B171** (RE_TIPO_A subcuenta remisiones — testigos 342_p186/344_p2639/339_p1683/333_p530); actualizaciones a M48 clase (1) y constancia a B163 (voces JYC dentro de considerando_text); Prioridad H208.
+
+### H208 — Estado final
+
+- **Corpus:** 5894 (5703 fallos + 191) — SIN CAMBIO.
+- **Pipeline:** parser v37.0 y todos los canónicos INTACTOS (sesión read-only; 0 `__version__` de la cadena tocados). Manifest **[CLEAN] 64 vigente** — sha idénticos al sello H207 (casos 19028de5412d… / textos dc724eebd435… / zonas 0fd3c38237e3… verificados por los instrumentos).
+- **Materia:** cobertura 77,0% · sin_ancla 1104 (sin cambio de dato; DESCOMPUESTO en diagnóstico).
+- Sin CHANGELOG ni re-sello (nada de la cadena cambió).
+
+**Scripts creados:** `scripts/diagnostico/H208/` — `diagnostico_sin_ancla.py` v0.1 · `diagnostico_dictamen.py` v0.2 · `extraer_normas.py` v0.2 + outputs (`sin_ancla_agregado_out.txt`, `sin_ancla_muestra_out.csv`, `dictamen_agregado_out.txt`, `dictamen_clasificados_out.csv`, `csjn_casos_normas_out.csv`, `normas_resumen_out.txt`) + baselines de adjudicación (`sin_ancla_muestra_adjudicada.csv`, `dictamen_spotcheck_adjudicado.csv`).
+
+**Commits:** 2 — (1) instrumentos H208 + outputs + baselines de adjudicación; (2) documentación (DEUDA editada + BITACORA append + PROMPT_H209).
+
+# APPEND para BITACORA.md — pegar al final
+# ⚠ ANTES DE PEGAR: correr `python scripts\pipeline\correr_pipeline.py --verify`
+# y confirmar los 3 valores marcados [VERIFICAR]. Si alguno no coincide, frenar.
+# ─────────────────────────────────────────────────────────────────────────────
+
+## H209 — M59 paso 1: extraer_normas canónico + derivar_materia v3.3 byte-idéntico (2026-07-15)
+
+**Objetivo:** promover `extraer_normas` de diagnóstico (v0.2, H208) a etapa canónica del pipeline y refactorizar `derivar_materia` para consumir su sidecar, con candado byte-idéntico.
+
+*Nota de registro:* la sesión quedó sin cierre en el momento (cierre de browser durante la conversación de legibilidad de `materia_capa`); este append se reconstruyó el mismo día desde el registro de la sesión y se verificó contra el manifest antes de pegar.
+
+### H209-01 — Decisión taxonómica (ex Opción B, resuelta en conversación)
+
+`materia` adopta diseño de dos ejes: los casos `competencia_dirimente` y `procesal_propio` reciben **etiqueta de categoría terminal** (espejo del patrón `originaria` de v3.2), y una columna futura **`materia_subyacente`** — poblada vía extracción de voces JYC (ancla B163) — captura la materia del pleito subyacente. Implementación en dos fases futuras; el relabel terminal es la primera (más barata). Cierra la validación de operador pendiente de H208 y desbloquea el diseño sobre ~40% del pool sin_ancla.
+
+### H209-02 — M59 paso 1 implementado y validado
+
+- `extraer_normas.py` v0.2→**v1.0** canónico en `scripts/pipeline/` — emite `csjn_casos_normas.csv` (caso, tipo, norma, ambito, n_menciones), **cuatro ámbitos**: caratula, considerando, dispositivo, voto. Importa `_norm` de `derivar_materia` como librería (fuente única de normalización); RE_LEY vive en el extractor desde esta versión.
+- `derivar_materia.py` v3.2→**v3.3** — deja de correr RE_LEY, lee el sidecar filtrando `ambito=considerando`. **Candado byte-idéntico PASÓ:** sha de `csjn_casos_materia.csv` = `89EB50FEF37B…` [VERIFICAR contra manifest], idéntico al vigente.
+- `correr_pipeline.py` v1.0→**v1.1** — etapa `extraer_normas` entra a la secuencia de derivers antes de materia.
+- `generar_manifiesto.py` v1.8→**v1.9** — sella 10 CSV canónicos (9→10).
+- `MAPA.md` — DAG, orden topológico y tabla de dependencias actualizados; nota sobre la dependencia de código (no de datos) extraer_normas→derivar_materia, sin ciclo.
+- Validación: py_compile los 5 archivos; harness de equivalencia sobre vocabulario y carátulas reales; sandbox end-to-end; corrida local completa del operador.
+- Baselines v0.2 reproducidos exacto: **411 pares carátula · 5.562 considerando · gap carátula 265**. Primeras mediciones corpus-wide de los ámbitos nuevos: **dispositivo 161 pares / 78 normas / 145 casos** · **voto 1.562 pares / 580 normas / 825 casos** (dato persistido; NO alimentan clasificación — v3.3 es refactor puro).
+
+### H209-03 — Legibilidad de `materia_capa` (conversación, cortada)
+
+El operador objetó los valores `capa1/capa1_refinado/capa2/pendiente_capa2` como jerga de implementación. Constatado post-sesión: la entrada **M49 (H191) ya cubre este ítem** con esquema del operador — no se crea entrada nueva. Esquema ratificado y completado en conversación intermedia del mismo día: `lectura_tribunal` · `lectura_tribunal_refinada` · `lectura_texto` · `sin_clasificar`; `originaria` queda (categoría terminal, no lectura); `lectura_dictamen` reservado para M58. Implementación = unidad H210.
+
+### H209 — Estado final
+
+- **Corpus:** 5.894 casos (5.703 fallos + 191) — SIN CAMBIO.
+- **Pipeline:** parser **v37.0** intacto; `extraer_normas` v1.0 · `derivar_materia` v3.3 · `correr_pipeline` v1.1 · `generar_manifiesto` v1.9.
+- **Materia:** cobertura 77,0% · sin_ancla 1.104 — SIN CAMBIO (candado byte-idéntico).
+- **Manifest:** **[CLEAN] 65** [VERIFICAR con --verify] — nuevo artefacto `csjn_casos_normas.csv`.
+
+**Outputs canónicos:** los 9 previos sin cambio de contenido salvo materia byte-idéntica re-derivada + `output/parser/csjn_casos_normas.csv` (nuevo, [VERIFICAR n filas con el resumen del extractor]).
+
+**Scripts creados:** ninguno en diagnostico/H209/ (la promoción movió el extractor a `scripts/pipeline/`).
+
+**Commits:** [VERIFICAR con git log si se hicieron en H209 o van con este cierre] — (1) pipeline: extraer_normas v1.0 + derivar_materia v3.3 + correr_pipeline v1.1 + generar_manifiesto v1.9 + MAPA + outputs + golden + manifest 65; (2) documentación: DEUDA editada + BITACORA/CHANGELOG appends + PROMPT_H210.
+

@@ -2,6 +2,28 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H209 (2026-07-15)
+
+- `extraer_normas.py`: v0.2→v1.0 — promoción a etapa canónica (`scripts/pipeline/`); 4 ámbitos (caratula, considerando, dispositivo, voto); emite `csjn_casos_normas.csv`.
+- `derivar_materia.py`: v3.2→v3.3 — refactor byte-idéntico; consume sidecar de normas (`ambito=considerando`) en lugar de correr RE_LEY. 0 casos afectados (candado sha idéntico).
+- `correr_pipeline.py`: v1.0→v1.1 — etapa extraer_normas en la secuencia de derivers, antes de materia.
+- `generar_manifiesto.py`: v1.8→v1.9 — sella 10 CSV canónicos (9→10).
+- `MAPA.md`: DAG + orden topológico + tabla de dependencias actualizados (M59).
+- `output/parser/csjn_casos_normas.csv`: NUEVO — [VERIFICAR n filas].
+- `output/parser/csjn_casos_materia.csv`: re-derivado byte-idéntico (0 delta).
+- `output/parser/_manifest.json`: re-sellado [CLEAN] 65.
+
+
+## H207 (2026-07-14)
+
+- `parser.py` v36.0→**37.0** (MAJOR): peek de wrap en las perf-variantes del RESOLUTOR — `_barrer` computa `cola_wrap = bloque[k+1].strip()` (espejo verbatim del zonificador) y la pasa a `es_candidato`; los 4 `_cand_*` +1 parámetro (t2/t4 lo ignoran; estructural/t3b lo forwardean a `detectar_apertura_dispositivo`). Cierra el residual H194. Flip-set sellado 4 = 4 TP (344_p575, 340_p1940, 347_p2160 texto-coincidente + 344_p2779 recuperación sin_dispositivo→desestima). Espec `scripts/diagnostico/H207/poc_b166_b1a_peek.py` v0.2.
+- `output/parser/csjn_casos.csv`: 5894 filas (sin delta); 5 celdas cambian ⊆{4} (wc_considerando ×4 + outcome 2779).
+- `output/parser/csjn_casos_textos.csv`: 5894 filas (sin delta); por_ello_text/considerando_text cambian SOLO en {4}.
+- `output/parser/csjn_casos_votos.csv`: 27.916 filas (identidad intacta); denormalizado outcome en 4 filas de 344_p2779.
+- `output/parser/csjn_casos_zonas.csv` y `csjn_casos_editorial.csv`: byte-idénticos.
+- `output/parser/csjn_casos_recursos.csv`: re-derivado (consume el pe nuevo de 2779) — sha 433006ff0f68….
+- Golden re-congelado; `_manifest.json` re-sellado [CLEAN] 64 (casos 19028de5412d… / textos dc724eebd435… / votos b64f241085fe…).
+
 ## H205 (2026-07-14)
 
 - `parser.py`: v35.0 → **v36.0** (MAJOR) — B166 (c) fix: consumidor `panel_cprima` (panel por evidencia de zonas, predicado verbatim PoC H204) cableado antes de collect(pick+1)/A001; sin candidata → comportamiento v35.0 verbatim. 34 casos afectados (31 TP + 3 costos B169).
