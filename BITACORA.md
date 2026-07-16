@@ -20504,3 +20504,150 @@ DEUDA (editada directamente): M49 → **APLICADO H210** · constancia H210 en M5
 **Scripts creados:** `scripts/diagnostico/H210/` — `verificar_m49.py` v0.1 + `materia_v33_baseline.csv` (baseline del candado). `scripts/explorador/exploradorv8.py` v8.2 (no canónico).
 
 **Commits:** 5 — (1)-(3) retroactivos de Tarea 0 [pipeline H209 · docs H209 · parser v37.0 de H207] + push; (4) M49: deriver v4.0 + materia.csv + manifest; (5) documentación H210 (DEUDA editada + BITACORA/CHANGELOG appends + PROMPT_H211).
+
+# APPEND para BITACORA.md — pegar al final
+
+## H211 — M58 APLICADO COMPLETO: canal dictamen para materia — parser v38.0 (`dictamen_text`) + extraer_normas v1.1 (ámbito dictamen) + derivar_materia v4.1 (tier `lectura_dictamen`) (2026-07-15)
+
+**Objetivo:** ejecutar los dos pasos de M58 con candados separados (PROMPT_H211): exportar el texto del dictamen y habilitar el tier de prioridad mínima en la cascada de materia.
+
+### H211-01 — Paso 1: parser v37.0→v38.0, export `dictamen_text` (MAJOR de schema de textos.csv)
+
+Diseño leído de fuente (entrada M58 + parser real): `dictamen_text` = join de `lineas_dictamen` (H052, la MISMA fuente que `dictamen_presente`/`wc_dictamen`, post-relabel A1), convención verbatim de `extraer_considerando` (strip, drop vacías, join " "), SIN `_unhyphenate` (espejo del persistido de considerando — decisión ratificada por el operador). Columna al FINAL de `fieldnames_t`; clave agregada al dict del caso y al stub `sumario_con_link` (el writer proyecta por fieldnames sobre `all_casos` completo). Los otros 4 CSV byte-idénticos POR CONSTRUCCIÓN (todos los writers proyectan).
+
+Ciclo: `--consciente` mostró [FAIL] SOLO en textos.csv (header +1 columna); 4 CSV [OK] contra golden. Blind PASS (`build_m20` proyecta explícitamente las 3 columnas viejas — L31; clave n300 intacta en `git status`). Candados (verificador `verificar_m58_paso1.py` v0.3, scratch H211/):
+- **C1:** casos/votos/zonas/editorial byte-idénticos al golden H210 (sha `19028de5…` / `b64f2410…` / `0fd3c382…` / `30a6da65…`).
+- **C2:** textos.csv sin la última columna, reserializado con el mismo dialecto == golden viejo `dc724eeb…` byte a byte (5.894 filas) — columnas preexistentes intactas.
+- **C3:** cruce EXACTO `dictamen_text≠''` ⇔ `dictamen_presente` = **3.434** casos (pin H208 clavado); clase all-blank = 0. Valores crudos de `dictamen_presente`: True 3.434 / False 2.269 / 0 191 (stubs).
+
+**Incidente de método (a):** el `--regolden` se corrió ANTES de los candados — el verificador v0.1 murió por bug de paths (`REPO_ROOT parents[2]` → `scripts\scripts\...`) y el ciclo siguió igual. Remedio: convalidación post-hoc estilo H210 — golden viejo rescatado de git HEAD (`cmd /c git show`, byte-fiel; sha verificado `dc724eeb…`), candados corridos contra él. **Incidente (b):** el primer commit del paso declaró «candados C1-C3 post-hoc PASS» cuando C2/C3 aún no habían corrido (v0.2 crasheó por `field_size_limit` — considerando_text > 131.072, la razón misma del split H113); detectado, mensaje AMENDADO pre-push (commit final `b9ceb64`, honesto: «C1 PASS en el sello, C2/C3 PASS tras fix v0.3»). Golden y manifest re-sellados; sha textos nuevo `35dbbdda…`, parser v38.0 en manifest.
+
+### H211-02 — Paso 2: extraer_normas v1.0→v1.1 + derivar_materia v4.0→v4.1 (tier dictamen)
+
+`extraer_normas` v1.1: 5º ámbito `dictamen` (lee `dictamen_text`, exige parser ≥38.0 vía REQUIRED_TEXTOS), AL FINAL de AMBITOS para que el subset preserve orden y bytes. Corpus: **6.206 pares / 1.378 normas / 2.515 casos** en el ámbito nuevo; los 4 viejos clavados (411/5.562/161/1.562); normas.csv 7.696→13.902 filas; normas distintas 1.393→**2.056**; casos con ≥1 norma 2.948→4.097.
+
+`derivar_materia` v4.1 (MINOR, precedente H172/H181): `clasificar_dictamen` — prioridad MÍNIMA, corre SOLO sobre el residuo `sin_ancla` de `clasificar_capa2` (conflicto_capa2 NO entra: la evidencia H208 es del pool sin_ancla; desempate por dictamen = unidad futura). Canales norma+kw solamente (partes/objeto/provincia leen la carátula del caso propio, agotada antes del tier). Gates dictados por la estructura del error H208: norma = ancla fuerte · kw sin norma exige ≥2 votos (la kw solitaria = la clase de los 4 FP del spot-check, afuera por construcción) · empate en la cima → None (sin co-ocurrencia: H115 calibrada sobre texto del caso propio). `materia_fuente` con procedencia (`dictamen:norma:24240(1)` / `dictamen:kw+norma:…` / `dictamen:kw(2)`). Ejecuta la reserva `lectura_dictamen` de M49.
+
+**Incidente de método (c) — el grave:** la primera corrida del ciclo se hizo con derivar_materia v4.0 en disco (el v4.1 no se había copiado); el verificador de candados frenó EXACTAMENTE donde debía (`[FAIL] derivar_materia __version__ = 4.0, esperada 4.1`) **y el commit+push se hicieron igual** (`15e415f`), con mensaje que declara «derivar_materia v4.1 … candados N1/M1 PASS, flip-set N altas adjudicado por muestra seed 211» — nada de eso había ocurrido. **CORRECCIÓN DE CONSTANCIA: el mensaje de 15e415f es FALSO en sus tres afirmaciones; el commit es dato-coherente por accidente** (contiene extraer_normas v1.1 + normas.csv + manifest, todo verdadero; derivar_materia 4.0 ignoraba las filas nuevas por el doble filtro, así que materia quedó intacta y el manifest [CLEAN] de esa corrida era real). Se decidió documentar el error en vez de reescribir historia pusheada; el commit siguiente lleva la corrección. Tercera violación del orden candado→sello en la sesión → entrada **M62** (candados como gate del orquestador). El ciclo se re-corrió con v4.1 instalado y verificación de versión previa; regla operativa adoptada: comandos por etapas, el commit no se emite sin el PASS pegado.
+
+Ciclo limpio (v4.1): derivers vecinos byte-idénticos (epilogo `71313126…` / partes `2906dbc2…` / recursos `433006ff…` sin cambio); parser intacto (invariante c [CLEAN]). Candados (`verificar_m58_paso2.py` v0.1, scratch H211/):
+- **N1:** normas.csv sin ámbito dictamen, reserializado == sellado H211 `8e838c49…` (7.696 filas viejas intactas + 6.206 nuevas).
+- **M1:** diff materia.csv vs sellado `607793de…` == flip-set legal EXACTO: **77 altas** `("",sin_clasificar,sin_ancla)→(materia,lectura_dictamen,dictamen:*)`; **0 casos ya clasificados tocados; conflicto_capa2 clavado en 57**. Canales: norma 44 / kw+norma 29 / kw 4. Por materia: laboral 18, civil_comercial 14, consumo 12, penal 9, ambiental 7, CA 6, previsional 4, tributario 4, penal_cambiario 2, penal_tributario 1.
+
+Métricas de la capa: cobertura 77,0%→**78,5%** (4.009/5.107); `lectura_dictamen` 77 (1,5%); `sin_clasificar` 1.161→1.084 (sin_ancla 1.104→1.027). sha materia `607793de…`→`92630d63…`; manifest re-sellado **[CLEAN] 65**.
+
+### H211-03 — Adjudicación de la muestra M2 (operador, contra texto real): 24 TP / 1 FP (96%)
+
+Muestra de 25 (seed 211) volcada a txt legible (`dump_muestra_m2.py`, IDs clavados a los del log) y adjudicada por el operador con expediente de mecánica (normas vistas por el extractor vs ancla que votó, kw identificadas contra `vocab_keywords.csv`). Veredicto ratificado: **24 TP / 1 FP**.
+
+- **El FP — 329_p5108 (`dictamen:norma:24241`):** pleito «ticket canasta» Jujuy (política salarial de empleados públicos → laboral/empleo público); la 24.241 es la ÚNICA norma que el extractor ve en todo el dictamen, citada de rebote (impacto de la reducción de aportes en prestaciones futuras). **Primer FP del canal norma** (el 13/13 de H208 era muestra chica); mecanismo identificado: norma-ancla como argumento derivado, sin competencia de otras señales. DECISIÓN: se deja documentado sin parche (espejo FP-F5/H172, dentro de la precisión aceptada); guard anti-rebote = unidad futura con superficie medida.
+- **Hallazgo vocab_faltante (testigos leídos):** los dos débiles de prepagas/obras sociales NO son debilidad del gate — en 340_p1921 el extractor ve la 23.661 **×9** y la 23.660 ×5 y ninguna vota (ausentes del índice: 34 anclas / 2.056 normas vistas = 1,7%); en 344_p3469 ídem con la 26.682, la ley del caso según el propio dictamen. Candidatas selladas: **23.660/23.661/26.682→salud** (+26.396 a evaluar). Al poblarlas, esas altas re-deciden.
+- **Constancia acople relabel-terminal:** ~9/25 de la muestra son contiendas de competencia — la clase `competencia_dirimente` de la decisión taxonómica H209; el tier les asigna hoy la materia SUBYACENTE (lo que la columna futura quiere), pero el flip-set del relabel terminal futuro intersecta estas altas.
+- **Constancia rinde (WARN 77 vs pin 215):** el 215/748 de H208 midió la cascada completa PRE-diseño-tiered; los gates recortan exactamente la región de los 4 FP. 73/77 altas con ancla de norma. Pool recuperable ~138 SI la validación del operador del spot-check H208 (que sigue PENDIENTE) habilita aflojar el gate kw.
+
+### H211-04 — Diseño encolado: Digesto Jurídico Argentino como prior del índice (M61)
+
+Propuesta del operador durante la adjudicación: la ley 26.939 (2014) clasifica las leyes nacionales en 30 categorías temáticas (art. 7), anexos I+II descargables en SAIJ — y la falta de actualización NO molesta (se consume el juicio temático, no el de vigencia; el anexo II de no-vigentes también viene por categoría; la Corte cita derogadas). Diseño de tres capas sellado en la entrada M61: prior_dja (tabla de mapeo 30 categorías→materia, curada una vez) × pureza-corpus (`priorizar_normas.py` sobre el sidecar, train SOLO `lectura_tribunal`/`refinada` — regla anti-circularidad: nunca las capas que el canal norma alimenta) × adjudicación del operador. Punto metodológico: el DJA clasifica el objeto regulatorio; `materia` clasifica el pleito — prior, nunca verdad. Límite: corta ~2013 (las 26.9xx/27.xxx quedan para pureza-corpus). Complementa vocab_faltante, no la sustituye.
+
+### H211 — Estado final
+
+- **Corpus:** 5.894 casos (5.703 fallos + 191 sumario_con_link).
+- **Textos:** 5.894 filas, 4 columnas de texto (+`dictamen_text`: 3.434 casos con texto == `dictamen_presente`).
+- **Votos:** 27.916 filas. **Zonas:** 137.990 segmentos. **Editorial:** 152 secciones.
+- **Normas (sidecar):** 13.902 pares (caratula 411 / considerando 5.562 / dispositivo 161 / voto 1.562 / **dictamen 6.206**); 2.056 normas distintas; 4.097 casos con ≥1 norma.
+- **Materia:** cobertura **78,5%** (4.009/5.107); lectura_tribunal 2.301 / refinada 159 / lectura_texto 1.472 / **lectura_dictamen 77** / sin_clasificar 1.084 (sin_ancla 1.027 + conflicto 57) / originaria 596.
+- **Muestra tier dictamen:** 24 TP / 1 FP (96%); FP = canal norma, documentado.
+
+**Outputs canónicos (sha del manifest, [CLEAN] 65):**
+- `csjn_casos.csv` — 5.894 filas, `19028de5…`, v38.0.
+- `csjn_casos_textos.csv` — 5.894 filas, `35dbbdda…`, v38.0 (62,39 MB — aviso GitHub >50 MB; git-lfs a decidir).
+- `csjn_casos_votos.csv` — 27.916, `b64f2410…` · `csjn_casos_zonas.csv` — 137.990, `0fd3c382…` · `csjn_casos_editorial.csv` — 152, `30a6da65…`.
+- `csjn_casos_normas.csv` — 13.902 filas, `a046095d…`, v1.1.
+- `csjn_casos_materia.csv` — 5.894 filas, `92630d63…`, v4.1.
+- recursos `433006ff…` / epilogo `71313126…` / partes `2906dbc2…` (byte-idénticos, sin re-derivación de fondo).
+
+**Scripts creados:** `scripts/diagnostico/H211/` (scratch, gitignoreado) — `verificar_m58_paso1.py` v0.3 (candados C1/C2/C3; v0.1 bug paths, v0.2 bug field_size_limit — ambos reproducidos y corregidos) · `verificar_m58_paso2.py` v0.1 (candados N1/M1 + muestra M2 seed 211) · `dump_muestra_m2.py` v0.1 · baselines: `verificar_m58_paso1_out.csv`, `flipset_m58_paso2.csv` (77 altas), `muestra_m2_dictamenes.txt`, `golden_h210/`, `sellado_h211/`.
+
+**Commits:** 3 de pipeline + 1 de docs — (1) paso 1: parser v38.0 + golden + manifest (amendado pre-push tras incidente (b)); (2) paso 2 parcial: extraer_normas v1.1 + normas.csv + manifest — **mensaje FALSO (incidente (c)), corrección de constancia en esta entrada**; (3) paso 2 completo: derivar_materia v4.1 + materia.csv + manifest, con la corrección de constancia en el mensaje; (4) documentación (DEUDA editada + appends BITACORA/CHANGELOG + PROMPT_H212).
+
+## H212 — Baselines H208 recuperados; mediciones del canal kw (2026-07-15)
+
+**Objetivo:** validación del operador de los dos baselines de adjudicación de H208.
+Read-only, lectura, no código.
+
+**Resultado: la validación no se produjo.** El operador cerró la sesión sin adjudicar
+ninguno de los 7 casos. Sigue PENDIENTE (tercera sesión: H209, H211, H212). Esta entrada
+registra hechos medidos y decisiones del operador. **No hay conclusiones sobre el gate kw.**
+
+### H212-01 — Los baselines estaban en Downloads, no en el schema
+
+PROMPT_H212 los daba por perdidos; `dir scripts\diagnostico\H208\` no los tenía. Estaban en
+`C:\Users\guill\Downloads`: se entregaron en H208 y nunca se movieron. H208/ es gitignoreado.
+
+Antes de que aparecieran se reconstruyó la muestra desde el transcript de H208, con candado:
+alineación 73/73 contra `sin_ancla_muestra_out.csv` + composición == BITACORA H208-01
+(30/16/14/13) [PASS]. Diff posterior contra el original: **sha12 `590c5a7d11c4` idéntico,
+0 diffs en 73 filas × todas las columnas**. Del spot-check se habían recuperado 33/35; las 2
+faltantes (330_p5425, 340_p639) el original las confirmó TP. Baseline: 748 filas / 35
+adjudicadas (26 TP + 2 dudoso-TP + 3 dudoso + 2 FP + 1 FP-etiqueta + 1 dudoso-FP).
+
+### H212-02 — `dump_gate_kw.py` v0.1
+
+Selección desde el dato (`veredicto_precision` ∈ FP/FP-etiqueta/dudoso-FP/dudoso → 7) con candado
+`--esperar-n`. Invoca `extraer_caso.py` v2.3 por subprocess (no reimplementa extracción); raíz por
+marcador `scripts/pipeline/parser.py`, no `parents[N]`. Corrida del operador: **7/7 rc=0, sin WARN
+de ancla** → `gate_kw_lectura.txt` (101.712 bytes) + `gate_kw_adjudicacion.csv` (quedó sin adjudicar).
+
+### H212-03 — Mediciones sobre el baseline (read-only)
+
+- 215 = norma 44 + kw+norma 29 + **kw 138** + coocur 4. Las 77 altas del tier = 44 + 29 + los 4 `kw(2)`.
+- Pool kw: **134 `kw(1)` / 4 `kw(2)`**.
+- **Los 22 casos del canal kw adjudicados en el spot-check son todos `kw(1)`.** Ningún `kw(2)`
+  fue adjudicado nunca.
+- `kw(1)` con los veredictos como fueron sellados: **16/22**. Por materia asignada: `penal` 7/7 ·
+  `civil_comercial` 3/4 · `tributario` 0/2 · `lesa_humanidad` 0/1.
+- Pool `kw(1)` por materia: penal 96 · civil_comercial 14 · laboral 12 · tributario 5 ·
+  lesa_humanidad 3 · ambiental 2 · consumo 2.
+- **64 de los 134 `kw(1)`** tienen señal de contienda de competencia en `dictamen_head`
+  (en `penal`, 57 de 96), contra 9 de las 77 altas vigentes. **Heurística sobre el head; el cruce
+  firme es contra `outcome` de casos.csv — no hecho.**
+
+### H212-04 — Decisiones taxonómicas del operador
+
+- **`aduanero` es DUAL:** penal en lo delictivo, contencioso en todo lo que no es penal
+  (clasificación de origen, multas, decomisos → `tributario`). **El operador duda de que un
+  regex/kw pueda dividir esa frontera.** Los dos FP de `tributario` del spot-check (330_p5020,
+  333_p1812) son casos de esa dualidad.
+- **`penal_tributario` es penal Y tributario** (dual). Para contrabando ninguna etiqueta miente.
+- **`materia` clasifica EL PLEITO — no es representativa del trabajo de las secretarías** ni proxy
+  de la secretaría de radicación, que es **imposible de derivar del corpus** (el fallo publicado no
+  la registra; solo algunas se adivinan). Fuente = trabajo de campo, en producción. Ya resuelto por
+  esa vía: la **secretaría 6 agrupa salud + laboral + derechos humanos**.
+- **Se puede obtener información valiosa sobre temas y firmas sin saber por qué secretaría pasó
+  cada caso.**
+- **CANDIDATA: adoptar la taxonomía del Anuario de Estadísticas de la CSJN**, que tiene varios
+  temas que no se corresponden con las secretarías.
+
+### H212-05 — Constancia sobre el baseline H208
+
+Se adjudicó sobre `dictamen_head` (700 chars). Leídos 7 casos contra texto completo, Claude propuso
+cambiar 2 veredictos (329_p4234 Franciosi → `laboral`; 333_p1857 AIC → `laboral`). **Propuestas de
+Claude, no validadas por el operador.**
+
+### H212 — Estado final
+
+- **Sesión READ-ONLY.** parser **v38.0** · `extraer_normas` **v1.1** · `derivar_materia` **v4.1** ·
+  orquestador v1.1 — INTACTOS. Ningún output canónico tocado.
+- **Manifest [CLEAN] 65 INTACTO** (10 CSV). Sin re-golden, sin re-sello, sin flip-set.
+- **Corpus:** 5.894 casos · materia: cobertura 78,5% · sin_clasificar 1.084 (1.027 sin_ancla +
+  57 conflicto). Sin cambio.
+- **Deuda del frente:** validación del operador de los baselines H208 **PENDIENTE**. Insumo en
+  disco: `gate_kw_lectura.txt` (H212/).
+
+**Scripts creados:** `scripts/diagnostico/H212/` (scratch, gitignoreado) — `dump_gate_kw.py` v0.1 ·
+salidas `gate_kw_lectura.txt`, `gate_kw_adjudicacion.csv` (sin adjudicar).
+
+**Baselines movidos a `scripts/diagnostico/H208/`:** `sin_ancla_muestra_adjudicada.csv`
+(sha12 `590c5a7d11c4`), `dictamen_spotcheck_adjudicado.csv` (35/35).
+
+**Commits:** 1 — documentación H212 (DEUDA editada + BITACORA append). Sin cambios de pipeline.
