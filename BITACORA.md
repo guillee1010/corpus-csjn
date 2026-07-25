@@ -20651,3 +20651,84 @@ salidas `gate_kw_lectura.txt`, `gate_kw_adjudicacion.csv` (sin adjudicar).
 (sha12 `590c5a7d11c4`), `dictamen_spotcheck_adjudicado.csv` (35/35).
 
 **Commits:** 1 — documentación H212 (DEUDA editada + BITACORA append). Sin cambios de pipeline.
+
+
+## H214 — Frente CIRCULACIÓN (sistema de gestión) + B172 diagnosticada: el fallback de carátula sin guards (2026-07-25)
+
+**Objetivo:** abrir el frente de circulación entre vocalías sobre el sistema de gestión (post-feria), y resolver por qué `case_name_cuerpo` no servía como clave de búsqueda para el crosswalk caso→expediente.
+
+**Sesión de DIAGNÓSTICO. Pipeline INTOCADO:** 0 scripts de la cadena, 0 `__version__`, 0 outputs canónicos. Parser v38.0 sin cambio. Manifest **[CLEAN] 65 vigente sin re-sello** — Paso 2 del cierre N/A, candado blind N/A. Único artefacto del repo tocado: `DEUDA_TECNICA.md`.
+
+---
+
+### H214-01 — Frente circulación: qué registra el sistema y qué no
+
+El sistema de gestión registra **la circulación entre vocalías**, no sólo la secretaría de radicación. Consecuencia de diseño: la secretaría de un caso es una **trayectoria**, no un valor único — el campo `secretaria_radicacion` de `muestreo_secretaria_H213.csv` se rompió en 3 de las 5 filas cargadas («1 Y 5», «1 Y 3», «3 Y 7») antes de llegar a la circulación.
+
+**Testigo `CSJ 159/2012` (Schiffrin, Fallos 340:257, id de expediente 23471822).** Rastro completo parseado: 67 registros leídos / **66 únicos** (el pegado repite en los cortes de página). 15 pases a vocalía y 17 retornos a secretaría en **1841 días**. Reasignación de secretaría documentada: 13/03/2012 Mesa de Entradas → **Secretaría 1**; 14/03 devuelto; 15/03 **Oficina de Adjudicación y Circulación de Causas** → **Secretaría 5**. Secuencia de vocalías `1 > 9 > 2 > 1 > 9 > 6 > Argibay > 2 > 2 > 1 > 3 > 9 > 4 > 4 > 9`. **Circulación radial: 13 de 15 pases a vocalía precedidos por retorno a la Secretaría 5; 0 pases directos vocalía→vocalía confirmados; 2 adyacencias sin establecer** (el retorno está fechado el mismo día que el despacho siguiente). Es evidencia documental, independiente del testimonio, de la circulación radial descripta por el informante X-007.
+
+**Límites del registro, medidos:** `RECEPCION PASE` = 0 registros en 2012-2014 y 14 en 2016-2017 (la métrica envío→recepción NO es comparable a lo largo de la serie) · 51 de 67 eventos caen en días con más de un evento (**la fecha sola no ordena**).
+
+**`CSJ 903/2004` (Bussi, Fallos 330:3160) — causa plenamente sustantiva (recusación de Highton desestimada, pedidos de pronto despacho, sentencia 13/07/2007, aclaratoria) con CERO pases a vocalía:** sólo Secretaría 5, Mesa de Compaginación, Ujiería y PGN. **Refuta la hipótesis «sólo circulan las causas de fondo» y sostiene la de PISO TEMPORAL DEL REGISTRO.** Ventana acotada: entre **agosto de 2007** (última actuación de Bussi) y **marzo de 2012** (primer pase a vocalía de Schiffrin). `CSJ 1196/2006` (Panunzio) no acota la ventana: desestimada en abril de 2010, después sólo movimientos de archivo. **El piso es del REGISTRO, no de la PRÁCTICA** — ausencia de evidencia sobre el asiento, no evidencia de ausencia de circulación; va declarado así en la tesis. Bussi repite además el patrón de adjudicación de Schiffrin ocho años antes: 18/05/2004, todo el mismo día, Mesa de Entradas → Secretaría 1 → Oficina de Adjudicación → Secretaría 5 (segunda observación del mecanismo).
+
+**Estructura del identificador de expediente, resuelta.** El id de la URL **no se descompone**: es clave sustituta, secuencial de base de datos, asignada al ingresar el registro al sistema. Evidencia: 23471821 = `CSJ 409/1993(24-D)` · 23471822 = `CSJ 159/2012(48-S)` · 23471823 = `CSJ 1196/2006(42-P)` — tres ids CONTIGUOS para causas separadas por 19 años (lote de migración), contra 41049977 = `CNT 7097/2026` (nativa de 2026). Sondeo por bandas: 25.000.000 → `CSS 521360/1996` · 30.000.000 → `CAF 37459/2017` · 35.000.000 → sin acceso/inexistente. El id es global a todo el PJN; el fuero lo identifica el prefijo de tres letras del NÚMERO de expediente, no el id.
+
+**Identificador clásico decodificado:** `B. 903. XL.` = `CSJ 903/2004(40-B)`. NÚMERO→número, LETRA→letra, ROMANO→el «tomo» de `(NN-L)`, con **año = tomo + 1964** verificado en tres pares (XL=40→2004, XLII=42→2006, XLVIII=48→2012). **Excepción:** `CSJ 409/1993(24-D)` da offset 1969 — la serie de tomos no fue de uno por año en el período viejo; regla utilizable con confianza para tomos ≥40. **No sirve como atajo del crosswalk:** en el texto de los fallos esos identificadores son PREDOMINANTEMENTE citas a otros casos; la desambiguación es POSICIONAL (encabezado vs. considerandos), o sea trabajo de la capa `zonas` (M57).
+
+**Conteo del docket por barrido de ids: DESCARTADO, con dos límites.** (1) El mensaje de error une «no puede acceder» y «no existe» en una sola frase → un id vacío es indistinguible de uno restringido. (2) Los expedientes creados DESPUÉS de la migración no caen en la banda sino mezclados en la secuencia corriente → la banda sólo captura el backlog premigración, y buena parte del corpus quedaría afuera.
+
+---
+
+### H214-02 — B172: `find_case_name` sin guards de forma (diagnóstico, fix no implementado)
+
+**Detectada** al intentar usar `case_name_cuerpo` como clave de búsqueda del crosswalk.
+
+**Causa raíz leída en código (parser v38.0).** L4105: `case_name_cuerpo = case_name_cuerpo_v1 or case_name_cuerpo_legacy`. La primaria `extraer_caratula_v1` (L313) busca `^Vistos los autos: "X"` HACIA ADELANTE desde `apertura_rel`; cuando el fallo abre con otra fórmula —típicamente `Autos y Vistos:` de las resoluciones de competencia— devuelve `""` y cae a `find_case_name` (L1012), que escanea **HACIA ATRÁS** desde la apertura, o sea hacia adentro del dictamen, y devuelve la PRIMERA línea que contenga `c/` (max_back=15) o `c/`|`s/` (max_back_fallback=60), **sin ningún guard de forma**.
+
+**Medición por rama sobre las 5894 filas** (la rama es identificable porque `cuerpo == legacy` ⇔ V1 devolvió vacío): **V1 3795 (64,4%) con 9 señales de daño (0,24%) · fallback `find_case_name` 1171 (19,9%) con 423 (36,1%) · vacío 928 (15,7%)**. Señales (PISO, no estimación): arranca en minúscula 366 · arranca con `s/` 60 · arranca con número 40 · identificador clásico 27 · romano inicial 23 · «sentencia del N» 20. El «~67%» estimado en B008 se corrobora: 64,4%.
+
+**Testigo `339_p1373`:** carátula real `Riv S.A. y Otro s/ Infracción ley 24.144` (correcta en `case_name_indice`), pero `case_name_cuerpo` = `1075, L. XLV, "Da Silva, Jorge s/ presunta infracción al régimen penal",` — una `Comp.` CITADA en la sección III del dictamen, devuelta verbatim con la coma final. Otros: `330_p2799` (trae «Vistos los autos: "López, José Florencio c/ ANSeS…"», que es OTRO caso) · `340_p1660` (trae la cita `CSJ 00602/2016/CS1, "Pino…"`) · `329_p4418` · `339_p1388`.
+
+**Constancia — el 72,9% de discrepancia índice-vs-cuerpo NO es tasa de error.** Revisadas 18 discrepancias al azar: la gran mayoría son legítimas (el índice usa forma invertida/abreviada, el cuerpo trae los autos completos). No contar esa cifra como daño.
+
+**Propagación medida.** `case_name_cuerpo` alimenta SÓLO `classify_queja(por_ello_text, case_name_cuerpo)` (L4179) y `es_originaria(case_name_cuerpo, …)` (L4243, con ripple a `is_merit` por la rama originaria del gate). **Ninguna variable de votación lo consume** (`voting_pattern`, `n_jueces`, `n_disidencias`, `n_votos_svoto`, `jueces`, `posiciones`, `outcome` vienen de otros extractores). **Hallazgo de cobertura, más grave que el ruido:** el ancla `RE_CARAT_QUEJA` aparece en el **54,0%** de las filas de V1 y en el **0,0%** de las otras tres ramas — no es «menos», es NUNCA: `find_case_name` devuelve una línea suelta y la fórmula ritual no sobrevive. En el 35,6% del corpus donde V1 no dispara, la capa carátula de `es_queja` (los +225 flips de H108) no puede contribuir. Punto ciego con forma: cualquier cruce de `es_queja` contra otra variable mostrará una correlación del detector.
+
+**Nota de alcance — la rama dañada NO es muestra aleatoria.** V1 dispara sobre la fórmula de las sentencias de fondo; las resoluciones cortas de competencia abren `Autos y Vistos:`. Medido: `is_merit_decision` **74,7% en V1** vs **6,7% en fallback** y **6,6% en vacío**. El daño está concentrado en una población que además es de otra naturaleza → **el subcorpus de MÉRITO, que sostiene el análisis de configuraciones de voto, es el limpio**. Va al CODEBOOK partido por rama, NO como tasa global.
+
+**Fix DISEÑADO, no implementado.** El discriminador ya existe en el proyecto: `_es_caratula_v2` (L2458) y `linea_es_firma_de_juez` se construyeron en H200/D1 para EXACTAMENTE esta clase de falso-match-hacia-atrás en `refinar_inicio_por_titulo`, y `find_case_name` nunca los recibió. Aplicar el mismo guard con **fallback al comportamiento actual** (patrón D2/H201; en D1 el rechazo duro mató 46 pistas). Costo conocido del guard de firma: la carátula legítima del juez-PARTE (`329_p1303`, Boggiano) → B165/D4.
+
+---
+
+### H214-03 — Correcciones de constancia
+
+1. **B008 remitía a la entrada equivocada.** Decía «El 33% restante cae al fallback de `find_case_name` (viejo comportamiento, sigue con bug — **ver B011**)», pero **B011 es el bug catalográfico de `344_p344`**, sin ninguna relación. Por eso el bug del fallback nunca tuvo ticket propio ni magnitud. Puntero corregido a **B172** en DEUDA, con constancia del error.
+2. **BITACORA L1622-1624** concluye, analizando `330_p829`, que «como Fix 1 prima V1 sobre `find_case_name`, **el daño no llega al CSV**». Vale SÓLO cuando V1 dispara; en los 1171 casos donde no dispara, el daño llega al CSV (423 filas). Observación de un caso generalizada a la población equivocada.
+3. **B106 pasa de `confirmado_caso_testigo` a `confirmado_cuantificado`:** la incidencia que pedía su validador está medida — **928 filas (15,7%)**. Pendiente acotado: separar cuántas traen efectivamente «Vistos los autos» en el bloque, porque el campo también queda vacío con `apertura_rel is None` (L4106-4108), que no es ese bug → las 928 son COTA SUPERIOR de B106.
+4. **Constancia de numeración:** H213 quedó abierta y sin cerrar (frentes A/B/E del 19-jul); esta sesión se numera H214 y no la absorbe. Si se decide renumerar, las tres menciones a H214 en DEUDA (cabecera, B172, B106) se mueven con ella.
+5. **`diagnostico_caratula.py` v0.1 se escribió bajo una premisa retractada** (un supuesto daño ~20% medido sobre la columna equivocada de `muestra.xlsx`, que había tomado `case_name_cuerpo` en vez de la carátula). Sirve como screen genérico de señales sobre un campo de texto; su motivación original no.
+
+---
+
+### H214 — Estado final
+
+- **Outputs canónicos: SIN CAMBIO.** No se corrió la cadena. Manifest **[CLEAN] 65** vigente, sin re-sello (la sesión no tocó outputs ni `__version__` — invariante de procedencia satisfecho por no-cambio).
+- **`output/parser/csjn_casos.csv` — 5894 filas, 39 columnas** (verificado en disco esta sesión).
+- Conteos de `votos` / `zonas` / `editorial` **no re-medidos** en esta sesión: sin cambio respecto del sello vigente.
+- **Parser: v38.0, sin cambio.**
+
+**Documentos actualizados:** `DEUDA_TECNICA.md` — cabecera (Última actualización H214) · **B172 nueva** · **B008** puntero corregido · **B106** a `confirmado_cuantificado` con magnitud.
+
+**Scripts creados (frente circulación, fuera del pipeline):**
+- `parsear_actuaciones_scw.py` v1.0 — lee los outerHTML guardados del listado de actuaciones, identifica el expediente por la cabecera (no por nombre de archivo), deduplica por `actuacion_id` y emite `actuaciones.csv` / `expedientes.csv` / `oficinas.csv`. Aprovecha que el `aria-label` de cada fila trae la marca temporal COMPLETA con segundos (resuelve el orden intradiario) y el nombre expandido del código de oficina (la tabla de códigos se arma desde los datos). Semántica verificada contra el `aria-label`: en un PASE, **Oficina = ORIGEN, Descripción = DESTINO**.
+- `parsear_circulacion.py` v0.1 — versión previa, sobre el listado pegado como texto plano. Superada por la anterior.
+- `diagnostico_caratula.py` v0.1 — screen de señales sobre un campo de texto de `casos.csv` (motivación original retractada, ver H214-03).
+- `muestreo_H213_v2.xlsx` — rediseño de la planilla a dos granos (caso × evento). Superado por `parsear_actuaciones_scw.py`.
+
+**Commits:** 1 — DEUDA_TECNICA (B172 nueva + puntero de B008 + B106 cuantificado + cabecera) y BITACORA. Los scripts del frente circulación se commitean aparte cuando se decida su ubicación en el schema (`scripts/diagnostico/H214/` es el candidato).
+
+**Pendientes abiertos por esta sesión:**
+- **B172** — PoC + fix (unidad propia, MAJOR: mueve `case_name_cuerpo` → `es_queja`, `is_originaria`, `is_merit`, `derivar_partes`; exige flip-set sellado, adjudicación y candado blind).
+- **B106** — separar los `apertura_rel is None` de las 928 para fijar su cardinalidad real.
+- **Piso temporal de las vocalías** — acotar la ventana ago-2007 / mar-2012 con un caso del corpus fallado en 2011 (candidato: `334_p474`, Pontoni, 17/05/2011).
+- **Sumarios de la CSJN** — único candidato a atajo del crosswalk (¿permiten buscar por tomo y página? ¿traen el número de expediente?). Sitio en mantenimiento al 25-jul.
+- **Rehacer la muestra del crosswalk tomando `case_name_indice`** (0% vacías) en vez de `case_name_cuerpo`.
