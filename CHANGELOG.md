@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H217 (2026-07-26)
+
+- parser.py: v39.0 -> v41.0 (dos MAJOR). v40.0: dedup por NOMBRE en parse_firma (B168; flags desde lista final). v41.0: peek de wrap en headers de voto/disidencia (B168-E; helper _hdr_tipo_wrap en colector, detectar_votos y zonificador; residual 329_p5741 documentado).
+- output/parser/csjn_casos.csv: 5894 filas; flips {329_p2063} (n_jueces 4->2, n_titulares, jueces) + {20 clase E} (n_disidencias +1; wc_mayoria/wc_votos en 11).
+- output/parser/csjn_casos_votos.csv: 27.902 -> 27.900 (-2 filas dup de 2063); texto_voto re-particionado en los 20 (disidencias recuperadas).
+- output/parser/csjn_casos_zonas.csv: 138.036 -> 138.048 (+12, splits voto_separado en los 20).
+- output/parser/csjn_casos_normas.csv: 13.926 pares; ripple adjudicado 8 casos = {2063} + 7 de los 20.
+- csjn_casos_textos.csv y csjn_casos_editorial.csv: byte-idénticos (blind por construcción).
+- DEUDA_TECNICA.md: B173 nueva (329_p2063 mal localizado — bloque = cola de Rusillo/329_p2062; parking); B168 cerrado salvo 5741.
+
 ## H216 (2026-07-26)
 
 - `parser.py` v38.0→v39.0 (MAJOR): RE_VOTO_HDR/RE_DISID_HDR ensanchadas (orden verbal-primero, «Voto Concurrente», femenino Vicepresidenta/Presidenta, OCR «de el», «Ampliación de Fundamentos» lado voto; clase E wrap fuera por diseño) + RE_CALIFICADOR_FIRMA local + rama calificador ampliación→«según su voto» en parse_firma. 40 casos + 1 costo aceptado (343_p1457, testigo B166(d)).

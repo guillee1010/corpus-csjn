@@ -18900,11 +18900,11 @@ Hallazgo en dos capas, cada una revelada por un PoC en disco que NO falló como 
 - **PoC v1.1 en disco: [CLEAN] espurio** → segunda capa: el `.gitignore` oculta la zona A PROPÓSITO (L42 `scripts/diagnostico/*` + `!README.md`; L50/53 `/diagnostico/` duplicada). Política deliberada del repo público: el scratch de diagnóstico no se publica (`git ls-files scripts/diagnostico` = solo H109 + README). `--exclude-standard` respeta esa política → los ignorados eran invisibles también para v1.1.
 - **v1.2 (diseño final):** `_fs_toplevel()` — escaneo del PRIMER NIVEL del working tree en disco (raíz real vía `git rev-parse --show-toplevel`), independiente del estado git, marcado «(en disco, ignorado o no)». Deliberadamente NO camina el árbol: el scratch en `scripts/diagnostico/HXX/` sigue legítimo, ignorado y sin flagear (política intacta). Dedupe contra la vía git. Validado primero en sandbox (repo sintético replicando el `.gitignore` real, 5 escenarios) y luego EN DISCO: fixture `diagnostico/PoC/test.md` → [FAIL] en `--all` y en staged; borrado → desaparece.
 
-**Efecto colateral valioso:** el gate destapó 4 residentes fuera de schema antes invisibles. Triage (decisiones de Guillermo): `.env` → allowlist [SECRETS]; `.tmp.driveupload/` → allowlist [SYNC — el repo vive en carpeta sincronizada con Google Drive]; `muestra_zona_epilogo.csv` (scratch H155, cf. `.gitignore` L55) → BORRADO (regenerable); `docs/` (PIPELINE.md 126.838 bytes pre-deprecación + analisis_forense_pipeline.md 254kB + GRAMATICA_DEL_FALLO + changelog_parser + BITACORA_2026-05-01 + log + figuras H025) → **[COMPLETAR: resolución]**.
+**Efecto colateral valioso:** el gate destapó 4 residentes fuera de schema antes invisibles. Triage (decisiones de Guillermo): `.env` → allowlist [SECRETS]; `.tmp.driveupload/` → allowlist [SYNC — el repo vive en carpeta sincronizada con Google Drive]; `muestra_zona_epilogo.csv` (scratch H155, cf. `.gitignore` L55) → BORRADO (regenerable); `docs/` (PIPELINE.md 126.838 bytes pre-deprecación + analisis_forense_pipeline.md 254kB + GRAMATICA_DEL_FALLO + changelog_parser + BITACORA_2026-05-01 + log + figuras H025) → **[medido retroactivamente H217: RESUELTO POR ELIMINACIÓN — `docs/` no existe en disco (`Test-Path` False) y el gate no lo flagea; la resolución ocurrió en algún punto entre H173 y H217 SIN constancia en BITACORA — tercer cierre retroactivo del proyecto (H210, H215, H217), refuerza M63]**.
 
 ### H173-02 — Estado del gate al cierre
 
-**[COMPLETAR]:** salida final de `python scripts\tests\check_allowlist_paths.py --all` tras el triage (esperado [CLEAN] si docs/ se resolvió; si no, [FAIL] con docs/ como único ítem).
+**[medido retroactivamente H217]** — el comando nunca se corrió al cierre de H173. Corrido en H217: `[FAIL] 2 path(s)`, AMBOS post-H173 (el triage original quedó efectivamente completo una vez resuelto docs/): `.tmp.drivedownload/` (hermano del `.tmp.driveupload/` ya allowlisteado [SYNC] — candidato obvio a mismo tratamiento) y `DELTA_CODEBOOK_H211.md` en raíz (el delta M58 que espera M43 — reubicar al schema, no borrar). Triage de ambos: PENDIENTE, encolado en M41.
 
 Pendientes menores registrados en M41: línea en los skills apertura/cierre (texto propuesto entregado, pega Guillermo); dedup o eliminación de `/diagnostico/` en `.gitignore` (L50/53 — el gate ya cubre); decisión sobre publicar `extraer_caso.py` (herramienta canónica citada en CODEBOOK, hoy no publicada por L42).
 
@@ -19891,10 +19891,47 @@ Parser v38.0→**v39.0** (MAJOR): RE_VOTO_HDR/RE_DISID_HDR ensanchadas a A/B/C/D
 **Outputs canónicos:**
 - `output/parser/csjn_casos.csv` — 5894 filas (flips ⊆ 42).
 - `output/parser/csjn_casos_votos.csv` — 27.902 filas.
-- `output/parser/csjn_casos_zonas.csv` — [COMPLETAR: filas de la corrida] (flips ⊆ 42).
+- `output/parser/csjn_casos_zonas.csv` — 138.036 segmentos (flips ⊆ 42).
 - `output/parser/csjn_casos_editorial.csv` — byte-idéntico.
 
 **Scripts creados:** `scripts/diagnostico/H216/` — superficie_b168.py v0.3 · b168_universo_sellado.csv · poc_b168_vocab.py v0.1 · poc_b168_vocab_baseline.csv · poc_b168_vocab_post{.csv,_log.txt} · m55_pool_post_h216.csv · adjudicar_h216.py (no usado, disponible) · extractos ×4 (345_p869, 340_p1236, 347_p1495, 343_p1457).
 
 **Commits:** 2 (1 = pipeline completo: parser v39.0 + tabla Antelo + outputs + golden + manifest + clave; 2 = documentación del cierre: DEUDA + BITACORA + CHANGELOG).
+
+## H217 — B168: dedup por nombre + peek de wrap clase E; destape B173 (2026-07-26)
+
+**Objetivo:** cerrar los dos residuales de B168 dejados por H216 (dedup 2063; clase E wrap-truncado 21), con superficie previa y ciclo completo por unidad.
+
+### H217-01 — U2: dedup por nombre en parse_firma (parser v40.0)
+
+Superficie post-v39 con dos instrumentos independientes sobre canónicos: único dup restante = 329_p2063 (columna `jueces` 1 caso; pares (caso, juez) duplicados en votos 2) — los 12 clase A absorbidos por el vocabulario H216, aritmética confirmada. Diseño leído en código antes de tocar: dedup DESPUÉS del loop de calificadores (dedup temprano extendería la ventana del juez anterior y robaría el calificador del duplicado), `has_voto`/`has_disid` recomputados desde la lista final, `panel_cprima` ya dedupeaba → c′ invariante. PoC `poc_b168_dedup.py` v0.1: E0 5894/5894 · E0'' réplica==real · VP 0 flips corpus-wide · flip-set {2063} EXACTO (nj 4→2, n_titulares 4→2, posiciones sin cambio). Ciclo con FRENO reparado: el regolden se corrió ANTES del consciente (bloque de comandos del asistente sin el paso bloqueante — familia H191); el candado anti-H178-2 ABORTÓ con «producción stale» y se reparó fix-forward. Diff adjudicado contra git: 1 fila casos / −2 filas votos (27.902→27.900). Blind PASS (clave n300 ausente). Gate M55: pool 29→30, alta única {2063} demostrada por Compare-Object contra el baseline H216.
+
+### H217-02 — B173: 329_p2063 mal localizado (destape del gate, parking)
+
+La alta M55 (nj=2, jurídicamente imposible) llevó a leer el corpus real: el bloque publicado [26309-26323] es íntegramente la cola de 329_p2062 (Rusillo) — su disidencia Fayt–Zaffaroni impresa en p. 2063 (header wrapeado) más su epílogo. La carátula real de Rojas vive en L26325-26 (actor-primero, conector wrapeado a línea 2; índice también wrapeado «…(Ro-»); `ancla_catalogo` con recorte 0 = todos los tiers de refinar fallaron. El caso genuino (desestima presentación postal de queja, 30-may-2006, firma de 5, unánime) no lo posee ningún bloque — familia B012/B045/B152. Constancia mayor: el dedup cierra el CONTEO, no el caso — y el caso resultó no ser el caso. PARKING por protocolo; entrada B173 con validador (verificar gap-o-bleed contra el sucesor).
+
+### H217-03 — U1: peek de wrap clase E (parser v41.0)
+
+Superficie `superficie_b168e.py` v0.1: pool truncado corpus-wide 26 = 21 E sellados + 5 FP («VOTO» pelado de índice/voces de sumario); discriminador = JOIN contra las regex reales → los 5 FP no joinean = 0 FP por construcción; 2.889 headers completos intactos; join 20/21. Residual sancionado: 329_p5741 (sub-clase E+vocab; ensanche a «Doctor» muerto con dato — 16 citas narrativas line-initial del grep del operador, y la zona no las saca: Pasada 1 pre-zonas + cuerpo no excluido en detectar_votos). Lectura Gate 2: el offset-loop de detectar_votos ya extiende headers multi-línea → fix mínimo = helper `_hdr_tipo_wrap` en los 3 call-sites (cola k+1, espejo H207). PoC `poc_b168e_peek.py` v0.3 (brazos A/B = código real vs código real parcheado en memoria, harness espejo de main): E0 5894/5894 en 39 columnas · flip-set 20 = 20/20 ⊆ E20 · riesgo 1457 VACÍO con dato (0 flips de decisión) · nd +1 los 20 (Δ+20) · wc_mayoria/wc_votos solo 11 (ivi None→k: la disidencia se contaba como mayoría) · votos ±0 filas · textos byte-idéntico → blind por construcción. Constancia de método: dos iteraciones del PoC quemadas por schema inventado (`source_file`; clave de headers) — Gate 1 del asistente, reparado leyendo main() completo + verificación de headers CSV en disco. Ciclo: diff adjudicado fila a fila + conjunto completo por git (casos 20/0 fuera · votos ⊆20/0 · zonas ⊆20/0, +12 filas por splits voto_separado) → regolden [CLEAN] → M55 pool 30 sin movimiento → post-fix «parche no aplica → convergencia declarada». Ripple normas adjudicado al final (acumulaba las dos unidades): 8 casos = 2063 ∪ 7 de los 20, 0 fuera — cerró la hipótesis pendiente de U2.
+
+### H217 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumario_con_link).
+- **Voting patterns:** unanime 3519 · disidencia 1117 · segun_su_voto 755 · mixed 304 · sin_firma 8.
+- **Votos:** 27.900 filas (−2 vs H216).
+- **Parser:** v39.0 → v40.0 (U2) → v41.0 (U1).
+- **M55:** pool 30 (3 nj=1 + 27 nj=2); trayectoria 48→46→45→29→30 con las dos altas adjudicadas (270 H205, 2063 H217→B173).
+
+**Outputs canónicos (sha del sello v41):**
+- `output/parser/csjn_casos.csv` — 5894 filas · d22dd411f633.
+- `output/parser/csjn_casos_textos.csv` — 5894 filas · f2dcf8fa46f3 (byte-idéntico desde v40).
+- `output/parser/csjn_casos_votos.csv` — 27.900 filas · 5df40a20cfd5.
+- `output/parser/csjn_casos_zonas.csv` —
+
+
+
+
+
+
+
 
