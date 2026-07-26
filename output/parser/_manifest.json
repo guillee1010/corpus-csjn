@@ -1,16 +1,16 @@
 {
   "schema_version": 4,
   "manifest_generator_version": "1.9",
-  "generated_at": "2026-07-15T21:10:58.248628+00:00",
+  "generated_at": "2026-07-26T07:25:22.405021+00:00",
   "git": {
-    "commit": "15e415fb545144f6d773b77098a4f8fd28fa3478",
+    "commit": "f829b5fbc212ea91fea1a09e81859b2112e426af",
     "dirty": true
   },
   "pipeline_scripts": {
     "detectar_paginas.py": "1.01",
     "construir_catalogo.py": "1.04",
     "cruzar_catalogo_y_mapa.py": "1.0",
-    "parser.py": "38.0",
+    "parser.py": "39.0",
     "parser_editorial.py": "1.0",
     "derivar_materia.py": "4.1",
     "derivar_recursos.py": "0.6",
@@ -332,39 +332,39 @@
     "csjn_casos.csv": {
       "path": "output/parser/csjn_casos.csv",
       "generated_by": "parser.py",
-      "generator_version": "38.0",
-      "sha256": "19028de5412dcb397edb9a89eb4c088a5c8345166b8ab08cbaf1765ceab48226",
+      "generator_version": "39.0",
+      "sha256": "b4963e91a733e465217c3a2a8cd6bd4c7445467d897d3ef46e7f75845f0c61bd",
       "n_rows": 5894,
-      "n_bytes": 4336887
+      "n_bytes": 4335926
     },
     "csjn_casos_textos.csv": {
       "path": "output/parser/csjn_casos_textos.csv",
       "generated_by": "parser.py",
-      "generator_version": "38.0",
-      "sha256": "35dbbdda2ca847f3bfcb3092abe1a5bee34d7809a428414157146ef5e3fedc7e",
+      "generator_version": "39.0",
+      "sha256": "f2dcf8fa46f3a8486c038162d774e2afb55b4f3562e814cf6eb8d7ba181ac3f5",
       "n_rows": 5894,
-      "n_bytes": 65421697
+      "n_bytes": 65291015
     },
     "csjn_casos_votos.csv": {
       "path": "output/parser/csjn_casos_votos.csv",
       "generated_by": "parser.py",
-      "generator_version": "38.0",
-      "sha256": "b64f241085fe6793efe6fa7a28d676640146dae1e2e72fb8eba611793d915dec",
-      "n_rows": 27916,
-      "n_bytes": 10808892
+      "generator_version": "39.0",
+      "sha256": "134e35f1900ffb254381e84db99f8d3372f0f6cdcbe39b855471d9ad5b18fde5",
+      "n_rows": 27902,
+      "n_bytes": 10941646
     },
     "csjn_casos_zonas.csv": {
       "path": "output/parser/csjn_casos_zonas.csv",
       "generated_by": "parser.py",
-      "generator_version": "38.0",
-      "sha256": "0fd3c38237e368cb1643842cdb904bc39071f8887fc2b9a378a42afab313a6a9",
-      "n_rows": 137990,
-      "n_bytes": 5437440
+      "generator_version": "39.0",
+      "sha256": "98c85a5aef02e6e72dbd3ebed2095cb96c149475d15215145465e5f6b9697f64",
+      "n_rows": 138036,
+      "n_bytes": 5439360
     },
     "csjn_casos_editorial.csv": {
       "path": "output/parser/csjn_casos_editorial.csv",
       "generated_by": "parser.py",
-      "generator_version": "38.0",
+      "generator_version": "39.0",
       "sha256": "30a6da652e3a9d2a0030192cd32a8f3f00dde8fcf57abb2cc5bffbda8e56ab8b",
       "n_rows": 152,
       "n_bytes": 8552
@@ -381,17 +381,17 @@
       "path": "output/parser/csjn_casos_recursos.csv",
       "generated_by": "derivar_recursos.py",
       "generator_version": "0.6",
-      "sha256": "433006ff0f68afd9095d400b8005dc2d8b1a59eacd7c99c9cd506e42c76de7ec",
+      "sha256": "da8b8e3771f3903e6663114a7705a035f8097e8ed37e02de05f672a4b0397dbc",
       "n_rows": 5894,
-      "n_bytes": 445736
+      "n_bytes": 445738
     },
     "csjn_casos_epilogo.csv": {
       "path": "output/parser/csjn_casos_epilogo.csv",
       "generated_by": "extraer_epilogos.py",
       "generator_version": "0.4",
-      "sha256": "71313126d768cf698a3911477a44875ca0c20c0cded9d74cb52a0bce390e8cb0",
+      "sha256": "c0e58fe41be3ddec04335b4092297a1d56fc9d4ee4c18ef2f352f78fec2d46fa",
       "n_rows": 5703,
-      "n_bytes": 2104537
+      "n_bytes": 2104512
     },
     "csjn_casos_partes.csv": {
       "path": "output/parser/csjn_casos_partes.csv",
@@ -405,9 +405,9 @@
       "path": "output/parser/csjn_casos_normas.csv",
       "generated_by": "extraer_normas.py",
       "generator_version": "1.1",
-      "sha256": "a046095d327e38a07a91a610d7c75551363f74aefd7bec74c61cec22c6deb783",
-      "n_rows": 13902,
-      "n_bytes": 439709
+      "sha256": "d6fb0f3eb73a3d113796e5996057bef469808ac7e18bc920cb3d47d0eba62b96",
+      "n_rows": 13918,
+      "n_bytes": 440093
     }
   }
 }
