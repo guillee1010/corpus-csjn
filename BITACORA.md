@@ -20652,6 +20652,80 @@ salidas `gate_kw_lectura.txt`, `gate_kw_adjudicacion.csv` (sin adjudicar).
 
 **Commits:** 1 — documentación H212 (DEUDA editada + BITACORA append). Sin cambios de pipeline.
 
+## H213 — Frentes A / B / E: taxonomía Anuario, censo de secretarías y Digesto (CIERRE RETROACTIVO, escrito en H215) (2026-07-19)
+
+**Nota de cierre:** esta entrada se escribe el 26-jul (H215) sobre una sesión del 19-jul que quedó abierta y que H214 explícitamente NO absorbió. Los datos vienen de reconstrucción del transcript, no de disco: **todo número marcado `[VERIFICAR]` debe confirmarse antes de usarse aguas abajo.** Segunda vez que el proyecto cierra una sesión retroactivamente (la primera fue H209, cerrada en H210).
+
+**Objetivo de la sesión:** resolver el marco taxonómico del frente materia (Frente A) y explorar el Digesto Jurídico Argentino como prior externo (Frente E).
+
+**Sesión READ-ONLY. Pipeline INTOCADO:** 0 scripts de la cadena, 0 `__version__`, 0 outputs canónicos. Parser v38.0 · `derivar_materia` v4.1 · manifest [CLEAN] 65, todos sin cambio.
+
+---
+
+### H213-01 — Frente A: la taxonomía del Anuario se MAPEA, no se adopta
+
+Insumos leídos: `anuario_csjn_por_secretaria.csv`, `anuario_csjn_por_materia.csv`, `anuario_csjn_admitidos_por_materia.csv` (extraídos en H083) contra el vocabulario vigente en `_meta/vocab_materia/`. Comparados los dos ejes del Anuario (secretaría y materia) con la taxonomía interna.
+
+**Decisión del operador, sellada: MAPEAR — ni adoptar la taxonomía del Anuario ni ignorarla.** La taxonomía interna queda como capa operativa; se define un mapeo **sobreyectivo** interna→Anuario como capa de reporte. El valor es comparabilidad de vocabulario con la estadística oficial.
+
+Estado del mapeo: `[VERIFICAR]` 8 de 10 categorías de materia mapean 1:1 con el vocab vigente. La fusión **«Tributaria-Aduanera-Bancaria»** del Anuario absorbe el problema de doble clasificación de `aduanero` documentado en H212. **Cuatro categorías sin resolver:** `lesa_humanidad`, `constitucional`, `electoral`, duales penales.
+
+**`anuario_mapeo.csv` NO se formalizó.** Ese es el pendiente vivo del frente → **M64 nueva** (creada en H215 para que el cierre no lo pierda).
+
+Límite metodológico ya sellado en H212 y reconfirmado acá: el Anuario y el corpus **no son la misma población** (la oficina de estadística trata todas las causas; el corpus solo las publicadas) y el Anuario cubre solo 2024/5, mientras que el propósito del frente materia es extender la estadística hacia atrás. Sirve por vocabulario, nunca como contraste de distribuciones.
+
+### H213-02 — El censo de secretarías: generado, congelado, y después reencuadrado
+
+Para resolver las cuatro categorías pendientes se generó `muestreo_secretaria_H213.csv` (`[VERIFICAR]` 82 filas, incluidos los 7 casos gate-kw de H212), a completar consultando la secretaría de radicación en el sistema de gestión. El sistema estaba caído por feria, así que el trabajo quedó congelado.
+
+**Observación del operador que cambió el encuadre:** `electoral` tramitaba históricamente por la **Secretaría Especial N°5**, que ya no existe; Schiffrin y los casos de colegios también pasaron por ahí. Como las competencias de las secretarías se reorganizaron, mapear radicación histórica al eje actual del Anuario **puede no ser metodológicamente válido**. Registrado como límite del método.
+
+**Consecuencia:** el valor primario del censo se reencuadró — pasa de insumo del mapeo a **material de tesis** (diseño institucional, adjudicación discrecional del docket). Las entrevistas que documentan el funcionamiento de la Especial 5 quedan como material futuro de la tesis, no como necesidad del frente corpus.
+
+*Constancia posterior:* H214 confirmó el reencuadre por otra vía y lo profundizó — la secretaría de un caso es una **trayectoria** de pases, no un valor único, y el campo `secretaria_radicacion` del censo se rompió en 3 de las 5 filas que llegaron a cargarse («1 Y 5», «1 Y 3», «3 Y 7»). El schema del censo quedó superado por el rediseño a dos granos de H214 y por `parsear_actuaciones_scw.py`.
+
+### H213-03 — Frente B: los 7 casos gate-kw NO se adjudicaron
+
+Se difirió esperando que volviera el sistema de gestión, porque el operador señaló la secretaría de radicación como vía de resolución de los casos ambiguos (en particular los dos FP de `aduanero`). Post-feria el sistema volvió, pero el frente no se retomó: H214 y H215 fueron a circulación y a B172.
+
+**Sigue sin adjudicar.** El insumo está listo desde H212 (`gate_kw_lectura.txt` + `gate_kw_adjudicacion.csv` sin adjudicar). Con esta sesión, la validación del operador de los baselines H208 acumula **cinco sesiones diferida** (H209, H211, H212, H213, H215).
+
+**Tensión que se documenta en vez de zanjarse:** en H212 el operador rechazó usar la secretaría de radicación como criterio de verdad para adjudicar materia, por circularidad metodológica; en H213 la señaló como la vía correcta para los casos ambiguos. Las dos constancias no son necesariamente incompatibles —criterio de verdad del clasificador vs. evidencia sobre un caso puntual— pero la distinción no está sellada, y mientras no lo esté el Frente B no tiene método de resolución acordado.
+
+### H213-04 — Frente E: DJA medido
+
+Insumos subidos por el operador: `ley26939-1.md` (Anexo I), `ley26939-2.md` (Anexo II). Parseado el Anexo I y extraídos los códigos de categoría del Digesto; medida la cobertura contra el residual (`residual_diagnostico.csv`, `[VERIFICAR]` 2.733 casos).
+
+Mediciones `[VERIFICAR]`: **36,2%** de las citas de ley del residual están cubiertas por el Anexo I; solo **0,9%** son posteriores al Digesto, **así que el corte 2012/13 no es obstáculo para este corpus** — que era la objeción principal contra usar el DJA.
+
+Borradoreada la estructura de `dja_mapeo.csv` con tres niveles de señal (`fuerte` / `media` / `NULA`), incorporando la nota metodológica de H212: **el DJA clasifica el objeto regulatorio; `materia` clasifica el pleito.** Las categorías H (Constitucional), U/V (Procesal), O (Derecho Internacional Público) y T (Político) son señal NULA por eso mismo.
+
+La continuidad de este frente ya vive en **M61**; no necesita entrada nueva.
+
+### H213-05 — Constancia de numeración
+
+El número H213 estaba **reservado para el relabel terminal** de `competencia_dirimente` / `procesal_propio` (decisión taxonómica de H209, diseño de dos ejes: `materia` terminal + columna futura `materia_subyacente`). La sesión del 19-jul tomó el número y trabajó los frentes A/B/E. **El relabel terminal sigue pendiente y sin número asignado.**
+
+---
+
+### H213 — Estado final
+
+- **Outputs canónicos: SIN CAMBIO.** No se corrió la cadena. Parser v38.0 · `extraer_normas` v1.1 · `derivar_materia` v4.1 · manifest [CLEAN] 65, vigentes sin re-sello.
+- Conteos del corpus **no re-medidos** en esta sesión.
+
+**Documentos actualizados:** ninguno en su momento — DEUDA y BITACORA se actualizan retroactivamente en H215 (M64 nueva; constancias de cierre en la cabecera).
+
+**Scripts creados:** ninguno canónico. Artefactos de trabajo: `muestreo_secretaria_H213.csv` (censo, superado por el rediseño H214), borrador de estructura de `dja_mapeo.csv` (no formalizado).
+
+**Commits:** 0 — la sesión no commiteó. Su documentación entra con el commit de cierre de H215.
+
+**Pendientes que migran a otra sesión:**
+- **M64** — `anuario_mapeo.csv` sin formalizar; 4 categorías sin resolver (`lesa_humanidad`, `constitucional`, `electoral`, duales penales), y sin vía de resolución ahora que la secretaría de radicación quedó descartada como criterio.
+- **Frente B** — los 7 casos gate-kw siguen sin adjudicar; falta acordar el método (ver la tensión de H213-03).
+- **M61** — `dja_mapeo.csv` sin formalizar.
+- **Relabel terminal** `competencia_dirimente` / `procesal_propio` — pendiente y sin número.
+- **Validación del operador de los baselines H208** — quinta sesión diferida.
+
 
 ## H214 — Frente CIRCULACIÓN (sistema de gestión) + B172 diagnosticada: el fallback de carátula sin guards (2026-07-25)
 
@@ -20732,3 +20806,104 @@ El sistema de gestión registra **la circulación entre vocalías**, no sólo la
 - **Piso temporal de las vocalías** — acotar la ventana ago-2007 / mar-2012 con un caso del corpus fallado en 2011 (candidato: `334_p474`, Pontoni, 17/05/2011).
 - **Sumarios de la CSJN** — único candidato a atajo del crosswalk (¿permiten buscar por tomo y página? ¿traen el número de expediente?). Sitio en mantenimiento al 25-jul.
 - **Rehacer la muestra del crosswalk tomando `case_name_indice`** (0% vacías) en vez de `case_name_cuerpo`.
+
+## H215 — B172 re-medida: el fallback no compra cobertura y sí inyecta dependencias falsas (fix redirigido (A)→(B)) + cierre retroactivo del backlog H211 (2026-07-26)
+
+**Objetivo:** cerrar el alcance de B172 detectada la noche anterior, y saldar la cola de commits declarados y no ejecutados que H214 había detectado en el árbol.
+
+**Sesión de MEDICIÓN. Pipeline INTOCADO:** 0 scripts de la cadena, 0 `__version__`, 0 outputs canónicos. Parser v38.0 y `derivar_materia` v4.1 sin cambio. Manifest **[CLEAN] 65 verificado en disco** (no re-sellado: la sesión no tocó outputs — invariante de procedencia satisfecho por no-cambio). Paso 2 del cierre N/A, candado blind N/A.
+
+---
+
+### H215-01 — La carátula nunca estuvo perdida
+
+`case_name_indice` tiene **0 vacías en las 5894 filas**. El identificador está completo en todo el corpus y viene del catálogo, no del cuerpo del fallo. Lo que `case_name_cuerpo` intenta recuperar no es la carátula sino los **autos completos** («Recurso de hecho deducido por X en la causa Y»), que es la forma que `RE_CARAT_QUEJA` necesita y que el índice —en forma invertida de catálogo— no tiene.
+
+**Consecuencia sobre el diseño del fix:** las variantes «repoblar desde el índice» y «repoblar desde el encabezado de página» quedan SIN OBJETO para el problema de identificador. Se exploraron y se descartaron con dato, no por argumento.
+
+Verificación de la rama sobre el testigo: `339_p1373` tiene `case_name_cuerpo == case_name_cuerpo_legacy`, los dos con la cita de Da Silva, y `case_name_indice` con la carátula real («Riv S.A. y Otro s/ Infracción ley 24.144»). El explorador muestra la carátula correcta porque lee el índice — por eso el daño sobrevivió meses sin que ningún consumidor visible chillara.
+
+### H215-02 — El fallback no compra cobertura (corrección de constancia a H214)
+
+`is_originaria` = 1 por rama, sobre las 5894 filas:
+
+| rama | n | `is_originaria`=1 |
+|---|---|---|
+| V1 | 3795 | 165 (4,3%) |
+| fallback | 1171 | 263 (22,5%) |
+| vacío | 928 | 168 (18,1%) |
+
+**Con `case_name_cuerpo` VACÍO la detección rinde prácticamente lo mismo que con el fallback.** Y dentro del propio fallback, las filas dañadas dan 24,5% contra 20,9% las sanas: indistinguible. La tasa alta es propiedad de la POBLACIÓN —las resoluciones de competencia y las originarias abren «Autos y Vistos:», que es justo lo que manda al fallback— y no del campo.
+
+**Corrección de constancia:** H214 conjeturó que la rama podía estar sosteniendo `es_originaria` y que matarla tendría costo de cobertura. Medido, no lo hace.
+
+Ídem `es_queja`: V1 2168 (57,1%) · fallback 94 (8,0%) · vacío 39 (4,2%); y dentro del fallback las dañadas dan **4,8%** contra **10,4%** las sanas. El string contaminado degrada la señal en vez de aportarla, consistente con el 0,0% de `RE_CARAT_QUEJA` medido en H214.
+
+### H215-03 — Los 34: dependencia mecánica de una subcadena ajena
+
+**34 filas del fallback contienen la palabra «Originario» dentro del string contaminado** —porque el fragmento capturado es la cita de un precedente originario— y en las 34 `is_originaria = 1`: **34/34 = 100%**, contra 20,1% de base en la misma rama. En V1 y en vacío hay **0** filas con esa palabra en el campo.
+
+Un 100% contra un 20% no es efecto de población: es dependencia mecánica del flag respecto de una subcadena de OTRO caso.
+
+Perfil de las 34: `outcome` competencia 23 / otro 8 / sin_dispositivo 1 / desestima 1 / hace_lugar 1; `is_merit_decision = 1` en **0**; 16/34 conservan marcador de cita visible (`in re`, `L. NNN`, romano). Testigos leídos: `329_p3065` («in re M. 466. XXIV. Originario. "Muñoz, Ana Rosa c/ Buenos Aires»), `330_p4678` (Barreto), `331_p994` (Galiano).
+
+**Caveat declarado — no son 34 falsos positivos.** `330_p2610` (Mendoza c/ Estado Nacional, Riachuelo) es originaria genuina, y en las 23 con `outcome = competencia` declarar la propia competencia originaria es el resultado esperable. La PROCEDENCIA está rota en las 34; cuántas están además materialmente mal exige adjudicarlas una por una. Las 34 quedan selladas como **flip-set de adjudicación del ciclo**.
+
+### H215-04 — Las 928 desagregadas (acota la cota de B106)
+
+Las 928 con `case_name_cuerpo` vacío no son un bloque homogéneo: `word_count = 0` en **191** · `apertura_tipo` vacío en **236** (`apertura_rel is None`: ni V1 ni el fallback llegaron a correr — no fallaron, no se ejecutaron) · `tipo_entrada` de sumario en **191** (34 `sumario_editorial` + 157 `sumario_con_link`, que no son fallos y correctamente no traen autos) · `case_name_indice` vacío en **0**.
+
+La cardinalidad real de B106 es sustancialmente menor que 928 y hay que calcularla con la intersección exacta, no restando a ojo (los conjuntos se solapan). Saldado parcialmente el pendiente que H214 le había dejado.
+
+### H215-05 — Fix de B172 redirigido: de (A) guard-con-fallback a (B) eliminar el fallback
+
+`case_name_cuerpo = case_name_cuerpo_v1` y punto. El campo pasa a significar «autos completos, cuando el fallo los trae con la fórmula ritual» — auto-descriptivo y sin ruido. Vacías 15,7% → ~35,6%; el identificador lo sigue dando `case_name_indice`, completo.
+
+**Prerrequisito no negociable: columna de procedencia `case_name_cuerpo_fuente`** ∈ {`v1`,`fallback`,`vacio`}. Hoy la partición solo es reconstruible por el accidente `cuerpo == legacy`, y L4101 marca `case_name_cuerpo_legacy` como «eliminable en una corrida posterior cuando el fix esté validado» — si esa columna se borra antes, las filas dañadas se vuelven invisibles otra vez. La metadata de rama está viviendo de prestado en una columna marcada para borrar.
+
+El ciclo deja de ser MAJOR sobre `find_case_name` (guards importados de H200/D1, fallbacks, costo conocido del juez-PARTE de B165/D4) y pasa a ser un borrado más una columna, con flip-set de 34.
+
+**Pendiente para cerrar el diseño:** el único consumidor que podría vivir del fallback es `derivar_partes` (PASO 4). Falta medir su rinde sobre las 1171 filas de la rama. Si predomina «ninguna parte derivada», (B) queda cerrada sin discusión.
+
+**Número no comparable, declarado.** El screen de daño usado hoy (minúscula inicial · `s/`|`c/` inicial · dígito inicial · identificador clásico · romano inicial · «sentencia del N») midió **497/1171 = 42,4%**. NO es el mismo screen que las 423 (36,1%) de H214: distinta definición de señales. Los dos números conviven; no fusionarlos ni presentarlos como serie. `is_merit_decision` re-medido: V1 74,7% · fallback 6,4% · vacío 6,6% (H214 reportó 6,7%/6,6%; diferencia sin consecuencia).
+
+### H215-06 — Cierre retroactivo del backlog H211
+
+`git log` confirma que **tras `15e415f` no hay ningún commit que toque `derivar_materia`**: los commits (3) y (4) declarados en la entrada H211 nunca se ejecutaron. HEAD arrastraba el manifest de las 20:57 con `derivar_materia` 4.0 mientras la BITACORA declaraba [CLEAN] 65 con v4.1.
+
+**No era brecha de validación.** Los candados N1/M1 y la muestra seed 211 (24 TP / 1 FP) estaban adjudicados en firme desde H211, y el WARN «77 vs pin 215» ya estaba resuelto en la propia entrada (los 215 midieron la cascada completa pre-diseño-tiered; los gates recortan exactamente la región de los 4 FP). Era brecha de commit.
+
+Gate previo al commit, los tres PASS pegados en conversación: `__version__` **4.1** · sha `csjn_casos_materia.csv` **92630d63** · manifest **[CLEAN] 65 artefactos**. `git status --short` mostró exactamente los cinco artefactos esperados y nada más.
+
+`DELTA_CODEBOOK_H211.md` se commitea en raíz, junto a `CODEBOOK.md` (verificado con `git ls-files`: el CODEBOOK vive en raíz; el único bajo `scripts/` es `CODEBOOK_M20.md`). H212 no lleva entrada de CHANGELOG: fue read-only.
+
+### H215-07 — Correcciones de constancia
+
+1. **H214 conjeturó que el fallback podía estar sosteniendo `es_originaria`.** Medido: no lo hace (H215-02).
+2. **El árbol sucio sobrevivió a dos cierres completos.** `d07b0c3` (H212) y `69f9984` (H214) se commitearon y pushearon sobre el backlog de H211 sin que ninguno lo notara — once días. Segundo cierre retroactivo del proyecto tras el de H210 (backlog H207-H209). → **M63 nueva**.
+3. **Docstring stale.** `derivar_materia.py` conserva en su candado M1 «rinde esperado ~215 (H208, vocabulario vigente); adjudicar muestra ANTES de re-sello», número que el propio diseño tiered descartó y que la entrada H211 ya explicó. Corregir cuando se toque el script; no bloquea nada.
+4. **`case_name_indice` como clave del crosswalk** (frente circulación, H214): confirmado 0% vacías, así que la decisión de rehacer la muestra tomándolo a él en vez de `case_name_cuerpo` queda con base medida.
+
+---
+
+### H215 — Estado final
+
+- **Outputs canónicos: SIN CAMBIO.** No se corrió la cadena. Manifest **[CLEAN] 65** verificado en disco, sin re-sello.
+- **`output/parser/csjn_casos.csv` — 5894 filas, 39 columnas** (verificado esta sesión).
+- **`output/parser/csjn_casos_materia.csv` — sha `92630d63…`** (verificado esta sesión).
+- Conteos de `votos` / `zonas` / `editorial` / `normas` **no re-medidos**: sin cambio respecto del sello vigente.
+- **Parser v38.0 · `derivar_materia` v4.1 · `extraer_normas` v1.1 — sin cambio.**
+
+**Documentos actualizados:** `DEUDA_TECNICA.md` — cabecera (Última actualización H215) · **B172 enmendada** (fix redirigido a (B), flip-set 34, número no comparable declarado) · **B106 cota acotada** · **M63 nueva**.
+
+**Scripts creados:** ninguno. Las mediciones se hicieron por lectura directa del CSV, sin instrumento nuevo. **Deuda de instrumento:** las particiones de H215-02/03/04 no quedaron en un script versionado — si hay que reproducirlas, hoy se rehacen a mano.
+
+**Commits:** 2 — (1) cierre retroactivo del paso 2 de H211: `derivar_materia` v4.1 + `csjn_casos_materia.csv` + `_manifest.json`, con los tres valores del gate en el mensaje; (2) documentación de H211: entrada de CHANGELOG + `DELTA_CODEBOOK_H211.md`. Falta el commit de cierre de esta sesión (DEUDA + BITACORA).
+
+**Pendientes abiertos por esta sesión:**
+- **B172 — ciclo (B):** eliminar el fallback + columna `case_name_cuerpo_fuente`, con las 34 como flip-set. Precondición: medir el rinde de `derivar_partes` sobre la rama.
+- **B106 — intersección exacta** para fijar su cardinalidad real dentro de las 928.
+- **M63** — `git status` como gate del cierre.
+- **Docstring de `derivar_materia`** con el rinde ~215 stale.
+- **H213 sigue abierta y sin cerrar.**
+
