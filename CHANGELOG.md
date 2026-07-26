@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H211 (2026-07-15)
+
+- `parser.py`: v37.0→**v38.0** (MAJOR de schema de textos.csv, M58 paso 1) — exporta `dictamen_text` como 4ª columna de texto (join de `lineas_dictamen`, convención de `extraer_considerando`, sin des-guionado); clave en dict del caso + stub; columna al final. 3.434 casos con texto (== `dictamen_presente`, cruce exacto). Los otros 4 CSV byte-idénticos (candados C1/C2/C3 post-hoc PASS; ver BITACORA por los incidentes de orden).
+- `extraer_normas.py`: v1.0→**v1.1** (M58 paso 2 / M59 paso 2 parcial) — 5º ámbito `dictamen` (exige parser ≥38.0), al final de AMBITOS; subset sin dictamen byte-idéntico al sellado H209/H211 (candado N1 PASS).
+- `derivar_materia.py`: v4.0→**v4.1** (MINOR, M58 paso 2) — tier `lectura_dictamen` (`clasificar_dictamen`): solo residuo sin_ancla, canales norma+kw, gates norma-fuerte / kw≥2 / empate→None; `materia_fuente` con procedencia `dictamen:*`. Ejecuta la reserva M49.
+- `output/parser/csjn_casos_textos.csv`: 5.894 filas (+1 columna); sha `dc724eeb…`→`35dbbdda…`; **62,39 MB (aviso GitHub >50 MB — git-lfs a decidir)**.
+- `output/parser/csjn_casos_normas.csv`: 7.696→**13.902** filas (+6.206 ámbito dictamen; 2.056 normas distintas); sha `8e838c49…`→`a046095d…`.
+- `output/parser/csjn_casos_materia.csv`: 5.894 filas (sin delta de filas); **77 altas** sin_ancla→lectura_dictamen (candado M1: 0 clasificados tocados, conflicto 57 intacto); cobertura 77,0%→**78,5%**; sha `607793de…`→`92630d63…`. Muestra 25 adjudicada por el operador: 24 TP / 1 FP (329_p5108, canal norma, documentado sin parche).
+- Golden de textos re-congelado; `_manifest.json` re-sellado **[CLEAN] 65** (dos re-sellos: post paso 1 y post paso 2).
+- Corrección de constancia git: commit `15e415f` (paso 2 parcial) tiene mensaje falso — declara v4.1/candados/muestra que no habían ocurrido; detalle y remedio en BITACORA H211, incidente (c). Nuevas entradas DEUDA: M61 (Digesto DJA como prior) y M62 (candados como gate del orquestador).
+
 ## H210 (2026-07-15)
 
 - `derivar_materia.py` v3.3→**4.0** (MAJOR, M49): rename semántico de `materia_capa` — `capa1`→`lectura_tribunal` · `capa1_refinado`→`lectura_tribunal_refinada` · `capa2`→`lectura_texto` · `pendiente_capa2`→`sin_clasificar`; terminales (originaria/sui_generis/residual/no_aplica) y `materia_fuente` intactos; `MAPEO_M49` como contrato importable (lo consume `verificar_m49.py`, scratch H210/); nomenclatura interna TIER 1/3 → router de partes / motor de co-ocurrencia (solo comentarios).
