@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H216 (2026-07-26)
+
+- `parser.py` v38.0→v39.0 (MAJOR): RE_VOTO_HDR/RE_DISID_HDR ensanchadas (orden verbal-primero, «Voto Concurrente», femenino Vicepresidenta/Presidenta, OCR «de el», «Ampliación de Fundamentos» lado voto; clase E wrap fuera por diseño) + RE_CALIFICADOR_FIRMA local + rama calificador ampliación→«según su voto» en parse_firma. 40 casos + 1 costo aceptado (343_p1457, testigo B166(d)).
+- `_meta/jueces/jueces_csjn.csv`: +1 fila (Antelo, conjuez, extracto 345_p869). 2 casos afectados.
+- `output/parser/csjn_casos.csv`: 5894 filas (flips ⊆ 42: nsv/nd/n_jueces/posiciones/voting_pattern; decisión solo 1457).
+- `output/parser/csjn_casos_votos.csv`: 27.916→27.902 (−16 dup +2 Antelo).
+- `output/parser/csjn_casos_{textos,zonas}.csv`: cambios ⊆ flip-set; editorial byte-idéntico.
+- Golden re-congelado (4 CSV) · manifest re-sellado [CLEAN] 65 · blind n300 byte-idéntica.
+
+
 ## H211 (2026-07-15)
 
 - `parser.py`: v37.0→**v38.0** (MAJOR de schema de textos.csv, M58 paso 1) — exporta `dictamen_text` como 4ª columna de texto (join de `lineas_dictamen`, convención de `extraer_considerando`, sin des-guionado); clave en dict del caso + stub; columna al final. 3.434 casos con texto (== `dictamen_presente`, cruce exacto). Los otros 4 CSV byte-idénticos (candados C1/C2/C3 post-hoc PASS; ver BITACORA por los incidentes de orden).
