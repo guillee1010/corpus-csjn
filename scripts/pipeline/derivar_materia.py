@@ -71,7 +71,7 @@ import unicodedata
 from collections import Counter
 from pathlib import Path
 
-__version__ = "4.0"  # H210 (M49): RENAME SEMANTICO de materia_capa (MAJOR: valores publicados) — capa1->lectura_tribunal · capa1_refinado->lectura_tribunal_refinada · capa2->lectura_texto · pendiente_capa2->sin_clasificar; terminales intactas (originaria/sui_generis/residual/no_aplica); lectura_dictamen RESERVADO M58; materia_fuente INTACTA (incl. prefijo historico conflicto_capa2:); mapeo 1:1 = MAPEO_M49 (fuente unica — lo importa verificar_m49.py); nomenclatura interna TIER 1/3 -> router de partes / motor de co-ocurrencia (solo comentarios). Candado: CSV identico salvo materia_capa mapeada 1:1 (cross-tab exacta contra MAPEO_M49, cero pares fuera). // H209 (M59 paso 1): REFACTOR BYTE-IDENTICO — el canal norma de clasificar_capa2 deja de correr RE_LEY sobre el considerando y consume el sidecar csjn_casos_normas.csv (etapa previa extraer_normas.py; filtro ambito=considerando AND tipo=ley, doble filtro explicito para que ampliaciones futuras del sidecar no entren en silencio). RE_LEY movida a extraer_normas.py (unico consumidor historico). Candado: csjn_casos_materia.csv byte-identico (sha sellado H207), patron M52/H198. CLI nueva --normas. // 3.2 H115 TIER 3 motor de co-ocurrencia: vocab_coocurrencia.csv (reglas dato (A,B)->materia con excluye y ambito por senal); desambiguar_co_ocurrencia desempata conflicto_capa2 y rescata sin_ancla ANTES del trigger CA. Reglas: tributario_disfrazado, corralito_emergencia(->CA, gt14/14), accion_civil_accidente, indemniz_despido, danos_transito, salud_amparo. Relabel originaria (pendiente_capa3 -> 'originaria', categoria terminal; cobertura sobre universo clasificable=fallos-originaria). Familia->civil_comercial via objeto-anclas. // 3.1 H114 REFINAMIENTO CAPA1: override CA->tributario por autoridad fiscal. // 3.0 H114: TIER 1 router de partes -> CA + anclas. // 2.1 H113: capa objeto. // 2.0: capa 2 vocabularios ADITIVA. // H112: capa 1.
+__version__ = "4.1"  # H211 (M58 paso 2): TIER DICTAMEN (MINOR: recall acotado y medido, precedente H172/H181; ejecuta la reserva lectura_dictamen de M49) — clasificar_dictamen corre SOLO sobre el residuo sin_ancla de clasificar_capa2 (conflicto_capa2 NO entra: la evidencia H208 es del pool sin_ancla; desempate por dictamen = unidad futura). Canales norma+kw solamente (partes/objeto/provincia leen la caratula del caso propio, ya agotada). Gates dictados por la estructura del error H208 (spot-check 35 ~80%): norma = ancla fuerte 13/13 TP; kw sin norma exige >=2 votos (kw solitaria = los 4 FP, afuera por construccion); empate en la cima = None (sin co-ocurrencia: H115 calibrada sobre texto del caso propio). Insumos: dictamen_text (textos.csv, parser >= 38.0, REQUIRED) + sidecar normas ambito=dictamen AND tipo=ley (doble filtro propio, espejo del de considerando; requiere extraer_normas >= 1.1). materia_fuente con procedencia: dictamen:norma:24240(1) / dictamen:kw+norma:NUM(n) / dictamen:kw(n). CANDADO M1: diff contra el sellado H211 = SOLO altas ("",sin_clasificar,sin_ancla) -> (mat,lectura_dictamen,dictamen:*); rinde esperado ~215 (H208, vocabulario vigente); adjudicar muestra ANTES de re-sello. Reporte: lectura_dictamen en cobertura (cuenta como clasificada) + tabla de materias del tier. // H210 (M49): RENAME SEMANTICO de materia_capa (MAJOR: valores publicados) — capa1->lectura_tribunal · capa1_refinado->lectura_tribunal_refinada · capa2->lectura_texto · pendiente_capa2->sin_clasificar; terminales intactas (originaria/sui_generis/residual/no_aplica); lectura_dictamen RESERVADO M58; materia_fuente INTACTA (incl. prefijo historico conflicto_capa2:); mapeo 1:1 = MAPEO_M49 (fuente unica — lo importa verificar_m49.py); nomenclatura interna TIER 1/3 -> router de partes / motor de co-ocurrencia (solo comentarios). Candado: CSV identico salvo materia_capa mapeada 1:1 (cross-tab exacta contra MAPEO_M49, cero pares fuera). // H209 (M59 paso 1): REFACTOR BYTE-IDENTICO — el canal norma de clasificar_capa2 deja de correr RE_LEY sobre el considerando y consume el sidecar csjn_casos_normas.csv (etapa previa extraer_normas.py; filtro ambito=considerando AND tipo=ley, doble filtro explicito para que ampliaciones futuras del sidecar no entren en silencio). RE_LEY movida a extraer_normas.py (unico consumidor historico). Candado: csjn_casos_materia.csv byte-identico (sha sellado H207), patron M52/H198. CLI nueva --normas. // 3.2 H115 TIER 3 motor de co-ocurrencia: vocab_coocurrencia.csv (reglas dato (A,B)->materia con excluye y ambito por senal); desambiguar_co_ocurrencia desempata conflicto_capa2 y rescata sin_ancla ANTES del trigger CA. Reglas: tributario_disfrazado, corralito_emergencia(->CA, gt14/14), accion_civil_accidente, indemniz_despido, danos_transito, salud_amparo. Relabel originaria (pendiente_capa3 -> 'originaria', categoria terminal; cobertura sobre universo clasificable=fallos-originaria). Familia->civil_comercial via objeto-anclas. // 3.1 H114 REFINAMIENTO CAPA1: override CA->tributario por autoridad fiscal. // 3.0 H114: TIER 1 router de partes -> CA + anclas. // 2.1 H113: capa objeto. // 2.0: capa 2 vocabularios ADITIVA. // H112: capa 1.
 
 # csjn_casos_textos.csv tiene considerando_text completo (post-split #1). Subir
 # el limite de campo csv a un valor amplio pero seguro en Windows.
@@ -89,7 +89,8 @@ DEFAULT_OUTPUT = REPO_ROOT / "output" / "parser" / "csjn_casos_materia.csv"
 # Columnas requeridas (falla ruidoso si falta alguna).
 REQUIRED_COLS    = ("caso_id_canonico", "tribunal_origen", "tribunal_origen_status",
                     "tipo_entrada", "case_name_cuerpo", "case_name_indice")
-REQUIRED_TEXTOS  = ("caso_id_canonico", "considerando_text")
+REQUIRED_TEXTOS  = ("caso_id_canonico", "considerando_text",
+                    "dictamen_text")  # exige parser >= 38.0 (M58 paso 1)
 REQUIRED_NORMAS  = ("caso_id_canonico", "tipo", "norma", "ambito")
 
 SENTINEL_SIN_TRIBUNAL = "SIN_TRIBUNAL_ORIGEN"
@@ -110,9 +111,12 @@ MAPEO_M49 = {
     "pendiente_capa2": SIN_CLASIFICAR,
 }
 # Terminales SIN rename: originaria (art. 117, no es una lectura) /
-# sui_generis / residual / no_aplica. 'lectura_dictamen' RESERVADO para M58
-# (el dictamen NO clasifica hoy). materia_fuente NO se toca (incluido el
+# sui_generis / residual / no_aplica. materia_fuente NO se toca (incluido el
 # prefijo historico 'conflicto_capa2:').
+# M58 paso 2 (H211): la reserva M49 se EJECUTA — lectura_dictamen es la capa
+# del tier dictamen (prioridad minima: corre SOLO sobre el residuo sin_ancla
+# de clasificar_capa2; ningun caso ya clasificado puede cambiar, candado M1).
+CAPA_DICTAMEN = "lectura_dictamen"
 
 
 def _norm(s: str) -> str:
@@ -405,6 +409,58 @@ def clasificar_capa2(considerando: str, caratula: str, vocab: dict,
     return ("", SIN_CLASIFICAR, "sin_ancla")
 
 
+def clasificar_dictamen(dictamen: str, vocab: dict, normas: set[str]
+                        ) -> tuple[str, str, str] | None:
+    """Tier DICTAMEN (M58 paso 2, H211) — prioridad minima de la cascada:
+    corre SOLO cuando clasificar_capa2 devolvio sin_ancla. None = no clasifica
+    (el caso queda sin_ancla, sin cambio).
+
+    Diseno dictado por la estructura del error H208 (spot-check 35, ~80%):
+      - norma-en-dictamen = ANCLA FUERTE (13/13 TP): materia ganadora con >=1
+        voto de norma clasifica.
+      - kw-en-dictamen GATEADA: sin norma, la ganadora necesita >=2 votos kw
+        (los 4 FP del spot-check fueron TODOS kw solitaria — esa clase queda
+        afuera por construccion). kw+norma coincidentes = caso norma (fuerte).
+      - EMPATE en la cima -> None. Sin motor de co-ocurrencia aca: H115 se
+        calibro sobre caratula/considerando del caso PROPIO, no sobre texto
+        ajeno. Conservador por diseno.
+    Solo canales norma+kw: partes/objeto/provincia leen la caratula del caso
+    propio, agotada antes de llegar a este tier.
+    `normas` = sidecar M59, ambito=dictamen AND tipo=ley (doble filtro propio,
+    espejo del filtro considerando de derivar()).
+    `materia_fuente` con procedencia explicita: dictamen:norma:24240(1) /
+    dictamen:kw+norma:20744(3) / dictamen:kw(2)."""
+    votos: Counter = Counter()
+    fuente_de: dict[str, list[str]] = {}
+    con_norma: set[str] = set()
+    kw_votos: Counter = Counter()
+
+    for num in sorted(normas):
+        mat = vocab["indice"].get(num)
+        if mat:
+            votos[mat] += 1
+            fuente_de.setdefault(mat, []).append(f"norma:{num}")
+            con_norma.add(mat)
+    if dictamen:
+        t = _norm(dictamen)
+        for rx, mat in vocab["kw"]:
+            if rx.search(t):
+                votos[mat] += 1
+                kw_votos[mat] += 1
+                fuente_de.setdefault(mat, []).append("kw")
+
+    if not votos:
+        return None
+    top = votos.most_common()
+    if len(top) > 1 and top[0][1] == top[1][1]:
+        return None  # empate: conservador, queda sin_ancla
+    mat, n = top[0]
+    if mat not in con_norma and kw_votos[mat] < 2:
+        return None  # kw solitaria = la clase de los 4 FP H208
+    fuentes = "+".join(sorted(set(fuente_de[mat])))
+    return (mat, CAPA_DICTAMEN, f"dictamen:{fuentes}({n})")
+
+
 # ============================================================================
 # Orquestacion
 # ============================================================================
@@ -427,7 +483,10 @@ def derivar(input_path: Path, textos_path: Path, normas_path: Path,
         faltan = [c for c in REQUIRED_TEXTOS if c not in (rd.fieldnames or [])]
         if faltan:
             sys.exit(f"[FATAL] faltan columnas en {textos_path}: {faltan}")
-        considerandos = {r["caso_id_canonico"]: r["considerando_text"] for r in rd}
+        considerandos, dictamenes = {}, {}
+        for r in rd:
+            considerandos[r["caso_id_canonico"]] = r["considerando_text"]
+            dictamenes[r["caso_id_canonico"]] = r.get("dictamen_text", "")
 
     # M59: normas citadas desde el sidecar de la etapa previa extraer_normas.
     # DOBLE FILTRO explicito (ambito AND tipo): cuando el sidecar sume filas
@@ -443,9 +502,13 @@ def derivar(input_path: Path, textos_path: Path, normas_path: Path,
         faltan = [c for c in REQUIRED_NORMAS if c not in (rd.fieldnames or [])]
         if faltan:
             sys.exit(f"[FATAL] faltan columnas en {normas_path}: {faltan}")
+        normas_dict: dict[str, set[str]] = {}
         for r in rd:
             if r["ambito"] == "considerando" and r["tipo"] == "ley":
                 normas_cons.setdefault(r["caso_id_canonico"], set()).add(r["norma"])
+            elif r["ambito"] == "dictamen" and r["tipo"] == "ley":
+                # M58 paso 2 (H211): insumo del tier dictamen, doble filtro propio.
+                normas_dict.setdefault(r["caso_id_canonico"], set()).add(r["norma"])
 
     vocab = cargar_vocabularios(vocab_dir)
 
@@ -454,6 +517,7 @@ def derivar(input_path: Path, textos_path: Path, normas_path: Path,
     materias1: Counter = Counter()
     materias2: Counter = Counter()
     pend2_motivo: Counter = Counter()
+    materias_dict: Counter = Counter()
     _vacio: set[str] = set()
     for r in filas:
         cid = r["caso_id_canonico"]
@@ -472,6 +536,15 @@ def derivar(input_path: Path, textos_path: Path, normas_path: Path,
             materia, capa, fuente = clasificar_capa2(
                 considerandos.get(cid, ""), caratula, vocab,
                 normas_cons.get(cid, _vacio))
+            if capa == SIN_CLASIFICAR and fuente == "sin_ancla":
+                # M58 paso 2 (H211): tier dictamen, prioridad MINIMA — corre
+                # solo sobre el residuo sin_ancla; conflicto_capa2 NO entra
+                # (evidencia H208 medida sobre el pool sin_ancla; desempate de
+                # conflictos por dictamen = unidad futura con flip-set propio).
+                alta = clasificar_dictamen(dictamenes.get(cid, ""), vocab,
+                                           normas_dict.get(cid, _vacio))
+                if alta:
+                    materia, capa, fuente = alta
 
         salida.append({
             "caso_id_canonico": cid,
@@ -486,6 +559,8 @@ def derivar(input_path: Path, textos_path: Path, normas_path: Path,
             materias1[materia] += 1
         elif capa == CAPA_TEXTO:
             materias2[materia] += 1
+        elif capa == CAPA_DICTAMEN:
+            materias_dict[materia] += 1
         elif capa == SIN_CLASIFICAR:
             pend2_motivo[fuente.split(":")[0]] += 1
 
@@ -500,7 +575,7 @@ def derivar(input_path: Path, textos_path: Path, normas_path: Path,
 
     return {"n": len(salida), "cobertura": cobertura,
             "materias1": materias1, "materias2": materias2,
-            "pend2_motivo": pend2_motivo}
+            "materias_dict": materias_dict, "pend2_motivo": pend2_motivo}
 
 
 def _reporte(stats: dict, fallos: int) -> None:
@@ -512,17 +587,18 @@ def _reporte(stats: dict, fallos: int) -> None:
     print(f"  originaria (terminal, fuera del denominador): {originaria}")
     print(f"  universo clasificable (fallos - originaria): {clasificable}")
     clasificadas = (cov.get(CAPA_TRIBUNAL, 0) + cov.get(CAPA_TRIBUNAL_REFINADA, 0)
-                    + cov.get(CAPA_TEXTO, 0))
+                    + cov.get(CAPA_TEXTO, 0) + cov.get(CAPA_DICTAMEN, 0))
     if clasificable:
         print(f"  COBERTURA: {clasificadas}/{clasificable} = "
               f"{100*clasificadas/clasificable:.1f}%")
     print("\n  === cobertura (capas) ===")
-    orden = [CAPA_TRIBUNAL, CAPA_TRIBUNAL_REFINADA, CAPA_TEXTO, SIN_CLASIFICAR,
+    orden = [CAPA_TRIBUNAL, CAPA_TRIBUNAL_REFINADA, CAPA_TEXTO, CAPA_DICTAMEN,
+             SIN_CLASIFICAR,
              "originaria", "sui_generis", "residual", "no_aplica"]
     for k in orden:
         v = cov.get(k, 0)
         base = clasificable if k in (CAPA_TRIBUNAL, CAPA_TRIBUNAL_REFINADA, CAPA_TEXTO,
-                                     SIN_CLASIFICAR) else fallos
+                                     CAPA_DICTAMEN, SIN_CLASIFICAR) else fallos
         if k == "no_aplica":
             base = stats["n"]
         pct = f"({100*v/base:5.1f}%)" if base else ""
@@ -533,6 +609,10 @@ def _reporte(stats: dict, fallos: int) -> None:
     print("\n  === materia lectura_texto (vocabularios) ===")
     for m, v in sorted(stats["materias2"].items(), key=lambda kv: -kv[1]):
         print(f"    {m:30s} {v:5d}")
+    if stats.get("materias_dict"):
+        print("\n  === materia lectura_dictamen (tier M58) ===")
+        for m, v in sorted(stats["materias_dict"].items(), key=lambda kv: -kv[1]):
+            print(f"    {m:30s} {v:5d}")
     print("\n  === sin_clasificar por motivo ===")
     for m, v in sorted(stats["pend2_motivo"].items(), key=lambda kv: -kv[1]):
         print(f"    {m:30s} {v:5d}")
