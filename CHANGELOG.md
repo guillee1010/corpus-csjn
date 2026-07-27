@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H218 (2026-07-26)
+
+- `parser.py` v41.0 → **v42.0** (MAJOR): elimina el fallback `or case_name_cuerpo_legacy` de `case_name_cuerpo`; agrega la columna `case_name_cuerpo_fuente` ∈ {v1, fallback, vacio}. Schema de `csjn_casos.csv` 39 → 40 columnas.
+- `output/parser/csjn_casos.csv`: 5894 filas, 40 columnas. `case_name_cuerpo` vaciada en 1160 (rama fallback real). 0 diffs en las otras 38 columnas viejas.
+- `output/parser/csjn_casos_normas.csv`: 13.926 → 13.908 filas (−18 pares, todos `ambito=caratula`).
+- `output/parser/csjn_casos_materia.csv`: 87 filas cambian (61 reparaciones, 4 costos declarados). Cobertura 78,5% → 77,5%.
+- `output/parser/csjn_casos_partes.csv`: 1 fila (347_p357 pierde `recurrente`).
+- `textos` / `votos` / `zonas` / `editorial` / `epilogo` / `recursos`: byte-idénticos.
+- Clave n300 byte-idéntica; blind vigente.
+
 ## H217 (2026-07-26)
 
 - parser.py: v39.0 -> v41.0 (dos MAJOR). v40.0: dedup por NOMBRE en parse_firma (B168; flags desde lista final). v41.0: peek de wrap en headers de voto/disidencia (B168-E; helper _hdr_tipo_wrap en colector, detectar_votos y zonificador; residual 329_p5741 documentado).

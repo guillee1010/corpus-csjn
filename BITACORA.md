@@ -19929,6 +19929,90 @@ Superficie `superficie_b168e.py` v0.1: pool truncado corpus-wide 26 = 21 E sella
 - `output/parser/csjn_casos_zonas.csv` —
 
 
+## H218 — B172 CERRADO: eliminación del fallback de `case_name_cuerpo` + columna de procedencia (2026-07-26)
+
+**Objetivo:** cerrar B172 por la vía (B) que redirigió H215 — eliminar el escaneo hacia atrás de `find_case_name` y agregar la columna de procedencia — con el pendiente (g) resuelto y el flip-set sellado antes de tocar el parser.
+
+### H218-01 — Pendiente (g): rinde de `derivar_partes` sobre la rama
+
+Rinde medido sobre las 1171 de la rama: «ninguna» 75,9% · «solo una» 20,6% · «ambas» 3,5%. Los buckets de capa carátula dan 107 en v1, **1 en fallback**, 0 en vacío, y la causa es estructural: `RE_MARK_CARATULA` es `.match()` anclado en `^(?:Recursos?|Queja)` case-sensitive, imposible de satisfacer con un string de la rama. La única vía expuesta es `_match_letrado_caratula` (L531), que solo pide ` c/ `: superficie 513 filas, disparó 1 vez, TP (347_p357, carátula genuina en versales). (B) queda cerrada sin discusión.
+
+### H218-02 — La partición histórica estaba contaminada
+
+`superficie_c_v1.py` v0.2 (H218/) corre `extraer_caratula_v1` REAL sobre el bloque reconstruido (candado E0: V1 debe devolver `""`) y sella la partición: **fallback_real 1160 + v1_coincidente 11**, contra las 1171 del accidente `cuerpo == legacy`. En esas 11 V1 sí disparó y `find_case_name` devolvió la carátula del mismo caso desde el dictamen. Sin la columna de procedencia la rama no es auditable — argumento más duro que el que dio H215.
+
+Reconstrucción del bloque verificada contra el código, no reconstruida: `lines = read_text(utf-8).split("\n")` (L3984-3985), `construir_bloque_desde_localizacion` = slice plano `lines[inicio:fin+1]` (L2039), y el `linea_inicio` publicado ya incluye el offset de `refinar_inicio_por_titulo` (L4045-4062).
+
+### H218-03 — Daño re-medido por dos instrumentos independientes
+
+Screen de forma 42,6% (499/1160; dos señales nuevas: abre con comilla de cita 46 · ley ausente del índice 17) y overlap de tokens contra el índice 44,6% de OTRO caso (517/1160; propio 45,8%; dudoso 9,7%). Dos métodos sin señales en común, mismo resultado. Entregado además un artefacto de colación índice/fallback para las 1160, con banda de densidad y filtros.
+
+### H218-04 — Dos correcciones de constancia sobre entradas previas
+
+**(a) La enmienda ★(c) de H215 era falsa.** El «34/34 con «Originario» = 100% contra 20,1% de base» se había leído como dependencia mecánica del flag respecto de una subcadena de otro caso. Es correlación: las 34 son originarias genuinas y el texto lo dice solo — las señales 1/2/4 de `es_originaria` disparan por su cuenta en 33/34 (la 34ª por la señal 5), verificado cargando las regex verbatim del parser sobre `textos.csv`. Causa mecánica: en L1633-1639 las señales 1 y 2 se evalúan ANTES que la 3, y en esta población el considerando dice «competencia originaria» o cita el art. 117. La carátula nunca decide. El «flip-set = las 34» que anunciaba H215 queda sin objeto.
+
+**(b) La propagación de H214 eran CINCO consumidores, no tres.** Grep sobre `scripts/{pipeline,validacion,tests}`: faltaban `derivar_materia` (L91, L524) y `extraer_normas` (L17/L90/L136), ambos concatenando `case_name_cuerpo + case_name_indice`. Ninguna variable de votación lo consume — eso sigue en pie.
+
+### H218-05 — Se evaluó y descartó tocar los consumidores
+
+Se midió cambiar `extraer_normas` para leer solo el índice: costaría **106 pares legítimos** de la rama v1 (filas donde el cuerpo trae una ley que el índice no) para ganar 17 contaminados. Se arregla el campo, no el consumidor.
+
+### H218-06 — Flip-set sellado: VACÍO
+
+`poc_b172_flipset.py` v0.1 (H218/), brazos A/B con `es_originaria` / `classify_queja` / `es_revision_fondo` reales sobre el bloque; candados E0 orig/queja/merit 1171/1171. `is_originaria` 0 flips · `es_queja`/`queja_resultado` 0 flips · 0 ripple a `tribunal_origen_status` (L4309-4316, columna que la entrada de DEUDA no declaraba), `is_merit_decision` ni `tipo_voto_sep`. Cruce contra el n300: 0 casos tocados, y `build_m20` proyecta columnas nombradas → la columna nueva es invisible para la clave por construcción. La partición vieja habría aportado 0 flips espurios.
+
+`poc_b172_materia.py` v0.1 (candado E0 5894/5894) sella la última superficie: 87 filas = 61 reparaciones + 4 costos + 19 no-ops + 2 dudosos.
+
+### H218-07 — Ciclo
+
+`--consciente` → `check_regresion` `[FAIL]` **solo por header, y ahí corta: nunca compara celdas** → adjudicación celda a celda con `verificar_h218.py` (PRE extraído de `git show HEAD`), **[CLEAN] en los 6 candados**: schema 39→40 con única columna nueva · `fuente` v1 3806 / fallback 1160 / vacio 928 · `case_name_cuerpo` vaciada en 1160 exactas, 0 a otro valor · set == `fallback_real` exacto · **0 diffs en las otras 38 columnas viejas** · las 11 `v1_coincidente` conservan su carátula → `--regolden` → invariante golden==producción [OK] en los 5 → manifest [CLEAN] 65.
+
+Los cuatro CSV que el contrato daba por byte-idénticos lo son **por sha, contra el sello de H217**: textos `f2dcf8fa46f3` · votos `5df40a20cfd5` · zonas `0a5b1b650d47` · editorial `30a6da652e3a`. Casos `d22dd411f633`→`46abe17fe666`. Clave n300 byte-idéntica (`build_m20` corrido, ausente de `git status`) → blind vigente, sin acople con M43.
+
+Derivers: `epilogo` y `recursos` byte-idénticos · `partes` 1 fila · `normas` 13.926→13.908 (−18 pares, todos `ambito=caratula`, inertes para la cascada) · `materia` 87 filas, cobertura 78,5%→77,5%, `sin_clasificar` 1084→1133 (+49 = 53−4), `lectura_texto` 1472→1420, `lectura_dictamen` 77→80, `conflicto_capa2` 57→53 — los cuatro deltas salen exactos de las transiciones que había sellado el PoC.
+
+Costos aceptados 4, nombrados: 329_p1243 Blomqvist · 330_p1183 Pavicich · 331_p357 Lawny (pierden `objeto(1)`: el `s/ objeto` vive solo en el cuerpo, el índice está en forma invertida de catálogo) · 331_p125 Correa («ESTADO NACIONAL» vs «E.N.»). 343_p1386 Alessandria NO es costo sino reparación: el fragmento sin el «Banco» delante burlaba `_RE_BANCO_PROV` (H114). 343_p1237 Hug es bug del índice (`Federals/` sin espacio rompe el `\b` de `_RE_SOBRE`) → ticket propio.
+
+### H218-08 — Frente (C) con superficie medida, y un frente nuevo
+
+`superficie_c_v1.py` v0.2 clasifica las 1160 por causa de que V1 no disparara: **`F2_otra_formula_SIN_caratula` 1089 (93,9%) con `ritual: 0`** — la apertura «Autos y Vistos: / Por los fundamentos del dictamen…» no nombra los autos: techo estructural. Recuperable ≈41 (`B` 15 · `F1` 10 · `Z_caption_anidado` 9 · `S` 6 · `E` 1). La clase Z es un bug del reconstructor: con caption anidado `Vistos los autos: "'X'; Y"` V1 abre en la comilla doble, encuentra la simple en posición 0 y devuelve `""` con la fórmula perfecta delante.
+
+**Frente nuevo — título de cabeza como fuente del Eje A.** El parser SÍ busca el título en versales de la página de inicio (L4020-4024: token del índice sobre `bloque[:15]`, sin acentos, `re.I`) pero solo lo usa como ancla de localización: guarda la posición (`linea_inicio`, `status_localizacion`), no el texto. Medido: de 141 títulos visibles **solo 2 son idénticos al índice** — el índice invierte nombres y separa con `|`, el título trae el **orden directo con `c/`** (o « V. » en tomos viejos, conector que `_es_caratula_v2` ya conoce desde H200). **2578/5894 casos (43,7%) no tienen `c/` en el índice** ⇒ orden de partes no derivable, y H163 ya lo había medido (convención «primer segmento = actora» 85,3%, 464 mismatch, por eso `derivar_partes` se niega a asumirlo). Demostrado 52; potencial 2578 sin medir. Objeto: el título casi nunca lo trae (2/141), así que no recupera los 4 costos de materia.
+
+### H218-09 — Constancias de método
+
+Dos del asistente. **(1)** El `--regolden` se corrió ANTES de la adjudicación; el protocolo pide adjudicar y después congelar (familia del regolden-antes-del-consciente de H217/U2). Recuperable sin costo porque no había commit y el golden viejo vivía en `HEAD` — extracción verificada por tamaño (4.335.906 bytes == el `casos.csv` pre-fix exacto). **(2)** `adjudicar_h218.py` se entregó sin probar y tenía un bug propio: el flag `--golden` quedaba registrado en argparse pero `main()` seguía leyendo el default (el golden ya re-congelado) → comparaba producción contra sí misma y devolvía «+[] / -[]», un FRENAR sin significado. Sucesor `verificar_h218.py`, paths posicionales, auto-testeado contra un POST sintético antes de entregarse.
+
+**Constancia de instrumento:** `check_regresion` compara el header primero y ahí CORTA — nunca compara celdas. Su `[FAIL]` ante un cambio de schema no demuestra el contrato. Todo ciclo MAJOR de schema necesita adjudicador propio.
+
+### H218 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallo + 157 sumario_con_link + 34 sumario_editorial).
+- **Sin firma:** 8 / 5703. Voting patterns: unanime 3519 · disidencia 1117 · segun_su_voto 755 · mixed 304 · sin_firma 8.
+- **Votos:** 27.900 filas (sin cambio).
+- **`case_name_cuerpo_fuente`:** v1 3806 · fallback 1160 · vacio 928.
+- **Cobertura de materia:** 77,5% (era 78,5%).
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5894 filas, **40 columnas**, sha `46abe17fe666`.
+- `output/parser/csjn_casos_textos.csv` — 5894 filas, sha `f2dcf8fa46f3` (sin cambio).
+- `output/parser/csjn_casos_votos.csv` — 27.900 filas, sha `5df40a20cfd5` (sin cambio).
+- `output/parser/csjn_casos_zonas.csv` — 138.048 segmentos, sha `0a5b1b650d47` (sin cambio).
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones, sha `30a6da652e3a` (sin cambio).
+- `output/parser/csjn_casos_materia.csv` — 5894 filas, sha `5292c8ec0f7b`.
+- `output/parser/csjn_casos_normas.csv` — 13.908 filas, sha `3f5a8dbf23c6`.
+- `output/parser/csjn_casos_partes.csv` — 5894 filas, sha `0e98fb800ba7`.
+- `output/parser/csjn_casos_epilogo.csv` — 5703 filas, sha `c0e58fe41be3` (sin cambio).
+- `output/parser/csjn_casos_recursos.csv` — 5894 filas, sha `da8b8e3771f3` (sin cambio).
+- Manifest `[CLEAN] 65`.
+
+**Versiones resultantes:** `parser.py` **v42.0**. El resto de la cadena sin cambio.
+
+**Scripts creados:** `scripts/diagnostico/H218/` — `superficie_c_v1.py` v0.2 · `poc_b172_flipset.py` v0.1 · `poc_b172_materia.py` v0.1 · `verificar_h218.py` · `adjudicar_h218.py` (con bug, superado) · baselines `superficie_c_v1.csv`, `poc_b172_materia_baseline.csv`, `golden_pre_H218.csv`.
+
+**Commits:** 2 — (1) parser v42.0 + los 4 outputs movidos + golden + manifest; (2) cierre documental (DEUDA + BITACORA + CHANGELOG).
+```
+
 
 
 
