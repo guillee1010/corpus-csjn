@@ -1423,11 +1423,9 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 329_p4414,ley,23661,dictamen,1
 329_p4414,ley,23798,dictamen,1
 329_p4414,ley,24455,dictamen,1
-329_p4416,ley,23737,caratula,1
 329_p4416,ley,26052,considerando,1
 329_p4416,ley,23737,dictamen,1
 329_p4416,ley,26052,dictamen,1
-329_p4418,ley,23737,caratula,1
 329_p4419,ley,17081,considerando,1
 329_p4419,ley,17081,dictamen,1
 329_p4422,ley,24522,dictamen,1
@@ -1782,7 +1780,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 329_p5368,ley,24521,caratula,1
 329_p5368,ley,19549,dictamen,2
 329_p5368,ley,24521,dictamen,1
-329_p5375,ley,24521,caratula,1
 329_p5377,ley,22262,caratula,1
 329_p5377,ley,22262,dictamen,10
 329_p5377,ley,25156,dictamen,5
@@ -2093,8 +2090,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 330_p45,ley,24463,considerando,3
 330_p45,ley,25561,considerando,1
 330_p45,ley,26153,considerando,1
-330_p51,ley,16986,caratula,1
-330_p51,ley,25561,caratula,1
 330_p53,ley,23982,dictamen,1
 330_p53,ley,25344,dictamen,1
 330_p53,ley,5320,dictamen,1
@@ -2147,7 +2142,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 330_p215,ley,23592,considerando,1
 330_p215,ley,1285,dictamen,1
 330_p215,ley,23592,dictamen,2
-330_p217,ley,13944,caratula,1
 330_p217,ley,13944,dictamen,1
 330_p220,ley,24463,considerando,1
 330_p228,ley,23431,dictamen,1
@@ -2797,7 +2791,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 330_p2040,ley,23521,dictamen,5
 330_p2040,ley,24952,dictamen,1
 330_p2040,ley,25779,dictamen,2
-330_p2046,ley,23521,caratula,1
 330_p2047,ley,2492,considerando,1
 330_p2049,ley,12346,dictamen,1
 330_p2049,ley,20628,dictamen,1
@@ -3260,7 +3253,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 330_p3565,ley,13064,dictamen,4
 330_p3565,ley,13998,dictamen,1
 330_p3565,ley,19549,dictamen,3
-330_p3579,ley,16986,caratula,1
 330_p3579,ley,16986,considerando,1
 330_p3581,ley,16183,considerando,1
 330_p3581,ley,26183,considerando,1
@@ -3865,7 +3857,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 331_p72,ley,18037,voto,1
 331_p76,ley,24241,considerando,1
 331_p76,ley,24463,considerando,1
-331_p77,ley,25871,caratula,1
 331_p77,ley,25871,dictamen,1
 331_p80,ley,21839,dictamen,3
 331_p80,ley,24432,dictamen,1
@@ -4294,7 +4285,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 331_p1329,ley,24463,considerando,3
 331_p1329,ley,26153,considerando,1
 331_p1329,ley,26153,dispositivo,1
-331_p1332,ley,25086,caratula,1
 331_p1332,ley,25086,dictamen,1
 331_p1336,ley,1285,considerando,1
 331_p1336,ley,26061,considerando,1
@@ -4791,7 +4781,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 331_p2715,ley,20744,considerando,1
 331_p2715,ley,24635,considerando,1
 331_p2715,ley,24635,dictamen,5
-331_p2720,ley,23737,caratula,2
+331_p2720,ley,23737,caratula,1
 331_p2720,ley,23737,considerando,2
 331_p2720,ley,26052,considerando,1
 331_p2720,ley,23737,voto,3
@@ -4874,7 +4864,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 331_p2907,ley,22351,dictamen,1
 331_p2913,ley,15336,dictamen,1
 331_p2919,ley,4459,considerando,1
-331_p2925,ley,16986,caratula,1
 331_p2925,ley,25675,considerando,1
 331_p2925,ley,1285,dictamen,1
 331_p2925,ley,16986,dictamen,2
@@ -5073,7 +5062,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 332_p433,ley,23592,considerando,1
 332_p433,ley,23298,voto,1
 332_p433,ley,23592,voto,2
-332_p459,ley,25561,caratula,3
+332_p459,ley,25561,caratula,2
 332_p479,ley,24522,dictamen,5
 332_p500,ley,24028,considerando,4
 332_p500,ley,24557,considerando,3
@@ -5565,7 +5554,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 332_p1933,ley,4839,dictamen,1
 332_p1933,ley,4903,dictamen,1
 332_p1952,ley,16986,caratula,1
-332_p1957,ley,23737,caratula,1
 332_p1957,ley,23737,considerando,2
 332_p1957,ley,26052,considerando,2
 332_p1957,ley,26052,dispositivo,1
@@ -7158,7 +7146,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 334_p1703,ley,25561,voto,2
 334_p1703,ley,25561,dictamen,3
 334_p1703,ley,25967,dictamen,1
-334_p1754,ley,16986,caratula,1
 334_p1754,ley,25675,considerando,1
 334_p1754,ley,26331,considerando,5
 334_p1754,ley,7107,considerando,1
@@ -7946,7 +7933,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 338_p424,ley,24521,dictamen,4
 338_p428,ley,1285,dictamen,1
 338_p428,ley,25326,dictamen,1
-338_p432,ley,23737,caratula,1
 338_p432,ley,23737,dictamen,1
 338_p435,ley,25675,considerando,4
 338_p435,ley,26168,considerando,3
@@ -8485,7 +8471,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 339_p225,ley,12346,considerando,2
 339_p230,ley,25344,considerando,2
 339_p230,ley,7153,considerando,1
-339_p234,ley,16986,caratula,2
+339_p234,ley,16986,caratula,1
 339_p245,ley,16986,caratula,2
 339_p245,ley,26689,considerando,1
 339_p252,ley,19550,dictamen,2
@@ -8594,7 +8580,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 339_p493,ley,1485,dictamen,1
 339_p493,ley,23982,dictamen,1
 339_p493,ley,25561,dictamen,1
-339_p506,ley,24144,caratula,2
+339_p506,ley,24144,caratula,1
 339_p506,ley,19359,considerando,2
 339_p506,ley,19359,dictamen,1
 339_p508,ley,24240,dictamen,1
@@ -8693,7 +8679,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 339_p795,ley,26061,dictamen,2
 339_p795,ley,26657,dictamen,1
 339_p795,ley,27044,dictamen,1
-339_p812,ley,23187,caratula,2
+339_p812,ley,23187,caratula,1
 339_p812,ley,23898,considerando,1
 339_p814,ley,5238,dictamen,1
 339_p819,ley,1285,considerando,3
@@ -8786,7 +8772,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 339_p1195,ley,1285,dictamen,1
 339_p1195,ley,17418,dictamen,1
 339_p1203,ley,23898,considerando,1
-339_p1204,ley,22415,caratula,2
+339_p1204,ley,22415,caratula,1
 339_p1206,ley,21526,caratula,2
 339_p1207,ley,21526,caratula,2
 339_p1208,ley,22278,dictamen,5
@@ -8804,7 +8790,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 339_p1223,ley,24065,dictamen,6
 339_p1223,ley,25790,dictamen,2
 339_p1223,ley,26854,dictamen,1
-339_p1254,ley,16986,caratula,2
+339_p1254,ley,16986,caratula,1
 339_p1254,ley,1285,considerando,1
 339_p1254,ley,16986,considerando,6
 339_p1254,ley,4055,considerando,1
@@ -8891,7 +8877,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 339_p1571,ley,21708,dictamen,1
 339_p1571,ley,26061,dictamen,1
 339_p1571,ley,26994,dictamen,1
-339_p1577,ley,23592,caratula,2
+339_p1577,ley,23592,caratula,1
 339_p1577,ley,1285,dictamen,1
 339_p1577,ley,23592,dictamen,2
 339_p1579,ley,19798,dictamen,1
@@ -8908,7 +8894,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 339_p1599,ley,21708,dictamen,1
 339_p1599,ley,23551,dictamen,1
 339_p1599,ley,24642,dictamen,1
-339_p1601,ley,24270,caratula,2
+339_p1601,ley,24270,caratula,1
 339_p1601,ley,24270,dictamen,1
 339_p1615,ley,17319,dictamen,2
 339_p1622,ley,24767,considerando,3
@@ -8925,11 +8911,10 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 339_p1663,ley,1285,dictamen,1
 339_p1663,ley,21708,dictamen,1
 339_p1674,ley,24557,dictamen,2
-339_p1680,ley,26364,caratula,1
 339_p1680,ley,26364,dictamen,1
 339_p1683,ley,16986,caratula,2
 339_p1683,ley,24946,dictamen,1
-339_p1689,ley,26361,caratula,2
+339_p1689,ley,26361,caratula,1
 339_p1689,ley,16986,considerando,1
 339_p1709,ley,26364,dictamen,1
 339_p1717,ley,22415,dictamen,1
@@ -9014,7 +8999,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 340_p103,ley,26522,dictamen,1
 340_p103,ley,27078,dictamen,1
 340_p113,ley,1285,considerando,1
-340_p121,ley,25561,caratula,2
+340_p121,ley,25561,caratula,1
 340_p121,ley,16986,considerando,1
 340_p121,ley,25561,considerando,3
 340_p122,ley,23660,considerando,2
@@ -9209,7 +9194,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 340_p765,ley,26361,considerando,2
 340_p765,ley,24240,voto,1
 340_p765,ley,24449,voto,1
-340_p786,ley,23737,caratula,2
+340_p786,ley,23737,caratula,1
 340_p786,ley,23737,considerando,1
 340_p786,ley,23737,dictamen,2
 340_p799,ley,15262,dictamen,1
@@ -9230,7 +9215,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 340_p822,ley,22172,dictamen,4
 340_p824,ley,1285,dictamen,1
 340_p824,ley,21708,dictamen,1
-340_p827,ley,24270,caratula,2
+340_p827,ley,24270,caratula,1
 340_p827,ley,24270,dictamen,2
 340_p832,ley,25434,dictamen,1
 340_p840,ley,9650,dictamen,9
@@ -9311,8 +9296,8 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 340_p1089,ley,10052,dictamen,1
 340_p1089,ley,6902,dictamen,1
 340_p1089,ley,7061,dictamen,1
-340_p1094,ley,22415,caratula,2
-340_p1110,ley,16986,caratula,2
+340_p1094,ley,22415,caratula,1
+340_p1110,ley,16986,caratula,1
 340_p1129,ley,14653,considerando,1
 340_p1129,ley,14653,dictamen,2
 340_p1136,ley,26854,considerando,2
@@ -9571,7 +9556,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 341_p101,ley,11683,considerando,1
 341_p101,ley,25414,considerando,2
 341_p101,ley,25414,voto,3
-341_p122,ley,16986,caratula,2
+341_p122,ley,16986,caratula,1
 341_p124,ley,26994,considerando,1
 341_p129,ley,3175,dictamen,1
 341_p146,ley,24240,dispositivo,1
@@ -9611,7 +9596,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 341_p289,ley,7408,considerando,3
 341_p289,ley,7408,dictamen,1
 341_p307,ley,26364,caratula,1
-341_p307,ley,26842,caratula,1
 341_p307,ley,12331,dictamen,1
 341_p307,ley,26364,dictamen,4
 341_p307,ley,26842,dictamen,3
@@ -9626,7 +9610,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 341_p331,ley,1285,considerando,2
 341_p331,ley,14467,considerando,2
 341_p331,ley,4055,considerando,2
-341_p335,ley,24051,caratula,2
+341_p335,ley,24051,caratula,1
 341_p336,ley,23492,considerando,2
 341_p336,ley,23521,considerando,1
 341_p336,ley,24952,considerando,1
@@ -9640,7 +9624,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 341_p336,ley,25779,dictamen,5
 341_p336,ley,25928,dictamen,1
 341_p413,ley,27148,considerando,1
-341_p414,ley,16986,caratula,2
+341_p414,ley,16986,caratula,1
 341_p414,ley,1285,considerando,1
 341_p414,ley,4055,considerando,1
 341_p416,ley,20744,dictamen,4
@@ -9667,11 +9651,11 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 341_p545,ley,22415,dictamen,1
 341_p545,ley,26476,dictamen,11
 341_p566,ley,21309,considerando,1
-341_p570,ley,24043,caratula,2
+341_p570,ley,24043,caratula,1
 341_p581,ley,20628,considerando,1
 341_p581,ley,24073,considerando,1
 341_p581,ley,25561,considerando,1
-341_p592,ley,22415,caratula,2
+341_p592,ley,22415,caratula,1
 341_p600,ley,24660,dictamen,1
 341_p605,ley,1285,dictamen,1
 341_p605,ley,25675,dictamen,1
@@ -10681,7 +10665,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 343_p181,ley,1285,dictamen,1
 343_p181,ley,18345,dictamen,2
 343_p181,ley,24557,dictamen,2
-343_p193,ley,22415,caratula,2
+343_p193,ley,22415,caratula,1
 343_p193,ley,22415,considerando,1
 343_p195,ley,1285,dictamen,1
 343_p195,ley,27541,dictamen,1
@@ -10741,7 +10725,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 343_p463,ley,1285,dictamen,1
 343_p463,ley,25675,dictamen,2
 343_p463,ley,27148,dictamen,1
-343_p473,ley,25561,caratula,1
 343_p473,ley,1285,dictamen,1
 343_p473,ley,16986,dictamen,1
 343_p473,ley,25561,dictamen,1
@@ -11465,7 +11448,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 344_p750,ley,13982,considerando,1
 344_p750,ley,23551,considerando,2
 344_p750,ley,9578,considerando,1
-344_p757,ley,25063,caratula,2
+344_p757,ley,25063,caratula,1
 344_p757,ley,21839,considerando,1
 344_p757,ley,24432,considerando,1
 344_p757,ley,21839,voto,2
@@ -11555,7 +11538,6 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 344_p1235,ley,16986,dictamen,1
 344_p1235,ley,23879,dictamen,1
 344_p1235,ley,25675,dictamen,1
-344_p1245,ley,16986,caratula,1
 344_p1245,ley,1285,dictamen,1
 344_p1245,ley,16986,dictamen,2
 344_p1245,ley,21836,dictamen,1
@@ -12189,7 +12171,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 344_p3725,ley,9603,considerando,1
 344_p3725,ley,9757,considerando,1
 344_p3725,ley,9868,considerando,1
-344_p3741,ley,16986,caratula,2
+344_p3741,ley,16986,caratula,1
 344_p3741,ley,16986,considerando,1
 344_p3741,ley,24071,considerando,1
 344_p3749,ley,25488,considerando,1
@@ -12240,18 +12222,18 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 345_p175,ley,1965,dictamen,1
 345_p175,ley,26061,dictamen,1
 345_p175,ley,4109,dictamen,1
-345_p191,ley,16986,caratula,2
+345_p191,ley,16986,caratula,1
 345_p191,ley,16986,considerando,3
 345_p191,ley,24937,considerando,3
 345_p191,ley,24939,considerando,1
 345_p191,ley,26854,considerando,3
 345_p191,ley,16986,dispositivo,1
-345_p197,ley,26080,caratula,2
+345_p197,ley,26080,caratula,1
 345_p197,ley,24937,considerando,6
 345_p197,ley,24939,considerando,4
 345_p197,ley,26080,considerando,3
 345_p197,ley,26855,considerando,1
-345_p217,ley,16986,caratula,2
+345_p217,ley,16986,caratula,1
 345_p220,ley,21839,considerando,2
 345_p220,ley,24432,considerando,1
 345_p220,ley,27423,considerando,4
@@ -12331,7 +12313,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 345_p608,ley,12665,considerando,2
 345_p608,ley,21836,considerando,1
 345_p608,ley,25197,considerando,1
-345_p630,ley,16986,caratula,2
+345_p630,ley,16986,caratula,1
 345_p632,ley,23898,considerando,1
 345_p634,ley,19349,dictamen,3
 345_p645,ley,11672,considerando,1
@@ -12496,7 +12478,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 345_p1303,ley,24767,considerando,1
 345_p1312,ley,23511,dictamen,6
 345_p1312,ley,26548,dictamen,11
-345_p1322,ley,16986,caratula,2
+345_p1322,ley,16986,caratula,1
 345_p1322,ley,24018,considerando,3
 345_p1322,ley,27546,considerando,1
 345_p1325,ley,25675,dictamen,3
@@ -12683,7 +12665,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 346_p580,ley,2027,dictamen,1
 346_p580,ley,2159,dictamen,4
 346_p580,ley,4317,dictamen,6
-346_p610,ley,16986,caratula,2
+346_p610,ley,16986,caratula,1
 346_p610,ley,24241,considerando,1
 346_p613,ley,11615,voto,1
 346_p613,ley,20628,dictamen,4
@@ -12719,7 +12701,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 346_p741,ley,18345,dictamen,1
 346_p741,ley,24557,dictamen,1
 346_p741,ley,27348,dictamen,7
-346_p750,ley,16986,caratula,2
+346_p750,ley,16986,caratula,1
 346_p750,ley,16986,considerando,1
 346_p754,ley,16986,voto,1
 346_p754,ley,17319,dictamen,2
@@ -12911,7 +12893,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 346_p1361,ley,1285,dictamen,1
 346_p1361,ley,16986,dictamen,1
 346_p1361,ley,9871,dictamen,3
-346_p1377,ley,21526,caratula,2
+346_p1377,ley,21526,caratula,1
 346_p1377,ley,16986,considerando,1
 346_p1379,ley,17798,considerando,1
 346_p1379,ley,24767,considerando,1

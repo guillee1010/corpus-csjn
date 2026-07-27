@@ -5397,7 +5397,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 347_p344,Cristina Elisabet Fernández,,,,no,epilogo,epilogo:recurso
 347_p347,Asociart S.A. ART,,,,no,epilogo,epilogo:recurso
 347_p352,Alianza La Libertad Avanza – Partido Unión Celeste y Blanco –Orden Nacional- y Partido Unión Celeste y Blanco –Distrito Santiago del Estero-,,,,no,epilogo,epilogo:recurso
-347_p357,Andrés Gil Domínguez,por_derecho_propio,,,no,caratula,caratula_via_letrado:nombre_match
+347_p357,,solo_letrado,,,no,epilogo,epilogo:recurso
 347_p360,,,,,,sin_epilogo,sin_zona
 347_p367,,,,,,no_aplica,tipo_entrada=sumario_con_link
 347_p368,,,,,,epilogo,sin_marcador_recurso
