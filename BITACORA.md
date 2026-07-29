@@ -20011,8 +20011,59 @@ Dos del asistente. **(1)** El `--regolden` se corrió ANTES de la adjudicación;
 **Scripts creados:** `scripts/diagnostico/H218/` — `superficie_c_v1.py` v0.2 · `poc_b172_flipset.py` v0.1 · `poc_b172_materia.py` v0.1 · `verificar_h218.py` · `adjudicar_h218.py` (con bug, superado) · baselines `superficie_c_v1.csv`, `poc_b172_materia_baseline.csv`, `golden_pre_H218.csv`.
 
 **Commits:** 2 — (1) parser v42.0 + los 4 outputs movidos + golden + manifest; (2) cierre documental (DEUDA + BITACORA + CHANGELOG).
-```
 
+## H219 — Frente C: Z_caption_anidado cerrado (parser v42.1) + B173 adjudicado (2026-07-27)
+
+**Objetivo:** ejecutar el validador B173 (query barata) y cerrar la clase Z del frente C (ensanche de V1) con flip-set sellado.
+
+### H219-01 — Priorización REEL
+
+Orden sancionado: Unidad 0 → validador B173 → Z_caption_anidado → clases de vocabulario B/S/E solo si Z cerraba redondo (no se abrieron) → medición título-de-cabeza como cola read-only (no se llegó). Decisión: `case_name_cuerpo_legacy` NO se borra hasta cerrar el frente C. Los 4 costos de materia de H218 (329_p1243, 330_p1183, 331_p357, 331_p125) verificados clase F2 = techo estructural: el frente C no los recupera.
+
+### H219-02 — B173: veredicto sellado por dump
+
+Dump L26315–26350 de `LibroVol329.2.md` + casos.csv: GAP HUÉRFANO COMPLETO — el Rojas genuino [26324–26347, 0-based] no lo posee ningún bloque (329_p2063 fin_real 26323; Vignolo/2064 inicio refinado 26348, intacto). El genuino trae V1 canónica ritual («Recurso de hecho deducido por los herederos de Marcos Efraín Rojas…»). Bonus: el bloque de 2063 duplica la cola de Rusillo que 2062 ya posee (ambos fin_real 26323, solape fin_extendido). Entrada B173 a completar en DEUDA.
+
+### H219-03 — Diseño Z: los 9 extractos y la decisión de semántica
+
+Lectura de `extraer_caratula_v1` (L340–370) + 9 extractos reales: la causa raíz es que el cierre aceptaba CUALQUIER comilla del set — con caption anidado «"'X…» la simple en pos 0 daba `acumulado[:0] == ""`. El anidamiento es CONVENCIÓN de acumulados (cada causa en '…' dentro del caption en "…", presente en 5 tomos), no OCR; el OCR agrega ruido encima (" impresa como " en 330_p2414, ' perdida en 337_p1006, "" duplicada en 339_p841, apóstrofos como ' «D' Alessandro»). 8/9 son acumulados genuinos + 339_p841 comilla duplicada. DECISIÓN del operador: el campo lleva la CAUSA LÍDER (denominación SJ-CSJN: «CHERQUIS ERNESTO s/ REC. DE CASACION…»; el expediente del titular ni figura en el caption — los numerados son los otros). Diseño: cierre por CLASE PAR + guard captura no vacía + fallback al comportamiento viejo verbatim (patrón D2/H201) + recorte a primera causa GATEADO a capturas que arrancan con comilla (imposible en rama v1 sana).
+
+### H219-04 — PoC y flip-set sellado (73)
+
+`poc_z_caption.py` v0.1→v0.2 (H219/): la v0.1 frenó E0 con 24 mismatches — adjudicados como defecto de espec del harness: producción NO llama a V1 en stubs `sumario_con_link` (L3281) ni con `apertura_rel None` (gate L4193). v0.2 replica ambos gates (exentos: stub 191 + sin_apertura 45; evaluadas 5658) → E0/E0'' 5658/5658. FLIP-SET SELLADO 73 (baseline `poc_z_caption_baseline.csv`): 58 reparaciones-v1 (captura truncada en comilla simple interna se extiende al cierre real; A prefijo de B 58/58) + 9 Z_a_valor + 6 Z_rama_vacio. CORRECCIÓN DE SUPERFICIE: la superficie H218 solo cubría `cuerpo != ""` → la clase Z real es 15, no 9 (firma de la rama vacio: fuente=vacio ∧ legacy==""). POOL LATENTE anotado sin abrir: 6 fallos con apertura None donde V1 dispararía desde 0 (329_p988, 329_p1930/B165, 329_p4862, 331_p1592, 334_p1193, 346_p1241) — ticket L4193.
+
+### H219-05 — Ripple de decisión: VACÍO medido
+
+`poc_z_ripple.py` v0.1 (adaptación de poc_b172_flipset/H218, brazos con `es_originaria`/`classify_queja`/`es_revision_fondo` reales sobre los 73; candados E0 4× 73/73): is_originaria 0 flips · es_queja/queja_resultado 0 · tribunal_origen_status/is_merit/tipo_voto_sep 0 · clave n300 INTACTA (0 del flip-set en el n300) → sin acople M43.
+
+### H219-06 — Fix v42.1, ciclo y FRENO del adjudicador (3 constancias de método)
+
+`parser.py` v42.0→42.1 (MINOR, precedente B135/H172): equivalencia demostrada en sandbox (fix==espec sellada y legado==v42.0, 17 bloques × 2). Ciclo consciente: producción CUMPLE contrato (check_regresion [FAIL] solo casos.csv con los diffs == flips del baseline; textos/votos/zonas/editorial [OK]). El adjudicador `verificar_h219.py` v1 FRENÓ por 3 defectos DEL ASISTENTE: (1) el comando de extracción del PRE (`git show | Out-File` en PowerShell) re-decodifica con la codepage de consola → mojibake de todo no-ASCII (C3/C5 espurios; vía correcta: `cmd /c` redirect); (2) prints con ⊆ sin `errors="replace"` → UnicodeEncodeError bajo redirección, clase H174 — el script se entregó auto-testeado pero sin test bajo redirección;3) el candado C6 esperaba vacio 928→913 — error aritmético del asistente: restaba los 15 migrantes completos del vacio, cuando migran 9 desde fallback y 6 desde vacio; el POST correcto es v1 3821 · fallback 1151 · vacio 922 (la expectativa 913 ni sumaba 5894: 3821+1151+913 = 5885). La cifra errada estaba también en el changelog de parser.py; ambas se corrigieron pre-commit y el [CLEAN] 7/7 salió con los conteos reales.
+
+### H219-07 — Estado final
+
+**Outputs canónicos:**
+- `output/parser/csjn_casos.csv` — 5894 filas, **40 columnas**, sha `59f2c4792262` (== golden, invariante verificado en disco).
+- `output/parser/csjn_casos_textos.csv` — 5894 filas, sha `f2dcf8fa46f3` (sin cambio).
+- `output/parser/csjn_casos_votos.csv` — 27.900 filas, sha `5df40a20cfd5` (sin cambio).
+- `output/parser/csjn_casos_zonas.csv` — 138.048 segmentos, sha `0a5b1b650d47` (sin cambio).
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones, sha `30a6da652e3a` (sin cambio).
+- `output/parser/csjn_casos_materia.csv` — 5894 filas, sha `56d5b601017a`.
+- `output/parser/csjn_casos_normas.csv` — 13.911 filas, sha `5adc4b9cdead` (+3 vs. H218).
+- `output/parser/csjn_casos_partes.csv` — 5894 filas, sha `df83ac2b7803`.
+- `output/parser/csjn_casos_epilogo.csv` — 5703 filas, sha `c0e58fe41be3` (sin cambio).
+- `output/parser/csjn_casos_recursos.csv` — 5894 filas, sha `da8b8e3771f3` (sin cambio).
+- Manifest `[CLEAN] 65`.
+
+**Candado de conteo (verificado en disco al cierre):** `casos.csv` 5894 × 40 · `case_name_cuerpo_fuente` v1 **3821** / fallback **1151** / vacio **922**.
+
+**Versiones resultantes:** `parser.py` **v42.1**. El resto de la cadena sin cambio.
+
+**Scripts creados:** `scripts/diagnostico/H219/` — `poc_z_caption.py` v0.1→v0.2 · `poc_z_ripple.py` v0.1 · `verificar_h219.py` v1→v2 (v1 con 3 defectos, superada) · baseline `poc_z_caption_baseline.csv`.
+
+**Constancia pendiente:** la adjudicación fina ⊆73 de los derivers quedó SIN hacer. Movimiento registrado sin adjudicar: `normas` +3 filas (13.908→13.911), `materia` y `partes` con sha nuevo. La dirección es la contratada (la concatenación de carátula gana contenido, inverso a H218), pero eso es coherencia, no adjudicación.
+
+**Commits:** 2 — (1) parser v42.1 + casos.csv + golden + manifest + los 3 derivers movidos; (2) cierre documental (BITACORA + CHANGELOG + DEUDA).
 
 
 

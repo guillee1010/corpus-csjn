@@ -2,6 +2,13 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H219 (2026-07-27)
+
+- `parser.py` v42.0→42.1: `extraer_caratula_v1` cierra por CLASE PAR de la comilla de apertura + guard de captura no vacía + fallback `_extraer_caratula_v1_legado` (comportamiento viejo verbatim) + `_acotar_primera_causa` gateada (acumulados → causa líder). 73 casos (58 reparaciones + 15 Z).
+- `output/parser/csjn_casos.csv`: 5894 filas (sin delta); 73 celdas `case_name_cuerpo` + 15 `case_name_cuerpo_fuente` (fallback→v1 ×9, vacio→v1 ×6). Conteo fuente: 3821/1151/922.
+- `output/parser/csjn_casos_{materia,normas,partes}.csv`: re-derivados (la concatenación carátula gana contenido, ⊆73): materia 77,7% · partes recurrente_ok 3899 (+62 vía carátula) · normas carátula 396 pares.
+- `scripts/tests/golden/csjn_casos.csv` + `output/parser/_manifest.json`: re-sellados (casos sha 59f2c479…; los otros 4 CSV byte-idénticos al sello H218).
+
 ## H218 (2026-07-26)
 
 - `parser.py` v41.0 → **v42.0** (MAJOR): elimina el fallback `or case_name_cuerpo_legacy` de `case_name_cuerpo`; agrega la columna `case_name_cuerpo_fuente` ∈ {v1, fallback, vacio}. Schema de `csjn_casos.csv` 39 → 40 columnas.
