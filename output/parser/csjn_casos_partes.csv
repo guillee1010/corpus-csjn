@@ -239,7 +239,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 329_p1473,Dora Cristina Sánchez,,Estado Nacional,,no,epilogo,epilogo:recurso+traslado
 329_p1480,,,,,,epilogo,sin_marcador_recurso
 329_p1484,Jockey Club,codemandada,,,no,epilogo,epilogo:recurso
-329_p1487,,demandada,,,no,caratula,caratula:rol_sin_nombre
+329_p1487,"Estado Nacional’; A.1333.XXXIX. ‘Altuna, Diana Alicia c/ Estado Nacional’; y otros",demandada,,,no,caratula,caratula:rol_causa
 329_p1488,Wal Mart Argentina S.A.,,,,no,epilogo,epilogo:recurso
 329_p1490,Perlui S.A.,,,,no,epilogo,epilogo:recurso
 329_p1493,Raúl Enrique Castets,,,,no,epilogo,epilogo:recurso
@@ -1330,7 +1330,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 330_p1567,síndico de la quiebra Mario Oscar Bruzzo,,,,no,epilogo,epilogo:recurso
 330_p1572,Lucrecia Beatriz Woodyatt Michel de Ulloa,,,,no,epilogo,epilogo:recurso
 330_p1578,la defensa de Fernando Daniel Vitabar Albornoz,,,,no,caratula,caratula:recurso
-330_p1580,"Carlos Francisco Zubiri, Mario José Castellucci y ‘Castellucci y Zubiri S.R.L",,,,no,caratula,caratula_via_letrado:recurso
+330_p1580,"Carlos Francisco Zubiri, Mario José Castellucci y ‘Castellucci y Zubiri S.R.L.’",,,,no,caratula,caratula_via_letrado:recurso
 330_p1587,,,,,,sin_epilogo,sin_zona
 330_p1599,,,,,,sin_epilogo,sin_zona
 330_p1601,,,,,,sin_epilogo,sin_zona
@@ -2422,7 +2422,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 332_p1564,Hugo Norberto Catalano,,,,no,epilogo,epilogo:recurso
 332_p1571,AFIP – DGI,,Candy S.A.,,no,epilogo,epilogo:recurso+traslado
 332_p1598,Instituto Cibernos S.A.,actora,,,no,epilogo,epilogo:recurso
-332_p1600,,demandada,,,no,caratula,caratula:rol_sin_nombre
+332_p1600,Aguas Argentinas S.A.’ y M.61.XLIII ‘Municipalidad de Berazategui c/ Aguas Argentinas S.A.’; el Estado Nacional en la causa M.60.XLIII ‘Municipalidad de Berazategui c/ Aguas Argentinas S.A.’ y M.2714.XXXIX ‘Municipalidad de Berazategui c/ Aguas Argentinas S.A.’; y por el Intendente de Berazategui en la causa M.72.XLIII ‘Municipalidad de Berazategui c/ Aguas Argentinas S.A.’,demandada,,,no,caratula,caratula:rol_causa
 332_p1616,Sr. Elvio Alberto Yapur,,,,no,epilogo,epilogo:recurso
 332_p1622,,,,,,sin_epilogo,sin_zona
 332_p1624,,,,,,epilogo,sin_marcador_recurso
@@ -2657,7 +2657,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 333_p855,Estado Nacional,,German Adolfo Rabolini,actora,no,epilogo,epilogo:recurso+traslado
 333_p859,Ramona Aguirre,actora,,,no,epilogo,epilogo:recurso
 333_p866,Cristian Andrés o Cristian Daniel Estévez,penal,,,no,epilogo,epilogo:recurso
-333_p914,"Gómez, José Mario y otro",demandada,,,no,caratula,caratula:rol_causa
+333_p914,"Gómez, José Mario y otro’ y por Elizabeth Dávalos Zuazo y José Mario Gómez en la causa M.1266.XLIV ‘Metzger, Hugo Alberto c/ Gómez, José Mario’",demandada,,,no,caratula,caratula:rol_causa
 333_p917,la defensa de Mariano Ezequiel Nievas,,,,no,caratula,caratula:recurso
 333_p924,,,,,,sin_epilogo,sin_zona
 333_p927,"Vanesa Maricel López, Dr. Pedro Pablo Pusineri",penal,,,no,epilogo,epilogo:recurso
@@ -5705,7 +5705,7 @@ caso_id_canonico,recurrente,recurrente_rol,recurrido,recurrido_rol,multi_recurre
 348_p755,Haras el Moro S.A,demandada,,,no,epilogo,epilogo:recurso
 348_p756,Eugenio Aramburu,,,,no,epilogo,epilogo:recurso
 348_p763,Centro de Educación Médica e Investigaciones Clínicas Norberto Quirno (CEMIC) y Fundación Norberto Quirno,codemandada,,,no,epilogo,epilogo:recurso
-348_p773,Pagano Andrea Esther p/ sí y en rep. de sus hijos men. y otro,actora,,,no,caratula,indice:nombre_rol
+348_p773,‘Pagano Andrea Esther p/ sí y en rep. de sus hijos men. y otro,actora,,,no,caratula,caratula:rol_causa
 348_p782,Félix De Barrio,,,,no,epilogo,epilogo:recurso
 348_p795,Julio I. Frigerio y Fernando M. Carcavallo,por_derecho_propio,,,no,epilogo,epilogo:recurso
 348_p802,"Facundo Ariel Cáceres Carrera, por su propio derecho",penal,Ford Argentina S.C.A.,penal,si,epilogo,epilogo:recurso+traslado

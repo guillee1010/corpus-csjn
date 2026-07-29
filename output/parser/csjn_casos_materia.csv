@@ -239,7 +239,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 329_p1473,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 329_p1480,penal,lectura_texto,objeto(1)
 329_p1484,laboral,lectura_tribunal,regla:\bdel trabajo\b
-329_p1487,,sin_clasificar,sin_ancla
+329_p1487,contencioso_administrativo,lectura_texto,provincia:ca
 329_p1488,laboral,lectura_tribunal,regla:\bdel trabajo\b
 329_p1490,civil_comercial,lectura_tribunal,regla:\ben lo civil\b
 329_p1493,penal,lectura_tribunal,regla:casacion penal
@@ -1077,7 +1077,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 330_p45,previsional,lectura_texto,norma:24463+norma:26153+parte(3)
 330_p47,,sin_clasificar,sin_ancla
 330_p48,,sin_clasificar,sin_ancla
-330_p50,,sin_clasificar,sin_ancla
+330_p50,contencioso_administrativo,lectura_texto,coocur:corralito_emergencia
 330_p51,,sin_clasificar,sin_ancla
 330_p53,contencioso_administrativo,lectura_texto,provincia:ca
 330_p58,civil_comercial,lectura_tribunal,regla:\ben lo civil\b
@@ -1597,7 +1597,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 330_p3663,,sin_clasificar,sin_ancla
 330_p3673,penal,lectura_tribunal,regla:criminal y correccional
 330_p3680,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
-330_p3685,,sin_clasificar,sin_ancla
+330_p3685,civil_comercial,lectura_texto,objeto(1)
 330_p3714,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 330_p3722,,sin_clasificar,sin_ancla
 330_p3723,penal,lectura_tribunal,regla:casacion penal
@@ -2102,7 +2102,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 331_p2169,laboral,lectura_tribunal,regla:\bdel trabajo\b
 331_p2174,laboral,lectura_tribunal,regla:\bdel trabajo\b
 331_p2178,,originaria,originaria
-331_p2195,,sin_clasificar,sin_ancla
+331_p2195,contencioso_administrativo,lectura_texto,provincia:ca
 331_p2202,penal,lectura_texto,kw+norma:24767+objeto(3)
 331_p2217,,sin_clasificar,sin_ancla
 331_p2223,ambiental,lectura_texto,norma:25675(1)
@@ -2176,7 +2176,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 331_p2656,tributario,lectura_texto,norma:11683(1)
 331_p2663,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 331_p2672,tributario,lectura_tribunal_refinada,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
-331_p2685,tributario,lectura_dictamen,dictamen:kw+norma:23548(2)
+331_p2685,contencioso_administrativo,lectura_texto,objeto(1)
 331_p2691,penal,lectura_tribunal,regla:casacion penal
 331_p2715,laboral,lectura_tribunal,regla:\bdel trabajo\b
 331_p2720,penal,lectura_texto,norma:23737(1)
@@ -2290,7 +2290,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 332_p607,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 332_p611,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 332_p616,civil_comercial,lectura_tribunal,regla:\ben lo comercial\b
-332_p622,,sin_clasificar,sin_ancla
+332_p622,civil_comercial,lectura_texto,objeto(1)
 332_p627,civil_comercial,lectura_tribunal,regla:civil y comercial federal
 332_p640,,originaria,originaria
 332_p663,,originaria,originaria
@@ -2652,7 +2652,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 333_p819,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 333_p825,civil_comercial,lectura_texto,norma:24522(1)
 333_p828,previsional,lectura_tribunal,regla:seguridad social
-333_p831,,sin_clasificar,sin_ancla
+333_p831,civil_comercial,lectura_texto,objeto(1)
 333_p847,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 333_p855,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 333_p859,contencioso_administrativo,lectura_texto,provincia:ca
@@ -2663,7 +2663,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 333_p927,penal,lectura_tribunal,regla:criminal y correccional
 333_p935,tributario,lectura_texto,kw+norma:11683+objeto+parte(4)
 333_p993,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
-333_p1017,,sin_clasificar,sin_ancla
+333_p1017,civil_comercial,lectura_texto,objeto(1)
 333_p1023,,sin_clasificar,sin_ancla
 333_p1053,penal,lectura_tribunal,regla:casacion penal
 333_p1062,civil_comercial,lectura_tribunal,regla:\ben lo comercial\b
@@ -2824,7 +2824,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 334_p196,contencioso_administrativo,lectura_texto,provincia:ca
 334_p198,previsional,lectura_tribunal,regla:seguridad social
 334_p210,previsional,lectura_tribunal,regla:seguridad social
-334_p214,laboral,lectura_dictamen,dictamen:kw(2)
+334_p214,laboral,lectura_texto,objeto(1)
 334_p223,laboral,lectura_dictamen,dictamen:norma:24557(1)
 334_p229,laboral,lectura_tribunal,regla:\bdel trabajo\b
 334_p236,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
@@ -3913,7 +3913,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 341_p29,laboral,lectura_texto,kw+objeto(2)
 341_p32,consumo,lectura_texto,norma:24240(1)
 341_p39,,originaria,originaria
-341_p54,,sin_clasificar,sin_ancla
+341_p54,contencioso_administrativo,lectura_texto,provincia:ca
 341_p71,,originaria,originaria
 341_p77,civil_comercial,lectura_texto,objeto(1)
 341_p79,civil_comercial,lectura_tribunal,regla:\ben lo civil\b
@@ -5705,7 +5705,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 348_p755,civil_comercial,lectura_tribunal,regla:\ben lo civil\b
 348_p756,civil_comercial,lectura_tribunal,regla:\ben lo civil\b
 348_p763,civil_comercial,lectura_tribunal,regla:\ben lo civil\b
-348_p773,laboral,lectura_dictamen,dictamen:kw+norma:20744+norma:24557+norma:26773(5)
+348_p773,laboral,lectura_texto,parte(1)
 348_p782,penal,lectura_tribunal,regla:casacion penal
 348_p795,civil_comercial,lectura_tribunal,regla:\ben lo civil\b
 348_p802,civil_comercial,lectura_tribunal,regla:\ben lo comercial\b

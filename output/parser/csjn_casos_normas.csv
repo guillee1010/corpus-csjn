@@ -2090,6 +2090,8 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 330_p45,ley,24463,considerando,3
 330_p45,ley,25561,considerando,1
 330_p45,ley,26153,considerando,1
+330_p50,ley,16986,caratula,1
+330_p50,ley,25561,caratula,1
 330_p53,ley,23982,dictamen,1
 330_p53,ley,25344,dictamen,1
 330_p53,ley,5320,dictamen,1
@@ -7555,7 +7557,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 337_p993,ley,20628,considerando,3
 337_p993,ley,24043,voto,2
 337_p993,ley,20628,dictamen,9
-337_p1006,ley,24043,caratula,1
+337_p1006,ley,24043,caratula,2
 337_p1006,ley,24043,considerando,7
 337_p1006,ley,24436,considerando,1
 337_p1006,ley,20840,dictamen,1
@@ -9651,7 +9653,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 341_p545,ley,22415,dictamen,1
 341_p545,ley,26476,dictamen,11
 341_p566,ley,21309,considerando,1
-341_p570,ley,24043,caratula,1
+341_p570,ley,24043,caratula,2
 341_p581,ley,20628,considerando,1
 341_p581,ley,24073,considerando,1
 341_p581,ley,25561,considerando,1
@@ -12019,6 +12021,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 344_p3249,ley,19798,voto,1
 344_p3249,ley,19798,dictamen,2
 344_p3249,ley,25675,dictamen,1
+344_p3289,ley,16986,caratula,1
 344_p3289,ley,12833,considerando,1
 344_p3289,ley,13278,considerando,1
 344_p3289,ley,13998,considerando,4
@@ -12566,7 +12569,7 @@ caso_id_canonico,tipo,norma,ambito,n_menciones
 346_p133,ley,24241,dictamen,4
 346_p133,ley,3021,dictamen,1
 346_p143,ley,25065,dictamen,1
-346_p150,ley,16986,caratula,2
+346_p150,ley,16986,caratula,3
 346_p150,ley,25561,dictamen,3
 346_p150,ley,25827,dictamen,2
 346_p150,ley,25967,dictamen,3
