@@ -20065,7 +20065,46 @@ Lectura de `extraer_caratula_v1` (L340–370) + 9 extractos reales: la causa ra�
 
 **Commits:** 2 — (1) parser v42.1 + casos.csv + golden + manifest + los 3 derivers movidos; (2) cierre documental (BITACORA + CHANGELOG + DEUDA).
 
+## H220 — Superficies read-only B170 + B171; cierre real de H219 (2026-07-29)
 
+**Objetivo:** ejecutar el PROMPT_H220 en orden: unidad 0 (que el repo tenga lo que la documentación dice que tiene) y las dos superficies read-only de la cola (B170 ivi espurio, B171 remisiones al dictamen). Pipeline intocado por contrato de sesión.
+
+### H220-01 — Unidad 0: cierre real de H219 (M63, tercera ocurrencia)
+
+`git log` en disco: HEAD en docs-H218 — los 2 commits declarados por el registro H219 estaban SIN emitir. Candados verificados ANTES de emitir: `casos.csv` 5894×40 · `case_name_cuerpo_fuente` v1 3821 / fallback 1151 / vacio 922 · golden == producción sha `59f2c4792262` (invariante demostrado en disco) · manifest `[CLEAN] 65`. Dos defectos encontrados leyendo BITACORA en disco y reparados pre-commit: (a) fence huérfano en L20014 — 25 fences, 24 pares + ése — que hacía renderizar la entrada H219 ENTERA como bloque de código; (b) la entrada H219 terminaba en H219-06 sin bloque de estado final → se escribió H219-07 CONTRA el `git status` real (regla M63), con constancia: la adjudicación fina ⊆73 de los derivers quedó SIN hacer (normas 13.908→13.911 +3, sha `5adc4b9cdead` · materia `56d5b601017a` · partes `df83ac2b7803` — movidos sin adjudicar; la dirección es la contratada, pero coherencia no es adjudicación). Commits emitidos, árbol limpio. `sha` de los 10 CSV verificados: los 6 sin movimiento == sello H218 byte a byte.
+
+### H220-02 — Unidad 1 (B170): superficie del ivi espurio — pool SELLADO
+
+Mecánica verificada en código (no de memoria): `RE_DISID_HDR` con `re.I` (L257) matchea el fragmento wrapeado line-initial «disidencia de los señores jueces…»; `cuerpo` NO está excluido en `detectar_votos_disidencias` (L4315-4317); consumidores del ivi: techo T1/T2 (L3989-3991), corte del considerando (L4354-4355), `wc_mayoria`/`wc_votos` (L4411-4425), y un consumidor que la entrada no declaraba — el guard de vp L4504.
+
+Instrumento `superficie_ivi_b170.py` v0.1→v0.3 (H220/; plantilla `superficie_b168e`; fuente única `_hdr_tipo_wrap`/`detectar_votos_disidencias` importados; `lineas_excluir` reconstruida de zonas.csv — invariante bajo relabel A1 por construcción, convención rel auto-detectada 5703). v0.1→v0.2: 8 falsos mismatches de E0 adjudicados por `dump_e0_h220.py` = stubs `sumario_con_link` con headers genuinos del material solapado (producción no llama a detectar en stubs, L3651-3662) — la MISMA lección del gate de `poc_z_caption` v0.1 (H219), repetida. v0.2→v0.3: el candado E1 atrapó una identidad falsa MÍA (stubs == sin-zonas): `tipo_entrada` = fallo 5703 + `sumario_con_link` 157 + **`sumario_editorial` 34** → sin-zonas 191 = 157 ∪ 34, y los 34 SÍ se evalúan (E0 los cubre con match-sets idénticos por monotonía: máscara vacía ⊆ cualquier máscara ∧ conteos iguales).
+
+Corrida final en disco: **E1 [OK] · E0 5737/5737 · E0'' [OK]**. POOL SELLADO (baseline `superficie_ivi_b170_out.csv`): **2879 matches = prev_cerrada 2231 · prev_abierta 647 · prev_fallos 1** — la sub-clase LITERAL del testigo 348_p728 es cardinalidad 1 corpus-wide; 648 sospechosas en 612 casos; **el ivi se mueve en 496 casos si la clase cae, 496/496 con techo T1/T2 activo** (cota superior, sin adjudicar). La pregunta real de B170 pasó a ser qué fracción de `prev_abierta` es FP — adjudicación por lectura, unidad sucesora.
+
+### H220-03 — Unidad 2 (B171): superficie de remisiones al dictamen — pool SELLADO (cota inferior)
+
+Lectura de código: los dos huecos del diagnóstico confirmados (la anafórica de A solo acepta «al que/cual cabe remitir» L1857; E exige «fundamentos» L1892; «comparte el dictamen» a secas no entra, L1847); cascada A ANTES que E; guards de producción: «dictamen» en ventana previa 250 (L2029-33) y cita Fallos ±300 (L2060-61). Hallazgo de diseño: cabeza = `texto_voto[:4000]` (L1965) ⊆ el `[:5000]` publicado en votos.csv (L4595) → la réplica es EXACTA desde el CSV, sin corpus.
+
+Instrumento `superficie_remision_b171.py` v0.1 (H220/; clasificador real importado; cast obligatorio de `is_merit_decision` — llega como string y `"0"` es truthy, rama D L2098). **E0 27.900/27.900 [OK]**. POOL (baseline `superficie_remision_b171_out.csv`): **75 matches = F1 «a cuyos términos» 43** (publicado: indeterminado 32 · D 5 · A 6; **riesgo B067 MEDIDO: 16/43 en contexto precedente/ambos** — un ensanche de A se los robaría a E) + **F2 «comparte el dictamen» 16** (indeterminado 12; el FP a mirar es la negación) + **F3 anafórica-«corresponde» 16 en 15 votos**.
+
+Testigos 4/4 adjudicados con TEXTO: los 4 casos tienen CERO votos separados (votos.csv: todas mayoria/wc 0) — sus fórmulas viven en `considerando_text` (333_p530 «comparte el dictamen»; 342_p186 y 344_p2639 «a cuyos términos») → **B171 tiene DOS NIVELES**: voto separado (medido) y remisión de la MAYORÍA (sin medir; consumidores M58 / tesis-H2 / `lectura_dictamen`). El 4to testigo (339_p1683, cons 175 chars leído entero) resolvió con dos hallazgos: variante NUEVA «cuyos términos SE DAN POR REPRODUCIDOS» (sin «remitir»; la cita de DEUDA era laxa) y **soft hyphen `\xad`** que parte «dic­tamen» y enmascara incluso fórmulas YA cubiertas — la cabeza no se des-guiona → **los 75 son COTA INFERIOR**.
+
+### H220-04 — Correcciones de constancia y constancias de método
+
+**Correcciones de constancia:** (1) al registro H219: los «stub 191 exentos» de `poc_z_caption` son en realidad `sumario_con_link` 157 ∪ `sumario_editorial` 34 — dos tipos, y los 34 SÍ se evalúan en producción (relevante: poc_z es regresión viva). (2) La cita de 339_p1683 en la entrada B171 («a cuyos términos…») era laxa — fórmula real verbatim en la entrada corregida.
+
+**Constancias de método (5, todas del asistente):** (1) contador de filas entregado contando líneas físicas (epilogo 29.350 vs 5703 reales, mismo sha); (2) `csv.reader` sin `field_size_limit` — revienta en textos.csv; (3) corrida pedida con el dato ya demostrado por sha == sello H218; (4) gate de stubs NO replicado en la v0.1 de la superficie — lección de poc_z_caption/H219 REPETIDA; (5) E1 v0.2 postuló la identidad falsa stubs==sin-zonas — el candado la atrapó y se corrigió con dato (v0.3).
+
+### H220 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 157 sumario_con_link + 34 sumario_editorial) — partición de `tipo_entrada` medida esta sesión.
+- **Pipeline:** INTOCADO. parser v42.1 · 0 cambios de `__version__` · 0 outputs canónicos modificados · manifest `[CLEAN] 65` vigente SIN re-sello (verificado en unidad 0).
+
+**Outputs canónicos:** sin cambio respecto del sello H219 (sha verificados en unidad 0; ver H219-07).
+
+**Scripts creados:** `scripts/diagnostico/H220/` — `superficie_ivi_b170.py` v0.3 · `dump_e0_h220.py` v0.1 · `superficie_remision_b171.py` v0.1 · baselines `superficie_ivi_b170_out.csv`, `superficie_remision_b171_out.csv`.
+
+**Commits:** 1 — cierre documental de H220 (DEUDA editada + BITACORA + CHANGELOG con nota de sesión sin cambios de pipeline). Los 2 commits de H219 se emitieron DENTRO de esta sesión (unidad 0) y están documentados en H219-07. Push pendiente de los 3.
 
 
 
