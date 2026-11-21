@@ -9,14 +9,16 @@ Para cada caso clasifica la votación desde `posiciones` del corpus (M67):
 Tribunal = jueces con posición en el fallo (titulares y conjueces); mayoría absoluta = n//2 + 1.
 
 Imprime, solo decisiones de MÉRITO (is_merit_decision), por secretaría:
-  A. total · B. por tamaño del tribunal (el umbral de mayoría cambia con el tamaño) · C. por año.
+  A. total · B. por tamaño del tribunal (el umbral de mayoría cambia con el tamaño) · C. por año
+  · D. posición de cada juez dentro de cada secretaría · E. chi² (con corrección de Yates) de cada
+  secretaría contra el resto, por tamaño de tribunal, para "≥1 disidencia" y "sin mayoría absoluta".
 Escribe secretarias_votacion.csv en el cache (una fila por caso con la clasificación).
 
 Uso:
   python scripts/analisis/secretarias_votacion.py [--cache DIR] [--min 15]
 """
-__version__ = "0.1"  # H221
-import argparse, csv, json, re, sys
+__version__ = "0.2"  # H221: + D. posiciones por juez dentro de cada secretaría · E. prueba chi² (cada secretaría vs resto) // 0.1 H221
+import argparse, csv, json, math, re, sys
 from collections import Counter, defaultdict
 from pathlib import Path
 try: sys.stdout.reconfigure(encoding="utf-8")
@@ -39,6 +41,20 @@ def clasificar(posiciones):
     if cab == 0: return "sin_cabeza", n, cab, dis
     if cab >= n // 2 + 1: return "cabeza_con_mayoria_abs", n, cab, dis
     return "cabeza_sin_mayoria_abs", n, cab, dis
+
+def juez_cat(p):
+    p = str(p).lower()
+    if "disidencia" in p: return "disidencia"
+    if p == "mayoria": return "mayoria"
+    return "voto"
+
+def chi2_yates(a, b, c, d):
+    """2x2 [[a,b],[c,d]]: (chi², p). p con 1 g.l. = erfc(sqrt(chi²/2))."""
+    n = a + b + c + d
+    r1, r2, c1, c2 = a + b, c + d, a + c, b + d
+    if 0 in (r1, r2, c1, c2): return None, None
+    x = n * max(0, abs(a * d - b * c) - n / 2) ** 2 / (r1 * r2 * c1 * c2)
+    return x, math.erfc(math.sqrt(x / 2))
 
 def anio(fecha_sj, date_corpus):
     m = re.search(r"/(\d{4})$", fecha_sj or "") or re.search(r"de\s+(\d{4})", date_corpus or "")
@@ -65,6 +81,7 @@ def main():
             "merito": c.get("is_merit_decision") in ("1", "True", "true"),
             "clase": clase, "n_tribunal": n, "n_cabeza": cab, "n_disidencias": dis,
             "voting_pattern": c.get("voting_pattern"),
+            "posiciones": c.get("posiciones") or "{}",
         })
     with (cache / "secretarias_votacion.csv").open("w", encoding="utf-8", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=list(filas[0])); w.writeheader(); w.writerows(filas)
@@ -113,6 +130,40 @@ def main():
         dis = sum(1 for f in g if f["n_disidencias"] > 0)
         tam = Counter(f["n_tribunal"] for f in g).most_common(1)[0][0]
         print(f"  {y}: {n:4d} · {dis * 100 / n:5.1f} · {sin * 100 / n:5.1f} · {tam}")
+    print(f"\nD. Mérito: posición de cada juez dentro de cada secretaría (jueces con ≥{a.min} participaciones)")
+    print("   participaciones · % mayoría (voto de cabeza) · % voto propio/concurrente · % disidencia")
+    for sec, g in sorted(por_sec.items(), key=lambda kv: -len(kv[1])):
+        if len(g) < a.min: continue
+        pj = defaultdict(Counter)
+        for f in g:
+            try: pos = json.loads(f["posiciones"])
+            except json.JSONDecodeError: continue
+            for j, v in pos.items(): pj[j][juez_cat(v)] += 1
+        filas_j = [(j, c) for j, c in pj.items() if sum(c.values()) >= a.min]
+        if not filas_j: continue
+        print(f" {sec}")
+        for j, c in sorted(filas_j, key=lambda x: -x[1]["disidencia"] / sum(x[1].values())):
+            n = sum(c.values())
+            print(f"   {j[:28]:28s} {n:4d} · {c['mayoria'] * 100 / n:5.1f} · {c['voto'] * 100 / n:5.1f} · {c['disidencia'] * 100 / n:5.1f}")
+
+    print(f"\nE. Chi² con corrección de Yates, cada secretaría contra el resto (mérito, mismo tamaño de tribunal; celdas con ≥{a.min})")
+    print("   p < 0,05 sugiere que la diferencia no es azar; con muchas comparaciones, mirar las de p muy chico")
+    for n_t in sorted({f["n_tribunal"] for f in mer}):
+        g_n = [f for f in mer if f["n_tribunal"] == n_t]
+        if len(g_n) < 2 * a.min: continue
+        print(f" tribunal de {n_t}")
+        for etq, cond in (("≥1 disidencia", lambda f: f["n_disidencias"] > 0),
+                          ("sin mayoría absoluta", lambda f: f["clase"] in ("cabeza_sin_mayoria_abs", "sin_cabeza"))):
+            for sec in sorted({f["secretaria"] for f in g_n}):
+                dentro = [f for f in g_n if f["secretaria"] == sec]
+                fuera = [f for f in g_n if f["secretaria"] != sec]
+                if len(dentro) < a.min: continue
+                si_d = sum(1 for f in dentro if cond(f)); si_f = sum(1 for f in fuera if cond(f))
+                x, pv = chi2_yates(si_d, len(dentro) - si_d, si_f, len(fuera) - si_f)
+                if x is None: continue
+                marca = " *" if pv < 0.05 else ""
+                print(f"   {etq:20s} {sec[:34]:34s} {si_d * 100 / len(dentro):5.1f}% vs {si_f * 100 / len(fuera):5.1f}% · chi² {x:6.2f} · p {pv:.4f}{marca}")
+
     print(f"\nArchivo: {cache / 'secretarias_votacion.csv'}")
     print("Cautelas: la secretaría de SJ no está validada contra el trabajo de campo; las posiciones vienen del parser (B019 puede bajar el tamaño del tribunal; B177 cuenta la disidencia parcial como disidencia).")
 
