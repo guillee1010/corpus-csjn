@@ -20236,3 +20236,15 @@ sj_anio.py v0.1.
 - La secretaría de 2006-2015 en SJ es "MIGRACION" (2154 casos): no hay secretaría real para esa década. `secretarias_votacion.py` v0.3 la excluye y unifica la Sec. 2. Los resultados por secretaría (Sec. 6, Sec. 4) siguen siendo de 2016-2026.
 
 **Commits:** 2 (DEUDA + BITACORA + tabla de adjudicación + secretarias_votacion v0.3; salidas de kappa_sjconsulta desde la máquina del operador).
+
+### H221 — Cierre
+
+- κ de votos commiteado por el operador desde su máquina (`output/validacion/kappa_sjconsulta.csv`, `kappa_sjconsulta_matriz.csv`, `sjconsulta_manifest.csv` con sha256 de 250 archivos del cache).
+- **Pipeline:** sin cambios en toda la sesión. Parser v42.1, outputs canónicos y `_manifest.json` intactos respecto de H220. CHANGELOG sin entrada (regla H220).
+- **Scripts nuevos versionados:** `scripts/validacion/cruce_sjconsulta.py` v0.4 · `kappa_sjconsulta.py` v0.1 · `superficie_b177.py` v0.1 · `scripts/analisis/funcionarial_explora.py` v0.1 · `unir_sjconsulta.py` v0.1 · `secretarias_votacion.py` v0.3 · `m67_mayoria_absoluta.py` v0.1.
+- **Datos versionados:** `output/validacion/adjudicacion_sjconsulta_h221.csv` (98 filas, dato curado) · `superficie_b177.csv` · `estadisticas/resultados/m67_mayoria_absoluta.csv` · salidas de kappa_sjconsulta.
+- **Datos locales, no versionados:** `scripts/diagnostico/sjconsulta/` (cache sj_AAAAMM_v03.json con capa funcionarial, logs, casos_sjconsulta*.csv). Huecos: 06/2015 y 05/2023.
+- **DEUDA:** M66, M67, B177, B178, B179, B180 nuevos o reescritos; B019, B098, B099 actualizados.
+- **Pendientes (próxima sesión, ver PROMPT_H222):** medir B179 corpus-wide; cruce doctrina × fallos sin mayoría absoluta (atribución de sumarios y holding); citas posteriores de mayorías circunstanciales; leer los 3 fallos con marca de disidencia parcial sin disidencia publicada, 332_p1394, 346_p931, 344_p174, 343_p1762; validar secretaría contra el trabajo de campo; concordancia disposición/vía con SJ (achicar M43); diseño conjunto de fix de la familia firma (B019/B177/B178/B180), posible auditoría externa read-only.
+
+**Commits de la sesión:** documentación en varias tandas (DEUDA + BITACORA), scripts de validación y análisis, datos curados y salidas del κ. Ninguno toca el pipeline.
