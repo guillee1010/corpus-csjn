@@ -1,0 +1,120 @@
+"""secretarias_votacion.py — votación por secretaría con control de mérito y de tamaño del tribunal (M66/M67, H221)
+
+Lee casos_sjconsulta.csv (salida de unir_sjconsulta.py, cache local) y output/parser/csjn_casos.csv
+(solo lectura). No hace pedidos al sitio.
+
+Para cada caso clasifica la votación desde `posiciones` del corpus (M67):
+  unanime · cabeza_con_mayoria_abs (el voto que encabeza tiene la mayoría absoluta del tribunal)
+  · cabeza_sin_mayoria_abs (mayoría circunstancial) · sin_cabeza (todos con voto propio o disidencia)
+Tribunal = jueces con posición en el fallo (titulares y conjueces); mayoría absoluta = n//2 + 1.
+
+Imprime, solo decisiones de MÉRITO (is_merit_decision), por secretaría:
+  A. total · B. por tamaño del tribunal (el umbral de mayoría cambia con el tamaño) · C. por año.
+Escribe secretarias_votacion.csv en el cache (una fila por caso con la clasificación).
+
+Uso:
+  python scripts/analisis/secretarias_votacion.py [--cache DIR] [--min 15]
+"""
+__version__ = "0.1"  # H221
+import argparse, csv, json, re, sys
+from collections import Counter, defaultdict
+from pathlib import Path
+try: sys.stdout.reconfigure(encoding="utf-8")
+except Exception: pass
+csv.field_size_limit(2**31 - 1)
+
+RAIZ = Path(__file__).resolve().parents[2]
+CASOS = RAIZ / "output" / "parser" / "csjn_casos.csv"
+
+def clasificar(posiciones):
+    """(clase, n_tribunal, n_cabeza, n_disid). Clase según M67."""
+    try: pos = json.loads(posiciones or "{}")
+    except json.JSONDecodeError: return "sin_posiciones", 0, 0, 0
+    if not pos: return "sin_posiciones", 0, 0, 0
+    v = [str(x).lower() for x in pos.values()]
+    n = len(v)
+    cab = sum(1 for x in v if x == "mayoria")
+    dis = sum(1 for x in v if "disidencia" in x)
+    if dis == 0 and cab == n: return "unanime", n, cab, dis
+    if cab == 0: return "sin_cabeza", n, cab, dis
+    if cab >= n // 2 + 1: return "cabeza_con_mayoria_abs", n, cab, dis
+    return "cabeza_sin_mayoria_abs", n, cab, dis
+
+def anio(fecha_sj, date_corpus):
+    m = re.search(r"/(\d{4})$", fecha_sj or "") or re.search(r"de\s+(\d{4})", date_corpus or "")
+    return int(m.group(1)) if m else None
+
+def main():
+    ap = argparse.ArgumentParser(description="votación por secretaría (M66/M67)")
+    ap.add_argument("--cache", default=str(RAIZ / "scripts" / "diagnostico" / "sjconsulta"))
+    ap.add_argument("--min", type=int, default=15, help="mínimo de casos para mostrar una celda")
+    a = ap.parse_args()
+    cache = Path(a.cache)
+    src = cache / "casos_sjconsulta.csv"
+    if not src.exists(): sys.exit(f"ERROR: falta {src}; correr antes scripts/analisis/unir_sjconsulta.py")
+
+    casos = {r["caso_id_canonico"]: r for r in csv.DictReader(CASOS.open(encoding="utf-8", newline=""))}
+    filas = []
+    for s in csv.DictReader(src.open(encoding="utf-8", newline="")):
+        c = casos.get(s["caso_id_canonico"])
+        if not c or c.get("tipo_entrada") != "fallo": continue
+        clase, n, cab, dis = clasificar(c.get("posiciones"))
+        filas.append({
+            "caso_id_canonico": s["caso_id_canonico"], "anio": anio(s.get("fecha_sj"), c.get("date")),
+            "secretaria": s.get("secretaria") or "(sin dato)",
+            "merito": c.get("is_merit_decision") in ("1", "True", "true"),
+            "clase": clase, "n_tribunal": n, "n_cabeza": cab, "n_disidencias": dis,
+            "voting_pattern": c.get("voting_pattern"),
+        })
+    with (cache / "secretarias_votacion.csv").open("w", encoding="utf-8", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=list(filas[0])); w.writeheader(); w.writerows(filas)
+
+    mer = [f for f in filas if f["merito"]]
+    print(f"secretarias_votacion v{__version__} · casos con secretaría {len(filas)} · de mérito {len(mer)}")
+    print(f"  clases (mérito): {dict(Counter(f['clase'] for f in mer))}\n")
+
+    def linea(etq, grupo):
+        n = len(grupo)
+        if n < a.min: return None
+        cnt = Counter(f["clase"] for f in grupo)
+        con_dis = sum(1 for f in grupo if f["n_disidencias"] > 0)
+        pct = lambda x: f"{x * 100 / n:5.1f}"
+        return (f"  {etq:46s} {n:4d} · unán {pct(cnt['unanime'])} · ≥1 disid {pct(con_dis)}"
+                f" · cabeza c/may.abs {pct(cnt['cabeza_con_mayoria_abs'])} · SIN may.abs {pct(cnt['cabeza_sin_mayoria_abs'] + cnt['sin_cabeza'])}")
+
+    print(f"A. Solo decisiones de mérito, por secretaría (celdas con ≥{a.min} casos)")
+    por_sec = defaultdict(list)
+    for f in mer: por_sec[f["secretaria"]].append(f)
+    for sec, g in sorted(por_sec.items(), key=lambda kv: -len(kv[1])):
+        l = linea(sec[:46], g)
+        if l: print(l)
+    l = linea("TODAS", mer)
+    if l: print(l)
+
+    print(f"\nB. Mérito, por tamaño del tribunal y secretaría (el umbral de mayoría absoluta cambia con el tamaño)")
+    for n in sorted({f["n_tribunal"] for f in mer}):
+        g_n = [f for f in mer if f["n_tribunal"] == n]
+        if len(g_n) < a.min: continue
+        print(f" tribunal de {n} (mayoría absoluta = {n // 2 + 1}), {len(g_n)} casos")
+        por = defaultdict(list)
+        for f in g_n: por[f["secretaria"]].append(f)
+        for sec, g in sorted(por.items(), key=lambda kv: -len(kv[1])):
+            l = linea("   " + sec[:43], g)
+            if l: print(l)
+
+    print(f"\nC. Mérito, por año (todas las secretarías): n · % con disidencia · % sin mayoría absoluta · tamaño de tribunal más frecuente")
+    por_a = defaultdict(list)
+    for f in mer:
+        if f["anio"]: por_a[f["anio"]].append(f)
+    for y in sorted(por_a):
+        g = por_a[y]; n = len(g)
+        if n < a.min: continue
+        sin = sum(1 for f in g if f["clase"] in ("cabeza_sin_mayoria_abs", "sin_cabeza"))
+        dis = sum(1 for f in g if f["n_disidencias"] > 0)
+        tam = Counter(f["n_tribunal"] for f in g).most_common(1)[0][0]
+        print(f"  {y}: {n:4d} · {dis * 100 / n:5.1f} · {sin * 100 / n:5.1f} · {tam}")
+    print(f"\nArchivo: {cache / 'secretarias_votacion.csv'}")
+    print("Cautelas: la secretaría de SJ no está validada contra el trabajo de campo; las posiciones vienen del parser (B019 puede bajar el tamaño del tribunal; B177 cuenta la disidencia parcial como disidencia).")
+
+if __name__ == "__main__":
+    main()

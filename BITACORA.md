@@ -20190,3 +20190,12 @@ sj_anio.py v0.1.
 - Auditabilidad: `cruce_sjconsulta.py` v0.4 (importable, sin cambio de lógica ni salidas) y `scripts/validacion/kappa_sjconsulta.py` v0.1, que recalcula acuerdo y κ con IC 95% por bootstrap por fallo y escribe un manifiesto con sha256 del cache en `output/validacion/`. El κ 0,970 a mano queda reemplazado por esa salida cuando se corra y commitee.
 
 **Commits:** 1 (scripts de validación y análisis + DEUDA M66 + BITACORA H221-08).
+
+### H221-09 — M67 medido y tabla por secretaría controlada
+
+- Corpus publicado: 19 tomos (329-334, 337-349); 335 y 336 parqueados (B098 cierre de firmas en imagen; B099 sin índice de nombres canónico). sjconsulta 2013: 202 fallos del tomo 336, 40 con votos (catálogo externo candidato).
+- M67 medido sobre 5703 fallos: 298 (5,2%) con voto de cabeza sin mayoría absoluta del tribunal (13,7% de los no unánimes; 207 de mérito). De ~9% (2006) a 34% (2023) entre no unánimes; parte puede ser efecto del tribunal de cuatro (umbral 3). Comparar por tamaño de tribunal.
+- `scripts/analisis/secretarias_votacion.py` v0.1: tabla por secretaría solo con decisiones de mérito, por tamaño de tribunal y por año; probado sobre el corpus real con secretarías simuladas. Pendiente correrlo con los datos reales del operador.
+- Descarga 2006-2015 en curso al cierre de este bloque.
+
+**Commits:** 1 (DEUDA M67/M66/B098/B099 + BITACORA H221-09 + secretarias_votacion.py).
