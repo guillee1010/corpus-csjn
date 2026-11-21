@@ -20109,3 +20109,44 @@ Testigos 4/4 adjudicados con TEXTO: los 4 casos tienen CERO votos separados (vot
 
 
 
+## H221 — sjconsulta como segundo codificador externo: sondeo, cruce y validación de posiciones 2016-2019 (2026-11-21)
+
+**Objetivo:** evaluar la base de sumarios de la Secretaría de Jurisprudencia (sjconsulta.csjn.gov.ar) como fuente externa para validar el corpus. Sesión read-only, sin cambios al pipeline ni a outputs canónicos.
+
+### H221-01 — La fuente
+
+No hay API oficial. El portal de datos abiertos de la CSJN no publica sentencias. Se leyó csjn-mcp v0.3.0, que usa los endpoints JSON de sjconsulta sin terceros. El sondeo (sondeo_sjconsulta.py v0.1, marzo 2020) muestra que la búsqueda acepta texto vacío y rango de fechas, que el comodín da HTTP 500 y que cada registro trae 58 campos. La composición está en analisisDocumental, junto con secretaría, fecha de entrada, sentido, recurso, materia, cuestiones federales y marcas. citasRex son fallos posteriores que citan el sumario. El JSON crudo trae datos personales de empleados. Todos los scripts guardan lista blanca. Detalle en M66.
+
+### H221-02 — Meses piloto
+
+Marzo 2020 (10 fallos) y noviembre 2019 (17), con sj_mes.py v0.1 y cobertura_mes.py. Cobertura 27/27. Coincidencia completa de jueces y posiciones entre titulares. Equivalencia de posiciones medida (ver M66). 342_p1847 (conjueces) adjudicado con texto a favor del corpus. Constancia de método: la v0.1 del cruce asumió fechas numéricas y la columna date está en castellano. 350/5894 valores de date quedan sin parsear, pendiente.
+
+### H221-03 — Años completos
+
+sj_anio.py v0.1.
+- 2019: 953/957 posiciones (99,6%), cobertura 209/210.
+- 2017: 1130/1139 (99,2%), cobertura 268/268.
+- 2016: 373/377 (98,9%) sobre 11 meses. Abril cayó por timeout. 177 fallos sin votos codificados en SJ.
+
+### H221-04 — Adjudicación con texto
+
+- Errores de SJ: conjueces en bloque (342_p1847), juez que no firma (342_p122, 339_p1254), página de la sentencia en vez del inicio (342_p1625).
+- Errores del corpus: disidencia parcial publicada como "en disidencia", 12 posiciones en 11 fallos (B177, causa leída en parse_firma). "Por su voto" sin normalizar, 5 líneas (B178). Firma partida "Juan ⏎ Carlos Maqueda." que pierde al juez, en 339_p155, 339_p680 y 340_p403 (B019).
+- No son errores: 340_p232, 340_p538 y 340_p793 son sumario_editorial, y SJ trae su composición. 340_p257 es un artefacto de la regla v0.1 (tres votos propios sin conjunto).
+
+### H221 — Decisiones
+
+- sjconsulta se usa como segundo codificador, no como verdad. Discrepancia se adjudica con texto.
+- Fallos con CONJUECES en SJ se excluyen del cruce automático.
+- Sin bloque conjunto ni unanimidad, nadie es mayoría (corrección de la regla tras 340_p257, pendiente de cablear en sj_anio v0.2).
+- La secretaría de SJ es dato registrado, no deducible. La etiqueta temática puede ser retroactiva y se valida por período contra el trabajo de campo antes de usarla.
+
+### H221 — Estado final
+
+- **Pipeline:** sin cambios. Parser v42.1, outputs canónicos y manifest intactos respecto de H220.
+- **DEUDA:** M66, B177 y B178 nuevas; B019 actualizada.
+- **Pendiente al cierre:** corrida 2018 y 2020-2026 en curso; re-correr abril 2016.
+
+**Scripts creados (scratch, gitignoreado):** `scripts/diagnostico/H221/` — sondeo_sjconsulta.py v0.1, cruce_sjconsulta_mes.py v0.1, cobertura_mes.py, sj_mes.py v0.1, sj_anio.py v0.1; caches sj_AAAAMM_limpio.json sin datos personales; cruces y logs por año; extractos de casos adjudicados.
+
+**Commits:** 2 (DEUDA H221; BITACORA H221).
