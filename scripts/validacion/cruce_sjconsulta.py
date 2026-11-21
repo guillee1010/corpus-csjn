@@ -18,13 +18,16 @@ DISIDENCIA* = en disidencia. Diferencia de DEFINICIÓN conocida: el corpus llama
 voto que encabeza aunque tenga una sola firma (342_p761/1061/1665); SJ lo codifica VOTO
 PROPIO (ver M67). Excluye fallos con CONJUECES en SJ (bloque genérico, 342_p1847).
 
-Privacidad: el JSON crudo trae datos personales de empleados de la Corte; se guarda solo una
-lista blanca de campos (limpiar()). Endpoint no documentado: puede cambiar sin aviso.
+Capa funcionarial (v0.3, decisión del operador H221): se guardan, por sumario, por análisis y por
+cada elemento cargado (voces, cuestiones federales, normas, votos…), el código de usuario, el
+nombre, el cargo y las fechas de carga/modificación de los funcionarios que intervinieron. NO se
+guardan CUIL (nombreUsuario) ni mail. Uso: análisis de la tesis; anonimizar en toda exposición.
+Endpoint no documentado: puede cambiar sin aviso.
 Historia: H221 sj_mes/sj_anio v0.1-v0.2 en scripts/diagnostico/H221/ (scratch).
 """
-__version__ = "0.2"  # H221: promovido desde diagnostico/H221/sj_anio_v02.py (regla 340_p257 + reintento por quincenas)
+__version__ = "0.3"  # H221 (cierre): capa funcionarial (código/nombre/cargo/fechas de carga, sin CUIL ni mail) + cache _v03 + reintento por semanas y por página // 0.2 H221: promovido desde diagnostico/H221/sj_anio_v02.py (regla 340_p257 + reintento por quincenas)
 import argparse
-import csv, http.cookiejar, json, re, sys, time, unicodedata, urllib.parse, urllib.request
+import csv, http.cookiejar, json, re, sys, time, unicodedata, urllib.error, urllib.parse, urllib.request
 from calendar import monthrange
 from collections import Counter, defaultdict
 from datetime import datetime
@@ -58,6 +61,36 @@ def norm(n):
 
 def val(o): return o.get("valor") if isinstance(o, dict) else None
 
+CAMPOS_USR = ("usuarioCreacion", "usuarioModificacion", "usuarioCreacionOld",
+              "usuarioModificacionOld", "usuarioControl", "usuarioControlOld", "usuarioMod")
+CAMPOS_FECHA = ("fechaCreacion", "fechaModificacion", "fechaControl")
+LISTAS_AN = ("voces", "cuestionesFederales", "referenciasNormativas", "formulas", "recusExcus",
+             "enlaces", "materias", "votosAnalisisDocumental", "votosSumario")
+
+def usr(u):
+    """Funcionario sin CUIL ni mail: código si viene como string; código/apellido/nombre/cargo si dict."""
+    if isinstance(u, dict):
+        return {k: u.get(k) for k in ("codigo", "apellido", "nombre", "cargo", "estado")}
+    return u
+
+def huella(o):
+    """Usuarios y fechas de carga de un objeto (solo los campos presentes y no nulos)."""
+    if not isinstance(o, dict): return {}
+    h = {k: usr(o[k]) for k in CAMPOS_USR if o.get(k)}
+    h.update({k: o[k] for k in CAMPOS_FECHA if o.get(k)})
+    return h
+
+def funcionarial(r):
+    a = r.get("analisisDocumental") or {}
+    rec = a.get("reciboEntrada") or {}
+    out = {"sumario": huella(r), "analisis": huella(a),
+           "recibo": {"codigoUsuario": rec.get("codigoUsuario"), "fecha": rec.get("fechaString")}}
+    for lista in LISTAS_AN:
+        items = [huella(x) for x in a.get(lista) or []]
+        items = [x for x in items if x]
+        if items: out[lista] = items
+    return out
+
 def limpiar(r):
     a = r.get("analisisDocumental") or {}
     rec = a.get("reciboEntrada") or {}
@@ -73,7 +106,8 @@ def limpiar(r):
             "an_tipo_recurso": val(a.get("tipoRecurso")), "an_materia": val(a.get("materiaSecretaria")),
             "an_votos": [{"tipo": (v.get("tipoVoto") or {}).get("descripcion"),
                           "ministros": [x.get("descripcion") for x in v.get("ministros") or []]}
-                         for v in a.get("votosAnalisisDocumental") or []]}
+                         for v in a.get("votosAnalisisDocumental") or []],
+            "funcionarial": funcionarial(r)}
 
 def descargar(anio, mes, d1=1, d2=None):
     op = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
@@ -84,35 +118,48 @@ def descargar(anio, mes, d1=1, d2=None):
         "filter.fechaHasta": f"{(d2 or monthrange(anio, mes)[1]):02d}/{mes:02d}/{anio}"}).encode()
     html = op.open(urllib.request.Request(f"{B}/consultaSumarios/buscar.html", data=d, headers={
         "Content-Type": "application/x-www-form-urlencoded",
-        "Referer": f"{B}/consultaSumarios/consulta.html"}), timeout=30).read().decode("utf-8", "replace")
+        "Referer": f"{B}/consultaSumarios/consulta.html"}), timeout=60).read().decode("utf-8", "replace")
     m = re.search(r'totalResultados\s*=\s*"(\d+)"', html)
     if not m: raise RuntimeError(f"{mes:02d}/{anio}: sin totalResultados")
     total, regs = int(m.group(1)), []
     while len(regs) < total:
-        time.sleep(PAUSA)
-        p = json.loads(op.open(urllib.request.Request(
-            f"{B}/consultaSumarios/paginarSumarios.html?startIndex={len(regs)}",
-            headers={"X-Requested-With": "XMLHttpRequest"}), timeout=30).read().decode("utf-8"))
+        p = None
+        for intento in range(3):   # v0.3: reintento por página (respuestas truncadas, 05/2023)
+            time.sleep(PAUSA * (1 + 2 * intento))
+            try:
+                p = json.loads(op.open(urllib.request.Request(
+                    f"{B}/consultaSumarios/paginarSumarios.html?startIndex={len(regs)}",
+                    headers={"X-Requested-With": "XMLHttpRequest"}), timeout=60).read().decode("utf-8"))
+                break
+            except (json.JSONDecodeError, TimeoutError, urllib.error.URLError):
+                if intento == 2: raise
         if not p: break
         regs += [limpiar(x) for x in p]
     print(f"  {mes:02d}/{anio} [{d1}-{d2 or 'fin'}]: total declarado {total} · descargados {len(regs)}")
     return regs
 
 def cargar_mes(anio, mes):
-    cache = AQUI / f"sj_{anio}{mes:02d}_limpio.json"
+    cache = AQUI / f"sj_{anio}{mes:02d}_v03.json"
     if cache.exists():
         regs = json.loads(cache.read_text(encoding="utf-8"))
         print(f"  {mes:02d}/{anio}: cache {cache.name} · {len(regs)}")
         return regs
-    try:
-        regs = descargar(anio, mes)
-    except Exception as e:
-        print(f"  {mes:02d}/{anio}: mes entero falló ({e!r}); reintento por quincenas")
-        regs, vistos = [], set()
-        for d1, d2 in ((1, 15), (16, None)):
-            for r in descargar(anio, mes, d1, d2):
-                if r["id_sumario"] not in vistos:
-                    vistos.add(r["id_sumario"]); regs.append(r)
+    fin = monthrange(anio, mes)[1]
+    niveles = [("mes", [(1, fin)]), ("quincenas", [(1, 15), (16, fin)]),
+               ("semanas", [(1, 7), (8, 14), (15, 21), (22, fin)])]
+    regs, ultimo = None, None
+    for nombre, tramos in niveles:   # v0.3: mes → quincenas → semanas
+        try:
+            acum, vistos = [], set()
+            for d1, d2 in tramos:
+                for r in descargar(anio, mes, d1, d2):
+                    if r["id_sumario"] not in vistos:
+                        vistos.add(r["id_sumario"]); acum.append(r)
+            regs = acum; break
+        except Exception as e:
+            ultimo = e
+            print(f"  {mes:02d}/{anio}: falló por {nombre} ({e!r})")
+    if regs is None: raise ultimo
     cache.write_text(json.dumps(regs, ensure_ascii=False, indent=1), encoding="utf-8")
     return regs
 

@@ -31,7 +31,8 @@ Secretaría de Jurisprudencia), como segundo codificador externo. Lee `output/pa
 (read-only) y escribe en el cache local (JSON limpios por mes + `posiciones_AAAA.csv`).
 
 - Baja los sumarios por mes desde sjconsulta (pausa 1,5 s); reusa el cache; si un mes falla, reintenta por quincenas.
-- Lista blanca de campos: no guarda los datos personales de empleados que trae el JSON crudo.
+- v0.3: guarda también la capa funcionarial (código de usuario, nombre, cargo y fechas de carga/modificación por sumario, análisis y elemento cargado), sin CUIL ni mail; cache `sj_AAAAMM_v03.json`. Uso analítico; anonimizar en toda exposición.
+- Reintentos: mes → quincenas → semanas, y hasta 3 intentos por página.
 - Excluye fallos con CONJUECES en SJ. Diferencias de definición conocidas en M67.
 - CLI: `AAAA [--cache DIR]` (default `scripts/diagnostico/sjconsulta/`, gitignoreado).
 
