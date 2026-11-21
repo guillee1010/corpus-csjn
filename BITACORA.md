@@ -20199,3 +20199,13 @@ sj_anio.py v0.1.
 - Descarga 2006-2015 en curso al cierre de este bloque.
 
 **Commits:** 1 (DEUDA M67/M66/B098/B099 + BITACORA H221-09 + secretarias_votacion.py).
+
+### H221-10 — Votación por secretaría: control, pruebas y desglose por juez
+
+- `secretarias_votacion.py` v0.2 (+ posición por juez dentro de cada secretaría + chi² con Yates contra el resto), sobre 1296 decisiones de mérito 2016-2026 con los datos del operador.
+- Con el mismo tamaño de tribunal, resiste la corrección por comparaciones múltiples solo la Sec. 6 en tribunal de cinco: 72,4% con disidencia vs 37,6% del resto (p<0,0001). Sugestivas: Sec. 6 en tribunal de cuatro (más disidencias, menos fallos sin mayoría absoluta) y Sec. 4 en tribunal de cuatro (más fallos sin mayoría absoluta).
+- Desglose por juez: la Sec. 6 es sobre todo Rosatti (35,3% de disidencias); la fragmentación de la 4 y de Originarios es Rosenkrantz por su voto (~25%); en la 3 disiente Rosenkrantz (21,6%). Los desacuerdos son de juez × materia.
+- Control B177 con SJ: las 90 disidencias de Rosatti en la Sec. 6 son totales, ninguna parcial.
+- Exploratorio: la secretaría de SJ sigue sin validar contra el trabajo de campo; falta 2006-2015.
+
+**Commits:** 1 (DEUDA M66 + BITACORA H221-10).
