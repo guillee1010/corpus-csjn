@@ -20150,3 +20150,13 @@ sj_anio.py v0.1.
 **Scripts creados (scratch, gitignoreado):** `scripts/diagnostico/H221/` — sondeo_sjconsulta.py v0.1, cruce_sjconsulta_mes.py v0.1, cobertura_mes.py, sj_mes.py v0.1, sj_anio.py v0.1; caches sj_AAAAMM_limpio.json sin datos personales; cruces y logs por año; extractos de casos adjudicados.
 
 **Commits:** 2 (DEUDA H221; BITACORA H221).
+
+### H221-05 — Addendum (misma sesión, después del commit de docs)
+
+- Serie extendida: 2018 940/949 (99,1%, 11 meses, cobertura 219/238) y 2020 1037/1049 (98,9%, cobertura 235/235). Diferencias de ambos años sin adjudicar. Abril 2016 y junio 2018 cortan por timeout en cada intento (re-intento confirmado); se bajarán en quincenas.
+- κ de Cohen sobre las matrices revisadas: 2016 0,896 · 2017 0,964 · 2019 0,986 · agregado 0,970 (2473 posiciones, acuerdo 99,3%). Reservas registradas en M66 (una variable, titulares, conjuntos distintos fuera de la matriz).
+- Superficie textual de B177 en corpus/*.md: 253 marcas de firma y 189 encabezados de disidencia parcial, concentrados en 329-334. Coincide con SJ donde hay SJ (340: 7 frente a 7; 342: 4 frente a 4). La señal está en el texto para todos los años.
+- Relación con M43 registrada en M66: sjconsulta no reemplaza la ronda ciega; puede achicarla (disposición, vía, originaria), no cubre parte ni el gate de mérito.
+- DEUDA actualizada en campos (M66, B177, encabezado y tablero). Corrida 2021-2026 en curso al cierre.
+
+**Commits:** 1 (addendum H221, DEUDA + BITACORA).
