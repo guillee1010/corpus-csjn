@@ -17,7 +17,7 @@ Escribe secretarias_votacion.csv en el cache (una fila por caso con la clasifica
 Uso:
   python scripts/analisis/secretarias_votacion.py [--cache DIR] [--min 15]
 """
-__version__ = "0.2"  # H221: + D. posiciones por juez dentro de cada secretaría · E. prueba chi² (cada secretaría vs resto) // 0.1 H221
+__version__ = "0.3"  # H221: excluye MIGRACION (marca de migración del sistema de SJ, no es secretaría; cubre casi todo 2006-2015) y unifica "Sec. Judicial Nº 2 - Previsional/Civil…" con "Sec. Judicial Nº 2" // 0.2 H221: + D. posiciones por juez dentro de cada secretaría · E. prueba chi² (cada secretaría vs resto) // 0.1 H221
 import argparse, csv, json, math, re, sys
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -56,6 +56,13 @@ def chi2_yates(a, b, c, d):
     x = n * max(0, abs(a * d - b * c) - n / 2) ** 2 / (r1 * r2 * c1 * c2)
     return x, math.erfc(math.sqrt(x / 2))
 
+def secretaria_norm(s):
+    """None para valores que no son secretaría; unifica nombres anteriores de la misma secretaría."""
+    s = (s or "").strip()
+    if not s or s.upper() == "MIGRACION": return None
+    if s.startswith("Sec. Judicial Nº 2 -"): return "Sec. Judicial Nº 2"
+    return s
+
 def anio(fecha_sj, date_corpus):
     m = re.search(r"/(\d{4})$", fecha_sj or "") or re.search(r"de\s+(\d{4})", date_corpus or "")
     return int(m.group(1)) if m else None
@@ -70,14 +77,17 @@ def main():
     if not src.exists(): sys.exit(f"ERROR: falta {src}; correr antes scripts/analisis/unir_sjconsulta.py")
 
     casos = {r["caso_id_canonico"]: r for r in csv.DictReader(CASOS.open(encoding="utf-8", newline=""))}
-    filas = []
+    filas, excl = [], Counter()
     for s in csv.DictReader(src.open(encoding="utf-8", newline="")):
         c = casos.get(s["caso_id_canonico"])
         if not c or c.get("tipo_entrada") != "fallo": continue
+        sec = secretaria_norm(s.get("secretaria"))
+        if sec is None:
+            excl[(s.get("secretaria") or "(vacío)").strip()] += 1; continue
         clase, n, cab, dis = clasificar(c.get("posiciones"))
         filas.append({
             "caso_id_canonico": s["caso_id_canonico"], "anio": anio(s.get("fecha_sj"), c.get("date")),
-            "secretaria": s.get("secretaria") or "(sin dato)",
+            "secretaria": sec,
             "merito": c.get("is_merit_decision") in ("1", "True", "true"),
             "clase": clase, "n_tribunal": n, "n_cabeza": cab, "n_disidencias": dis,
             "voting_pattern": c.get("voting_pattern"),
@@ -87,7 +97,12 @@ def main():
         w = csv.DictWriter(fh, fieldnames=list(filas[0])); w.writeheader(); w.writerows(filas)
 
     mer = [f for f in filas if f["merito"]]
-    print(f"secretarias_votacion v{__version__} · casos con secretaría {len(filas)} · de mérito {len(mer)}")
+    print(f"secretarias_votacion v{__version__} · casos con secretaría {len(filas)} · de mérito {len(mer)}"
+          f" · excluidos sin secretaría real {dict(excl)}")
+    if filas:
+        ys = sorted(f["anio"] for f in filas if f["anio"])
+        print(f"  años con secretaría: {ys[0]}-{ys[-1]} · casos por año: "
+              + " ".join(f"{y}:{n}" for y, n in sorted(Counter(f['anio'] for f in filas if f['anio']).items())))
     print(f"  clases (mérito): {dict(Counter(f['clase'] for f in mer))}\n")
 
     def linea(etq, grupo):

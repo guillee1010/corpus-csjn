@@ -20227,3 +20227,12 @@ sj_anio.py v0.1.
 - Pendiente del operador: correr `kappa_sjconsulta.py` y commitear su salida, que reemplaza el κ a mano. El control de Rosatti (90 disidencias totales) queda reproducible desde `casos_sjconsulta.csv` con `secretarias_votacion.py`; no tiene script propio.
 
 **Commits:** 1 (scripts M67 y B177 + tabla de adjudicación + DEUDA + BITACORA + README).
+
+### H221-13 — Década 2006-2015 y κ final reproducible
+
+- Descarga 2006-2015 completa salvo 06/2015 (119/120 meses). Retomada sin pérdida tras cerrar la ventana (control de JSON íntegros: 0 dañados).
+- SJ codifica votos de forma parcial en esa década (22-43 fallos comparables por año hasta 2014; 120 en 2015). Acuerdo 93,5-99,8% por año. 2009 (93,5%) adjudicado: 14 B177 + 1 M67; la disidencia parcial pesa más en la Corte de siete. Filas sumadas a `adjudicacion_sjconsulta_h221.csv` (clasificadas por el código de SJ, sin lectura individual).
+- `kappa_sjconsulta.py` corrido por el operador sobre los 250 archivos del cache: 2006-2026, 2480 fallos, 10281 posiciones, acuerdo 98,93%, κ 0,960 [0,950; 0,969]. Reemplaza el κ a mano.
+- La secretaría de 2006-2015 en SJ es "MIGRACION" (2154 casos): no hay secretaría real para esa década. `secretarias_votacion.py` v0.3 la excluye y unifica la Sec. 2. Los resultados por secretaría (Sec. 6, Sec. 4) siguen siendo de 2016-2026.
+
+**Commits:** 2 (DEUDA + BITACORA + tabla de adjudicación + secretarias_votacion v0.3; salidas de kappa_sjconsulta desde la máquina del operador).
