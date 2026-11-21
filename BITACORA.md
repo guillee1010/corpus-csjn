@@ -20209,3 +20209,12 @@ sj_anio.py v0.1.
 - Exploratorio: la secretaría de SJ sigue sin validar contra el trabajo de campo; falta 2006-2015.
 
 **Commits:** 1 (DEUDA M66 + BITACORA H221-10).
+
+### H221-11 — Adjudicación con texto de 2018, 2020 y 2021
+
+- 37 posiciones distintas y 14 conjuntos de jueces distintos, todos clasificados leyendo el corpus.
+- Posiciones: 21 B177 (disidencia parcial); 6 B179 nuevo (posición dejada a salvo DENTRO del voto común por remisión a votos o disidencias propias o "por mayoría": 341_p961, 341_p1063, 343_p536, 343_p1923); 2 B180 nuevo (calificador partido a la línea siguiente, 343_p1800; calificador omitido en la firma impresa con header de disidencia, 344_p1444); 1 B166(c′) conocido (344_p441); 1 M67 (344_p1952); 4 artefacto de la regla de cruce (343_p168, empate 2-2 ordenado por antigüedad en SJ; el corpus tiene razón); 2 texto contradictorio en el tomo (344_p2441).
+- Conjuntos: 5 B019 nuevos (último juez partido de línea tras linea_fin_real: 341_p726, 343_p1758, 344_p66, 344_p3695, 344_p1030; 343_p1762 probable); 4 sumario_editorial; 2 errores de SJ (343_p283 incluye a quien no firma; 343_p970 omite a quien firma); 2 a revisar (346_p931, 344_p174).
+- Con 2016, 2017 y 2019 ya adjudicados, la validación de votos 2016-2021 queda completa: todo desacuerdo tiene causa.
+
+**Commits:** 1 (DEUDA B179/B180/B019/M66 + BITACORA H221-11).
