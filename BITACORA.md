@@ -20171,3 +20171,13 @@ sj_anio.py v0.1.
 - CHANGELOG sin entrada: sesión sin cambios de pipeline ni de outputs canónicos (regla ratificada en H220).
 
 **Commits:** 1 (cierre H221: DEUDA M66/M67 + BITACORA + cruce_sjconsulta.py + README de validación).
+
+### H221-07 — Re-descarga con capa funcionarial (cruce_sjconsulta v0.3)
+
+- v0.3 en `scripts/validacion/cruce_sjconsulta.py`: guarda por sumario, análisis y elemento cargado el código de usuario, nombre, cargo y fechas de carga/modificación de los funcionarios (sin CUIL ni mail; decisión del operador: recolectar para el análisis de la tesis y anonimizar en toda exposición). Reintentos mes → quincenas → semanas y 3 por página; timeout 60 s; cache `sj_AAAAMM_v03.json`.
+- Re-descarga 2016-2026 en la máquina del operador. Primer intento cortado desde 06/2022 por HTTP 503: mantenimiento programado del PJN (sábado 21/11, 8 h, ~7 h). Completada a la tarde.
+- Serie final: 8390/8461 posiciones coinciden (99,2%); por año entre 98,8% y 99,8%; cobertura completa salvo mayo 2023 (18 fallos; el servidor trunca la respuesta en el mismo punto aun por semanas). Abril 2016 y junio 2018 entraron.
+- Es censo, no muestra, para los fallos completos 2016-2026 (salvo conjueces y entradas de sumario).
+- Próximo: análisis exploratorio de la capa funcionarial (funcionarios por año y secretaría, tiempos de ingreso a sentencia).
+
+**Commits:** 1 (DEUDA M66 + BITACORA H221-07).
