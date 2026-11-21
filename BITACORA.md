@@ -20160,3 +20160,14 @@ sj_anio.py v0.1.
 - DEUDA actualizada en campos (M66, B177, encabezado y tablero). Corrida 2021-2026 en curso al cierre.
 
 **Commits:** 1 (addendum H221, DEUDA + BITACORA).
+
+### H221-06 — Serie completa 2016-2026, instrumento promovido y cierre
+
+- cruce_sjconsulta v0.2 (regla de mayoría corregida tras 340_p257 + reintento por quincenas) promovido de `scripts/diagnostico/H221/sj_anio_v02.py` a `scripts/validacion/cruce_sjconsulta.py`, con `--cache` (default `scripts/diagnostico/sjconsulta/`, gitignoreado) y entrada en el README del subsistema. Smoke test contra csjn_casos.csv real.
+- Serie v0.2, posiciones juez×fallo de titulares: 2016 373/377 · 2017 1130/1139 · 2018 1020/1029 · 2019 950/957 · 2020 1037/1049 · 2021 1329/1345 · 2022 568/569 · 2023 521/525 · 2024 729/733 · 2025 566/570 · 2026 119/120. Total 8342/8413 (99,2%); ningún año bajo 98,8%. 2016-2021: 5839/5896 (99,0%).
+- Huecos: abril 2016 (timeout aun por quincenas) y mayo 2023 (JSONDecodeError, respuesta truncada). Junio 2018 entró por quincenas (cobertura 238/238).
+- 2022: los 85 conjuntos de jueces distintos son entradas de sumario sin jueces en el corpus (verificado sobre los 22 listados: 20 sumario_con_link + 2 sumario_editorial). 2023-2025 probablemente igual, sin verificar.
+- 2019 con v0.2: 3 diferencias nuevas = voto de cabeza unipersonal (342_p761, 342_p1061, 342_p1665; firmas leídas). Diferencia de definición, no error: el corpus llama "mayoria" al voto que encabeza aunque tenga una firma; SJ lo codifica VOTO PROPIO → M67 (nuevo).
+- CHANGELOG sin entrada: sesión sin cambios de pipeline ni de outputs canónicos (regla ratificada en H220).
+
+**Commits:** 1 (cierre H221: DEUDA M66/M67 + BITACORA + cruce_sjconsulta.py + README de validación).

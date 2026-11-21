@@ -25,6 +25,20 @@ python scripts\validacion\kappa_confiabilidad.py `
   --out output\validacion\kappa_resultados_parte.csv
 ```
 
+### `cruce_sjconsulta.py` *(H221, M66)*
+Cruce de la posición de cada juez titular entre el corpus y sjconsulta (base de sumarios de la
+Secretaría de Jurisprudencia), como segundo codificador externo. Lee `output/parser/csjn_casos.csv`
+(read-only) y escribe en el cache local (JSON limpios por mes + `posiciones_AAAA.csv`).
+
+- Baja los sumarios por mes desde sjconsulta (pausa 1,5 s); reusa el cache; si un mes falla, reintenta por quincenas.
+- Lista blanca de campos: no guarda los datos personales de empleados que trae el JSON crudo.
+- Excluye fallos con CONJUECES en SJ. Diferencias de definición conocidas en M67.
+- CLI: `AAAA [--cache DIR]` (default `scripts/diagnostico/sjconsulta/`, gitignoreado).
+
+```powershell
+foreach ($y in 2016..2026) { python scripts\validacion\cruce_sjconsulta.py $y *> scripts\diagnostico\sjconsulta\log_$y.txt }
+```
+
 ### Resto del subsistema *(rol; internals sin leer — verificar)*
 | Archivo | Rol (aproximado) |
 |---|---|
