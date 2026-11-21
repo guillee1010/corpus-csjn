@@ -40,6 +40,17 @@ Secretaría de Jurisprudencia), como segundo codificador externo. Lee `output/pa
 foreach ($y in 2016..2026) { python scripts\validacion\cruce_sjconsulta.py $y *> scripts\diagnostico\sjconsulta\log_$y.txt }
 ```
 
+### `kappa_sjconsulta.py` *(H221, M66)*
+Hace auditable la validación externa de votos. Recalcula desde el cache de `cruce_sjconsulta.py`
+(importa su lógica, no la duplica) los pares juez×fallo y escribe en `output/validacion/`:
+`kappa_sjconsulta.csv` (acuerdo y κ por año y total, IC 95% por bootstrap por fallo),
+`kappa_sjconsulta_matriz.csv` (matriz SJ × corpus) y `sjconsulta_manifest.csv` (sha256 y registros
+de cada archivo del cache). Los tres son agregados o hashes, sin datos personales, y se versionan.
+
+```powershell
+python scripts\validacion\kappa_sjconsulta.py
+```
+
 ### Resto del subsistema *(rol; internals sin leer — verificar)*
 | Archivo | Rol (aproximado) |
 |---|---|

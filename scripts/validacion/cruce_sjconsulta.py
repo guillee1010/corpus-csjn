@@ -25,7 +25,7 @@ guardan CUIL (nombreUsuario) ni mail. Uso: análisis de la tesis; anonimizar en 
 Endpoint no documentado: puede cambiar sin aviso.
 Historia: H221 sj_mes/sj_anio v0.1-v0.2 en scripts/diagnostico/H221/ (scratch).
 """
-__version__ = "0.3"  # H221 (cierre): capa funcionarial (código/nombre/cargo/fechas de carga, sin CUIL ni mail) + cache _v03 + reintento por semanas y por página // 0.2 H221: promovido desde diagnostico/H221/sj_anio_v02.py (regla 340_p257 + reintento por quincenas)
+__version__ = "0.4"  # H221: importable (argparse dentro de main) para kappa_sjconsulta.py; sin cambio de lógica ni de salidas // 0.3 H221 (cierre): capa funcionarial (código/nombre/cargo/fechas de carga, sin CUIL ni mail) + cache _v03 + reintento por semanas y por página // 0.2 H221: promovido desde diagnostico/H221/sj_anio_v02.py (regla 340_p257 + reintento por quincenas)
 import argparse
 import csv, http.cookiejar, json, re, sys, time, unicodedata, urllib.error, urllib.parse, urllib.request
 from calendar import monthrange
@@ -36,12 +36,19 @@ try: sys.stdout.reconfigure(encoding="utf-8")
 except Exception: pass
 csv.field_size_limit(2**31 - 1)
 RAIZ = Path(__file__).resolve().parents[2]
-_ap = argparse.ArgumentParser(description="cruce corpus × sjconsulta (M66)")
-_ap.add_argument("anio", type=int)
-_ap.add_argument("--cache", default=str(RAIZ / "scripts" / "diagnostico" / "sjconsulta"))
-_args = _ap.parse_args()
-ANIO = _args.anio
-AQUI = Path(_args.cache); AQUI.mkdir(parents=True, exist_ok=True)
+CACHE_DEFAULT = RAIZ / "scripts" / "diagnostico" / "sjconsulta"
+ANIO = None
+AQUI = CACHE_DEFAULT
+
+def _config():
+    global ANIO, AQUI
+    ap = argparse.ArgumentParser(description="cruce corpus × sjconsulta (M66)")
+    ap.add_argument("anio", type=int)
+    ap.add_argument("--cache", default=str(CACHE_DEFAULT))
+    args = ap.parse_args()
+    ANIO = args.anio
+    AQUI = Path(args.cache); AQUI.mkdir(parents=True, exist_ok=True)
+
 CASOS = RAIZ / "output" / "parser" / "csjn_casos.csv"
 B = "https://sjconsulta.csjn.gov.ar/sjconsulta"
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) corpus-csjn/sondeo (investigacion academica)"
@@ -190,6 +197,7 @@ def cat_corpus(p):
     return "otro:" + p
 
 def main():
+    _config()
     print(f"cruce_sjconsulta v{__version__} · año {ANIO} · cache {AQUI}\n")
     regs = []
     for mes in range(1, 13):

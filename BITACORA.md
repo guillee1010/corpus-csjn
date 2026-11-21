@@ -20181,3 +20181,12 @@ sj_anio.py v0.1.
 - Próximo: análisis exploratorio de la capa funcionarial (funcionarios por año y secretaría, tiempos de ingreso a sentencia).
 
 **Commits:** 1 (DEUDA M66 + BITACORA H221-07).
+
+### H221-08 — Tabla por secretaría, lectura de campos y auditabilidad
+
+- `scripts/analisis/funcionarial_explora.py` v0.1 (3318 fallos 2016-2026): la fecha de entrada de SJ es el ingreso a la Secretaría de Jurisprudencia, no a la Corte (2808/3318 a ≤30 días de la sentencia). Capa funcionarial: 7-12 códigos por año, no divididos por secretaría; CYC (Copias y Coherencia, según el operador) es último modificador en 1437 análisis, revisión posterior y no codificación. Para la tesis no aporta (personal de Jurisprudencia, no de vocalías); se conserva y se despriorizó.
+- `scripts/analisis/unir_sjconsulta.py` v0.1: 2562 casos del corpus unidos con su secretaría. Corte exploratorio: Sec. 6 37,1% con disidencia, Sec. 4 26,5% según su voto, Sec. 5 3,1%. Sin control por mérito ni período, no es hallazgo todavía.
+- 2013 (tomo 336, no procesado): 202 fallos en SJ, 40 con votos codificados. Corrige la hipótesis de que la codificación de votos empieza en 2016.
+- Auditabilidad: `cruce_sjconsulta.py` v0.4 (importable, sin cambio de lógica ni salidas) y `scripts/validacion/kappa_sjconsulta.py` v0.1, que recalcula acuerdo y κ con IC 95% por bootstrap por fallo y escribe un manifiesto con sha256 del cache en `output/validacion/`. El κ 0,970 a mano queda reemplazado por esa salida cuando se corra y commitee.
+
+**Commits:** 1 (scripts de validación y análisis + DEUDA M66 + BITACORA H221-08).
