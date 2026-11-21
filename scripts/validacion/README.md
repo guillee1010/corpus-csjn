@@ -51,6 +51,15 @@ de cada archivo del cache). Los tres son agregados o hashes, sin datos personale
 python scripts\validacion\kappa_sjconsulta.py
 ```
 
+### `superficie_b177.py` *(H221, B177)*
+Por caso: marcas de disidencia parcial en la firma y en headers dentro del rango de líneas del fallo, contra lo
+que publica `posiciones`. Salida `output/validacion/superficie_b177.csv`.
+
+### `output/validacion/adjudicacion_sjconsulta_h221.csv` *(dato curado, H221)*
+Una fila por discrepancia corpus × sjconsulta adjudicada: clase (B177, B179, B019…), quién tiene razón,
+si se leyó con texto y la evidencia con número de línea. Cada fila leída se verifica con
+`scripts/diagnostico/extraer_caso.py <caso_id>`.
+
 ### Resto del subsistema *(rol; internals sin leer — verificar)*
 | Archivo | Rol (aproximado) |
 |---|---|

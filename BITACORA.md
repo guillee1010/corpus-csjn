@@ -20218,3 +20218,12 @@ sj_anio.py v0.1.
 - Con 2016, 2017 y 2019 ya adjudicados, la validación de votos 2016-2021 queda completa: todo desacuerdo tiene causa.
 
 **Commits:** 1 (DEUDA B179/B180/B019/M66 + BITACORA H221-11).
+
+### H221-12 — Reproducibilidad de lo medido en la sesión
+
+- Inventario: cruce, κ, capa funcionarial, unión por secretaría y tabla por secretaría ya eran scripts versionados. Eran ad hoc (código suelto en el entorno de Claude o comando de una vez): el κ 0,970, M67 corpus-wide, la superficie de B177 y el control de Rosatti.
+- Convertidos: `scripts/analisis/m67_mayoria_absoluta.py` v0.1 (reproduce 298/5703; salida por fallo en `estadisticas/resultados/m67_mayoria_absoluta.csv`; corrige 13,7% → 14,1% de no unánimes sin mayoría absoluta) y `scripts/validacion/superficie_b177.py` v0.1 (por caso: 170 fallos con marca de disidencia parcial, 0 publicados como parcial).
+- Rastro cualitativo: `output/validacion/adjudicacion_sjconsulta_h221.csv` (82 filas; 41 leídas con texto, con línea).
+- Pendiente del operador: correr `kappa_sjconsulta.py` y commitear su salida, que reemplaza el κ a mano. El control de Rosatti (90 disidencias totales) queda reproducible desde `casos_sjconsulta.csv` con `secretarias_votacion.py`; no tiene script propio.
+
+**Commits:** 1 (scripts M67 y B177 + tabla de adjudicación + DEUDA + BITACORA + README).
