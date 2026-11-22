@@ -83,7 +83,7 @@ The full list is in CODEBOOK §11. The main ones are:
 - `is_full_bench` means five titular justices signed; it equals a full bench only in volumes 339–344 (CODEBOOK §3).
 - The text of a separate vote signed jointly by several justices is attached to one of them only (CODEBOOK §6).
 - Positions that a justice states only inside the common opinion (for example "se remite a su disidencia" in a precedent) are not coded; a lower-bound review finds 56 such positions in 38 rulings.
-- `materia` is incomplete (32.7% of entries unclassified) and its taxonomy is not final.
+- `materia` is incomplete (32.3% of entries unclassified) and its taxonomy is not final.
 - The appeal type is missing for part of the rulings (see Validation).
 - Text comes from OCR; residual OCR errors exist.
 

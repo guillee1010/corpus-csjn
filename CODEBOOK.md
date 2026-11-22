@@ -47,7 +47,7 @@ The dataset consists of ten CSV files, sealed by `_manifest.json` (SHA-256, row 
 | `csjn_casos_textos.csv` | Case | 5,894 | 5 | Full-text fields extracted per case: `considerando_text`, `por_ello_text`, `firma_raw`, `dictamen_text`. Keyed 1:1 by `caso_id_canonico`. |
 | `csjn_casos_materia.csv` | Case | 5,894 | 4 | Subject-matter (*materia*) sidecar, keyed 1:1. Under active development; see §7 and §8. |
 | `csjn_casos_partes.csv` | Case | 5,894 | 8 | Appellant (*recurrente*) and respondent (*recurrido*) with their procedural role, derived from the editorial epilogue and the caption. See §7. |
-| `csjn_casos_normas.csv` | Case × statute × scope | 13,958 | 5 | Statutes cited ("ley N") per case and per scope (caption, *considerando*, dictamen, operative clause, separate votes), 4,097 cases with at least one. See §7. |
+| `csjn_casos_normas.csv` | Case × statute × scope | 13,958 | 5 | Statutes cited ("ley N") per case and per scope (caption, *considerando*, dictamen, operative clause, separate votes), 4,115 cases with at least one. See §7. |
 | `csjn_casos_epilogo.csv` | Ruling | 5,732 | 7 | Raw text of the editorial epilogue after the signature (appeal and filing notes, counsel, court of origin), input of `csjn_casos_partes.csv`. See §7. |
 | `csjn_casos_editorial.csv` | Editorial section | 152 | 7 | Non-judicial editorial content in the volumes: indexes (by parties, by subject, by legislation), *acordadas* (administrative resolutions), and miscellaneous texts. |
 
@@ -79,10 +79,10 @@ The dataset consists of ten CSV files, sealed by `_manifest.json` (SHA-256, row 
 | Variable | Type | Description |
 |---|---|---|
 | `date` | string | Date of the ruling in Spanish natural-language format (e.g., `7 de febrero de 2006`). Null for 311 entries (149 rulings and the 162 editorial entries) where no date marker was detected. |
-| `tribunal_origen` | string | Name of the lower court whose decision is being reviewed. Null for original-jurisdiction cases and entries where detection failed (193 null). Free text; not normalized. |
+| `tribunal_origen` | string | Name of the lower court whose decision is being reviewed. Null for original-jurisdiction cases and entries where detection failed (162 null). Free text; not normalized. |
 | `tribunal_origen_status` | string | Detection status for the lower court. See [Coded Values](#tribunal_origen_status). |
-| `is_originaria` | integer (0/1) | Whether the case falls under the Court's original jurisdiction (*competencia originaria*, Art. 117 of the Constitution). 546 cases. |
-| `es_queja` | integer (0/1) | Whether the case arises from a *recurso de queja* (complaint appeal filed after a denied extraordinary appeal). 2,297 cases. Also published, denormalized, in `csjn_casos_recursos.csv`. |
+| `is_originaria` | integer (0/1) | Whether the case falls under the Court's original jurisdiction (*competencia originaria*, Art. 117 of the Constitution). 598 cases. |
+| `es_queja` | integer (0/1) | Whether the case arises from a *recurso de queja* (complaint appeal filed after a denied extraordinary appeal). 2,313 cases. Also published, denormalized, in `csjn_casos_recursos.csv`. |
 | `queja_resultado` | string | Outcome of the *queja*, where applicable. See [Coded Values](#queja_resultado). Null for non-queja cases and quejas with no recorded result. |
 | `tipo_cuestion_federal` | string | Type of federal question raised in the extraordinary appeal. See [Coded Values](#tipo_cuestion_federal). Null where none was detected. |
 
@@ -90,7 +90,7 @@ The dataset consists of ten CSV files, sealed by `_manifest.json` (SHA-256, row 
 
 | Variable | Type | Description |
 |---|---|---|
-| `apertura_tipo` | string | Type of ruling opening marker detected: `fallo`, `sentencia`, or null (239 null). |
+| `apertura_tipo` | string | Type of ruling opening marker detected: `fallo`, `sentencia`, or null (207 null). |
 | `outcome` | string | **LEGACY — frozen (*congelada*).** Single-axis dispositional outcome extracted from the *por ello* clause under the pre-M26 schema. Superseded by the orthogonal axes in `csjn_casos_recursos.csv` (§4). Retained for backward compatibility and reproducibility of earlier analyses; **not** the recommended field for new outcome analysis. See [Coded Values](#outcome). |
 | `voting_pattern` | string | Voting configuration of the panel. See [Coded Values](#voting_pattern). |
 | `n_jueces` | integer | Total number of judges who signed the ruling. |
@@ -98,7 +98,7 @@ The dataset consists of ten CSV files, sealed by `_manifest.json` (SHA-256, row 
 | `n_votos_svoto` | integer | Number of *según su voto* (concurring with separate reasoning) votes. |
 | `n_disidencias` | integer | Number of dissenting votes. |
 | `is_full_bench` | integer (0/1) | 1 when exactly five titular justices signed (`n_titulares == 5`). 1,547 cases. **This matches a full bench only in volumes 339–344 (2016–2021).** In volumes 329–337 the Court had seven members, so five signatures is not a full bench and seven is coded 0; in 338 and 345–349 the Court had three or four members and no ruling is coded 1. See Known Limitations (B156). |
-| `is_merit_decision` | integer (0/1) | Whether the ruling addresses the merits of the case (as opposed to procedural dismissals). 2,870 cases. |
+| `is_merit_decision` | integer (0/1) | Whether the ruling addresses the merits of the case (as opposed to procedural dismissals). 2,981 cases. |
 | `dictamen_presente` | boolean | Whether the ruling includes an embedded *dictamen* from the Procurador General or Fiscal. `True` 3,443 · `False` 2,289 · `0` 162 (editorial entries). |
 
 ### Word counts
@@ -149,7 +149,7 @@ The **recourse-and-disposition layer** introduced in the M26 refactor (parser v2
 | `causa_inadmisibilidad` | string | Specific ground for inadmissibility. Non-null **iff** `admisibilidad = inadmite` (the invariant below). See [Coded Values](#causa_inadmisibilidad). |
 | `es_queja` | integer (0/1) | Whether the case arises from a *queja* (denormalized from `csjn_casos.csv`). |
 
-> **Invariant (verified on disk).** `causa_inadmisibilidad ≠ "" ⟺ admisibilidad = "inadmite"`. Exactly **1,107 = 1,107**: every inadmissibility decision carries a ground, and no admitted case does. `causa_inadmisibilidad` is the **reason** for declining access; `admisibilidad` is the **access decision**; `disposicion` is the **merit verb**. Analyses of inadmissibility grounds should use `causa_inadmisibilidad`; analyses of the access decision should use `admisibilidad`.
+> **Invariant (verified on disk).** `causa_inadmisibilidad ≠ "" ⟺ admisibilidad = "inadmite"`. Exactly **1,127 = 1,127**: every inadmissibility decision carries a ground, and no admitted case does. `causa_inadmisibilidad` is the **reason** for declining access; `admisibilidad` is the **access decision**; `disposicion` is the **merit verb**. Analyses of inadmissibility grounds should use `causa_inadmisibilidad`; analyses of the access decision should use `admisibilidad`.
 
 ---
 
@@ -222,7 +222,7 @@ Subject-matter sidecar. Keyed 1:1 by `caso_id_canonico`. See [Coded Values](#mat
 | Variable | Type | Description |
 |---|---|---|
 | `caso_id_canonico` | string | Foreign key to `csjn_casos.csv`. |
-| `materia` | string | Derived subject matter. Null for unclassified cases (1,926). |
+| `materia` | string | Derived subject matter. Null for unclassified cases (1,904). |
 | `materia_capa` | string | Classification tier (how the case was classified). See [Coded Values](#materia). |
 | `materia_fuente` | string | The specific signal(s) that fired (e.g. `regla` for capa1; `objeto`, `norma`, `parte`, `kw`, `coocur:{rule}` for capa2; `sin_ancla` / `conflicto_capa2:{m1}/{m2}` for the residual). |
 
@@ -449,11 +449,11 @@ Counts as of parser v44.0. The pattern is derived from the signature block (and,
 | `en disidencia` | 2,031 | Judge dissented from the majority disposition. |
 | `en disidencia parcial` | 237 | Judge dissented in part, as marked in the signature block "(en disidencia parcial)". A vote header "Disidencia parcial" does not override a printed "(en disidencia)": 13 positions with "parcial" only in the header are published as `en disidencia` (H227). Counts as a dissent for `voting_pattern`. Since parser v43.0 (H225, B177). |
 
-Source of the position: the qualifier printed in the signature block. Since parser v43.3 (H226, B180 (b)), when the signature carries no qualifier for a judge who heads a separate vote or dissent in the text, the position stated by that header is published instead (never overriding a printed qualifier). Counts as of parser v43.3 (28,044 rows at parser v44.0; 11 positions in 10 rulings moved from `mayoria` at v43.3).
+Source of the position: the qualifier printed in the signature block. Since parser v43.3 (H226, B180 (b)), when the signature carries no qualifier for a judge who heads a separate vote or dissent in the text, the position stated by that header is published instead (never overriding a printed qualifier). Counts as of parser v44.0 (28,044 rows at parser v44.0; 11 positions in 10 rulings moved from `mayoria` at v43.3).
 
 ### `tipo_voto_sep` (in `csjn_casos_votos.csv`) {#tipo_voto_sep}
 
-Classification of separate votes by their structural relationship to the majority. Applied only to judges with a separate vote (2,853 votes; null for the remaining 24,941). **Schema A–E under development.**
+Classification of separate votes by their structural relationship to the majority. Applied only to judges with a separate vote (2,853 votes; null for the remaining 25,191). **Schema A–E under development.**
 
 | Value | N | Description |
 |---|---|---|
@@ -542,7 +542,7 @@ Counts as of parser v44.0. `linea_ini` and `linea_fin` are offsets relative to t
 | `sui_generis` | 8 | Impeachment juries and judicial councils. |
 | `residual` | 6 | Arbitral tribunals and OCR/anaphora artifacts. |
 
-`materia` values (when classified): `civil_comercial` (999), `contencioso_administrativo` (933), `penal` (680), `laboral` (475), `previsional` (354), `tributario` (350), `ambiental` (58), `constitucional` (29), `electoral` (29), `consumo` (29), `salud` (18), `cambiario` (7), `lesa_humanidad` (3), `penal_tributario` (2), `penal_cambiario` (2); null (1,926).
+`materia` values (when classified): `civil_comercial` (1,001), `contencioso_administrativo` (939), `penal` (684), `laboral` (479), `previsional` (354), `tributario` (353), `ambiental` (59), `constitucional` (30), `electoral` (29), `consumo` (29), `salud` (19), `cambiario` (7), `lesa_humanidad` (3), `penal_tributario` (2), `penal_cambiario` (2); null (1,904).
 
 `materia_fuente` records the specific signal that fired (e.g. `regla:…` for the court-of-origin rule, `objeto(n)`, `norma`, `provincia:…`, `dictamen:norma:N`, `sin_ancla`). Its values are implementation labels, kept for auditability.
 

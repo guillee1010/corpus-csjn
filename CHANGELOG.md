@@ -8,6 +8,7 @@ Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y docume
 - Corrida en el clon (sin regolden): `csjn_casos.csv` 5894 filas, `tipo_entrada` fallo 5703→5732, sumario_con_link 157→128; `csjn_casos_votos.csv` 27.938→28.044; `csjn_casos_textos.csv` y `csjn_casos_zonas.csv` (138.062→138.591 segmentos) solo esas 29 entradas; `csjn_casos_editorial.csv` byte-idéntico. Derivados, solo esas 29: epílogo 5703→5732, normas 13.911→13.958 (19 casos), partes, materia y recursos (28) recalculados.
 - Golden + `_manifest.json`: PENDIENTES de regolden en disco local del operador (`correr_pipeline.py --consciente` / `--regolden`).
 - Documentación H227: `CODEBOOK.md` 3.1 (cifras sobre v44.0, notas de `is_full_bench`, votos conjuntos, κ sobre intersección de jueces, límites 16-19); `README.md` y `_meta/dataverse/README.md` al día con v44.0; DEUDA (B191 cerrado, B192-B197 y M69 nuevos); BITACORA H227.
+- `scripts/auxiliares/actualizar_codebook.py` v0.1 (nuevo): recalcula desde `output/parser/` las cifras tabulares del CODEBOOK (tabla de archivos, tablas de §8, cifras en línea del diccionario, versión del parser); `--check` sale con 1 si no coinciden. Va en el cierre de todo ciclo que cambie outputs, después del regolden. `CODEBOOK.md` 3.1: barrido de cifras en prosa que el script no cubre (`tribunal_origen`, `is_originaria`, `es_queja`, `apertura_tipo`, `is_merit_decision`, invariante de inadmisibilidad, `materia`, normas, `tipo_voto_sep`).
 
 ## H226 (2026-11-22)
 
