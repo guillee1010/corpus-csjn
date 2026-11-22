@@ -5660,6 +5660,8 @@ Fix cableado a `es_originaria`: **(b)** `RE_RUNNING_HEAD.sub(" ", cuerpo)` ANTES
 - **Flip-set previsto.** Los 132 fallos de `superficie_b177.csv` con `marcas_firma ≥ 1` en `posiciones`, 0 en `voting_pattern`. Los fallos con header y sin marca en la firma solo se mueven si se implementa el consumo de headers (B180 (b)).
 - **Decisión pendiente del operador.** Valor "en disidencia parcial", ciclo MAJOR junto con B178.
 
+**DECISION DEL OPERADOR (H223, 2026-11-21):** opción 1 de 3. Valor nuevo "en disidencia parcial" en `posiciones` y en `csjn_casos_votos.csv.posicion` (ciclo MAJOR + CODEBOOK), con el cambio de `has_disid` (L1406) para que la disidencia parcial siga contando como disidencia en `voting_pattern`. Descartadas la columna aparte de marca parcial (opción 2) y el cierre documentado sin cambio (opción 3). B178 entra en el mismo ciclo ("por su voto" → "según su voto"). Solo la vía de la firma; la vía de los headers (`RE_DISID_HDR` colapsado en `detectar_votos_disidencias`) queda para B180 (b). Prompt de implementación `PROMPT_H225_B177_B178_vocabulario_posicion.md` (H224 sigue reservado a la agenda de H221).
+
 ### B178 — Calificador "por su voto" publicado sin normalizar: dos etiquetas para la misma posición en `posiciones`
 
 **Componente:** parser (`parse_firma`, L~1368 en v42.1).
