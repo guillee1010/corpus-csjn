@@ -524,6 +524,19 @@ The M26 recourse-layer axes were validated against a hand-coded gold standard by
 
 > **Notes.** (a) `admisibilidad` is a synthesis of the disposition/access signals (≈99.9% relabel-consistent), not an independent detector, so it carries no standalone κ. (b) `parte_ganadora` is binary on both sides: the pipeline derives `recurrente_gana`/`recurrente_pierde` with no `parcial` value (`modifica → gana`), and the gold's original three-value coding (gana / parcial / pierde) was collapsed to the same binary scheme; the three-value gold is retained in the repository so the collapse is auditable. The κ remains capped below 1.0 by seven residual role-inversions preserved as genuine disagreements. (c) `reenvia` κ is moderate and **not reportable**: the reversal universe requires manual recoding (B130, in progress) before a reliable estimate over the full reversal set can be published.
 
+### 9.1 External validation against the Court's summaries database (sjconsulta)
+
+The Court's Secretaría de Jurisprudencia (SJ) publishes a summaries database (`sjconsulta.csjn.gov.ar`) in which its staff code, for each ruling, the votes of each justice, the outcome (`sentido`) and the type of appeal (`tipo_recurso`). SJ coding is independent of this pipeline, so it works as a large external second coder. Rulings are matched by volume and page (`caso_id_canonico`); entries with several SJ rulings on the same page and rulings with *conjueces* are excluded. Figures as of parser v43.3 (H224); bootstrap 95% CI, B = 2,000.
+
+| Variable | SJ field | N | Agreement | κ | 95% CI |
+|---|---|---|---|---|---|
+| `posicion` (justice × ruling) | vote blocks | 10,301 positions in 2,480 rulings (2006–2026) | 0.997 | **0.988** | [0.982, 0.993] |
+| `es_queja` | `tipo_recurso` = queja | 2,549 | 0.937 | **0.868** | [0.848, 0.888] |
+| `disposicion` | `sentido` | 3,126 | 0.886 | **0.853** | [0.839, 0.867] |
+| `via_recurso` | `tipo_recurso` | 2,549 | 0.915 | 0.606 | [0.563, 0.651] |
+
+> **Notes.** (a) `posicion`: SJ's first UNANIMIDAD / VOTO CONJUNTO block is `mayoria`, other non-dissenting blocks are `según su voto`, DISIDENCIA (PARCIAL) blocks are `en disidencia (parcial)`; the bootstrap resamples rulings, since positions within a ruling are not independent. Of the 33 remaining disagreements, 18 are SJ VOTO PROPIO vs corpus `mayoria`, the pattern of a known definitional difference (a heading opinion signed by fewer than a majority is `mayoria` in the corpus and VOTO PROPIO in SJ; not read one by one), and the 5 read in H224 were SJ errors (e.g., "(en disidencia parcial)" printed in the signature, coded as full dissent by SJ). Scripts: `scripts/validacion/kappa_sjconsulta.py` (from the SJ cache) and `kappa_sjconsulta_posiciones.py` (same logic, reproducible without the personal data in the cache). (b) `disposicion`, `via_recurso`, `es_queja`: the mapping between SJ labels and corpus values is set at the top of `scripts/validacion/kappa_disposicion_via_sj.py` (seven disposition classes; 142 rulings with SJ labels outside the mapping, e.g. PROCEDIMIENTO or ADMITE, are excluded). (c) The lower κ for `via_recurso` is driven by 186 rulings where the corpus detects no appeal type and SJ records an extraordinary (153) or ordinary (33) appeal: a recall gap, not a confusion between types. (d) This is agreement with an external coder over the whole overlap, not a blind κ against a hand-coded gold standard (table above).
+
 ---
 
 ## 10. Crosswalk to the Supreme Court Database (SCDB)
