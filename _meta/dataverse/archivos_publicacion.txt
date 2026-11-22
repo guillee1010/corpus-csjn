@@ -19,6 +19,15 @@ output/parser/csjn_casos_textos.csv
 output/parser/csjn_casos_votos.csv
 output/parser/csjn_casos_zonas.csv
 output/parser/_manifest.json
+# --- validación que cita el CODEBOOK (§9, §9.1, §11): agregados, sin datos de funcionarios. Fuera, por internos: baselines M55/M68, superficies, kappa_resultados(_v22).csv, posiciones_cambios
+output/validacion/adjudicacion_b179_h224.csv
+output/validacion/adjudicacion_sjconsulta_h221.csv
+output/validacion/kappa_disposicion_via_sj.csv
+output/validacion/kappa_disposicion_via_sj_matriz.csv
+output/validacion/kappa_resultados_parte.csv
+output/validacion/kappa_sjconsulta.csv
+output/validacion/kappa_sjconsulta_matriz.csv
+output/validacion/sjconsulta_manifest.csv
 # --- reproducción: fuente, insumos de localización, tablas y vocabularios
 corpus/LibroVol329.1.md
 corpus/LibroVol329.2.md

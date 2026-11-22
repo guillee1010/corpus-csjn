@@ -12,11 +12,11 @@ operador: BORRA archivos). Deja en la copia SOLO lo que lista `_meta/dataverse/a
 Uso:  python scripts/auxiliares/preparar_bundle_dataverse.py RAIZ_DE_LA_COPIA [--yo-se-que-borra]
 Imprime la lista final con tamaños. Sin `--yo-se-que-borra` solo verifica, no borra ni copia.
 """
-__version__ = "0.2"  # H224: + corpus, insumos de localización, tablas y vocabularios (reproducción) y MAPA; chequeo contra corpus/inputs/vocabularios del manifest // 0.1 H224
+__version__ = "0.3"  # H224: + output/validacion (lo que cita el CODEBOOK) // 0.2 H224: + corpus, insumos de localización, tablas y vocabularios (reproducción) y MAPA; chequeo contra corpus/inputs/vocabularios del manifest // 0.1 H224
 import json, shutil, sys
 from pathlib import Path
 
-CARPETAS = ("output/parser", "output/mapa", "output/catalogo", "output/localizacion", "corpus", "_meta", "scripts/pipeline", "dataverse")
+CARPETAS = ("output/parser", "output/mapa", "output/catalogo", "output/localizacion", "output/validacion", "corpus", "_meta", "scripts/pipeline", "dataverse")
 
 
 def main():

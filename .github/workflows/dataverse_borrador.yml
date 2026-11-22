@@ -43,4 +43,4 @@ jobs:
         run: >-
           python uploader/dataverse.py "$DATAVERSE_TOKEN" https://dataverse.harvard.edu
           doi:10.7910/DVN/TJTVKW "$GITHUB_REPOSITORY"
-          -d "dataverse output/parser corpus output/mapa output/catalogo output/localizacion _meta scripts/pipeline" -r true -p false
+          -d "dataverse output/parser corpus output/mapa output/catalogo output/localizacion output/validacion _meta scripts/pipeline" -r true -p false
