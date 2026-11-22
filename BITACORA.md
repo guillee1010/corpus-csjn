@@ -20436,3 +20436,56 @@ PR #4 mergeado en `main`. Corrida local del operador `--consciente --ignorar-cor
 Corrección al Estado final de arriba: los outputs canónicos ya no son solo "corrida v43.3 en el clon". Están regolden y re-sellados en `main` con los sha listados.
 
 **Commits:** 5 (parser U2 · parser U3 · cierre documental · merge PR #4 · regolden + manifest + outputs + baseline M55, del operador), más este H226-07 (BITACORA H226-06).
+
+## H224 — Agenda que dejó H221: adjudicaciones contra SJ, B179 medido y superficies de votación para la tesis (2026-11-22)
+
+**Objetivo:** cumplir la agenda que H221 dejó como "ver PROMPT_H222" (prompt `PROMPT_H224_agenda_H221.md`), solo lectura respecto del pipeline.
+
+### H224-01 — Prerrequisito y base
+
+Clon de `main` en `0317eb2` (H226-07, parser v43.3, manifest re-sellado). H222 y H223 cerradas en la BITÁCORA; H223 no hizo B179 (criterio del operador, menos de 10 casos no justifican un ciclo). H225 y H226 movieron `posiciones`, así que M67 se recomputó antes de usarlo. El cache de sjconsulta es local del operador y no está en el repo: la sesión no tuvo la base de SJ.
+
+### H224-02 — U1 y U2, dato curado de la adjudicación sjconsulta
+
+- U1: 343_p1762 (LORENZETTI), B019 → B182. La firma está en L12092-12094 de LibroVol343-3 ("Ricardo Luis ⏎ Lorenzett."). La L12264 citada en el prompt y en la DEUDA (H222) es `linea_fin_real`, la firma de Rosenkrantz al pie de su disidencia parcial; corregida en la fila y en B182.
+- U2: la premisa del prompt no se sostuvo. 332_p1394, 346_p931 y 344_p174 no están en `superficie_b177.csv` y sobre v43.3 los tres tienen una disidencia en `posiciones`; en la adjudicación H221 eran discrepancias de CONJUNTO "a revisar" (la lista del cierre H221 los describió mal). Leídos, los tres `error_sj`: el corpus reproduce la firma impresa (332_p1394 Fayt firma, L18668-18671; 344_p174 Rosenkrantz firma, L8442-8444; 346_p931 firman cuatro sin Highton, L6457-6458, sentencia de 2018 publicada en el tomo 346 como precedente no incluido). Ninguna clase nueva. Quedan `a_revisar` solo las dos filas de 344_p2441 (contradicción del tomo).
+
+### H224-03 — M67 recomputado sobre v43.3
+
+`m67_mayoria_absoluta.py` v0.1 sin cambios. Unánimes 3508 · cabeza con mayoría absoluta 1877 · sin mayoría absoluta 301 (208 de mérito) · sin cabeza 9 · sin posiciones 8; sin mayoría absoluta entre no unánimes 306/2175 → 310/2187 (14,2%). 62 filas movidas por B019/B181 y B180 (b); 348_p708 a sin_cabeza es artefacto (tribunal de 1). Medido, sin decidir: con el disidente parcial contado en la cabeza, 20 de los 301 cambian de clase (18 a mayoría absoluta, 2 a unánimes). `secretarias_votacion.py` no se corrió (lee el cache local).
+
+### H224-04 — U3, B179 medido
+
+`scripts/validacion/superficie_b179.py` v0.6 (versionado, espejo de `superficie_b177.py`) sobre `considerando_text` y `por_ello_text` des-guionados: 81 matches en 53 fallos. El instrumento creció en seis pasos atrapados con lectura (F5 con "Los" en mayúscula; F7 "remiten" sin "se", F8 "a juicio de", F9 "por su parte"; F10 mayoría absoluta; F3 anclada en `por_ello_text`; "respectiva(s)"; corte de renglón ya aplanado). Adjudicación leída de los 53 en `output/validacion/adjudicacion_b179_h224.csv`: 56 posiciones B179 en 38 fallos, las 56 publicadas "mayoria"; 26 disienten en el resultado en 16 fallos (firma limpia y "por mayoría" en el por_ello), 18 concurren, 12 sin determinar sin SJ. Voto por cuestiones declarado en 341_p1063, 342_p1170 y 343_p1923 ("escindir el conjunto decisorio" para alcanzar la mayoría absoluta del art. 23 decreto-ley 1285/58). Contradicción del tomo nueva, 330_p4875 (Argibay se remite a su voto y no firma). Corrección a la constancia H222: el FP sellado 342_p287 era un artefacto del regex ("consideran" dentro de "considerando"). Es un piso.
+
+### H224-05 — U4 y U5, superficies de tesis (insumo, sin conclusiones)
+
+- B190 nuevo: la zona `sumario` de `zonas.csv` no marca los sumarios impresos (testigo 344_p174). U4 los lee del tomo (`scripts/diagnostico/H224/sumarios_impresos.py`, región `linea_inicio` → "FALLO DE LA CORTE SUPREMA"/dictamen, VOZ en mayúsculas, atribución al final; corregido con lectura para "Dictámenes" en plural y la cola "–En igual sentido…–").
+- U4 (`u4_escala.py`), 208 fallos de mérito sin mayoría absoluta: la doctrina de la cabeza se imprime atribuida a su voto en 0 de 2006-2016 (81 con cabeza sin atribución) y en 46 de 2017-2025 (33-67% por año desde 2018), más 4 sin año. Control, cabeza con mayoría absoluta: 0-5% por año hasta 2024; 2025 sube por tribunales de 3 con cabeza de 2. Muestras leídas: 341_p101, 343_p990 atribuidos; 333_p633, 337_p256, 334_p156, 337_p1548, 339_p1077, 343_p2039 sin atribución.
+- U5 (`u5_citas.py`, tramo que sigue a la cita hasta ";", ")" o la cita siguiente): 646 citas posteriores a 132 fallos sin mayoría absoluta, 12,8% con aclaración (voto de la cabeza 27, de otro juez 35, disidencia 17), control 3,1%; por tomo del citado, ≤339 5,9% y ≥340 35,5%.
+- Límites: formato viejo de sumarios en 329-331; un sumario sin atribución puede ser la parte común y no la doctrina propia de la cabeza; nada cruzado contra la base de SJ.
+
+### H224-06 — U6, no hecha
+
+Las dos validaciones necesitan datos que no están en el repo: `casos_sjconsulta.csv` del cache local (secretaría, sentido, tipo de recurso; no el archivo funcionarial) y, para la secretaría, el dato del trabajo de campo. Pedidos al operador.
+
+Visto, no abierto: 348_p1435, la conjueza firma "María Inés Catalano" y no entra en `posiciones` (familia B187/B188); los instrumentos U4/U5 quedan en `scripts/diagnostico/H224/` (gitignoreado), sin versionar hasta decisión del operador.
+
+### H224 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumario_con_link), sin cambio.
+- **Sin firma:** 8 / 5703 fallos (0,14%), sin cambio.
+- **Votos:** 27.938 filas, sin cambio.
+- **Pipeline:** sin cambios. Parser v43.3, outputs canónicos y `_manifest.json` intactos respecto de H226 (casos `727b507d4584`, votos `a0b045517ed1`). CHANGELOG sin entrada (regla H220).
+
+**Outputs canónicos (sin cambio):**
+- `output/parser/csjn_casos.csv` — 5894 filas.
+- `output/parser/csjn_casos_votos.csv` — 27.938 filas.
+- `output/parser/csjn_casos_zonas.csv` — 138.062 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones.
+
+**Datos versionados:** `output/validacion/adjudicacion_sjconsulta_h221.csv` (4 filas) · `estadisticas/resultados/m67_mayoria_absoluta.csv` (recomputado) · `output/validacion/superficie_b179.csv` · `output/validacion/adjudicacion_b179_h224.csv`.
+
+**Scripts creados:** `scripts/validacion/superficie_b179.py` v0.6 (versionado, + README) · `scripts/diagnostico/H224/` (gitignoreado) — `adjudicar_b179.py`, `sumarios_impresos.py`, `u4_escala.py` (+ csv), `u5_citas.py` (+ csv).
+
+**Commits:** 4 (adjudicación U1/U2 · M67 recomputado · superficie y adjudicación B179 · DEUDA + BITACORA H224).
