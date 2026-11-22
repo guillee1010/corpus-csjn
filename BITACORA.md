@@ -20489,3 +20489,7 @@ Visto, no abierto: 348_p1435, la conjueza firma "María Inés Catalano" y no ent
 **Scripts creados:** `scripts/validacion/superficie_b179.py` v0.6 (versionado, + README) · `scripts/diagnostico/H224/` (gitignoreado) — `adjudicar_b179.py`, `sumarios_impresos.py`, `u4_escala.py` (+ csv), `u5_citas.py` (+ csv).
 
 **Commits:** 4 (adjudicación U1/U2 · M67 recomputado · superficie y adjudicación B179 · DEUDA + BITACORA H224).
+
+### H224-07 — U6 (b), superficie de disposición y vía contra SJ
+
+Con la app de escritorio abierta, la sesión leyó del disco del operador solo `scripts/diagnostico/sjconsulta/casos_sjconsulta.csv` (5245 filas; el funcionarial y los JSON quedaron en su máquina). Pares con fallo del corpus: 5059. Superficie sin crosswalk decidido. `recursos.disposicion` × `sentido` SJ (3270 pares con sentido): deja_sin_efecto → DEJA SIN EFECTO 1064/1089 · revoca → REVOCA o REVOCA PARCIALMENTE 521/567 (+21 RECHAZA LA DEMANDA) · confirma → CONFIRMA o CONFIRMA PARCIALMENTE 278/289 · no_revision_competencia → DECLARA (IN)COMPETENCIA 207/207 · nulidad → DECLARA NULIDAD 26/33 · no_fondo 789 heterogéneo (DESESTIMA 349, DECLARA COMPETENCIA 145, PROCEDIMIENTO 46). `via_recurso` × `tipo_recurso` (2549 pares): SJ registra QUEJA donde el corpus registra recurso_extraordinario (1376, compatibles); vía vacía en el corpus en 277. El crosswalk y el κ son decisión del operador; M43 sigue postergada por su orden (H185). U6 (a), secretaría contra el trabajo de campo, sigue pendiente del dato de campo.
