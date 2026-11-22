@@ -94,3 +94,9 @@ en el resultado (disiente si el por_ello dice "por mayoría"; concurre; sin_dete
 contra `sentido` y `tipo_recurso` de sjconsulta. Lee `casos_sjconsulta.csv` del cache local (sin datos de
 funcionarios). Las tablas de equivalencia están al principio del script y son decisión del operador.
 Salidas `output/validacion/kappa_disposicion_via_sj.csv` y `kappa_disposicion_via_sj_matriz.csv`.
+
+### `kappa_sjconsulta_posiciones.py` *(H224, M66)*
+κ de posiciones juez × fallo contra SJ recomputado sobre el `csjn_casos.csv` vigente, desde `posiciones_AAAA.csv`
+del cache (bloque de votos de SJ, sin funcionarios). Reusa `pos_sj`/`cat_corpus`/`norm` y `kappa`/`boot`.
+Brazo A (posiciones guardadas en H221) reproduce `kappa_sjconsulta.csv` (2480 fallos, 10.281 posiciones, κ 0,9598).
+Salidas `output/validacion/kappa_sjconsulta_posiciones.csv` y `kappa_sjconsulta_posiciones_cambios.csv`.
