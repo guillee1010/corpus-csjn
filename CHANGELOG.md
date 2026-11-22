@@ -2,6 +2,12 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H227 (2026-11-22)
+
+- `parser.py` v43.3→44.0 (N3 de la auditoría FABLE-03, MAJOR, cambia el universo de fallos): `clasificar_tipo_entrada` recibe `nombres_indice`; la nota "(*) Sentencia del … Ver …" deja de ser señal suficiente de `sumario_con_link` cuando el bloque trae un fallo impreso propio de la entrada (`_fallo_propio_en_bloque`: apertura + firma + carátula del fallo que coincide con una del índice, `_caratula_fallo_impreso`). Flip-set sellado 29 (14 fallos de la propia entrada, 15 de una de dos carátulas), 0 fuera del set; los 4 fallos sin fila en el catálogo (346_p542, 347_p1763, 345_p204) quedan como estaban.
+- Corrida en el clon (sin regolden): `csjn_casos.csv` 5894 filas, `tipo_entrada` fallo 5703→5732, sumario_con_link 157→128; `csjn_casos_votos.csv` 27.938→28.044; `csjn_casos_textos.csv` y `csjn_casos_zonas.csv` (138.062→138.591 segmentos) solo esas 29 entradas; `csjn_casos_editorial.csv` byte-idéntico. Derivados, solo esas 29: epílogo 5703→5732, normas 13.911→13.958 (19 casos), partes, materia y recursos (28) recalculados.
+- Golden + `_manifest.json`: PENDIENTES de regolden en disco local del operador (`correr_pipeline.py --consciente` / `--regolden`).
+
 ## H226 (2026-11-22)
 
 - `parser.py` v43.1→43.2 (U2, B184): `detectar_votos_disidencias` pasa el header acumulado por `_unhyphenate` antes de `detectar_juez_en_voto_header`. 2 casos (344_p1444, 342_p2344); flip-set sellado 2, 0 fuera del set.
