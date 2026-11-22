@@ -20297,3 +20297,17 @@ sj_anio.py v0.1.
 **Scripts creados:** ninguno versionado.
 
 **Commits:** 1 (DEUDA H222 + BITACORA H222).
+
+### H222-05 — Nombres de prompts y pendientes en orden
+
+- Prompts renombrados por número de sesión. H223 = `PROMPT_H223_FABLE-02_implementacion_firma.md` (reemplaza el nombre `PROMPT_FABLE-02_implementacion_firma.md` citado en H222-04). H224 = el PROMPT_H222 que dejó H221, renombrado `PROMPT_H224`.
+- H224 suma la corrección de la fila de 343_p1762 en `adjudicacion_sjconsulta_h221.csv` (B019 → B182). Si H223 hace la unidad opcional de B179, H224 no la repite.
+- Pendientes de la familia de la firma sin número asignado, en orden de prioridad.
+  1. Hx — B177 + B178, ciclo MAJOR de vocabulario de `posicion` (requiere decisión de schema del operador).
+  2. Hx — M68 (validador header × posiciones) como candado, y después B180 (b) + B184 (consumo de headers en `posiciones`).
+  3. Hx — residual de B019, voto entero detrás de la firma partida (338_p1060, 329_p5210).
+  4. Hx — B179, implementación de la marca `posicion_en_texto` (después de la adjudicación).
+  5. Hx — B182, superficie de apellidos truncados por OCR.
+  6. Hx — B183, solo junto con M57.
+
+**Commits:** 2 (DEUDA H222 + BITACORA H222; BITACORA H222-05).
