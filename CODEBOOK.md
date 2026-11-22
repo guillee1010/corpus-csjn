@@ -114,7 +114,7 @@ The dataset consists of eight CSV files. All files are UTF-8 encoded with comma 
 | `jueces` | string | Pipe-separated (`\|`) list of judges who signed the ruling, in order of appearance. |
 | `jueces_conocidos` | string | Pipe-separated list of judges matched to the canonical list of known CSJN justices and conjueces. |
 | `jueces_desconocidos` | float | Count of judges in the signature block not matched to any known justice. Null when signature detection failed entirely. |
-| `posiciones` | string | JSON dictionary mapping each judge's name to their voting position (e.g., `{"Petracchi": "mayoria", "Fayt": "en disidencia", "Lorenzetti": "en disidencia parcial"}`). Vocabulary: `mayoria`, `según su voto`, `en disidencia`, `en disidencia parcial` (see `posicion`). |
+| `posiciones` | string | JSON dictionary mapping each judge's name to their voting position (e.g., `{"Petracchi": "mayoria", "Fayt": "en disidencia", "Lorenzetti": "en disidencia parcial"}`). Vocabulary: `mayoria`, `según su voto`, `en disidencia`, `en disidencia parcial` (see `posicion`). Source: the qualifier printed after the judge's name in the signature block; since parser v43.3 (H226, B180 (b)), a judge whose signature carries no qualifier but who heads a separate vote or dissent in the ruling (header "Voto del…" / "Disidencia (parcial) del…") is published with the position the header states, under four guards (header after the dispositive clause, judge in the signature, non-empty vote text, no other signed panel between the dispositive clause and the header). 11 positions in 10 rulings moved at v43.3. |
 
 ### Pipeline metadata
 
@@ -407,12 +407,12 @@ Outcome of the *recurso de queja*, where `es_queja = 1`.
 
 | Value | N | Description |
 |---|---|---|
-| `mayoria` | 24,107 | Judge voted with the majority. |
-| `según su voto` | 1,571 | Judge concurred in the result but filed separate reasoning. Since parser v43.1 (H225, B178) this also covers the signature variant "(por su voto)" (8 positions). |
-| `en disidencia` | 2,023 | Judge dissented from the majority disposition. |
-| `en disidencia parcial` | 237 | Judge dissented in part, as marked in the signature block "(en disidencia parcial)". Counts as a dissent for `voting_pattern`. Since parser v43.0 (H225, B177). Partial dissents marked only in the vote header and not in the signature are still published as `en disidencia` (B180 (b)). |
+| `mayoria` | 24,096 | Judge voted with the majority. |
+| `según su voto` | 1,579 | Judge concurred in the result but filed separate reasoning. Since parser v43.1 (H225, B178) this also covers the signature variant "(por su voto)" (8 positions). |
+| `en disidencia` | 2,026 | Judge dissented from the majority disposition. |
+| `en disidencia parcial` | 237 | Judge dissented in part, as marked in the signature block "(en disidencia parcial)" or, since v43.3, in the vote header. Counts as a dissent for `voting_pattern`. Since parser v43.0 (H225, B177). |
 
-Counts as of parser v43.1 (27,938 rows).
+Source of the position: the qualifier printed in the signature block. Since parser v43.3 (H226, B180 (b)), when the signature carries no qualifier for a judge who heads a separate vote or dissent in the text, the position stated by that header is published instead (never overriding a printed qualifier). Counts as of parser v43.3 (27,938 rows; 11 positions in 10 rulings moved from `mayoria` at v43.3).
 
 ### `tipo_voto_sep` (in `csjn_casos_votos.csv`) {#tipo_voto_sep}
 
