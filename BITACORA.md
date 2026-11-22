@@ -20248,3 +20248,52 @@ sj_anio.py v0.1.
 - **Pendientes (próxima sesión, ver PROMPT_H222):** medir B179 corpus-wide; cruce doctrina × fallos sin mayoría absoluta (atribución de sumarios y holding); citas posteriores de mayorías circunstanciales; leer los 3 fallos con marca de disidencia parcial sin disidencia publicada, 332_p1394, 346_p931, 344_p174, 343_p1762; validar secretaría contra el trabajo de campo; concordancia disposición/vía con SJ (achicar M43); diseño conjunto de fix de la familia firma (B019/B177/B178/B180), posible auditoría externa read-only.
 
 **Commits de la sesión:** documentación en varias tandas (DEUDA + BITACORA), scripts de validación y análisis, datos curados y salidas del κ. Ninguno toca el pipeline.
+
+## H222 — Auditoría externa de la familia de la firma (FABLE-01) y registro documental (2026-11-21)
+
+**Objetivo:** registrar en la DEUDA el resultado de una auditoría externa de solo lectura sobre la lectura de la firma (B019, B177, B178, B179, B180) antes de implementar fixes.
+
+### H222-01 — Auditoría FABLE-01
+
+- Auditor externo sin historia de sesiones, con el prompt `PROMPT_FABLE_auditoria_firma.md`. Corrió en un sandbox sobre un clon del commit `aa4c742` (cierre H221), con el parser importado como fuente única de los predicados. Informe `informe_auditoria_firma.docx`, fuera del repo.
+- Por Gate 4, **las superficies son preliminares** hasta reproducirlas en disco local. Los testigos citados se leyeron con texto en los `.md` del tomo.
+- Los instrumentos de la auditoría vivieron en el scratchpad del sandbox y no se versionaron.
+
+### H222-02 — Hallazgos
+
+- **B019, causa raíz diagnosticada.** Los patrones de `jueces_csjn.csv` exigen nombre y apellido. La continuación de una firma partida ("Carlos Maqueda.", "LORENZETTI.", "RAÚL ZAFFARONI.") es invisible para `linea_es_firma_de_juez` y deja `linea_fin_real` un renglón antes por tres caminos, `extender_firma` (pista `firma_actual`), Pista 3 que toma "LORENZETTI." como header de sumario, y la etapa B de `retroceder_frontera` que toma "RAÚL ZAFFARONI." como carátula. Superficie 40 casos (22 / 7 / 11). Fix diseñado como extensión de un renglón al salir de `detectar_fin_real`. Residual que el fix no cura, el voto entero detrás de la firma partida en 338_p1060 y 329_p5210.
+- **B180 (a) no es corte de frontera.** En 343_p1800 el calificador está dentro del bloque y de `firma_raw`, y falla `RE_CALIFICADOR_FIRMA` por el punto en "(en disidencia.)". Se reclasifica a **B181**, calificador deforme (guion de corte, guion blando, "mi voto", puntuación interna), 10 fallos, 4 con `voting_pattern` incorrecto.
+- **B180 (b), mecanismo leído en código.** Ningún punto del parser corrige una posición desde un header de voto o disidencia.
+- **B177.** Leer el grupo 2 del calificador no alcanza, porque `has_disid` (L1406) compara por igualdad y un fallo con disidencia parcial única pasaría a `unanime`. Consumidores de `posiciones` leídos uno por uno.
+- **B178.** 8 posiciones en 5 fallos, listados.
+- **B179.** Superficie candidata de unos 40 fallos sin adjudicar. Propuesta de marca aparte (`posicion_en_texto` en votos.csv) en lugar de recodificar `posiciones`.
+- **Nuevos.** B181 (calificador deforme), B182 (apellido truncado por OCR, testigo 343_p1762), B183 (fragmento de calificador a inicio de línea rechazado como firma, 492 líneas, daño latente para M57), B184 (`detectar_juez_en_voto_header` sin deshifenar, testigo 344_p1444), M68 (validador header × posiciones, pool 26).
+
+### H222-03 — Correcciones de constancia
+
+- 343_p1762 no es B019 sino B182 ("Lorenzett." del OCR). La fila de la adjudicación H221 queda con `clase=B019` y se corrige en el ciclo que corresponda (dato curado, no se toca en esta sesión).
+- 339_p1648, testigo original de B019, ya no exhibe el bug (su fin lo fija `marcador_apertura_siguiente`).
+- El informe FABLE-01 preveía `n_votos_svoto` +1 en 338_p1060 y 329_p5210. Es un error del informe. La extensión de un renglón agrega solo la continuación de la firma.
+
+### H222-04 — Numeración
+
+- Acordada con el operador. H222 = esta sesión (FABLE-01 + registro). H223 = implementación con Fable de B019 y B181 (prompt `PROMPT_FABLE-02_implementacion_firma.md`). H224 = la agenda que H221 dejó como "ver PROMPT_H222" (medir B179, doctrina × fallos sin mayoría absoluta, lectura de 332_p1394, 346_p931, 344_p174, validación de secretaría).
+- 343_p1762, que estaba en esa agenda, ya quedó leído (B182).
+
+### H222 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 157 sumario_con_link + 34 sumario_editorial).
+- **Sin firma:** 8 / 5703. Sin cambio.
+- **Votos:** 27.900 filas. Sin cambio.
+
+**Outputs canónicos (intactos respecto de H221):**
+- `output/parser/csjn_casos.csv` — 5894 filas.
+- `output/parser/csjn_casos_votos.csv` — 27.900 filas.
+- `output/parser/csjn_casos_zonas.csv` — 138.048 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones.
+
+**Pipeline:** sin cambios. Parser v42.1, `_manifest.json` sin re-sello. CHANGELOG sin entrada.
+
+**Scripts creados:** ninguno versionado.
+
+**Commits:** 1 (DEUDA H222 + BITACORA H222).
