@@ -1,5 +1,5 @@
 nombre_canonico,tipo,patron,periodo_desde,periodo_hasta,fuente,nota,testigos
-Rosatti,titular,horacio\s+(daniel\s+)?rosatti,,,parser<=27.1 (migrada verbatim),,
+Rosatti,titular,horacio\s+(daniel\s+)?rosatti|rosatti\s+horacio,,,parser<=27.1 (migrada verbatim) + variante H228 (B187),"'Rosatti Horacio' en 348_p708: orden del sello de firma digital, ÚNICA aparición de un titular en ese orden en el corpus (original y sjconsulta confirman la firma)",348_p708
 Rosenkrantz,titular,carlos\s+fernando\s+rosenkrantz,,,parser<=27.1 (migrada verbatim),,
 Lorenzetti,titular,ricardo\s+(luis\s+)?lorenzetti,,,parser<=27.1 (migrada verbatim),,
 Maqueda,titular,juan\s+carlos\s+maqueda,,,parser<=27.1 (migrada verbatim),,
