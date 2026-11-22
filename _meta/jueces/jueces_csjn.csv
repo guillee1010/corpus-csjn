@@ -1,7 +1,7 @@
 nombre_canonico,tipo,patron,periodo_desde,periodo_hasta,fuente,nota,testigos
 Rosatti,titular,horacio\s+(daniel\s+)?rosatti|rosatti\s+horacio,,,parser<=27.1 (migrada verbatim) + variante H228 (B187),"'Rosatti Horacio' en 348_p708: orden del sello de firma digital, ÚNICA aparición de un titular en ese orden en el corpus (original y sjconsulta confirman la firma)",348_p708
 Rosenkrantz,titular,carlos\s+fernando\s+rosenkrantz,,,parser<=27.1 (migrada verbatim),,
-Lorenzetti,titular,ricardo\s+(luis\s+)?lorenzetti,,,parser<=27.1 (migrada verbatim),,
+Lorenzetti,titular,ricardo\s+(luis\s+)?lorenzett(?:i|\.),,,parser<=27.1 (migrada verbatim) + variante H228 (B182),apellido truncado 'Lorenzett.' en 343_p1762 (sjconsulta confirma la firma),343_p1762
 Maqueda,titular,juan\s+carlos\s+maqueda|[—–]\s*carlos\s+maqueda,,,parser<=27.1 (migrada verbatim) + variante H228,"errata del tomo en 346_p319 ('Carlos Maqueda', sin 'Juan'; original y sjconsulta confirman la firma); anclada a la raya",346_p319
 Highton de Nolasco,titular,elena\s+(i\.|inés)\s*(highton)?(?:\s+de\s+nolasco)?,,,parser<=27.1 (migrada verbatim),,
 García Mansilla,titular,manuel\s+jos[eé]?\s+garc[íi]a[\-\s—–]+mansilla,,,parser<=27.1 (migrada verbatim) + ensanche H228 (B194),apellido impreso con raya en las firmas del tomo 348,348_p83;348_p113;348_p179;348_p189
