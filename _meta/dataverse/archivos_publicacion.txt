@@ -1,0 +1,32 @@
+# Archivos que se publican en Dataverse (H224). Uno por línea, ruta en el dataset.
+# La lista es cerrada: preparar_bundle_dataverse.py borra en la copia de CI todo lo que no esté acá y frena si falta algo.
+# dataverse/README.md sale de _meta/dataverse/README.md; dataverse/CODEBOOK.md es copia del CODEBOOK.md de la raíz.
+dataverse/README.md
+dataverse/CODEBOOK.md
+output/parser/_manifest.json
+output/parser/csjn_casos.csv
+output/parser/csjn_casos_editorial.csv
+output/parser/csjn_casos_epilogo.csv
+output/parser/csjn_casos_materia.csv
+output/parser/csjn_casos_normas.csv
+output/parser/csjn_casos_partes.csv
+output/parser/csjn_casos_recursos.csv
+output/parser/csjn_casos_textos.csv
+output/parser/csjn_casos_votos.csv
+output/parser/csjn_casos_zonas.csv
+scripts/pipeline/clasificador_admision.py
+scripts/pipeline/clasificador_causa.py
+scripts/pipeline/clasificador_disposicion.py
+scripts/pipeline/clasificador_via.py
+scripts/pipeline/construir_catalogo.py
+scripts/pipeline/correr_pipeline.py
+scripts/pipeline/cruzar_catalogo_y_mapa.py
+scripts/pipeline/derivar_materia.py
+scripts/pipeline/derivar_partes.py
+scripts/pipeline/derivar_recursos.py
+scripts/pipeline/detectar_paginas.py
+scripts/pipeline/extraer_epilogos.py
+scripts/pipeline/extraer_normas.py
+scripts/pipeline/generar_manifiesto.py
+scripts/pipeline/parser.py
+scripts/pipeline/parser_editorial.py

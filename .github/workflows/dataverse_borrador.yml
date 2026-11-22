@@ -1,0 +1,46 @@
+# Sube el dataset a Harvard Dataverse como BORRADOR (H224). Se dispara solo a mano (Actions > Run workflow).
+# No publica: la versión queda en draft y el operador la revisa y publica desde la web de Dataverse.
+# Sube SOLO lo que lista _meta/dataverse/archivos_publicacion.txt (lo arma y verifica
+# scripts/auxiliares/preparar_bundle_dataverse.py en la copia descartable del runner).
+# Requiere el secreto del repo DATAVERSE_TOKEN (token de API de Dataverse, lo carga el operador).
+# DELETE true: borra los archivos del borrador antes de subir (saca, entre otros, el fósil
+# csjn_editorial_indice_partes.csv, M35). La acción usa para borrar la API SWORD; si Harvard no la
+# acepta, el borrado falla y hay que sacar los archivos viejos a mano en la web antes de publicar.
+name: Dataverse (borrador)
+on:
+  workflow_dispatch:
+    inputs:
+      confirmo:
+        description: "Escribí BORRADOR para confirmar (sube como draft, borra los archivos actuales del draft)"
+        required: true
+permissions:
+  contents: read
+jobs:
+  subir:
+    if: ${{ github.event.inputs.confirmo == 'BORRADOR' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copia del repo
+        uses: actions/checkout@v4
+        with:
+          path: repo
+      - name: Uploader de IQSS (v1.7, fijado)
+        uses: actions/checkout@v4
+        with:
+          repository: IQSS/dataverse-uploader
+          ref: v1.7
+          path: uploader
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencias
+        run: pip install -r uploader/requirements.txt
+      - name: Armar y verificar el paquete (borra en la copia lo que no se publica)
+        run: python repo/scripts/auxiliares/preparar_bundle_dataverse.py repo --yo-se-que-borra
+      - name: Subir como borrador
+        env:
+          DATAVERSE_TOKEN: ${{ secrets.DATAVERSE_TOKEN }}
+        run: >-
+          python uploader/dataverse.py "$DATAVERSE_TOKEN" https://dataverse.harvard.edu
+          doi:10.7910/DVN/TJTVKW "$GITHUB_REPOSITORY"
+          -d "output/parser scripts/pipeline dataverse" -r true -p false
