@@ -570,6 +570,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 329_p158,329,cuerpo,1,137,145,9,76
 329_p158,329,dispositivo,1,146,148,3,26
 329_p158,329,firma,1,149,150,2,19
+329_p158,329,sumario,3,151,151,1,1
 329_p163,329,residuo_caso_anterior,1,0,0,1,2
 329_p163,329,sumario,1,1,8,8,86
 329_p163,329,dictamen,1,9,25,17,169
@@ -2076,6 +2077,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 329_p576,329,cuerpo,3,250,270,21,239
 329_p576,329,dispositivo,1,271,274,4,37
 329_p576,329,firma,1,275,276,2,19
+329_p576,329,sumario,3,277,277,1,1
 329_p584,329,residuo_caso_anterior,1,0,1,2,17
 329_p584,329,sumario,1,2,35,34,314
 329_p584,329,header_pagina,1,36,38,3,7
@@ -2201,6 +2203,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 329_p622,329,header_pagina,1,15,17,3,7
 329_p622,329,dispositivo,2,18,19,2,13
 329_p622,329,firma,1,20,21,2,19
+329_p622,329,sumario,2,22,22,1,1
 329_p623,329,residuo_caso_anterior,1,0,0,1,7
 329_p623,329,sumario,1,1,5,5,50
 329_p623,329,apertura,1,6,6,1,5
@@ -6544,6 +6547,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 329_p1908,329,cuerpo,1,55,56,2,10
 329_p1908,329,dispositivo,1,57,62,6,72
 329_p1908,329,firma,1,63,64,2,19
+329_p1908,329,sumario,2,65,65,1,1
 329_p1910,329,residuo_caso_anterior,1,0,0,1,9
 329_p1910,329,sumario,1,1,8,8,89
 329_p1910,329,apertura,1,9,9,1,5
@@ -14603,6 +14607,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 329_p4241,329,cuerpo,2,20,32,13,125
 329_p4241,329,dispositivo,1,33,40,8,88
 329_p4241,329,firma,1,41,42,2,19
+329_p4241,329,sumario,2,43,43,1,1
 329_p4242,329,residuo_caso_anterior,1,0,0,1,7
 329_p4242,329,sumario,1,1,6,6,60
 329_p4242,329,header_pagina,1,7,9,3,7
@@ -18120,6 +18125,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 329_p5210,329,cuerpo,6,532,533,2,22
 329_p5210,329,dispositivo,1,534,537,4,39
 329_p5210,329,firma,1,538,540,3,27
+329_p5210,329,sumario,5,541,541,1,1
 329_p5227,329,residuo_caso_anterior,1,0,1,2,13
 329_p5227,329,sumario,1,2,27,26,265
 329_p5227,329,header_pagina,1,28,30,3,7
@@ -19909,6 +19915,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 329_p5722,329,header_pagina,2,58,60,3,7
 329_p5722,329,dispositivo,2,61,64,4,50
 329_p5722,329,firma,1,65,66,2,19
+329_p5722,329,sumario,2,67,67,1,1
 329_p5724,329,residuo_caso_anterior,1,0,0,1,2
 329_p5724,329,sumario,1,1,13,13,134
 329_p5724,329,dictamen,1,14,18,5,29
@@ -23629,6 +23636,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 330_p638,330,header_pagina,2,60,62,3,7
 330_p638,330,dispositivo,2,63,69,7,74
 330_p638,330,firma,1,70,71,2,19
+330_p638,330,sumario,2,72,72,1,1
 330_p640,330,residuo_caso_anterior,1,0,0,1,5
 330_p640,330,sumario,1,1,22,22,207
 330_p640,330,header_pagina,1,23,25,3,7
@@ -24230,6 +24238,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 330_p818,330,cuerpo,3,87,112,26,288
 330_p818,330,dispositivo,1,113,116,4,42
 330_p818,330,firma,1,117,118,2,19
+330_p818,330,sumario,3,119,119,1,1
 330_p822,330,residuo_caso_anterior,1,0,1,2,8
 330_p822,330,sumario,1,2,19,18,227
 330_p822,330,dictamen,1,20,25,6,33
@@ -24649,6 +24658,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 330_p963,330,cuerpo,3,282,284,3,18
 330_p963,330,dispositivo,3,285,286,2,16
 330_p963,330,firma,4,287,287,1,10
+330_p963,330,sumario,3,288,288,1,1
 330_p971,330,header_pagina,1,0,0,1,1
 330_p971,330,residuo_caso_anterior,1,1,1,1,8
 330_p971,330,sumario,1,2,37,36,368
@@ -25378,6 +25388,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 330_p1179,330,cuerpo,1,51,52,2,10
 330_p1179,330,dispositivo,1,53,58,6,70
 330_p1179,330,firma,1,59,60,2,19
+330_p1179,330,sumario,2,61,61,1,1
 330_p1181,330,residuo_caso_anterior,1,0,0,1,3
 330_p1181,330,sumario,1,1,10,10,105
 330_p1181,330,dictamen,1,11,32,22,206
@@ -26814,6 +26825,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 330_p1564,330,header_pagina,3,77,79,3,7
 330_p1564,330,dispositivo,2,80,85,6,65
 330_p1564,330,firma,3,86,86,1,10
+330_p1564,330,sumario,3,87,87,1,1
 330_p1567,330,residuo_caso_anterior,1,0,0,1,4
 330_p1567,330,sumario,1,1,21,21,223
 330_p1567,330,header_pagina,1,22,24,3,7
@@ -29658,6 +29670,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 330_p2414,330,cuerpo,2,32,42,11,98
 330_p2414,330,dispositivo,1,43,61,19,166
 330_p2414,330,firma,1,62,63,2,19
+330_p2414,330,sumario,2,64,64,1,1
 330_p2416,330,sumario,1,0,35,36,384
 330_p2416,330,header_pagina,1,36,38,3,7
 330_p2416,330,sumario,2,39,63,25,298
@@ -29984,6 +29997,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 330_p2520,330,cuerpo,1,7,8,2,10
 330_p2520,330,dispositivo,1,9,15,7,84
 330_p2520,330,firma,1,16,17,2,19
+330_p2520,330,sumario,2,18,18,1,1
 330_p2521,330,residuo_caso_anterior,1,0,1,2,9
 330_p2521,330,sumario,1,2,35,34,336
 330_p2521,330,header_pagina,1,36,38,3,7
@@ -35695,7 +35709,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 330_p4345,330,apertura,1,239,239,1,5
 330_p4345,330,cuerpo,1,240,246,7,53
 330_p4345,330,dispositivo,1,247,249,3,21
-330_p4345,330,firma,1,250,251,2,18
+330_p4345,330,firma,1,250,252,3,20
 330_p4351,330,residuo_caso_anterior,1,0,0,1,5
 330_p4351,330,sumario,1,1,7,7,63
 330_p4351,330,header_pagina,1,8,10,3,7
@@ -35707,7 +35721,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 330_p4351,330,dispositivo,1,81,85,5,52
 330_p4351,330,header_pagina,3,86,88,3,7
 330_p4351,330,dispositivo,2,89,90,2,15
-330_p4351,330,firma,1,91,92,2,18
+330_p4351,330,firma,1,91,93,3,20
 330_p4354,330,residuo_caso_anterior,1,0,0,1,6
 330_p4354,330,sumario,1,1,17,17,200
 330_p4354,330,dictamen,1,18,23,6,33
@@ -35852,7 +35866,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 330_p4396,330,header_pagina,2,75,77,3,7
 330_p4396,330,cuerpo,2,78,98,21,234
 330_p4396,330,dispositivo,2,99,109,11,99
-330_p4396,330,firma,1,110,111,2,18
+330_p4396,330,firma,1,110,112,3,20
 330_p4399,330,residuo_caso_anterior,1,0,0,1,4
 330_p4399,330,sumario,1,1,31,31,319
 330_p4399,330,header_pagina,1,32,34,3,7
@@ -39072,7 +39086,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 330_p5342,330,dispositivo,1,101,103,3,22
 330_p5342,330,header_pagina,3,104,106,3,7
 330_p5342,330,dispositivo,2,107,108,2,12
-330_p5342,330,firma,1,109,110,2,18
+330_p5342,330,firma,1,109,111,3,20
 330_p5345,330,residuo_caso_anterior,1,0,0,1,10
 330_p5345,330,sumario,1,1,22,22,235
 330_p5345,330,header_pagina,1,23,25,3,7
@@ -75376,7 +75390,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 338_p477,338,header_pagina,7,275,277,3,7
 338_p477,338,cuerpo,2,278,287,10,106
 338_p477,338,dispositivo,1,288,295,8,79
-338_p477,338,firma,1,296,296,1,9
+338_p477,338,firma,1,296,297,2,11
 338_p484,338,residuo_caso_anterior,1,0,8,9,72
 338_p484,338,header_pagina,1,9,11,3,7
 338_p484,338,residuo_caso_anterior,2,12,27,16,154
@@ -75830,7 +75844,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 338_p651,338,header_pagina,1,27,29,3,7
 338_p651,338,cuerpo,2,30,40,11,122
 338_p651,338,dispositivo,1,41,42,2,14
-338_p651,338,firma,1,43,43,1,9
+338_p651,338,firma,1,43,44,2,11
 338_p652,338,residuo_caso_anterior,1,0,10,11,102
 338_p652,338,header_pagina,1,11,13,3,7
 338_p652,338,residuo_caso_anterior,2,14,48,35,361
@@ -76966,7 +76980,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 338_p1060,338,header_pagina,23,913,915,3,7
 338_p1060,338,cuerpo,18,916,924,9,93
 338_p1060,338,dispositivo,1,925,932,8,84
-338_p1060,338,firma,1,933,933,1,9
+338_p1060,338,firma,1,933,934,2,14
 338_p1084,338,residuo_caso_anterior,1,0,6,7,64
 338_p1084,338,header_pagina,1,7,9,3,7
 338_p1084,338,residuo_caso_anterior,2,10,34,25,249
@@ -77139,7 +77153,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 338_p1149,338,header_pagina,6,213,215,3,7
 338_p1149,338,cuerpo,2,216,234,19,217
 338_p1149,338,dispositivo,1,235,242,8,79
-338_p1149,338,firma,1,243,243,1,9
+338_p1149,338,firma,1,243,244,2,11
 338_p1156,338,residuo_caso_anterior,1,0,25,26,248
 338_p1156,338,header_pagina,1,26,28,3,7
 338_p1156,338,residuo_caso_anterior,2,29,61,33,334
@@ -78500,7 +78514,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 339_p127,339,dispositivo,1,607,610,4,30
 339_p127,339,header_pagina,15,611,613,3,7
 339_p127,339,dispositivo,2,614,616,3,32
-339_p127,339,firma,1,617,617,1,9
+339_p127,339,firma,1,617,618,2,11
 339_p142,339,residuo_caso_anterior,1,0,19,20,170
 339_p142,339,header_pagina,1,20,22,3,7
 339_p142,339,residuo_caso_anterior,2,23,55,33,321
@@ -78552,7 +78566,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 339_p155,339,header_pagina,5,186,188,3,7
 339_p155,339,cuerpo,3,189,198,10,100
 339_p155,339,dispositivo,1,199,204,6,64
-339_p155,339,firma,1,205,205,1,9
+339_p155,339,firma,1,205,206,2,11
 339_p160,339,residuo_caso_anterior,1,0,9,10,65
 339_p160,339,header_pagina,1,10,12,3,7
 339_p160,339,residuo_caso_anterior,2,13,43,31,307
@@ -80174,7 +80188,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 339_p680,339,header_pagina,2,69,71,3,7
 339_p680,339,cuerpo,3,72,90,19,186
 339_p680,339,dispositivo,1,91,95,5,44
-339_p680,339,firma,1,96,96,1,9
+339_p680,339,firma,1,96,97,2,11
 339_p683,339,residuo_caso_anterior,1,0,29,30,268
 339_p683,339,header_pagina,1,30,32,3,7
 339_p683,339,residuo_caso_anterior,2,33,68,36,347
@@ -84756,7 +84770,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 340_p403,340,header_pagina,3,99,101,3,7
 340_p403,340,cuerpo,3,102,113,12,125
 340_p403,340,dispositivo,1,114,117,4,39
-340_p403,340,firma,1,118,118,1,9
+340_p403,340,firma,1,118,119,2,11
 340_p406,340,residuo_caso_anterior,1,0,8,9,82
 340_p406,340,header_pagina,1,9,11,3,7
 340_p406,340,residuo_caso_anterior,2,12,13,2,15
@@ -91502,7 +91516,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 341_p726,341,header_pagina,1,29,31,3,7
 341_p726,341,cuerpo,2,32,39,8,92
 341_p726,341,dispositivo,1,40,43,4,39
-341_p726,341,firma,1,44,44,1,9
+341_p726,341,firma,1,44,45,2,11
 341_p727,341,residuo_caso_anterior,1,0,9,10,81
 341_p727,341,header_pagina,1,10,12,3,7
 341_p727,341,residuo_caso_anterior,2,13,34,22,207
@@ -106345,7 +106359,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 343_p1758,343,header_pagina,4,122,124,3,7
 343_p1758,343,cuerpo,3,125,131,7,77
 343_p1758,343,dispositivo,1,132,137,6,63
-343_p1758,343,firma,1,138,138,1,9
+343_p1758,343,firma,1,138,139,2,10
 343_p1762,343,residuo_caso_anterior,1,0,9,10,78
 343_p1762,343,header_pagina,1,10,12,3,7
 343_p1762,343,residuo_caso_anterior,2,13,47,35,365
@@ -108090,7 +108104,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 344_p66,344,header_pagina,14,553,555,3,7
 344_p66,344,cuerpo,2,556,573,18,191
 344_p66,344,dispositivo,1,574,583,10,97
-344_p66,344,firma,1,584,584,1,9
+344_p66,344,firma,1,584,585,2,10
 344_p81,344,residuo_caso_anterior,1,0,22,23,214
 344_p81,344,header_pagina,1,23,25,3,7
 344_p81,344,residuo_caso_anterior,2,26,59,34,323
@@ -110650,7 +110664,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 344_p1030,344,header_pagina,2,62,64,3,7
 344_p1030,344,cuerpo,2,65,92,28,313
 344_p1030,344,dispositivo,1,93,97,5,51
-344_p1030,344,firma,1,98,99,2,17
+344_p1030,344,firma,1,98,100,3,18
 344_p1033,344,residuo_caso_anterior,1,0,13,14,129
 344_p1033,344,header_pagina,1,14,16,3,7
 344_p1033,344,residuo_caso_anterior,2,17,39,23,211
@@ -117631,7 +117645,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 344_p3695,344,dispositivo,1,181,183,3,26
 344_p3695,344,header_pagina,5,184,186,3,7
 344_p3695,344,dispositivo,2,187,189,3,36
-344_p3695,344,firma,1,190,190,1,7
+344_p3695,344,firma,1,190,191,2,8
 344_p3700,344,residuo_caso_anterior,1,0,8,9,76
 344_p3700,344,sumario,1,9,19,11,107
 344_p3700,344,header_pagina,1,20,22,3,7
@@ -121175,7 +121189,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 345_p1336,345,cuerpo,5,111,145,35,376
 345_p1336,345,header_pagina,4,146,148,3,7
 345_p1336,345,dispositivo,1,149,154,6,60
-345_p1336,345,firma,1,155,155,1,7
+345_p1336,345,firma,1,155,156,2,8
 345_p1342,345,residuo_caso_anterior,1,0,33,34,345
 345_p1342,345,header_pagina,1,34,36,3,7
 345_p1342,345,residuo_caso_anterior,2,37,57,21,216
@@ -121429,7 +121443,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 345_p1417,345,dispositivo,1,131,135,5,45
 345_p1417,345,header_pagina,4,136,138,3,7
 345_p1417,345,dispositivo,2,139,141,3,31
-345_p1417,345,firma,1,142,142,1,7
+345_p1417,345,firma,1,142,143,2,8
 345_p1421,345,residuo_caso_anterior,1,0,19,20,205
 345_p1421,345,header_pagina,1,20,22,3,7
 345_p1421,345,residuo_caso_anterior,2,23,56,34,324
@@ -127007,7 +127021,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 347_p412,347,header_pagina,1,21,23,3,7
 347_p412,347,cuerpo,2,24,36,13,133
 347_p412,347,dispositivo,1,37,54,18,194
-347_p412,347,firma,1,55,55,1,7
+347_p412,347,firma,1,55,56,2,8
 347_p414,347,residuo_caso_anterior,1,0,9,10,99
 347_p414,347,sumario,1,10,30,21,201
 347_p414,347,header_pagina,1,31,33,3,7
@@ -128170,7 +128184,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 347_p818,347,header_pagina,5,168,170,3,7
 347_p818,347,cuerpo,2,171,172,2,15
 347_p818,347,dispositivo,1,173,178,6,64
-347_p818,347,firma,1,179,179,1,7
+347_p818,347,firma,1,179,180,2,8
 347_p833,347,residuo_caso_anterior,1,0,28,29,289
 347_p833,347,header_pagina,1,29,31,3,7
 347_p833,347,residuo_caso_anterior,2,32,41,10,109
@@ -132357,7 +132371,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 348_p60,348,header_pagina,1,0,2,3,7
 348_p60,348,cuerpo,1,3,4,2,28
 348_p60,348,dispositivo,1,5,6,2,13
-348_p60,348,firma,1,7,7,1,7
+348_p60,348,firma,1,7,8,2,8
 348_p61,348,residuo_caso_anterior,1,0,10,11,91
 348_p61,348,header_pagina,1,11,13,3,7
 348_p61,348,residuo_caso_anterior,2,14,47,34,337
@@ -132876,7 +132890,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 348_p259,348,header_pagina,1,0,0,1,1
 348_p259,348,cuerpo,1,1,11,11,105
 348_p259,348,dispositivo,1,12,17,6,60
-348_p259,348,firma,1,18,18,1,7
+348_p259,348,firma,1,18,19,2,8
 348_p267,348,residuo_caso_anterior,1,0,4,5,38
 348_p267,348,header_pagina,1,5,7,3,7
 348_p267,348,residuo_caso_anterior,2,8,14,7,78
@@ -133454,7 +133468,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 348_p473,348,header_pagina,1,0,0,1,1
 348_p473,348,cuerpo,1,1,3,3,32
 348_p473,348,dispositivo,1,4,12,9,96
-348_p473,348,firma,1,13,13,1,7
+348_p473,348,firma,1,13,14,2,8
 348_p474,348,residuo_caso_anterior,1,0,12,13,133
 348_p474,348,sumario,1,13,14,2,11
 348_p474,348,header_pagina,1,15,17,3,7
@@ -133945,7 +133959,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 348_p659,348,header_pagina,3,82,84,3,7
 348_p659,348,cuerpo,3,85,93,9,95
 348_p659,348,dispositivo,1,94,99,6,66
-348_p659,348,firma,1,100,100,1,7
+348_p659,348,firma,1,100,101,2,8
 348_p662,348,residuo_caso_anterior,1,0,7,8,70
 348_p662,348,header_pagina,1,8,10,3,7
 348_p662,348,residuo_caso_anterior,2,11,46,36,353
@@ -135589,7 +135603,7 @@ caso_id_canonico,tomo,zona,segmento,linea_ini,linea_fin,n_lineas,wc
 348_p1242,348,header_pagina,11,415,417,3,7
 348_p1242,348,cuerpo,10,418,424,7,83
 348_p1242,348,dispositivo,1,425,441,17,158
-348_p1242,348,firma,1,442,442,1,7
+348_p1242,348,firma,1,442,443,2,8
 348_p1255,348,residuo_caso_anterior,1,0,30,31,314
 348_p1255,348,header_pagina,1,31,33,3,7
 348_p1255,348,residuo_caso_anterior,2,34,61,28,285
