@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H226 (2026-11-22)
+
+- `parser.py` v43.1→43.2 (U2, B184): `detectar_votos_disidencias` pasa el header acumulado por `_unhyphenate` antes de `detectar_juez_en_voto_header`. 2 casos (344_p1444, 342_p2344); flip-set sellado 2, 0 fuera del set.
+- `parser.py` v43.2→43.3 (U3, B180 (b), MINOR por decisión del operador): `_subir_posiciones_desde_headers` sube SOLO jueces sin calificador a la posición del marcador de header, con cuatro guardas (header posterior al dispositivo, juez en la firma, texto no vacío, ningún otro panel firmado entre dispositivo y header); el marcador conserva "disidencia parcial"; regla de `voting_pattern` extraída a `_voting_pattern_de_jueces` (parse_firma + paso nuevo); predicado de panel extraído a `_parsea_panel` (panel_cprima + guarda 4, no-op demostrado). 11 posiciones en 10 fallos; flip-set sellado 11/10, 0 fuera del set.
+- `scripts/validacion/validar_m68.py` v0.1 (nuevo, M68): invariante header × `posiciones` sobre canónicos, con `--baseline`; baseline `output/validacion/m68_pool_baseline.csv` (13 fallos en v43.3, los 13 con ticket).
+- `output/parser/csjn_casos.csv`: 5894 filas (sin delta); 10 celdas `posiciones` + 7 `voting_pattern` (U3). vp fallos 3513/758/1120/304/8 → 3507/762/1121/305/8.
+- `output/parser/csjn_casos_votos.csv`: 27.938 filas (sin delta); 8 celdas (U2) + 11 `posicion` y 26 `voting_pattern` (U3). Conteos de `posicion`: mayoría 24.107→24.096, según su voto 1571→1579, en disidencia 2023→2026, parcial 237.
+- `csjn_casos_textos.csv`, `csjn_casos_zonas.csv`, `csjn_casos_editorial.csv`: byte-idénticos. Derivados: sin medir en el clon (se adjudican en el regolden).
+- `CODEBOOK.md`: fuente de `posicion`/`posiciones` (firma completada por el header desde v43.3) y conteos v43.3.
+- Golden + `_manifest.json`: PENDIENTES de regolden en disco local del operador (`correr_pipeline.py --consciente` / `--regolden`); sha de los CSV del clon v43.3: casos 727b507d4584…, votos a0b045517ed1…, textos 887826273b1f…, zonas 491721775bd2…, editorial 30a6da652e3a….
+
 ## H225 (2026-11-22)
 
 - `parser.py` v42.3→43.0 (U1, B177, MAJOR, vocabulario de `posicion`): `parse_firma` lee el grupo 2 de `RE_CALIFICADOR_FIRMA` y publica "en disidencia parcial"; `has_disid` pasa a `startswith("en disidencia")`. 237 posiciones en 152 fallos; `voting_pattern` y `n_disidencias` sin movimiento. Solo vía firma; headers para B180 (b).

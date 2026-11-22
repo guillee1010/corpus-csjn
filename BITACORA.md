@@ -20387,3 +20387,44 @@ Visto, no abierto: 329_p4804 y 329_p5157 con "(en disidencia parcial)" en el ran
 **Scripts creados:** `scripts/diagnostico/H225/` (gitignoreado, entregados como archivos) — `harness_ab.py` (H223, sin cambios), `superficie_u1_b177.py`, `superficie_u1_b177.csv`, `superficie_u1_b177_resumen.txt`, `parche_u1.py`, `flipset_out_B1_*.csv`, `superficie_u2_b178.py`, `superficie_u2_b178.csv`, `parche_u2.py`, `flipset_out_B2_*.csv`, `INFORME_H225.md`.
 
 **Commits:** 5 (parser U1 · parser U2 · merge PR #2 · regolden + manifest + outputs, del operador · DEUDA + CODEBOOK + CHANGELOG + BITACORA H225).
+
+## H226 — M68 como candado, B184 y B180 (b): headers que corrigen posiciones (2026-11-22)
+
+**Objetivo:** versionar el validador M68 y adjudicar su pool leyendo el tomo antes de tocar el parser; después cerrar B184 y B180 (b) con harness A/B y flip-set sellado, sin tocar golden, manifest ni outputs canónicos.
+
+### H226-01 — Prerrequisito y base
+
+Verificado en disco que H223 y H225 estaban cerradas (parser v43.1, manifest re-sellado, vocabulario con "en disidencia parcial", `has_disid` con `startswith`). La primera verificación, sobre un clon de `main` anterior a H225, frenó por el prerrequisito del prompt; el operador aplicó H225 y la sesión siguió sobre `7260fbb`. Rama `h226-headers-posiciones`. Harness A/B propio (`harness_ab.py`, H226/, espejo del de H223: `parser.main()` real a temporal, parche en memoria desde la fuente real con reemplazos exigidos únicos, diff keyed-by-caso en casos y votos). Candado E0 limpio en los 5 CSV (mismos sha que el cierre H225). Gate 2: DEUDA B169, B170, B180, B184, M68, BITACORA H225, `parse_firma`, `detectar_votos_disidencias`, armado de `posiciones` y guard B087 leídos en v43.1. Hallazgo de lectura: H225 no tocó `detectar_votos_disidencias`, el header "Disidencia parcial" seguía colapsando en `tipo="disidencia"`.
+
+### H226-02 — U1, M68 y adjudicación del pool (corte bloqueante)
+
+`scripts/validacion/validar_m68.py` v0.1, read-only sobre `csjn_casos.csv`, ramas D y V de la invariante, `--baseline` para usarlo como candado. Pool sobre v43.1: 20 (la DEUDA nombra 25 de los 26; los 5 B181 nombrados ya no violan tras H223; el 26.º no es identificable). Sonda `sonda_m68.py` (parser real con grabadoras sobre `detectar_votos_disidencias`, `resolver_dispositivo` y `parse_firma`, alineadas por orden de llamada y verificadas contra `n_votos_svoto`/`n_disidencias` publicados; E0 5 CSV). Los 20 adjudicados leyendo el tomo (`adjudicacion_u1.csv`): B180 (b) genuino 4 (344_p1444, 348_p1505, 347_p2160, 344_p441), "(SU VOTO)" 2, contradicción interna del tomo 2, documento ajeno dentro del bloque 6, conjueces con apellido primero 2, firma espuria 1, conjuez fuera de la tabla 1, FP conocidos 2. Tres correcciones a la auditoría H222: 344_p441 no es FP B166 (voto separado de Rosatti impreso, firma colectiva sin calificador); las tres "firmas truncadas" ya no lo están desde B019 (4524 y 2655 son contradicción firma/header del tomo, 1930 es un fallo anidado); 329_p6087 no es B180 (b) genuino (la disidencia de Fayt es de la Acordada de la OVD anexada al bloque). Las tres guardas del prompt dejaban pasar cuatro FP (6087, 1309, 1930, 708). Decisiones del operador, con recomendación del asistente: OK a la tabla; 344_p441 adentro; cuarta guarda.
+
+### H226-03 — U2, B184 (parser v43.2)
+
+Superficie corpus-wide con el parser real (`superficie_u2_b184.py`, grabadora sobre `detectar_juez_en_voto_header`): 17 headers sin juez en 15 casos; B184 = 2 (344_p1444, 342_p2344), U+00AD + espacio, `_unhyphenate` alcanza. Los 15 restantes (variantes de nombre de titulares, conjueces fuera de la tabla, FP B170) → B188. Fix, `_unhyphenate(header_completo)` en cada intento del loop. Flip-set sellado 2 (`parche_u2.py`): 8 celdas de votos (texto_voto, wc_voto, tipo_voto_sep, fragmenta_ratio), 0 fuera del set; casos, textos, zonas y editorial byte-idénticos; parser commiteado = brazo B byte a byte. Constancia de método (asistente): la primera versión de la superficie abortaba LibroVol348-1 por un `assert` dentro del wrapper (main() atrapa y saltea el archivo), E0 DIFF en los 5 CSV; corregido antes de medir.
+
+### H226-04 — U3, B180 (b) (parser v43.3)
+
+Guardas medidas por separado sobre 2864 marcadores (`superficie_u3_b180b.py`): g1 2852, g2 2853, g3 2864 (vacua, se mantiene por diseño), g4 2687. Guarda 4 nueva, ningún otro panel firmado entre el dispositivo y el header, con el predicado de `panel_cprima` extraído a `_parsea_panel` (la primera versión contaba cualquier run de zona firma y frenaba votos genuinos por la firma de un solo juez al pie del voto anterior; corregida con dato). Sobre los 17 marcadores de juez sin calificador: con tres guardas 16 flips, con cuatro 11. Fix, `_subir_posiciones_desde_headers` después de `extraer_textos_votos` y antes del guard B087; marcador con "disidencia parcial"; regla de `voting_pattern` extraída a `_voting_pattern_de_jueces`. Flip-set sellado 11 jueces / 10 casos (`parche_u3.py`, brazo A = v43.2): `posiciones` 10, `voting_pattern` 7, `votos.posicion` 11; 0 fuera del set; textos, zonas y editorial idénticos (refactor de `panel_cprima` no-op). Siete genuinos leídos (los 4 del pool más 329_p1998, 330_p4936, 330_p5131) y tres curados por rebote (330_p452, 330_p472 por B185; 348_p708 por B187). Candado M68 sobre el brazo B: 20 → 13, 0 altas, PASS; baseline `output/validacion/m68_pool_baseline.csv`. Decisiones del operador: MINOR (43.3) con nota en CODEBOOK; los tres por rebote aceptados con constancia (opción A).
+
+### H226-05 — Cierre documental
+
+DEUDA: B180 y B184 cerrados, M68 con script y adjudicación, B185 a B189 nuevas, radar y encabezado. CODEBOOK: fuente de `posicion`/`posiciones` y conteos v43.3. CHANGELOG. Visto, no abierto: la tabla de `voting_pattern` del CODEBOOK (3529/1113/746/293) está desactualizada desde antes de H223; los derivados no se midieron en el clon; headers conjuntos siguen con un solo juez en el marcador (B188).
+
+### H226 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumario_con_link).
+- **Sin firma:** 8 / 5703 fallos (0,14 %), sin cambio.
+- **Votos:** 27.938 filas (sin delta). `posicion`: mayoría 24.096 (−11), según su voto 1579 (+8), en disidencia 2026 (+3), en disidencia parcial 237.
+- **Voting patterns (fallos):** unánime 3507 (−6), según su voto 762 (+4), disidencia 1121 (+1), mixed 305 (+1), sin firma 8.
+
+**Outputs canónicos (corrida v43.3 en el clon; en el repo quedan los publicados hasta el regolden del operador):**
+- `output/parser/csjn_casos.csv` — 5894 filas (sha 727b507d4584…).
+- `output/parser/csjn_casos_votos.csv` — 27.938 filas (sha a0b045517ed1…).
+- `output/parser/csjn_casos_zonas.csv` — 138.062 segmentos (sin cambio).
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones (sin cambio).
+
+**Scripts creados:** `scripts/validacion/validar_m68.py` v0.1 (versionado) y `output/validacion/m68_pool_baseline.csv`; `scripts/diagnostico/H226/` (gitignoreado) — `sonda_m68.py`, `sonda_m68_out.json`, `adjudicacion_u1.csv`, `superficie_u2_b184.py` (+ csv), `harness_ab.py`, `parche_u2.py`, `parche_u3.py`, `superficie_u3_b180b.py` (+ csv), `flipset_parche_u2_*.csv`, `flipset_parche_u3_*.csv`.
+
+**Commits:** 3 en la rama `h226-headers-posiciones` (parser U2 · parser U3 · DEUDA + CODEBOOK + CHANGELOG + BITACORA H226 + validar_m68 + baseline). Pendiente del operador: merge del PR, regolden + manifest + M55 en disco local (commit de outputs + golden + manifest).
