@@ -14,12 +14,12 @@ The dataset was constructed automatically by a Python pipeline from OCR-digitize
 
 | Dimension | Count |
 |---|---|
-| Cases (total entries) | 5,890 |
-| Full rulings (*fallos*) | 5,697 |
-| Editorial summaries with link (`sumario_con_link`) | 160 |
-| Editorial summaries (`sumario_editorial`) | 33 |
-| Individual votes | 27,697 |
-| Text zones | 141,451 |
+| Cases (total entries) | 5,894 |
+| Full rulings (*fallos*) | 5,703 |
+| Editorial summaries with link (`sumario_con_link`) | 157 |
+| Editorial summaries (`sumario_editorial`) | 34 |
+| Individual votes | 27,938 |
+| Text zones | 138,062 |
 | Volumes (tomos) covered | 19 (329–334, 337–349) |
 | Source files | 46 |
 | Temporal span | Feb 2006 – Mar 2026 |
@@ -388,20 +388,22 @@ Outcome of the *recurso de queja*, where `es_queja = 1`.
 
 | Value | N | Description |
 |---|---|---|
-| `unanime` | 3,529 | All judges joined a single opinion. |
-| `disidencia` | 1,113 | At least one judge dissented from the majority disposition. |
-| `segun_su_voto` | 746 | All judges agreed on the disposition but at least one filed separate concurring reasoning. |
-| `mixed` | 293 | Combination of dissents and concurrences. |
-| *(null)* | 193 | Not available (editorial entries). |
-| `sin_firma` | 16 | No judicial signatures could be extracted. |
+| `unanime` | 3,507 | All judges joined a single opinion. |
+| `disidencia` | 1,121 | At least one judge dissented from the majority disposition. |
+| `segun_su_voto` | 762 | All judges agreed on the disposition but at least one filed separate concurring reasoning. |
+| `mixed` | 305 | Combination of dissents and concurrences. |
+| *(null)* | 191 | Not available (editorial entries). |
+| `sin_firma` | 8 | No judicial signatures could be extracted. |
+
+Counts as of parser v43.3. The pattern is derived from the signature block (and, since v43.3, from vote headers; see `posicion`). Positions a judge states only inside the common opinion (e.g., "la jueza X se remite a su disidencia en…") are not captured; see Known Limitations.
 
 ### `tipo_entrada` {#tipo_entrada}
 
 | Value | N | Description |
 |---|---|---|
-| `fallo` | 5,697 | Full ruling with complete text. |
-| `sumario_con_link` | 160 | Summary entry with a cross-reference to another volume. |
-| `sumario_editorial` | 33 | Editorial summary without full ruling text. |
+| `fallo` | 5,703 | Full ruling with complete text. |
+| `sumario_con_link` | 157 | Summary entry with a cross-reference to another volume. |
+| `sumario_editorial` | 34 | Editorial summary without full ruling text. |
 
 ### `posicion` (in `csjn_casos_votos.csv`) {#posicion}
 
@@ -431,16 +433,18 @@ Classification of separate votes by their structural relationship to the majorit
 
 | Value | N (segments) | Description |
 |---|---|---|
-| `header_pagina` | 46,144 | Page header inserted by the publisher. Not part of the ruling. |
-| `cuerpo` | 23,043 | Body of the majority opinion (*considerandos* and reasoning). |
-| `dictamen` | 17,012 | Opinion of the Procurador General or Fiscal, embedded before the Court's decision. |
-| `dispositivo` | 12,500 | Operative section (*por ello* clause). |
-| `firma` | 10,616 | Signature block listing the judges' names. |
-| `sumario` | 8,007 | Editorial summary printed before the ruling, authored by the publisher. |
-| `epilogo` | 7,618 | Trailing text after the signature: notifications, dissent notes, annotations. |
-| `residuo_caso_anterior` | 7,541 | Residual text belonging to the preceding case on a shared page. |
-| `apertura` | 5,776 | Opening section: case caption, date, initial procedural framing. |
-| `voto_separado` | 3,194 | Separate opinion (concurrence or dissent) by an individual judge. |
+| `header_pagina` | 44,643 | Page header inserted by the publisher. Not part of the ruling. |
+| `cuerpo` | 25,401 | Body of the majority opinion (*considerandos* and reasoning). |
+| `dictamen` | 16,924 | Opinion of the Procurador General or Fiscal, embedded before the Court's decision. |
+| `dispositivo` | 11,573 | Operative section (*por ello* clause). |
+| `firma` | 9,746 | Signature block listing the judges' names. |
+| `sumario` | 7,978 | Intended for the editorial summaries printed before the ruling. **Not reliable for that purpose** (see Known Limitations). |
+| `epilogo` | 4,910 | Trailing text after the signature: notifications, dissent notes, annotations. |
+| `residuo_caso_anterior` | 7,703 | Residual text belonging to the preceding case on a shared page. |
+| `apertura` | 5,779 | Opening section: case caption, date, initial procedural framing. |
+| `voto_separado` | 3,405 | Separate opinion (concurrence or dissent) by an individual judge. |
+
+Counts as of parser v43.3. `linea_ini` and `linea_fin` are offsets relative to the case block: the absolute line in the source file is `linea_inicio` + offset + 1.
 
 ### `tribunal_origen_status` {#tribunal_origen_status}
 
@@ -543,25 +547,27 @@ For analysts familiar with the U.S. Supreme Court Database, the recourse-layer a
 
 ### Data quality
 
-1. **Legacy `outcome` residual (`otro`: 362).** The frozen `outcome` field retains an unclassified residual. This field is superseded by the §4 axes and is not the recommended basis for outcome analysis.
+1. **Legacy `outcome` residual (`otro`: 347).** The frozen `outcome` field retains an unclassified residual. This field is superseded by the §4 axes and is not the recommended basis for outcome analysis.
 2. **`reenvia` reliability pending (B130).** κ for the remand axis is not yet reportable; manual recoding of the reversal universe is in progress. Treat `reenvia` as provisional.
 3. **Party identity/type not derived.** `parte_ganadora` records whether the *recurrente* won, but the dataset does not yet identify the parties (actor/demandado) or their type (individual, business, state, etc.). This precludes a `decisionDirection`-style analysis (which party type the Court favors). The raw material is present (captions, party index); the derivation is a planned layer (see §10 and the technical-debt register).
-4. **Missing signatures (`sin_firma`: 16 cases, 0.3%).** OCR artifacts or non-standard formatting.
-5. **Missing dispositional clause (`sin_dispositivo` in legacy `outcome`: 26 cases).** No extractable *por ello* clause.
-6. **Dates in natural language.** `date` is Spanish free text, not ISO. 344 entries (5.8%) have no date.
+4. **Missing signatures (`sin_firma`: 8 rulings, 0.1%).** OCR artifacts or non-standard formatting.
+5. **Missing dispositional clause (`sin_dispositivo` in legacy `outcome`: 21 cases).** No extractable *por ello* clause.
+6. **Dates in natural language.** `date` is Spanish free text, not ISO. 339 entries (5.8%) have no date.
 
 ### Coverage
 
 7. **Volumes 335–336 not yet included.** Volumes 335–336 are not yet included in this release. They were unavailable in digitized form at processing time and are planned for inclusion in a future version, once physical copies are obtained and OCR-processed. They cover parts of the 2012–2013 terms.
-8. **Non-normalized lower courts.** 1,272 entries have `sin_marcador` status; even where detected, court names are not normalized.
+8. **Non-normalized lower courts.** 1,238 entries have `sin_marcador` status; even where detected, court names are not normalized.
 9. **No *secretaría letrada* information.** The dataset does not identify which law-clerk office drafted each ruling; this is absent from the published volumes.
 
 ### Methodological
 
 10. **OCR-dependent source text.** Source markdown was produced by OCR digitization of printed volumes; residual OCR errors may affect extraction accuracy.
 11. **`materia` under development.** Coverage and taxonomy of the subject-matter sidecar are not final (see §8).
-12. **Separate-vote typology (A–E) under development.** `tipo_voto_sep` uses a provisional schema; 1,333 of 2,756 separate votes (48.4%) are `indeterminado`.
-13. **Editorial entries.** 193 entries (`tipo_entrada ≠ fallo`) are summaries/cross-references with null analytical fields; filter via `tipo_entrada = 'fallo'` for ruling-level analysis.
+12. **Separate-vote typology (A–E) under development.** `tipo_voto_sep` uses a provisional schema; 1,365 of 2,847 separate votes (47.9%) are `indeterminado`.
+13. **Editorial entries.** 191 entries (`tipo_entrada ≠ fallo`) are summaries/cross-references with null analytical fields; filter via `tipo_entrada = 'fallo'` for ruling-level analysis.
+14. **Positions stated inside the common opinion are not coded (B179).** `posicion`, `posiciones` and `voting_pattern` come from the signature block and vote headers. When every judge signs the common opinion without a qualifier but the text says that a judge "se remite a su disidencia/voto" in a precedent, or the *por ello* clause says "por mayoría", that position is not captured. A lower-bound surface (H224) finds 56 such positions in 38 rulings, all published as `mayoria`; in 16 rulings at least one of them dissents from the result. The read adjudication is in `output/validacion/adjudicacion_b179_h224.csv`.
+15. **`zona = sumario` does not capture the printed summaries (B190).** The editorial summaries printed before each ruling largely fall in unlabeled stretches or in `residuo_caso_anterior`, and the `sumario` label also covers other material (volume front matter, *acordadas*, opinions). Do not use `zona = sumario` to recover the summaries or their attribution to a vote.
 
 ---
 
