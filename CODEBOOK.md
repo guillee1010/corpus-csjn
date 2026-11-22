@@ -512,6 +512,8 @@ Counts as of parser v43.3. `linea_ini` and `linea_fin` are offsets relative to t
 
 ## 9. Reliability — inter-rater Cohen's κ (recourse-layer axes)
 
+The primary validation of the dataset is the census against the Court's summaries database (§9.1), which covers every ruling with a match. The hand-coded n = 300 κ below is kept as the earlier, sample-based validation; no new hand-coded round is planned.
+
 The M26 recourse-layer axes were validated against a hand-coded gold standard by computing Cohen's κ between the pipeline prediction and the human coding (`kappa_confiabilidad.py`; bootstrap 95% CI, B = 5,000). This measures agreement corrected for chance between parser and gold — it is **not** a double-coding (codebook-reproducibility) κ.
 
 | Axis | N | Agreement | κ | 95% CI | Landis–Koch |
@@ -522,7 +524,7 @@ The M26 recourse-layer axes were validated against a hand-coded gold standard by
 | `parte_ganadora` | 134 | 0.940 | **0.804** | [0.658, 0.925] | almost perfect |
 | `reenvia` | 75 | 0.853 | 0.458 | [0.184, 0.702] | moderate — **not reportable** |
 
-Recomputed in H224 against the current `csjn_casos_recursos.csv` (gold `golds/planilla_M20_57GOLD_parte_limpia.xlsx`; output `output/validacion/kappa_resultados_parte.csv`). The previous published values (0.940 / 0.943 / 0.912 / 0.784 / 0.408) predate the unification of the merit gate (H178). The gold was coded before the decision to count original-jurisdiction rulings decided on the merits as merit decisions, following the SCDB (B136, H169): 8 of the 16 `es_revision_fondo` disagreements are such rulings (`disposicion = no_revision_demanda`), coded "no" in the gold and "si" by the pipeline. This is a difference of criterion, not a parser error; a new blind round (M43) will re-describe the axes with a single criterion.
+Recomputed in H224 against the current `csjn_casos_recursos.csv` (gold `golds/planilla_M20_57GOLD_parte_limpia.xlsx`; output `output/validacion/kappa_resultados_parte.csv`). The previous published values (0.940 / 0.943 / 0.912 / 0.784 / 0.408) predate the unification of the merit gate (H178). The gold was coded before the decision to count original-jurisdiction rulings decided on the merits as merit decisions, following the SCDB (B136, H169): 8 of the 16 `es_revision_fondo` disagreements are such rulings (`disposicion = no_revision_demanda`), coded "no" in the gold and "si" by the pipeline. This is a difference of criterion, not a parser error. `parte_ganadora` and `reenvia` have no SJ counterpart, so for them this table remains the only reliability estimate.
 
 > **Notes.** (a) `admisibilidad` is a synthesis of the disposition/access signals (≈99.9% relabel-consistent), not an independent detector, so it carries no standalone κ. (b) `parte_ganadora` is binary on both sides: the pipeline derives `recurrente_gana`/`recurrente_pierde` with no `parcial` value (`modifica → gana`), and the gold's original three-value coding (gana / parcial / pierde) was collapsed to the same binary scheme; the three-value gold is retained in the repository so the collapse is auditable. The κ remains capped below 1.0 by seven residual role-inversions preserved as genuine disagreements. (c) `reenvia` κ is moderate and **not reportable**: the reversal universe requires manual recoding (B130, in progress) before a reliable estimate over the full reversal set can be published.
 

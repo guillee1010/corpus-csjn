@@ -5167,7 +5167,11 @@ Fix cableado a `es_originaria`: **(b)** `RE_RUNNING_HEAD.sub(" ", cuerpo)` ANTES
 **Estado del fix:** **CERRADO H179** (v2-upstream queda como unidad futura, condicionada a tomos nuevos).
 **Referencias cruzadas:** M38 (enforcement de gates, mismo espíritu), M41 (schema), `check_regresion --make-golden`, `generar_manifiesto`, MAPA.md §«Cómo correr la cadena». H174, H179. Sin ID histórico.
 
-### M43 — Paquete de re-validación pre-Dataverse: re-κ ciego n300 + κ de es_de_fondo
+### M43 — Paquete de re-validación pre-Dataverse: re-κ ciego n300 + κ de es_de_fondo — CERRADA POR REEMPLAZO H224
+
+**Decisión del operador (H224):** no se hace otra ronda manual. La validación del dataset pasa a ser el censo contra la base de sumarios de SJ (M66; CODEBOOK §9.1): posiciones κ 0,988 (10.301), disposición 0,914 (3126), fondo / no fondo 0,916 (2984), `es_queja` 0,868, vía 0,606 (2549). El κ manual n300 queda como antecedente, recomputado sobre v43.3 en H224. Lo que la ronda ciega debía cubrir y el censo no cubre: `parte_ganadora` y `reenvia` (SJ no los codifica) y la confiabilidad de `es_de_fondo` sobre las originarias.
+
+*Entrada histórica:*
 
 **Componente:** validación (scripts/validacion/) — condición de publicación de la próxima versión del dataset.
 **Origen / fuente del diagnóstico:** H175 (Guillermo, durante el gold de B140b): los κ publicados (gate 0,946 · vía 0,941 · disposición 0,912 · parte 0,784) describen el pipeline al momento en que se midieron; con B136+B138+B140b encima (y el paso 3 de M39 en el horizonte) quedan descriptivamente stale respecto de lo que se publicaría. Además arrastra el κ ciego de `es_de_fondo` pendiente desde H169 (v1.10).
