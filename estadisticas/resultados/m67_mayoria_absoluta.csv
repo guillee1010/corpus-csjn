@@ -25,7 +25,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 329_p142,329,2006,True,6,6,0,unanime
 329_p147,329,2006,False,5,3,0,cabeza_con_mayoria_abs
 329_p149,329,2006,True,7,2,0,cabeza_sin_mayoria_abs
-329_p158,329,2006,False,5,5,0,unanime
+329_p158,329,2006,False,6,6,0,unanime
 329_p163,329,2006,False,5,5,0,unanime
 329_p165,329,2006,False,5,5,0,unanime
 329_p167,329,2006,False,5,5,0,unanime
@@ -83,7 +83,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 329_p491,329,2006,False,5,4,0,cabeza_con_mayoria_abs
 329_p493,329,2006,False,6,4,0,cabeza_con_mayoria_abs
 329_p495,329,2006,False,6,4,0,cabeza_con_mayoria_abs
-329_p500,329,2006,False,7,7,0,unanime
+329_p500,329,2006,False,7,6,0,cabeza_con_mayoria_abs
 329_p502,329,2006,True,7,6,0,cabeza_con_mayoria_abs
 329_p510,329,2006,False,7,5,0,cabeza_con_mayoria_abs
 329_p513,329,2006,True,7,6,1,cabeza_con_mayoria_abs
@@ -101,13 +101,13 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 329_p568,329,2006,False,6,6,0,unanime
 329_p570,329,2006,False,6,6,0,unanime
 329_p573,329,2006,True,5,5,0,unanime
-329_p576,329,2006,True,5,5,0,unanime
+329_p576,329,2006,True,6,6,0,unanime
 329_p584,329,2006,True,5,4,0,cabeza_con_mayoria_abs
 329_p595,329,2006,True,6,6,0,unanime
 329_p617,329,2006,False,6,6,0,unanime
 329_p619,329,2006,False,6,6,0,unanime
 329_p620,329,2006,False,5,4,0,cabeza_con_mayoria_abs
-329_p622,329,2006,False,5,5,0,unanime
+329_p622,329,2006,False,6,6,0,unanime
 329_p623,329,2006,False,5,5,0,unanime
 329_p624,329,2006,True,7,5,2,cabeza_con_mayoria_abs
 329_p629,329,2006,False,7,7,0,unanime
@@ -159,7 +159,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 329_p906,329,2006,False,7,5,2,cabeza_con_mayoria_abs
 329_p909,329,2006,True,6,1,1,cabeza_sin_mayoria_abs
 329_p926,329,2006,False,6,6,0,unanime
-329_p928,329,2006,False,7,7,0,unanime
+329_p928,329,2006,False,7,6,1,cabeza_con_mayoria_abs
 329_p937,329,2006,False,5,4,0,cabeza_con_mayoria_abs
 329_p942,329,2006,False,7,4,2,cabeza_con_mayoria_abs
 329_p951,329,2006,False,5,5,0,unanime
@@ -302,7 +302,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 329_p1881,329,2006,True,6,6,0,unanime
 329_p1898,329,2006,False,6,6,0,unanime
 329_p1905,329,2006,False,6,6,0,unanime
-329_p1908,329,2006,False,5,5,0,unanime
+329_p1908,329,2006,False,6,6,0,unanime
 329_p1910,329,2006,False,7,7,0,unanime
 329_p1912,329,2006,False,6,6,0,unanime
 329_p1915,329,2006,False,7,7,0,unanime
@@ -320,7 +320,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 329_p1972,329,2006,False,6,6,0,unanime
 329_p1974,329,2006,False,6,5,1,cabeza_con_mayoria_abs
 329_p1984,329,2006,False,6,5,0,cabeza_con_mayoria_abs
-329_p1998,329,2006,True,7,6,0,cabeza_con_mayoria_abs
+329_p1998,329,2006,True,7,5,0,cabeza_con_mayoria_abs
 329_p2005,329,2006,False,8,2,3,cabeza_sin_mayoria_abs
 329_p2024,329,2006,True,6,5,1,cabeza_con_mayoria_abs
 329_p2030,329,2006,False,7,5,2,cabeza_con_mayoria_abs
@@ -443,8 +443,8 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 329_p2626,329,2006,True,7,5,2,cabeza_con_mayoria_abs
 329_p2631,329,2006,True,7,4,2,cabeza_con_mayoria_abs
 329_p2645,329,2006,False,5,5,0,unanime
-329_p2649,329,2006,False,7,6,1,cabeza_con_mayoria_abs
-329_p2655,329,2006,False,7,6,1,cabeza_con_mayoria_abs
+329_p2649,329,2006,False,7,5,2,cabeza_con_mayoria_abs
+329_p2655,329,2006,False,7,5,2,cabeza_con_mayoria_abs
 329_p2659,329,2006,True,7,5,2,cabeza_con_mayoria_abs
 329_p2667,329,2006,True,6,5,1,cabeza_con_mayoria_abs
 329_p2672,329,2006,False,5,5,0,unanime
@@ -489,7 +489,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 329_p2834,329,2006,True,5,5,0,unanime
 329_p2837,329,2006,True,7,5,2,cabeza_con_mayoria_abs
 329_p2844,329,2006,True,5,5,0,unanime
-329_p2847,329,2006,False,7,6,1,cabeza_con_mayoria_abs
+329_p2847,329,2006,False,7,5,2,cabeza_con_mayoria_abs
 329_p2856,329,2006,True,6,6,0,unanime
 329_p2860,329,2006,False,7,4,0,cabeza_con_mayoria_abs
 329_p2864,329,2006,True,7,5,2,cabeza_con_mayoria_abs
@@ -700,7 +700,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 329_p4228,329,2006,False,6,6,0,unanime
 329_p4233,329,2006,False,5,5,0,unanime
 329_p4234,329,2006,True,5,5,0,unanime
-329_p4241,329,2006,False,5,5,0,unanime
+329_p4241,329,2006,False,6,6,0,unanime
 329_p4242,329,2006,False,5,5,0,unanime
 329_p4243,329,,False,0,0,0,sin_posiciones
 329_p4245,329,2006,False,5,5,0,unanime
@@ -885,7 +885,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 329_p5195,329,2006,True,5,5,0,unanime
 329_p5198,329,2006,False,7,7,0,unanime
 329_p5203,329,2006,True,6,6,0,unanime
-329_p5210,329,2006,True,6,4,1,cabeza_con_mayoria_abs
+329_p5210,329,2006,True,7,5,1,cabeza_con_mayoria_abs
 329_p5227,329,2006,False,7,5,0,cabeza_con_mayoria_abs
 329_p5234,329,2006,True,5,5,0,unanime
 329_p5239,329,2006,True,6,5,0,cabeza_con_mayoria_abs
@@ -983,7 +983,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 329_p5716,329,2006,False,7,7,0,unanime
 329_p5718,329,2006,False,6,6,0,unanime
 329_p5720,329,2006,False,7,7,0,unanime
-329_p5722,329,2006,False,5,5,0,unanime
+329_p5722,329,2006,False,6,6,0,unanime
 329_p5724,329,2006,False,6,6,0,unanime
 329_p5726,329,2006,False,5,5,0,unanime
 329_p5728,329,2006,False,6,6,0,unanime
@@ -1027,7 +1027,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 329_p5900,329,2006,False,4,4,0,unanime
 329_p5902,329,2006,False,7,4,3,cabeza_con_mayoria_abs
 329_p5903,329,2006,True,6,4,2,cabeza_con_mayoria_abs
-329_p5913,329,2006,True,5,3,0,cabeza_con_mayoria_abs
+329_p5913,329,2006,True,5,2,0,cabeza_sin_mayoria_abs
 329_p5944,329,2006,True,5,5,0,unanime
 329_p5949,329,2006,False,4,4,0,unanime
 329_p5950,329,2006,True,5,4,1,cabeza_con_mayoria_abs
@@ -1149,8 +1149,8 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 330_p393,330,2007,True,7,4,3,cabeza_con_mayoria_abs
 330_p399,330,2007,True,7,2,3,cabeza_sin_mayoria_abs
 330_p444,330,2007,False,7,4,1,cabeza_con_mayoria_abs
-330_p452,330,2007,False,5,5,0,unanime
-330_p472,330,2007,True,5,5,0,unanime
+330_p452,330,2007,False,5,3,0,cabeza_con_mayoria_abs
+330_p472,330,2007,True,5,4,0,cabeza_con_mayoria_abs
 330_p478,330,2007,True,5,5,0,unanime
 330_p479,330,2007,False,7,5,2,cabeza_con_mayoria_abs
 330_p484,330,2007,False,6,4,2,cabeza_con_mayoria_abs
@@ -1181,10 +1181,10 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 330_p631,330,2007,False,6,6,0,unanime
 330_p633,330,2007,False,7,7,0,unanime
 330_p635,330,2007,False,6,6,0,unanime
-330_p638,330,2007,False,5,5,0,unanime
+330_p638,330,2007,False,6,6,0,unanime
 330_p640,330,2007,False,6,4,0,cabeza_con_mayoria_abs
 330_p642,330,2007,True,7,3,2,cabeza_sin_mayoria_abs
-330_p685,330,2007,False,6,4,2,cabeza_con_mayoria_abs
+330_p685,330,2007,False,6,3,3,cabeza_sin_mayoria_abs
 330_p692,330,2007,False,4,4,0,unanime
 330_p694,330,2007,True,7,6,1,cabeza_con_mayoria_abs
 330_p702,330,2007,False,7,5,2,cabeza_con_mayoria_abs
@@ -1207,7 +1207,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 330_p810,330,2007,False,5,5,0,unanime
 330_p811,330,2007,False,5,5,0,unanime
 330_p816,330,2007,False,4,4,0,unanime
-330_p818,330,2007,True,5,5,0,unanime
+330_p818,330,2007,True,6,6,0,unanime
 330_p822,330,2007,True,7,7,0,unanime
 330_p826,330,2007,False,5,5,0,unanime
 330_p829,330,2007,True,7,4,3,cabeza_con_mayoria_abs
@@ -1249,7 +1249,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 330_p1169,330,2007,False,5,5,0,unanime
 330_p1172,330,2007,False,5,5,0,unanime
 330_p1175,330,2007,False,5,5,0,unanime
-330_p1179,330,2007,False,5,5,0,unanime
+330_p1179,330,2007,False,6,6,0,unanime
 330_p1181,330,2007,False,5,5,0,unanime
 330_p1183,330,2007,False,5,5,0,unanime
 330_p1186,330,2007,False,5,5,0,unanime
@@ -1448,7 +1448,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 330_p2347,330,2007,True,5,3,0,cabeza_con_mayoria_abs
 330_p2351,330,2007,False,7,4,3,cabeza_con_mayoria_abs
 330_p2361,330,2007,False,6,3,2,cabeza_sin_mayoria_abs
-330_p2414,330,2007,False,5,5,0,unanime
+330_p2414,330,2007,False,6,6,0,unanime
 330_p2416,330,2007,True,7,7,0,unanime
 330_p2429,330,2007,True,7,4,3,cabeza_con_mayoria_abs
 330_p2434,330,2007,False,6,4,1,cabeza_con_mayoria_abs
@@ -1463,7 +1463,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 330_p2494,330,2007,False,4,4,0,unanime
 330_p2498,330,2007,True,7,6,0,cabeza_con_mayoria_abs
 330_p2507,330,2007,True,7,7,0,unanime
-330_p2520,330,2007,False,5,5,0,unanime
+330_p2520,330,2007,False,6,6,0,unanime
 330_p2521,330,2007,True,6,2,2,cabeza_sin_mayoria_abs
 330_p2527,330,2007,True,6,6,0,unanime
 330_p2533,330,2007,False,6,2,1,cabeza_sin_mayoria_abs
@@ -1662,8 +1662,8 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 330_p4331,330,2007,True,5,5,0,unanime
 330_p4337,330,2007,True,5,5,0,unanime
 330_p4338,330,2007,True,5,4,0,cabeza_con_mayoria_abs
-330_p4345,330,2007,False,5,5,0,unanime
-330_p4351,330,2007,True,5,5,0,unanime
+330_p4345,330,2007,False,6,6,0,unanime
+330_p4351,330,2007,True,6,6,0,unanime
 330_p4354,330,2007,True,6,6,0,unanime
 330_p4358,330,2007,False,5,4,1,cabeza_con_mayoria_abs
 330_p4364,330,2007,False,5,5,0,unanime
@@ -1671,7 +1671,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 330_p4368,330,2007,False,4,4,0,unanime
 330_p4372,330,2007,False,6,6,0,unanime
 330_p4389,330,2007,False,5,4,1,cabeza_con_mayoria_abs
-330_p4396,330,2007,False,5,5,0,unanime
+330_p4396,330,2007,False,6,6,0,unanime
 330_p4399,330,2007,True,7,4,3,cabeza_con_mayoria_abs
 330_p4409,330,2007,False,4,4,0,unanime
 330_p4411,330,2007,False,4,4,0,unanime
@@ -1769,7 +1769,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 330_p4925,330,2007,False,5,4,1,cabeza_con_mayoria_abs
 330_p4928,330,2007,True,6,6,0,unanime
 330_p4930,330,2007,True,7,4,3,cabeza_con_mayoria_abs
-330_p4936,330,2007,True,7,6,0,cabeza_con_mayoria_abs
+330_p4936,330,2007,True,7,5,0,cabeza_con_mayoria_abs
 330_p4945,330,2007,False,7,4,3,cabeza_con_mayoria_abs
 330_p4953,330,2007,False,5,5,0,unanime
 330_p4960,330,2007,False,7,2,3,cabeza_sin_mayoria_abs
@@ -1787,7 +1787,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 330_p5095,330,2007,False,7,7,0,unanime
 330_p5108,330,2007,True,7,4,3,cabeza_con_mayoria_abs
 330_p5111,330,2007,True,7,4,0,cabeza_con_mayoria_abs
-330_p5131,330,2007,False,7,5,2,cabeza_con_mayoria_abs
+330_p5131,330,2007,False,7,4,3,cabeza_con_mayoria_abs
 330_p5139,330,2007,True,7,7,0,unanime
 330_p5144,330,2007,True,7,4,3,cabeza_con_mayoria_abs
 330_p5158,330,2007,False,7,5,2,cabeza_con_mayoria_abs
@@ -1809,7 +1809,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 330_p5294,330,2007,True,6,4,1,cabeza_con_mayoria_abs
 330_p5303,330,2007,True,6,6,0,unanime
 330_p5306,330,2007,False,7,4,3,cabeza_con_mayoria_abs
-330_p5342,330,2007,True,5,5,0,unanime
+330_p5342,330,2007,True,6,6,0,unanime
 330_p5345,330,2007,True,7,2,3,cabeza_sin_mayoria_abs
 330_p5404,330,2007,True,7,4,3,cabeza_con_mayoria_abs
 330_p5425,330,2007,False,5,5,0,unanime
@@ -1945,7 +1945,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 331_p854,331,2008,False,4,4,0,unanime
 331_p856,331,2008,False,5,5,0,unanime
 331_p858,331,2008,True,6,4,2,cabeza_con_mayoria_abs
-331_p866,331,2008,True,5,5,0,unanime
+331_p866,331,2008,True,5,4,0,cabeza_con_mayoria_abs
 331_p881,331,2008,True,6,6,0,unanime
 331_p886,331,2008,False,6,3,2,cabeza_sin_mayoria_abs
 331_p901,331,2008,True,7,3,2,cabeza_sin_mayoria_abs
@@ -2353,7 +2353,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 332_p1082,332,2009,True,7,7,0,unanime
 332_p1085,332,2009,False,7,4,1,cabeza_con_mayoria_abs
 332_p1090,332,2009,True,5,5,0,unanime
-332_p1095,332,2009,False,7,6,1,cabeza_con_mayoria_abs
+332_p1095,332,2009,False,7,5,2,cabeza_con_mayoria_abs
 332_p1098,332,2009,True,7,4,3,cabeza_con_mayoria_abs
 332_p1109,332,2009,True,6,4,1,cabeza_con_mayoria_abs
 332_p1115,332,2009,True,6,6,0,unanime
@@ -2703,7 +2703,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 333_p1442,333,2010,True,5,5,0,unanime
 333_p1446,333,2010,False,7,4,3,cabeza_con_mayoria_abs
 333_p1460,333,2010,True,4,4,0,unanime
-333_p1464,333,2010,False,6,4,1,cabeza_con_mayoria_abs
+333_p1464,333,2010,False,6,3,2,cabeza_sin_mayoria_abs
 333_p1467,333,2010,True,5,5,0,unanime
 333_p1469,333,2010,True,6,5,1,cabeza_con_mayoria_abs
 333_p1474,333,2010,False,7,7,0,unanime
@@ -2799,7 +2799,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 334_p9,334,2011,True,5,5,0,unanime
 334_p13,334,2011,True,6,6,0,unanime
 334_p30,334,2011,True,6,6,0,unanime
-334_p35,334,2011,True,5,5,0,unanime
+334_p35,334,2011,True,5,4,1,cabeza_con_mayoria_abs
 334_p38,334,2011,True,4,4,0,unanime
 334_p44,334,2011,True,4,4,0,unanime
 334_p53,334,2011,True,6,6,0,unanime
@@ -3183,7 +3183,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 338_p467,338,2015,False,3,3,0,unanime
 338_p471,338,2015,False,3,3,0,unanime
 338_p474,338,2015,True,4,4,0,unanime
-338_p477,338,2015,True,2,2,0,unanime
+338_p477,338,2015,True,3,3,0,unanime
 338_p484,338,2015,True,3,3,0,unanime
 338_p488,338,2015,True,4,4,0,unanime
 338_p493,338,2015,True,3,3,0,unanime
@@ -3201,7 +3201,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 338_p613,338,2015,True,4,3,1,cabeza_con_mayoria_abs
 338_p623,338,2015,True,3,3,0,unanime
 338_p628,338,2015,True,4,3,1,cabeza_con_mayoria_abs
-338_p651,338,2015,False,2,2,0,unanime
+338_p651,338,2015,False,3,3,0,unanime
 338_p652,338,2015,True,3,3,0,unanime
 338_p693,338,2015,True,3,3,0,unanime
 338_p697,338,2015,False,3,3,0,unanime
@@ -3252,12 +3252,12 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 338_p1032,338,2015,True,4,4,0,unanime
 338_p1045,338,2015,True,3,3,0,unanime
 338_p1048,338,2015,True,4,2,0,cabeza_sin_mayoria_abs
-338_p1060,338,2015,False,2,2,0,unanime
+338_p1060,338,2015,False,3,2,0,cabeza_con_mayoria_abs
 338_p1084,338,,True,3,3,0,unanime
 338_p1092,338,2015,True,4,4,0,unanime
 338_p1104,338,2015,True,3,3,0,unanime
 338_p1110,338,2015,True,3,2,0,cabeza_con_mayoria_abs
-338_p1149,338,2015,True,2,2,0,unanime
+338_p1149,338,2015,True,3,3,0,unanime
 338_p1156,338,2015,True,3,3,0,unanime
 338_p1171,338,2015,True,4,4,0,unanime
 338_p1183,338,2015,True,4,4,0,unanime
@@ -3309,9 +3309,9 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 339_p111,339,2016,False,3,3,0,unanime
 339_p115,339,2016,True,3,2,0,cabeza_con_mayoria_abs
 339_p126,339,2016,False,3,3,0,unanime
-339_p127,339,2016,True,2,2,0,unanime
+339_p127,339,2016,True,3,3,0,unanime
 339_p142,339,2016,True,3,2,0,cabeza_con_mayoria_abs
-339_p155,339,2016,True,2,2,0,unanime
+339_p155,339,2016,True,3,3,0,unanime
 339_p160,339,2016,False,3,3,0,unanime
 339_p168,339,2016,False,3,3,0,unanime
 339_p173,339,2016,False,3,3,0,unanime
@@ -3417,7 +3417,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 339_p658,339,2016,False,3,3,0,unanime
 339_p662,339,2016,True,3,3,0,unanime
 339_p676,339,2016,False,3,3,0,unanime
-339_p680,339,2016,True,2,2,0,unanime
+339_p680,339,2016,True,3,3,0,unanime
 339_p683,339,2016,True,3,3,0,unanime
 339_p697,339,2016,True,3,3,0,unanime
 339_p704,339,2016,True,3,3,0,unanime
@@ -3684,7 +3684,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 340_p394,340,2017,False,5,5,0,unanime
 340_p397,340,2017,False,5,5,0,unanime
 340_p400,340,2017,False,5,5,0,unanime
-340_p403,340,2017,False,2,2,0,unanime
+340_p403,340,2017,False,3,3,0,unanime
 340_p406,340,2017,False,5,5,0,unanime
 340_p411,340,2017,False,5,5,0,unanime
 340_p415,340,2017,False,5,5,0,unanime
@@ -4002,7 +4002,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 341_p717,341,2018,False,4,4,0,unanime
 341_p721,341,2018,False,5,5,0,unanime
 341_p723,341,2018,False,4,4,0,unanime
-341_p726,341,2018,False,2,2,0,unanime
+341_p726,341,2018,False,3,3,0,unanime
 341_p727,341,2018,True,5,5,0,unanime
 341_p739,341,2018,True,5,5,0,unanime
 341_p745,341,2018,True,5,3,0,cabeza_con_mayoria_abs
@@ -4547,13 +4547,13 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 343_p1738,343,2020,True,3,3,0,unanime
 343_p1750,343,2020,True,5,5,0,unanime
 343_p1752,343,2020,True,5,3,2,cabeza_con_mayoria_abs
-343_p1758,343,2020,True,2,2,0,unanime
+343_p1758,343,2020,True,3,3,0,unanime
 343_p1762,343,2020,True,3,2,1,cabeza_con_mayoria_abs
 343_p1772,343,2020,True,5,2,1,cabeza_sin_mayoria_abs
 343_p1784,343,2020,True,4,3,0,cabeza_con_mayoria_abs
 343_p1791,343,2020,True,4,4,0,unanime
 343_p1794,343,2020,True,5,3,1,cabeza_con_mayoria_abs
-343_p1800,343,2020,True,5,5,0,unanime
+343_p1800,343,2020,True,5,4,1,cabeza_con_mayoria_abs
 343_p1805,343,2020,False,5,3,2,cabeza_con_mayoria_abs
 343_p1823,343,2020,False,4,3,1,cabeza_con_mayoria_abs
 343_p1827,343,2020,True,5,3,2,cabeza_con_mayoria_abs
@@ -4602,7 +4602,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 344_p48,344,2021,True,3,3,0,unanime
 344_p57,344,2021,True,3,3,0,unanime
 344_p62,344,2021,True,5,4,1,cabeza_con_mayoria_abs
-344_p66,344,2021,True,2,2,0,unanime
+344_p66,344,2021,True,3,3,0,unanime
 344_p81,344,2021,False,5,5,0,unanime
 344_p102,344,2021,True,3,3,0,unanime
 344_p116,344,2021,True,4,4,0,unanime
@@ -4639,7 +4639,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 344_p409,344,2021,False,5,5,0,unanime
 344_p421,344,2021,True,5,2,2,cabeza_sin_mayoria_abs
 344_p431,344,2021,True,4,3,1,cabeza_con_mayoria_abs
-344_p441,344,2021,True,5,4,1,cabeza_con_mayoria_abs
+344_p441,344,2021,True,5,3,1,cabeza_con_mayoria_abs
 344_p494,344,2021,False,5,3,0,cabeza_con_mayoria_abs
 344_p507,344,2021,False,4,3,1,cabeza_con_mayoria_abs
 344_p527,344,2021,True,5,3,1,cabeza_con_mayoria_abs
@@ -4688,7 +4688,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 344_p1006,344,2021,False,5,4,1,cabeza_con_mayoria_abs
 344_p1010,344,2021,True,5,5,0,unanime
 344_p1013,344,2021,True,5,3,0,cabeza_con_mayoria_abs
-344_p1030,344,2021,True,4,3,1,cabeza_con_mayoria_abs
+344_p1030,344,2021,True,5,4,1,cabeza_con_mayoria_abs
 344_p1033,344,2021,False,5,5,0,unanime
 344_p1042,344,2021,False,4,4,0,unanime
 344_p1043,344,2021,False,5,4,0,cabeza_con_mayoria_abs
@@ -4734,7 +4734,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 344_p1435,344,2021,False,5,5,0,unanime
 344_p1438,344,2021,False,4,3,1,cabeza_con_mayoria_abs
 344_p1442,344,2021,False,5,5,0,unanime
-344_p1444,344,2021,True,4,4,0,unanime
+344_p1444,344,2021,True,4,3,1,cabeza_con_mayoria_abs
 344_p1451,344,2021,False,5,5,0,unanime
 344_p1458,344,2021,True,4,4,0,unanime
 344_p1464,344,2021,True,5,3,2,cabeza_con_mayoria_abs
@@ -4903,7 +4903,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 344_p3636,344,2021,False,4,3,1,cabeza_con_mayoria_abs
 344_p3683,344,2021,True,4,4,0,unanime
 344_p3689,344,2021,False,3,2,0,cabeza_con_mayoria_abs
-344_p3695,344,2021,True,2,2,0,unanime
+344_p3695,344,2021,True,3,3,0,unanime
 344_p3700,344,2021,True,3,3,0,unanime
 344_p3706,344,2021,False,4,3,1,cabeza_con_mayoria_abs
 344_p3711,344,2021,True,4,3,0,cabeza_con_mayoria_abs
@@ -5041,7 +5041,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 345_p1322,345,2022,False,4,4,0,unanime
 345_p1325,345,2022,False,4,4,0,unanime
 345_p1332,345,2022,True,4,3,1,cabeza_con_mayoria_abs
-345_p1336,345,2022,False,2,2,0,unanime
+345_p1336,345,2022,False,3,3,0,unanime
 345_p1342,345,2022,True,3,3,0,unanime
 345_p1349,345,2022,False,4,4,0,unanime
 345_p1358,345,2022,True,4,3,1,cabeza_con_mayoria_abs
@@ -5054,7 +5054,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 345_p1405,345,2022,False,4,4,0,unanime
 345_p1409,345,2022,False,4,4,0,unanime
 345_p1411,345,2022,True,4,4,0,unanime
-345_p1417,345,2022,True,2,2,0,unanime
+345_p1417,345,2022,True,3,3,0,unanime
 345_p1421,345,2022,False,4,4,0,unanime
 345_p1457,345,2022,True,3,2,0,cabeza_con_mayoria_abs
 345_p1470,345,2022,True,4,4,0,unanime
@@ -5271,7 +5271,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 347_p391,347,2024,False,3,3,0,unanime
 347_p392,347,2024,True,4,4,0,unanime
 347_p400,347,2024,True,4,2,0,cabeza_sin_mayoria_abs
-347_p412,347,2024,False,2,2,0,unanime
+347_p412,347,2024,False,3,3,0,unanime
 347_p414,347,2024,True,3,3,0,unanime
 347_p426,347,2024,True,4,4,0,unanime
 347_p437,347,2024,True,4,3,0,cabeza_con_mayoria_abs
@@ -5319,7 +5319,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 347_p790,347,2024,True,4,3,0,cabeza_con_mayoria_abs
 347_p802,347,2024,True,4,4,0,unanime
 347_p811,347,2024,True,4,4,0,unanime
-347_p818,347,2024,True,2,2,0,unanime
+347_p818,347,2024,True,3,3,0,unanime
 347_p833,347,2024,False,4,4,0,unanime
 347_p843,347,2024,True,5,3,2,cabeza_con_mayoria_abs
 347_p856,347,2024,False,4,3,1,cabeza_con_mayoria_abs
@@ -5429,7 +5429,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 347_p2115,347,2024,True,4,2,0,cabeza_sin_mayoria_abs
 347_p2146,347,2024,False,3,2,0,cabeza_con_mayoria_abs
 347_p2154,347,,True,3,3,0,unanime
-347_p2160,347,2024,False,3,3,0,unanime
+347_p2160,347,2024,False,3,2,0,cabeza_con_mayoria_abs
 347_p2177,347,2024,True,3,2,0,cabeza_con_mayoria_abs
 347_p2186,347,2024,True,5,2,2,cabeza_sin_mayoria_abs
 347_p2221,347,2024,False,4,2,0,cabeza_sin_mayoria_abs
@@ -5452,7 +5452,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 348_p48,348,2025,True,3,3,0,unanime
 348_p56,348,2025,True,3,3,0,unanime
 348_p59,348,2025,False,3,3,0,unanime
-348_p60,348,,False,2,2,0,unanime
+348_p60,348,,False,3,3,0,unanime
 348_p61,348,2025,False,4,3,1,cabeza_con_mayoria_abs
 348_p78,348,2025,False,3,3,0,unanime
 348_p80,348,2025,False,3,3,0,unanime
@@ -5472,7 +5472,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 348_p246,348,2025,False,3,3,0,unanime
 348_p248,348,2025,True,3,3,0,unanime
 348_p256,348,2025,True,3,3,0,unanime
-348_p259,348,,True,2,2,0,unanime
+348_p259,348,,True,3,3,0,unanime
 348_p267,348,2025,True,3,2,0,cabeza_con_mayoria_abs
 348_p276,348,2025,True,3,2,0,cabeza_con_mayoria_abs
 348_p287,348,2025,False,3,3,0,unanime
@@ -5500,7 +5500,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 348_p443,348,2025,False,3,3,0,unanime
 348_p452,348,2025,True,3,3,0,unanime
 348_p461,348,2025,True,3,3,0,unanime
-348_p473,348,,False,2,2,0,unanime
+348_p473,348,,False,3,3,0,unanime
 348_p474,348,2025,True,3,3,0,unanime
 348_p487,348,2025,True,3,3,0,unanime
 348_p491,348,2025,True,3,3,0,unanime
@@ -5516,14 +5516,14 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 348_p611,348,2025,True,3,3,0,unanime
 348_p635,348,,False,5,2,1,cabeza_sin_mayoria_abs
 348_p644,348,2025,True,3,3,0,unanime
-348_p659,348,2025,False,2,2,0,unanime
+348_p659,348,2025,False,3,3,0,unanime
 348_p662,348,2025,True,3,3,0,unanime
 348_p678,348,2025,False,3,3,0,unanime
 348_p680,348,2025,False,3,2,0,cabeza_con_mayoria_abs
 348_p689,348,2025,True,3,3,0,unanime
 348_p696,348,2025,False,3,3,0,unanime
 348_p700,348,2025,False,3,3,0,unanime
-348_p708,348,2025,False,1,1,0,unanime
+348_p708,348,2025,False,1,0,0,sin_cabeza
 348_p716,348,2025,False,5,4,1,cabeza_con_mayoria_abs
 348_p719,348,2025,False,3,2,0,cabeza_con_mayoria_abs
 348_p728,348,,False,3,1,2,cabeza_sin_mayoria_abs
@@ -5586,7 +5586,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 348_p1225,348,2025,False,3,3,0,unanime
 348_p1227,348,2025,False,3,3,0,unanime
 348_p1228,348,2025,False,3,3,0,unanime
-348_p1242,348,2025,False,2,2,0,unanime
+348_p1242,348,2025,False,3,3,0,unanime
 348_p1255,348,2025,True,3,3,0,unanime
 348_p1262,348,2025,True,5,3,2,cabeza_con_mayoria_abs
 348_p1265,348,2025,True,3,3,0,unanime
@@ -5615,7 +5615,7 @@ caso_id_canonico,tomo,anio,merito,n_tribunal,n_cabeza,n_disidencias,clase
 348_p1494,348,2025,False,3,3,0,unanime
 348_p1499,348,2025,False,3,3,0,unanime
 348_p1502,348,2025,False,3,3,0,unanime
-348_p1505,348,2025,True,3,3,0,unanime
+348_p1505,348,2025,True,3,2,1,cabeza_con_mayoria_abs
 348_p1511,348,2025,True,3,3,0,unanime
 348_p1516,348,2025,True,3,3,0,unanime
 348_p1519,348,2025,True,3,3,0,unanime
