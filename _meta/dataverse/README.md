@@ -1,6 +1,6 @@
 # corpus-csjn: A Structured Dataset of Argentine Supreme Court Rulings, Volumes 329–349 (2006–2026)
 
-**Version 3.0** · parser v43.3 · November 2026
+**Version 4.0** · parser v43.3 · November 2026
 **Author:** Guillermo Rubinetti
 **DOI:** [10.7910/DVN/TJTVKW](https://doi.org/10.7910/DVN/TJTVKW) · **License:** data CC-BY 4.0, code MIT
 **Source code and history:** <https://github.com/guillee1010/corpus-csjn>
@@ -90,10 +90,10 @@ The source is the *Colección de Fallos de la Corte Suprema de Justicia de la Na
 
 The dataset contains the names of the justices and of the parties as they appear in the published rulings. The validation uses only the votes and outcomes recorded in sjconsulta; no data about the court staff who load that database is included.
 
-## Changes since version 2.0
+## Changes since version 3.0
 
-Version 2.0 was produced with parser v18.15. Version 3.0 adds the recourse layer (disposition, merit review, admissibility and its cause, appeal type, party winning, remand), the subject-matter, parties, statutes and epilogue files, the Procuración's opinion text, partial dissent as its own position, many corrections to signatures and positions, the source corpus and inputs for reproduction, and the census validation against sjconsulta. The file `csjn_editorial_indice_partes.csv` is no longer produced and was removed.
+Version 3.0 was produced with parser v18.15. Version 4.0 adds the recourse layer (disposition, merit review, admissibility and its cause, appeal type, party winning, remand), the subject-matter, parties, statutes and epilogue files, the Procuración's opinion text, partial dissent as its own position, many corrections to signatures and positions, the source corpus and inputs for reproduction, and the census validation against sjconsulta. The file `csjn_editorial_indice_partes.csv` is no longer produced and was removed.
 
 ## Citation
 
-> Rubinetti, Guillermo (2026). *corpus-csjn: A Structured Dataset of Argentine Supreme Court Rulings, Volumes 329–349 (2006–2026)*. Version 3.0. Harvard Dataverse. https://doi.org/10.7910/DVN/TJTVKW
+> Rubinetti, Guillermo (2026). *corpus-csjn: A Structured Dataset of Argentine Supreme Court Rulings, Volumes 329–349 (2006–2026)*. Version 4.0. Harvard Dataverse. https://doi.org/10.7910/DVN/TJTVKW

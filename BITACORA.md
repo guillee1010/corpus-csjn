@@ -20559,3 +20559,7 @@ Corrida 44993368912 (operador): el paquete pasó el control y el paso de subida 
 ### H224-23 — Título de la tesis
 
 Corrección del operador: el README del repo citaba un título viejo ("Diseño institucional y estrategia en la decisión judicial colegiada"). Reemplazado por el del plan presentado, "Diseño institucional y coordinación judicial. Un análisis comparado de los mecanismos de formación de mayorías en la Corte Suprema argentina frente al modelo estadounidense", en el README del repo y en el del dataset. El README ya subido al borrador de Dataverse queda viejo hasta re-correr el workflow.
+
+### H224-24 — Numeración de Dataverse: la próxima es 4.0
+
+El log de la corrida 44995355112 mostró que la última versión publicada en Dataverse es la 3.0 (60 archivos: la subida de H097, parser v18.15, con BITACORA, CHANGELOG, DEUDA y scripts en la raíz, `parser/_manifest.json`, `readme_output_parser.md` y una planilla de `archivo/snapshots_ad_hoc/`), no la "2.0" con que la nombró H097. El operador borró los borradores anteriores. Al publicar como versión mayor, Dataverse asigna 4.0; el README del dataset pasa a "Version 4.0" y "Changes since version 3.0", y la cita a "Version 4.0". El borrador debe re-subirse para llevar el README corregido. La versión 3.0 publicada queda como está (no se puede modificar).
