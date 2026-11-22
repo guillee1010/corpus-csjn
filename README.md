@@ -31,16 +31,16 @@ El objetivo metodológico es producir el equivalente argentino del [Supreme Cour
 
 ## Estado actual
 
-- **Versión del parser:** v44.0
+- **Versión del parser:** v44.1
 - **Universo procesable:** 19 tomos (329–349, excluidos 335 y 336 por OCR no legible)
 - **Casos:** 5.894 (5.732 fallos + 128 sumarios con link a fallo + 34 sumarios editoriales)
-- **Votos individuales:** 28.044
-- **Zonas de texto:** 138.591
+- **Votos individuales:** 28.080
+- **Zonas de texto:** 138.597
 - **Zonas editoriales:** 152
-- **Normas citadas:** 13.958
+- **Normas citadas:** 13.959
 - **Manifiesto:** `_manifest.json` sella 65 artefactos `[CLEAN]` (regolden H227, corrida local del operador)
 
-Versiones de la cadena: parser `44.0` · extraer_epilogos `0.4` · extraer_normas `1.1` · derivar_partes `0.18` · derivar_materia `4.1` · derivar_recursos `0.6` · clasificador_disposicion `1.18` · clasificador_via `0.1` · clasificador_admision `0.2` · clasificador_causa `0.5` · generar_manifiesto `1.9` · correr_pipeline `1.1`.
+Versiones de la cadena: parser `44.1` · extraer_epilogos `0.4` · extraer_normas `1.1` · derivar_partes `0.18` · derivar_materia `4.1` · derivar_recursos `0.6` · clasificador_disposicion `1.18` · clasificador_via `0.1` · clasificador_admision `0.2` · clasificador_causa `0.5` · generar_manifiesto `1.9` · correr_pipeline `1.1`.
 
 ### Validación
 
@@ -119,7 +119,7 @@ corpus-csjn/
 ├── scripts/
 │   ├── pipeline/                      ← pipeline productivo + orquestador + sello
 │   │   ├── correr_pipeline.py         ← orquestador de la cadena (v1.1)
-│   │   ├── parser.py                  ← parser principal (v44.0)
+│   │   ├── parser.py                  ← parser principal (v44.1)
 │   │   ├── parser_editorial.py        ← zonas editoriales (librería)
 │   │   ├── construir_catalogo.py      ← catálogo (etapa de localización)
 │   │   ├── detectar_paginas.py        ← mapa de páginas (etapa de localización)

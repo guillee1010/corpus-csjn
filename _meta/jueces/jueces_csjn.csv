@@ -1,10 +1,10 @@
 nombre_canonico,tipo,patron,periodo_desde,periodo_hasta,fuente,nota,testigos
-Rosatti,titular,horacio\s+(daniel\s+)?rosatti,,,parser<=27.1 (migrada verbatim),,
+Rosatti,titular,horacio\s+(daniel\s+)?rosatti|rosatti\s+horacio,,,parser<=27.1 (migrada verbatim) + variante H228 (B187),"'Rosatti Horacio' en 348_p708: orden del sello de firma digital, ÚNICA aparición de un titular en ese orden en el corpus (original y sjconsulta confirman la firma)",348_p708
 Rosenkrantz,titular,carlos\s+fernando\s+rosenkrantz,,,parser<=27.1 (migrada verbatim),,
-Lorenzetti,titular,ricardo\s+(luis\s+)?lorenzetti,,,parser<=27.1 (migrada verbatim),,
-Maqueda,titular,juan\s+carlos\s+maqueda,,,parser<=27.1 (migrada verbatim),,
+Lorenzetti,titular,ricardo\s+(luis\s+)?lorenzett(?:i|\.),,,parser<=27.1 (migrada verbatim) + variante H228 (B182),apellido truncado 'Lorenzett.' en 343_p1762 (sjconsulta confirma la firma),343_p1762
+Maqueda,titular,juan\s+carlos\s+maqueda|[—–]\s*carlos\s+maqueda,,,parser<=27.1 (migrada verbatim) + variante H228,"errata del tomo en 346_p319 ('Carlos Maqueda', sin 'Juan'; original y sjconsulta confirman la firma); anclada a la raya",346_p319
 Highton de Nolasco,titular,elena\s+(i\.|inés)\s*(highton)?(?:\s+de\s+nolasco)?,,,parser<=27.1 (migrada verbatim),,
-García Mansilla,titular,manuel\s+jos[eé]?\s+garc[íi]a[\-\s]+mansilla,,,parser<=27.1 (migrada verbatim),,
+García Mansilla,titular,manuel\s+jos[eé]?\s+garc[íi]a[\-\s—–]+mansilla,,,parser<=27.1 (migrada verbatim) + ensanche H228 (B194),apellido impreso con raya en las firmas del tomo 348,348_p83;348_p113;348_p179;348_p189
 Zaffaroni,titular,e\.?\s*ra[úu]l\s+zaffaroni|eugenio\s+ra[úu]l\s+zaffaroni,,,parser<=27.1 (migrada verbatim),,
 Petracchi,titular,enrique\s+santiago\s+petracchi|enrique\s+s\.?\s+petracchi,,,parser<=27.1 (migrada verbatim),,
 Argibay,titular,carmen\s+m\.?\s*argibay|carmen\s+mar[íi]a\s+argibay,,,parser<=27.1 (migrada verbatim),,
@@ -17,10 +17,10 @@ Nazareno,titular,juli[oa]\s+s\.?\s*nazareno,,,parser<=27.1 (migrada verbatim),,
 Rodríguez Basavilbaso,conjuez,juan\s+carlos\s+rodr[íi]guez\s+basavilbaso,,,parser<=27.1 (migrada verbatim),,
 Otero,conjuez,(?:luis\s+)?c[ée]sar\s+otero,,,parser<=27.1 + ensanche H191 (B153),firma sin 'LUIS' en 329_p1303/329_p1305,
 Cavallo,conjuez,gabriel\s+(rub[ée]n|r\.?)\s+cavallo,,,parser<=27.1 (migrada verbatim),,
-Borinsky,conjuez,mariano\s+borinsky,,,parser<=27.1 (migrada verbatim),,
+Borinsky,conjuez,mariano\s+(?:hern[áa]n\s+)?borinsk[yi]|borinsky\s+mariano(?:\s+hern[áa]n)?,,,parser<=27.1 (migrada verbatim) + ensanche H228 (B187) + variante H228,segundo nombre y orden invertido en 348_p728; errata del tomo 'Borinski' en 347_p863 (sjconsulta confirma la firma),348_p728;347_p863
 Catania,conjuez,alejandro\s+s\.?\s*catania,,,parser<=27.1 (migrada verbatim),,
 Gemignani,conjuez,juan\s+carlos\s+gemignani,,,parser<=27.1 (migrada verbatim),,
-Petrone,conjuez,daniel\s+a\.?\s*petrone,,,parser<=27.1 (migrada verbatim),,
+Petrone,conjuez,daniel\s+(?:a\.?|antonio)\s*petrone,,,parser<=27.1 (migrada verbatim) + ensanche H228,segundo nombre completo en 348_p1064,348_p1064
 Ledesma,conjuez,angela\s+e\.?\s*ledesma,,,parser<=27.1 (migrada verbatim),,
 Barroetaveña,conjuez,diego\s+g\.?\s*barroetave[ñn]a,,,parser<=27.1 (migrada verbatim),,
 Hornos,conjuez,gustavo\s+m\.?\s*hornos,,,parser<=27.1 (migrada verbatim),,
@@ -31,17 +31,17 @@ Yacobucci,conjuez,guillermo\s+yacobucci,,,parser<=27.1 (migrada verbatim),,
 Figueroa,conjuez,ana\s+mar[íi]a\s+figueroa,,,parser<=27.1 (migrada verbatim),,
 Mahiques,conjuez,carlos\s+a\.?\s*mahiques,,,parser<=27.1 (migrada verbatim),,
 Najurieta,conjuez,mar[íi]a\s+susana\s+najurieta,,,parser<=27.1 (migrada verbatim),,
-Alcalá,conjuez,roc[íi]o\s+alcal[áa],,,parser<=27.1 (migrada verbatim),,
+Alcalá,conjuez,roc[íi]o\s+alcal[áa]|alcal[áa]\s+roc[íi]o,,,parser<=27.1 (migrada verbatim) + ensanche H228 (B187),orden invertido en 348_p708 y 348_p728,348_p708;348_p728
 Morán,conjuez,jorge\s+eduardo\s+mor[áa]n\.?,,,parser<=27.1 (migrada verbatim),,
-Tyden de Skanata,conjuez,mirta\s+(d\.?|delia)\s+tyden(?:\s+de\s+skanata)?,,,parser<=27.1 (migrada verbatim),,
-Poclava Lafuente,conjuez,juan\s+carlos\s+poclava\s+lafuente,,,parser<=27.1 (migrada verbatim),,
+Tyden de Skanata,conjuez,mirta\s+(d\.?|delia)\s+tyden(?:\s+de\s+skanata)?|tyden\s+mirta\s+delia,,,parser<=27.1 (migrada verbatim) + ensanche H228 (B187),orden invertido en 345_p583,345_p583
+Poclava Lafuente,conjuez,juan\s+(?:carlos|c\.?)\s+poclava\s+lafuente,,,parser<=27.1 (migrada verbatim) + ensanche H228,'JUAN C.' en 330_p1436,330_p1436
 Pereyra González,conjuez,carlos\s+(m\.?|mart[íi]n)\s+pereyra\s+gonz[áa]lez,,,parser<=27.1 (migrada verbatim),,
 Ferro,conjuez,jorge\s+ferro,,,parser<=27.1 (migrada verbatim),,
 Pacilio,conjuez,antonio\s+pacilio,,,parser<=27.1 (migrada verbatim),,
 Argañaraz,conjuez,[áa]ngel\s+a\.?\s*arga[ñn]araz,,,parser<=27.1 (migrada verbatim),,
 Mill de Pereyra,conjuez,rita\s+(mill|m\.?)\s+de\s+pereyra,,,parser<=27.1 (migrada verbatim),,
 García Lema,conjuez,(?:alberto\s+manuel\s+garc[íi]a\s+lema|garc[íi]a\s+lema\s+alberto\s+manuel),,,parser<=27.1 (migrada verbatim) + ensanche H202 (B154-bis),orden invertido en 344_p3070; en firma de mayoría de 1847 wrapea «García ⏎ Lema»,342_p1847;344_p3070;329_p1092
-Rabbi-Baldi Cabanillas,conjuez,luis\s+renato\s+rabbi[\s—-]+baldi\s+cabanillas,,,parser<=27.1 (migrada verbatim),,
+Rabbi-Baldi Cabanillas,conjuez,luis\s+renato\s+rabbi[\s—-]+baldi\s+cabanillas|rabbi[\s—-]+baldi\s+cabanillas\s+luis\s+renato,,,parser<=27.1 (migrada verbatim) + ensanche H228 (B187),orden invertido en 348_p708,348_p708
 Méndez,conjuez,(?:h[ée]ctor\s+(oscar\s+)?m[ée]ndez|m[ée]ndez\s+h[ée]ctor\s+oscar),,,parser<=27.1 (migrada verbatim) + ensanche H202 (B154-bis),orden invertido en 344_p3070,344_p3070;329_p1092
 Montesi,conjuez,(?:graciela\s+susana\s+montesi|montesi\s+graciela\s+susana),,,parser<=27.1 (migrada verbatim) + ensanche H202 (B154-bis),invertido y wrapeado «Montesi ⏎ Graciela Susana» en 344_p3070 (matchea en firma_raw multi-línea vía \s+),344_p3070
 Cossio,conjuez,marina\s+(josefa\s+)?cossio|cossio\s+marina,,,parser<=27.1 (migrada verbatim),,
@@ -53,7 +53,7 @@ Schiffrin,conjuez,leopoldo\s+h\.?\s*schiffrin,,,parser<=27.1 (migrada verbatim),
 Aguilar,conjuez,horacio\s+jos[ée]\s+aguilar,,,parser<=27.1 (migrada verbatim),,
 Pérez Tognola,conjuez,victoria\s+patricia\s+p[ée]rez\s+tognola,,,parser<=27.1 (migrada verbatim),,
 Corcuera,conjuez,santiago\s+hern[áa]n\s+corcuera,,,parser<=27.1 (migrada verbatim),,
-Andalaf Casiello,conjuez,silvina\s+mar[íi]a\s+andalaf(?:\s+casiello)?,,,parser<=27.1 (migrada verbatim),,
+Andalaf Casiello,conjuez,silvina\s+mar[íi]a\s+andalaf(?:\s+casiello)?|andalaf\s+casiello\s+silvina\s+mar[íi]a,,,parser<=27.1 (migrada verbatim) + ensanche H228 (B187),orden invertido en 348_p708,348_p708
 Fernández Gómez,conjuez,cintia\s+fern[áa]ndez\s+g[óo]mez,,,parser<=27.1 (migrada verbatim),,
 Moliné O'Connor,titular_historico,eduardo\s+molin[eé]\s+o[’'´`]?\s*connor,,,H191 (B153) — adjudicado sobre firma_raw,fallo viejo publicado tardíamente,329_p3568;329_p4178;330_p224;330_p2793
 Bossert,titular_historico,gustavo\s+a\.?\s*bossert,,,H191 (B153) — adjudicado sobre firma_raw,fallo viejo publicado tardíamente,329_p4178
@@ -78,7 +78,7 @@ Aranguren,conjuez,(?:beatriz\s+estela\s+aranguren|aranguren\s+beatriz\s+estela),
 Irurzun,conjuez,mart[íi]n\s+irurzun,,,H192 (B154) — adjudicado sobre firma_raw,"en 331_p1397 el ancla de firma es errónea (B148, .md leído: firmó; panel real 7)",338_p1433;344_p1557;331_p1397
 Lozano,conjuez,mariano\s+roberto\s+lozano,,,H192 (B154) — adjudicado sobre firma_raw,el conjuez de H189/Mercante; visible post-ripple v28.0,348_p1553;349_p43
 Boldú,conjuez,(?:mario\s+osvaldo\s+bold[úu]|bold[úu]\s+mario\s+osvaldo),,,H192 (B154) — adjudicado sobre firma_raw,orden invertido en 348_p563; con tilde en 348_p841/955,348_p563;348_p1553;348_p841;348_p955
-Sánchez,conjuez,abel\s+guillermo\s+s[áa]nchez,,,H192 (B154) — adjudicado sobre firma_raw,,349_p43;349_p53;349_p81
+Sánchez,conjuez,abel\s+guillermo\s+s[áa]nchez|s[áa]nchez\s+abel\s+guillermo,,,H192 (B154) — adjudicado sobre firma_raw + ensanche H228 (B187),orden invertido en 347_p1701 y 347_p2278 (sin tilde),349_p43;349_p53;349_p81;347_p1701;347_p2278
 Barreiro,conjuez,ricardo\s+guido\s+barreiro,,,H192 (B154) — adjudicado sobre firma_raw,"distinto de Barreiro Deymonnaz, letrado en bleed 330_p2527",338_p1433
 Sotelo de Andreau,conjuez,mirta\s+gladis\s+sotelo(?:\s+de\s+andreau)?,,,H192 (B154) — adjudicado sobre firma_raw,"sufijo opcional, patrón tipo Tyden",344_p1557
 Bejas,conjuez,ra[úu]l\s+daniel\s+bejas,,,H192 (B154) — adjudicado sobre firma_raw,,349_p53
@@ -91,3 +91,21 @@ Botana,conjuez,(?:diego\s+botana|botana\s+diego),,,H202 (B154-bis) — adjudicad
 Torres V.N.,conjuez,(?:ver[óo]nica\s+nidia\s+torres|torres\s+ver[óo]nica\s+nidia),,,H202 (B154-bis) — adjudicado sobre .md 342_p1847/344_p2752,saga art. 110; orden invertido y sin acentos en 344_p2752,342_p1847;344_p2752
 Caballero,conjuez,(?:mar[íi]a\s+rosa\s+caballero|caballero\s+mar[íi]a\s+rosa),,,H202 (B154-bis) — adjudicado sobre .md 342_p1847/344_p2752,saga art. 110; firma su voto «María Rosa Caballero.» en 1847; invertida en 2752,342_p1847;344_p2752
 Antelo,conjuez,guillermo\s+alberto\s+antelo,,,H216 — adjudicado sobre extracto 345_p869 (visor),firma «— Guillermo Alberto Antelo.» panel real 5,332_p1124;345_p869
+Hornos R.E.,conjuez,roberto\s+enrique\s+hornos,,,"H228 — adjudicado sobre el tomo, confirmado por sjconsulta",no es Gustavo M. Hornos,347_p1673
+Russo,conjuez,(?:russo\s+sebasti[áa]n\s+eduardo|sebasti[áa]n\s+eduardo\s+russo),,,"H228 — adjudicado sobre el tomo, confirmado por sjconsulta",orden invertido en 347_p2334,347_p2334
+Amabile,conjuez,roberto\s+daniel\s+amabile,,,"H228 — adjudicado sobre el tomo, confirmado por sjconsulta",,346_p326
+Morán M.,conjuez,marcos\s+mor[áa]n,,,"H228 — adjudicado sobre el tomo, confirmado por sjconsulta",no es Jorge Eduardo Morán; sjconsulta lo carga sin nombre de pila,347_p737
+Castellanos,conjuez,alejandro\s+augusto\s+castellanos,,,"H228 — adjudicado sobre el tomo, confirmado por sjconsulta",,347_p1471
+Castiñeira de Dios,conjuez,gustavo\s+enrique\s+casti[ñn]eira\s+de\s+dios,,,"H228 — adjudicado sobre el tomo, confirmado por sjconsulta",,348_p1231
+Catalano,conjuez,mar(?:iana|[íi]a)\s+in[ée]s\s+catalano,,,"H228 — adjudicado sobre el tomo, confirmado por sjconsulta",'María Inés' en la firma de 348_p1435 es errata del tomo (el cuerpo dice Mariana Inés),348_p1435;348_p1505
+Perozziello Vizier,conjuez,juan\s+perozziello\s+vizier,,,"H228 — adjudicado sobre el tomo, confirmado por sjconsulta",,348_p1505
+Fegoli,conjuez,juan\s+edgardo\s+fegoli,,,"H228 — adjudicado sobre el tomo, confirmado por sjconsulta",sjconsulta lo carga como bloque genérico CONJUECES,331_p1755
+Gurruchaga,conjuez,hugo\s+daniel\s+gurruchaga,,,"H228 — adjudicado sobre el tomo, sin contraste en sjconsulta",,339_p323
+Vélez Funes,conjuez,ignacio\s+mar[íi]a\s+v[ée]lez\s+funes,,,"H228 — adjudicado sobre el tomo, sin contraste en sjconsulta",,339_p323
+Vidal,conjuez,[ée]lida\s+isabel\s+vidal,,,"H228 — adjudicado sobre el tomo, sin contraste en sjconsulta",,339_p323
+Berraz de Vidal,conjuez,amelia\s+berraz\s+de\s+vidal,,,"H228 — adjudicado sobre el tomo, sin contraste en sjconsulta",,330_p1436
+Mitchell,conjuez,wagner\s+gustavo\s+mitchell,,,"H228 — adjudicado sobre el tomo, sin contraste en sjconsulta",,332_p1124
+Aguilar J.L.A.,conjuez,jos[ée]\s+luis\s+alberto\s+aguilar,,,"H228 — adjudicado sobre el tomo, sin contraste en sjconsulta",no es Horacio José Aguilar,337_p1052
+Bertuzzi,conjuez,[—–]\s*pablo\s+daniel\s+bertuzzi,,,"H228 — adjudicado sobre el tomo, confirmado por sjconsulta",anclado a la raya: es parte en 343_p1457 (13 apariciones en el tomo 343),347_p1084
+Bruglia,conjuez,[—–]\s*leopoldo\s+oscar\s+bruglia,,,"H228 — adjudicado sobre el tomo, confirmado por sjconsulta",anclado a la raya: es parte en 343_p1457 (13 apariciones en el tomo 343),346_p1514
+Medina,conjuez,[—–]\s*graciela\s+medina,,,"H228 — adjudicado sobre el tomo, confirmado por sjconsulta",anclado a la raya: homónima parcial letrada en epílogos ('Miriam Graciela Medina'); sjconsulta la carga como bloque genérico CONJUECES,342_p459
