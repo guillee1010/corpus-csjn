@@ -20527,3 +20527,7 @@ Observaciones del operador: la κ manual del CODEBOOK estaba desactualizada, y e
 ### H224-15 — Decisión del operador: el censo contra SJ reemplaza la ronda manual
 
 No se hace otra ronda ciega manual (M43). M43 cerrada por reemplazo en la DEUDA; CODEBOOK §9 presenta el censo contra sjconsulta (§9.1) como validación principal y el κ manual n300 como antecedente. Sin contraparte en SJ, y por lo tanto con el κ manual como única estimación: `parte_ganadora` (0,804) y `reenvia` (0,458, no reportable).
+
+### H224-16 — README al día con v43.3
+
+Pedido del operador. El README estaba en el parser v24.0. Reemplazadas, con cifras remedidas sobre los outputs v43.3: nota de versión (Dataverse sigue en v18.15, republicación pendiente), estado actual, versiones de la cadena (`__version__` leído de cada script), distribuciones de mérito, disposición, admisibilidad, causa, vía, queja, materia, partes, outcome y voting pattern, árbol del repositorio (normas, CODEBOOK, validación, análisis) y la cadena (extraer_normas). Sección nueva de validación con el censo contra SJ. Manifest citado como [CLEAN] 65 del regolden H226 en el disco del operador; en el clon `gate_manifiesto` da [FAIL] por el CRLF de los `.md` (constancia H223), no se re-selló.
