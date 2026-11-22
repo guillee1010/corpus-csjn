@@ -1,9 +1,13 @@
 # Archivos que se publican en Dataverse (H224). Uno por línea, ruta en el dataset.
-# La lista es cerrada: preparar_bundle_dataverse.py borra en la copia de CI todo lo que no esté acá y frena si falta algo.
-# dataverse/README.md sale de _meta/dataverse/README.md; dataverse/CODEBOOK.md es copia del CODEBOOK.md de la raíz.
+# La lista es cerrada: preparar_bundle_dataverse.py borra en la copia de CI todo lo que no esté acá y frena si falta algo o si
+# el corpus, los insumos y los vocabularios no coinciden con lo que declara output/parser/_manifest.json.
+# dataverse/README.md sale de _meta/dataverse/README.md; dataverse/CODEBOOK.md y dataverse/MAPA.md son copias de la raíz.
+# Fuera a propósito: corpus/LibroVol335.*.md y LibroVol336.*.md (tomos excluidos del pipeline, OCR ilegible).
+# --- documentación
 dataverse/README.md
 dataverse/CODEBOOK.md
-output/parser/_manifest.json
+dataverse/MAPA.md
+# --- dataset (outputs canónicos + sello)
 output/parser/csjn_casos.csv
 output/parser/csjn_casos_editorial.csv
 output/parser/csjn_casos_epilogo.csv
@@ -14,6 +18,66 @@ output/parser/csjn_casos_recursos.csv
 output/parser/csjn_casos_textos.csv
 output/parser/csjn_casos_votos.csv
 output/parser/csjn_casos_zonas.csv
+output/parser/_manifest.json
+# --- reproducción: fuente, insumos de localización, tablas y vocabularios
+corpus/LibroVol329.1.md
+corpus/LibroVol329.2.md
+corpus/LibroVol329.3.md
+corpus/LibroVol329.4.md
+corpus/LibroVol330.1.md
+corpus/LibroVol330.2.md
+corpus/LibroVol330.3.md
+corpus/LibroVol330.4.md
+corpus/LibroVol331.1.md
+corpus/LibroVol331.2.md
+corpus/LibroVol331.3.md
+corpus/LibroVol332.1.md
+corpus/LibroVol332.2.md
+corpus/LibroVol332.3.md
+corpus/LibroVol333.1.md
+corpus/LibroVol333.2.md
+corpus/LibroVol333.3.md
+corpus/LibroVol334.1.md
+corpus/LibroVol334.2.md
+corpus/LibroVol334.3.md
+corpus/LibroVol337.1.md
+corpus/LibroVol337.2.md
+corpus/LibroVol338.1.md
+corpus/LibroVol338.2.md
+corpus/LibroVol339.1.md
+corpus/LibroVol339.2.md
+corpus/LibroVol340.1.md
+corpus/LibroVol340_2.md
+corpus/LibroVol341.1.md
+corpus/LibroVol341.2.md
+corpus/LibroVol342-1.md
+corpus/LibroVol342-2.md
+corpus/LibroVol343-1.md
+corpus/LibroVol343-2.md
+corpus/LibroVol343-3.md
+corpus/LibroVol344-1.md
+corpus/LibroVol344-2.md
+corpus/LibroVol344-3.md
+corpus/LibroVol345-1.md
+corpus/LibroVol345-2.md
+corpus/LibroVol346-1.md
+corpus/LibroVol346-2.md
+corpus/LibroVol347-1.md
+corpus/LibroVol347-2.md
+corpus/LibroVol348-1.md
+corpus/LibroVol349-1.md
+output/catalogo/catalogo.csv
+output/catalogo/secciones_indices.csv
+output/localizacion/fallos_localizados.csv
+output/mapa/mapa_paginas.csv
+_meta/catalogo_suplemento_editorial.csv
+_meta/jueces/jueces_csjn.csv
+_meta/vocab_materia/indice_normas.csv
+_meta/vocab_materia/vocab_coocurrencia.csv
+_meta/vocab_materia/vocab_keywords.csv
+_meta/vocab_materia/vocab_objeto.csv
+_meta/vocab_materia/vocab_partes.csv
+# --- pipeline
 scripts/pipeline/clasificador_admision.py
 scripts/pipeline/clasificador_causa.py
 scripts/pipeline/clasificador_disposicion.py

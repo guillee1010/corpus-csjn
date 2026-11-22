@@ -3,8 +3,8 @@
 Corre en el runner de GitHub Actions sobre la copia que hace `actions/checkout` (NUNCA en el disco del
 operador: BORRA archivos). Deja en la copia SOLO lo que lista `_meta/dataverse/archivos_publicacion.txt`:
 
-  1. crea `dataverse/` con `README.md` (desde `_meta/dataverse/README.md`) y `CODEBOOK.md` (copia de la raíz);
-  2. dentro de las carpetas que se suben (`output/parser`, `scripts/pipeline`, `dataverse`) borra todo
+  1. crea `dataverse/` con `README.md` (desde `_meta/dataverse/README.md`), `CODEBOOK.md` y `MAPA.md` (copias de la raíz);
+  2. dentro de las carpetas que se suben (ver CARPETAS) borra todo
      archivo que no esté en la lista;
   3. verifica que lo que queda sea EXACTAMENTE la lista (ni uno más, ni uno menos) y que el manifest
      declare los 10 CSV que se suben; si no, sale con error y el workflow no sube nada.
@@ -12,11 +12,11 @@ operador: BORRA archivos). Deja en la copia SOLO lo que lista `_meta/dataverse/a
 Uso:  python scripts/auxiliares/preparar_bundle_dataverse.py RAIZ_DE_LA_COPIA [--yo-se-que-borra]
 Imprime la lista final con tamaños. Sin `--yo-se-que-borra` solo verifica, no borra ni copia.
 """
-__version__ = "0.1"  # H224
+__version__ = "0.2"  # H224: + corpus, insumos de localización, tablas y vocabularios (reproducción) y MAPA; chequeo contra corpus/inputs/vocabularios del manifest // 0.1 H224
 import json, shutil, sys
 from pathlib import Path
 
-CARPETAS = ("output/parser", "scripts/pipeline", "dataverse")
+CARPETAS = ("output/parser", "output/mapa", "output/catalogo", "output/localizacion", "corpus", "_meta", "scripts/pipeline", "dataverse")
 
 
 def main():
@@ -40,6 +40,7 @@ def main():
         (raiz / "dataverse").mkdir(exist_ok=True)
         shutil.copyfile(readme_src, raiz / "dataverse/README.md")
         shutil.copyfile(raiz / "CODEBOOK.md", raiz / "dataverse/CODEBOOK.md")
+        shutil.copyfile(raiz / "MAPA.md", raiz / "dataverse/MAPA.md")
         for c in CARPETAS:
             for p in sorted((raiz / c).rglob("*")):
                 if p.is_file() and p.relative_to(raiz).as_posix() not in lista:
@@ -61,6 +62,11 @@ def main():
     if csv_lista != csv_man:
         errores.append(f"los CSV de la lista no coinciden con los outputs del manifest: {sorted(csv_lista ^ csv_man)}")
 
+    esperado = {f"corpus/{f}" for f in man["corpus"]["files"]} | {v["path"] for v in man["inputs"].values()} \
+        | {f"_meta/vocab_materia/{f}" for f in man["vocabularios"]["files"]}
+    en_lista = {x for x in lista if x.startswith(("corpus/", "output/mapa/", "output/catalogo/", "output/localizacion/", "_meta/vocab_materia/"))}
+    if esperado != en_lista:
+        errores.append(f"corpus/insumos/vocabularios de la lista no coinciden con el manifest: {sorted(esperado ^ en_lista)}")
     print(f"preparar_bundle_dataverse v{__version__} · {'BORRA (copia de CI)' if borra else 'solo verifica'} · {len(lista)} archivos en la lista")
     for x in lista:
         p = raiz / x
