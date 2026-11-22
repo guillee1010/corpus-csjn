@@ -38,7 +38,7 @@ El objetivo metodológico es producir el equivalente argentino del [Supreme Cour
 - **Zonas de texto:** 138.597
 - **Zonas editoriales:** 152
 - **Normas citadas:** 13.959
-- **Manifiesto:** `_manifest.json` sella 65 artefactos `[CLEAN]` (regolden H227, corrida local del operador)
+- **Manifiesto:** `_manifest.json` sella 65 artefactos `[CLEAN]` (regolden H228, corrida local del operador)
 
 Versiones de la cadena: parser `44.1` · extraer_epilogos `0.4` · extraer_normas `1.1` · derivar_partes `0.18` · derivar_materia `4.1` · derivar_recursos `0.6` · clasificador_disposicion `1.18` · clasificador_via `0.1` · clasificador_admision `0.2` · clasificador_causa `0.5` · generar_manifiesto `1.9` · correr_pipeline `1.1`.
 
