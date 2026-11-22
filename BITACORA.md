@@ -20543,3 +20543,7 @@ Corrección del operador: sin el corpus nadie puede replicar el pipeline. `archi
 ### H224-19 — Validación en el paquete de Dataverse
 
 Criterio del operador confirmado: lo único que no se publica es el cache de sjconsulta (JSON y `casos_sjconsulta_funcionarial.csv`, con datos de funcionarios), que no está en el repo. Revisados los 16 archivos de `output/validacion/`, ninguno tiene esa capa. Se suman 8 a la lista (95 archivos), los que cita el CODEBOOK: `kappa_sjconsulta.csv` y matriz, `kappa_disposicion_via_sj.csv` y matriz, `kappa_resultados_parte.csv`, `sjconsulta_manifest.csv`, `adjudicacion_sjconsulta_h221.csv`, `adjudicacion_b179_h224.csv`. Fuera, por internos: baselines M55 y M68, superficies, `kappa_resultados(_v22).csv`, `kappa_sjconsulta_posiciones_cambios.csv`. `preparar_bundle_dataverse.py` v0.3; probado sobre `git archive HEAD`.
+
+### H224-20 — Primera corrida del workflow (operador)
+
+Corrida #3 (44992689675), disparada por el operador: falló en "Armar y verificar el paquete", como estaba previsto, por falta de `_meta/dataverse/README.md`; el paso de subida no corrió y Dataverse no se tocó. El mensaje listaba además como "sobrantes" los archivos que la copia todavía no había borrado; `preparar_bundle_dataverse.py` v0.4 corta antes con un solo mensaje. El token (`DATAVERSE_TOKEN`) quedó sin probar.

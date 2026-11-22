@@ -12,7 +12,7 @@ operador: BORRA archivos). Deja en la copia SOLO lo que lista `_meta/dataverse/a
 Uso:  python scripts/auxiliares/preparar_bundle_dataverse.py RAIZ_DE_LA_COPIA [--yo-se-que-borra]
 Imprime la lista final con tamaños. Sin `--yo-se-que-borra` solo verifica, no borra ni copia.
 """
-__version__ = "0.3"  # H224: + output/validacion (lo que cita el CODEBOOK) // 0.2 H224: + corpus, insumos de localización, tablas y vocabularios (reproducción) y MAPA; chequeo contra corpus/inputs/vocabularios del manifest // 0.1 H224
+__version__ = "0.4"  # H224: sin README corta con un solo mensaje // 0.3 H224: + output/validacion (lo que cita el CODEBOOK) // 0.2 H224: + corpus, insumos de localización, tablas y vocabularios (reproducción) y MAPA; chequeo contra corpus/inputs/vocabularios del manifest // 0.1 H224
 import json, shutil, sys
 from pathlib import Path
 
@@ -35,7 +35,8 @@ def main():
 
     readme_src = raiz / "_meta/dataverse/README.md"
     if not readme_src.is_file():
-        errores.append("falta _meta/dataverse/README.md (el README del dataset)")
+        print("ERROR, no se sube nada: falta _meta/dataverse/README.md (el README del dataset, se escribe antes de publicar)")
+        sys.exit(1)  # v0.4: corta acá, sin listar sobrantes que todavía no se borraron
     if borra and not errores:
         (raiz / "dataverse").mkdir(exist_ok=True)
         shutil.copyfile(readme_src, raiz / "dataverse/README.md")
