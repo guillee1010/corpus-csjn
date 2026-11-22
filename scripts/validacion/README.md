@@ -60,6 +60,16 @@ Una fila por discrepancia corpus × sjconsulta adjudicada: clase (B177, B179, B0
 si se leyó con texto y la evidencia con número de línea. Cada fila leída se verifica con
 `scripts/diagnostico/extraer_caso.py <caso_id>`.
 
+### `superficie_b179.py` *(H224, B179)*
+Fórmulas con que un juez deja a salvo su posición dentro del voto común (remisión a su voto o disidencia
+en un precedente, "por mayoría" en el por_ello, mayoría con nombres, escisión del conjunto decisorio),
+sobre `considerando_text` y `por_ello_text` des-guionados. Una fila por match, con los jueces de
+`posiciones` nombrados en la ventana. Salida `output/validacion/superficie_b179.csv`. Es un piso.
+
+### `output/validacion/adjudicacion_b179_h224.csv` *(dato curado, H224)*
+Una fila por juez en cada fallo de la superficie B179 v0.6: clase (RV, RD, RA, VC, RS, PUB, FP_*), efecto
+en el resultado (disiente si el por_ello dice "por mayoría"; concurre; sin_determinar) y evidencia.
+
 ### Resto del subsistema *(rol; internals sin leer — verificar)*
 | Archivo | Rol (aproximado) |
 |---|---|

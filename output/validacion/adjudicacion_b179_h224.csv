@@ -1,0 +1,77 @@
+# H224 · adjudicación B179 leída sobre superficie_b179.py v0.6 (scripts/diagnostico/H224/) · parser v43.3 · dato curado; PISO, no total
+caso_id_canonico,juez,clase,efecto,posicion_publicada,voting_pattern,evidencia
+329_p318,Petracchi,FP_cita,,mayoria,mixed,"la remisión a sus votos es la de los jueces en 'Martínez Areco' (Fallos 328:3741), citado en el considerando 4º"
+329_p318,Maqueda,FP_cita,,mayoria,mixed,"la remisión a sus votos es la de los jueces en 'Martínez Areco' (Fallos 328:3741), citado en el considerando 4º"
+329_p318,Zaffaroni,FP_cita,,mayoria,mixed,"la remisión a sus votos es la de los jueces en 'Martínez Areco' (Fallos 328:3741), citado en el considerando 4º"
+329_p473,,FP_cita,,,segun_su_voto,'votos concordantes' describe Aquino (Fallos 327:3753)
+329_p1928,Lorenzetti,FUERA,,,sin_firma,vp sin_firma; remite a 'Halper' fallada en la fecha
+329_p1928,Zaffaroni,FUERA,,,sin_firma,vp sin_firma; remite a 'Halper' fallada en la fecha
+329_p1930,Lorenzetti,RA,sin_determinar,mayoria,unanime,se remite al voto del juez Belluscio en 'Cordón'; bloque anidado (H226: disidencia de Puente dentro de Halper)
+329_p1930,Zaffaroni,RA,disiente,mayoria,unanime,"se remite a la disidencia del juez Boggiano en 'Cordón'; por_ello 'el Tribunal, por mayoría, resuelve'"
+329_p1930,Argibay,RD,disiente,mayoria,unanime,"se remite a su disidencia en P.141.XXXVII; tiene texto_voto (wc 938), bloque anidado"
+329_p3207,Zaffaroni,RD,sin_determinar,mayoria,unanime,"'comparten los fundamentos y conclusiones precedentes, y con respecto al alcance de la movilidad, se remiten a sus respectivas disidencias en la causa Brochetta' (parcial)"
+329_p3207,Argibay,RD,sin_determinar,mayoria,unanime,"'comparten los fundamentos y conclusiones precedentes, y con respecto al alcance de la movilidad, se remiten a sus respectivas disidencias en la causa Brochetta' (parcial)"
+329_p3568,,PUB,,,disidencia,'por mayoría' con Belluscio y Petracchi en disidencia en la firma
+329_p5336,Maqueda,RV,concurre,mayoria,unanime,remite a su voto concurrente en 'Blackie'
+330_p1718,Argibay,RD,disiente,mayoria,unanime,se remite a su disidencia de Fallos 328:3340; por_ello 'por mayoría'
+330_p1947,Argibay,RD,disiente,mayoria,unanime,se remite a su respectiva disidencia en 'Brochetta'; por_ello 'el Tribunal por mayoría resuelve'
+330_p2414,Zaffaroni,RD,disiente,mayoria,unanime,"remiten a su disidencia en 'Rosza', 'que dan íntegramente por reproducida en cuanto a sus consideraciones y conclusión'; por_ello 'por mayoría'; cabeza remite a los votos mayoritarios de Lorenzetti, Highton y Maqueda y al de Fayt"
+330_p2414,Argibay,RD,disiente,mayoria,unanime,"remiten a su disidencia en 'Rosza', 'que dan íntegramente por reproducida en cuanto a sus consideraciones y conclusión'; por_ello 'por mayoría'; cabeza remite a los votos mayoritarios de Lorenzetti, Highton y Maqueda y al de Fayt"
+330_p3843,Petracchi,RV,concurre,mayoria,segun_su_voto,"se remite a su voto en 'Lado Domínguez' (serie Rinaldi, votos concurrentes)"
+330_p4071,Highton de Nolasco,RD,disiente,mayoria,unanime,se remite a su disidencia en el precedente; por_ello 'por mayoría'
+330_p4703,Argibay,RD,sin_determinar,mayoria,unanime,se remite a su disidencia en 'Grillo'; sin 'por mayoría'
+330_p4875,Lorenzetti,RA,concurre,mayoria,unanime,se remite al voto de los jueces Petracchi y Highton de Nolasco en el expediente citado
+330_p4875,Argibay,contradiccion_tomo,,,unanime,L21504-21505 'la jueza Argibay se remite a su voto en la causa Alas' pero la firma impresa L21509-21511 tiene seis jueces sin Argibay
+331_p89,Petracchi,RV,concurre,mayoria,unanime,serie Rinaldi/Lado Domínguez
+331_p144,Maqueda,RD,sin_determinar,mayoria,unanime,remite a su disidencia en 'Daus'; sin 'por mayoría'
+331_p241,,FP_doctrina,,,disidencia,falta de mayoría de votos concordantes del tribunal inferior (art. 109 RJN)
+331_p549,Highton de Nolasco,RD,disiente,mayoria,unanime,remiten a sus respectivos votos en disidencia en 'Bussi'; por_ello 'por mayoría'; 3 de 7
+331_p549,Petracchi,RD,disiente,mayoria,unanime,remiten a sus respectivos votos en disidencia en 'Bussi'; por_ello 'por mayoría'; 3 de 7
+331_p549,Maqueda,RD,disiente,mayoria,unanime,remiten a sus respectivos votos en disidencia en 'Bussi'; por_ello 'por mayoría'; 3 de 7
+331_p843,Lorenzetti,RD,disiente,mayoria,unanime,"se remite a su disidencia en 'Longobardi'; F5 'los jueces Highton, Petracchi, Maqueda y Zaffaroni consideran'; por_ello 'por mayoría'"
+331_p1105,Petracchi,RV,concurre,mayoria,unanime,serie Rinaldi/Lado Domínguez
+331_p1399,Argibay,RV,concurre,mayoria,unanime,se remite a su voto en 'Abero' (Fallos 329:4857)
+331_p2491,Petracchi,RV,concurre,mayoria,unanime,serie Rinaldi/Lado Domínguez
+331_p2844,Petracchi,RV,concurre,mayoria,unanime,serie Rinaldi/Lado Domínguez
+331_p2898,Petracchi,RV,concurre,mayoria,unanime,serie Rinaldi/Lado Domínguez
+332_p111,Highton de Nolasco,RS,concurre,mayoria,disidencia,'deja a salvo su opinión respecto a la legitimación del Defensor del Pueblo' (considerando 28)
+332_p363,Lorenzetti,RD,disiente,mayoria,unanime,se remiten a sus disidencias en 'Longobardi'; por_ello 'por mayoría'
+332_p363,Fayt,RD,disiente,mayoria,unanime,se remiten a sus disidencias en 'Longobardi'; por_ello 'por mayoría'
+332_p370,Lorenzetti,RD,sin_determinar,mayoria,unanime,se remiten a sus respectivas disidencias; sin 'por mayoría'
+332_p370,Fayt,RD,sin_determinar,mayoria,unanime,se remiten a sus respectivas disidencias; sin 'por mayoría'
+332_p370,Argibay,RD,sin_determinar,mayoria,unanime,se remiten a sus respectivas disidencias; sin 'por mayoría'
+332_p523,Lorenzetti,VC,disiente,mayoria,unanime,"considerando 3º 'a juicio de los jueces Lorenzetti y Argibay, el recurso extraordinario es inadmisible'; 1º cinco jueces, 2º Highton y Petracchi; por_ello 'por mayoría'"
+332_p523,Argibay,VC,disiente,mayoria,unanime,"considerando 3º 'a juicio de los jueces Lorenzetti y Argibay, el recurso extraordinario es inadmisible'; 1º cinco jueces, 2º Highton y Petracchi; por_ello 'por mayoría'"
+332_p591,Argibay,RD,sin_determinar,mayoria,disidencia,se remite a su disidencia en 'Grillo'; vp disidencia por otro juez
+332_p797,Petracchi,RV,concurre,mayoria,unanime,serie Rinaldi/Lado Domínguez
+332_p873,Lorenzetti,RD,sin_determinar,mayoria,unanime,"se remiten a sus disidencias en 'Longobardi'; sin 'por mayoría' (en 332_p363, 332_p1082 y 331_p843, misma serie, sí)"
+332_p873,Fayt,RD,sin_determinar,mayoria,unanime,"se remiten a sus disidencias en 'Longobardi'; sin 'por mayoría' (en 332_p363, 332_p1082 y 331_p843, misma serie, sí)"
+332_p943,,FP_doctrina,,,disidencia,sentencia del inferior sin mayoría absoluta de fundamentos (Fallos 304:590; 308:139)
+332_p1082,Lorenzetti,RD,disiente,mayoria,unanime,se remiten a sus respectivas disidencias en 'Longobardi'; por_ello 'por mayoría'
+332_p1082,Fayt,RD,disiente,mayoria,unanime,se remiten a sus respectivas disidencias en 'Longobardi'; por_ello 'por mayoría'
+332_p1082,Argibay,RA,sin_determinar,mayoria,unanime,'remite –en lo pertinente– a los fundamentos desarrollados en Longobardi y Benedetti'
+332_p1671,,PUB,,,disidencia,"F5 describe la mayoría; Lorenzetti, Argibay en disidencia y Fayt en disidencia parcial ya en la firma"
+332_p1769,,PUB,,,mixed,'por mayoría de votos el Tribunal resuelve' con cuatro disidencias parciales en la firma
+332_p2108,,PUB,,,mixed,'por mayoría' con disidencia parcial de Highton y voto de Argibay en la firma
+332_p2783,Maqueda,RD,disiente,mayoria,unanime,se remiten a sus disidencias; por_ello 'la mayoría del Tribunal resuelve'
+332_p2783,Argibay,RD,disiente,mayoria,unanime,se remiten a sus disidencias; por_ello 'la mayoría del Tribunal resuelve'
+333_p914,Petracchi,RV,concurre,mayoria,unanime,serie Rinaldi/Lado Domínguez
+333_p1217,Maqueda,RV,concurre,mayoria,unanime,remiten a su voto en 'ADC' (ley 26.124)
+333_p1217,Argibay,RV,concurre,mayoria,unanime,remiten a su voto en 'ADC' (ley 26.124)
+338_p1216,,FP_organo,,,unanime,mayoría absoluta del Consejo de la Magistratura
+341_p961,Highton de Nolasco,RV,concurre,mayoria,disidencia,testigo H221; se remite a su voto en 'Sosa'
+341_p1063,Maqueda,VC,disiente,mayoria,unanime,"testigo H221; cuatro jueces 'consideran'; Maqueda remite a sus votos en Fox, Coronel, Murguía; escinde el conjunto decisorio para alcanzar la mayoría absoluta (art. 23 decreto-ley 1285/58)"
+342_p1170,Highton de Nolasco,VC,disiente,mayoria,unanime,escinde el conjunto decisorio 'a los fines de alcanzar la mayoría absoluta de los votos concordantes' (Fallos 322:1100; 324:1411; 341:1063); Highton y Maqueda 'sostienen' otra solución en la primera cuestión y se remiten a la disidencia de Highton y Zaffaroni en 'Cargill'
+342_p1170,Maqueda,VC,disiente,mayoria,unanime,escinde el conjunto decisorio 'a los fines de alcanzar la mayoría absoluta de los votos concordantes' (Fallos 322:1100; 324:1411; 341:1063); Highton y Maqueda 'sostienen' otra solución en la primera cuestión y se remiten a la disidencia de Highton y Zaffaroni en 'Cargill'
+343_p536,Lorenzetti,RV,concurre,mayoria,unanime,testigo H221; se remite a su voto en 'Nieto'
+343_p536,Rosenkrantz,RV,concurre,mayoria,unanime,testigo H221; se remite a su voto en 'Díaz' (Fallos 341:648)
+343_p1923,Highton de Nolasco,VC,disiente,mayoria,unanime,"testigo H221; F5 'Maqueda, Lorenzetti y Rosatti consideran' y escisión del conjunto decisorio (art. 23 decreto-ley 1285/58); 'entienden que resulta de aplicación el criterio sustentado en sus respectivas disidencias en Fallos: 331:756, al que se remiten' (la fórmula 'al que se remiten' no la toma la superficie)"
+343_p1923,Lorenzetti,VC,disiente,mayoria,unanime,"testigo H221; F5 'Maqueda, Lorenzetti y Rosatti consideran' y escisión del conjunto decisorio (art. 23 decreto-ley 1285/58); 'entienden que resulta de aplicación el criterio sustentado en sus respectivas disidencias en Fallos: 331:756, al que se remiten' (la fórmula 'al que se remiten' no la toma la superficie)"
+344_p3585,,FP_doctrina,,,unanime,agravio por falta de mayoría de votos concordantes del inferior
+344_p3636,,FP_organo,,,disidencia,mayoría absoluta del plenario del Consejo
+346_p532,Rosenkrantz,RD,disiente,mayoria,unanime,se remite a su disidencia en 'Blanco'; por_ello 'por mayoría'
+346_p1514,Rosenkrantz,PUB,,según su voto,mixed,se remite a su voto en 'Flores'; ya 'según su voto' en la firma
+347_p43,,FP_organo,,,segun_su_voto,mayoría absoluta de votos en la elección presidencial
+347_p2221,,FP_organo,,,segun_su_voto,mayoría absoluta de miembros del Consejo
+348_p1435,Rosatti,VC,disiente,mayoria,unanime,"'El juez Rosatti, por su parte, estima que el recurso extraordinario es inadmisible respecto de la cuestión en examen'; por_ello 'por mayoría'; la conjueza Catalano (firma 'María Inés Catalano', texto 'Mariana Inés') no está en posiciones"
+349_p251,Lorenzetti,RV,concurre,mayoria,unanime,en un punto ('restantes agravios') remite a su voto en 'Vidal' (Fallos 344:3156)
