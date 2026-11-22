@@ -12,7 +12,7 @@ operador: BORRA archivos). Deja en la copia SOLO lo que lista `_meta/dataverse/a
 Uso:  python scripts/auxiliares/preparar_bundle_dataverse.py RAIZ_DE_LA_COPIA [--yo-se-que-borra]
 Imprime la lista final con tamaños. Sin `--yo-se-que-borra` solo verifica, no borra ni copia.
 """
-__version__ = "0.4"  # H224: sin README corta con un solo mensaje // 0.3 H224: + output/validacion (lo que cita el CODEBOOK) // 0.2 H224: + corpus, insumos de localización, tablas y vocabularios (reproducción) y MAPA; chequeo contra corpus/inputs/vocabularios del manifest // 0.1 H224
+__version__ = "0.5"  # H224: deja _lista_subida.txt en la raíz de la copia para subir_dataverse.py // 0.4 H224: sin README corta con un solo mensaje // 0.3 H224: + output/validacion (lo que cita el CODEBOOK) // 0.2 H224: + corpus, insumos de localización, tablas y vocabularios (reproducción) y MAPA; chequeo contra corpus/inputs/vocabularios del manifest // 0.1 H224
 import json, shutil, sys
 from pathlib import Path
 
@@ -76,6 +76,8 @@ def main():
         print("\nERROR, no se sube nada:")
         for e in errores: print("  - " + e)
         sys.exit(1)
+    if borra:
+        (raiz / "_lista_subida.txt").write_text("\n".join(lista) + "\n", encoding="utf-8")  # v0.5: la lista original se borra con _meta/
     print("\nOK: el paquete es exactamente la lista.")
 
 

@@ -3,9 +3,10 @@
 # Sube SOLO lo que lista _meta/dataverse/archivos_publicacion.txt (lo arma y verifica
 # scripts/auxiliares/preparar_bundle_dataverse.py en la copia descartable del runner).
 # Requiere el secreto del repo DATAVERSE_TOKEN (token de API de Dataverse, lo carga el operador).
-# DELETE true: borra los archivos del borrador antes de subir (saca, entre otros, el fósil
-# csjn_editorial_indice_partes.csv, M35). La acción usa para borrar la API SWORD; si Harvard no la
-# acepta, el borrado falla y hay que sacar los archivos viejos a mano en la web antes de publicar.
+# --borrar-antes: borra los archivos de la última versión antes de subir (saca, entre otros, el fósil
+# csjn_editorial_indice_partes.csv, M35); sobre la versión publicada, Dataverse lo hace en un borrador nuevo.
+# H224: ya no usa IQSS/dataverse-uploader (se caía en Harvard tras el primer archivo, corrida 44993368912);
+# sube scripts/auxiliares/subir_dataverse.py por la API nativa, con tabIngest false (sin conversión a .tab).
 name: Dataverse (borrador)
 on:
   workflow_dispatch:
@@ -24,23 +25,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: repo
-      - name: Uploader de IQSS (v1.7, fijado)
-        uses: actions/checkout@v4
-        with:
-          repository: IQSS/dataverse-uploader
-          ref: v1.7
-          path: uploader
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - name: Dependencias
-        run: pip install -r uploader/requirements.txt
+        run: pip install requests
       - name: Armar y verificar el paquete (borra en la copia lo que no se publica)
         run: python repo/scripts/auxiliares/preparar_bundle_dataverse.py repo --yo-se-que-borra
       - name: Subir como borrador
         env:
           DATAVERSE_TOKEN: ${{ secrets.DATAVERSE_TOKEN }}
-        run: >-
-          python uploader/dataverse.py "$DATAVERSE_TOKEN" https://dataverse.harvard.edu
-          doi:10.7910/DVN/TJTVKW "$GITHUB_REPOSITORY"
-          -d "dataverse output/parser corpus output/mapa output/catalogo output/localizacion output/validacion _meta scripts/pipeline" -r true -p false
+        run: python repo/scripts/auxiliares/subir_dataverse.py repo --doi doi:10.7910/DVN/TJTVKW --borrar-antes
