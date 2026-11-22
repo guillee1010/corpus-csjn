@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H228 (2026-11-22)
+
+- `_meta/jueces/jueces_csjn.csv`: 92 → 110 filas (11 commits de dato). Raya en el apellido de García Mansilla (B194); forma apellido-nombre para Tyden, Sánchez, Borinsky, Alcalá, Andalaf Casiello y Rabbi-Baldi (B187); variantes de Petrone y Poclava Lafuente; variantes de nombre tomadas de erratas o formas únicas del tomo, cada una con su testigo: "Carlos Maqueda" (anclada a la raya), "Lorenzett." (B182), "Rosatti Horacio" (única aparición), "Borinski"; 18 conjueces nuevos, tres de ellos (Bertuzzi, Bruglia, Medina) con el patrón anclado a la raya.
+- `parser.py` v44.0→44.1 (MINOR): `_RE_FIRMANTE_INTERCALADO` en `parse_firma`, el calificador no se asigna al juez anterior si en medio hay un firmante que la tabla no lee (B195); `RE_CALIFICADOR_FIRMA` lee "(su voto)" a secas (B185). Las dos son guardas con flip-set vacío sobre la tabla nueva.
+- Flip-set sellado 29 fallos, 0 fuera del set (12 brazos de `parser.main()` real, uno por grupo de la tabla); 343_p1457 idéntico. Adjudicación leída en el tomo y contrastada con sjconsulta (31 fallos, 0 contradicciones).
+- Corrida en el clon (sin regolden): `csjn_casos.csv` 5894 filas, 140 celdas en 29 fallos; `csjn_casos_votos.csv` 28.044→28.080; `csjn_casos_zonas.csv` 138.591→138.597; `csjn_casos_textos.csv` 3 celdas `firma_raw`; `csjn_casos_editorial.csv` byte-idéntico. vp fallos 3529/1125/765/305/8 → 3529/1124/764/307/8. Derivados: `csjn_casos_normas.csv` 13.958→13.959; epílogo, partes, materia y recursos idénticos.
+- Candados: M68 13→11, M55 9→5, sin altas.
+- Golden + `_manifest.json`: PENDIENTES de regolden en disco local del operador (`correr_pipeline.py --consciente` / `--regolden`); sha esperados: casos d2f86f697086…, textos 00f42ea1dba9…, votos a88a87184f5b…, zonas c3d7d6d7e055…, editorial 30a6da652e3a…, normas e5a02f34cf86….
+- Documentación H228: `CODEBOOK.md` 3.2 (cifras sobre v44.1, límite 19 reescrito); `README.md` y `_meta/dataverse/README.md`; DEUDA (B182, B185, B187, B194 y B195 cerrados; constancias en B179, B188, M68 y M69); BITACORA H228.
+
 ## H227 (2026-11-22)
 
 - `parser.py` v43.3→44.0 (N3 de la auditoría FABLE-03, MAJOR, cambia el universo de fallos): `clasificar_tipo_entrada` recibe `nombres_indice`; la nota "(*) Sentencia del … Ver …" deja de ser señal suficiente de `sumario_con_link` cuando el bloque trae un fallo impreso propio de la entrada (`_fallo_propio_en_bloque`: apertura + firma + carátula del fallo que coincide con una del índice, `_caratula_fallo_impreso`). Flip-set sellado 29 (14 fallos de la propia entrada, 15 de una de dos carátulas), 0 fuera del set; los 4 fallos sin fila en el catálogo (346_p542, 347_p1763, 345_p204) quedan como estaban.

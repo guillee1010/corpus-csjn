@@ -20609,3 +20609,60 @@ DEUDA (B191 cerrado, B192 a B197 y M69 nuevos, constancias en B019, B156, B180, 
 **Scripts creados:** `scripts/diagnostico/H227/` (gitignoreado, entregados como archivos): `correr_version.py`, `flipset.py`, `contencion.py`, `sonda_h227.py`, `h227_lib.py`, `ver.py`, `leer_firmas.py`, superficies `u2_*`, `u3_*`, `u4_*`, `u5_*`, `u6_*`, `n3_*`, `poc_n3.py`, `poc_n3_verificar.py`, `actualizar_codebook_v44.py`. Informe `informe_FABLE-03.docx` y `propuesta_agenda.md`, fuera del repo.
 
 **Commits:** parser (rama H227-N3) · merge PR #5 · documentación H227 · regolden del operador.
+
+
+## H228 — Firmantes que la tabla de jueces no leía: B194, B195, B187, B182 y B185 (2026-11-22)
+
+**Objetivo:** cerrar la familia de errores de lectura de la firma que midió la auditoría FABLE-03 (H227), con superficie única, adjudicación leída en el tomo antes de tocar nada y harness A/B con flip-set sellado.
+
+### H228-01 — Base (U0)
+
+Clon de `main` en `fbba5b7` (regolden H227), parser v44.0, rama `h228-firmantes`. Golden, producción y `_manifest.json` iguales por sha en los 5 CSV. Candado E0 limpio: `parser.main()` real con el argv de `correr_pipeline.py` reproduce casos `771a81127c73`, textos `c7df8f08e109`, votos `9a9725a62bcf`, zonas `112189bd7787` y editorial `30a6da652e3a`. M68 13 = 13, M55 9 = 9. Gate 2: DEUDA B194, B195, B187, B182 y B185, BITACORA H226 y H227, `parse_firma` y sus regex leídos. Los instrumentos de H227 (`u4_abiertos.py`, `u5_n_calificador_heredado.py`) no están en el repo (carpeta gitignoreada); la superficie se rehízo.
+
+### H228-02 — Superficie común y adjudicación (U1, corte bloqueante)
+
+`u1_superficie.py` toma el panel del `firma_raw` publicado en `csjn_casos_textos.csv`, lo que elimina el límite de H227 (37 paneles no identificables): `parse_firma(firma_raw)` reproduce `jueces` y `jueces_desconocidos` en 5724 de 5724 fallos con firma (8 sin firma). 125 piezas no reconocidas en 88 fallos: raya en el apellido 4, apellido-nombre 4, OCR a distancia 1 una, con forma de nombre 31, ruido 85; releídas, 94 son ruido de epílogo. Segundo barrido, `u1b_firmas_fuera_del_panel.py`, de tiradas con forma de firma dentro de cada bloque que no están en el panel publicado: 66, de las que 3 son firmas reales (348_p708, 339_p323, 330_p1436). Adjudicación leída en el tomo, `adjudicacion_u1.csv`, 36 filas con archivo y líneas. Diferencias con H227: B187 son 5 fallos más 348_p708 y no 3 (se suman 347_p2278 y 347_p2334); clase nueva, variante de nombre de un juez que sí está en la tabla ("Carlos Maqueda" en 346_p319, titular en un fallo de 2023; "Daniel Antonio Petrone"; "Juan C. Poclava Lafuente"; "Mariano Hernan Borinski"); mecanismo nuevo, si la primera línea de la firma no trae ningún juez reconocido `collect_firma_lines` la pierde (339_p323 publicado con 2 jueces de 6, 330_p1436 con 3 de 5). Falsas alarmas del instrumento leídas y descartadas: 346_p580, 330_p399, 329_p4426, 345_p386 (B192), 329_p3148 (B169).
+
+### H228-03 — Contraste con fuentes externas
+
+A pedido del operador. Dos sentencias originales bajadas del sitio de la Corte: 348_p708 lleva las firmas digitales "ROSATTI Horacio Daniel", "RABBI BALDI CABANILLAS Luis Renato", "ALCALA Rocio" y "ANDALAF CASIELLO Silvina Maria", de donde sale el orden apellido-nombre que el tomo transcribe; 346_p319 está firmada por "MAQUEDA Juan Carlos" ("Carlos Maqueda" es errata del tomo). `u1_contraste_sj.py` (corre en disco del operador, importa `cargar_mes` de `cruce_sjconsulta.py`, cache de 250 meses): 31 fallos de la adjudicación con sumario, 26 con jueces nombrados, 0 contradicciones; B194 4 de 4, B195 3 de 3 (Lorenzetti y Corcuera en el voto conjunto), B187 6 de 6. `h228_conjueces_sj.py`, censo inverso sobre 5660 fallos que cruzan por tomo y página: 40 conjueces nombrados en SJ, 21 faltantes en 18 fallos y 23 titulares faltantes en 16 fallos; 17 y 7 ya adjudicados, y los 10 fallos restantes leídos son de otras clases (constancia en M69). La superficie de U1 no dejó ningún caso de la familia sin ver en el período en que SJ nombra conjueces (desde 2021). Hallazgo lateral: 348_p1435 publicado unánime con posiciones narradas en el texto (B179, constancia). Constancia de método (asistente): el primer CSV de adjudicación se entregó con el mismo nombre que uno de una sesión anterior (21/11) y el operador copió el viejo; se reentregó con el número de sesión en el nombre.
+
+### H228-04 — Decisiones del operador
+
+OK a la tabla, con el contraste a la vista. Entran los 18 conjueces sin fila, medidos; Bertuzzi, Bruglia y Medina con el patrón anclado a la raya (precedente Boggiano) porque sus nombres aparecen fuera de firmas (los dos primeros son parte en 343_p1457; "Miriam Graciela Medina" es letrada en 11 epílogos). Las formas descubiertas se toman como variantes de nombre en la tabla, incluidas las erratas del tomo. "Rosatti Horacio": primero rechazado ("es un error de la Corte, no vamos a reescribir por un caso"), después aceptado como variante de dato y documentado como única aparición. "Jorge Morán" (339_p323) queda afuera, identidad sin confirmar. La tabla va antes que el código (U3 antes que U2).
+
+### H228-05 — U2 medida sola, y por qué se invirtió el orden
+
+`parche_u2_b195.py` (`_RE_FIRMANTE_INTERCALADO` en `parse_firma`). Grabadora sobre `_normalizar_ventana_calificador` en una corrida real, 28.174 ventanas, 3852 con calificador, 3 con firmante intercalado, las conocidas. Flip-set sobre v44.0: 3 fallos, 0 fuera del set, textos, zonas y editorial idénticos. Candado M68 FAIL con 2 altas (347_p1701, 347_p1673): al sacarle el calificador al juez equivocado el fallo queda sin ningún "según su voto" mientras su dueño no se lea. El calificador heredado es consecuencia del firmante no leído, así que la tabla va primero.
+
+### H228-06 — U3, tabla de jueces (dato, 92 → 110 filas)
+
+`u3_tabla.py` arma la tabla por grupos y `u3_brazo.py` corre `parser.main()` real con la tabla cargada por `_cargar_jueces_conocidos` del propio parser; 12 brazos, uno por grupo y uno con todo, cada uno contra el brazo A. Fallos tocados por brazo: raya de García Mansilla 4; conjueces apellido-nombre 5; Petrone y Poclava Lafuente 2; "Carlos Maqueda" 1; "Lorenzett." 1; "Borinski" 1; 15 conjueces nuevos de una sola aparición 13; Bertuzzi 1; Bruglia 1; Medina 1. "Rosatti Horacio" sola toca 348_p708 y lo deja MAL (Rosatti hereda el calificador de Rabbi-Baldi, que sale del panel), porque depende de las filas de conjueces invertidos; con todo junto sale bien. Brazo completo: 29 fallos, igual a la unión de los parciales, 0 fuera de la adjudicación; 343_p1457 idéntico en casos y zonas. La tabla escrita en el repo reproduce por sha el brazo en memoria. Zonas: 7 fallos, en todos una línea que era `dispositivo` pasa a `firma` (y el pie del voto de Vélez Funes en 339_p323).
+
+### H228-07 — U2 y U4 sobre la tabla nueva (parser v44.1)
+
+B195 encima de la tabla: flip-set VACÍO, los 5 CSV idénticos por sha; queda como guarda. B185, `parche_u4_b185.py`: `(?:su|mi)\s+voto` en `RE_CALIFICADOR_FIRMA` y rama en `parse_firma`; 8 ventanas de 28.211 cambian, 2 formas, de los 2 testigos; flip-set VACÍO (B180 (b) ya los publicaba). Parser commiteado igual por sha al brazo medido. MINOR, sin cambio de schema ni de vocabulario.
+
+### H228-08 — Cierre en el clon
+
+Cadena completa `correr_pipeline.py --consciente --ignorar-corpus-drift` en el clon: exit 3 esperado, [FAIL] en casos, textos, votos y zonas, editorial [OK]. Derivados: `normas` 13.958 → 13.959 (`e5a02f34cf86`; +1 fila, 347_p1673 ley 24018 en el voto de Hornos, y el conteo por voto cambia en 348_p113, 348_p189 y 348_p728), todos dentro del flip-set; epílogo, partes, materia y recursos iguales por sha. M68 13 → 11 (bajas 339_p323 y 348_p728, 0 altas, PASS). M55 9 → 5 (bajas 339_p323, 346_p319, 348_p708, 348_p83). CODEBOOK 3.2 (`actualizar_codebook.py --subir`, [CHECK] CLEAN; límite 19 reescrito; jueces distintos 79 → 100), los dos README, DEUDA y CHANGELOG. Pruebas del repo, constancia sin investigar: `test_construir_catalogo.py` 17 de 19 y `test_cruzar_catalogo_y_mapa.py` 1 de 8, etapas no tocadas en este ciclo.
+
+### H228 — Estado final
+
+- **Corpus:** 5894 casos (5732 fallos + 128 sumario_con_link + 34 sumario_editorial), sin cambio.
+- **Sin firma:** 8 / 5732 fallos, sin cambio.
+- **Votos:** 28.080 filas (+36). `posicion`: mayoría 24.224 (+30), según su voto 1587 (+5), en disidencia 2031, en disidencia parcial 238 (+1). Jueces distintos 100 (17 sin sufijo, 83 conjueces).
+- **Voting patterns (fallos):** unánime 3529, disidencia 1124 (−1), según su voto 764 (−1), mixed 307 (+2), sin firma 8.
+- **Zonas:** 138.597 segmentos (+6).
+- **Residuos conocidos:** 339_p323 en 5 de 6 ("Jorge Morán"); Sánchez (347_p1701), Bertuzzi (347_p1084), Medina (342_p459) y Vélez Funes (339_p323) entran sin `texto_voto` (B188); 348_p1435 (B179).
+
+**Outputs canónicos (corrida v44.1 en el clon; en el repo quedan los publicados hasta el regolden del operador):**
+- `output/parser/csjn_casos.csv` — 5894 filas (sha `d2f86f697086`).
+- `output/parser/csjn_casos_textos.csv` — 5894 filas (sha `00f42ea1dba9`).
+- `output/parser/csjn_casos_votos.csv` — 28.080 filas (sha `a88a87184f5b`).
+- `output/parser/csjn_casos_zonas.csv` — 138.597 segmentos (sha `c3d7d6d7e055`).
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones (sha `30a6da652e3a`, sin cambio).
+
+**Scripts creados:** `scripts/diagnostico/H228/` (gitignoreado, entregados como archivos): `e0_candado.py`, `h228_lib.py`, `ver.py`, `u1_superficie.py`, `u1b_firmas_fuera_del_panel.py`, `u1_leer.py`, `adjudicacion_u1.py` (+ csv), `u1_contraste_sj.py`, `h228_conjueces_sj.py`, `harness_ab.py`, `parche_u2_b195.py`, `u2_superficie_b195.py`, `u3_tabla.py`, `u3_brazo.py`, `u3_diff.py`, `u3_correr_todo.sh`, `u3_pre_radio_3nombres.py`, `parche_u4_b185.py`, `u4_superficie_b185.py`, `flipset_H228_final_*.csv`.
+
+**Commits:** 13 en la rama `h228-firmantes` (11 de dato, uno por grupo de la tabla · parser v44.1 · documentación H228), merge del PR. Pendiente del operador: `git pull`, `--consciente`, `--regolden`, M68, M55 y censo de sjconsulta en disco local.

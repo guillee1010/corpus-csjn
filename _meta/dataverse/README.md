@@ -1,6 +1,6 @@
 # corpus-csjn: A Structured Dataset of Argentine Supreme Court Rulings, Volumes 329–349 (2006–2026)
 
-**Version 4.0** · parser v44.0 · November 2026
+**Version 4.0** · parser v44.1 · November 2026
 **Author:** Guillermo Rubinetti
 **DOI:** [10.7910/DVN/TJTVKW](https://doi.org/10.7910/DVN/TJTVKW) · **License:** data CC-BY 4.0, code MIT
 **Source code and history:** <https://github.com/guillee1010/corpus-csjn>
@@ -27,12 +27,12 @@ The full variable dictionary, coded values, validation and known limitations are
 |---|---|---|
 | `csjn_casos.csv` | 5,894 | Case: caption, date, panel, voting pattern, positions, merit, *queja*. |
 | `csjn_casos_recursos.csv` | 5,894 | Case: disposition, merit review, admissibility and its cause, appeal type, party winning, remand. **Use this layer for outcomes.** |
-| `csjn_casos_votos.csv` | 28,044 | Justice × case: position and separate-opinion text. |
+| `csjn_casos_votos.csv` | 28,080 | Justice × case: position and separate-opinion text. |
 | `csjn_casos_materia.csv` | 5,894 | Case: inferred subject matter (under development). |
 | `csjn_casos_partes.csv` | 5,894 | Case: appellant and respondent with procedural role. |
-| `csjn_casos_normas.csv` | 13,958 | Case × statute × scope: statutes cited ("ley N"). |
+| `csjn_casos_normas.csv` | 13,959 | Case × statute × scope: statutes cited ("ley N"). |
 | `csjn_casos_textos.csv` | 5,894 | Case: full text of the reasoning, operative clause, signature block and the Procuración's opinion. |
-| `csjn_casos_zonas.csv` | 138,591 | Text zone × case, with line ranges. |
+| `csjn_casos_zonas.csv` | 138,597 | Text zone × case, with line ranges. |
 | `csjn_casos_epilogo.csv` | 5,732 | Ruling: editorial epilogue text. |
 | `csjn_casos_editorial.csv` | 152 | Editorial section of each volume (indexes, *acordadas*). |
 
