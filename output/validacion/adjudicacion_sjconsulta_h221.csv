@@ -31,7 +31,7 @@ anio_sj,caso_id_canonico,juez,tipo,sj,corpus,clase,tiene_razon,leido_con_texto,e
 2018,341_p1063,MAQUEDA,posicion,disidencia,mayoria,B179,sj,si,"L7839 'Los jueces Lorenzetti, Highton de Nolasco, Rosatti y Rosenkrantz consideran'"
 2018,341_p726,MAQUEDA,conjunto,firma,ausente,B019,sj,si,'Juan ⏎ Carlos Maqueda.' tras linea_fin_real (L27398-27399)
 2018,341_p892,(todos),conjunto,composicion,vacio,sumario_editorial,esperado,si,tipo_entrada=sumario_editorial
-2018,346_p931,HIGHTON DE NOLASCO,conjunto,incluido,ausente,a_revisar,a_revisar,no,fecha 2018 en tomo 346 (2023)
+2018,346_p931,HIGHTON DE NOLASCO,conjunto,incluido,ausente,error_sj,corpus,si,"firma L6457-6458 de LibroVol346-2 'Rosatti (en disidencia) — Rosenkrantz — Maqueda — Lorenzetti'; sentencia del 20/2/2018 publicada en el tomo 346 como precedente no incluido antes (nota L6409-6410) (H224)"
 2019,342_p193,ROSENKRANTZ,posicion,disid_parcial,disidencia,B177,sj,si,firma 'Carlos Fernando Rosenkrantz (en disidencia parcial)'; header 'Disidencia parcial del Señor Presidente'
 2019,342_p2344,ROSENKRANTZ,posicion,disid_parcial,disidencia,B177,sj,no,SJ codifica DISIDENCIA PARCIAL; mecanismo B177 confirmado con texto en 342_p193
 2019,342_p2198,ROSENKRANTZ,posicion,disid_parcial,disidencia,B177,sj,no,SJ codifica DISIDENCIA PARCIAL; mecanismo B177 confirmado con texto en 342_p193
@@ -57,7 +57,7 @@ anio_sj,caso_id_canonico,juez,tipo,sj,corpus,clase,tiene_razon,leido_con_texto,e
 2020,343_p283,LORENZETTI,conjunto,incluido,no firma,error_sj,corpus,si,firma 'Rosenkrantz — Highton de Nolasco — Maqueda.'
 2020,343_p970,HIGHTON DE NOLASCO,conjunto,omitido,firma,error_sj,corpus,si,firma 'Elena I. Highton de Nolasco — Maqueda — Lorenzetti — Rosatti'
 2020,343_p1758,ROSATTI,conjunto,firma,ausente,B019,sj,si,'Horacio ⏎ Rosatti.' tras linea_fin_real
-2020,343_p1762,LORENZETTI,conjunto,firma,ausente,B019,a_revisar,no,probable firma partida; sin leer
+2020,343_p1762,LORENZETTI,conjunto,firma,ausente,B182,sj,si,firma 'Ricardo Luis Lorenzett.' L12093-12094 de LibroVol343-3 (L12264 es linea_fin_real; firma de Rosenkrantz); apellido truncado por OCR; Lorenzetti en jueces_desconocidos (H224)
 2021,344_p362,ROSENKRANTZ,posicion,disid_parcial,disidencia,B177,sj,no,SJ codifica DISIDENCIA PARCIAL; mecanismo B177 confirmado con texto en 342_p193
 2021,344_p507,ROSENKRANTZ,posicion,disid_parcial,disidencia,B177,sj,no,SJ codifica DISIDENCIA PARCIAL; mecanismo B177 confirmado con texto en 342_p193
 2021,344_p1481,LORENZETTI,posicion,disid_parcial,disidencia,B177,sj,no,SJ codifica DISIDENCIA PARCIAL; mecanismo B177 confirmado con texto en 342_p193
@@ -80,7 +80,7 @@ anio_sj,caso_id_canonico,juez,tipo,sj,corpus,clase,tiene_razon,leido_con_texto,e
 2021,344_p325,(todos),conjunto,composicion,vacio,sumario_editorial,esperado,si,tipo_entrada=sumario_editorial
 2021,344_p1211,(todos),conjunto,composicion,vacio,sumario_editorial,esperado,si,tipo_entrada=sumario_editorial
 2021,344_p2115,(todos),conjunto,composicion,vacio,sumario_editorial,esperado,si,tipo_entrada=sumario_editorial
-2021,344_p174,ROSENKRANTZ,conjunto,ausente,firma,a_revisar,a_revisar,no,"el corpus lo tiene, SJ no; sin leer"
+2021,344_p174,ROSENKRANTZ,conjunto,ausente,firma,error_sj,corpus,si,"firma L8442-8444 de LibroVol344-1 'Rosenkrantz – Highton de Nolasco (en disidencia) – Maqueda – Lorenzetti – Rosatti' (H224)"
 2022,345_p102,ROSENKRANTZ,posicion,disid_parcial,disidencia,B177,sj,no,SJ codifica DISIDENCIA PARCIAL; mecanismo B177 confirmado con texto en 342_p193
 2009,332_p111,ARGIBAY,posicion,disid_parcial,disidencia,B177,sj,no,SJ codifica DISIDENCIA PARCIAL; mecanismo B177 confirmado con texto en 342_p193
 2009,332_p111,FAYT,posicion,disid_parcial,disidencia,B177,sj,no,SJ codifica DISIDENCIA PARCIAL; mecanismo B177 confirmado con texto en 342_p193
@@ -97,4 +97,4 @@ anio_sj,caso_id_canonico,juez,tipo,sj,corpus,clase,tiene_razon,leido_con_texto,e
 2009,332_p2250,MAQUEDA,posicion,disid_parcial,disidencia,B177,sj,no,SJ codifica DISIDENCIA PARCIAL; mecanismo B177 confirmado con texto en 342_p193
 2009,332_p2250,PETRACCHI,posicion,disid_parcial,disidencia,B177,sj,no,SJ codifica DISIDENCIA PARCIAL; mecanismo B177 confirmado con texto en 342_p193
 2009,332_p1769,HIGHTON DE NOLASCO,posicion,voto,mayoria,M67,definicion,no,SJ sin bloque conjunto ni unanimidad; el corpus llama mayoria al único firmante sin calificador
-2009,332_p1394,FAYT,conjunto,ausente,firma,a_revisar,a_revisar,no,"el corpus lo tiene, SJ no; sin leer"
+2009,332_p1394,FAYT,conjunto,ausente,firma,error_sj,corpus,si,"firma L18668-18671 de LibroVol332.2, Fayt firma sin calificador entre Highton (según su voto) y Petracchi (en disidencia) (H224)"
