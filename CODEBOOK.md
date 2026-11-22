@@ -8,7 +8,7 @@ The dataset covers volumes (tomos) 329 through 349, excluding volumes 335 and 33
 
 Each ruling is decomposed into case-level metadata, a recourse-and-disposition layer, individual judicial votes, and fine-grained textual zones, enabling quantitative analysis of admissibility decisions, dispositional outcomes, voting patterns, argumentative effort, and coalition formation within the Court.
 
-The dataset was constructed automatically by a Python pipeline from OCR-digitized markdown source files, with iterative validation against the original volumes. Variable extraction is algorithmic; the recourse-layer axes (§4) were additionally validated against a hand-coded gold standard via inter-rater Cohen's κ (see Reliability).
+The dataset was constructed automatically by a Python pipeline from OCR-digitized markdown source files, with iterative validation against the original volumes. Variable extraction is algorithmic. The main validation is a census against the Court's own summaries database (sjconsulta), an independent external coder, covering every matched ruling (§9.1); an earlier hand-coded sample of 300 rulings is reported in §9.
 
 ### Key Figures
 
@@ -29,31 +29,35 @@ The dataset was constructed automatically by a Python pipeline from OCR-digitize
 
 ## 2. File Descriptions
 
-The dataset consists of eight CSV files. All files are UTF-8 encoded with comma separators and are keyed on `caso_id_canonico` where a case-level key applies.
+The dataset consists of ten CSV files, sealed by `_manifest.json` (SHA-256, row counts and generator version of each file). All files are UTF-8 encoded with comma separators and are keyed on `caso_id_canonico` where a case-level key applies. Counts as of parser v43.3.
 
 ### Primary files
 
 | File | Unit of observation | Rows | Columns | Description |
 |---|---|---|---|---|
-| `csjn_casos.csv` | Case | 5,890 | 39 | Case-level metadata: parties, date, voting configuration, word counts, judge panel, jurisdiction, localization within source files, and the legacy `outcome` field (see §3). |
-| `csjn_casos_recursos.csv` | Case (recourse layer) | 5,890 | 10 | The M26 recourse-and-disposition layer: the orthogonal admissibility / disposition / merit-review / party-winning / remand axes plus `via_recurso`, `multi_recurso`, and `causa_inadmisibilidad`. Keyed 1:1 to `csjn_casos.csv`. This is the canonical layer for outcome analysis (see §4). |
-| `csjn_casos_votos.csv` | Judge × Case | 27,697 | 19 | One row per judge per case. Records each justice's voting position and, where applicable, the text and classification of their separate opinion. Includes denormalized case-level fields for analytical convenience. |
-| `csjn_casos_zonas.csv` | Text zone × Case | 141,451 | 8 | Fine-grained segmentation of each ruling into structural zones (summary, opinion body, dictamen, signature block, etc.) with line references and word counts. |
+| `csjn_casos.csv` | Case | 5,894 | 40 | Case-level metadata: parties, date, voting configuration, word counts, judge panel, jurisdiction, localization within source files, and the legacy `outcome` field (see §3). |
+| `csjn_casos_recursos.csv` | Case (recourse layer) | 5,894 | 10 | The M26 recourse-and-disposition layer: the orthogonal admissibility / disposition / merit-review / party-winning / remand axes plus `via_recurso`, `multi_recurso`, `causa_inadmisibilidad` and `es_queja`. Keyed 1:1 to `csjn_casos.csv`. This is the canonical layer for outcome analysis (see §4). |
+| `csjn_casos_votos.csv` | Judge × Case | 27,938 | 19 | One row per judge per case. Records each justice's voting position and, where applicable, the text and classification of their separate opinion. Includes denormalized case-level fields for analytical convenience. |
+| `csjn_casos_zonas.csv` | Text zone × Case | 138,062 | 8 | Segmentation of each ruling into structural zones (opinion body, dictamen, operative clause, signature block, separate votes, etc.) with line references and word counts. |
 
 ### Auxiliary files
 
 | File | Unit of observation | Rows | Columns | Description |
 |---|---|---|---|---|
-| `csjn_casos_textos.csv` | Case | 5,890 | 4 | Full-text fields extracted per case: `considerando_text`, `por_ello_text`, `firma_raw`. Separated from `csjn_casos.csv` for compactness. Keyed 1:1 by `caso_id_canonico`. |
-| `csjn_casos_materia.csv` | Case | 5,890 | 4 | Subject-matter (*materia*) derivation sidecar, keyed 1:1 by `caso_id_canonico`. Produced by `derivar_materia.py` (a standalone post-parser stage). Under active development; see §8 and §9. |
+| `csjn_casos_textos.csv` | Case | 5,894 | 5 | Full-text fields extracted per case: `considerando_text`, `por_ello_text`, `firma_raw`, `dictamen_text`. Keyed 1:1 by `caso_id_canonico`. |
+| `csjn_casos_materia.csv` | Case | 5,894 | 4 | Subject-matter (*materia*) sidecar, keyed 1:1. Under active development; see §7 and §8. |
+| `csjn_casos_partes.csv` | Case | 5,894 | 8 | Appellant (*recurrente*) and respondent (*recurrido*) with their procedural role, derived from the editorial epilogue and the caption. See §7. |
+| `csjn_casos_normas.csv` | Case × statute × scope | 13,911 | 5 | Statutes cited ("ley N") per case and per scope (caption, *considerando*, dictamen, operative clause, separate votes), 4,097 cases with at least one. See §7. |
+| `csjn_casos_epilogo.csv` | Ruling | 5,703 | 7 | Raw text of the editorial epilogue after the signature (appeal and filing notes, counsel, court of origin), input of `csjn_casos_partes.csv`. See §7. |
 | `csjn_casos_editorial.csv` | Editorial section | 152 | 7 | Non-judicial editorial content in the volumes: indexes (by parties, by subject, by legislation), *acordadas* (administrative resolutions), and miscellaneous texts. |
-| `csjn_editorial_indice_partes.csv` | Index entry | 11,445 | 7 | Individual entries from the alphabetical party index (*índice de partes*) in each volume. Used during pipeline construction for cross-referencing and validation. |
+
+`csjn_editorial_indice_partes.csv`, published in earlier versions, is no longer produced by the pipeline and was removed (M35).
 
 ---
 
 ## 3. Variable Dictionary — `csjn_casos.csv`
 
-39 columns. **Note:** as of the M26 refactor (parser v22.0), the full-text fields (`considerando_text`, `por_ello_text`, `firma_raw`) live in `csjn_casos_textos.csv`, and `causa_inadmisibilidad` lives in `csjn_casos_recursos.csv`. They are no longer columns of this file.
+40 columns. **Note:** as of the M26 refactor (parser v22.0), the full-text fields (`considerando_text`, `por_ello_text`, `firma_raw`) live in `csjn_casos_textos.csv`, and `causa_inadmisibilidad` lives in `csjn_casos_recursos.csv`. They are no longer columns of this file.
 
 ### Identification
 
@@ -64,6 +68,7 @@ The dataset consists of eight CSV files. All files are UTF-8 encoded with comma 
 | `case_name_indice` | string | Case name(s) as listed in the volume's alphabetical party index. Multiple variants separated by ` \| `. May be null for entries not found in the index. |
 | `case_name_cuerpo` | string | Case name extracted from the ruling's header in the body text. Typically the full procedural caption (*carátula*). |
 | `case_name_cuerpo_legacy` | string | Earlier extraction of the body case name, retained for backward compatibility. |
+| `case_name_cuerpo_fuente` | string | Provenance of `case_name_cuerpo` (since parser v42.0, H218): `v1` (3,821) extracted from the ruling's header; `fallback` (1,151) the header extractor did not find the caption and the old fallback, which returned the whole procedural record, was removed, so `case_name_cuerpo` is empty (the old value stays in `case_name_cuerpo_legacy`); `vacio` (922) no caption found. `case_name_indice` is never empty. |
 | `source_file` | string | Source markdown file from which the case was extracted (e.g., `LibroVol329.1.md`). |
 | `linea_inicio` | integer | Start line (0-indexed) within the source file. |
 | `linea_fin` | integer | Projected end line within the source file. |
@@ -158,6 +163,7 @@ Full-text fields, one row per case, keyed 1:1 by `caso_id_canonico`.
 | `considerando_text` | string | Full text of the *considerando* section (legal reasoning of the majority). |
 | `por_ello_text` | string | Full text of the *por ello* clause (the dispositional section where the Court states its operative decision). |
 | `firma_raw` | string | Raw text of the signature block as extracted from the source. |
+| `dictamen_text` | string | Full text of the opinion of the Procuración General (*dictamen*) embedded in the ruling, empty if none. |
 
 ---
 
@@ -216,7 +222,7 @@ Subject-matter sidecar. Keyed 1:1 by `caso_id_canonico`. See [Coded Values](#mat
 | Variable | Type | Description |
 |---|---|---|
 | `caso_id_canonico` | string | Foreign key to `csjn_casos.csv`. |
-| `materia` | string | Derived subject matter. Null for unclassified cases (1,916). |
+| `materia` | string | Derived subject matter. Null for unclassified cases (1,926). |
 | `materia_capa` | string | Classification tier (how the case was classified). See [Coded Values](#materia). |
 | `materia_fuente` | string | The specific signal(s) that fired (e.g. `regla` for capa1; `objeto`, `norma`, `parte`, `kw`, `coocur:{rule}` for capa2; `sin_ancla` / `conflicto_capa2:{m1}/{m2}` for the residual). |
 
@@ -232,17 +238,46 @@ Subject-matter sidecar. Keyed 1:1 by `caso_id_canonico`. See [Coded Values](#mat
 | `n_lineas` | integer | Number of lines. |
 | `wc` | integer | Word count. |
 
-### `csjn_editorial_indice_partes.csv`
+### `csjn_casos_partes.csv`
+
+Appellant and respondent, keyed 1:1 by `caso_id_canonico`. The appellant comes only from the appeal marker of the editorial epilogue ("Recurso … interpuesto por X"), which ties who appealed to their procedural role; the caption is used as a fallback for the name, never to decide who appealed.
 
 | Variable | Type | Description |
 |---|---|---|
+| `caso_id_canonico` | string | Foreign key to `csjn_casos.csv`. |
+| `recurrente` | string | Appellant (the party, not counsel). Empty when no appeal marker was found. |
+| `recurrente_rol` | string | Procedural role of the appellant: `actora`, `demandada`, `codemandada`, `coactora`, `penal`, `querellante`, `mp_fiscal`, `mp_defensa`, `por_derecho_propio`, `solo_letrado`; empty if unknown. In multi-appellant rulings, the role of the first appellant. |
+| `recurrido` | string | Respondent, from the reply-to-appeal marker (*traslado contestado por*). Often empty. |
+| `recurrido_rol` | string | Procedural role of the respondent (same values). |
+| `multi_recurrente` | string | `si` / `no` (more than one appellant); empty when no appellant was identified. |
+| `partes_capa` | string | Layer that produced the row: `epilogo`, `caratula`, `sin_epilogo`, `no_aplica` (editorial entries). |
+| `partes_fuente` | string | Specific source within the layer (e.g. `epilogo:recurso`, `epilogo:recurso+traslado`, `caratula:recurso`, `sin_zona`, `sin_marcador_recurso`). |
+
+### `csjn_casos_normas.csv`
+
+Statutes cited, one row per case × statute × scope. Only "ley N" citations are extracted (`tipo = ley`); decrees, resolutions and *acordadas* are not yet covered, and citations without a number (codes, constitutional articles) are out of scope.
+
+| Variable | Type | Description |
+|---|---|---|
+| `caso_id_canonico` | string | Foreign key to `csjn_casos.csv`. |
+| `tipo` | string | Type of norm. Currently always `ley`. |
+| `norma` | string | Statute number as cited (e.g. `24557`, `1285`). |
+| `ambito` | string | Where it is cited: `caratula`, `considerando`, `dictamen`, `dispositivo` (*por ello*), `voto` (separate votes, aggregated per case). |
+| `n_menciones` | integer | Number of mentions in that scope. |
+
+### `csjn_casos_epilogo.csv`
+
+One row per ruling (`tipo_entrada = fallo`).
+
+| Variable | Type | Description |
+|---|---|---|
+| `caso_id_canonico` | string | Foreign key to `csjn_casos.csv`. |
 | `tomo` | integer | Volume number. |
 | `source_file` | string | Source markdown file. |
-| `case_name_indice` | string | Case name as listed in the party index. |
-| `paginas` | string | Page reference(s) as printed in the index (may contain multiple pages separated by commas). |
-| `n_paginas` | integer | Number of page references for this entry. |
-| `linea_ini` | integer | Start line of the entry in the index section. |
-| `linea_fin` | integer | End line of the entry in the index section. |
+| `epilogo_status` | string | `ok` (4,421) or `sin_zona` (1,282, no epilogue zone found). |
+| `n_seg` | integer | Number of epilogue segments joined. |
+| `wc` | integer | Word count. |
+| `epilogo_text` | string | Raw epilogue text (soft hyphens removed). |
 
 ---
 
@@ -254,35 +289,35 @@ The access decision in the recourse layer. **This axis is a synthesis** of the d
 
 | Value | N | Description |
 |---|---|---|
-| `admite` | 2,896 | The Court admitted the recourse (access granted; merits or competence reached). |
-| `sin_marcador` | 1,363 | No explicit access marker; admissibility not determinable from access signals alone. |
-| `inadmite` | 1,107 | The Court declined to admit the recourse. Carries a `causa_inadmisibilidad` (the invariant). |
-| `no_aplica` | 524 | Access axis does not apply (e.g. original jurisdiction, editorial entries). |
+| `admite` | 2,888 | The Court admitted the recourse (access granted; merits or competence reached). |
+| `sin_marcador` | 1,320 | No explicit access marker; admissibility not determinable from access signals alone. |
+| `inadmite` | 1,116 | The Court declined to admit the recourse. Carries a `causa_inadmisibilidad` (the invariant). |
+| `no_aplica` | 570 | Access axis does not apply (e.g. original jurisdiction, editorial entries). |
 
 ### `disposicion` {#disposicion}
 
-The merit verb (≈ SCDB *caseDisposition*). Distribution across 5,890 cases:
+The merit verb (≈ SCDB *caseDisposition*). Distribution across 5,894 cases:
 
 | Value | N | Description |
 |---|---|---|
-| `no_fondo` | 1,867 | No merit disposition (resolved on access/procedural grounds). |
-| `deja_sin_efecto` | 1,353 | Prior decision set aside (*deja sin efecto*). |
-| `revoca` | 903 | Lower court decision reversed (*revoca*). |
-| `no_revision_competencia` | 587 | No merit review; jurisdictional-competence resolution. |
-| `confirma` | 537 | Lower court decision affirmed. |
-| `no_revision_procesal` | 355 | No merit review; procedural resolution. |
-| `no_revision_demanda` | 178 | No merit review; resolution at the demand/claim stage. |
-| `nulidad` | 66 | Lower court decision annulled. |
-| `nulidad_concesion` | 31 | Annulment of the grant of the appeal (*nulidad de la concesión*). |
-| `grant_remand_implicito` | 10 | Implicit grant-and-remand disposition. |
-| `modifica` | 3 | Decision modified. |
+| `no_fondo` | 1,838 | No merit disposition (resolved on access/procedural grounds). |
+| `deja_sin_efecto` | 1,366 | Prior decision set aside (*deja sin efecto*). |
+| `revoca` | 910 | Lower court decision reversed (*revoca*). |
+| `no_revision_competencia` | 590 | No merit review; jurisdictional-competence resolution. |
+| `confirma` | 541 | Lower court decision affirmed. |
+| `no_revision_procesal` | 356 | No merit review; procedural resolution. |
+| `no_revision_demanda` | 181 | No merit review; resolution at the demand/claim stage. |
+| `nulidad` | 57 | Lower court decision annulled. |
+| `nulidad_concesion` | 42 | Annulment of the grant of the appeal (*nulidad de la concesión*). |
+| `grant_remand_implicito` | 9 | Implicit grant-and-remand disposition. |
+| `modifica` | 4 | Decision modified. |
 
 ### `es_revision_fondo` {#es_revision_fondo}
 
 | Value | N | Description |
 |---|---|---|
-| `no` | 3,074 | The ruling does not review the merits. |
-| `si` | 2,816 | The ruling reviews the merits. |
+| `no` | 2,925 | The ruling does not review the merits. |
+| `si` | 2,969 | The ruling reviews the merits. |
 
 ### `parte_ganadora` {#parte_ganadora}
 
@@ -290,9 +325,9 @@ Party-winning under the SCDB *partyWinning* convention: **binary and petitioner-
 
 | Value | N | Description |
 |---|---|---|
-| `no_aplica` | 3,018 | Axis undefined (no merit review, or no identifiable petitioner outcome). |
-| `recurrente_gana` | 2,335 | The *recurrente* obtained a favorable disposition. Following SCDB, partial victories (`disposicion = modifica`) and reversal-and-remand are coded as wins: any favorable element to the *recurrente* is a win. |
-| `recurrente_pierde` | 537 | The *recurrente* did not prevail. |
+| `no_aplica` | 3,007 | Axis undefined (no merit review, or no identifiable petitioner outcome). |
+| `recurrente_gana` | 2,346 | The *recurrente* obtained a favorable disposition. Following SCDB, partial victories (`disposicion = modifica`) and reversal-and-remand are coded as wins: any favorable element to the *recurrente* is a win. |
+| `recurrente_pierde` | 541 | The *recurrente* did not prevail. |
 
 > **Derivation and limitation.** `parte_ganadora` is derived from `disposicion` by a fixed rule (revoca / deja_sin_efecto / nulidad / modifica / grant_remand → `recurrente_gana`; confirma → `recurrente_pierde`). For `modifica`, the win coding is guaranteed by the prohibition of *reformatio in pejus* — a petitioner cannot be left worse off by its own appeal — so a modification it obtained is favorable or neutral, never adverse. The rule assigns relative to a single *recurrente* of reference; in the rare case of genuinely reciprocal appeals (both parties appeal: `multi_recurso = si`) this reference may not match the party an analyst would pick. This imprecision is transversal to all disposition verbs, not specific to `modifica`. The granularity of *who* wins among identified parties (petitioner vs. respondent) is out of scope here and belongs to the prospective party-typing layer (§10).
 
@@ -300,8 +335,8 @@ Party-winning under the SCDB *partyWinning* convention: **binary and petitioner-
 
 | Value | N | Description |
 |---|---|---|
-| `no` | 4,599 | The Court resolves the controversy itself (no remand). |
-| `si` | 1,291 | The Court remands to the lower court (*reenvía*). |
+| `no` | 4,531 | The Court resolves the controversy itself (no remand). |
+| `si` | 1,363 | The Court remands to the lower court (*reenvía*). |
 
 > Reliability is **not yet reportable** for this axis (κ = 0.408 on a provisional gold; B130 paused pending manual recoding of the 42-case reversal universe). Use with caution.
 
@@ -309,16 +344,16 @@ Party-winning under the SCDB *partyWinning* convention: **binary and petitioner-
 
 | Value | N | Description |
 |---|---|---|
-| `recurso_extraordinario` | 3,370 | Access via the federal extraordinary appeal (REX, Art. 14 Law 48). |
-| `recurso_ordinario` | 328 | Access via the ordinary appeal to the Court. |
-| *(null)* | 2,192 | Avenue not detected / not applicable. |
+| `recurso_extraordinario` | 3,382 | Access via the federal extraordinary appeal (REX, Art. 14 Law 48). |
+| `recurso_ordinario` | 327 | Access via the ordinary appeal to the Court. |
+| *(null)* | 2,185 | Avenue not detected / not applicable. |
 
 ### `multi_recurso` {#multi_recurso}
 
 | Value | N | Description |
 |---|---|---|
-| `no` | 5,530 | A single recourse is resolved. |
-| `si` | 360 | More than one recourse is resolved jointly. |
+| `no` | 5,533 | A single recourse is resolved. |
+| `si` | 361 | More than one recourse is resolved jointly. |
 
 ### `causa_inadmisibilidad` {#causa_inadmisibilidad}
 
@@ -326,10 +361,10 @@ Specific ground for inadmissibility. Derived in the recourse layer (`clasificado
 
 | Value | N | Description |
 |---|---|---|
-| `INADMISIBLE_SIN_CAUSAL_EXPLICITA` | 466 | Inadmissibility declared without a canonical ground detectable in the text (discretionary/silent residual). |
-| `ART_280` | 229 | Rejected under Art. 280 CPCCN (discretionary certiorari). |
-| `INADMISIBLE_REMITE_DICTAMEN` | 165 | Inadmissibility resolved by reference to the Procurador General's *dictamen*. |
-| `CUESTION_ABSTRACTA` | 92 | Rejected because the question became moot. Restricted to genuine mootness: cases that also decide the merits are recorded as `admite`. |
+| `INADMISIBLE_SIN_CAUSAL_EXPLICITA` | 467 | Inadmissibility declared without a canonical ground detectable in the text (discretionary/silent residual). |
+| `ART_280` | 231 | Rejected under Art. 280 CPCCN (discretionary certiorari). |
+| `INADMISIBLE_REMITE_DICTAMEN` | 170 | Inadmissibility resolved by reference to the Procurador General's *dictamen*. |
+| `CUESTION_ABSTRACTA` | 93 | Rejected because the question became moot. Restricted to genuine mootness: cases that also decide the merits are recorded as `admite`. |
 | `ACORDADA_4_2007` | 51 | Rejected for non-compliance with the formal requirements of *Acordada* 4/2007. |
 | `FALTA_SENTENCIA_DEFINITIVA` | 43 | Rejected for absence of a final judgment (a prerequisite for the REX). |
 | `CADUCIDAD_INSTANCIA` | 13 | Dismissed for lapse of instance (treatise §2.6). |
@@ -339,27 +374,27 @@ Specific ground for inadmissibility. Derived in the recourse layer (`clasificado
 | `FUERA_DE_TERMINO` | 10 | Appeal filed out of time. |
 | `INTERPOSICION_INCORRECTA` | 2 | REX filed before the wrong forum (treatise §1.2.2). |
 | `DEPOSITO_PREVIO` | 2 | Rejected in connection with the prior-deposit requirement. |
-| *(null)* | 4,783 | `admisibilidad ≠ inadmite` (not applicable). |
+| *(null)* | 4,778 | `admisibilidad ≠ inadmite` (not applicable). |
 
 ### `outcome` (LEGACY — frozen) {#outcome}
 
-> **Frozen field.** Single-axis disposition under the pre-M26 schema, superseded by §4. Retained for reproducibility only. Distribution across 5,890 cases:
+> **Frozen field.** Single-axis disposition under the pre-M26 schema, superseded by §4. Retained for reproducibility only. Distribution across 5,894 cases:
 
 | Value | N | | Value | N |
 |---|---|---|---|---|
-| `hace_lugar` | 1,401 | | `nulidad_concesion` | 31 |
-| `competencia` | 925 | | `sin_dispositivo` | 26 |
-| `desestima` | 806 | | `inadmisible_280` | 24 |
-| `procedente` | 759 | | `inadmisible` | 23 |
-| `otro` | 362 | | `improcedente` | 23 |
-| `confirma` | 345 | | `caducidad` | 13 |
-| `revoca` | 340 | | `desierto` | 12 |
-| `rechaza` | 276 | | `desistimiento` | 10 |
-| *(null)* | 193 | | `cautelar` | 5 |
-| `abstracto` | 148 | | `inadmisible_acordada_4` | 5 |
+| `hace_lugar` | 1,402 | | `nulidad_concesion` | 32 |
+| `competencia` | 932 | | `sin_dispositivo` | 21 |
+| `desestima` | 809 | | `inadmisible_280` | 24 |
+| `procedente` | 757 | | `inadmisible` | 23 |
+| `otro` | 347 | | `improcedente` | 23 |
+| `confirma` | 350 | | `caducidad` | 15 |
+| `revoca` | 341 | | `desierto` | 12 |
+| `rechaza` | 284 | | `desistimiento` | 10 |
+| *(null)* | 191 | | `cautelar` | 5 |
+| `abstracto` | 149 | | `inadmisible_acordada_4` | 5 |
 | `deja_sin_efecto` | 82 | | | |
 | `nulidad` | 42 | | | |
-| `mal_concedido` | 39 | | | |
+| `mal_concedido` | 38 | | | |
 
 ### `tipo_cuestion_federal` {#tipo_cuestion_federal}
 
@@ -368,7 +403,7 @@ Specific ground for inadmissibility. Derived in the recourse layer (`clasificado
 | `cuestion_federal` | 1,302 | Ordinary federal question (*cuestión federal* in the strict sense). |
 | `arbitrariedad` | 883 | Arbitrariness doctrine invoked (*arbitrariedad de sentencia*). |
 | `mixto` | 677 | Both an ordinary federal question and arbitrariness. |
-| *(null)* | 3,028 | No federal-question type detected. |
+| *(null)* | 3,032 | No federal-question type detected. |
 
 ### `queja_resultado` {#queja_resultado}
 
@@ -376,12 +411,12 @@ Outcome of the *recurso de queja*, where `es_queja = 1`.
 
 | Value | N | | Value | N |
 |---|---|---|---|---|
-| *(null)* | 3,794 | | `abstracta` | 16 |
-| `hace_lugar` | 1,211 | | `suspendida` | 15 |
-| `desestima` | 524 | | `desistida` | 10 |
-| `procedente` | 173 | | `inadmisible` | 1 |
+| *(null)* | 3,776 | | `abstracta` | 17 |
+| `hace_lugar` | 1,217 | | `suspendida` | 15 |
+| `desestima` | 525 | | `desistida` | 10 |
+| `procedente` | 182 | | `inadmisible` | 1 |
 | `admisible` | 101 | | `nula` | 1 |
-| `agreguese` | 25 | | | |
+| `agreguese` | 30 | | | |
 | `rechaza` | 19 | | | |
 
 ### `voting_pattern` {#voting_pattern}
@@ -422,12 +457,12 @@ Classification of separate votes by their structural relationship to the majorit
 
 | Value | N | Description |
 |---|---|---|
-| `indeterminado` | 1,333 | Could not be classified into a defined category. |
-| `B` | 556 | *To be documented.* |
-| `D` | 534 | *To be documented.* |
+| `indeterminado` | 1,365 | Could not be classified into a defined category. |
+| `B` | 566 | *To be documented.* |
+| `D` | 575 | *To be documented.* |
 | `A` | 161 | *To be documented.* |
-| `C` | 114 | *To be documented.* |
-| `E` | 58 | *To be documented.* |
+| `C` | 116 | *To be documented.* |
+| `E` | 64 | *To be documented.* |
 
 ### `zona` (in `csjn_casos_zonas.csv`) {#zona}
 
@@ -450,40 +485,40 @@ Counts as of parser v43.3. `linea_ini` and `linea_fin` are offsets relative to t
 
 | Value | N | Description |
 |---|---|---|
-| `apelado_detectado` | 3,879 | Lower court identified from the *Tribunal de origen* marker. |
-| `sin_marcador` | 1,272 | No marker found; populated from other heuristics or left as free text. |
-| `originaria` | 546 | Original-jurisdiction case (no lower court). |
-| *(null)* | 193 | Not available. |
+| `apelado_detectado` | 3,869 | Lower court identified from the *Tribunal de origen* marker. |
+| `sin_marcador` | 1,238 | No marker found; populated from other heuristics or left as free text. |
+| `originaria` | 596 | Original-jurisdiction case (no lower court). |
+| *(null)* | 191 | Not available. |
 
 ### `status_localizacion` {#status_localizacion}
 
 | Value | N | Description |
 |---|---|---|
-| `ok` | 5,615 | Standard localization via page map and opening markers. |
-| `ok_sin_marcador_apertura` | 180 | Located without the standard opening marker. |
+| `ok` | 5,618 | Standard localization via page map and opening markers. |
+| `ok_sin_marcador_apertura` | 181 | Located without the standard opening marker. |
 | `ok_ancla_catalogo` | 27 | Located using the volume catalog as anchor. |
 | `fallo_cruza_archivos` | 27 | Ruling spans two source files. |
 | `ok_cortado_en_indice` | 19 | Case spans a page boundary indicated in the index. |
-| `ok_sin_marcador_apertura_ancla_catalogo` | 16 | Compound: no opening marker + catalog anchor. |
-| `ok_sin_marcador_apertura_ancla_vistos` | 5 | Compound: no opening marker + *vistos* anchor. |
+| `ok_sin_marcador_apertura_ancla_catalogo` | 17 | Compound: no opening marker + catalog anchor. |
+| `ok_sin_marcador_apertura_ancla_vistos` | 4 | Compound: no opening marker + *vistos* anchor. |
 | `ok_ancla_vistos` | 1 | Located using the *vistos* clause as anchor. |
 
 ### `status_fin` {#status_fin}
 
 | Value | N | Description |
 |---|---|---|
-| `fin_extendido_pag_compartida` | 5,689 | End extended to accommodate a shared page with the next ruling. |
+| `fin_extendido_pag_compartida` | 5,695 | End extended to accommodate a shared page with the next ruling. |
 | `fin_por_firma_actual` | 115 | End determined by the ruling's own signature block. |
 | `fin_por_editorial` | 46 | End determined by the start of an editorial section. |
-| `fin_dentro_bloque` | 23 | End falls within the ruling's allocated block. |
+| `fin_dentro_bloque` | 21 | End falls within the ruling's allocated block. |
 | `fin_no_detectado` | 17 | End boundary could not be detected reliably. |
 
 ### `pista_fin` {#pista_fin}
 
 | Value | N | Description |
 |---|---|---|
-| `caratula_siguiente` | 5,196 | Next ruling's case caption found. |
-| `sumario_siguiente` | 339 | Next ruling's editorial summary found. |
+| `caratula_siguiente` | 5,203 | Next ruling's case caption found. |
+| `sumario_siguiente` | 336 | Next ruling's editorial summary found. |
 | `marcador_apertura_siguiente` | 177 | Next ruling's opening marker found. |
 | `firma_actual` | 115 | Current ruling's own signature block used. |
 | `editorial_siguiente` | 46 | Start of editorial content found. |
@@ -493,20 +528,23 @@ Counts as of parser v43.3. `linea_ini` and `linea_fin` are offsets relative to t
 
 > **Under active development.** Subject-matter is derived from `csjn_casos` and `csjn_casos_textos` by a standalone, deterministic, layered stage (`derivar_materia.py`), re-runnable without re-parsing. The classifiable universe excludes original-jurisdiction cases. Counts below are a snapshot.
 
-`materia_capa` (the confidence tier):
+`materia_capa` (how the case was classified; values renamed in M49, H210, from the earlier `capa1` / `capa2` / `pendiente_capa2` / `capa1_refinado`):
 
 | Value | N | Description |
 |---|---|---|
-| `capa1` | 2,307 | Derived from the specialized court of origin (`tribunal_origen` → fuero → materia). Highest precision. |
-| `capa2` | 1,508 | Derived from secondary signals: cited statutes, parties, case object, keywords, co-occurrence engine. |
-| `pendiente_capa2` | 1,163 | Not classifiable with available signals (no anchor or unresolved tie). |
-| `originaria` | 546 | Original-jurisdiction case (Art. 117). Terminal category, excluded from the coverage denominator. |
-| `no_aplica` | 193 | Editorial-summary entries. |
-| `capa1_refinado` | 159 | A `capa1` label overridden by a tax-authority signal (CA → `tributario`). |
+| `lectura_tribunal` | 2,301 | Derived from the specialized court of origin (`tribunal_origen` → fuero → materia). Highest precision. (Formerly `capa1`.) |
+| `lectura_texto` | 1,431 | Derived from the ruling's text: cited statutes, parties, case object, keywords, co-occurrence engine. (Formerly `capa2`.) |
+| `sin_clasificar` | 1,125 | Not classifiable with available signals (no anchor or unresolved tie). (Formerly `pendiente_capa2`.) |
+| `originaria` | 596 | Original-jurisdiction case (Art. 117). Terminal category, excluded from the coverage denominator. |
+| `no_aplica` | 191 | Editorial-summary entries. |
+| `lectura_tribunal_refinada` | 159 | A `lectura_tribunal` label overridden by a tax-authority signal (CA → `tributario`). (Formerly `capa1_refinado`.) |
+| `lectura_dictamen` | 77 | Derived from the Procuración's opinion (statutes and keywords), only for cases with no anchor in the ruling's own text. |
 | `sui_generis` | 8 | Impeachment juries and judicial councils. |
 | `residual` | 6 | Arbitral tribunals and OCR/anaphora artifacts. |
 
-`materia` values (when classified): `civil_comercial` (1,013), `contencioso_administrativo` (940), `penal` (686), `laboral` (457), `previsional` (357), `tributario` (350), `ambiental` (57), `constitucional` (36), `electoral` (29), `salud` (20), `consumo` (18), `cambiario` (8), `lesa_humanidad` (3); null (1,916).
+`materia` values (when classified): `civil_comercial` (999), `contencioso_administrativo` (933), `penal` (680), `laboral` (475), `previsional` (354), `tributario` (350), `ambiental` (58), `constitucional` (29), `electoral` (29), `consumo` (29), `salud` (18), `cambiario` (7), `lesa_humanidad` (3), `penal_tributario` (2), `penal_cambiario` (2); null (1,926).
+
+`materia_fuente` records the specific signal that fired (e.g. `regla:…` for the court-of-origin rule, `objeto(n)`, `norma`, `provincia:…`, `dictamen:norma:N`, `sin_ancla`). Its values are implementation labels, kept for auditability.
 
 ---
 
@@ -591,20 +629,21 @@ For analysts familiar with the U.S. Supreme Court Database, the recourse-layer a
 
 ## 12. Pipeline Methodology
 
-The dataset is produced by a staged Python pipeline:
+The dataset is produced by a staged Python pipeline (`scripts/pipeline/`; dependency graph and run order in `MAPA.md`):
 
 1. **`detectar_paginas.py`** — Reads the OCR-digitized markdown source files and builds a page map (`mapa_paginas.csv`).
-2. **`construir_catalogo.py`** — Parses the alphabetical party index to produce a catalog of expected cases (`catalogo.csv`).
+2. **`construir_catalogo.py`** — Parses the volume indexes to produce a catalog of expected cases (`catalogo.csv`, `secciones_indices.csv`), with a curated errata supplement (`_meta/catalogo_suplemento_editorial.csv`).
 3. **`cruzar_catalogo_y_mapa.py`** — Cross-references catalog and page map to produce a localization table (`fallos_localizados.csv`).
-4. **`parser.py`** (v22.0) — The main extraction engine. Detects case openings, extracts caption, date, judges, voting positions, and the full text of each structural zone. Produces `csjn_casos.csv`, `csjn_casos_votos.csv`, `csjn_casos_zonas.csv`, and `csjn_casos_textos.csv`.
-5. **Recourse-and-disposition deriver** — `derivar_recursos.py` plus the M26 classifiers (`clasificador_disposicion.py`, `clasificador_via.py`, `clasificador_admision.py`, `clasificador_causa.py`) produce `csjn_casos_recursos.csv`.
-6. **`derivar_materia.py`** — Standalone subject-matter derivation producing `csjn_casos_materia.csv`.
+4. **`parser.py`** (v43.3) — The main extraction engine. Detects case openings, extracts caption, date, judges (`_meta/jueces/jueces_csjn.csv`), voting positions, and the full text of each structural zone. Produces `csjn_casos.csv`, `csjn_casos_votos.csv`, `csjn_casos_zonas.csv`, `csjn_casos_textos.csv` and `csjn_casos_editorial.csv` (with `parser_editorial.py`).
+5. **`extraer_epilogos.py`** and **`extraer_normas.py`** — Epilogue text and cited statutes (`csjn_casos_epilogo.csv`, `csjn_casos_normas.csv`).
+6. **Derivers** — `derivar_recursos.py` plus the M26 classifiers (`clasificador_disposicion.py`, `clasificador_via.py`, `clasificador_admision.py`, `clasificador_causa.py`) produce `csjn_casos_recursos.csv`; `derivar_partes.py` produces `csjn_casos_partes.csv`; `derivar_materia.py` (with the vocabularies in `_meta/vocab_materia/`) produces `csjn_casos_materia.csv`.
+7. **`generar_manifiesto.py`** — Seals the outputs, inputs, corpus and vocabularies in `_manifest.json`.
 
-`parser_editorial.py` handles non-judicial editorial sections separately. `auditar_fallo.py` audits individual cases against the source text. Reliability validation lives in `scripts/validacion/` (`kappa_confiabilidad.py`).
+`correr_pipeline.py` runs steps 4–7 in order with version checks, a regression check against a frozen golden copy and the manifest verification. Steps 1–3 are run by hand when volumes are added. Reliability validation lives in `scripts/validacion/` (`kappa_sjconsulta.py`, `kappa_disposicion_via_sj.py`, `kappa_confiabilidad.py`).
 
 ### Versioning
 
-Pipeline scripts carry embedded `__version__` strings. This dataset was produced with **parser.py v22.0** and the M26 recourse layer. The full version history and bug registry are in the repository's `BITACORA.md` (session journal) and `DEUDA_TECNICA.md` (technical-debt and bug tracker).
+Pipeline scripts carry embedded `__version__` strings, recorded in `_manifest.json`. This dataset was produced with **parser.py v43.3**. The full version history and bug registry are in the repository's `BITACORA.md` (session journal), `CHANGELOG.md` and `DEUDA_TECNICA.md` (technical-debt and bug tracker).
 
 ---
 
@@ -612,7 +651,7 @@ Pipeline scripts carry embedded `__version__` strings. This dataset was produced
 
 **Source:** *Colección de Fallos de la Corte Suprema de Justicia de la Nación*, volumes 329–349 (excluding 335–336). Digitized versions available at [https://sjconsulta.csjn.gov.ar](https://sjconsulta.csjn.gov.ar).
 
-**Legal status of source material:** The rulings of the Argentine Supreme Court are official public documents and are not subject to copyright. The editorial summaries (*sumarios*) included in the *Colección de Fallos* are authored by the publisher and may be subject to separate copyright. The dataset labels these as `zona = "sumario"` and does not claim authorship over them.
+**Legal status of source material:** The rulings of the Argentine Supreme Court are official public documents and are not subject to copyright. The editorial summaries (*sumarios*) included in the *Colección de Fallos* are authored by the publisher and may be subject to separate copyright. They are part of the source volumes (`corpus/*.md`) distributed for reproducibility; the dataset does not claim authorship over them. `zona = "sumario"` does not reliably delimit them (see §11).
 
 **Dataset license:** CC-BY 4.0 International.
 **Code license:** MIT.
@@ -637,4 +676,4 @@ Pipeline scripts carry embedded `__version__` strings. This dataset was produced
 
 ---
 
-*Codebook version: 2.0 — Generated for corpus-csjn parser v22.0 (M26 recourse layer).*
+*Codebook version: 3.0 — corpus-csjn parser v43.3 (H224).*
