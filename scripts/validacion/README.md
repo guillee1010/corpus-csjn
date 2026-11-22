@@ -88,3 +88,9 @@ en el resultado (disiente si el por_ello dice "por mayoría"; concurre; sin_dete
 - **Paths:** `build_m20.py` y `validar_H120.py` hardcodean `HERE / <gold>`; con el move a
   `scripts/validacion/` hay que ajustarlos a `HERE / "golds" / <gold>`.
   `kappa_confiabilidad.py` no se ve afectado (usa `--gold`).
+
+### `kappa_disposicion_via_sj.py` *(H224, M66)*
+κ de Cohen con IC 95% bootstrap de `disposicion`, `via_recurso` y `es_queja` (`csjn_casos_recursos.csv`)
+contra `sentido` y `tipo_recurso` de sjconsulta. Lee `casos_sjconsulta.csv` del cache local (sin datos de
+funcionarios). Las tablas de equivalencia están al principio del script y son decisión del operador.
+Salidas `output/validacion/kappa_disposicion_via_sj.csv` y `kappa_disposicion_via_sj_matriz.csv`.
