@@ -2,6 +2,17 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H225 (2026-11-22)
+
+- `parser.py` v42.3→43.0 (U1, B177, MAJOR, vocabulario de `posicion`): `parse_firma` lee el grupo 2 de `RE_CALIFICADOR_FIRMA` y publica "en disidencia parcial"; `has_disid` pasa a `startswith("en disidencia")`. 237 posiciones en 152 fallos; `voting_pattern` y `n_disidencias` sin movimiento. Solo vía firma; headers para B180 (b).
+- `parser.py` v43.0→43.1 (U2, B178): "por su voto" → "según su voto" en `parse_firma`. 8 posiciones en 5 fallos; `voting_pattern` sin movimiento.
+- `output/parser/csjn_casos.csv`: 5894 filas (sin delta); 157 celdas `posiciones` (152 U1 + 5 U2). vp sin cambio (3513 / 758 / 1120 / 304 / 8).
+- `output/parser/csjn_casos_votos.csv`: 27.938 filas (sin delta); 245 celdas `posicion` (237 U1 + 8 U2). Conteos: mayoría 24.107, según su voto 1563→1571, en disidencia 2260→2023, en disidencia parcial 0→237.
+- `csjn_casos_textos.csv`, `csjn_casos_zonas.csv`, `csjn_casos_editorial.csv` y los 5 derivados: byte-idénticos.
+- Golden + `_manifest.json`: re-sellados en disco local del operador (v43.1; casos sha f3b470ffc570…, votos 62d5292ff197…), invariante golden==producción [CLEAN], manifest [CLEAN] 65.
+- `CODEBOOK.md`: vocabulario de `posiciones` y tabla de `posicion` (la tabla vigente estaba desactualizada respecto de v42.3).
+- `scripts/diagnostico/H225/` (gitignoreado, entregado como archivos): `harness_ab.py` (de H223, sin cambios), `superficie_u1_b177.py`, `superficie_u2_b178.py`, `parche_u1.py`, `parche_u2.py`, superficies y flip-sets CSV, `INFORME_H225.md`.
+
 ## H223 (2026-11-21)
 
 - `parser.py` v42.1→42.2 (U1, B019): `_es_continuacion_firma(lines, k)` aplicado una vez en `procesar_archivo` sobre el fin de `detectar_fin_real` (un renglón, sin pasar el techo); techo extraído verbatim a `_limite_adelante_fin_real`. 40 casos: `linea_fin_real` +1; `n_jueces` +1 en 38; `voting_pattern` 338_p1060 unanime→segun_su_voto; `is_full_bench` en 16 (aritmética). 0 fuera del set.
