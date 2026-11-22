@@ -20311,3 +20311,40 @@ sj_anio.py v0.1.
   6. Hx — B183, solo junto con M57.
 
 **Commits:** 2 (DEUDA H222 + BITACORA H222; BITACORA H222-05).
+
+## H223 — Implementación FABLE-02: B019 y B181, familia de la firma (2026-11-21)
+
+**Objetivo:** reproducir en disco las dos superficies de la auditoría FABLE-01 (H222), implementar los fixes en `parser.py` en dos commits atómicos con flip-set sellado, sin tocar golden, manifest ni outputs canónicos.
+
+### H223-01 — Base y harness
+
+Clon de `main` en `d05b344` (parser v42.1), rama `h223-familia-firma`. Hallazgo de base: los 46 `.md` del corpus no coinciden con el sha256 del manifest porque el manifest hasheó la copia local con CRLF y el repo normaliza a LF (`.gitattributes`); el parser lee con `read_text` (newlines universales) y el brazo A reproduce lo publicado byte a byte, así que no afecta. Harness A/B (`harness_ab.py`) que llama a `parser.main()` real con `sys.argv` armado como `correr_pipeline.py`; brazo B = mismo `main()` con el parche en memoria (monkeypatch). Candado E0: brazo A igual a `output/parser/` y al golden por sha256 en casos, votos, textos, zonas y editorial. Corrida 61 s.
+
+### H223-02 — U1, B019 (parser v42.2)
+
+Superficie con predicados importados: 40 casos (22 `firma_actual`, 7 `sumario_siguiente`, 11 `caratula_siguiente`), igual al sandbox, todos a un renglón; corpus-wide 1571 pares, censo de 103 continuaciones distintas 100 % firma (incluye 112 de la familia B183). Decisión de diseño (operador, opción 2 de 3): helper en el caller, con el techo de la cascada extraído verbatim a `_limite_adelante_fin_real` para no duplicar la regla. Flip-set sellado 40, 0 fuera del set; `n_jueces` +1 en 38; sub-clase nueva firma-de-voto-separado (330_p963, 330_p1564) con panel ya completo; `voting_pattern` flip único 338_p1060; `is_full_bench` en 16 por `int(n_titulares == 5)`. El parser commiteado reproduce el brazo B byte a byte en los cinco CSV. `check_regresion.py` falla contra golden como corresponde y su diferencia completa es exactamente el flip-set.
+
+### H223-03 — U2, B181 (parser v42.3)
+
+Superficie: 12 casos, no 10 (+ 329_p500, 329_p5913, guion de corte; el sandbox buscó solo "disiden-"); U+00AD en `jueces_csjn.csv` 0. Dos variantes medidas. La diseñada en la DEUDA (deshifenar `firma_raw` entero) cura 11/12 y produce una regresión en 329_p4426 (zona `firma` falsa del zonificador alcanza `nj_dedup >= 2` en `panel_cprima` y desplaza a la firma real de 8 jueces) más 31 movimientos en `jueces_desconocidos`; descartada con dato. La implementada deshifena solo la ventana del calificador, con borrado del U+00AD pegado que `_unhyphenate` no cubre (334_p35). Flip-set sellado 12, 0 fuera del set, `voting_pattern` corregido en 5. Textos, zonas y editorial byte-idénticos.
+
+### H223-04 — Decisiones del operador y cierre
+
+PR #1 mergeado en `main` con los dos commits. U3 (B179, solo lectura) no se hizo: el operador juzgó que 4 testigos no justifican la superficie, y dejó como criterio que una superficie de menos de 10 casos no justifica un ciclo entero de harness y flip-set. Visto y no abierto: `test_*.py` de `scripts/tests/` importan `csjnv11`, inexistente; `check_allowlist_paths.py` falla en `main` por `DELTA_CODEBOOK_H211.md`, preexistente; apellidos de jueces partidos con guion en firma real, sin medir.
+
+### H223 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumario_con_link).
+- **Sin firma:** 8 / 5703 fallos (0,14 %), sin cambio.
+- **Votos:** 27.938 filas (+38).
+- **Voting patterns (fallos):** unánime 3513 (−6), según su voto 758 (+3), disidencia 1120 (+3), mixed 304, sin firma 8.
+
+**Outputs canónicos (corrida v42.3 en el clon; en el repo quedan los publicados hasta el regolden del operador):**
+- `output/parser/csjn_casos.csv` — 5894 filas.
+- `output/parser/csjn_casos_votos.csv` — 27.938 filas.
+- `output/parser/csjn_casos_zonas.csv` — 138.062 segmentos.
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones.
+
+**Scripts creados:** `scripts/diagnostico/H223/` (gitignoreado, entregados como archivos) — `harness_ab.py`, `superficie_u1_b019.py`, `superficie_u2_b181.py`, `parche_u1.py`, `parche_u2.py`, `parche_u2b.py`, `informe_u1.md`, `informe_u2.md`, `adjudicacion_u1.csv`, `adjudicacion_u2.csv`, flip-sets y baselines.
+
+**Commits:** 3 (parser U1 · parser U2 · DEUDA + CHANGELOG + BITACORA H223). Pendiente del operador: regolden + manifest + M55 (commit de outputs + golden + manifest).

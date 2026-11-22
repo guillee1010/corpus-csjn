@@ -2,6 +2,16 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H223 (2026-11-21)
+
+- `parser.py` v42.1→42.2 (U1, B019): `_es_continuacion_firma(lines, k)` aplicado una vez en `procesar_archivo` sobre el fin de `detectar_fin_real` (un renglón, sin pasar el techo); techo extraído verbatim a `_limite_adelante_fin_real`. 40 casos: `linea_fin_real` +1; `n_jueces` +1 en 38; `voting_pattern` 338_p1060 unanime→segun_su_voto; `is_full_bench` en 16 (aritmética). 0 fuera del set.
+- `parser.py` v42.2→42.3 (U2, B181): `RE_CALIFICADOR_FIRMA` admite `(su|mi)` y puntuación antes del cierre; `_normalizar_ventana_calificador` (`_unhyphenate` + borrado de U+00AD pegado) solo sobre la ventana del calificador de `parse_firma`. 12 casos: `posiciones` 12, `voting_pattern` 5 (329_p500, 329_p928, 331_p866, 334_p35, 343_p1800). 0 fuera del set. `firma_raw` sin cambio.
+- `output/parser/csjn_casos.csv`: 5894 filas (sin delta); 52 filas movidas (40 U1 + 12 U2). vp unánime 3519→3513, según su voto 755→758, disidencia 1117→1120.
+- `output/parser/csjn_casos_votos.csv`: 27.900 → 27.938 filas (+38, U1).
+- `output/parser/csjn_casos_textos.csv`: 38 `firma_raw` (U1). `csjn_casos_zonas.csv`: 40 casos (U1). `csjn_casos_editorial.csv`: sin cambio.
+- Golden + `_manifest.json`: re-sello pendiente en disco local del operador (`correr_pipeline.py --consciente` / `--regolden`); los derivers se re-corren en esa corrida.
+- `scripts/diagnostico/H223/` (gitignoreado, entregado como archivos): `harness_ab.py`, `superficie_u1_b019.py`, `superficie_u2_b181.py`, `parche_u1.py`, `parche_u2.py` (descartado), `parche_u2b.py`, flip-sets, baselines, `informe_u1.md`, `informe_u2.md`, `adjudicacion_u{1,2}.csv`.
+
 ## H219 (2026-07-27)
 
 - `parser.py` v42.0→42.1: `extraer_caratula_v1` cierra por CLASE PAR de la comilla de apertura + guard de captura no vacía + fallback `_extraer_caratula_v1_legado` (comportamiento viejo verbatim) + `_acotar_primera_causa` gateada (acumulados → causa líder). 73 casos (58 reparaciones + 15 Z).
