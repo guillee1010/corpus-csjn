@@ -9,6 +9,4 @@ caso_id_canonico,tomo,rama,n_disidencias,n_votos_svoto,voting_pattern,posiciones
 330_p1309,330,V,0,1,unanime,"{""Lorenzetti"": ""mayoria"", ""Highton de Nolasco"": ""mayoria"", ""Fayt"": ""mayoria"", ""Petracchi"": ""mayoria"", ""Maqueda"": ""mayoria"", ""Argibay"": ""mayoria""}"
 330_p2655,330,D,1,0,segun_su_voto,"{""Lorenzetti"": ""según su voto"", ""Highton de Nolasco"": ""mayoria"", ""Petracchi"": ""mayoria"", ""Maqueda"": ""mayoria"", ""Zaffaroni"": ""según su voto"", ""Argibay"": ""mayoria""}"
 330_p4263,330,V,0,1,unanime,"{""Lorenzetti"": ""mayoria"", ""Highton de Nolasco"": ""mayoria"", ""Petracchi"": ""mayoria"", ""Maqueda"": ""mayoria"", ""Zaffaroni"": ""mayoria""}"
-339_p323,339,D,1,1,segun_su_voto,"{""Leal de Ibarra (conjuez)"": ""mayoria"", ""Ferro (conjuez)"": ""según su voto""}"
 347_p520,347,V,0,1,unanime,"{""Rosatti"": ""mayoria""}"
-348_p728,348,V,2,2,disidencia,"{""Rosatti"": ""mayoria"", ""Rosenkrantz"": ""en disidencia"", ""Lorenzetti"": ""en disidencia""}"
