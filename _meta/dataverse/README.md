@@ -1,6 +1,6 @@
 # corpus-csjn: A Structured Dataset of Argentine Supreme Court Rulings, Volumes 329–349 (2006–2026)
 
-**Version 4.0** · parser v43.3 · November 2026
+**Version 4.0** · parser v44.0 · November 2026
 **Author:** Guillermo Rubinetti
 **DOI:** [10.7910/DVN/TJTVKW](https://doi.org/10.7910/DVN/TJTVKW) · **License:** data CC-BY 4.0, code MIT
 **Source code and history:** <https://github.com/guillee1010/corpus-csjn>
@@ -27,16 +27,16 @@ The full variable dictionary, coded values, validation and known limitations are
 |---|---|---|
 | `csjn_casos.csv` | 5,894 | Case: caption, date, panel, voting pattern, positions, merit, *queja*. |
 | `csjn_casos_recursos.csv` | 5,894 | Case: disposition, merit review, admissibility and its cause, appeal type, party winning, remand. **Use this layer for outcomes.** |
-| `csjn_casos_votos.csv` | 27,938 | Justice × case: position and separate-opinion text. |
+| `csjn_casos_votos.csv` | 28,044 | Justice × case: position and separate-opinion text. |
 | `csjn_casos_materia.csv` | 5,894 | Case: inferred subject matter (under development). |
 | `csjn_casos_partes.csv` | 5,894 | Case: appellant and respondent with procedural role. |
-| `csjn_casos_normas.csv` | 13,911 | Case × statute × scope: statutes cited ("ley N"). |
+| `csjn_casos_normas.csv` | 13,958 | Case × statute × scope: statutes cited ("ley N"). |
 | `csjn_casos_textos.csv` | 5,894 | Case: full text of the reasoning, operative clause, signature block and the Procuración's opinion. |
-| `csjn_casos_zonas.csv` | 138,062 | Text zone × case, with line ranges. |
-| `csjn_casos_epilogo.csv` | 5,703 | Ruling: editorial epilogue text. |
+| `csjn_casos_zonas.csv` | 138,591 | Text zone × case, with line ranges. |
+| `csjn_casos_epilogo.csv` | 5,732 | Ruling: editorial epilogue text. |
 | `csjn_casos_editorial.csv` | 152 | Editorial section of each volume (indexes, *acordadas*). |
 
-All files are UTF-8, comma-separated, keyed on `caso_id_canonico` (`{volume}_p{first page}`, e.g. `344_p174`). Of the 5,894 entries, 5,703 are full rulings and 191 are editorial summaries; filter on `tipo_entrada = 'fallo'` for ruling-level analysis.
+All files are UTF-8, comma-separated, keyed on `caso_id_canonico` (`{volume}_p{first page}`, e.g. `344_p174`). Of the 5,894 entries, 5,732 are full rulings and 162 are editorial summaries; filter on `tipo_entrada = 'fallo'` for ruling-level analysis.
 
 ## Validation
 
@@ -50,7 +50,7 @@ The main validation is a census against the Court's own summaries database (sjco
 | *Queja* (yes / no) | 2,549 | 93.7% | **0.868** |
 | Appeal type | 2,549 | 91.5% | 0.606 |
 
-The lower value for appeal type comes from rulings where the pipeline finds no appeal type and SJ records one, not from confusion between types. Party winning and remand have no SJ counterpart; for them, the earlier hand-coded sample of 300 rulings applies (κ 0.804 and 0.458, the latter not reportable). Details in CODEBOOK §9.
+The position agreement compares the justices present in both sources; 212 of the 2,480 rulings have different sets of justices, which this κ does not count as disagreement (CODEBOOK §9.1). Figures computed at parser v43.3. The lower value for appeal type comes from rulings where the pipeline finds no appeal type and SJ records one, not from confusion between types. Party winning and remand have no SJ counterpart; for them, the earlier hand-coded sample of 300 rulings applies (κ 0.804 and 0.458, the latter not reportable). Details in CODEBOOK §9.
 
 ## Quick start
 
@@ -79,6 +79,9 @@ Two caveats for checking hashes. Harvard Dataverse converts CSV files to its tab
 The full list is in CODEBOOK §11. The main ones are:
 
 - Volumes 335–336 are not included.
+- Six printed rulings of 2022–2024 are not indexed in the volume catalog and have no row of their own (CODEBOOK §11, item 16).
+- `is_full_bench` means five titular justices signed; it equals a full bench only in volumes 339–344 (CODEBOOK §3).
+- The text of a separate vote signed jointly by several justices is attached to one of them only (CODEBOOK §6).
 - Positions that a justice states only inside the common opinion (for example "se remite a su disidencia" in a precedent) are not coded; a lower-bound review finds 56 such positions in 38 rulings.
 - `materia` is incomplete (32.7% of entries unclassified) and its taxonomy is not final.
 - The appeal type is missing for part of the rulings (see Validation).

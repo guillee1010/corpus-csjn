@@ -31,16 +31,16 @@ El objetivo metodológico es producir el equivalente argentino del [Supreme Cour
 
 ## Estado actual
 
-- **Versión del parser:** v43.3
+- **Versión del parser:** v44.0
 - **Universo procesable:** 19 tomos (329–349, excluidos 335 y 336 por OCR no legible)
-- **Casos:** 5.894 (5.703 fallos + 157 sumarios con link a fallo + 34 sumarios editoriales)
-- **Votos individuales:** 27.938
-- **Zonas de texto:** 138.062
+- **Casos:** 5.894 (5.732 fallos + 128 sumarios con link a fallo + 34 sumarios editoriales)
+- **Votos individuales:** 28.044
+- **Zonas de texto:** 138.591
 - **Zonas editoriales:** 152
-- **Normas citadas:** 13.911
-- **Manifiesto:** `_manifest.json` sella 65 artefactos `[CLEAN]` (regolden H226)
+- **Normas citadas:** 13.958
+- **Manifiesto:** `_manifest.json` sella 65 artefactos `[CLEAN]` (regolden H227, corrida local del operador)
 
-Versiones de la cadena: parser `43.3` · extraer_epilogos `0.4` · extraer_normas `1.1` · derivar_partes `0.18` · derivar_materia `4.1` · derivar_recursos `0.6` · clasificador_disposicion `1.18` · clasificador_via `0.1` · clasificador_admision `0.2` · clasificador_causa `0.5` · generar_manifiesto `1.9` · correr_pipeline `1.1`.
+Versiones de la cadena: parser `44.0` · extraer_epilogos `0.4` · extraer_normas `1.1` · derivar_partes `0.18` · derivar_materia `4.1` · derivar_recursos `0.6` · clasificador_disposicion `1.18` · clasificador_via `0.1` · clasificador_admision `0.2` · clasificador_causa `0.5` · generar_manifiesto `1.9` · correr_pipeline `1.1`.
 
 ### Validación
 
@@ -54,57 +54,57 @@ La validación principal es un censo contra la base de sumarios de la Secretarí
 | Queja | 2.549 | 93,7 % | **0,868** |
 | Vía del recurso | 2.549 | 91,5 % | 0,606 |
 
-La vía tiene una brecha de detección (186 fallos sin vía en el corpus que SJ registra como extraordinario u ordinario). Parte ganadora y reenvío no tienen contraparte en SJ; para esas dos variables vale la validación manual previa sobre una muestra de 300 fallos (κ 0,804 y 0,458, este último no reportable; CODEBOOK §9).
+El acuerdo de posiciones compara los jueces presentes en las dos fuentes; 212 de los 2.480 fallos tienen conjuntos de jueces distintos, que este κ no cuenta como desacuerdo (CODEBOOK §9.1, M69). Cifras sobre parser v43.3. La vía tiene una brecha de detección (186 fallos sin vía en el corpus que SJ registra como extraordinario u ordinario). Parte ganadora y reenvío no tienen contraparte en SJ; para esas dos variables vale la validación manual previa sobre una muestra de 300 fallos (κ 0,804 y 0,458, este último no reportable; CODEBOOK §9).
 
 ### Eje de mérito (SCDB-equivalente)
 
 Tras el cierre de M39 (paso 3, H178), `is_merit_decision` se deriva del gate del clasificador (`es_revision_fondo`) como fuente única para todo el corpus; la divergencia entre ambas capas es **0 por construcción**.
 
-`is_merit_decision = 1`: **2.969** (50,4 %) · `= 0`: 2.925 (49,6 %), idéntico a `es_revision_fondo = si`: 2.969.
-`is_originaria = 1`: **596** (10,1 %).
+`is_merit_decision = 1`: **2.981** (50,6 %) · `= 0`: 2.913 (49,4 %), idéntico a `es_revision_fondo = si`: 2.981.
+`is_originaria = 1`: **598** (10,1 %).
 
 ### Disposición (`disposicion`), eje de mérito canónico
 
 Derivado por `derivar_recursos` / `clasificador_disposicion`. Distribución sobre los 5.894 casos (11 valores):
 
-`no_fondo` 1838 · `deja_sin_efecto` 1366 · `revoca` 910 · `no_revision_competencia` 590 · `confirma` 541 · `no_revision_procesal` 356 · `no_revision_demanda` 181 · `nulidad` 57 · `nulidad_concesion` 42 · `grant_remand_implicito` 9 · `modifica` 4.
+`no_fondo` 1821 · `deja_sin_efecto` 1373 · `revoca` 914 · `no_revision_competencia` 592 · `confirma` 542 · `no_revision_procesal` 359 · `no_revision_demanda` 181 · `nulidad` 57 · `nulidad_concesion` 42 · `grant_remand_implicito` 9 · `modifica` 4.
 
 ### Admisibilidad y gatekeeping
 
-`admisibilidad`: `admite` 2888 (49,0 %) · `sin_marcador` 1320 (22,4 %) · `inadmite` 1116 (18,9 %) · `no_aplica` 570 (9,7 %).
+`admisibilidad`: `admite` 2900 (49,2 %) · `sin_marcador` 1295 (22,0 %) · `inadmite` 1127 (19,1 %) · `no_aplica` 572 (9,7 %).
 
 `causa_inadmisibilidad` separa el **gate** (por qué la Corte no entra al fondo) de la **acción** (`disposicion`). Vocabulario controlado, anclado al recurso efectivamente decidido. Distribución (13 valores):
 
-`INADMISIBLE_SIN_CAUSAL_EXPLICITA` 467 (gate sin causal nominada) · `ART_280` 231 · `INADMISIBLE_REMITE_DICTAMEN` 170 · `CUESTION_ABSTRACTA` 93 · `ACORDADA_4_2007` 51 · `FALTA_SENTENCIA_DEFINITIVA` 43 · `CADUCIDAD_INSTANCIA` 13 · `RESOLUCION_NO_RECURRIBLE` 12 · `FALTA_FUNDAMENTACION_AUTONOMA` 12 · `DESISTIMIENTO` 10 · `FUERA_DE_TERMINO` 10 · `INTERPOSICION_INCORRECTA` 2 · `DEPOSITO_PREVIO` 2 · vacío 4.778 (no-gate / fondo).
+`INADMISIBLE_SIN_CAUSAL_EXPLICITA` 476 (gate sin causal nominada) · `ART_280` 232 · `INADMISIBLE_REMITE_DICTAMEN` 170 · `CUESTION_ABSTRACTA` 94 · `ACORDADA_4_2007` 51 · `FALTA_SENTENCIA_DEFINITIVA` 43 · `CADUCIDAD_INSTANCIA` 13 · `RESOLUCION_NO_RECURRIBLE` 12 · `FALTA_FUNDAMENTACION_AUTONOMA` 12 · `DESISTIMIENTO` 10 · `FUERA_DE_TERMINO` 10 · `INTERPOSICION_INCORRECTA` 2 · `DEPOSITO_PREVIO` 2.
 
-Invariante (post-M26): `causa_inadmisibilidad != "" ⇔ admisibilidad = inadmite` (**1.116** casos, 18,9 %; se cumple en los 5.894).
+Invariante (post-M26): `causa_inadmisibilidad != "" ⇔ admisibilidad = inadmite` (**1.127** casos, 19,1 %; se cumple en los 5.894).
 
 ### Vía y queja
 
-`via_recurso`: `recurso_extraordinario` 3382 (57,4 %) · `recurso_ordinario` 327 (5,5 %) · vacío 2185.
-`es_queja = 1`: 2.301 (39,0 %). `queja_resultado` (sobre las quejas): `hace_lugar` 1217 · `desestima` 525 · `procedente` 182 · `admisible` 101 · `agreguese` 30 · resto ≤ 19 · vacío 183.
+`via_recurso`: `recurso_extraordinario` 3399 (57,7 %) · `recurso_ordinario` 327 (5,5 %) · vacío 2168.
+`es_queja = 1`: 2.313 (39,2 %). `queja_resultado` (sobre las quejas): `hace_lugar` 1224 · `desestima` 528 · `procedente` 182 · `admisible` 101 · `agreguese` 30 · resto ≤ 19 · vacío 184.
 
 ### Materia (inferida)
 
 `derivar_materia` (lectura del tribunal de origen, del texto y del dictamen, más originarias). 15 valores:
 
-`civil_comercial` 999 · `contencioso_administrativo` 933 · `penal` 680 · `laboral` 475 · `previsional` 354 · `tributario` 350 · `ambiental` 58 · `constitucional` 29 · `electoral` 29 · `consumo` 29 · `salud` 18 · `cambiario` 7 · `lesa_humanidad` 3 · `penal_tributario` 2 · `penal_cambiario` 2 · vacío 1.926 (32,7 %; `sin_clasificar` 1.125, `no_aplica` 191).
+`civil_comercial` 1001 · `contencioso_administrativo` 939 · `penal` 684 · `laboral` 479 · `previsional` 354 · `tributario` 353 · `ambiental` 59 · `constitucional` 30 · `electoral` 29 · `consumo` 29 · `salud` 19 · `cambiario` 7 · `lesa_humanidad` 3 · `penal_tributario` 2 · `penal_cambiario` 2 · vacío 1.904 (32,3 %; `sin_clasificar` 1.130, `no_aplica` 162).
 
 ### Partes (recurrente / recurrido)
 
-`derivar_partes` (deriva del epílogo + carátula). Rol del recurrente (10 valores): `actora` 590 · `demandada` 514 · `penal` 392 · `mp_fiscal` 89 · `por_derecho_propio` 44 · `codemandada` 35 · `querellante` 25 · `mp_defensa` 14 · `solo_letrado` 10 · `coactora` 7 · sin rol 4.174. Cobertura del epílogo (`csjn_casos_epilogo.csv`): `ok` 4.421 / 5.703 fallos (77,5 %).
+`derivar_partes` (deriva del epílogo + carátula). Rol del recurrente (10 valores): `actora` 595 · `demandada` 518 · `penal` 395 · `mp_fiscal` 90 · `por_derecho_propio` 45 · `codemandada` 35 · `querellante` 25 · `mp_defensa` 14 · `solo_letrado` 10 · `coactora` 7 · sin rol 4.160. Cobertura del epílogo (`csjn_casos_epilogo.csv`): `ok` 4.445 / 5.732 fallos (77,5 %).
 
 ### Outcome (legacy)
 
 `outcome` es el campo plano heredado, **congelado como legacy** tras el refactor M26 (los ejes canónicos son `disposicion` + `admisibilidad` + `causa_inadmisibilidad`). Se conserva por continuidad. Distribución (22 valores):
 
-`hace_lugar` 1402 · `competencia` 932 · `desestima` 809 · `procedente` 757 · `confirma` 350 · `otro` 347 · `revoca` 341 · `rechaza` 284 · `abstracto` 149 · `deja_sin_efecto` 82 · `nulidad` 42 · `mal_concedido` 38 · `nulidad_concesion` 32 · `inadmisible_280` 24 · `inadmisible` 23 · `improcedente` 23 · `sin_dispositivo` 21 · `caducidad` 15 · `desierto` 12 · `desistimiento` 10 · `cautelar` 5 · `inadmisible_acordada_4` 5 (+ 191 sumarios sin dispositivo propio).
+`hace_lugar` 1409 · `competencia` 936 · `desestima` 818 · `procedente` 760 · `confirma` 351 · `otro` 350 · `revoca` 342 · `rechaza` 284 · `abstracto` 150 · `deja_sin_efecto` 82 · `nulidad` 42 · `mal_concedido` 38 · `nulidad_concesion` 32 · `inadmisible_280` 24 · `inadmisible` 23 · `improcedente` 23 · `sin_dispositivo` 21 · `caducidad` 15 · `desierto` 12 · `desistimiento` 10 · `cautelar` 5 · `inadmisible_acordada_4` 5.
 
 ### Voting pattern y posiciones
 
-`unanime` 3507 (59,5 %) · `disidencia` 1121 (19,0 %) · `segun_su_voto` 762 (12,9 %) · `mixed` 305 (5,2 %) · `sin_firma` 8 (+ 191 sumarios).
+`unanime` 3529 (59,9 %) · `disidencia` 1125 (19,1 %) · `segun_su_voto` 765 (13,0 %) · `mixed` 305 (5,2 %) · `sin_firma` 8 (+ 162 sumarios).
 
-`posicion` (votos): `mayoria` 24.096 · `según su voto` 1.579 · `en disidencia` 2.026 · `en disidencia parcial` 237. Fuente, la firma impresa completada por el encabezado del voto (desde v43.3). Las posiciones que un juez expresa solo dentro del voto común no se codifican (B179, CODEBOOK §11).
+`posicion` (votos): `mayoria` 24.194 · `según su voto` 1.582 · `en disidencia` 2.031 · `en disidencia parcial` 237. Fuente, la firma impresa completada por el encabezado del voto (desde v43.3). Las posiciones que un juez expresa solo dentro del voto común no se codifican (B179, CODEBOOK §11).
 
 ## Estructura del repositorio
 
@@ -119,7 +119,7 @@ corpus-csjn/
 ├── scripts/
 │   ├── pipeline/                      ← pipeline productivo + orquestador + sello
 │   │   ├── correr_pipeline.py         ← orquestador de la cadena (v1.1)
-│   │   ├── parser.py                  ← parser principal (v43.3)
+│   │   ├── parser.py                  ← parser principal (v44.0)
 │   │   ├── parser_editorial.py        ← zonas editoriales (librería)
 │   │   ├── construir_catalogo.py      ← catálogo (etapa de localización)
 │   │   ├── detectar_paginas.py        ← mapa de páginas (etapa de localización)

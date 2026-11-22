@@ -20563,3 +20563,49 @@ Corrección del operador: el README del repo citaba un título viejo ("Diseño i
 ### H224-24 — Numeración de Dataverse: la próxima es 4.0
 
 El log de la corrida 44995355112 mostró que la última versión publicada en Dataverse es la 3.0 (60 archivos: la subida de H097, parser v18.15, con BITACORA, CHANGELOG, DEUDA y scripts en la raíz, `parser/_manifest.json`, `readme_output_parser.md` y una planilla de `archivo/snapshots_ad_hoc/`), no la "2.0" con que la nombró H097. El operador borró los borradores anteriores. Al publicar como versión mayor, Dataverse asigna 4.0; el README del dataset pasa a "Version 4.0" y "Changes since version 3.0", y la cita a "Version 4.0". El borrador debe re-subirse para llevar el README corregido. La versión 3.0 publicada queda como está (no se puede modificar).
+
+## H227 — Auditoría FABLE-03 de lo implementado después de FABLE-01, e implementación de B191 (2026-11-22)
+
+**Objetivo:** auditoría externa de solo lectura (prompt `PROMPT_H227_FABLE-03_auditoria_post_firma.md`) de H223, H225, H226 y H224 sobre la punta de `main`, y después, a pedido del operador, PoC e implementación del hallazgo de mayor daño (N3 → B191).
+
+### H227-01 — Base y candados (U0)
+
+Clon de `main` en `d1ec353` (H224-24), parser v43.3, sin commits posteriores. E0 limpio: `parser.main()` real (argv como `correr_pipeline.py`) reproduce por sha256 los 5 CSV de `output/parser/` y el golden. Cadena reconstruida: el parser de cada commit (`aa4c742`, `185728d`, `1fa85b4`, `aa69ad9`, `3513e87`, `6948d96`, `54be8f7`) corrido sobre el mismo corpus reproduce byte a byte lo que dejó cada regolden (`aa4c742`, `66c7bf3`, `eade476`, `31baab1`). Constancia: los cuatro manifests registran `dirty: true` y el commit del merge anterior, no el del regolden.
+
+### H227-02 — Flip-sets reales contra declarados (U1)
+
+Diff keyed-by-caso (y caso + juez en votos) entre versiones consecutivas: B019 40 casos (`n_jueces` +1 en 38, `voting_pattern` 1), B181 12 (vp 5), B177 152 celdas / 237 jueces, B178 5 / 8, B184 8 celdas en 2 casos, B180 (b) 10 casos / 11 jueces (vp 7), iguales a lo declarado. Acumulado v42.1 → v43.3: 540 celdas de casos, 595 de votos, 38 de textos, 0 fuera de algún flip-set, 0 tocadas por dos fixes. 53 adjudicaciones leídas en el tomo (B019 muestra de 10 con semilla 227 más residual y sub-clase, B181 12, B177 10 con semilla 227, B178 5, B184 2, B180 (b) 10): 51 correcciones verdaderas, 330_p4936 contradicción del tomo (header conjunto Lorenzetti y Argibay, firma y voto solo de Argibay), 348_p708 acierto por la razón equivocada; 330_p452 y 330_p472 rebote legítimo. Hallazgo lateral: de las altas de zonas de B019, 14 son segmentos `sumario` de una línea (B197).
+
+### H227-03 — Superficies de FABLE-01 sobre v43.3 (U2)
+
+Sonda propia (`sonda_h227.py`, grabadoras sobre `procesar_archivo`, `construir_bloque_desde_localizacion`, `detectar_votos_disidencias`, `detectar_juez_en_voto_header`, `_subir_posiciones_desde_headers`; E0 de la sonda limpio, 0 errores de grabadora). B019: predicado del fix 0 pendientes; voto fuera del bloque en 7 fallos, no 2 (B196). B181: 27.940 ventanas de `parse_firma`, sin variante sin leer salvo los 3 "(SU VOTO)" de B185; 4601 paréntesis de zona firma, ninguna variante nueva. B177/B178: 0 por la firma; 13 posiciones con "Disidencia parcial" solo en el header, publicadas "en disidencia". M68: 13 = 13, PASS; los 13 leídos, 329_p3148 no es FP (panel publicado incorrecto, B169); por marcador, 37 fuera de la diagonal en 32 casos. B179: 81 matches / 53 fallos reproducidos, muestra de 8 contrastada con el tomo, 8 de 8.
+
+### H227-04 — Código de los fixes, abiertos y hallazgos nuevos (U3, U4, U5)
+
+U3: radio de cada cambio leído; conviven tres reglas de calificador (`RE_CALIFICADOR`, `RE_CALIFICADOR_FIRMA` y el grupo de `_RE_FIRMA_COMPLETA`, este sin "mi voto" ni "por su voto", 0 casos hoy); "por su voto" muerto en `_voting_pattern_de_jueces`; guarda 3 de B180 (b) vacua por construcción; B180 (b) ciego a co-firmantes de headers conjuntos. U4, cardinalidades: B182 1, B183 513 líneas sin daño publicado, B185 sin superficie pendiente, B186 refinado 31, B187 3 más 348_p708, B188 15/13, B189 1, B190 10.701 líneas `sumario` después de la apertura en 262 fallos. U5, invariantes: `voting_pattern` contra la regla 1 diferencia (329_p2063, guard B087), `n_jueces`, posiciones contra votos y columnas replicadas 0; `is_full_bench` = `n_titulares == 5` sin diferencias pero solo equivale a banco completo en 339-344 (B156); 79 nombres de jueces en votos, sin variantes del mismo juez. Nuevos: N3 fallos impresos dentro de `sumario_con_link` (B191), N6 headers conjuntos (B193), N4 raya en apellido (B194), N5 calificador heredado (B195), N2 (B196), N1 (B197), N8 κ sobre intersección (M69). M67 recomputado igual al versionado; con el disidente parcial en la cabeza cambian 125 fallos (20 desde sin mayoría absoluta), sin decidir.
+
+### H227-05 — Paquete de Dataverse (U6)
+
+CODEBOOK 3.0 contra los CSV: §8 coincide (149 cifras); no coincidían 13 cifras en línea de recursos y `dictamen_presente`, `is_full_bench`, fechas nulas y "44 jueces". Lista de publicación (95) igual al manifest; sin datos de funcionarios ni cache. `catalogo.csv`, `secciones_indices.csv` y `fallos_localizados.csv` difieren del sha del manifest solo por CRLF.
+
+### H227-06 — B191: PoC, rama y PR (parser v44.0)
+
+Lectura de los 33 fallos absorbidos (`n3_adjudicacion_33.csv`): A 14 de la propia entrada, B 15 de una de dos carátulas, C 4 sin fila en el catálogo (B192). Mecanismo: la llamada (*) está en la entrada anterior en 20, dentro de la entrada en 13. PoC `poc_n3.py` (monkeypatch de `clasificar_tipo_entrada` sobre `parser.main()` real), tres vueltas corregidas con lectura hasta v0.3: flip-set exactamente A + B (29), C 0, 0 fuera del set. Implementación en la rama `h227-n3-sumario-link` (commit H227-N3: `_caratula_fallo_impreso`, `_fallo_propio_en_bloque`, parámetro `nombres_indice`), byte-idéntica al PoC; cadena completa `--consciente` en el clon con derivados solo en las 29; M68 13 = 13, M55 9 = 9. PR #5 mergeado por pedido del operador.
+
+### H227-07 — Corrida local del operador
+
+`git pull` a `a0a927f`. `correr_pipeline.py --consciente --ignorar-corpus-drift`: exit 3, [FAIL] en casos, textos, votos y zonas (el reporte posicional se corre por las filas nuevas), editorial [OK]. sha en disco iguales al clon en los 5 CSV (casos `771a81127c73`, textos `c7df8f08e109`, votos `9a9725a62bcf`, zonas `112189bd7787`, editorial `30a6da652e3a`); `tipo_entrada` fallo 5732 / sumario_con_link 128 / sumario_editorial 34; votos 28.044, epílogo 5732, normas 13.958. M68 13 = 13 PASS sobre 5732 fallos; M55 9 = 9. Constancia: un `fetch` previo disparó la limpieza automática de Git, que pidió confirmación por cada carpeta de `.git/objects` bloqueada por Windows; se resolvió con `GIT_ASK_YESNO=false`, sin efecto en el repo.
+
+### H227-08 — Documentación
+
+DEUDA (B191 cerrado, B192 a B197 y M69 nuevos, constancias en B019, B156, B180, B182, B183, B185, B186, B187, B188 y M68), CODEBOOK 3.1 (cifras recalculadas sobre v44.0 por script, notas de `is_full_bench`, votos conjuntos, κ sobre intersección y límites 16 a 19), README del repo y del dataset, CHANGELOG.
+
+### H227 — Estado final
+
+- **Corpus:** 5894 casos (5732 fallos + 128 sumario_con_link + 34 sumario_editorial).
+- **Votos:** 28.044 filas. **Zonas:** 138.591 segmentos.
+- **Pipeline:** parser v44.0 en `main`. Regolden y re-sello del manifest pendientes del operador al escribir este bloque.
+
+**Scripts creados:** `scripts/diagnostico/H227/` (gitignoreado, entregados como archivos): `correr_version.py`, `flipset.py`, `contencion.py`, `sonda_h227.py`, `h227_lib.py`, `ver.py`, `leer_firmas.py`, superficies `u2_*`, `u3_*`, `u4_*`, `u5_*`, `u6_*`, `n3_*`, `poc_n3.py`, `poc_n3_verificar.py`, `actualizar_codebook_v44.py`. Informe `informe_FABLE-03.docx` y `propuesta_agenda.md`, fuera del repo.
+
+**Commits:** parser (rama H227-N3) · merge PR #5 · documentación H227 · regolden del operador.
