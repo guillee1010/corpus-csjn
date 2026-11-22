@@ -4,7 +4,7 @@
 
 Pipeline de extracción y análisis de fallos de la Corte Suprema de Justicia de la Nación (CSJN), Argentina, tomos 329–349 (período 2006–2026).
 
-Producto base de la tesis de Maestría en Argumentación Jurídica (UBA), director Dr. Eugenio Sarrabayrouse: *"Diseño institucional y estrategia en la decisión judicial colegiada"*.
+Producto base de la tesis de Maestría en Argumentación Jurídica (UBA), director Dr. Eugenio Sarrabayrouse: *"Diseño institucional y coordinación judicial. Un análisis comparado de los mecanismos de formación de mayorías en la Corte Suprema argentina frente al modelo estadounidense"*.
 
 ## Dataset publicado
 

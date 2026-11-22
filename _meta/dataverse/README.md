@@ -5,7 +5,7 @@
 **DOI:** [10.7910/DVN/TJTVKW](https://doi.org/10.7910/DVN/TJTVKW) · **License:** data CC-BY 4.0, code MIT
 **Source code and history:** <https://github.com/guillee1010/corpus-csjn>
 
-A structured dataset of the rulings of the Argentine Supreme Court (*Corte Suprema de Justicia de la Nación*, CSJN) published in the official *Colección de Fallos*, volumes 329 to 349 (February 2006 to March 2026, excluding volumes 335–336). It is modelled on the U.S. Supreme Court Database (SCDB) and built for quantitative research on admissibility, outcomes and voting in the Court. It was produced as part of a Master's thesis in Legal Argumentation (Universidad de Buenos Aires) on institutional design and collegiate decision-making.
+A structured dataset of the rulings of the Argentine Supreme Court (*Corte Suprema de Justicia de la Nación*, CSJN) published in the official *Colección de Fallos*, volumes 329 to 349 (February 2006 to March 2026, excluding volumes 335–336). It is modelled on the U.S. Supreme Court Database (SCDB) and built for quantitative research on admissibility, outcomes and voting in the Court. It was produced as part of a Master's thesis in Legal Argumentation (Universidad de Buenos Aires), *Diseño institucional y coordinación judicial. Un análisis comparado de los mecanismos de formación de mayorías en la Corte Suprema argentina frente al modelo estadounidense*.
 
 The full variable dictionary, coded values, validation and known limitations are in **`dataverse/CODEBOOK.md`**. Start there.
 
