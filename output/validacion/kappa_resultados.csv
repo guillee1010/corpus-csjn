@@ -1,6 +1,6 @@
 variable,n,acuerdo,kappa,ic95_lo,ic95_hi,lectura,deg_pct
-es_revision_fondo,300,0.967,0.933,0.887,0.967,casi perfecto,0.0
+es_revision_fondo,300,0.95,0.9,0.847,0.947,casi perfecto,0.0
 via_recurso,132,0.985,0.941,0.842,1.0,casi perfecto,0.0
-disposicion,140,0.943,0.912,0.847,0.966,casi perfecto,0.0
-parte_ganadora,136,0.875,0.653,0.504,0.783,sustancial,0.0
-reenvia,75,0.827,0.408,0.16,0.635,moderado,0.0
+disposicion,140,0.95,0.923,0.862,0.976,casi perfecto,0.0
+parte_ganadora,136,0.882,0.668,0.52,0.799,sustancial,0.0
+reenvia,75,0.853,0.458,0.184,0.702,moderado,0.0

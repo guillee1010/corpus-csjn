@@ -516,11 +516,13 @@ The M26 recourse-layer axes were validated against a hand-coded gold standard by
 
 | Axis | N | Agreement | κ | 95% CI | Landis–Koch |
 |---|---|---|---|---|---|
-| `es_revision_fondo` | 300 | 0.970 | **0.940** | [0.899, 0.973] | almost perfect |
+| `es_revision_fondo` | 300 | 0.947 | **0.893** | [0.840, 0.940] | almost perfect |
 | `via_recurso` | 133 | 0.985 | **0.943** | [0.850, 1.000] | almost perfect |
-| `disposicion` | 140 | 0.943 | **0.912** | [0.847, 0.966] | almost perfect |
-| `parte_ganadora` | 134 | 0.933 | **0.784** | [0.632, 0.908] | substantial |
-| `reenvia` | 75 | 0.827 | 0.408 | [0.160, 0.635] | moderate — **not reportable** |
+| `disposicion` | 140 | 0.950 | **0.923** | [0.862, 0.976] | almost perfect |
+| `parte_ganadora` | 134 | 0.940 | **0.804** | [0.658, 0.925] | almost perfect |
+| `reenvia` | 75 | 0.853 | 0.458 | [0.184, 0.702] | moderate — **not reportable** |
+
+Recomputed in H224 against the current `csjn_casos_recursos.csv` (gold `golds/planilla_M20_57GOLD_parte_limpia.xlsx`; output `output/validacion/kappa_resultados_parte.csv`). The previous published values (0.940 / 0.943 / 0.912 / 0.784 / 0.408) predate the unification of the merit gate (H178). The gold was coded before the decision to count original-jurisdiction rulings decided on the merits as merit decisions, following the SCDB (B136, H169): 8 of the 16 `es_revision_fondo` disagreements are such rulings (`disposicion = no_revision_demanda`), coded "no" in the gold and "si" by the pipeline. This is a difference of criterion, not a parser error; a new blind round (M43) will re-describe the axes with a single criterion.
 
 > **Notes.** (a) `admisibilidad` is a synthesis of the disposition/access signals (≈99.9% relabel-consistent), not an independent detector, so it carries no standalone κ. (b) `parte_ganadora` is binary on both sides: the pipeline derives `recurrente_gana`/`recurrente_pierde` with no `parcial` value (`modifica → gana`), and the gold's original three-value coding (gana / parcial / pierde) was collapsed to the same binary scheme; the three-value gold is retained in the repository so the collapse is auditable. The κ remains capped below 1.0 by seven residual role-inversions preserved as genuine disagreements. (c) `reenvia` κ is moderate and **not reportable**: the reversal universe requires manual recoding (B130, in progress) before a reliable estimate over the full reversal set can be published.
 
@@ -532,10 +534,11 @@ The Court's Secretaría de Jurisprudencia (SJ) publishes a summaries database (`
 |---|---|---|---|---|---|
 | `posicion` (justice × ruling) | vote blocks | 10,301 positions in 2,480 rulings (2006–2026) | 0.997 | **0.988** | [0.982, 0.993] |
 | `es_queja` | `tipo_recurso` = queja | 2,549 | 0.937 | **0.868** | [0.848, 0.888] |
-| `disposicion` | `sentido` | 3,126 | 0.886 | **0.853** | [0.839, 0.867] |
+| `disposicion` | `sentido` | 3,126 | 0.937 | **0.914** | [0.903, 0.925] |
+| `es_revision_fondo` (merit / non-merit) | `sentido` | 2,984 | 0.963 | **0.916** | [0.901, 0.931] |
 | `via_recurso` | `tipo_recurso` | 2,549 | 0.915 | 0.606 | [0.563, 0.651] |
 
-> **Notes.** (a) `posicion`: SJ's first UNANIMIDAD / VOTO CONJUNTO block is `mayoria`, other non-dissenting blocks are `según su voto`, DISIDENCIA (PARCIAL) blocks are `en disidencia (parcial)`; the bootstrap resamples rulings, since positions within a ruling are not independent. Of the 33 remaining disagreements, 18 are SJ VOTO PROPIO vs corpus `mayoria`, the pattern of a known definitional difference (a heading opinion signed by fewer than a majority is `mayoria` in the corpus and VOTO PROPIO in SJ; not read one by one), and the 5 read in H224 were SJ errors (e.g., "(en disidencia parcial)" printed in the signature, coded as full dissent by SJ). Scripts: `scripts/validacion/kappa_sjconsulta.py` (from the SJ cache) and `kappa_sjconsulta_posiciones.py` (same logic, reproducible without the personal data in the cache). (b) `disposicion`, `via_recurso`, `es_queja`: the mapping between SJ labels and corpus values is set at the top of `scripts/validacion/kappa_disposicion_via_sj.py` (seven disposition classes; 142 rulings with SJ labels outside the mapping, e.g. PROCEDIMIENTO or ADMITE, are excluded). (c) The lower κ for `via_recurso` is driven by 186 rulings where the corpus detects no appeal type and SJ records an extraordinary (153) or ordinary (33) appeal: a recall gap, not a confusion between types. (d) This is agreement with an external coder over the whole overlap, not a blind κ against a hand-coded gold standard (table above).
+> **Notes.** (a) `posicion`: SJ's first UNANIMIDAD / VOTO CONJUNTO block is `mayoria`, other non-dissenting blocks are `según su voto`, DISIDENCIA (PARCIAL) blocks are `en disidencia (parcial)`; the bootstrap resamples rulings, since positions within a ruling are not independent. Of the 33 remaining disagreements, 18 are SJ VOTO PROPIO vs corpus `mayoria`, the pattern of a known definitional difference (a heading opinion signed by fewer than a majority is `mayoria` in the corpus and VOTO PROPIO in SJ; not read one by one), and the 5 read in H224 were SJ errors (e.g., "(en disidencia parcial)" printed in the signature, coded as full dissent by SJ). Scripts: `scripts/validacion/kappa_sjconsulta.py` (from the SJ cache) and `kappa_sjconsulta_posiciones.py` (same logic, reproducible without the personal data in the cache). (b) `disposicion`, `via_recurso`, `es_queja`: the mapping between SJ labels and corpus values is set at the top of `scripts/validacion/kappa_disposicion_via_sj.py` (six disposition classes; jurisdiction rulings, DECLARA (IN)COMPETENCIA, count as non-merit, the same criterion as the hand-coded gold; original-jurisdiction rulings on the claim are left out of the merit / non-merit row; 142 rulings with SJ labels outside the mapping, e.g. PROCEDIMIENTO or ADMITE, are excluded). (c) The lower κ for `via_recurso` is driven by 186 rulings where the corpus detects no appeal type and SJ records an extraordinary (153) or ordinary (33) appeal: a recall gap, not a confusion between types. (d) This is agreement with an external coder over the whole overlap, not a blind κ against a hand-coded gold standard (table above).
 
 ---
 

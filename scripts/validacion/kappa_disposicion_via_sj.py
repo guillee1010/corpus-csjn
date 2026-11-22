@@ -11,7 +11,7 @@ Uso:
 Escribe output/validacion/kappa_disposicion_via_sj.csv (κ, IC 95% bootstrap, n) y
 output/validacion/kappa_disposicion_via_sj_matriz.csv (matriz de confusión por eje).
 """
-__version__ = "0.1"  # H224
+__version__ = "0.2"  # H224: competencia = sin_revision (criterio del operador: la competencia no es fondo) + eje binario fondo / no fondo // 0.1 H224
 import argparse, csv, random
 from collections import Counter
 from pathlib import Path
@@ -23,7 +23,7 @@ DISP_CORPUS = {
     "deja_sin_efecto": "deja_sin_efecto", "grant_remand_implicito": "deja_sin_efecto",
     "revoca": "revoca", "modifica": "revoca",
     "confirma": "confirma",
-    "no_revision_competencia": "competencia",
+    "no_revision_competencia": "sin_revision",  # v0.2, criterio del operador
     "nulidad": "nulidad", "nulidad_concesion": "nulidad",
     "no_fondo": "sin_revision", "no_revision_procesal": "sin_revision",
     "no_revision_demanda": "demanda",
@@ -32,7 +32,7 @@ DISP_SJ = {
     "DEJA SIN EFECTO": "deja_sin_efecto",
     "REVOCA": "revoca", "REVOCA PARCIALMENTE": "revoca", "MODIFICA": "revoca",
     "CONFIRMA": "confirma", "CONFIRMA PARCIALMENTE": "confirma",
-    "DECLARA COMPETENCIA": "competencia", "DECLARA INCOMPETENCIA": "competencia",
+    "DECLARA COMPETENCIA": "sin_revision", "DECLARA INCOMPETENCIA": "sin_revision",  # v0.2
     "DECLARA NULIDAD": "nulidad",
     "DESESTIMA": "sin_revision", "RECHAZA": "sin_revision", "DECLARA INADMISIBLE": "sin_revision",
     "DECLARA MAL CONCEDIDO": "sin_revision", "DECLARA INOFICIOSO": "sin_revision",
@@ -83,6 +83,9 @@ def main():
         if s not in DISP_SJ: fuera[s] += 1; continue
         P.append((DISP_CORPUS[rec[k]["disposicion"]], DISP_SJ[s]))
     ejes["disposicion"] = (P, fuera)
+    # v0.2: fondo / no fondo (revisión de la sentencia apelada vs. el resto), desde la misma tabla
+    FONDO = {"deja_sin_efecto", "revoca", "confirma", "nulidad"}
+    ejes["fondo_binario"] = ([(a in FONDO, b in FONDO) for a, b in P if a != "demanda" and b != "demanda"], Counter())
     # vía (3 clases) y queja (binario)
     P, Q, fuera = [], [], Counter()
     for k in ks:
