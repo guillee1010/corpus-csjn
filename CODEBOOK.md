@@ -114,7 +114,7 @@ The dataset consists of eight CSV files. All files are UTF-8 encoded with comma 
 | `jueces` | string | Pipe-separated (`\|`) list of judges who signed the ruling, in order of appearance. |
 | `jueces_conocidos` | string | Pipe-separated list of judges matched to the canonical list of known CSJN justices and conjueces. |
 | `jueces_desconocidos` | float | Count of judges in the signature block not matched to any known justice. Null when signature detection failed entirely. |
-| `posiciones` | string | JSON dictionary mapping each judge's name to their voting position (e.g., `{"Petracchi": "mayoria", "Fayt": "en disidencia"}`). |
+| `posiciones` | string | JSON dictionary mapping each judge's name to their voting position (e.g., `{"Petracchi": "mayoria", "Fayt": "en disidencia", "Lorenzetti": "en disidencia parcial"}`). Vocabulary: `mayoria`, `según su voto`, `en disidencia`, `en disidencia parcial` (see `posicion`). |
 
 ### Pipeline metadata
 
@@ -407,10 +407,12 @@ Outcome of the *recurso de queja*, where `es_queja = 1`.
 
 | Value | N | Description |
 |---|---|---|
-| `mayoria` | 23,931 | Judge voted with the majority. |
-| `en disidencia` | 2,230 | Judge dissented from the majority disposition. |
-| `según su voto` | 1,528 | Judge concurred in the result but filed separate reasoning. |
-| `por su voto` | 8 | Variant of *según su voto*. |
+| `mayoria` | 24,107 | Judge voted with the majority. |
+| `según su voto` | 1,571 | Judge concurred in the result but filed separate reasoning. Since parser v43.1 (H225, B178) this also covers the signature variant "(por su voto)" (8 positions). |
+| `en disidencia` | 2,023 | Judge dissented from the majority disposition. |
+| `en disidencia parcial` | 237 | Judge dissented in part, as marked in the signature block "(en disidencia parcial)". Counts as a dissent for `voting_pattern`. Since parser v43.0 (H225, B177). Partial dissents marked only in the vote header and not in the signature are still published as `en disidencia` (B180 (b)). |
+
+Counts as of parser v43.1 (27,938 rows).
 
 ### `tipo_voto_sep` (in `csjn_casos_votos.csv`) {#tipo_voto_sep}
 

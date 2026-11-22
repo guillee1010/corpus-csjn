@@ -20348,3 +20348,42 @@ PR #1 mergeado en `main` con los dos commits. U3 (B179, solo lectura) no se hizo
 **Scripts creados:** `scripts/diagnostico/H223/` (gitignoreado, entregados como archivos) — `harness_ab.py`, `superficie_u1_b019.py`, `superficie_u2_b181.py`, `parche_u1.py`, `parche_u2.py`, `parche_u2b.py`, `informe_u1.md`, `informe_u2.md`, `adjudicacion_u1.csv`, `adjudicacion_u2.csv`, flip-sets y baselines.
 
 **Commits:** 3 (parser U1 · parser U2 · DEUDA + CHANGELOG + BITACORA H223). Pendiente del operador: regolden + manifest + M55 (commit de outputs + golden + manifest).
+
+## H225 — B177 y B178, vocabulario de `posicion` (2026-11-22)
+
+**Objetivo:** cerrar B177 (disidencia parcial) y B178 ("por su voto") en un ciclo MAJOR de vocabulario de `posicion`, según la decisión del operador H223-07; solo la vía de la firma.
+
+### H225-01 — Base y harness
+
+Rama `h225-vocabulario-posicion` sobre `main` 467cfeb (H223-07, parser v42.3, manifest 42.3, golden en el mismo commit); el operador confirmó disco sin cambios. Harness A/B de H223 sin cambios en `scripts/diagnostico/H225/`. Candado E0 limpio: brazo A = v42.3 byte-idéntico a `output/parser/` en casos, votos y textos. DEUDA B177/B178 leídas con constancias H222 y decisión H223, sin contradicción con el prompt. Consumidores de `posicion` releídos en v42.3 (`has_disid` L1444, `has_voto` L1442, `tiene_cal` L1501, `n_disidencias` L1607, `clasificar_tipo_voto` L1965, `secretarias_votacion.clasificar`/`juez_cat`, `m67`, `cruce_sjconsulta.cat_corpus`, exploradores): el único que había que tocar era `has_disid`.
+
+### H225-02 — U1, B177 (parser v43.0, MAJOR)
+
+Superficie en disco con `parse_firma` REAL: `RE_CALIFICADOR_FIRMA` envuelta en un grabador y la función llamada sobre `firma_raw` publicado (27.940 llamadas en 5894 firmas, una por juez posicional), cero réplica de lógica. 237 posiciones con grupo 2 no vacío en 152 fallos, todas publicadas como "en disidencia"; vp de los 152: disidencia 118, mixed 34. Por tomo: 329: 48, 330: 48, 331: 18, 332: 29, 333: 20, 334: 20, 337: 5, 340: 7, 341: 7, 342: 4, 343: 5, 344: 11, 345: 1, 346: 6, 347: 7, 348: 1. Cruce con sjconsulta: 11/12 posiciones en 10/11 fallos; 340_p1433 fuera, firma "(en disidencia)" a secas y "parcial" solo en el header (B180 (b)). Cruce con `superficie_b177.csv` (H221): 130 en ambas, 22 solo del parser (marca partida en dos líneas, invisible al conteo línea a línea de H221; leído 329_p537 L20334, 347_p128 L6773-6774), 2 solo de H221 (329_p4804, 329_p5157, marca fuera de la firma). La estimación H222 de 132 era un piso. Fix: dos cambios en `parse_firma`, grupo 2 → "en disidencia parcial" y `has_disid` con `startswith`. Parche en memoria desde la fuente real (`inspect.getsource` + reemplazos textuales exigidos únicos), brazo B, flip-set sellado: `casos.posiciones` 152 celdas / 237 jueces, `votos.posicion` 237 filas, `voting_pattern` 0, `n_disidencias` 0, 0 fuera del set, igual a la superficie; textos, zonas y editorial byte-idénticos; parser commiteado = brazo B byte a byte en los 5 CSV. `check_version_bump` [CLEAN].
+
+### H225-03 — U2, B178 (parser v43.1)
+
+Superficie con la misma técnica sobre v43.0: 8 posiciones en 5 fallos (329_p1066 Fayt y Maqueda, 331_p77 Petracchi, 339_p1323 Rosatti, 339_p1763 Highton de Nolasco y Rosenkrantz, 339_p1804 Lorenzetti y Highton de Nolasco), "(por su voto)" literal en los 8, coincidente con `votos.posicion`, `casos.posiciones` y CODEBOOK. Superficie < 10 avisada; el operador pidió el ciclo completo igual y fijó el vocabulario de la Corte, "según su voto". Fix de una línea (L1406); `has_voto` conserva la tupla. Flip-set sellado contra v43.0: `posiciones` 5 celdas / 8 jueces, `votos.posicion` 8 filas, `voting_pattern` 0, 0 fuera del set; parser commiteado = brazo B byte a byte. Bump 43.1, MINOR dentro del ciclo MAJOR (decisión: no requiere MAJOR propio).
+
+### H225-04 — Merge, regolden y cierre
+
+PR #2 mergeado en `main` por el operador. Corrida local `--consciente --ignorar-corpus-drift`: [FAIL] solo en casos.csv y votos.csv, columnas `posiciones`/`posicion`, movimientos del tipo previsto; textos, zonas, editorial [OK]. `--regolden`: golden congelado, invariante golden==producción [CLEAN] en los 5 CSV, manifest re-sellado v43.1 y [CLEAN] 65; derivados sin cambio. Sha locales iguales a los del sandbox (casos f3b470ffc570, votos 62d5292ff197, textos 887826273b1f, zonas 491721775bd2, editorial 30a6da652e3a). Commit H225-03 del operador: 157 filas de casos y 245 de votos. Cierre documental en rama `h225-cierre`: DEUDA (B177 y B178 cerrados), CODEBOOK (vocabulario y tabla de `posicion`; la tabla vigente estaba desactualizada respecto de v42.3), CHANGELOG y BITACORA.
+
+Visto, no abierto: 329_p4804 y 329_p5157 con "(en disidencia parcial)" en el rango fuera de la firma; la disidencia parcial marcada solo en el header (340_p1433; ~38 fallos según H221, no remedido) sigue como "en disidencia" hasta B180 (b); la frase "en el repo quedan los publicados hasta el regolden del operador" del Estado final de H223 quedó vieja (el regolden entró en H223-07).
+
+### H225 — Estado final
+
+- **Corpus:** 5894 casos (5703 fallos + 191 sumario_con_link).
+- **Sin firma:** 8 / 5703 fallos (0,14 %), sin cambio.
+- **Votos:** 27.938 filas (sin delta). `posicion`: mayoría 24.107, según su voto 1571 (+8), en disidencia 2023 (−237), en disidencia parcial 237 (nuevo).
+- **Voting patterns (fallos):** unánime 3513, según su voto 758, disidencia 1120, mixed 304, sin firma 8, sin cambio.
+
+**Outputs canónicos (parser v43.1, regolden y manifest [CLEAN] 65 en disco del operador):**
+- `output/parser/csjn_casos.csv` — 5894 filas (sha f3b470ffc570…).
+- `output/parser/csjn_casos_votos.csv` — 27.938 filas (sha 62d5292ff197…).
+- `output/parser/csjn_casos_zonas.csv` — 138.062 segmentos (sin cambio).
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones (sin cambio).
+
+**Scripts creados:** `scripts/diagnostico/H225/` (gitignoreado, entregados como archivos) — `harness_ab.py` (H223, sin cambios), `superficie_u1_b177.py`, `superficie_u1_b177.csv`, `superficie_u1_b177_resumen.txt`, `parche_u1.py`, `flipset_out_B1_*.csv`, `superficie_u2_b178.py`, `superficie_u2_b178.csv`, `parche_u2.py`, `flipset_out_B2_*.csv`, `INFORME_H225.md`.
+
+**Commits:** 5 (parser U1 · parser U2 · merge PR #2 · regolden + manifest + outputs, del operador · DEUDA + CODEBOOK + CHANGELOG + BITACORA H225).
