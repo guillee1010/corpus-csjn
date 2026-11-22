@@ -4952,7 +4952,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 345_p154,,sin_clasificar,sin_ancla
 345_p155,,no_aplica,tipo_entrada=sumario_con_link
 345_p156,,no_aplica,tipo_entrada=sumario_editorial
-345_p157,,no_aplica,tipo_entrada=sumario_con_link
+345_p157,tributario,lectura_texto,parte(1)
 345_p159,,no_aplica,tipo_entrada=sumario_editorial
 345_p160,,no_aplica,tipo_entrada=sumario_con_link
 345_p162,,no_aplica,tipo_entrada=sumario_con_link
@@ -4965,7 +4965,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 345_p184,,no_aplica,tipo_entrada=sumario_con_link
 345_p185,,no_aplica,tipo_entrada=sumario_con_link
 345_p186,,no_aplica,tipo_entrada=sumario_con_link
-345_p187,,no_aplica,tipo_entrada=sumario_con_link
+345_p187,,sin_clasificar,sin_ancla
 345_p189,penal,lectura_tribunal,regla:criminal y correccional
 345_p191,,sin_clasificar,sin_ancla
 345_p197,contencioso_administrativo,lectura_texto,objeto(1)
@@ -4979,9 +4979,9 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 345_p229,penal,lectura_tribunal,regla:criminal y correccional
 345_p241,laboral,lectura_tribunal,regla:\bdel trabajo\b
 345_p243,,no_aplica,tipo_entrada=sumario_con_link
-345_p244,,no_aplica,tipo_entrada=sumario_con_link
+345_p244,penal,lectura_tribunal,regla:casacion penal
 345_p250,,no_aplica,tipo_entrada=sumario_con_link
-345_p251,,no_aplica,tipo_entrada=sumario_con_link
+345_p251,contencioso_administrativo,lectura_texto,objeto(1)
 345_p263,contencioso_administrativo,lectura_texto,provincia:ca
 345_p270,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 345_p276,,no_aplica,tipo_entrada=sumario_con_link
@@ -4996,7 +4996,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 345_p298,penal,lectura_tribunal,regla:casacion penal
 345_p331,penal,lectura_tribunal,regla:criminal y correccional
 345_p337,,no_aplica,tipo_entrada=sumario_editorial
-345_p338,,no_aplica,tipo_entrada=sumario_con_link
+345_p338,penal,lectura_tribunal,regla:casacion penal
 345_p348,,sin_clasificar,sin_ancla
 345_p358,civil_comercial,lectura_texto,objeto(1)
 345_p378,,sin_clasificar,sin_ancla
@@ -5005,8 +5005,8 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 345_p381,,no_aplica,tipo_entrada=sumario_con_link
 345_p382,,sin_clasificar,sin_ancla
 345_p383,,no_aplica,tipo_entrada=sumario_con_link
-345_p384,,no_aplica,tipo_entrada=sumario_con_link
-345_p386,,no_aplica,tipo_entrada=sumario_con_link
+345_p384,laboral,lectura_tribunal,regla:\bdel trabajo\b
+345_p386,penal,lectura_tribunal,regla:casacion penal
 345_p400,,no_aplica,tipo_entrada=sumario_con_link
 345_p401,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 345_p416,,no_aplica,tipo_entrada=sumario_con_link
@@ -5028,7 +5028,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 345_p602,,no_aplica,tipo_entrada=sumario_con_link
 345_p603,,no_aplica,tipo_entrada=sumario_con_link
 345_p604,,no_aplica,tipo_entrada=sumario_con_link
-345_p605,,no_aplica,tipo_entrada=sumario_con_link
+345_p605,civil_comercial,lectura_tribunal,regla:\ben lo civil\b
 345_p608,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 345_p621,penal,lectura_tribunal,regla:criminal y correccional
 345_p630,,sin_clasificar,sin_ancla
@@ -5043,7 +5043,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 345_p694,penal,lectura_tribunal,regla:criminal y correccional
 345_p702,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 345_p715,,no_aplica,tipo_entrada=sumario_editorial
-345_p716,,no_aplica,tipo_entrada=sumario_con_link
+345_p716,laboral,lectura_texto,kw+norma:26773+objeto(3)
 345_p722,laboral,lectura_tribunal,regla:\bdel trabajo\b
 345_p728,laboral,lectura_texto,kw+norma:24557+parte(3)
 345_p730,,sin_clasificar,sin_ancla
@@ -5054,7 +5054,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 345_p801,,originaria,originaria
 345_p838,tributario,lectura_tribunal_refinada,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 345_p847,,originaria,originaria
-345_p849,,no_aplica,tipo_entrada=sumario_con_link
+345_p849,tributario,lectura_texto,kw+norma:11683(2)
 345_p867,,no_aplica,tipo_entrada=sumario_con_link
 345_p869,penal,lectura_tribunal,regla:casacion penal
 345_p876,tributario,lectura_texto,norma:11683(1)
@@ -5105,7 +5105,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 345_p1205,civil_comercial,lectura_texto,norma:24901(1)
 345_p1210,civil_comercial,lectura_tribunal,regla:civil y comercial federal
 345_p1219,laboral,lectura_tribunal,regla:\bdel trabajo\b
-345_p1233,,no_aplica,tipo_entrada=sumario_con_link
+345_p1233,contencioso_administrativo,lectura_texto,provincia:ca
 345_p1238,laboral,lectura_tribunal,regla:\bdel trabajo\b
 345_p1244,contencioso_administrativo,lectura_texto,provincia:ca
 345_p1249,tributario,lectura_tribunal_refinada,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
@@ -5118,7 +5118,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 345_p1296,,no_aplica,tipo_entrada=sumario_con_link
 345_p1297,,sin_clasificar,sin_ancla
 345_p1303,penal,lectura_tribunal,regla:criminal y correccional
-345_p1309,,no_aplica,tipo_entrada=sumario_con_link
+345_p1309,,sin_clasificar,conflicto_capa2:cambiario/civil_comercial
 345_p1312,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 345_p1322,previsional,lectura_texto,norma:24018(1)
 345_p1325,contencioso_administrativo,lectura_texto,objeto(1)
@@ -5156,13 +5156,13 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 346_p42,,sin_clasificar,conflicto_capa2:civil_comercial/constitucional
 346_p44,tributario,lectura_texto,coocur:tributario_disfrazado(desempate)
 346_p47,,no_aplica,tipo_entrada=sumario_editorial
-346_p48,,no_aplica,tipo_entrada=sumario_con_link
+346_p48,,originaria,originaria
 346_p56,,no_aplica,tipo_entrada=sumario_con_link
 346_p57,penal,lectura_tribunal,regla:casacion penal
 346_p58,,sin_clasificar,sin_ancla
 346_p73,,no_aplica,tipo_entrada=sumario_editorial
 346_p74,,no_aplica,tipo_entrada=sumario_con_link
-346_p75,,no_aplica,tipo_entrada=sumario_con_link
+346_p75,tributario,lectura_tribunal_refinada,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 346_p84,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 346_p103,,sin_clasificar,conflicto_capa2:penal/tributario
 346_p116,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
@@ -5184,13 +5184,13 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 346_p209,,originaria,originaria
 346_p217,tributario,lectura_texto,parte(1)
 346_p231,penal,lectura_texto,objeto(1)
-346_p233,,no_aplica,tipo_entrada=sumario_con_link
+346_p233,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 346_p235,,no_aplica,tipo_entrada=sumario_editorial
 346_p236,laboral,lectura_texto,norma:23551(1)
 346_p247,,no_aplica,tipo_entrada=sumario_con_link
 346_p249,laboral,lectura_tribunal,regla:\bdel trabajo\b
 346_p253,,no_aplica,tipo_entrada=sumario_editorial
-346_p254,,no_aplica,tipo_entrada=sumario_con_link
+346_p254,laboral,lectura_texto,objeto(1)
 346_p256,,no_aplica,tipo_entrada=sumario_con_link
 346_p257,laboral,lectura_tribunal,regla:\bdel trabajo\b
 346_p259,civil_comercial,lectura_tribunal,regla:\ben lo civil\b
@@ -5284,13 +5284,13 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 346_p1015,,originaria,originaria
 346_p1039,tributario,lectura_tribunal_refinada,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 346_p1062,,no_aplica,tipo_entrada=sumario_editorial
-346_p1063,,no_aplica,tipo_entrada=sumario_con_link
+346_p1063,,sin_clasificar,sin_ancla
 346_p1065,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 346_p1068,contencioso_administrativo,lectura_texto,provincia:ca
 346_p1070,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 346_p1075,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 346_p1081,,no_aplica,tipo_entrada=sumario_editorial
-346_p1082,,no_aplica,tipo_entrada=sumario_con_link
+346_p1082,,sin_clasificar,sin_ancla
 346_p1086,,sin_clasificar,sin_ancla
 346_p1087,,no_aplica,tipo_entrada=sumario_editorial
 346_p1089,,originaria,originaria
@@ -5314,7 +5314,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 346_p1233,,no_aplica,tipo_entrada=sumario_con_link
 346_p1234,salud,lectura_texto,coocur:salud_amparo
 346_p1241,contencioso_administrativo,lectura_texto,provincia:ca
-346_p1243,,no_aplica,tipo_entrada=sumario_con_link
+346_p1243,,sin_clasificar,sin_ancla
 346_p1248,,sin_clasificar,sin_ancla
 346_p1257,,sin_clasificar,conflicto_capa2:civil_comercial/lesa_humanidad
 346_p1272,,originaria,originaria
@@ -5350,7 +5350,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 346_p1521,penal,lectura_tribunal,regla:casacion penal
 346_p1526,penal,lectura_tribunal,regla:casacion penal
 346_p1538,penal,lectura_texto,objeto(1)
-346_p1545,,no_aplica,tipo_entrada=sumario_con_link
+346_p1545,salud,lectura_texto,coocur:salud_amparo
 346_p1549,contencioso_administrativo,lectura_texto,provincia:ca
 346_p1551,,no_aplica,tipo_entrada=sumario_con_link
 346_p1552,civil_comercial,lectura_tribunal,regla:\ben lo civil\b
@@ -5387,7 +5387,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 347_p291,penal,lectura_tribunal,regla:criminal y correccional
 347_p302,penal,lectura_tribunal,regla:criminal y correccional
 347_p311,,sin_clasificar,sin_ancla
-347_p316,,no_aplica,tipo_entrada=sumario_con_link
+347_p316,ambiental,lectura_texto,kw(1)
 347_p320,,no_aplica,tipo_entrada=sumario_con_link
 347_p321,tributario,lectura_texto,coocur:tributario_disfrazado(desempate)
 347_p327,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
@@ -5460,7 +5460,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 347_p811,contencioso_administrativo,lectura_texto,provincia:ca
 347_p818,laboral,lectura_texto,objeto(1)
 347_p823,,no_aplica,tipo_entrada=sumario_con_link
-347_p824,,no_aplica,tipo_entrada=sumario_con_link
+347_p824,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 347_p833,,originaria,originaria
 347_p843,,sin_clasificar,sin_ancla
 347_p856,penal,lectura_tribunal,regla:criminal y correccional
@@ -5497,13 +5497,13 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 347_p1151,tributario,lectura_tribunal_refinada,refinamiento:fiscal(\bafip\b|\bdgi\b|d)
 347_p1166,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 347_p1177,,sin_clasificar,sin_ancla
-347_p1184,,no_aplica,tipo_entrada=sumario_con_link
+347_p1184,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 347_p1185,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 347_p1191,previsional,lectura_tribunal,regla:seguridad social
 347_p1201,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 347_p1210,tributario,lectura_texto,norma:11683+parte(2)
 347_p1215,,sin_clasificar,sin_ancla
-347_p1218,,no_aplica,tipo_entrada=sumario_con_link
+347_p1218,civil_comercial,lectura_texto,norma:24901(1)
 347_p1223,,sin_clasificar,conflicto_capa2:civil_comercial/tributario
 347_p1230,civil_comercial,lectura_texto,norma:24901(1)
 347_p1234,civil_comercial,lectura_texto,objeto(1)
@@ -5520,7 +5520,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 347_p1344,penal,lectura_tribunal,regla:casacion penal
 347_p1353,civil_comercial,lectura_tribunal,regla:civil y comercial federal
 347_p1360,,sin_clasificar,sin_ancla
-347_p1363,,no_aplica,tipo_entrada=sumario_con_link
+347_p1363,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 347_p1375,,no_aplica,tipo_entrada=sumario_con_link
 347_p1376,,no_aplica,tipo_entrada=sumario_con_link
 347_p1377,,sin_clasificar,sin_ancla
@@ -5606,7 +5606,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 348_p45,,sin_clasificar,sin_ancla
 348_p48,contencioso_administrativo,lectura_tribunal,regla:contencioso administrativo
 348_p53,,no_aplica,tipo_entrada=sumario_con_link
-348_p54,,no_aplica,tipo_entrada=sumario_con_link
+348_p54,laboral,lectura_tribunal,regla:\bdel trabajo\b
 348_p56,contencioso_administrativo,lectura_texto,objeto(1)
 348_p59,,sin_clasificar,sin_ancla
 348_p60,,sin_clasificar,sin_ancla
@@ -5635,7 +5635,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 348_p259,civil_comercial,lectura_texto,objeto(1)
 348_p260,,no_aplica,tipo_entrada=sumario_con_link
 348_p261,,no_aplica,tipo_entrada=sumario_editorial
-348_p262,,no_aplica,tipo_entrada=sumario_con_link
+348_p262,penal,lectura_tribunal,regla:casacion penal
 348_p267,contencioso_administrativo,lectura_texto,provincia:ca
 348_p274,,no_aplica,tipo_entrada=sumario_con_link
 348_p275,,no_aplica,tipo_entrada=sumario_con_link
@@ -5762,7 +5762,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 348_p1227,civil_comercial,lectura_tribunal,regla:civil y comercial federal
 348_p1228,tributario,lectura_texto,parte(1)
 348_p1230,,no_aplica,tipo_entrada=sumario_editorial
-348_p1231,,no_aplica,tipo_entrada=sumario_con_link
+348_p1231,,originaria,originaria
 348_p1242,,originaria,originaria
 348_p1254,,no_aplica,tipo_entrada=sumario_con_link
 348_p1255,penal,lectura_tribunal,regla:criminal y correccional
@@ -5833,7 +5833,7 @@ caso_id_canonico,materia,materia_capa,materia_fuente
 348_p1721,,originaria,originaria
 348_p1728,,no_aplica,tipo_entrada=sumario_con_link
 348_p1729,,no_aplica,tipo_entrada=sumario_editorial
-348_p1730,,no_aplica,tipo_entrada=sumario_con_link
+348_p1730,constitucional,lectura_texto,objeto(1)
 348_p1733,ambiental,lectura_texto,kw(1)
 348_p1738,tributario,lectura_texto,kw(1)
 348_p1741,penal,lectura_tribunal,regla:criminal y correccional
