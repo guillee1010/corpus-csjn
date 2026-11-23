@@ -13,6 +13,7 @@ Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y docume
 - `CODEBOOK.md` 3.2→4.0 (cambio de schema): `voto_firmantes`, `texto_voto` (recorte a 5000 caracteres, que no estaba documentado), `wc_voto`, `wc_votos`, `tipo_voto_sep`, límites 12 y 18. README y README de Dataverse.
 - `DEUDA_TECNICA.md`: B193 cerrado; B198 y M71 nuevos; constancias en B188, M68 y M67 (decisión del operador sobre el disidente parcial).
 - Golden + `_manifest.json`: PENDIENTES de regolden en disco local del operador (`correr_pipeline.py --consciente --ignorar-corpus-drift` y después `--regolden`); sha esperados: casos fc9b06a3ed05…, textos 00f42ea1dba9… (sin cambio), votos f88f9eaddc25…, zonas c3d7d6d7e055… (sin cambio), editorial 30a6da652e3a… (sin cambio), normas f432251cdc37….
+- Regolden HECHO por el operador en disco local (2026-11-23): los 6 sha reproducidos, golden == producción, `_manifest.json` re-sellado con 65 artefactos [CLEAN]; M68 por fallo 11 PASS, M68 por juez 36 PASS, M55 5.
 
 ## H228 (2026-11-22)
 

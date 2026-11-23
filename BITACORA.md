@@ -20730,3 +20730,13 @@ CODEBOOK 3.2 → 4.0 con `actualizar_codebook.py` (`--subir`, `--check` [CHECK] 
 **Scripts creados:** `scripts/diagnostico/H229/` (gitignoreado, entregados como archivos): `e0_candado.py`, `h229_lib.py`, `harness_ab.py`, `u1_grabadora.py`, `u1_explorar.py`, `u1_ver_formas.py`, `u1_superficie.py`, `u1_clasificar.py`, `u1_leer.py`, `u1_adjudicacion.py`, `u1_v1_m68_por_juez.py`, `u1_prototipo_radio.py`, `parche_u2_b193.py`, `aplicar_parche.py`, `u2_verificar.py`, `u2_espec_vs_parser.py`, `u3_m68_por_juez_desde_csv.py`, más los CSV de superficie, adjudicación y flip-set.
 
 **Commits:** 3 en la rama `h229-votos-conjuntos` (parser v45.0 y extraer_normas v1.2 · candado M68 por juez · documentación H229), merge del PR. Pendiente del operador: `git pull`, `--consciente`, `--regolden`, M68 en sus dos modos y M55 en disco local.
+
+
+### H229-07 — Regolden y re-sello en disco local (operador)
+
+Merge del PR 7 y `git pull`. `correr_pipeline.py --consciente --ignorar-corpus-drift` en el disco del operador: los 6 sha esperados reproducidos (casos `fc9b06a3ed05`, textos `00f42ea1dba9`, votos `f88f9eaddc25`, zonas `c3d7d6d7e055`, editorial `30a6da652e3a`, normas `f432251cdc37`). Candados en disco: `validar_m68.py --baseline` 11 = 11 PASS; `validar_m68.py --por-juez --baseline` 36 = 36 PASS sobre 3808 filas con texto; `check_m55_quorum.py` pool 5.
+
+Tropiezo: las instrucciones de cierre daban `--regolden` sin `--ignorar-corpus-drift` y el orquestador abortó en el pre-flight ([CORPUS-DRIFT], los cuatro `.md` de los tomos 335 y 336). El operador commiteó igual lo que había en `output/` (casos, votos y normas, ya verificados por sha), y durante ese commit el golden y el manifest quedaron en v44.1. Corregido con `--regolden --ignorar-corpus-drift`: golden congelado, golden == producción en los 5 CSV, manifest re-sellado y verificado, 65 artefactos [CLEAN] (corpus 46 archivos; parser v45.0, extraer_normas v1.2). Para los próximos cierres: `--ignorar-corpus-drift` va en las dos corridas, la `--consciente` y la `--regolden`.
+
+**Commits:** dos del operador en `main` (outputs v45.0 · golden y manifest v45.0) y uno de documentación (este bloque, DEUDA, CHANGELOG, README).
+
