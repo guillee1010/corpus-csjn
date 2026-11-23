@@ -29,7 +29,7 @@ The dataset was constructed automatically by a Python pipeline from OCR-digitize
 
 ## 2. File Descriptions
 
-The dataset consists of ten CSV files, sealed by `_manifest.json` (SHA-256, row counts and generator version of each file). All files are UTF-8 encoded with comma separators and are keyed on `caso_id_canonico` where a case-level key applies. Counts as of parser v44.1.
+The dataset consists of ten CSV files, sealed by `_manifest.json` (SHA-256, row counts and generator version of each file). All files are UTF-8 encoded with comma separators and are keyed on `caso_id_canonico` where a case-level key applies. Counts as of parser v45.0.
 
 ### Primary files
 
@@ -37,7 +37,7 @@ The dataset consists of ten CSV files, sealed by `_manifest.json` (SHA-256, row 
 |---|---|---|---|---|
 | `csjn_casos.csv` | Case | 5,894 | 40 | Case-level metadata: parties, date, voting configuration, word counts, judge panel, jurisdiction, localization within source files, and the legacy `outcome` field (see §3). |
 | `csjn_casos_recursos.csv` | Case (recourse layer) | 5,894 | 10 | The M26 recourse-and-disposition layer: the orthogonal admissibility / disposition / merit-review / party-winning / remand axes plus `via_recurso`, `multi_recurso`, `causa_inadmisibilidad` and `es_queja`. Keyed 1:1 to `csjn_casos.csv`. This is the canonical layer for outcome analysis (see §4). |
-| `csjn_casos_votos.csv` | Judge × Case | 28,080 | 19 | One row per judge per case. Records each justice's voting position and, where applicable, the text and classification of their separate opinion. Includes denormalized case-level fields for analytical convenience. |
+| `csjn_casos_votos.csv` | Judge × Case | 28,080 | 20 | One row per judge per case. Records each justice's voting position and, where applicable, the text and classification of their separate opinion. Includes denormalized case-level fields for analytical convenience. |
 | `csjn_casos_zonas.csv` | Text zone × Case | 138,597 | 8 | Segmentation of each ruling into structural zones (opinion body, dictamen, operative clause, signature block, separate votes, etc.) with line references and word counts. |
 
 ### Auxiliary files
@@ -107,7 +107,7 @@ The dataset consists of ten CSV files, sealed by `_manifest.json` (SHA-256, row 
 |---|---|---|
 | `word_count` | integer | Total word count of the ruling, including all zones. |
 | `wc_mayoria` | integer | Word count of the majority opinion body (*cuerpo*). |
-| `wc_votos` | integer | Aggregate word count of all separate votes (*votos separados*). |
+| `wc_votos` | integer | Aggregate word count of all separate votes (*votos separados*), counted on the ruling's text from the first separate-vote header onward; each vote is counted once regardless of how many justices sign it. `word_count` = `wc_mayoria` + `wc_votos` in every ruling. |
 | `wc_considerando` | integer | Word count of the *considerando* section (legal reasoning). |
 | `wc_dictamen` | integer | Word count of the *dictamen*, if present. |
 
@@ -186,11 +186,12 @@ One row per judge per case. Includes denormalized case-level fields for direct a
 
 | Variable | Type | Description |
 |---|---|---|
-| `texto_voto` | string | Full text of the judge's separate vote, if any. Null for judges voting with the majority without a separate opinion. **A separate vote signed jointly by several judges (header "Voto de los señores ministros X e Y") is attached to one of them only**; the co-signers have empty `texto_voto` and `wc_voto` 0 (956 judge rows in 761 rulings at parser v44.0, B193). |
-| `wc_voto` | integer | Word count of the individual judge's separate vote. 0 for majority-only votes. |
-| `tipo_voto_sep` | string | Classification of the separate vote. Coded A–E or `indeterminado`; null for judges without a separate vote (25,222 null). See [Coded Values](#tipo_voto_sep). |
+| `texto_voto` | string | Text of the judge's separate vote (header included), truncated to its first 5,000 characters (1,338 of 3,808 rows reach the limit; `wc_voto` counts the whole vote). Null for judges voting with the majority without a separate opinion. **Since parser v45.0 (H229, B193) a separate vote signed jointly by several judges (header "Voto de los señores ministros X e Y") carries the same text in the row of each signer**; up to v44.1 it was attached to one of them only and the co-signers had empty `texto_voto` and `wc_voto` 0 (950 judge rows in 761 rulings gained their text at v45.0). Use `voto_firmantes` to count each vote once. |
+| `wc_voto` | integer | Word count of the judge's separate vote. 0 for majority-only votes. Every signer of a joint vote carries the full count of that vote: summing `wc_voto` over all rows of a ruling counts a joint vote once per signer. Summed over distinct votes (one row per `caso_id_canonico` × `voto_firmantes`) it equals `wc_votos` in 2,176 of the 2,190 rulings with separate votes; in the other 14 a vote is attributed to no row and the sum is lower, never higher. |
+| `tipo_voto_sep` | string | Classification of the separate vote. Coded A–E or `indeterminado`; null for judges without a separate vote (24,272 null). Co-signers of a joint vote share its classification. See [Coded Values](#tipo_voto_sep). |
 | `fragmenta_ratio` | float | Ratio measuring how fragmented the separate vote text is relative to the total ruling. Null for majority-only votes. |
 | `punto_divergencia` | float | Estimated point (0.0–1.0) within the ruling's argumentative structure where the separate vote diverges from the majority. Null for majority-only votes. |
+| `voto_firmantes` | string | Justices who sign this row's separate vote, as named in the vote header, in printed order, joined by ` | ` (e.g. `Lorenzetti | Highton de Nolasco | Argibay`). Identical in the row of every signer; a single-signer vote lists that judge alone. Empty when the row has no `texto_voto`. **A vote is a distinct value of `voto_firmantes` within a ruling**: 3,808 rows with text are 2,860 distinct votes (2,072 signed by one justice, 628 by two, 156 by three, 4 by four). Names come from the header and follow the judge table; a co-signer the table does not read in the header is missing from the list (9 joint headers, B188), and in one ruling (329_p4804) the list names a justice with no row in the published panel. New in parser v45.0 (H229, B193). |
 
 ### Denormalized case-level fields
 
@@ -262,7 +263,7 @@ Statutes cited, one row per case × statute × scope. Only "ley N" citations are
 | `caso_id_canonico` | string | Foreign key to `csjn_casos.csv`. |
 | `tipo` | string | Type of norm. Currently always `ley`. |
 | `norma` | string | Statute number as cited (e.g. `24557`, `1285`). |
-| `ambito` | string | Where it is cited: `caratula`, `considerando`, `dictamen`, `dispositivo` (*por ello*), `voto` (separate votes, aggregated per case). |
+| `ambito` | string | Where it is cited: `caratula`, `considerando`, `dictamen`, `dispositivo` (*por ello*), `voto` (separate votes, aggregated per case; a vote signed by several justices is counted once, by `voto_firmantes`, since extraer_normas v1.2). |
 | `n_menciones` | integer | Number of mentions in that scope. |
 
 ### `csjn_casos_epilogo.csv`
@@ -430,7 +431,7 @@ Outcome of the *recurso de queja*, where `es_queja = 1`.
 | *(null)* | 162 | Not available (editorial entries). |
 | `sin_firma` | 8 | No judicial signatures could be extracted. |
 
-Counts as of parser v44.1. The pattern is derived from the signature block (and, since v43.3, from vote headers; see `posicion`). Positions a judge states only inside the common opinion (e.g., "la jueza X se remite a su disidencia en…") are not captured; see Known Limitations.
+Counts as of parser v45.0. The pattern is derived from the signature block (and, since v43.3, from vote headers; see `posicion`). Positions a judge states only inside the common opinion (e.g., "la jueza X se remite a su disidencia en…") are not captured; see Known Limitations.
 
 ### `tipo_entrada` {#tipo_entrada}
 
@@ -444,25 +445,25 @@ Counts as of parser v44.1. The pattern is derived from the signature block (and,
 
 | Value | N | Description |
 |---|---|---|
-| `mayoria` | 24,224 | Judge voted with the majority. |
-| `según su voto` | 1,587 | Judge concurred in the result but filed separate reasoning. Since parser v43.1 (H225, B178) this also covers the signature variant "(por su voto)" (8 positions). |
-| `en disidencia` | 2,031 | Judge dissented from the majority disposition. |
-| `en disidencia parcial` | 238 | Judge dissented in part, as marked in the signature block "(en disidencia parcial)". A vote header "Disidencia parcial" does not override a printed "(en disidencia)": 13 positions with "parcial" only in the header are published as `en disidencia` (H227). Counts as a dissent for `voting_pattern`. Since parser v43.0 (H225, B177). |
+| `mayoria` | 24,222 | Judge voted with the majority. |
+| `según su voto` | 1,588 | Judge concurred in the result but filed separate reasoning. Since parser v43.1 (H225, B178) this also covers the signature variant "(por su voto)" (8 positions). |
+| `en disidencia` | 2,032 | Judge dissented from the majority disposition. |
+| `en disidencia parcial` | 238 | Judge dissented in part, as marked in the signature block "(en disidencia parcial)". A vote header "Disidencia parcial" does not override a printed "(en disidencia)": 19 positions with "parcial" only in the header are published as `en disidencia`, and 5 with "parcial" only in the signature as `en disidencia parcial` (H229; the earlier figure, 13, counted one justice per joint vote). Counts as a dissent for `voting_pattern`. Since parser v43.0 (H225, B177). |
 
-Source of the position: the qualifier printed in the signature block. Since parser v43.3 (H226, B180 (b)), when the signature carries no qualifier for a judge who heads a separate vote or dissent in the text, the position stated by that header is published instead (never overriding a printed qualifier). Counts as of parser v44.1 (28,044 rows at parser v44.0; 11 positions in 10 rulings moved from `mayoria` at v43.3).
+Source of the position: the qualifier printed in the signature block. Since parser v43.3 (H226, B180 (b)), when the signature carries no qualifier for a judge who heads a separate vote or dissent in the text, the position stated by that header is published instead (never overriding a printed qualifier). Counts as of parser v45.0 (28,044 rows at parser v44.0; 11 positions in 10 rulings moved from `mayoria` at v43.3; 2 more at v45.0, when co-signers of a joint vote became visible to the header rule: 330_p4399 and 344_p2441).
 
 ### `tipo_voto_sep` (in `csjn_casos_votos.csv`) {#tipo_voto_sep}
 
-Classification of separate votes by their structural relationship to the majority. Applied only to judges with a separate vote (2,858 votes; null for the remaining 25,222). **Schema A–E under development.**
+Classification of separate votes by their structural relationship to the majority. Applied to every row with a separate-vote text (3,808 judge rows, which are 2,860 distinct votes; null for the remaining 24,272 rows). Counts below are judge rows: a vote signed by three justices counts three times. Up to parser v44.1 only one signer per vote was classified (2,858 rows). **Schema A–E under development.**
 
 | Value | N | Description |
 |---|---|---|
-| `indeterminado` | 1,369 | Could not be classified into a defined category. |
-| `B` | 566 | *To be documented.* |
-| `D` | 580 | *To be documented.* |
-| `A` | 161 | *To be documented.* |
+| `indeterminado` | 1,862 | Could not be classified into a defined category. |
+| `B` | 798 | *To be documented.* |
+| `D` | 739 | *To be documented.* |
+| `A` | 211 | *To be documented.* |
 | `C` | 118 | *To be documented.* |
-| `E` | 64 | *To be documented.* |
+| `E` | 80 | *To be documented.* |
 
 ### `zona` (in `csjn_casos_zonas.csv`) {#zona}
 
@@ -479,7 +480,7 @@ Classification of separate votes by their structural relationship to the majorit
 | `apertura` | 5,811 | Opening section: case caption, date, initial procedural framing. |
 | `voto_separado` | 3,415 | Separate opinion (concurrence or dissent) by an individual judge. |
 
-Counts as of parser v44.1. `linea_ini` and `linea_fin` are offsets relative to the case block: the absolute line in the source file is `linea_inicio` + offset + 1.
+Counts as of parser v45.0. `linea_ini` and `linea_fin` are offsets relative to the case block: the absolute line in the source file is `linea_inicio` + offset + 1.
 
 ### `tribunal_origen_status` {#tribunal_origen_status}
 
@@ -620,13 +621,13 @@ For analysts familiar with the U.S. Supreme Court Database, the recourse-layer a
 
 10. **OCR-dependent source text.** Source markdown was produced by OCR digitization of printed volumes; residual OCR errors may affect extraction accuracy.
 11. **`materia` under development.** Coverage and taxonomy of the subject-matter sidecar are not final (see §8).
-12. **Separate-vote typology (A–E) under development.** `tipo_voto_sep` uses a provisional schema; 1,369 of 2,858 separate votes (47.9%) are `indeterminado`.
+12. **Separate-vote typology (A–E) under development.** `tipo_voto_sep` uses a provisional schema; 1,371 of 2,860 distinct separate votes (47.9%) are `indeterminado` (1,862 of 3,808 judge rows, 48.9%).
 13. **Editorial entries.** 162 entries (`tipo_entrada ≠ fallo`) are summaries/cross-references with null analytical fields; filter via `tipo_entrada = 'fallo'` for ruling-level analysis.
 14. **Positions stated inside the common opinion are not coded (B179).** `posicion`, `posiciones` and `voting_pattern` come from the signature block and vote headers. When every judge signs the common opinion without a qualifier but the text says that a judge "se remite a su disidencia/voto" in a precedent, or the *por ello* clause says "por mayoría", that position is not captured. A lower-bound surface (H224) finds 56 such positions in 38 rulings, all published as `mayoria`; in 16 rulings at least one of them dissents from the result. The read adjudication is in `output/validacion/adjudicacion_b179_h224.csv`.
 15. **`zona = sumario` does not capture the printed summaries (B190).** The editorial summaries printed before each ruling largely fall in unlabeled stretches or in `residuo_caso_anterior`, and the `sumario` label also covers other material (volume front matter, *acordadas*, opinions). Do not use `zona = sumario` to recover the summaries or their attribution to a vote.
 16. **Rulings not indexed in the catalog (B192).** Six printed rulings of 2022–2024 have no row of their own because the volume index does not list them: they sit inside the block of another entry (346_p542, 347_p1763, 345_p204, 345_p386). Four of them are signed only by *conjueces*. Their panel is not published, and in 345_p386 the text of one of them is counted with the ruling of the entry.
 17. **`is_full_bench` is not period-aware (B156).** It is `n_titulares == 5`, a full bench only in volumes 339–344 (see §3).
-18. **Joint separate votes (B193).** The text of a separate vote signed by several justices is attached to one of them; the others have no `texto_voto` (see §6).
+18. **Joint separate votes (B193, fixed in parser v45.0).** A separate vote signed by several justices carries the same `texto_voto` and `wc_voto` in the row of each signer, and `voto_firmantes` identifies the vote (see §6): per-justice counts need no adjustment, per-ruling sums must take one row per `voto_firmantes`. Residue: 9 joint votes have a co-signer whose name the judge table does not read in the header (B188), who keeps the right `posicion` but no text; 57 of 3,858 non-majority positions have no text. The printed volume sometimes contradicts itself between a vote header and the signature block (B198): the signature qualifier prevails, so 330_p4399 is published with four dissenters out of seven, and 24 positions differ from their vote header only in the word "parcial".
 19. **Signers not recognized by the judge table.** The panel is read against a table of name patterns (`_meta/jueces/jueces_csjn.csv`, 110 rows). Since parser v44.1 (H228) the table reads surname-first signatures of *conjueces* (the volume sometimes transcribes the digital-signature stamp, "Borinsky Mariano Hernan"), the compound surname printed with a dash ("García—Mansilla"), 18 *conjueces* that had no row, and five printed variants taken as name variants of a known judge, each with its ruling as witness: "Carlos Maqueda" (346_p319), "Lorenzett." (343_p1762), "Rosatti Horacio" (348_p708, the only occurrence of a sitting justice printed surname-first), "Borinski" (347_p863) and "María Inés Catalano" (348_p1435). 29 rulings changed; the three rulings where a printed qualifier was attributed to the previous justice (B195) are corrected. The panels were read in the volume and checked against the Secretaría de Jurisprudencia records (sjconsulta) in 31 rulings, with no contradiction. Known residue: in 339_p323 one signer ("Jorge Morán") is not in the table because his identity could not be confirmed (5 of 6 signers published); a *conjuez* who is not in the table is missing from `posiciones`, and his printed qualifier is no longer given to another judge; three *conjueces* enter the panel without `texto_voto` because the header of their vote is not read (347_p1701, 347_p1084, 342_p459; B188).
 
 ---
@@ -647,7 +648,7 @@ The dataset is produced by a staged Python pipeline (`scripts/pipeline/`; depend
 
 ### Versioning
 
-Pipeline scripts carry embedded `__version__` strings, recorded in `_manifest.json`. This dataset was produced with **parser.py v44.1**. The full version history and bug registry are in the repository's `BITACORA.md` (session journal), `CHANGELOG.md` and `DEUDA_TECNICA.md` (technical-debt and bug tracker).
+Pipeline scripts carry embedded `__version__` strings, recorded in `_manifest.json`. This dataset was produced with **parser.py v45.0**. The full version history and bug registry are in the repository's `BITACORA.md` (session journal), `CHANGELOG.md` and `DEUDA_TECNICA.md` (technical-debt and bug tracker).
 
 ---
 
@@ -680,4 +681,4 @@ Pipeline scripts carry embedded `__version__` strings, recorded in `_manifest.js
 
 ---
 
-*Codebook version: 3.2 — corpus-csjn parser v44.1 (H228).*
+*Codebook version: 4.0 — corpus-csjn parser v45.0 (H229). Version 4.0: schema change, new column `voto_firmantes` in `csjn_casos_votos.csv`.*

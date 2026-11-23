@@ -1,6 +1,6 @@
 # corpus-csjn: A Structured Dataset of Argentine Supreme Court Rulings, Volumes 329–349 (2006–2026)
 
-**Version 4.0** · parser v44.1 · November 2026
+**Version 4.0** · parser v45.0 · November 2026
 **Author:** Guillermo Rubinetti
 **DOI:** [10.7910/DVN/TJTVKW](https://doi.org/10.7910/DVN/TJTVKW) · **License:** data CC-BY 4.0, code MIT
 **Source code and history:** <https://github.com/guillee1010/corpus-csjn>
@@ -27,7 +27,7 @@ The full variable dictionary, coded values, validation and known limitations are
 |---|---|---|
 | `csjn_casos.csv` | 5,894 | Case: caption, date, panel, voting pattern, positions, merit, *queja*. |
 | `csjn_casos_recursos.csv` | 5,894 | Case: disposition, merit review, admissibility and its cause, appeal type, party winning, remand. **Use this layer for outcomes.** |
-| `csjn_casos_votos.csv` | 28,080 | Justice × case: position and separate-opinion text. |
+| `csjn_casos_votos.csv` | 28,080 | Justice × case: position and separate-opinion text. A vote signed by several justices repeats its text in each signer's row; `voto_firmantes` identifies the vote. |
 | `csjn_casos_materia.csv` | 5,894 | Case: inferred subject matter (under development). |
 | `csjn_casos_partes.csv` | 5,894 | Case: appellant and respondent with procedural role. |
 | `csjn_casos_normas.csv` | 13,959 | Case × statute × scope: statutes cited ("ley N"). |
