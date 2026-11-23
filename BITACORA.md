@@ -20673,3 +20673,60 @@ Cadena completa `correr_pipeline.py --consciente --ignorar-corpus-drift` en el c
 Merge del PR 6 y `git pull`. `correr_pipeline.py --consciente --ignorar-corpus-drift` en el disco del operador: los 6 sha esperados reproducidos (casos `d2f86f697086`, textos `00f42ea1dba9`, votos `a88a87184f5b`, zonas `c3d7d6d7e055`, editorial `30a6da652e3a`, normas `e5a02f34cf86`). `--regolden`: golden == producción y manifest 65 artefactos [CLEAN]. `validar_m68.py --baseline`: 13 → 11, altas 0, bajas 339_p323 y 348_p728, PASS; línea de base actualizada a 11. `check_m55_quorum.py`: pool 5, línea de base actualizada. `actualizar_codebook.py --check`: [CHECK] CLEAN. Censo `h228_conjueces_sj.py` sobre el cache de 250 meses, antes → después: conjueces que SJ nombra y faltan en el corpus, 21 en 18 fallos → 1 en 1 fallo (344_p3249, que la firma impresa no trae); titulares, 23 en 16 fallos → 16 en 9 fallos, los 9 leídos y fuera de la familia (M69); bloque genérico "CONJUECES" sin conjuez en el corpus, 2 → 0. El censo corrió en su primera versión, sin la lista inversa de sobrantes; el caso que esa lista vigilaba, 343_p1457, quedó probado idéntico por sha en H228-06. Hallazgo al verificar el re-sello en el clon: `gate_manifiesto.py --verify` da [FAIL] sobre los `.md` del corpus por fin de línea (M70, entrada nueva), preexistente y sin efecto en los datos.
 
 **Commits:** uno más del operador en `main` (regolden y manifest v44.1) y uno de documentación (este bloque, DEUDA con M70, README).
+
+## H229 — Votos firmados por varios jueces (B193) y control M68 por juez (2026-11-23)
+
+**Objetivo:** tercer punto de la agenda del parser que dejó la auditoría FABLE-03 (H227): que cada juez que firma un voto conjunto tenga su texto, con decisión de schema del operador, adjudicación leída en el tomo antes de tocar el parser y harness A/B con flip-set sellado; y medir el control M68 juez por juez.
+
+### H229-01 — Base (U0)
+
+Clon de `main` en `6ba1e5e`, parser v44.1 con el regolden H228 (`ad722da`), rama `h229-votos-conjuntos`. Candado E0 limpio: `parser.main()` real con el argv de `correr_pipeline.py` reproduce casos `d2f86f697086`, textos `00f42ea1dba9`, votos `a88a87184f5b`, zonas `c3d7d6d7e055` y editorial `30a6da652e3a`. M68 11 = 11, M55 5. Gate 2: DEUDA B193, B188, B180, M68 y M67; BITÁCORA H226 a H228. Leídas enteras `detectar_votos_disidencias`, `extraer_textos_votos`, `_subir_posiciones_desde_headers` y `detectar_juez_en_voto_header`. Consumidores del texto de los votos fuera del parser: `extraer_normas.py` (ámbito voto, suma por fila) y `superficie_b179.py` (`wc_voto` como columna informativa). `wc_votos` no es consumidor: se calcula sobre las líneas del bloque desde el primer header, no sumando votos por juez. El operador subió los instrumentos de H227 y H228; se reusaron `e0_candado.py`, `h228_lib.py` y `harness_ab.py`.
+
+### H229-02 — Superficie y adjudicación (U1, corte bloqueante)
+
+`u1_grabadora.py` envuelve `detectar_votos_disidencias` y `_subir_posiciones_desde_headers` en una corrida real (los cinco CSV iguales por sha) y guarda bloque, zonas, marcadores y firma antes de B180 (b) de los 2190 fallos con header. `u1_superficie.py`: 2885 headers, 2872 con marcador; 792 con dos o más jueces de la tabla en 762 fallos; 957 co-firmantes sin marcador, 953 en el panel con `wc_voto` 0 y 4 fuera del panel. Las cifras de H227 sobre v43.3 se sostienen. Hallazgo de diseño: el parser deja de leer el header en el primer juez que matchea, así que el segundo renglón de un header conjunto ni se concatena; el fix necesita una regla de dónde termina el header (`header_logico`: sigue mientras la línea aporte solo jueces de la tabla, vocabulario de encabezado o tokens con forma de nombre).
+
+Adjudicación (`H229_U1_adjudicacion.csv`, 812 headers): 82 leídos en el tomo con archivo y líneas, la muestra estratificada con semilla 229 (54 headers en 19 tomos, todos conjuntos genuinos) y todos los que no cerraban contra la firma al pie. Clase 2 (juez nombrado que no firma), 0 confirmados: 3 pies incompletos en el tomo (330_p4960, 344_p684, 330_p4936), 3 errores del instrumento (línea de letrados tomada por firma) y 2 bloques con otro pronunciamiento (329_p4804, 329_p5157; B186). Clase 3, 9 headers conjuntos con un co-firmante que la tabla no lee (B188). Clase 4, 330_p4936 y 330_p2655. 329_p3021 tiene el voto cortado por el fin del bloque (B196).
+
+V1, M68 juez por juez sobre v44.1 (`u1_v1_m68_por_juez.py`, una marca por header y juez nombrado): 3828 marcas en 2185 fallos, 50 fuera de la diagonal en 31 fallos (parcial 24, fuera del panel 12, mayoria 9, cruzada 5); 34 contando solo el juez del marcador.
+
+Radio de las tres opciones de schema, con un prototipo en memoria (`u1_prototipo_radio.py`): con el mismo texto en cada fila, 950 filas ganan texto en 761 fallos, `posiciones` se mueve solo en 330_p4399 y 344_p2441, `wc_votos` y `word_count` 0 cambios, la suma de `wc_voto` por juez supera a `wc_votos` en 759 fallos y `extraer_normas` infla 452 filas del ámbito voto en 259 casos (3253 → 4149 menciones).
+
+### H229-03 — Decisiones del operador
+
+Opción C: el mismo texto en la fila de cada firmante y una columna, `voto_firmantes`, que identifica el voto. Criterio del operador: todos los que firman el mismo voto muestran el mismo número, y ese número entra una sola vez en el total del fallo. OK a cuatro puntos: 330_p4399 se publica con Highton en disidencia y Petracchi como está impreso (4 disidentes contra 3, anotado en B198); el marcador sale del header sin exigir la firma al pie; los 9 de la clase 3 quedan para B188; regla nueva de fin del header. El candado M68 por juez entra en este ciclo. Sobre M67: "en disidencia parcial" queda como categoría propia y M67 se informa de las dos maneras (153 fallos con disidente parcial, 20 dependen de la regla). Si el header "parcial" pisa a la firma queda para la próxima sesión, con lectura previa de los 16 fallos.
+
+### H229-04 — U2, B193 (parser v45.0, extraer_normas v1.2)
+
+`parche_u2_b193.py`, 8 reemplazos únicos sobre v44.1: `_header_logico`, `_jueces_en_texto`, `jueces_en_voto_header`; un marcador por juez del header en `detectar_votos_disidencias`; fin del voto en el próximo header en `extraer_textos_votos`; `firmantes_votos`; columna `voto_firmantes`. Harness A/B: votos 950 filas en 761 fallos (texto, `wc_voto`, `tipo_voto_sep`, `fragmenta_ratio`; 175 `punto_divergencia`) y 2 `posicion`; casos 2 celdas de `posiciones`, las dos leídas (330_p4399, LibroVol330.4 L3645-3648 y pie L3674-3675; 344_p2441, LibroVol344-2 L46863-46865 y pie L46909); 0 celdas fuera del set; textos, zonas y editorial idénticos. Votos del brazo B sin la columna nueva = votos del prototipo de U1 por sha. Parser commiteado (`aplicar_parche.py`) = brazo B por sha en los cinco CSV. `u2_espec_vs_parser.py`: la espec de U1 y `_header_logico` coinciden en los 2885 headers; el juez de v44.1 queda fuera del header lógico en 1 (330_p1950, el segundo renglón termina en ":"), y lo conserva la vía anterior. `u2_verificar.py`: `voto_firmantes` llena si y solo si hay texto, 3808 filas, 2860 votos distintos (2072, 628, 156 y 4 de uno a cuatro firmantes), mismo texto y `wc_voto` dentro de cada voto; suma de votos distintos = `wc_votos` en 2176 de 2190 fallos, nunca de más (M71).
+
+`extraer_normas.py` v1.2 cuenta una vez por (caso, `voto_firmantes`): la salida cambia 1 celda respecto de la publicada (329_p5157, ley 23540, 1 → 2), porque la primera disidencia de ese bloque no estaba atribuida a nadie. Epílogo, partes, materia y recursos idénticos por sha. M68 11 = 11, M55 5 = 5.
+
+### H229-05 — U3, candado M68 por juez (validar_m68 v0.2)
+
+Modo `--por-juez`: rótulo con que empieza `texto_voto` (regex importadas del parser) contra `posicion`, sobre `csjn_casos_votos.csv` de v45.0. 36 filas en 25 fallos sobre 3808 con texto: parcial 24 (16 fallos), mayoria 7, cruzada 5. Línea de base versionada, clave (caso, juez). Coincide con V1 menos los 12 jueces fuera del panel, que no tienen fila, y los 2 que corrigió el fix.
+
+### H229-06 — Cierre en el clon
+
+CODEBOOK 3.2 → 4.0 con `actualizar_codebook.py` (`--subir`, `--check` [CHECK] CLEAN, sobre los CSV de v45.0 puestos en `output/` y retirados después) y texto: `voto_firmantes`, `texto_voto` (recorte a 5000 caracteres, sin documentar hasta ahora: 1338 de 3808 filas lo alcanzan), `wc_voto`, `wc_votos`, `tipo_voto_sep` (1371 de 2860 votos distintos indeterminado, 47,9%; 1862 de 3808 filas, 48,9%), `posicion` (19 y 5 posiciones de "parcial") y límites 12 y 18. README y README de Dataverse. DEUDA: B193 cerrado, B198 y M71 nuevos, constancias en B188, M68 y M67. Fallas previas de `main` sin tocar: `test_clasificador.py` (importa `csjnv11`), `test_detectar_paginas.py` (import), `check_allowlist_paths.py` (`DELTA_CODEBOOK_H211.md` en la raíz).
+
+### H229 — Estado final
+
+- **Corpus:** 5894 casos (5732 fallos + 128 sumario_con_link + 34 sumario_editorial), sin cambio.
+- **Sin firma:** 8 / 5732 fallos, sin cambio.
+- **Votos:** 28.080 filas, 20 columnas (+1, `voto_firmantes`). `posicion`: mayoría 24.222 (−2), según su voto 1588 (+1), en disidencia 2032 (+1), en disidencia parcial 238. Filas con `texto_voto` 2858 → 3808; posiciones propias sin texto 1004 → 57.
+- **Voting patterns (fallos):** sin cambio.
+- **Zonas:** 138.597 segmentos, sin cambio.
+- **Residuos conocidos:** 9 co-firmantes de headers conjuntos y 12 headers individuales que la tabla no lee (B188); 330_p4399 con 4 disidentes contra 3 y 330_p4936 (B198); 14 fallos con un voto sin atribuir (M71).
+
+**Outputs canónicos (corrida v45.0 en el clon; en el repo quedan los publicados hasta el regolden del operador):**
+- `output/parser/csjn_casos.csv` — 5894 filas (sha `fc9b06a3ed05`).
+- `output/parser/csjn_casos_textos.csv` — 5894 filas (sha `00f42ea1dba9`, sin cambio).
+- `output/parser/csjn_casos_votos.csv` — 28.080 filas (sha `f88f9eaddc25`).
+- `output/parser/csjn_casos_zonas.csv` — 138.597 segmentos (sha `c3d7d6d7e055`, sin cambio).
+- `output/parser/csjn_casos_editorial.csv` — 152 secciones (sha `30a6da652e3a`, sin cambio).
+- `output/parser/csjn_casos_normas.csv` — 13.959 filas (sha `f432251cdc37`); epílogo `a52eaa608fe5`, partes `8e06125a0710`, materia `6bffc214c8f6` y recursos `80a2dff6fa1d`, sin cambio.
+
+**Scripts creados:** `scripts/diagnostico/H229/` (gitignoreado, entregados como archivos): `e0_candado.py`, `h229_lib.py`, `harness_ab.py`, `u1_grabadora.py`, `u1_explorar.py`, `u1_ver_formas.py`, `u1_superficie.py`, `u1_clasificar.py`, `u1_leer.py`, `u1_adjudicacion.py`, `u1_v1_m68_por_juez.py`, `u1_prototipo_radio.py`, `parche_u2_b193.py`, `aplicar_parche.py`, `u2_verificar.py`, `u2_espec_vs_parser.py`, `u3_m68_por_juez_desde_csv.py`, más los CSV de superficie, adjudicación y flip-set.
+
+**Commits:** 3 en la rama `h229-votos-conjuntos` (parser v45.0 y extraer_normas v1.2 · candado M68 por juez · documentación H229), merge del PR. Pendiente del operador: `git pull`, `--consciente`, `--regolden`, M68 en sus dos modos y M55 en disco local.

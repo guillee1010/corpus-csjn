@@ -2,6 +2,18 @@
 
 Registro de cambios del proyecto corpus-csjn: parser, auditor, cruzador y documentación.
 
+## H229 (2026-11-23)
+
+- `parser.py` v44.1→45.0 (MAJOR, cambia el schema de `csjn_casos_votos.csv`): B193, votos firmados por varios jueces, opción C por decisión del operador. `detectar_votos_disidencias` registra un marcador por cada juez nombrado en el header lógico del voto (`_header_logico`, `jueces_en_voto_header`); `extraer_textos_votos` da el mismo texto a todos los firmantes; columna nueva `voto_firmantes` al final (jueces del header en el orden impreso, " | "; vacía sin `texto_voto`).
+- `extraer_normas.py` v1.1→1.2: el ámbito `voto` cuenta cada voto una vez por (caso, `voto_firmantes`). Exige votos.csv de parser ≥ 45.0.
+- `validar_m68.py` v0.1→0.2: modo `--por-juez` (rótulo del `texto_voto` contra `posicion`, fila por fila). Línea de base nueva `output/validacion/m68_por_juez_baseline.csv`, 36 filas en 25 fallos.
+- Flip-set sellado contra v44.1, 0 celdas fuera del set: `csjn_casos_votos.csv` 28.080 filas, 19→20 columnas, 950 filas en 761 fallos ganan `texto_voto`, `wc_voto`, `tipo_voto_sep` y `fragmenta_ratio`, 2 filas cambian `posicion`; `csjn_casos.csv` 2 celdas de `posiciones` (330_p4399 Highton de Nolasco, 344_p2441 Lorenzetti), leídas en el tomo; `csjn_casos_normas.csv` 1 celda (329_p5157); textos, zonas, editorial, epílogo, partes, materia y recursos byte-idénticos.
+- Posiciones propias sin texto 1004→57. `voto_firmantes`: 3808 filas, 2860 votos distintos.
+- Candados: M68 por fallo 11 = 11, M55 5 = 5, sin altas.
+- `CODEBOOK.md` 3.2→4.0 (cambio de schema): `voto_firmantes`, `texto_voto` (recorte a 5000 caracteres, que no estaba documentado), `wc_voto`, `wc_votos`, `tipo_voto_sep`, límites 12 y 18. README y README de Dataverse.
+- `DEUDA_TECNICA.md`: B193 cerrado; B198 y M71 nuevos; constancias en B188, M68 y M67 (decisión del operador sobre el disidente parcial).
+- Golden + `_manifest.json`: PENDIENTES de regolden en disco local del operador (`correr_pipeline.py --consciente --ignorar-corpus-drift` y después `--regolden`); sha esperados: casos fc9b06a3ed05…, textos 00f42ea1dba9… (sin cambio), votos f88f9eaddc25…, zonas c3d7d6d7e055… (sin cambio), editorial 30a6da652e3a… (sin cambio), normas f432251cdc37….
+
 ## H228 (2026-11-22)
 
 - `_meta/jueces/jueces_csjn.csv`: 92 → 110 filas (11 commits de dato). Raya en el apellido de García Mansilla (B194); forma apellido-nombre para Tyden, Sánchez, Borinsky, Alcalá, Andalaf Casiello y Rabbi-Baldi (B187); variantes de Petrone y Poclava Lafuente; variantes de nombre tomadas de erratas o formas únicas del tomo, cada una con su testigo: "Carlos Maqueda" (anclada a la raya), "Lorenzett." (B182), "Rosatti Horacio" (única aparición), "Borinski"; 18 conjueces nuevos, tres de ellos (Bertuzzi, Bruglia, Medina) con el patrón anclado a la raya.
