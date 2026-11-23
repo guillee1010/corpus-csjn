@@ -22,7 +22,10 @@ TODO lo ya exportado en CSVs sellados, habilitar por unidad):
   - dispositivo   por_ello_text (csjn_casos_textos.csv). Extraido, INERTE
                   para la cascada ("art. 280" / "ley 48" viven ahi).
   - voto          texto_voto (csjn_casos_votos.csv), AGREGADO por caso
-                  (n_menciones = suma sobre todos los votos del caso). La
+                  (n_menciones = suma sobre todos los votos del caso). Desde
+                  parser 45.0 (B193, H229) un voto firmado por varios jueces
+                  trae el mismo texto en la fila de cada firmante: cada voto
+                  se cuenta UNA vez, por (caso, voto_firmantes). La
                   granularidad por juez (dato de tesis: citacion normativa
                   por ministro) exige schema propio -> ampliacion futura,
                   NO se emite acota de contrabando.
@@ -59,7 +62,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-__version__ = "1.1"  # H211 (M58 paso 2): 5o ambito `dictamen` (dictamen_text de textos.csv, parser >= 38.0), AL FINAL de AMBITOS — el subset ambito!=dictamen preserva orden y bytes del sellado H209 (candado N1). Filas nuevas INERTES para la cascada por el doble filtro de derivar_materia hasta v4.1, que las consume via su propio filtro ambito=dictamen. // 1.0 H209 (M59 paso 1): promocion de la diagnostica v0.2 (H208) a etapa canonica. CUATRO ambitos (caratula/considerando/dispositivo/voto), columna tipo desde v1 (solo 'ley'), RE_LEY movida VERBATIM de derivar_materia v3.2 L198 (unico consumidor historico), _norm importado de derivar_materia (fuente unica). Salida determinista LF. Solo `ambito=considerando` alimenta la cascada de materia en este paso (candado byte-identico, ver derivar_materia v3.3).
+__version__ = "1.2"  # H229 (B193): el ambito `voto` cuenta cada voto UNA vez por (caso, voto_firmantes); exige csjn_casos_votos.csv de parser >= 45.0 (columna voto_firmantes). Candado: sobre los CSV de v45.0 la salida es byte-identica a la de v1.1 sobre v44.1 (sha e5a02f34cf86), 13.959 filas; sin la guarda, 452 filas del ambito voto en 259 casos cambian n_menciones (3253 -> 4149). // v1.1: H211 (M58 paso 2): 5o ambito `dictamen` (dictamen_text de textos.csv, parser >= 38.0), AL FINAL de AMBITOS — el subset ambito!=dictamen preserva orden y bytes del sellado H209 (candado N1). Filas nuevas INERTES para la cascada por el doble filtro de derivar_materia hasta v4.1, que las consume via su propio filtro ambito=dictamen. // 1.0 H209 (M59 paso 1): promocion de la diagnostica v0.2 (H208) a etapa canonica. CUATRO ambitos (caratula/considerando/dispositivo/voto), columna tipo desde v1 (solo 'ley'), RE_LEY movida VERBATIM de derivar_materia v3.2 L198 (unico consumidor historico), _norm importado de derivar_materia (fuente unica). Salida determinista LF. Solo `ambito=considerando` alimenta la cascada de materia en este paso (candado byte-identico, ver derivar_materia v3.3).
 
 # textos.csv (considerando completo) y votos.csv (texto_voto) traen campos
 # grandes: regla de proyecto — field_size_limit en TODO script que los lea.
@@ -90,7 +93,8 @@ DEFAULT_OUTPUT = REPO_ROOT / "output" / "parser" / "csjn_casos_normas.csv"
 REQUIRED_CASOS  = ("caso_id_canonico", "case_name_cuerpo", "case_name_indice")
 REQUIRED_TEXTOS = ("caso_id_canonico", "considerando_text", "por_ello_text",
                    "dictamen_text")  # exige parser >= 38.0 (M58 paso 1)
-REQUIRED_VOTOS  = ("caso_id_canonico", "texto_voto")
+REQUIRED_VOTOS  = ("caso_id_canonico", "texto_voto",
+                   "voto_firmantes")  # exige parser >= 45.0 (B193, H229)
 
 FIELDNAMES = ["caso_id_canonico", "tipo", "norma", "ambito", "n_menciones"]
 AMBITOS    = ("caratula", "considerando", "dispositivo", "voto",
@@ -143,10 +147,21 @@ def main(argv: list[str] | None = None) -> int:
                                          r.get("dictamen_text", ""))
 
     # -- votos: extraccion por fila, AGREGADA por caso (suma de menciones) ------
+    # B193 (H229): un voto conjunto se repite en la fila de cada firmante;
+    # se extrae una sola vez por (caso, voto_firmantes). Sin esta guarda las
+    # menciones del ambito voto se inflan (medido sobre v45.0: 452 filas en
+    # 259 casos, 3253 -> 4149 menciones).
     votos_agg: dict[str, Counter] = {}
     n_filas_votos = 0
+    votos_vistos: set[tuple[str, str]] = set()
     for r in _abrir_verificado(args.votos, REQUIRED_VOTOS):
         n_filas_votos += 1
+        firmantes = r.get("voto_firmantes", "")
+        if firmantes:
+            clave_voto = (r["caso_id_canonico"], firmantes)
+            if clave_voto in votos_vistos:
+                continue
+            votos_vistos.add(clave_voto)
         cnt = extraer(_norm(r.get("texto_voto", "")))
         if cnt:
             cid = r["caso_id_canonico"]
